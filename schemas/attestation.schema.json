@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Wavefront-Labs/skills-library/schemas/attestation.schema.json",
+  "title": "Skill review attestation v1",
+  "description": "Evidence that a reviewer (human or agent) checked a skill's claims against its sources. See REVIEWING.md. An attestation never promotes a skill by itself; a maintainer does.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "protocol", "skill", "reviewer", "reviewed_at", "sources", "claims", "verdict", "attestation_sha256"],
+  "properties": {
+    "schema": {"const": "wavefront-attestation/1"},
+    "protocol": {"type": "string", "description": "Review protocol followed, e.g. docs-check/1."},
+    "skill": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "version", "sha256"],
+      "properties": {
+        "id": {"type": "string"},
+        "version": {"type": ["integer", "string"]},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 of the skill file bytes, CRLF normalised to LF."}
+      }
+    },
+    "reviewer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["github", "kind"],
+      "properties": {
+        "github": {"type": "string", "description": "Must equal the pull request author."},
+        "kind": {"enum": ["human", "agent", "human+agent"]},
+        "agent": {"type": "string", "description": "Tool name and version."},
+        "model": {"type": "string"}
+      }
+    },
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "sources": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["url", "fetched_at", "http_status", "content_sha256"],
+        "properties": {
+          "url": {"type": "string", "pattern": "^https://"},
+          "fetched_at": {"type": "string", "format": "date-time"},
+          "http_status": {"type": "integer"},
+          "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 of the response body as fetched. Pages change, so a mismatch is a flag for a maintainer, not proof of fabrication."}
+        }
+      }
+    },
+    "claims": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["claim", "verdict"],
+        "properties": {
+          "claim": {"type": "string", "maxLength": 300, "description": "A concrete claim copied verbatim from the skill (command, flag, number, behaviour)."},
+          "verdict": {"enum": ["confirmed", "contradicted", "unverifiable", "gated"]},
+          "source_url": {"type": "string", "description": "One of sources[].url. Required for confirmed and contradicted."},
+          "evidence_quote": {"type": "string", "maxLength": 400, "description": "Text copied from the source that supports or contradicts the claim. Must appear in the re-fetched page."},
+          "note": {"type": "string", "maxLength": 400}
+        }
+      }
+    },
+    "coverage": {"type": "string", "description": "How the claims were chosen, e.g. every command and flag."},
+    "verdict": {"enum": ["pass", "needs-changes", "fail"]},
+    "suggested_edits": {"type": "string"},
+    "attestation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 of this document's canonical JSON (sorted keys, no spaces) without this field. Tamper evidence only."}
+  }
+}

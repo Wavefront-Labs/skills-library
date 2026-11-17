@@ -81,6 +81,8 @@ unconfirmed. Don't paste copyrighted text or anything you can't license under Ap
 personal data or machine-specific paths. By submitting you agree your contribution is Apache-2.0 (sign off with `-s`).
 See also [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) and [`SECURITY.md`](SECURITY.md).
 
+**Reviewing:** you can also help by checking existing skills against their sources, with your own agent or by hand, and submitting a verifiable attestation. See [`REVIEWING.md`](REVIEWING.md).
+
 ## Layout
 ```
 SKILLS.md              the categories and how to search
