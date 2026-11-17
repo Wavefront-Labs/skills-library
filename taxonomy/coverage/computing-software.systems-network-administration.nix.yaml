@@ -1,0 +1,258 @@
+# Coverage spec: nix. Topics from the Nix reference manual (NixOS/nix, doc/manual/source and src/nix/*.md).
+subject: nix
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [nix]
+sources:
+  - "Nix reference manual (github.com/NixOS/nix/tree/master/doc/manual/source)"
+  - "Nix command pages (github.com/NixOS/nix/tree/master/src/nix)"
+topics:
+  - id: install-multi-user
+    name: "Multi-user installation with the install script"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/installing-binary.md"
+    match: [install-nix, multi-user-install, daemon-install]
+  - id: install-single-user
+    name: "Single-user installation"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/single-user.md"
+    match: [single-user-install, no-daemon]
+  - id: install-pinned
+    name: "Pinned version and tarball installs"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/installing-binary.md"
+    match: [pinned-version, releases-nixos-org, binary-tarball, offline-install]
+  - id: macos-installer
+    name: "macOS installer and APFS volume"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/installing-binary.md"
+    match: [macos, apfs-volume, launchdaemon, synthetic-conf]
+  - id: uninstall-linux
+    name: "Uninstalling Nix on Linux"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/uninstall.md"
+    match: [uninstall-nix, systemd-uninstall, build-users-removal]
+  - id: uninstall-macos
+    name: "Uninstalling Nix on macOS"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/uninstall.md"
+    match: [uninstall-macos, diskutil, launchctl]
+  - id: uninstall-single-freebsd
+    name: "Uninstalling single-user and FreeBSD installs"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/uninstall.md"
+    match: [uninstall-single-user, freebsd-uninstall]
+  - id: upgrade-nix
+    name: "Upgrading Nix"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/upgrading.md"
+    match: [upgrade-nix, daemon-restart]
+  - id: ssl-proxy
+    name: "Certificates and proxies"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/env-variables.md"
+    match: [nix-ssl-cert-file, proxy, https-intercept]
+  - id: shell-path
+    name: "PATH and profile script"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/env-variables.md"
+    match: [nix-sh, path-setup, nix-profile-bin]
+  - id: manual-multi-user
+    name: "Manual multi-user setup and daemon socket"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/multi-user.md"
+    match: [build-users, nixbld, nix-remote, daemon-socket]
+  - id: docker-image
+    name: "Nix in Docker"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/installation/installing-docker.md"
+    match: [docker, container-image, ghcr]
+  - id: profiles
+    name: "Profiles, generations and user environments"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/profiles.md"
+    match: [profiles, generations, user-environment, nix-profile]
+  - id: rollback
+    name: "Rollback and switching generations"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/profiles.md"
+    match: [rollback, switch-generation, switch-profile]
+  - id: garbage-collection
+    name: "Garbage collection and old generations"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/garbage-collection.md"
+    match: [garbage-collection, delete-generations, nix-collect-garbage]
+  - id: gc-settings
+    name: "GC preview and keep settings"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/garbage-collection.md"
+    match: [print-dead, print-live, keep-outputs, keep-derivations]
+  - id: gc-roots
+    name: "Garbage collector roots"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/garbage-collector-roots.md"
+    match: [gc-roots, gcroots, indirect-roots]
+  - id: collect-garbage-cmd
+    name: "nix-collect-garbage options"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-collect-garbage.md"
+    match: [delete-older-than, max-freed, profile-locations]
+  - id: http-binary-cache
+    name: "Serving a store over HTTP"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/binary-cache-substituter.md"
+    match: [nix-serve, binary-cache, http-cache, substituters]
+  - id: ssh-store
+    name: "SSH substituter and closure copy"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/ssh-substituter.md"
+    match: [ssh-substituter, ssh-agent, nix-copy-closure, closure-copy, nix-sshopts]
+  - id: ssh-forced-command
+    name: "Restricted SSH store access"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/package-management/ssh-substituter.md"
+    match: [forced-command, sshd-config, nix-store-serve]
+  - id: remote-builder
+    name: "Remote builder prerequisites"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/distributed-builds.md"
+    match: [remote-builds, remote-builder, trusted-users, nix-store-info]
+  - id: builders-config
+    name: "Builders option and machines file"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/distributed-builds.md"
+    match: [builders, cross-platform-build, machines-file]
+  - id: cores-jobs
+    name: "Cores versus jobs"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/cores-vs-jobs.md"
+    match: [max-jobs, cores, nix-build-cores, oversubscription]
+  - id: diff-hook
+    name: "Diff hook"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/diff-hook.md"
+    match: [diff-hook, run-diff-hook, reproducibility]
+  - id: build-check
+    name: "Determinism check with --check"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/diff-hook.md"
+    match: [nix-build-check, determinism, keep-failed]
+  - id: post-build-hook
+    name: "Post-build hook uploads"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/post-build-hook.md"
+    match: [post-build-hook, s3-cache, out-paths, nix-copy]
+  - id: signing-keys
+    name: "Binary cache signing keys"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/post-build-hook.md"
+    match: [signing-key, trusted-public-keys, secret-key-files, generate-binary-cache-key]
+  - id: eval-profiler
+    name: "Evaluation profiler"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/advanced-topics/eval-profiler.md"
+    match: [eval-profiler, flamegraph, eval-profile-file]
+  - id: nix-build
+    name: "nix-build"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-build.md"
+    match: [nix-build, result-symlink, out-link, dry-run, multiple-outputs, attr-all, output-symlinks]
+  - id: nix-shell
+    name: "nix-shell environments"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-shell.md"
+    match: [nix-shell, pure-shell, shellhook, ad-hoc-packages]
+  - id: shebang-scripts
+    name: "nix-shell shebang scripts"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-shell.md"
+    match: [shebang, nix-shell-interpreter, self-contained-script]
+  - id: channels
+    name: "nix-channel"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-channel.md"
+    match: [nix-channel, channels, channel-rollback, tarball-ttl]
+  - id: nix-hash
+    name: "nix-hash and hash formats"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-hash.md"
+    match: [nix-hash, hash-conversion, sri-hash, nar-hash]
+  - id: nix-instantiate
+    name: "nix-instantiate and evaluation"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-instantiate.md"
+    match: [nix-instantiate, eval-strict, drv-path, nix-eval]
+  - id: nix-prefetch-url
+    name: "nix-prefetch-url"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-prefetch-url.md"
+    match: [nix-prefetch-url, prefetch, fetchurl-hash, unpack]
+  - id: nix-env-install
+    name: "nix-env install"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-env/install.md"
+    match: [nix-env-install, attr-path, priority, outputs-to-install]
+  - id: nix-env-upgrade
+    name: "nix-env upgrade and version ordering"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-env/upgrade.md"
+    match: [nix-env-upgrade, version-comparison, always-flag, downgrade]
+  - id: nix-env-query
+    name: "nix-env query"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-env/query.md"
+    match: [nix-env-query, available-packages, compare-versions, status-flags]
+  - id: store-query
+    name: "nix-store query"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-store/query.md"
+    match: [nix-store-query, requisites, referrers, closure-size]
+  - id: store-verify
+    name: "Store verify and repair"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-store/verify.md"
+    match: [store-verify, check-contents, repair-path, store-corruption]
+  - id: store-optimise
+    name: "Store optimisation"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-store/optimise.md"
+    match: [store-optimise, hard-links, deduplication, disk-space]
+  - id: store-realise
+    name: "nix-store realise"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/command-ref/nix-store/realise.md"
+    match: [nix-store-realise, realise, read-log, check-flag]
+  - id: lang-functions
+    name: "Functions and patterns"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/syntax.md"
+    match: [nix-language, function-patterns, default-arguments, at-pattern]
+  - id: lang-let-with
+    name: "let, with, inherit and rec"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/syntax.md"
+    match: [let-in, with-expression, inherit, shadowing]
+  - id: lang-operators
+    name: "Operators and precedence"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/operators.md"
+    match: [operators, precedence, set-merge, path-concatenation]
+  - id: lang-strings
+    name: "String literals"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/string-literals.md"
+    match: [string-literals, indented-strings, escaping, interpolation]
+  - id: lang-lookup-path
+    name: "Lookup paths and NIX_PATH"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/constructs/lookup-path.md"
+    match: [lookup-path, nix-path, find-file, path-literals]
+  - id: derivation-basics
+    name: "The derivation builtin"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/derivations.md"
+    match: [derivation, builtins-derivation, builder, outputs]
+  - id: output-checks
+    name: "Output reference checks"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/advanced-attributes.md"
+    match: [allowed-references, disallowed-references, output-checks, structured-attrs]
+  - id: derivation-scheduling
+    name: "Build scheduling attributes"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/advanced-attributes.md"
+    match: [prefer-local-build, allow-substitutes, required-system-features, impure-env-vars]
+  - id: fixed-output
+    name: "Fixed-output and content-addressed derivations"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/advanced-attributes.md"
+    match: [fixed-output, output-hash, output-hash-mode, content-addressed]
+  - id: ifd
+    name: "Import From Derivation"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/import-from-derivation.md"
+    match: [import-from-derivation, ifd, allow-import-from-derivation, read-write-mode]
+  - id: string-context
+    name: "String context"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/doc/manual/source/language/string-context.md"
+    match: [string-context, get-context, discard-string-context, append-context]
+  - id: flake-refs
+    name: "Flake references"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/flake.md"
+    match: [flakes, flake-reference, github-flake, indirect-registry]
+  - id: flake-structure
+    name: "flake.nix structure"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/flake.md"
+    match: [flake-nix, flake-outputs, nix-config, self-input]
+  - id: flake-inputs
+    name: "Flake inputs and follows"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/flake.md"
+    match: [follows, input-override, non-flake-input, flake-false]
+  - id: flake-lock
+    name: "Flake lock file and update"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/flake-update.md"
+    match: [flake-lock, flake-update, lock-file, nix-flake-lock]
+  - id: flake-check
+    name: "nix flake check"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/flake-check.md"
+    match: [flake-check, checks-output, no-build, keep-going]
+  - id: nix-develop
+    name: "nix develop"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/develop.md"
+    match: [nix-develop, devshells, build-environment, redirect]
+  - id: nix-run
+    name: "nix run and apps"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/run.md"
+    match: [nix-run, flake-apps, main-program, installable]
+  - id: why-depends
+    name: "nix why-depends"
+    source: "https://raw.githubusercontent.com/NixOS/nix/master/src/nix/why-depends.md"
+    match: [why-depends, runtime-references, build-time-dependencies]

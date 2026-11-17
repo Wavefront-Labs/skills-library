@@ -1,0 +1,293 @@
+# Coverage spec: Compiler and Interpreter Construction. Topics and subtopics from the external structures in `sources`.
+subject: compiler-construction
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [compiler-construction]
+sources:
+  - "Compilers: Principles, Techniques, and Tools (Aho, Lam, Sethi, Ullman) chapter list - lexical analysis, syntax analysis, syntax-directed translation, intermediate code, run-time environments, code generation, machine-independent optimisation, instruction-level parallelism, interprocedural analysis"
+  - "Crafting Interpreters (Nystrom) table of contents - scanning, parsing, evaluating, resolving, classes, bytecode VM, garbage collection, optimisation"
+  - "Engineering a Compiler (Cooper, Torczon) and Modern Compiler Implementation (Appel) chapters"
+  - "LLVM documentation (Language Reference, Kaleidoscope tutorial, passes, CodeGen, MLIR) and GCC Internals"
+  - "Types and Programming Languages (Pierce) and Crafting/Writing An Interpreter in Go reference outlines"
+topics:
+  - id: lexing
+    name: Lexical analysis
+    source: "Dragon book ch.3; Crafting Interpreters ch.4"
+    match: [lexer, tokenizer, scanner]
+    subtopics:
+      - {id: hand-written-scanner, name: "Hand-written scanners", match: [scanner-loop, lookahead-char, maximal-munch]}
+      - {id: regex-to-dfa-lexers, name: "Regular expressions, NFA and DFA lexers", match: [regex-to-nfa, subset-construction, lexer-generator]}
+  - id: parsing-topdown
+    name: Top-down parsing
+    source: "Dragon book ch.4; Crafting Interpreters ch.6"
+    match: [recursive-descent, ll1, predictive-parsing]
+    subtopics:
+      - {id: recursive-descent-parser, name: "Recursive descent", match: [recursive-descent-parser, expression-grammar, left-recursion-elimination]}
+      - {id: pratt-parsing, name: "Pratt (precedence climbing) parsing", match: [pratt-parser, precedence-climbing, binding-power]}
+  - id: parsing-bottomup
+    name: Bottom-up parsing
+    source: "Dragon book ch.4"
+    match: [lr-parsing, lalr, shift-reduce]
+    subtopics:
+      - {id: lr-items-and-tables, name: "LR(0), SLR, LALR(1) tables", match: [lr0-items, lalr1-lookahead, parse-table-construction]}
+      - {id: conflicts-and-precedence, name: "Shift/reduce conflicts and precedence", match: [shift-reduce-conflict, reduce-reduce-conflict, bison-precedence]}
+  - id: parser-generators
+    name: Parser generators and combinators
+    source: "ANTLR, bison, PEG docs"
+    match: [antlr, peg-parser, parser-combinators]
+    subtopics:
+      - {id: antlr-and-bison, name: "ANTLR and bison/yacc", match: [antlr4-grammar, bison-yacc, tree-listener]}
+      - {id: peg-and-combinators, name: "PEG and parser combinators", match: [peg-packrat, parser-combinators, nom-parsec]}
+  - id: ast-design
+    name: Abstract syntax trees
+    source: "Crafting Interpreters ch.5"
+    match: [ast, visitor-pattern, tree-walking]
+    subtopics:
+      - {id: ast-node-design, name: "AST node design", match: [ast-nodes, source-spans, sum-types]}
+      - {id: visitors-and-tree-transforms, name: "Visitors and tree transformations", match: [visitor-pattern-ast, tree-rewrite, pattern-matching-ast]}
+  - id: semantic-analysis
+    name: Semantic analysis
+    source: "Dragon book ch.2/6; Crafting Interpreters ch.11"
+    match: [symbol-table, scope-resolution, name-resolution]
+    subtopics:
+      - {id: symbol-tables-and-scopes, name: "Symbol tables and scope resolution", match: [lexical-scope, symbol-table-stack, variable-resolution]}
+      - {id: semantic-checks, name: "Semantic checks", match: [control-flow-checks, definite-assignment, return-checks]}
+  - id: type-systems
+    name: Type checking and inference
+    source: "Types and Programming Languages"
+    match: [type-checking, hindley-milner, type-inference]
+    subtopics:
+      - {id: type-checker-basics, name: "Type checkers", match: [type-environment, typing-rules, subtyping]}
+      - {id: hindley-milner-inference, name: "Hindley-Milner inference", match: [algorithm-w, unification, let-polymorphism]}
+  - id: interpreters
+    name: Tree-walking interpreters
+    source: "Crafting Interpreters part II"
+    match: [tree-walking-interpreter, environments, closures]
+    subtopics:
+      - {id: tree-walking-evaluator, name: "Tree-walking evaluation", match: [eval-loop, runtime-values, runtime-errors]}
+      - {id: closures-and-environments, name: "Closures and upvalues", match: [closure-conversion, upvalues, captured-variables]}
+  - id: bytecode-vm
+    name: Bytecode virtual machines
+    source: "Crafting Interpreters part III"
+    match: [bytecode-vm, stack-vm, register-vm]
+    subtopics:
+      - {id: stack-vm-design, name: "Stack-based VM design", match: [opcode-dispatch, constant-pool, call-frames]}
+      - {id: register-vms-and-dispatch, name: "Register VMs and dispatch techniques", match: [register-based-vm, threaded-code, computed-goto]}
+  - id: gc-runtime
+    name: Garbage collection and runtime
+    source: "Crafting Interpreters ch.26; Garbage Collection Handbook"
+    match: [garbage-collection, mark-sweep, generational-gc]
+    subtopics:
+      - {id: mark-sweep-collector, name: "Mark-sweep collector", match: [mark-and-sweep, tricolor-marking, gc-roots]}
+      - {id: generational-and-copying-gc, name: "Copying and generational GC", match: [copying-collector, generational-gc, write-barrier]}
+  - id: objects-oop
+    name: Objects, classes and dispatch
+    source: "Crafting Interpreters part II/III"
+    match: [method-dispatch, vtable, inline-caching]
+    subtopics:
+      - {id: classes-and-inheritance, name: "Classes and inheritance", match: [class-implementation, super-calls, method-binding]}
+      - {id: dynamic-dispatch-optimisation, name: "vtables, hidden classes, inline caches", match: [vtable-dispatch, hidden-classes, polymorphic-inline-cache]}
+  - id: ir-design
+    name: Intermediate representations
+    source: "Dragon book ch.6; Engineering a Compiler"
+    match: [three-address-code, ssa-form, control-flow-graph]
+    subtopics:
+      - {id: three-address-code-and-cfg, name: "Three-address code and CFGs", match: [basic-blocks, three-address-code-gen, cfg-construction]}
+      - {id: ssa-construction, name: "SSA form", match: [ssa-construction, phi-nodes, dominance-frontier]}
+  - id: dataflow
+    name: Dataflow analysis
+    source: "Dragon book ch.9"
+    match: [dataflow-analysis, liveness-analysis, reaching-definitions]
+    subtopics:
+      - {id: iterative-dataflow, name: "Iterative dataflow framework", match: [gen-kill-sets, worklist-algorithm, lattice-fixpoint]}
+      - {id: constant-propagation-and-dce, name: "Constant propagation and dead code elimination", match: [sparse-conditional-constant-propagation, dead-code-elimination, constant-folding]}
+  - id: optimisation
+    name: Optimisation passes
+    source: "Engineering a Compiler ch.8-10"
+    match: [loop-optimisation, inlining, common-subexpression-elimination]
+    subtopics:
+      - {id: loop-optimisations, name: "Loop optimisations", match: [loop-invariant-code-motion, strength-reduction, loop-unrolling]}
+      - {id: inlining-and-gvn, name: "Inlining and value numbering", match: [function-inlining, global-value-numbering, tail-call-elimination]}
+  - id: regalloc
+    name: Register allocation
+    source: "Engineering a Compiler ch.13"
+    match: [register-allocation, graph-coloring, linear-scan]
+    subtopics:
+      - {id: graph-colouring-allocation, name: "Graph-colouring allocation", match: [interference-graph, chaitin-briggs, spilling]}
+      - {id: linear-scan-allocation, name: "Linear scan allocation", match: [linear-scan-register, live-intervals, second-chance-binpacking]}
+  - id: codegen
+    name: Instruction selection and code generation
+    source: "Dragon book ch.8"
+    match: [instruction-selection, calling-convention, assembly-emission]
+    subtopics:
+      - {id: instruction-selection, name: "Instruction selection", match: [tree-pattern-matching, burs, isel-dag]}
+      - {id: calling-conventions-and-abi, name: "Calling conventions and ABI", match: [system-v-abi, stack-frame-layout, callee-saved]}
+  - id: llvm-ir
+    name: LLVM IR
+    source: "LLVM Language Reference Manual"
+    match: [llvm, llvm-ir, llvm-opt]
+    subtopics:
+      - {id: reading-writing-llvm-ir, name: "Reading and writing LLVM IR", match: [llvm-ir-syntax, getelementptr, llvm-types]}
+      - {id: llvm-opt-tool, name: "opt, llc and pass pipelines", match: [opt-passes, new-pass-manager, llc-codegen]}
+  - id: llvm-frontend
+    name: Building an LLVM frontend
+    source: "LLVM Kaleidoscope tutorial"
+    match: [kaleidoscope, llvm-irbuilder, llvm-c-api]
+    subtopics:
+      - {id: irbuilder-codegen, name: "Generating IR with IRBuilder", match: [irbuilder, llvm-module-context, codegen-visitor]}
+      - {id: orcjit-and-linking, name: "ORC JIT and ahead-of-time output", match: [orcjit, lli, object-file-emission]}
+  - id: mlir
+    name: MLIR
+    source: "MLIR documentation"
+    match: [mlir, mlir-dialects, mlir-lowering]
+    subtopics:
+      - {id: mlir-dialects-and-lowering, name: "Dialects and lowering", match: [mlir-dialect, mlir-opt, conversion-passes]}
+      - {id: mlir-pattern-rewrites, name: "Pattern rewriting", match: [rewrite-patterns, dag-rewriter, canonicalization]}
+  - id: jit
+    name: JIT compilation
+    source: "JIT literature (V8, HotSpot, LuaJIT)"
+    match: [jit-compiler, tiered-compilation, tracing-jit]
+    subtopics:
+      - {id: baseline-and-tiered-jits, name: "Baseline and tiered JITs", match: [baseline-jit, tiering, on-stack-replacement]}
+      - {id: tracing-and-specialisation, name: "Tracing JITs and specialisation", match: [trace-compilation, type-specialisation, guards-deopt]}
+  - id: object-files-linking
+    name: Object files and linking
+    source: "System V ABI; linker docs"
+    match: [elf-format, relocations, linker]
+    subtopics:
+      - {id: elf-sections-symbols-relocs, name: "ELF, symbols and relocations", match: [elf-sections, symbol-table, relocation-types]}
+      - {id: static-and-dynamic-linking, name: "Static vs dynamic linking and loaders", match: [ld-script, plt-got, dynamic-loader]}
+  - id: debug-info
+    name: Debug information
+    source: "DWARF standard"
+    match: [dwarf, debug-info, line-tables]
+    subtopics:
+      - {id: dwarf-basics, name: "DWARF basics", match: [dwarf-dies, line-number-program, cfi-unwind]}
+      - {id: source-maps-and-pdb, name: "Source maps, PDB and symbolication", match: [source-maps, pdb-files, symbolication]}
+  - id: diagnostics
+    name: Error reporting and diagnostics
+    source: "Rust/Elm/Clang diagnostics practice"
+    match: [compiler-diagnostics, error-recovery, source-spans]
+    subtopics:
+      - {id: good-error-messages, name: "Designing error messages", match: [error-messages, span-rendering, suggestions]}
+      - {id: error-recovery-strategies, name: "Parser error recovery", match: [panic-mode-recovery, error-productions, synchronisation-tokens]}
+  - id: language-server
+    name: Language servers and IDE support
+    source: "LSP specification; tree-sitter docs"
+    match: [language-server-protocol, incremental-parsing, tree-sitter]
+    subtopics:
+      - {id: lsp-implementation, name: "Implementing LSP", match: [lsp-server, textdocument-didchange, diagnostics-publish]}
+      - {id: incremental-parsing-tree-sitter, name: "Incremental parsing", match: [tree-sitter-grammar, incremental-reparse, error-tolerant-parsing]}
+  - id: macros-metaprogramming
+    name: Macros and metaprogramming
+    source: "Lisp/Rust/Scheme macro docs"
+    match: [hygienic-macros, macro-expansion, compile-time-evaluation]
+    subtopics:
+      - {id: hygienic-macro-systems, name: "Macro expansion and hygiene", match: [hygiene, syntax-rules, procedural-macros]}
+      - {id: compile-time-evaluation, name: "Compile-time evaluation", match: [constexpr-evaluation, const-folding-interpreter, staged-compilation]}
+  - id: modules-generics
+    name: Modules and generics
+    source: "Language implementation practice"
+    match: [module-system, monomorphization, generics-implementation]
+    subtopics:
+      - {id: module-systems-and-imports, name: "Module systems and name visibility", match: [import-resolution, module-graph, separate-compilation]}
+      - {id: generics-monomorphization-vs-erasure, name: "Generics: monomorphization vs erasure", match: [monomorphization, type-erasure, dictionary-passing]}
+  - id: pattern-exceptions
+    name: Pattern matching and exceptions
+    source: "Maranget; Itanium EH ABI"
+    match: [pattern-match-compilation, decision-trees, exception-handling-lowering]
+    subtopics:
+      - {id: pattern-match-compilation, name: "Compiling pattern matching", match: [decision-tree-matching, exhaustiveness-checking, pattern-matrix]}
+      - {id: exception-handling-implementation, name: "Exception handling implementation", match: [zero-cost-exceptions, landing-pads, setjmp-longjmp]}
+  - id: async-lowering
+    name: Coroutines and async lowering
+    source: "Coroutine implementation papers"
+    match: [coroutines, async-await-lowering, state-machine-transform]
+    subtopics:
+      - {id: state-machine-transform, name: "Async/await to state machines", match: [async-state-machine, generator-lowering, continuation-passing]}
+      - {id: llvm-coroutines-and-fibers, name: "LLVM coroutines and stackful fibers", match: [llvm-coro, stackful-coroutine, context-switch-asm]}
+  - id: memory-models
+    name: Memory management strategies
+    source: "Rust/Swift/Go implementation docs"
+    match: [ownership-borrow-checking, reference-counting, escape-analysis]
+    subtopics:
+      - {id: borrow-checking-and-ownership, name: "Ownership and borrow checking", match: [borrow-checker, lifetimes, move-semantics]}
+      - {id: rc-arc-and-escape-analysis, name: "Reference counting and escape analysis", match: [refcount-optimisation, escape-analysis, stack-allocation]}
+  - id: ffi-interop
+    name: FFI and runtime interop
+    source: "libffi, language docs"
+    match: [ffi, c-abi-interop, language-bindings]
+    subtopics:
+      - {id: c-ffi-implementation, name: "Implementing a C FFI", match: [libffi, calling-c-from-vm, struct-marshalling]}
+      - {id: embedding-interpreters, name: "Embedding an interpreter", match: [embedded-scripting, lua-c-api, host-api-design]}
+  - id: dsl-design
+    name: DSL design
+    source: "DSL literature (Fowler)"
+    match: [domain-specific-language, embedded-dsl, language-workbench]
+    subtopics:
+      - {id: internal-vs-external-dsl, name: "Internal vs external DSLs", match: [embedded-dsl-design, external-dsl, fluent-api]}
+      - {id: config-and-query-languages, name: "Configuration and query languages", match: [expression-language, template-engine, sandboxed-evaluation]}
+  - id: testing-compilers
+    name: Testing compilers
+    source: "Compiler testing literature"
+    match: [compiler-testing, differential-testing, csmith]
+    subtopics:
+      - {id: golden-and-differential-tests, name: "Golden, snapshot and differential tests", match: [golden-tests, filecheck-lit, differential-compiler-testing]}
+      - {id: fuzzing-and-reduction, name: "Fuzzing and test-case reduction", match: [program-generators, csmith-yarpgen, creduce]}
+  - id: bootstrapping
+    name: Bootstrapping and cross-compilation
+    source: "Trusting trust; compiler engineering"
+    match: [bootstrapping-compiler, cross-compilation, self-hosting]
+    subtopics:
+      - {id: self-hosting-bootstrap, name: "Self-hosting and bootstrap stages", match: [stage0-stage1-stage2, bootstrap-chain, reproducible-compiler]}
+      - {id: cross-compilation-targets, name: "Cross-compilation and target triples", match: [target-triple, sysroot, cross-toolchain]}
+  - id: pgo-lto-sanitizers
+    name: Whole-program and profile-guided optimisation
+    source: "Compiler docs (LLVM/GCC)"
+    match: [lto, pgo, sanitizers-instrumentation]
+    subtopics:
+      - {id: lto-and-pgo, name: "LTO and PGO", match: [thin-lto, profile-guided-optimization, instrumentation-profile]}
+      - {id: sanitizer-instrumentation, name: "Sanitizer instrumentation", match: [addresssanitizer, undefined-behaviour-sanitizer, shadow-memory]}
+  - id: vectorization
+    name: Vectorisation and parallelism in compilers
+    source: "LLVM vectorizers; Polly"
+    match: [auto-vectorization, polyhedral-model, loop-vectorizer]
+    subtopics:
+      - {id: auto-vectorisation, name: "Auto-vectorisation", match: [slp-vectorizer, loop-vectorizer, vectorization-remarks]}
+      - {id: polyhedral-and-loop-transforms, name: "Polyhedral optimisation", match: [polly, loop-tiling, loop-interchange]}
+  - id: incremental-build
+    name: Incremental and query-based compilation
+    source: "Salsa/rustc, Roslyn docs"
+    match: [incremental-compilation, query-based-compiler, build-cache]
+    subtopics:
+      - {id: query-based-compilers, name: "Query-based architecture", match: [salsa-framework, demand-driven-compilation, memoization]}
+      - {id: compilation-caching, name: "Compiler caching and distributed builds", match: [ccache-sccache, content-addressed-cache, remote-execution]}
+  - id: arch-backends
+    name: Backends and targets
+    source: "Intel/Arm manuals; Cranelift docs"
+    match: [x86-64-encoding, arm64-backend, cranelift]
+    subtopics:
+      - {id: x86-64-code-emission, name: "x86-64 instruction encoding", match: [rex-prefix, modrm-sib, machine-code-emission]}
+      - {id: cranelift-and-small-backends, name: "Cranelift and other lightweight backends", match: [cranelift-codegen, qbe-backend, tcc-backend]}
+  - id: calling-conventions
+    name: Calling conventions and ABI
+    source: "System V AMD64 ABI; AAPCS"
+    match: [calling-convention, abi, stack-frame-layout]
+    subtopics:
+      - {id: calling-convention-details, name: "Calling conventions in practice", match: [sysv-amd64, register-arguments, stack-frame]}
+      - {id: name-mangling-and-abi-stability, name: "Name mangling and ABI stability", match: [name-mangling, itanium-abi, abi-versioning]}
+  - id: language-design
+    name: Language design
+    source: "Language design practice"
+    match: [language-design, grammar-design, syntax-design]
+    subtopics:
+      - {id: syntax-and-semantics-design, name: "Syntax and semantics design", match: [grammar-ambiguity, syntax-choices, semantic-specification]}
+      - {id: evolution-and-compatibility, name: "Language evolution and compatibility", match: [editions, deprecation-policy, backward-compatibility]}
+  - id: numeric-semantics
+    name: Numeric and string semantics
+    source: "IEEE 754; Unicode standard"
+    match: [integer-overflow, floating-point-semantics, unicode-strings]
+    subtopics:
+      - {id: integers-and-floats, name: "Integer and floating-point semantics", match: [integer-overflow-semantics, ieee754-nan, constant-folding-fp]}
+      - {id: strings-and-unicode, name: "Strings and Unicode", match: [utf8-representation, grapheme-clusters, string-interning]}

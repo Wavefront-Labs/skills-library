@@ -1,0 +1,347 @@
+# Canonical coverage spec: Data Science & Analytics (whole field).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: data-science-and-analytics
+scope:
+  category: computing-software
+  field: data-science-and-analytics
+  products: [pandas-numpy, statistics-for-practitioners, jupyter-notebooks, data-visualization, experiment-design, bi-tools]
+sources:
+  - "pandas documentation user guide (pandas.pydata.org/docs/user_guide) - IO tools, indexing, missing data, groupby, merge/join, reshaping, time series, text, categoricals, scaling to large datasets, enhancing performance"
+  - "NumPy documentation user guide (numpy.org/doc/stable/user) - array creation, indexing, broadcasting, ufuncs, linear algebra, random Generator, structured arrays"
+  - "SciPy reference guide (docs.scipy.org/doc/scipy/reference) - scipy.stats distributions and tests, optimize, interpolate, signal"
+  - "statsmodels documentation (statsmodels.org/stable) - regression and linear models, GLM, time series, multiple testing, power"
+  - "Jupyter documentation (docs.jupyter.org) and IPython documentation (ipython.readthedocs.io) - magics, kernels, nbformat, nbconvert, widgets; papermill and nbstripout docs"
+  - "matplotlib documentation (matplotlib.org/stable) - usage guide, tutorials, gallery, styling, constrained layout, saving; seaborn and Plotly Python documentation"
+  - "Trustworthy Online Controlled Experiments (Kohavi, Tang and Xu) chapters - experimentation basics, metrics, sample ratio mismatch, variance reduction, ethics; Causal Inference The Mixtape and Hernan and Robins What If chapter lists"
+  - "Tableau Desktop help (help.tableau.com) - data sources and joins, calculations, level of detail expressions, table calculations, parameters, dashboards, extracts"
+  - "Microsoft Power BI documentation (learn.microsoft.com/power-bi) and DAX reference (learn.microsoft.com/dax) - data modelling, DAX, Power Query, refresh, row-level security, deployment pipelines"
+  - "Exam guides used as outlines - Microsoft PL-300 Power BI Data Analyst skills measured; Tableau Desktop Specialist exam guide"
+topics:
+  - id: pd-structures
+    name: "Series, DataFrame and dtypes"
+    source: "pandas user guide - Intro to data structures; Essential basic functionality"
+    match: [pd-structures]
+    subtopics:
+      - {id: pd-structures-dataframe-construction-and-inspection, name: "Build and inspect a DataFrame", match: [dataframe-construction]}
+      - {id: pd-structures-dtype-conversion-nullable-types, name: "Convert dtypes and use nullable types", match: [dtype-conversion]}
+      - {id: pd-structures-memory-reduction-downcasting, name: "Cut DataFrame memory with downcasting and category", match: [memory-reduction]}
+  - id: pd-io
+    name: "Reading and writing data"
+    source: "pandas user guide - IO tools (text, CSV, HDF5, ...)"
+    match: [pd-io]
+    subtopics:
+      - {id: pd-io-read-csv-robustly, name: "Read CSV files robustly", match: [read-csv-options]}
+      - {id: pd-io-chunked-and-columnar-io, name: "Chunked reads and Parquet", match: [chunked-reading]}
+      - {id: pd-io-excel-and-database-io, name: "Read Excel and SQL into pandas", match: [read-excel]}
+  - id: pd-indexing
+    name: "Selection, indexing and filtering"
+    source: "pandas user guide - Indexing and selecting data; MultiIndex"
+    match: [pd-indexing]
+    subtopics:
+      - {id: pd-indexing-loc-iloc-boolean-selection, name: "Select with loc, iloc and boolean masks", match: [loc-iloc]}
+      - {id: pd-indexing-avoid-setting-with-copy, name: "Avoid SettingWithCopy and chained assignment", match: [setting-with-copy]}
+      - {id: pd-indexing-multiindex-and-set-index, name: "Work with set_index and MultiIndex", match: [multiindex]}
+  - id: pd-missing
+    name: "Missing data and duplicates"
+    source: "pandas user guide - Working with missing data; duplicate labels"
+    match: [pd-missing]
+    subtopics:
+      - {id: pd-missing-detect-and-fill-missing, name: "Detect and impute missing values", match: [missing-values]}
+      - {id: pd-missing-deduplicate-records, name: "Find and drop duplicate rows", match: [drop-duplicates]}
+  - id: pd-groupby
+    name: "Group by, aggregate and window"
+    source: "pandas user guide - Group by: split-apply-combine; Windowing operations"
+    match: [pd-groupby]
+    subtopics:
+      - {id: pd-groupby-groupby-named-aggregation, name: "Aggregate with groupby named aggregation", match: [groupby-agg]}
+      - {id: pd-groupby-groupby-transform-filter, name: "Group-wise transform, filter and rank", match: [groupby-transform]}
+      - {id: pd-groupby-rolling-expanding-windows, name: "Rolling and expanding window calculations", match: [rolling-window]}
+  - id: pd-merge
+    name: "Merge, join and concatenate"
+    source: "pandas user guide - Merge, join, concatenate and compare"
+    match: [pd-merge]
+    subtopics:
+      - {id: pd-merge-merge-join-validation, name: "Merge with validation and indicators", match: [pandas-merge]}
+      - {id: pd-merge-concat-and-asof-merge, name: "Concatenate frames and merge_asof", match: [pandas-concat]}
+  - id: pd-reshape
+    name: "Reshaping and pivoting"
+    source: "pandas user guide - Reshaping and pivot tables; Melt; Stack and unstack"
+    match: [pd-reshape]
+    subtopics:
+      - {id: pd-reshape-pivot-table-crosstab, name: "Pivot tables and crosstabs", match: [pivot-table]}
+      - {id: pd-reshape-melt-stack-wide-long, name: "Convert wide to long with melt and stack", match: [melt-wide-to-long]}
+      - {id: pd-reshape-explode-and-json-normalize, name: "Explode lists and flatten nested JSON", match: [explode-lists]}
+  - id: pd-timeseries
+    name: "Time series and dates"
+    source: "pandas user guide - Time series / date functionality; Time deltas"
+    match: [pd-timeseries]
+    subtopics:
+      - {id: pd-timeseries-resample-and-frequency, name: "Resample time series to a new frequency", match: [resample]}
+      - {id: pd-timeseries-timezones-and-parsing, name: "Handle time zones and date parsing", match: [tz-localize]}
+      - {id: pd-timeseries-shift-lag-diff-pct-change, name: "Lags, differences and growth rates", match: [shift-lag]}
+  - id: pd-text-categorical
+    name: "Strings and categoricals"
+    source: "pandas user guide - Working with text data; Categorical data"
+    match: [pd-text-categorical]
+    subtopics:
+      - {id: pd-text-categorical-string-methods-regex-cleaning, name: "Clean text columns with str methods and regex", match: [str-accessor]}
+      - {id: pd-text-categorical-categorical-ordered-data, name: "Use categorical dtype and ordered categories", match: [categorical-dtype]}
+  - id: pd-performance
+    name: "Performance and scaling pandas"
+    source: "pandas user guide - Enhancing performance; Scaling to large datasets"
+    match: [pd-performance]
+    subtopics:
+      - {id: pd-performance-vectorise-instead-of-apply, name: "Vectorise instead of iterrows and apply", match: [vectorization]}
+      - {id: pd-performance-scale-beyond-memory, name: "Scale past memory limits", match: [larger-than-memory]}
+  - id: np-arrays
+    name: "NumPy arrays, dtypes and indexing"
+    source: "NumPy user guide - Array creation; Data types; Indexing on ndarrays"
+    match: [np-arrays]
+    subtopics:
+      - {id: np-arrays-ndarray-creation-dtypes, name: "Create arrays and choose dtypes", match: [ndarray-creation]}
+      - {id: np-arrays-slicing-views-fancy-indexing, name: "Slicing, views and fancy indexing", match: [array-slicing-views]}
+      - {id: np-arrays-structured-arrays-and-memmap, name: "Structured arrays and memory-mapped files", match: [structured-arrays]}
+  - id: np-broadcasting
+    name: "Broadcasting and ufuncs"
+    source: "NumPy user guide - Broadcasting; Universal functions; Reductions"
+    match: [np-broadcasting]
+    subtopics:
+      - {id: np-broadcasting-broadcasting-rules, name: "Apply broadcasting rules correctly", match: [broadcasting-rules]}
+      - {id: np-broadcasting-ufuncs-and-numerical-pitfalls, name: "Use ufuncs and avoid float pitfalls", match: [numpy-ufuncs]}
+  - id: np-linalg-random
+    name: "Linear algebra and random numbers"
+    source: "NumPy user guide - numpy.linalg; Random Generator"
+    match: [np-linalg-random]
+    subtopics:
+      - {id: np-linalg-random-linear-algebra-solve, name: "Solve linear systems and decompositions", match: [numpy-linalg]}
+      - {id: np-linalg-random-random-generator-reproducibility, name: "Reproducible randomness with Generator", match: [default-rng]}
+  - id: st-descriptive
+    name: "Descriptive statistics and distributions of data"
+    source: "SciPy stats / statsmodels descriptive; OpenIntro Statistics ch.2"
+    match: [st-descriptive]
+    subtopics:
+      - {id: st-descriptive-summary-statistics-robust, name: "Summarise data with robust statistics", match: [descriptive-statistics]}
+      - {id: st-descriptive-distribution-fitting-qq, name: "Check distribution shape with Q-Q plots and fits", match: [qq-plot]}
+  - id: st-probability
+    name: "Probability distributions"
+    source: "scipy.stats distributions; OpenIntro Statistics ch.3-4"
+    match: [st-probability]
+    subtopics:
+      - {id: st-probability-scipy-distributions-pdf-cdf-ppf, name: "Use scipy.stats distributions", match: [scipy-distributions]}
+      - {id: st-probability-simulation-and-clt, name: "Simulate sampling distributions and the CLT", match: [monte-carlo-simulation]}
+  - id: st-hypothesis-tests
+    name: "Hypothesis tests"
+    source: "scipy.stats tests; OpenIntro Statistics ch.5-7"
+    match: [st-hypothesis-tests]
+    subtopics:
+      - {id: st-hypothesis-tests-t-tests-welch-paired, name: "Run t-tests: Welch, paired, one-sample", match: [t-test]}
+      - {id: st-hypothesis-tests-chi-square-and-proportions, name: "Test categorical data and proportions", match: [chi-square-test]}
+      - {id: st-hypothesis-tests-nonparametric-tests, name: "Use nonparametric alternatives", match: [mann-whitney]}
+  - id: st-intervals
+    name: "Confidence intervals and bootstrap"
+    source: "OpenIntro Statistics ch.5; scipy.stats.bootstrap; statsmodels proportion_confint"
+    match: [st-intervals]
+    subtopics:
+      - {id: st-intervals-confidence-intervals-mean-proportion, name: "Compute and interpret confidence intervals", match: [confidence-interval]}
+      - {id: st-intervals-bootstrap-intervals, name: "Bootstrap confidence intervals", match: [bootstrap-ci]}
+  - id: st-anova-multiple
+    name: "ANOVA and multiple comparisons"
+    source: "statsmodels anova and multitest; OpenIntro ch.7"
+    match: [st-anova-multiple]
+    subtopics:
+      - {id: st-anova-multiple-one-way-anova-posthoc, name: "One-way and two-way ANOVA with post-hoc tests", match: [anova-oneway]}
+      - {id: st-anova-multiple-multiple-testing-correction, name: "Correct for multiple comparisons", match: [multiple-testing]}
+      - {id: st-anova-multiple-power-and-sample-size, name: "Power analysis and sample size", match: [power-analysis]}
+  - id: st-correlation
+    name: "Correlation and association"
+    source: "SciPy stats correlation functions; OpenIntro ch.8"
+    match: [st-correlation]
+    subtopics:
+      - {id: st-correlation-correlation-pearson-spearman, name: "Correlation: Pearson, Spearman, Kendall", match: [pearson-correlation]}
+  - id: st-regression
+    name: "Linear regression"
+    source: "statsmodels regression and linear models; ISLR ch.3"
+    match: [st-regression]
+    subtopics:
+      - {id: st-regression-ols-formula-regression, name: "Fit and read an OLS regression", match: [ols-regression]}
+      - {id: st-regression-regression-diagnostics, name: "Diagnose regression assumptions", match: [regression-diagnostics]}
+      - {id: st-regression-train-test-cross-validation, name: "Validate models out of sample", match: [train-test-split]}
+  - id: st-glm
+    name: "Logistic and generalised linear models"
+    source: "statsmodels GLM and discrete models; ISLR ch.4"
+    match: [st-glm]
+    subtopics:
+      - {id: st-glm-logistic-regression-odds, name: "Logistic regression and odds ratios", match: [logistic-regression]}
+      - {id: st-glm-poisson-count-glm, name: "Poisson and count-data GLMs", match: [poisson-regression]}
+  - id: st-timeseries
+    name: "Time series analysis"
+    source: "statsmodels tsa; Hyndman Forecasting Principles and Practice"
+    match: [st-timeseries]
+    subtopics:
+      - {id: st-timeseries-stationarity-decomposition, name: "Test stationarity and decompose series", match: [stationarity-adf]}
+      - {id: st-timeseries-arima-forecast-backtest, name: "Forecast with ARIMA/ETS and backtest", match: [arima-forecast]}
+  - id: st-bayesian
+    name: "Bayesian estimation basics"
+    source: "Think Bayes; Gelman et al. BDA ch.1-5; PyMC docs"
+    match: [st-bayesian]
+    subtopics:
+      - {id: st-bayesian-beta-binomial-conjugate, name: "Bayesian conversion rate with Beta-Binomial", match: [beta-binomial]}
+      - {id: st-bayesian-mcmc-with-pymc, name: "Fit a model with MCMC and check convergence", match: [mcmc-pymc]}
+  - id: jn-kernels-environments
+    name: "Kernels and environments"
+    source: "Jupyter docs - Installation; IPython kernel; ipykernel install"
+    match: [jn-kernels-environments]
+    subtopics:
+      - {id: jn-kernels-environments-register-venv-kernel, name: "Register a virtualenv as a Jupyter kernel", match: [ipykernel-install]}
+      - {id: jn-kernels-environments-kernel-management-restarts, name: "Manage, interrupt and restart kernels", match: [kernel-restart]}
+  - id: jn-magics-productivity
+    name: "IPython magics and productivity"
+    source: "IPython docs - Built-in magic commands; Jupyter shortcuts"
+    match: [jn-magics-productivity]
+    subtopics:
+      - {id: jn-magics-productivity-ipython-line-cell-magics, name: "Use line and cell magics", match: [ipython-magics]}
+      - {id: jn-magics-productivity-profiling-in-notebooks, name: "Profile slow cells", match: [prun-profiling]}
+  - id: jn-reproducibility
+    name: "Reproducible notebooks"
+    source: "Jupyter docs; nbformat; nbstripout; jupytext"
+    match: [jn-reproducibility]
+    subtopics:
+      - {id: jn-reproducibility-clean-notebooks-in-git, name: "Keep notebooks clean in version control", match: [nbstripout]}
+      - {id: jn-reproducibility-pin-environment-and-seeds, name: "Pin dependencies and seeds", match: [requirements-lock]}
+      - {id: jn-reproducibility-notebook-to-script-refactor, name: "Refactor notebook logic into modules", match: [notebook-refactor]}
+  - id: jn-execution-conversion
+    name: "Parameterised execution and conversion"
+    source: "papermill docs; nbconvert docs; nbclient"
+    match: [jn-execution-conversion]
+    subtopics:
+      - {id: jn-execution-conversion-papermill-parameterised-runs, name: "Run parameterised notebooks with papermill", match: [papermill-parameters]}
+      - {id: jn-execution-conversion-nbconvert-export-html-pdf, name: "Convert notebooks with nbconvert", match: [nbconvert-html]}
+  - id: jn-interactivity
+    name: "Widgets and interactive exploration"
+    source: "ipywidgets docs; Jupyter tutorials"
+    match: [jn-interactivity]
+    subtopics:
+      - {id: jn-interactivity-ipywidgets-interactive-controls, name: "Add interactive controls with ipywidgets", match: [ipywidgets]}
+  - id: mpl-anatomy
+    name: "matplotlib figure anatomy and API"
+    source: "matplotlib usage guide; Quick start"
+    match: [mpl-anatomy]
+    subtopics:
+      - {id: mpl-anatomy-matplotlib-object-oriented-api, name: "Use the object-oriented matplotlib API", match: [matplotlib-oo-api]}
+      - {id: mpl-anatomy-matplotlib-styling-export, name: "Style and export figures for reports", match: [matplotlib-style]}
+      - {id: mpl-anatomy-matplotlib-dates-annotations, name: "Dates, annotations and twin axes", match: [matplotlib-dates]}
+  - id: viz-seaborn
+    name: "Statistical plots with seaborn"
+    source: "seaborn user guide - distributions, relational, categorical, regression plots, multi-plot grids"
+    match: [viz-seaborn]
+    subtopics:
+      - {id: viz-seaborn-seaborn-distribution-plots, name: "Plot distributions with seaborn", match: [seaborn-histplot]}
+      - {id: viz-seaborn-seaborn-relational-categorical, name: "Relationship and category plots", match: [seaborn-scatterplot]}
+      - {id: viz-seaborn-seaborn-heatmaps-regression, name: "Heatmaps and regression fits", match: [seaborn-heatmap]}
+  - id: viz-interactive
+    name: "Interactive charts with Plotly"
+    source: "Plotly Python docs - Plotly Express, graph objects, figure export"
+    match: [viz-interactive]
+    subtopics:
+      - {id: viz-interactive-plotly-express-charts, name: "Build interactive charts with Plotly Express", match: [plotly-express]}
+      - {id: viz-interactive-plotly-export-sharing, name: "Export and share Plotly figures safely", match: [plotly-write-html]}
+  - id: viz-design
+    name: "Chart choice and visual design"
+    source: "Tufte, Cleveland, Wilke Fundamentals of Data Visualization chapters; Few; Datawrapper academy"
+    match: [viz-design]
+    subtopics:
+      - {id: viz-design-choose-the-right-chart, name: "Choose a chart for the question", match: [chart-selection]}
+      - {id: viz-design-honest-axes-and-scales, name: "Keep axes and scales honest", match: [truncated-axis]}
+      - {id: viz-design-colour-and-accessibility, name: "Choose colour palettes accessibly", match: [colour-palettes]}
+  - id: ab-design
+    name: "Designing online controlled experiments"
+    source: "Kohavi et al. Trustworthy Online Controlled Experiments ch.1-7"
+    match: [ab-design]
+    subtopics:
+      - {id: ab-design-experiment-hypothesis-metrics, name: "Define hypothesis, OEC and guardrail metrics", match: [oec-metric]}
+      - {id: ab-design-randomisation-and-assignment, name: "Randomise and assign users correctly", match: [hash-bucketing]}
+      - {id: ab-design-experiment-duration-power, name: "Plan duration, power and novelty effects", match: [experiment-duration]}
+  - id: ab-analysis
+    name: "Analysing experiment results"
+    source: "Kohavi et al. ch.17-19; Deng et al. CUPED"
+    match: [ab-analysis]
+    subtopics:
+      - {id: ab-analysis-srm-sample-ratio-check, name: "Detect sample ratio mismatch", match: [sample-ratio-mismatch]}
+      - {id: ab-analysis-ab-test-analysis-ci, name: "Analyse a conversion A/B test", match: [ab-test-analysis]}
+      - {id: ab-analysis-cuped-variance-reduction, name: "Reduce variance with CUPED", match: [cuped]}
+  - id: ab-pitfalls
+    name: "Peeking, sequential testing and interference"
+    source: "Kohavi et al. ch.15-16, 20-22; Evan Miller sequential testing"
+    match: [ab-pitfalls]
+    subtopics:
+      - {id: ab-pitfalls-sequential-testing-peeking, name: "Handle peeking with sequential methods", match: [sequential-testing]}
+      - {id: ab-pitfalls-interference-and-network-effects, name: "Spot interference and carry-over", match: [network-interference]}
+  - id: causal-observational
+    name: "Causal inference from observational data"
+    source: "Hernan and Robins What If; Cunningham Causal Inference The Mixtape; statsmodels"
+    match: [causal-observational]
+    subtopics:
+      - {id: causal-observational-difference-in-differences, name: "Estimate effects with difference-in-differences", match: [difference-in-differences]}
+      - {id: causal-observational-propensity-score-matching, name: "Adjust for confounding with propensity scores", match: [propensity-score]}
+      - {id: causal-observational-regression-discontinuity-iv, name: "Regression discontinuity and instrumental variables", match: [regression-discontinuity]}
+  - id: tableau-calcs
+    name: "Tableau calculations and level of detail"
+    source: "Tableau help - Calculations; Table calculations; LOD expressions; Parameters"
+    match: [tableau-calcs]
+    subtopics:
+      - {id: tableau-calcs-tableau-calculated-fields, name: "Write Tableau calculated fields", match: [tableau-calculated-field]}
+      - {id: tableau-calcs-tableau-lod-expressions, name: "Use LOD expressions (FIXED, INCLUDE, EXCLUDE)", match: [tableau-lod]}
+      - {id: tableau-calcs-tableau-table-calcs-parameters, name: "Table calculations, sets and parameters", match: [tableau-table-calculation]}
+  - id: tableau-dashboards
+    name: "Tableau data sources, extracts and dashboards"
+    source: "Tableau help - Connect and join data; Extracts; Dashboards and actions; Performance"
+    match: [tableau-dashboards]
+    subtopics:
+      - {id: tableau-dashboards-tableau-relationships-extracts, name: "Model data with relationships and extracts", match: [tableau-relationships]}
+      - {id: tableau-dashboards-tableau-dashboard-design-performance, name: "Design fast, usable dashboards", match: [tableau-dashboard-actions]}
+  - id: pbi-modelling
+    name: "Power BI data modelling and Power Query"
+    source: "Microsoft PL-300 skills measured - Prepare the data; Model the data; Power BI docs"
+    match: [pbi-modelling]
+    subtopics:
+      - {id: pbi-modelling-pbi-star-schema-relationships, name: "Build a star-schema model with relationships", match: [power-bi-star-schema]}
+      - {id: pbi-modelling-power-query-transformations, name: "Shape data in Power Query", match: [power-query]}
+      - {id: pbi-modelling-pbi-import-vs-directquery, name: "Pick Import, DirectQuery or composite models", match: [import-vs-directquery]}
+  - id: pbi-dax
+    name: "DAX measures and evaluation context"
+    source: "DAX reference; Microsoft PL-300 - Model the data; Russo and Ferrari DAX Patterns"
+    match: [pbi-dax]
+    subtopics:
+      - {id: pbi-dax-dax-measures-filter-context, name: "Write measures and understand filter context", match: [dax-measures]}
+      - {id: pbi-dax-dax-time-intelligence, name: "Time intelligence: YTD, prior year, rolling", match: [dax-time-intelligence]}
+      - {id: pbi-dax-dax-variables-performance, name: "DAX variables and performance tuning", match: [dax-variables]}
+  - id: pbi-governance
+    name: "Power BI security, refresh and deployment"
+    source: "Microsoft PL-300 - Deploy and maintain assets; Power BI security and governance docs"
+    match: [pbi-governance]
+    subtopics:
+      - {id: pbi-governance-pbi-row-level-security, name: "Implement row-level security", match: [row-level-security]}
+      - {id: pbi-governance-pbi-refresh-gateway, name: "Schedule refresh and use gateways", match: [scheduled-refresh]}
+      - {id: pbi-governance-pbi-deployment-pipelines, name: "Deploy through workspaces and pipelines", match: [deployment-pipelines]}
+  - id: analysis-workflow-quality
+    name: "Analysis workflow and data validation"
+    source: "Wickham Tidy Data; pandera and Great Expectations docs; CRISP-DM"
+    match: [analysis-workflow-quality]
+    subtopics:
+      - {id: analysis-workflow-quality-exploratory-data-analysis-checklist, name: "Run an exploratory data analysis checklist", match: [exploratory-data-analysis]}
+      - {id: analysis-workflow-quality-dataframe-validation-pandera, name: "Validate DataFrames with schema checks", match: [pandera-schema]}
+  - id: product-analytics
+    name: "Product and business analytics patterns"
+    source: "Reforge/Amplitude/Mixpanel analytics guides; Lean Analytics"
+    match: [product-analytics]
+    subtopics:
+      - {id: product-analytics-cohort-retention-analysis, name: "Build cohort retention tables", match: [cohort-analysis]}
+      - {id: product-analytics-funnel-conversion-analysis, name: "Compute funnel conversion and drop-off", match: [funnel-analysis]}
+      - {id: product-analytics-metric-definitions-kpi-tree, name: "Define metrics and KPI trees", match: [metric-definition]}
+  - id: analysis-communication
+    name: "Communicating analysis results"
+    source: "Knaflic Storytelling with Data; Few Show Me the Numbers"
+    match: [analysis-communication]
+    subtopics:
+      - {id: analysis-communication-data-story-structure, name: "Structure a data story for decision makers", match: [data-storytelling]}
+      - {id: analysis-communication-uncertainty-and-caveat-reporting, name: "Report uncertainty and limitations honestly", match: [uncertainty-communication]}

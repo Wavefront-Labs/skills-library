@@ -1,0 +1,1417 @@
+# Canonical coverage spec: Google Cloud Platform.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (Google Cloud certification exam guides and
+# the Google Cloud Architecture Framework), not from what we happened to write.
+# Subtopics (depth) come from the cloud.google.com product "How-to guides" tables of contents,
+# the gcloud command groups for each product, and the exam-guide sub-bullets.
+subject: google-cloud
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [google-cloud]
+sources:
+  - "Google Cloud Associate Cloud Engineer exam guide: Setting up a cloud solution environment, Planning and configuring, Deploying and implementing, Ensuring successful operation, Configuring access and security"
+  - "Google Cloud Professional Cloud Architect exam guide: Designing and planning, Managing and provisioning, Security and compliance, Analyzing and optimizing technical and business processes, Managing implementation, Ensuring solution and operations reliability"
+  - "Google Cloud Professional Cloud DevOps Engineer exam guide: Bootstrapping a Google Cloud organization, Building and implementing CI/CD pipelines, Applying site reliability engineering practices, Implementing service monitoring strategies, Optimizing service performance"
+  - "Google Cloud Professional Cloud Security Engineer exam guide: Configuring access, Securing communications and establishing boundary protection, Ensuring data protection, Managing operations, Supporting compliance requirements"
+  - "Google Cloud Architecture Framework pillars: Operational excellence, Security privacy and compliance, Reliability, Cost optimization, Performance optimization, plus System design"
+  - "cloud.google.com per-product documentation How-to guides tables of contents (Resource Manager, Compute Engine, GKE, Cloud Run, Cloud Storage, Cloud SQL, VPC, Cloud Load Balancing, Cloud KMS, Cloud Logging, Cloud Monitoring, Cloud Build, Cloud Deploy and others)"
+  - "gcloud CLI reference command groups (gcloud compute, gcloud container, gcloud run, gcloud storage, gcloud sql, gcloud kms, gcloud logging, gcloud monitoring, gcloud builds, gcloud deploy, gcloud iam, gcloud org-policies, gcloud access-context-manager)"
+topics:
+  # --- Environment setup, identity and access (ACE 1 and 5; PCSE Configuring access; PCDOE Bootstrapping)
+  - id: resource-hierarchy
+    name: Organization, folders and projects hierarchy
+    source: ACE/Setting up; PCSE/Configuring access; Resource Manager how-to guides
+    match: [resource-hierarchy, folders, organization, projects]
+    subtopics:
+      - {id: folder-management, name: Creating and managing folders and folder IAM, match: [folder-creation, folder-iam, gcloud-resource-manager-folders]}
+      - {id: project-creation, name: Creating projects and project ID conventions, match: [project-creation, project-id-naming, gcloud-projects-create]}
+      - {id: move-project, name: Moving projects between folders and organizations, match: [move-project, project-migration-between-folders]}
+      - {id: project-liens-shutdown, name: Project liens and shutting down or restoring projects, match: [project-liens, project-shutdown, undelete-project]}
+      - {id: resource-labels, name: Labels on projects and resources, match: [resource-labels, project-labels, labelling-strategy]}
+      - {id: resource-manager-tags, name: Tags and tag bindings, match: [resource-manager-tags, tag-bindings, tag-keys]}
+      - {id: org-resource-setup, name: Creating the organization resource and organization administrators, match: [organization-resource-setup, organization-administrator-role]}
+      - {id: default-org-roles-cleanup, name: Removing default Project Creator and Billing Account Creator grants, match: [default-org-roles-cleanup, project-creator-role-removal]}
+      - {id: project-count-quota, name: Project count quota and requesting more projects, match: [project-count-quota, project-quota-increase]}
+  - id: billing-accounts-budgets
+    name: Billing accounts, budgets and billing export
+    source: ACE/Setting up; Cloud Billing how-to guides
+    match: [billing-account, billing-accounts, billing-export, budgets, billing-budgets]
+    subtopics:
+      - {id: link-billing, name: Linking and changing a project billing account, match: [link-billing-account, billing-account-linking, change-billing-account]}
+      - {id: budget-notifications, name: Budget alerts and programmatic Pub/Sub notifications, match: [pubsub-budget-notifications, budget-alerts]}
+      - {id: billing-export-bq, name: Billing export to BigQuery and standard queries, match: [bigquery-billing-export, billing-export-queries]}
+      - {id: billing-reports, name: Cost reports and cost table analysis, match: [billing-reports, cost-table, cost-breakdown]}
+      - {id: billing-iam, name: Billing IAM roles and separation of duties, match: [billing-roles, billing-admin]}
+      - {id: disable-billing, name: Capping spend by disabling billing programmatically, match: [disable-billing, cap-spending, billing-kill-switch]}
+      - {id: invoices-payments, name: Invoices, payment methods and billing contacts, match: [invoices, payment-methods, billing-contacts]}
+      - {id: billing-subaccounts, name: Billing subaccounts for resellers and chargeback, match: [billing-subaccounts, reseller-billing]}
+      - {id: billing-catalog-api, name: Pricing lookups with the Cloud Billing Catalog API and pricing calculator, match: [billing-catalog-sku-lookup, pricing-calculator-estimates]}
+  - id: gcloud-cli
+    name: gcloud CLI, configurations and Cloud Shell
+    source: ACE/Setting up; gcloud CLI docs
+    match: [gcloud, gcloud-config, cloud-shell, gcloud-configurations]
+    subtopics:
+      - {id: gcloud-install-components, name: Installing gcloud and managing components, match: [gcloud-install, gcloud-components, gcloud-init]}
+      - {id: gcloud-properties-configs, name: Named configurations and properties, match: [named-configurations, gcloud-properties]}
+      - {id: gcloud-auth-adc, name: gcloud auth and Application Default Credentials, match: [gcloud-auth, application-default-credentials, adc]}
+      - {id: gcloud-format-filter, name: Output formatting and filtering, match: [gcloud-format, gcloud-filter, gcloud-output]}
+      - {id: gcloud-scripting, name: Scripting gcloud non-interactively, match: [gcloud-scripting, gcloud-quiet, gcloud-exit-codes]}
+      - {id: cloud-shell-usage, name: Cloud Shell editor and customisation, match: [cloud-shell-editor, cloud-shell-customization, cloud-shell-boost]}
+      - {id: gcloud-release-tracks, name: Alpha and beta release tracks and command availability, match: [gcloud-release-tracks, gcloud-beta-alpha]}
+      - {id: gcloud-proxy-ca, name: Running gcloud behind a proxy with custom CA certificates, match: [gcloud-proxy, gcloud-custom-ca-certs]}
+      - {id: gcloud-debugging, name: Debugging gcloud with --log-http verbosity and gcloud info, match: [gcloud-debugging, gcloud-info-diagnostics]}
+  - id: cloud-identity-groups
+    name: Cloud Identity, groups and super-admin hygiene
+    source: PCSE/Configuring access; Cloud Identity how-to guides
+    match: [cloud-identity, groups, google-groups, super-admin, workforce-identity-federation]
+    subtopics:
+      - {id: gcds-sync, name: Google Cloud Directory Sync from AD or LDAP, match: [gcds, google-cloud-directory-sync]}
+      - {id: saml-sso, name: SAML single sign-on with an external IdP, match: [saml-sso, sso-setup]}
+      - {id: groups-management, name: Managing groups and memberships with gcloud identity, match: [gcloud-identity-groups, group-membership, dynamic-groups]}
+      - {id: two-step-verification, name: Enforcing 2-step verification and security keys, match: [2sv, two-step-verification, security-keys]}
+      - {id: super-admin-hygiene, name: Super-admin account hygiene and recovery, match: [super-admin-recovery, admin-account-hygiene, break-glass-account]}
+      - {id: workforce-pools, name: Workforce identity pools and providers, match: [workforce-pools, workforce-identity-pool-provider]}
+      - {id: identity-platform, name: Identity Platform for customer identities, match: [identity-platform, gcip, firebase-authentication]}
+      - {id: scim-provisioning, name: Automatic user provisioning from Entra ID or Okta, match: [scim-provisioning, automatic-user-provisioning]}
+      - {id: unmanaged-accounts, name: Consolidating unmanaged and conflicting consumer accounts, match: [unmanaged-user-accounts, conflicting-accounts]}
+  - id: iam-roles
+    name: IAM predefined and custom roles, least privilege
+    source: ACE/Access and security; PCSE; IAM how-to guides
+    match: [iam, predefined-roles, custom-roles, least-privilege]
+    subtopics:
+      - {id: custom-role-lifecycle, name: Custom role creation and lifecycle stages, match: [custom-role-lifecycle, role-stages, gcloud-iam-roles]}
+      - {id: iam-conditions, name: Conditional role bindings, match: [iam-conditions, conditional-bindings]}
+      - {id: policy-troubleshooter, name: Policy Troubleshooter for access denials, match: [policy-troubleshooter]}
+      - {id: iam-recommender, name: Role recommendations and least-privilege cleanup, match: [iam-recommender, role-recommendations]}
+      - {id: policy-analyzer, name: Policy Analyzer who-has-access queries, match: [policy-analyzer, analyze-iam-policy]}
+      - {id: iam-policy-audit, name: Auditing IAM bindings with get-iam-policy, match: [iam-policy-audit, get-iam-policy, role-grant-review]}
+      - {id: basic-roles-removal, name: Removing basic roles, match: [basic-roles, primitive-roles]}
+      - {id: iam-policy-simulator, name: Policy Simulator for IAM changes, match: [iam-policy-simulator, simulate-iam-policy]}
+      - {id: iam-policy-etag, name: Read-modify-write IAM policies with etags and policy versions, match: [iam-policy-etag, set-iam-policy-etag]}
+      - {id: testable-permissions, name: Grantable roles and testable permissions lookups, match: [grantable-roles, testable-permissions]}
+      - {id: privileged-access-manager, name: Just-in-time access with Privileged Access Manager, match: [privileged-access-manager, pam-entitlements, just-in-time-access]}
+  - id: service-accounts
+    name: Service accounts, keys and impersonation
+    source: ACE/Access and security; PCSE; IAM service accounts how-to guides
+    match: [service-accounts, service-account-keys, impersonation]
+    subtopics:
+      - {id: sa-key-rotation, name: Key rotation and disabling key creation, match: [service-account-key-rotation, disable-key-creation, disableserviceaccountkeycreation]}
+      - {id: short-lived-credentials, name: Short-lived credentials and token creator, match: [short-lived-credentials, token-creator, generate-access-token]}
+      - {id: attached-service-accounts, name: Attaching service accounts to resources and the default SA, match: [default-service-account, attached-service-account, scopes-vs-iam]}
+      - {id: sa-insights, name: Service account insights and unused accounts, match: [service-account-insights, unused-service-accounts, key-usage-activity]}
+      - {id: sa-disable-delete, name: Disabling and deleting service accounts safely, match: [disable-service-account, service-account-cleanup]}
+      - {id: cross-project-sa, name: Cross-project service account usage, match: [cross-project-service-accounts, service-account-user-role]}
+      - {id: service-agents, name: Service agents and Google-managed service accounts, match: [service-agents, google-managed-service-accounts]}
+      - {id: sa-key-expiry, name: Service account key expiry and uploaded keys, match: [service-account-key-expiry, upload-service-account-key]}
+      - {id: leaked-key-response, name: Responding to a leaked service account key, match: [leaked-service-account-key, exposed-key-response]}
+  - id: workload-identity-federation
+    name: Workload Identity Federation for external workloads
+    source: PCSE/Configuring access; Workload Identity Federation how-to guides
+    match: [workload-identity-federation, gke-workload-identity, keyless-auth]
+    subtopics:
+      - {id: wif-aws, name: Federation from AWS, match: [wif-aws, aws-to-gcp-federation]}
+      - {id: wif-oidc-azure, name: Federation from Azure and OIDC providers, match: [wif-oidc, wif-azure]}
+      - {id: wif-github-actions, name: Federation from GitHub Actions, match: [github-actions-wif, google-github-actions-auth]}
+      - {id: wif-attribute-mapping, name: Attribute mapping and attribute conditions, match: [attribute-mapping, attribute-conditions]}
+      - {id: wif-credential-config, name: Credential configuration files and external_account, match: [credential-configuration-file, external-account]}
+      - {id: gke-ksa-gsa, name: Binding Kubernetes service accounts to IAM, match: [ksa-gsa-binding, kubernetes-service-account-binding]}
+      - {id: wif-gitlab, name: Federation from GitLab CI/CD, match: [wif-gitlab, gitlab-ci-federation]}
+      - {id: wif-x509, name: Federation with X.509 certificates for on-prem workloads, match: [wif-x509, x509-federation]}
+      - {id: wif-direct-access, name: Direct resource access with principal identifiers vs impersonation, match: [wif-direct-resource-access, principalset-identifiers]}
+      - {id: wif-troubleshooting, name: Troubleshooting STS token exchange errors, match: [wif-troubleshooting, sts-token-exchange-errors]}
+  - id: org-policy
+    name: Organization Policy constraints
+    source: PCSE/Configuring access; PCDOE/Bootstrapping; Organization Policy how-to guides
+    match: [org-policy, organization-policy-service, custom-constraints]
+    subtopics:
+      - {id: custom-constraints-cel, name: Writing custom constraints in CEL, match: [custom-constraints, custom-constraint-cel]}
+      - {id: org-policy-dry-run, name: Dry-run policies, match: [dry-run, org-policy-dry-run]}
+      - {id: org-policy-simulator, name: Policy Simulator for org policies, match: [policy-simulator]}
+      - {id: domain-restricted-sharing, name: Domain restricted sharing, match: [domain-restricted-sharing, allowed-policy-member-domains]}
+      - {id: compute-constraints, name: Compute constraints such as external IP and serial port, match: [vm-external-ip-access, compute-constraints, vmexternalipaccess]}
+      - {id: resource-location-constraint, name: Resource location restriction, match: [gcp-resourcelocations, resource-locations]}
+      - {id: essential-contacts, name: Essential Contacts, match: [essential-contacts]}
+      - {id: policy-inheritance, name: Policy inheritance merge and reset behaviour, match: [org-policy-inheritance, inherit-from-parent]}
+      - {id: conditional-org-policy, name: Tag-conditional organization policies, match: [conditional-org-policy, tag-conditional-constraints]}
+      - {id: effective-org-policy, name: Listing constraints and effective policies, match: [effective-org-policy, describe-effective-policy]}
+  - id: iam-deny-pab
+    name: IAM deny policies and principal access boundaries
+    source: PCSE/Configuring access; IAM deny how-to guides
+    match: [iam-deny-policies, deny-policies, principal-access-boundary]
+    subtopics:
+      - {id: deny-policy-authoring, name: Authoring deny rules and deniedPermissions, match: [deniedpermissions, deny-rule-authoring, gcloud-iam-policies]}
+      - {id: pab-policies, name: PAB policies and bindings, match: [pab-policy, pab-binding, principal-set]}
+      - {id: deny-exceptions, name: Exception principals, match: [exceptionprincipals, deny-exceptions]}
+      - {id: deny-troubleshooting, name: Troubleshooting deny policy denials, match: [deny-troubleshooting, deny-policy-audit]}
+      - {id: deny-tags, name: Tag-conditioned deny rules, match: [resource-matchtag, tag-conditioned-deny]}
+      - {id: deny-attachment-points, name: Managing deny policies with gcloud iam policies at org folder and project, match: [gcloud-iam-policies, deny-policy-attachment-points]}
+      - {id: deny-permission-format, name: Deny-supported permissions and the v2 permission format, match: [deny-permission-format, supported-deny-permissions]}
+      - {id: pab-troubleshooting, name: Troubleshooting principal access boundary denials, match: [pab-troubleshooting, principal-access-boundary-denials]}
+  - id: iap-beyondcorp
+    name: Identity-Aware Proxy and BeyondCorp access
+    source: PCSE/Configuring access; IAP how-to guides
+    match: [identity-aware-proxy, iap, beyondcorp, context-aware-access]
+    subtopics:
+      - {id: iap-backend-service, name: Enabling IAP on a load balancer backend, match: [iap-backend-service, iap-oauth-client, load-balancer-auth]}
+      - {id: iap-serverless, name: IAP for Cloud Run and App Engine, match: [iap-cloud-run, iap-app-engine]}
+      - {id: access-levels, name: Access levels in Access Context Manager, match: [access-levels]}
+      - {id: iap-jwt, name: Validating the IAP JWT in the backend, match: [iap-jwt, x-goog-iap-jwt-assertion]}
+      - {id: iap-settings, name: IAP settings and reauthentication, match: [iap-settings, iap-reauthentication, iap-session]}
+      - {id: endpoint-verification, name: Endpoint Verification and device trust, match: [endpoint-verification, device-trust]}
+      - {id: iap-programmatic, name: Programmatic access to IAP with OIDC tokens, match: [iap-programmatic-access, iap-oidc-token]}
+      - {id: iap-external-identities, name: IAP with external identities via Identity Platform, match: [iap-external-identities]}
+      - {id: iap-oauth-clients, name: Custom OAuth clients and consent screen for IAP, match: [iap-oauth-client, iap-custom-oauth]}
+  - id: cloud-audit-logs
+    name: Cloud Audit Logs (admin, data access, policy denied)
+    source: ACE/Access and security; PCSE/Managing operations; Cloud Audit Logs how-to guides
+    match: [cloud-audit-logs, audit-logs, data-access-logs, audit-logging]
+    subtopics:
+      - {id: data-access-config, name: Enabling Data Access logs via auditConfig, match: [auditconfig, data-access-audit-config]}
+      - {id: log-exemptions, name: Exempting principals from audit logs, match: [log-exemptions]}
+      - {id: audit-log-queries, name: Querying audit logs by method and principal, match: [audit-log-queries, methodname-filter, protopayload]}
+      - {id: policy-denied-logs, name: Policy Denied audit logs, match: [policy-denied-logs]}
+      - {id: audit-log-export, name: Long-term audit log export and retention, match: [audit-log-bigquery, audit-log-export]}
+      - {id: audit-log-alerts, name: Alerting on sensitive admin activity, match: [iam-change-alerts, audit-log-alerting]}
+      - {id: system-event-logs, name: System Event audit logs, match: [system-event-audit-logs]}
+      - {id: audit-log-structure, name: Reading the audit log entry structure, match: [audit-log-entry-structure, protopayload]}
+      - {id: data-access-cost, name: Estimating and controlling Data Access log volume, match: [data-access-log-volume, audit-log-cost]}
+  - id: landing-zone
+    name: Landing zone and organization bootstrap as code
+    source: PCDOE/Bootstrapping; PCA/Designing; terraform-example-foundation and Fabric FAST docs
+    match: [landing-zone, fabric-fast, terraform-example-foundation, project-factory, org-bootstrap]
+    subtopics:
+      - {id: fast-stages, name: Fabric FAST stages, match: [fast-stages, fast-bootstrap]}
+      - {id: example-foundation-stages, name: terraform-example-foundation stages 0-bootstrap to 5-app-infra, match: [0-bootstrap, example-foundation-stages]}
+      - {id: project-factory-module, name: Project factory module usage, match: [project-factory-module, pf-module]}
+      - {id: environment-folders, name: Environment folder structure, match: [environment-folders, folder-structure]}
+      - {id: seed-project, name: Seed project and state bucket, match: [seed-project, terraform-state-bucket]}
+      - {id: centralized-logging-project, name: Centralised logging project, match: [logging-project, centralized-logging-project]}
+      - {id: network-hub, name: Network hub and spoke projects, match: [network-hub-project, hub-and-spoke]}
+      - {id: foundation-groups, name: Foundation IAM groups, match: [foundation-groups, grp-gcp-groups]}
+      - {id: baseline-org-policies, name: Baseline organization policy set for a new landing zone, match: [baseline-org-policies, secure-by-default-org-policies]}
+      - {id: google-cloud-setup, name: Guided foundation with Google Cloud Setup, match: [google-cloud-setup, guided-foundation-setup]}
+  - id: cloud-asset-inventory
+    name: Cloud Asset Inventory and resource search
+    source: PCSE/Managing operations; Cloud Asset Inventory how-to guides
+    match: [cloud-asset-inventory, asset-inventory, asset-search]
+    subtopics:
+      - {id: asset-export, name: Exporting assets to BigQuery or GCS, match: [bigquery-asset-export, asset-export]}
+      - {id: asset-feeds, name: Real-time asset feeds, match: [asset-feeds]}
+      - {id: iam-policy-search, name: Searching IAM policies, match: [iam-policy-search]}
+      - {id: asset-history, name: Asset history and point-in-time queries, match: [asset-history, point-in-time-assets]}
+      - {id: analyze-move, name: Analysing project moves, match: [analyze-move]}
+      - {id: cai-os-inventory, name: OS inventory through asset inventory, match: [asset-os-inventory, cai-os-inventory]}
+      - {id: search-all-resources, name: Searching resources with searchAllResources query syntax, match: [search-all-resources, asset-search-query]}
+      - {id: asset-relationships, name: Asset relationships export, match: [asset-relationships]}
+      - {id: analyze-org-policies, name: Analysing organization policies and governed assets, match: [analyze-org-policies, governed-assets]}
+  - id: quotas
+    name: Quotas and quota management
+    source: ACE/Planning; PCA/Managing implementation; Cloud Quotas how-to guides
+    match: [quotas, quota-management, quota-increase]
+    subtopics:
+      - {id: quota-adjuster, name: Quota Adjuster, match: [quota-adjuster]}
+      - {id: quota-preferences, name: Quota preferences via Cloud Quotas API, match: [quota-preferences, cloud-quotas-api]}
+      - {id: consumer-override, name: Consumer quota overrides, match: [consumer-override, quota-override]}
+      - {id: quota-alerts, name: Quota usage alerts, match: [quota-alerts, quota-monitoring]}
+      - {id: per-user-quota, name: Per-user quotas and quota projects, match: [per-user-quota, quota-project, x-goog-user-project]}
+      - {id: gpu-quota, name: GPU and TPU quota requests, match: [gpu-quota, accelerator-quota]}
+      - {id: quota-usage-reporting, name: Quota usage reporting across projects, match: [quota-usage-report, quota-dashboards]}
+  # --- Compute (ACE 2 and 3; PCA Managing and provisioning)
+      - {id: rate-quota-errors, name: Handling rate-quota 429 errors and retries, match: [rate-quota-429, quota-exceeded-errors]}
+      - {id: system-limits, name: System limits vs adjustable quotas, match: [system-limits, non-adjustable-limits]}
+  - id: compute-engine-vms
+    name: Compute Engine VM provisioning and machine families
+    source: ACE/Deploying; PCA/Provisioning; Compute Engine how-to guides
+    match: [compute-engine, gce, machine-types, machine-families, vm-provisioning]
+    subtopics:
+      - {id: instance-creation, name: Creating instances with gcloud, match: [gcloud-compute-instances-create, instance-creation]}
+      - {id: machine-family-selection, name: Choosing machine families and custom machine types, match: [custom-machine-types, machine-family-comparison, e2-vs-n2]}
+      - {id: startup-scripts-metadata, name: Startup scripts and instance metadata, match: [startup-script, instance-metadata, custom-metadata]}
+      - {id: gpu-vms, name: GPU VMs and driver installation, match: [gpu-vms, gpu-drivers, accelerator-optimized]}
+      - {id: instance-templates, name: Instance templates, match: [instance-templates]}
+      - {id: reservations, name: Reservations and future reservations, match: [reservations, future-reservations, capacity-reservation]}
+      - {id: host-maintenance, name: Live migration and availability policies, match: [live-migration, on-host-maintenance, availability-policy]}
+      - {id: windows-vms, name: Windows Server VMs and passwords, match: [windows-vm, windows-password-reset, sysprep]}
+      - {id: vm-lifecycle, name: Stop suspend resize and machine type changes, match: [vm-lifecycle, suspend-resume, change-machine-type]}
+      - {id: instance-schedules, name: Instance schedules, match: [instance-schedules, resource-policy-schedule]}
+      - {id: nested-virtualization, name: Nested virtualization on Compute Engine, match: [nested-virtualization]}
+      - {id: vm-deletion-protection, name: Deletion protection and auto-delete disk settings, match: [vm-deletion-protection, auto-delete-disks]}
+  - id: mig-autoscaling
+    name: Managed instance groups and autoscaling
+    source: ACE/Deploying; MIG how-to guides
+    match: [managed-instance-groups, mig, autoscaler, autohealing]
+    subtopics:
+      - {id: regional-mig, name: Regional MIGs and distribution shape, match: [regional-mig, distribution-shape]}
+      - {id: rolling-update, name: Rolling updates and canary updates, match: [rolling-update, canary-update]}
+      - {id: stateful-mig, name: Stateful MIGs, match: [stateful-mig]}
+      - {id: predictive-autoscaling, name: Predictive autoscaling, match: [predictive-autoscaling]}
+      - {id: schedule-autoscaling, name: Schedule-based autoscaling, match: [schedule-based-autoscaling]}
+      - {id: scale-in-controls, name: Scale-in controls, match: [scale-in-controls]}
+      - {id: standby-pool, name: Standby pools, match: [standby-pool]}
+      - {id: instance-flexibility, name: Instance flexibility policy with mixed machine types, match: [instance-flexibility, mixed-machine-types]}
+      - {id: mig-instance-ops, name: Abandoning recreating and resizing instances, match: [abandon-instances, recreate-instances, mig-resize]}
+      - {id: named-ports, name: Named ports, match: [named-ports]}
+      - {id: autoscaling-signals, name: Autoscaling on load balancing utilisation and Cloud Monitoring metrics, match: [autoscaling-custom-metrics, lb-utilization-autoscaling]}
+      - {id: mig-autohealing, name: Autohealing with application health checks, match: [mig-autohealing, autohealing-health-check]}
+  - id: persistent-disk-snapshots
+    name: Persistent Disk, Hyperdisk and snapshots
+    source: ACE/Planning storage; PCA/Reliability; Compute Engine disks how-to guides
+    match: [persistent-disk, hyperdisk, disk-snapshots, snapshot-schedule, regional-persistent-disk]
+    subtopics:
+      - {id: snapshot-schedules, name: Snapshot schedules, match: [snapshot-schedule, snapshot-schedules]}
+      - {id: disk-resize, name: Resizing disks and growing filesystems, match: [disk-resize, resize-filesystem]}
+      - {id: storage-pools, name: Hyperdisk storage pools, match: [storage-pools]}
+      - {id: local-ssd, name: Local SSD, match: [local-ssd]}
+      - {id: disk-clone, name: Disk clones and instant snapshots, match: [disk-clone, instant-snapshots]}
+      - {id: machine-images, name: Machine images, match: [machine-images]}
+      - {id: csek, name: Customer-supplied encryption keys, match: [csek, customer-supplied-encryption-keys]}
+      - {id: snapshot-location, name: Snapshot storage location and archive snapshots, match: [snapshot-location, archive-snapshots]}
+      - {id: disk-performance, name: Disk performance tuning, match: [disk-iops, disk-throughput, disk-performance]}
+      - {id: regional-pd, name: Regional persistent disks Hyperdisk Balanced HA and force-attach failover, match: [regional-persistent-disk, force-attach]}
+      - {id: async-replication, name: Persistent Disk asynchronous replication for DR, match: [async-replication, persistent-disk-asynchronous-replication]}
+  - id: custom-images
+    name: Custom images, image families and golden images
+    source: ACE/Deploying; Compute Engine images how-to guides
+    match: [custom-images, image-families, golden-image, packer, image-pipeline]
+    subtopics:
+      - {id: image-import, name: Importing virtual disks and images, match: [image-import, import-virtual-disk]}
+      - {id: packer-builds, name: Packer googlecompute builds, match: [packer-googlecompute, packer-cloud-build]}
+      - {id: image-deprecation, name: Image families and deprecation states, match: [deprecate-image, image-deprecation]}
+      - {id: trusted-image-projects, name: Trusted image projects constraint, match: [trusted-image-projects]}
+      - {id: image-sharing, name: Sharing images across projects and orgs, match: [image-sharing]}
+      - {id: guest-environment, name: Guest environment, match: [guest-environment]}
+      - {id: image-export, name: Exporting images, match: [image-export, export-image]}
+      - {id: image-from-disk, name: Creating images from disks and snapshots, match: [create-image-from-disk, image-from-snapshot]}
+      - {id: guest-os-features, name: Guest OS features such as UEFI gVNIC and SEV, match: [guest-os-features]}
+      - {id: cis-hardened-images, name: Hardening golden images to CIS benchmarks, match: [cis-hardened-images, image-hardening]}
+  - id: os-login-ssh
+    name: OS Login, SSH and IAP TCP forwarding
+    source: ACE/Operations; PCSE; Compute Engine connect how-to guides
+    match: [os-login, ssh-access, iap-tunnel, iap-tcp-forwarding, metadata-ssh-keys]
+    subtopics:
+      - {id: enable-oslogin, name: Enabling OS Login, match: [enable-oslogin]}
+      - {id: oslogin-2fa, name: OS Login 2-factor, match: [oslogin-2fa]}
+      - {id: serial-console, name: Interactive serial console, match: [serial-console]}
+      - {id: windows-rdp, name: Windows RDP access, match: [windows-rdp]}
+      - {id: bastion-iap, name: Bastion-less access with IAP, match: [bastion, no-external-ip]}
+      - {id: ssh-troubleshooting, name: Troubleshooting SSH failures, match: [ssh-troubleshooting, ssh-timeout, guest-agent-ssh]}
+      - {id: block-project-ssh-keys, name: Blocking project-wide SSH keys, match: [block-project-ssh-keys]}
+      - {id: oslogin-external, name: OS Login for service accounts and external users, match: [os-login-service-accounts, os-login-external-users]}
+      - {id: ssh-in-browser, name: SSH-in-browser and its requirements, match: [ssh-in-browser]}
+      - {id: metadata-ssh-keys, name: Managing instance and project metadata SSH keys, match: [metadata-ssh-keys, instance-ssh-keys]}
+  - id: vm-manager-patching
+    name: VM Manager, OS Config and patch management
+    source: ACE/Operations; PCSE/Managing operations; VM Manager how-to guides
+    match: [vm-manager, os-config, os-patch, patch-management, os-policy]
+    subtopics:
+      - {id: patch-deployments, name: Patch deployments and schedules, match: [patch-deployment, patch-jobs]}
+      - {id: os-policy-assignments, name: OS policy assignments, match: [os-policy-assignments]}
+      - {id: os-inventory, name: OS inventory, match: [os-inventory]}
+      - {id: vulnerability-reports, name: Vulnerability reports, match: [vulnerability-reports]}
+      - {id: osconfig-agent, name: OS Config agent setup, match: [osconfig-agent]}
+      - {id: patch-compliance, name: Patch compliance reporting, match: [compliance-reporting, patch-compliance]}
+      - {id: windows-patching, name: Windows update classifications, match: [windows-update-classification, windows-patching]}
+      - {id: os-policy-rollout, name: OS policy rollouts and disruption budgets, match: [os-policy-rollout, disruption-budget]}
+      - {id: patch-scripts, name: Pre-patch and post-patch scripts and reboot settings, match: [patch-pre-post-scripts, patch-reboot-config]}
+      - {id: patch-rollout, name: Zone-by-zone patch rollout and disruption budgets, match: [patch-rollout-zones, patch-disruption-budget]}
+  - id: sole-tenant-byol
+    name: Sole-tenant nodes and licensing
+    source: PCA/Designing; ACE/Planning; Sole-tenant nodes how-to guides
+    match: [sole-tenant-nodes, sole-tenant, bring-your-own-license, byol]
+    subtopics:
+      - {id: node-groups-templates, name: Node templates and node groups, match: [node-groups, node-templates]}
+      - {id: node-affinity, name: Node affinity labels, match: [node-affinity]}
+      - {id: cpu-overcommit, name: CPU overcommit, match: [cpu-overcommit]}
+      - {id: host-maintenance-policy, name: Host maintenance policies, match: [host-maintenance]}
+      - {id: windows-byol, name: Windows Server BYOL images, match: [windows-server-byol]}
+      - {id: node-group-autoscaling, name: Node group autoscaler, match: [node-group-autoscaling]}
+      - {id: license-tracking, name: License tracking and compliance, match: [license-compliance, sql-server-licensing]}
+      - {id: sole-tenant-migration, name: Moving existing VMs onto sole-tenant nodes, match: [sole-tenant-migration, move-vm-to-sole-tenant]}
+      - {id: sole-tenant-node-types, name: Sole-tenant node types sizing and billing, match: [sole-tenant-node-types, sole-tenant-billing]}
+  - id: spot-preemptible
+    name: Spot VMs and preemptible workloads
+    source: ACE/Planning; Framework/Cost optimization; Spot VMs how-to guides
+    match: [spot-vms, spot, preemptible]
+    subtopics:
+      - {id: spot-creation, name: Creating Spot VMs and provisioning models, match: [spot-vm-creation, provisioning-model]}
+      - {id: preemption-handling, name: Handling preemption notices and shutdown scripts, match: [preemption-notice, shutdown-script-spot, graceful-shutdown]}
+      - {id: spot-mig, name: Spot VMs in MIGs with on-demand mix, match: [spot-mig, mixed-spot-on-demand]}
+      - {id: spot-pricing, name: Spot pricing and price history, match: [spot-pricing, spot-price-history]}
+      - {id: spot-gke, name: Spot pods and node pools in GKE, match: [spot-pods, spot-node-pool]}
+      - {id: spot-batch, name: Spot in Batch, match: [spot-batch]}
+      - {id: termination-action, name: Instance termination action STOP vs DELETE and max run duration, match: [instance-termination-action, max-run-duration]}
+      - {id: spot-checkpointing, name: Checkpointing long-running work on Spot, match: [spot-checkpointing]}
+      - {id: spot-zone-flexibility, name: Spreading Spot capacity across zones and machine types, match: [spot-zone-flexibility, spot-obtainability]}
+  - id: gke-cluster-modes
+    name: GKE Autopilot vs Standard cluster design
+    source: ACE/Deploying; PCA/Provisioning; GKE cluster how-to guides
+    match: [gke, gke-autopilot, gke-standard, cluster-creation]
+    subtopics:
+      - {id: regional-zonal, name: Regional vs zonal clusters, match: [regional-cluster, zonal-cluster]}
+      - {id: private-cluster, name: Private clusters, match: [private-cluster]}
+      - {id: compute-classes, name: Autopilot compute classes, match: [compute-classes]}
+      - {id: cluster-create-cli, name: Creating clusters with gcloud and Terraform, match: [gcloud-container-clusters-create, terraform-gke-module]}
+      - {id: gke-enterprise, name: GKE Enterprise edition, match: [gke-enterprise]}
+      - {id: autopilot-pricing, name: Autopilot pricing model, match: [autopilot-pricing]}
+      - {id: deletion-protection, name: Cluster deletion protection, match: [deletion-protection, cluster-deletion]}
+      - {id: control-plane-access, name: Control plane DNS endpoint and access, match: [dns-endpoint, control-plane-access]}
+      - {id: gke-ip-planning, name: Pod service and node IP range sizing for VPC-native clusters, match: [gke-ip-planning, pod-cidr-sizing]}
+      - {id: standard-to-autopilot, name: Migrating workloads from Standard to Autopilot, match: [standard-to-autopilot-migration]}
+  - id: gke-node-pools-upgrades
+    name: GKE node pools, release channels and upgrades
+    source: ACE/Operations; GKE node pool how-to guides
+    match: [node-pools, node-auto-provisioning, gke-upgrades, release-channels, maintenance-windows]
+    subtopics:
+      - {id: nap, name: Node auto-provisioning, match: [nap]}
+      - {id: maintenance-exclusions, name: Maintenance exclusions, match: [maintenance-exclusions]}
+      - {id: surge-upgrade, name: Surge upgrades, match: [surge-upgrade]}
+      - {id: blue-green-upgrade, name: Blue-green node upgrades, match: [blue-green-upgrade]}
+      - {id: node-auto-repair, name: Node auto-repair, match: [node-auto-repair]}
+      - {id: cluster-autoscaler, name: Cluster autoscaler profiles, match: [cluster-autoscaler]}
+      - {id: node-taints-labels, name: Node labels and taints, match: [node-labels-taints, node-pool-taints]}
+      - {id: node-system-config, name: Node system and kubelet configuration, match: [node-system-config, kubelet-config, sysctl-config]}
+      - {id: node-images, name: Node images and containerd, match: [node-image, containerd-cos]}
+      - {id: node-local-ssd, name: Local SSD and ephemeral storage on nodes, match: [local-ssd-node-pool, ephemeral-storage]}
+      - {id: gke-gpu-node-pools, name: GPU node pools and driver installation, match: [gke-gpu-node-pools, gke-gpu-drivers]}
+  - id: gke-networking
+    name: GKE VPC-native networking, Ingress and Gateway
+    source: ACE/Deploying; PCA/Network topologies; GKE networking how-to guides
+    match: [vpc-native, gke-networking, gke-ingress, gke-gateway, container-native-load-balancing]
+    subtopics:
+      - {id: gateway-api, name: Gateway API, match: [gateway-api]}
+      - {id: backendconfig, name: BackendConfig and FrontendConfig, match: [backendconfig, frontendconfig]}
+      - {id: dataplane-v2, name: Dataplane V2 and network policy, match: [gke-dataplane-v2, network-policy]}
+      - {id: multi-cluster-gateway, name: Multi-cluster Gateway, match: [multi-cluster-gateway]}
+      - {id: internal-lb-service, name: Internal LoadBalancer services, match: [internal-lb-service, service-type-loadbalancer]}
+      - {id: cloud-dns-for-gke, name: Cloud DNS for GKE, match: [cloud-dns-for-gke, kube-dns]}
+      - {id: pod-range-expansion, name: Additional pod ranges, match: [pod-cidr-expansion, additional-pod-ranges]}
+      - {id: gke-egress-nat, name: Egress NAT for GKE, match: [gke-cloud-nat, egress-nat-gateway]}
+      - {id: nodelocal-dnscache, name: NodeLocal DNSCache and kube-dns scaling, match: [nodelocal-dnscache, kube-dns-scaling]}
+      - {id: container-native-lb, name: Container-native load balancing and standalone NEGs, match: [container-native-load-balancing, standalone-negs]}
+  - id: gke-security-hardening
+    name: GKE security hardening
+    source: PCSE/Boundary protection; GKE hardening guide
+    match: [gke-security, gke-hardening, shielded-nodes, private-cluster, binary-authorization]
+    subtopics:
+      - {id: workload-identity, name: Workload Identity, match: [workload-identity]}
+      - {id: gke-sandbox, name: GKE Sandbox with gVisor, match: [gke-sandbox, gvisor]}
+      - {id: metadata-concealment, name: Node metadata protection, match: [metadata-concealment]}
+      - {id: pod-security-admission, name: Pod Security admission, match: [pod-security-admission]}
+      - {id: cis-gke, name: CIS GKE Benchmark, match: [cis-gke-benchmark]}
+      - {id: authorized-networks, name: Authorized networks, match: [authorized-networks]}
+      - {id: secrets-encryption, name: Application-layer secrets encryption, match: [secrets-encryption]}
+      - {id: gke-rbac, name: RBAC with Google Groups, match: [gke-rbac, google-groups-rbac]}
+      - {id: security-bulletins, name: Security bulletins and CVE response, match: [security-bulletins, gke-cve-response]}
+      - {id: gke-security-posture, name: Security posture dashboard and workload vulnerability scanning, match: [gke-security-posture, workload-vulnerability-scanning]}
+      - {id: shielded-gke-nodes, name: Shielded GKE nodes and secure boot, match: [shielded-gke-nodes]}
+  - id: gke-fleets-multicluster
+    name: GKE fleets, Config Sync and multi-cluster
+    source: PCA/Designing; PCDOE; Fleet management how-to guides
+    match: [gke-fleet, fleet, multi-cluster, config-sync, cloud-service-mesh]
+    subtopics:
+      - {id: policy-controller, name: Policy Controller, match: [policy-controller]}
+      - {id: multi-cluster-services, name: Multi-cluster Services, match: [multi-cluster-services, mcs]}
+      - {id: multi-cluster-ingress, name: Multi Cluster Ingress, match: [multi-cluster-ingress]}
+      - {id: fleet-workload-identity, name: Fleet Workload Identity, match: [fleet-workload-identity]}
+      - {id: team-scopes, name: Team scopes and namespaces, match: [team-scopes]}
+      - {id: connect-gateway, name: Connect gateway, match: [connect-gateway]}
+      - {id: fleet-registration, name: Registering clusters to a fleet, match: [fleet-registration, fleet-memberships]}
+      - {id: fleet-default-config, name: Fleet-level default configuration, match: [fleet-default-config]}
+      - {id: mesh-install, name: Installing managed Cloud Service Mesh, match: [cloud-service-mesh-managed, mesh-install]}
+      - {id: config-sync-troubleshooting, name: Troubleshooting Config Sync with nomos and RootSync status, match: [config-sync-troubleshooting, nomos-status]}
+  - id: gke-observability
+    name: GKE monitoring, logging and Managed Prometheus
+    source: PCDOE/Service monitoring; GKE observability how-to guides
+    match: [gke-monitoring, gke-logging, managed-prometheus, gmp]
+    subtopics:
+      - {id: podmonitoring, name: PodMonitoring and ClusterPodMonitoring, match: [podmonitoring, clusterpodmonitoring]}
+      - {id: kube-state-metrics, name: kube-state-metrics package, match: [kube-state-metrics]}
+      - {id: control-plane-metrics, name: Control plane metrics, match: [control-plane-metrics]}
+      - {id: gke-log-exclusions, name: Reducing GKE logging cost, match: [cost-of-logging, gke-log-exclusions]}
+      - {id: gke-dashboards, name: GKE dashboards, match: [gke-dashboards]}
+      - {id: gke-recommended-alerts, name: Recommended GKE alerts, match: [gke-alerting, gke-recommended-alerts]}
+      - {id: gke-usage-metering, name: Cost allocation and usage metering, match: [gke-cost-allocation, gke-usage-metering]}
+      - {id: grafana-gmp, name: Grafana with Managed Prometheus, match: [grafana-gmp, prometheus-frontend]}
+      - {id: kubernetes-events, name: Kubernetes events and GKE audit logs, match: [kubernetes-events-logging, gke-audit-logs]}
+      - {id: gke-monitoring-components, name: Selecting system and workload monitoring and logging components, match: [gke-monitoring-components, gke-logging-components]}
+  - id: cloud-run
+    name: Cloud Run services, jobs and revisions
+    source: ACE/Deploying; PCDOE; Cloud Run how-to guides
+    match: [cloud-run, cloud-run-jobs, serverless-containers]
+    subtopics:
+      - {id: concurrency-scaling, name: Concurrency and instance scaling, match: [concurrency, min-instances, max-instances]}
+      - {id: cpu-allocation, name: CPU allocation and billing modes, match: [cpu-allocation, instance-based-billing]}
+      - {id: revisions-traffic, name: Revisions and traffic splitting, match: [revisions, traffic-splitting]}
+      - {id: direct-vpc-egress, name: Direct VPC egress, match: [direct-vpc-egress]}
+      - {id: cloud-run-domains, name: Custom domains, match: [cloud-run-custom-domains, domain-mapping]}
+      - {id: cloud-run-sidecars, name: Sidecars and multi-container deployments, match: [cloud-run-sidecars, multi-container]}
+      - {id: cloud-run-gpu, name: GPUs on Cloud Run, match: [cloud-run-gpu]}
+      - {id: cloud-run-volumes, name: Volume mounts, match: [cloud-run-volume-mounts, gcs-fuse-volume]}
+      - {id: cloud-run-deploy-source, name: Deploying from source, match: [cloud-run-deploy-from-source, gcloud-run-deploy]}
+      - {id: cloud-run-probes, name: Startup and liveness probes, match: [cloud-run-health-checks, startup-probe]}
+      - {id: cloud-run-ingress-invoker, name: Ingress settings and invoker IAM for services, match: [cloud-run-ingress-settings, cloud-run-invoker]}
+      - {id: cloud-run-jobs-exec, name: Job executions task parallelism and retries, match: [cloud-run-jobs-execution, cloud-run-job-tasks]}
+  - id: cloud-run-functions
+    name: Cloud Run functions (Cloud Functions)
+    source: ACE/Deploying; Cloud Run functions how-to guides
+    match: [cloud-run-functions, cloud-functions, functions-framework]
+    subtopics:
+      - {id: function-triggers, name: HTTP and event triggers, match: [functions-triggers, http-trigger, event-trigger]}
+      - {id: functions-local, name: Local testing with Functions Framework, match: [functions-framework-local, local-testing]}
+      - {id: functions-deploy, name: Deploying functions with gcloud, match: [gcloud-functions-deploy, functions-2nd-gen]}
+      - {id: functions-retry, name: Retries for event-driven functions, match: [functions-retry, retry-on-failure]}
+      - {id: functions-config, name: Environment variables and secrets, match: [functions-secrets-env, env-vars-functions]}
+      - {id: functions-auth, name: Authentication and CORS, match: [functions-auth, functions-cors]}
+      - {id: function-scaling, name: Function memory concurrency min and max instances, match: [function-min-instances, function-concurrency]}
+      - {id: functions-gen2-migration, name: Migrating 1st gen functions to Cloud Run functions, match: [functions-gen2-migration, upgrade-1st-gen-functions]}
+      - {id: function-build-failures, name: Troubleshooting function build and deployment failures, match: [function-build-failures, function-deploy-errors]}
+  - id: app-engine
+    name: App Engine standard and flexible
+    source: ACE/Deploying; App Engine how-to guides
+    match: [app-engine, app-engine-standard, app-engine-flexible]
+    subtopics:
+      - {id: app-yaml, name: app.yaml and dispatch.yaml, match: [app-yaml, dispatch-yaml]}
+      - {id: gae-scaling, name: Instance classes and scaling, match: [instance-classes, automatic-scaling]}
+      - {id: gae-traffic, name: Versions and traffic splitting, match: [app-engine-versions]}
+      - {id: gae-cron, name: App Engine cron, match: [app-engine-cron]}
+      - {id: gae-deploy, name: Deploying with gcloud app deploy, match: [gcloud-app-deploy, app-engine-deploy]}
+      - {id: gae-domains, name: Custom domains and SSL, match: [app-engine-custom-domains, app-engine-ssl]}
+      - {id: gae-logs, name: App Engine logs and debugging, match: [app-engine-logs, app-engine-debugging]}
+      - {id: app-engine-firewall, name: App Engine firewall rules, match: [app-engine-firewall-rules, gcloud-app-firewall-rules]}
+      - {id: serverless-vpc-connector, name: Serverless VPC Access connectors, match: [serverless-vpc-access-connector, vpc-access-connector]}
+      - {id: app-engine-to-cloud-run, name: Migrating App Engine apps to Cloud Run, match: [app-engine-to-cloud-run]}
+  - id: cloud-batch-hpc
+    name: Batch and HPC workloads
+    source: PCA/Designing compute; Batch how-to guides
+    match: [cloud-batch, batch, hpc, slurm]
+    subtopics:
+      - {id: task-arrays, name: Task arrays and parallelism, match: [task-arrays, job-arrays]}
+      - {id: compact-placement, name: Compact placement policies, match: [compact-placement, placement-policy]}
+      - {id: cluster-toolkit, name: Cluster Toolkit, match: [cluster-toolkit]}
+      - {id: batch-job-spec, name: Batch job JSON specification, match: [batch-job-spec, batch-json]}
+      - {id: batch-containers, name: Container and script runnables, match: [batch-container-jobs, batch-script-jobs]}
+      - {id: batch-networking, name: Batch networking and service accounts, match: [batch-networking, batch-service-account]}
+      - {id: slurm-deploy, name: Deploying Slurm clusters, match: [slurm-cluster-deploy, slurm-gcp]}
+      - {id: batch-gpu-jobs, name: GPU jobs on Batch, match: [batch-gpu-jobs]}
+      - {id: batch-job-monitoring, name: Batch job states status events and logs, match: [batch-job-status-events, batch-job-monitoring]}
+  - id: cloud-marketplace
+    name: Cloud Marketplace deployments
+    source: ACE/Deploying; Cloud Marketplace how-to guides
+    match: [cloud-marketplace, marketplace]
+    subtopics:
+      - {id: marketplace-vm, name: Deploying VM solutions, match: [marketplace-vm]}
+      - {id: marketplace-k8s, name: Deploying Kubernetes apps, match: [marketplace-kubernetes-app]}
+      - {id: marketplace-saas, name: SaaS subscriptions, match: [marketplace-saas]}
+      - {id: private-offers, name: Private offers, match: [private-offers]}
+      - {id: marketplace-producer, name: Producer Portal and listing a product, match: [marketplace-producer-portal, listing-your-product]}
+      - {id: marketplace-updates, name: Updating Marketplace VM deployments, match: [marketplace-image-updates, marketplace-vm-upgrades]}
+      - {id: marketplace-reporting, name: Marketplace usage and billing reports, match: [marketplace-usage-reporting, marketplace-billing-reports]}
+      - {id: marketplace-procurement, name: Procurement governance and request-approval for Marketplace, match: [marketplace-procurement-approval, marketplace-request-procurement]}
+  - id: eventing-orchestration
+    name: Eventarc, Workflows, Cloud Scheduler and Cloud Tasks
+    source: ACE/Deploying; PCA/Designing; Eventarc and Workflows how-to guides
+    match: [eventarc, workflows, cloud-scheduler, cloud-tasks]
+    subtopics:
+      - {id: eventarc-triggers, name: Eventarc triggers including audit log triggers, match: [eventarc-triggers, eventarc-audit-log-trigger]}
+      - {id: eventarc-advanced, name: Eventarc Advanced message buses and pipelines, match: [eventarc-advanced, message-bus, eventarc-pipelines]}
+      - {id: workflows-authoring, name: Workflows YAML steps and connectors, match: [workflows-yaml, workflows-steps, workflows-connectors]}
+      - {id: workflows-callbacks, name: Callbacks and long-running workflows, match: [workflows-callbacks, long-running-workflows]}
+      - {id: scheduler-jobs, name: Cloud Scheduler cron jobs, match: [cloud-scheduler-cron, scheduler-http-target]}
+      - {id: tasks-queues, name: Cloud Tasks queues and rate limits, match: [cloud-tasks-queues, task-rate-limits, task-deduplication]}
+  # --- Storage and data (ACE 2 and 3; PCA Storage systems)
+      - {id: cloud-tasks-http-auth, name: Cloud Tasks HTTP targets with OIDC auth, match: [cloud-tasks-oidc, http-target-tasks]}
+      - {id: workflows-errors, name: Workflows retries and try/except error handling, match: [workflows-retry-policy, workflows-error-handling]}
+      - {id: workflows-parallel, name: Workflows parallel steps and iteration, match: [workflows-parallel]}
+      - {id: eventarc-troubleshooting, name: Troubleshooting Eventarc triggers and delivery, match: [eventarc-troubleshooting]}
+  - id: cloud-storage-buckets
+    name: Cloud Storage buckets, classes and lifecycle
+    source: ACE/Deploying data solutions; Cloud Storage how-to guides
+    match: [cloud-storage, gcs, storage-classes, object-lifecycle-management]
+    subtopics:
+      - {id: autoclass, name: Autoclass, match: [autoclass]}
+      - {id: object-versioning, name: Object versioning and soft delete, match: [object-versioning, soft-delete]}
+      - {id: retention-lock, name: Retention policies and bucket lock, match: [retention-policy, bucket-lock]}
+      - {id: dual-region, name: Dual-region buckets and turbo replication, match: [dual-region-buckets, turbo-replication]}
+      - {id: gcloud-storage-transfer, name: Uploading with gcloud storage and parallel composite uploads, match: [gcloud-storage-cp, parallel-composite-upload]}
+      - {id: hierarchical-namespace, name: Hierarchical namespace buckets, match: [hierarchical-namespace, hns-buckets]}
+      - {id: object-metadata, name: Object metadata and Content-Type, match: [object-metadata, content-type-cache-control]}
+      - {id: gcsfuse, name: Cloud Storage FUSE, match: [gcsfuse, cloud-storage-fuse]}
+      - {id: storage-insights, name: Storage Insights inventory reports, match: [storage-insights, inventory-reports]}
+      - {id: bucket-relocation, name: Bucket relocation between locations, match: [bucket-relocation]}
+      - {id: gcs-pubsub-notifications, name: Pub/Sub notifications for Cloud Storage, match: [gcs-pubsub-notifications, object-change-notifications]}
+  - id: cloud-storage-security
+    name: Cloud Storage access control and signed URLs
+    source: PCSE/Data protection; Cloud Storage access control how-to guides
+    match: [signed-urls, uniform-bucket-level-access, bucket-iam, public-access-prevention, gcs-security]
+    subtopics:
+      - {id: signed-policy-documents, name: Signed policy documents for uploads, match: [signed-policy-documents]}
+      - {id: gcs-iam-conditions, name: IAM conditions on buckets, match: [iam-conditions, bucket-conditions]}
+      - {id: object-acls, name: Object ACLs and migrating to uniform, match: [object-acl, acl-migration]}
+      - {id: cmek-gcs, name: CMEK on buckets, match: [cmek-gcs]}
+      - {id: hmac-keys, name: HMAC keys for S3-compatible access, match: [hmac-keys]}
+      - {id: requester-pays, name: Requester Pays, match: [requester-pays]}
+      - {id: gcs-cors, name: CORS configuration, match: [cors]}
+      - {id: gcs-vpc-sc, name: Buckets inside VPC Service Controls, match: [gcs-vpc-service-controls, bucket-vpc-sc]}
+      - {id: gcs-usage-logs, name: Bucket usage and storage logs, match: [gcs-audit-logs, bucket-usage-logs]}
+      - {id: v4-signing, name: V4 signing with service account signBlob, match: [v4-signing, signblob]}
+      - {id: public-access-prevention, name: Public access prevention, match: [public-access-prevention]}
+  - id: filestore
+    name: Filestore and managed NFS
+    source: ACE/Planning storage; Filestore how-to guides
+    match: [filestore, nfs, managed-nfs, parallelstore]
+    subtopics:
+      - {id: filestore-tiers, name: Choosing Filestore service tiers, match: [filestore-basic, filestore-zonal, filestore-enterprise]}
+      - {id: filestore-backups, name: Backups and snapshots, match: [filestore-backups, filestore-snapshots]}
+      - {id: filestore-mount, name: NFS mount options, match: [nfs-mount-options]}
+      - {id: filestore-csi, name: GKE Filestore CSI driver, match: [gke-filestore-csi]}
+      - {id: filestore-networking, name: Filestore IP ranges and private services access, match: [filestore-ip-ranges, filestore-private-services-access]}
+      - {id: filestore-scaling, name: Capacity scaling, match: [filestore-capacity-scaling, filestore-resize]}
+      - {id: filestore-replication, name: Filestore replication and DR, match: [filestore-replication, filestore-dr]}
+      - {id: filestore-multishare, name: Multishare for GKE, match: [filestore-multishare, multishare-csi]}
+      - {id: filestore-performance, name: Filestore performance testing and troubleshooting, match: [filestore-performance]}
+  - id: cloud-sql
+    name: Cloud SQL HA, replicas, backups and connectivity
+    source: ACE/Deploying; PCA/Reliability; Cloud SQL how-to guides
+    match: [cloud-sql, cloud-sql-ha, cloud-sql-proxy, cloud-sql-auth-proxy, read-replicas]
+    subtopics:
+      - {id: cross-region-replica, name: Cross-region replicas and promotion, match: [cross-region-replica, replica-promotion]}
+      - {id: private-ip-psc, name: Private IP and Private Service Connect, match: [private-ip, psc-cloud-sql]}
+      - {id: backups-pitr, name: Automated backups and point-in-time recovery, match: [automated-backups, point-in-time-recovery]}
+      - {id: iam-db-auth, name: IAM database authentication, match: [iam-database-authentication]}
+      - {id: maintenance-window, name: Maintenance windows and deny periods, match: [maintenance-window, deny-maintenance-period]}
+      - {id: database-flags, name: Database flags, match: [database-flags, cloud-sql-flags]}
+      - {id: import-export, name: Import and export via Cloud Storage, match: [cloud-sql-import-export, sql-dump-gcs]}
+      - {id: failover-test, name: Testing failover, match: [cloud-sql-failover-test, manual-failover]}
+      - {id: instance-clone, name: Cloning instances, match: [cloud-sql-clone, instance-clone]}
+      - {id: cloud-sql-ssl, name: SSL and client certificates, match: [cloud-sql-ssl, server-ca, client-certificates]}
+      - {id: major-upgrade, name: In-place major version upgrades, match: [cloud-sql-upgrade, major-version-upgrade]}
+      - {id: storage-autoresize, name: Storage auto-increase and disk full, match: [cloud-sql-storage-autoresize, storage-full]}
+  - id: alloydb
+    name: AlloyDB for PostgreSQL
+    source: PCA/Storage systems; AlloyDB how-to guides
+    match: [alloydb]
+    subtopics:
+      - {id: alloydb-read-pool, name: Read pool instances, match: [read-pool]}
+      - {id: alloydb-auth-proxy, name: AlloyDB Auth Proxy, match: [alloydb-auth-proxy]}
+      - {id: alloydb-backup, name: Continuous backup and recovery, match: [continuous-backup]}
+      - {id: alloydb-cross-region, name: Cross-region replication and secondary clusters, match: [cross-region-replication, secondary-cluster]}
+      - {id: alloydb-columnar, name: Columnar engine, match: [columnar-engine]}
+      - {id: alloydb-create, name: Creating clusters with gcloud, match: [alloydb-cluster-create, gcloud-alloydb]}
+      - {id: alloydb-migration, name: Migrating to AlloyDB with DMS, match: [alloydb-migration, dms-to-alloydb]}
+      - {id: alloydb-flags, name: Database flags, match: [alloydb-flags, alloydb-database-flags]}
+      - {id: alloydb-iam-auth, name: IAM authentication, match: [alloydb-iam-auth]}
+      - {id: alloydb-maintenance, name: Maintenance windows, match: [alloydb-maintenance]}
+      - {id: alloydb-omni, name: AlloyDB Omni outside Google Cloud, match: [alloydb-omni-install, alloydb-omni-kubernetes-operator]}
+  - id: spanner
+    name: Spanner schema and scaling
+    source: PCA/Storage systems; Spanner how-to guides
+    match: [spanner, cloud-spanner]
+    subtopics:
+      - {id: processing-units, name: Processing units and nodes, match: [processing-units]}
+      - {id: interleaved-tables, name: Interleaved tables, match: [interleaved-tables]}
+      - {id: spanner-indexes, name: Secondary indexes, match: [secondary-indexes]}
+      - {id: spanner-autoscaler, name: Autoscaler, match: [spanner-autoscaler]}
+      - {id: spanner-backups, name: Backups and PITR, match: [spanner-backups, pitr-spanner]}
+      - {id: change-streams, name: Change streams, match: [change-streams]}
+      - {id: spanner-import-export, name: Import and export with Dataflow, match: [spanner-import-export, dataflow-spanner]}
+      - {id: spanner-query-tuning, name: Query plans and optimizer statistics, match: [spanner-query-optimizer, query-plans, spanner-statistics]}
+      - {id: spanner-schema-updates, name: Online schema updates, match: [spanner-ddl-updates, schema-updates]}
+      - {id: spanner-graph, name: Spanner Graph, match: [spanner-graph]}
+      - {id: spanner-fgac, name: Fine-grained access control, match: [spanner-fine-grained-access, spanner-iam-roles]}
+  - id: firestore-datastore
+    name: Firestore and Datastore mode
+    source: ACE/Deploying; PCA; Firestore how-to guides
+    match: [firestore, datastore]
+    subtopics:
+      - {id: security-rules, name: Security rules, match: [security-rules]}
+      - {id: composite-indexes, name: Composite indexes, match: [composite-indexes]}
+      - {id: firestore-ttl, name: TTL policies, match: [firestore-ttl]}
+      - {id: firestore-backups, name: Backups and PITR, match: [firestore-backups, pitr-firestore]}
+      - {id: named-databases, name: Named databases, match: [named-databases]}
+      - {id: firestore-query-explain, name: Query explain and performance, match: [firestore-query-explain, query-performance]}
+      - {id: datastore-upgrade, name: Upgrading Datastore to Firestore, match: [datastore-to-firestore-upgrade, firestore-migration]}
+      - {id: firestore-triggers, name: Firestore event triggers, match: [firestore-triggers, firestore-eventarc]}
+      - {id: firestore-vector, name: Vector search, match: [firestore-vector-search]}
+      - {id: firestore-export-import, name: Managed export and import of Firestore data, match: [firestore-export-import]}
+  - id: bigtable
+    name: Bigtable schema and cluster design
+    source: PCA/Storage systems; Bigtable how-to guides
+    match: [bigtable, cloud-bigtable]
+    subtopics:
+      - {id: row-key-design, name: Row key design and hotspotting, match: [row-key-design]}
+      - {id: gc-policy, name: Garbage collection policies, match: [garbage-collection-policy]}
+      - {id: bigtable-replication, name: Replication and app profiles, match: [app-profiles, multi-cluster-routing]}
+      - {id: bigtable-autoscaling, name: Autoscaling, match: [bigtable-autoscaling]}
+      - {id: key-visualizer, name: Key Visualizer, match: [key-visualizer]}
+      - {id: bigtable-backups, name: Backups and restore, match: [bigtable-backups]}
+      - {id: bigtable-import-export, name: Import and export with Dataflow, match: [bigtable-import-export, bigtable-dataflow]}
+      - {id: bigtable-change-streams, name: Change streams, match: [bigtable-change-streams]}
+      - {id: bigtable-sql, name: SQL and Data Boost, match: [bigtable-sql, bigtable-data-boost]}
+      - {id: bigtable-monitoring, name: Monitoring CPU and latency, match: [bigtable-monitoring, bigtable-metrics]}
+      - {id: bigtable-authorized-views, name: Authorized views, match: [bigtable-authorized-views]}
+  - id: memorystore
+    name: Memorystore for Redis and Memcached
+    source: PCA/Storage systems; Memorystore how-to guides
+    match: [memorystore, redis, memcached, valkey]
+    subtopics:
+      - {id: redis-cluster, name: Redis Cluster, match: [memorystore-for-redis-cluster, redis-cluster]}
+      - {id: redis-tiers, name: Basic vs standard tier and read replicas, match: [standard-tier, basic-tier]}
+      - {id: redis-auth-tls, name: AUTH and in-transit encryption, match: [redis-auth, in-transit-encryption]}
+      - {id: redis-persistence, name: RDB and AOF persistence, match: [rdb-snapshots, aof-persistence]}
+      - {id: redis-import-export, name: Import and export, match: [redis-import-export, rdb-import]}
+      - {id: redis-upgrade, name: Version upgrades, match: [redis-version-upgrade, memorystore-upgrade]}
+      - {id: memorystore-maintenance, name: Maintenance windows, match: [memorystore-maintenance]}
+      - {id: memorystore-scaling, name: Scaling instances, match: [memorystore-scaling, resize-redis]}
+      - {id: valkey-cluster, name: Memorystore for Valkey, match: [memorystore-valkey, valkey-cluster]}
+      - {id: memorystore-monitoring, name: Monitoring and alerting, match: [memorystore-monitoring, redis-metrics]}
+  - id: bigquery-admin
+    name: BigQuery administration, slots and cost control
+    source: ACE/Deploying; Framework/Cost; BigQuery admin how-to guides
+    match: [bigquery, bigquery-admin, slots, bigquery-reservations]
+    subtopics:
+      - {id: bq-editions, name: Editions and slot autoscaling, match: [bigquery-editions, autoscaling-slots]}
+      - {id: bq-custom-quotas, name: Custom query quotas and maximum bytes billed, match: [custom-quotas, maximum-bytes-billed]}
+      - {id: bq-partition-cluster, name: Partitioning and clustering, match: [partitioning, clustering]}
+      - {id: bq-storage-billing, name: Storage billing models, match: [storage-billing-model, physical-storage]}
+      - {id: bq-information-schema, name: INFORMATION_SCHEMA monitoring, match: [information-schema]}
+      - {id: bq-security, name: Authorized views and row and column security, match: [authorized-views, row-level-security, column-level-security]}
+      - {id: bq-datasets, name: Datasets and dataset access, match: [bigquery-datasets, dataset-access]}
+      - {id: bq-dts, name: BigQuery Data Transfer Service, match: [bigquery-data-transfer-service, dts]}
+      - {id: bq-external-biglake, name: External tables and BigLake, match: [bigquery-external-tables, biglake]}
+      - {id: bq-materialized-views, name: Materialized views, match: [bigquery-materialized-views]}
+      - {id: bq-scheduled-queries, name: Scheduled queries, match: [bigquery-scheduled-queries]}
+      - {id: bq-cmek, name: CMEK for BigQuery, match: [bigquery-cmek]}
+  - id: pubsub
+    name: Pub/Sub topics, subscriptions and delivery semantics
+    source: ACE/Deploying; PCA; Pub/Sub how-to guides
+    match: [pubsub, pub-sub, cloud-pubsub]
+    subtopics:
+      - {id: push-pull, name: Push vs pull subscriptions, match: [pull-subscription, push-subscription]}
+      - {id: export-subscriptions, name: BigQuery and Cloud Storage subscriptions, match: [bigquery-subscription, gcs-subscription]}
+      - {id: dead-letter, name: Dead-letter topics and retry policy, match: [dead-letter-topic, retry-policy]}
+      - {id: exactly-once-ordering, name: Exactly-once delivery and ordering keys, match: [exactly-once-delivery, ordering-keys]}
+      - {id: seek-replay, name: Seek and replay with snapshots, match: [seek-and-replay]}
+      - {id: pubsub-schemas, name: Schemas, match: [schemas, pubsub-schemas]}
+      - {id: pubsub-iam, name: Topic and subscription IAM, match: [pubsub-iam, topic-permissions]}
+      - {id: pubsub-monitoring, name: Monitoring backlog and oldest unacked message, match: [pubsub-monitoring, oldest-unacked-message, backlog-alerts]}
+      - {id: pubsub-cmek-residency, name: CMEK and message storage policy, match: [pubsub-cmek, message-storage-policy]}
+      - {id: import-topics, name: Import topics from Kafka and Cloud Storage, match: [pubsub-import-topics, kafka-ingestion, cloud-storage-ingestion]}
+      - {id: pubsub-emulator, name: Pub/Sub emulator, match: [pubsub-emulator]}
+  - id: dataflow
+    name: Dataflow pipelines operations
+    source: ACE/Deploying; PCA; Dataflow how-to guides
+    match: [dataflow, apache-beam]
+    subtopics:
+      - {id: streaming-engine, name: Streaming Engine and Dataflow Prime, match: [streaming-engine, dataflow-prime]}
+      - {id: flex-templates, name: Flex templates and classic templates, match: [flex-templates, classic-templates]}
+      - {id: dataflow-autoscaling, name: Autoscaling, match: [dataflow-autoscaling]}
+      - {id: update-drain, name: Updating draining and cancelling jobs, match: [update-pipeline, drain]}
+      - {id: dataflow-snapshots, name: Snapshots, match: [dataflow-snapshots]}
+      - {id: dataflow-monitoring, name: Job monitoring and freshness lag, match: [job-monitoring, data-freshness, system-lag]}
+      - {id: dataflow-cost, name: Cost optimisation and resource usage, match: [dataflow-cost-optimization, dataflow-resource-usage]}
+      - {id: dataflow-troubleshoot, name: Troubleshooting with worker logs, match: [dataflow-troubleshooting, worker-logs]}
+      - {id: dataflow-yaml, name: Dataflow YAML and SQL, match: [dataflow-yaml, dataflow-sql]}
+      - {id: dataflow-gpu, name: GPUs and right fitting, match: [dataflow-gpu, right-fitting]}
+      - {id: dataflow-security, name: CMEK VPC and worker security, match: [dataflow-cmek, dataflow-security]}
+  - id: dataproc
+    name: Dataproc clusters and serverless Spark
+    source: ACE/Deploying; PCA; Dataproc how-to guides
+    match: [dataproc, spark, hadoop]
+    subtopics:
+      - {id: serverless-spark, name: Dataproc Serverless batches, match: [serverless-spark, dataproc-serverless]}
+      - {id: workflow-templates, name: Workflow templates, match: [workflow-templates]}
+      - {id: autoscaling-policies, name: Autoscaling policies, match: [autoscaling-policies]}
+      - {id: initialization-actions, name: Initialization actions, match: [initialization-actions]}
+      - {id: dataproc-metastore, name: Dataproc Metastore, match: [dataproc-metastore]}
+      - {id: dataproc-jobs, name: Submitting jobs with gcloud, match: [gcloud-dataproc-jobs, dataproc-job-submit]}
+      - {id: cluster-properties, name: Cluster and Spark properties, match: [dataproc-cluster-properties, spark-properties]}
+      - {id: persistent-history-server, name: Persistent History Server, match: [persistent-history-server, phs]}
+      - {id: dataproc-monitoring, name: Monitoring and metrics, match: [dataproc-monitoring, dataproc-metrics]}
+      - {id: dataproc-images, name: Image versions and custom images, match: [dataproc-image-versions, custom-dataproc-images]}
+      - {id: dataproc-on-gke, name: Dataproc on GKE, match: [dataproc-on-gke]}
+  - id: data-transfer-migration
+    name: Storage Transfer, Transfer Appliance and Database Migration Service
+    source: PCA/Migration; Storage Transfer Service and DMS how-to guides
+    match: [storage-transfer-service, transfer-appliance, database-migration-service, dms, data-migration]
+    subtopics:
+      - {id: transfer-agents, name: Transfer agents for POSIX and HDFS, match: [transfer-agents, posix-transfer]}
+      - {id: cloud-to-cloud, name: S3 and Azure to GCS transfers, match: [s3-to-gcs, azure-to-gcs]}
+      - {id: transfer-scheduling, name: Scheduled transfer jobs and manifests, match: [transfer-jobs-scheduling, transfer-manifest]}
+      - {id: transfer-appliance-order, name: Ordering and using Transfer Appliance, match: [transfer-appliance-ordering, offline-transfer]}
+      - {id: dms-mysql-pg, name: DMS for MySQL and PostgreSQL, match: [dms-mysql, dms-postgresql]}
+      - {id: dms-oracle, name: DMS for Oracle to PostgreSQL, match: [dms-oracle, oracle-to-postgresql]}
+      - {id: transfer-iam, name: Transfer service permissions, match: [transfer-service-iam, transfer-permissions]}
+      - {id: hdfs-transfer, name: HDFS to Cloud Storage, match: [hdfs-to-gcs, hadoop-transfer]}
+      - {id: event-driven-transfers, name: Event-driven Storage Transfer jobs, match: [event-driven-transfers]}
+      - {id: datastream-cdc, name: Datastream change data capture into BigQuery, match: [datastream-cdc, datastream]}
+  - id: backup-dr-service
+    name: Backup and DR Service and backup vaults
+    source: PCA/Reliability; Framework/Reliability; Backup and DR how-to guides
+    match: [backup-and-dr, backup-dr, backup-vault, backup-plans]
+    subtopics:
+      - {id: immutable-backups, name: Immutable and indelible backups, match: [immutable-backups]}
+      - {id: compute-backup, name: Compute Engine VM backups, match: [compute-engine-backup, disk-backup]}
+      - {id: gke-backup, name: Backup for GKE, match: [backup-for-gke, gke-backup]}
+      - {id: backup-vault-setup, name: Creating backup vaults, match: [backup-vault-create, backup-dr-setup]}
+      - {id: backup-plan-associations, name: Backup plan associations and schedules, match: [backup-plan-associations, backup-schedules]}
+      - {id: backup-restore, name: Restoring VMs and disks, match: [backup-dr-restore, restore-vm]}
+      - {id: backup-monitoring, name: Backup monitoring and reports, match: [backup-dr-monitoring, backup-reports]}
+      - {id: backup-appliance, name: Backup appliance and management console, match: [backup-appliance, management-console]}
+  # --- Networking (ACE 2 and 3; PCA Network topologies; PCSE Boundary protection)
+      - {id: backup-dr-cloud-sql, name: Backup and DR for Cloud SQL, match: [backup-dr-cloud-sql]}
+      - {id: disk-backup-plans, name: Backup plans for standalone persistent disks, match: [disk-backup-plans]}
+  - id: vpc-design
+    name: VPC networks, subnets and IP planning
+    source: ACE/Deploying networking; PCA; VPC how-to guides
+    match: [vpc, vpc-design, subnets, shared-vpc]
+    subtopics:
+      - {id: secondary-ranges, name: Secondary ranges and alias IPs, match: [secondary-ranges, alias-ip]}
+      - {id: vpc-peering, name: VPC Network Peering, match: [vpc-peering]}
+      - {id: network-connectivity-center, name: Network Connectivity Center, match: [network-connectivity-center]}
+      - {id: subnet-ops, name: Creating and expanding subnets, match: [subnet-creation, expand-subnet]}
+      - {id: ipv6, name: IPv6 and dual-stack subnets, match: [ipv6-subnets, dual-stack]}
+      - {id: byoip, name: Bring your own IP, match: [bring-your-own-ip, byoip]}
+      - {id: peering-routes, name: Peering custom route exchange, match: [vpc-peering-routes, peering-custom-routes]}
+      - {id: internal-ranges, name: Internal ranges and IP address management, match: [internal-ranges, ip-address-management]}
+      - {id: routes, name: Static routes and policy-based routes, match: [static-routes, policy-based-routes]}
+      - {id: shared-vpc, name: Shared VPC host and service projects, match: [shared-vpc-host-project, shared-vpc-service-project]}
+      - {id: multi-nic, name: Multiple network interfaces on VMs, match: [multi-nic, multiple-network-interfaces]}
+  - id: vpc-firewall
+    name: VPC firewall rules and hierarchical firewall policies
+    source: ACE/Deploying; PCSE/Boundary protection; Cloud NGFW firewall how-to guides
+    match: [firewall-rules, firewall-policies, hierarchical-firewall-policies, network-firewall-policies]
+    subtopics:
+      - {id: secure-tags, name: Secure tags as firewall targets, match: [secure-tags]}
+      - {id: firewall-insights, name: Firewall Insights, match: [firewall-insights]}
+      - {id: firewall-logging, name: Firewall rules logging, match: [firewall-logging, firewall-rules-logging]}
+      - {id: firewall-priority, name: Rule priority and implied rules, match: [firewall-rule-priority, implied-rules]}
+      - {id: regional-firewall-policy, name: Regional network firewall policies, match: [regional-network-firewall-policy]}
+      - {id: firewall-policy-gcloud, name: Managing firewall policies with gcloud, match: [gcloud-compute-firewall-policies, firewall-policy-rules-gcloud]}
+      - {id: sa-firewall-targets, name: Service account firewall targets, match: [target-service-accounts, service-account-firewall-targets]}
+      - {id: firewall-policy-migration, name: Migrating VPC firewall rules to network firewall policies, match: [firewall-policy-migration, migrate-vpc-firewall-rules]}
+      - {id: google-source-ranges, name: Allowing health check IAP and Google front end source ranges, match: [health-check-firewall-ranges, iap-source-range]}
+  - id: cloud-nat-private-access
+    name: Cloud NAT and Private Google Access
+    source: ACE/Deploying; PCSE; Cloud NAT how-to guides
+    match: [cloud-nat, private-google-access]
+    subtopics:
+      - {id: nat-setup, name: Creating a NAT gateway, match: [cloud-nat-setup, gcloud-compute-routers-nats]}
+      - {id: nat-ports, name: Port allocation and dynamic port allocation, match: [nat-port-allocation, dynamic-port-allocation]}
+      - {id: nat-logging, name: NAT logging and monitoring, match: [nat-logging, nat-monitoring]}
+      - {id: private-nat, name: Private NAT and hybrid NAT, match: [private-nat, hybrid-nat]}
+      - {id: pga-dns, name: Private Google Access DNS and VIPs, match: [private-googleapis-vip, restricted-vip, private-google-access-dns]}
+      - {id: nat-static-ips, name: Manual NAT IP addresses, match: [nat-static-ips, manual-nat-ips]}
+      - {id: nat-rules, name: Rule-based NAT with NAT rules, match: [nat-rules]}
+      - {id: nat-port-exhaustion, name: Troubleshooting NAT port exhaustion and dropped connections, match: [nat-port-exhaustion, nat-allocation-failed]}
+      - {id: pga-on-prem, name: Private Google Access for on-premises hosts, match: [private-google-access-on-premises]}
+  - id: cloud-load-balancing
+    name: Cloud Load Balancing selection and backends
+    source: ACE/Deploying; PCA/Designing; Cloud Load Balancing how-to guides
+    match: [cloud-load-balancing, load-balancer, global-external-alb, internal-load-balancer, backend-service]
+    subtopics:
+      - {id: url-maps, name: URL maps and path matchers, match: [url-map, path-matchers, header-rewrites]}
+      - {id: health-checks, name: Health checks, match: [health-checks]}
+      - {id: negs, name: Serverless hybrid and internet NEGs, match: [serverless-neg, hybrid-neg, internet-neg]}
+      - {id: session-affinity, name: Session affinity and connection draining, match: [session-affinity, connection-draining]}
+      - {id: proxy-only-subnet, name: Proxy-only subnets, match: [proxy-only-subnet]}
+      - {id: lb-timeouts, name: Backend timeouts, match: [backend-timeouts, lb-timeouts]}
+      - {id: lb-logging, name: Load balancer logging and monitoring, match: [lb-logging, lb-monitoring]}
+      - {id: cross-region-ilb, name: Cross-region internal ALB, match: [cross-region-internal-alb]}
+      - {id: traffic-steering, name: Weighted traffic splitting and steering, match: [weighted-backends, traffic-steering]}
+      - {id: lb-gcloud, name: Building a load balancer with gcloud, match: [gcloud-compute-backend-services, lb-gcloud-setup]}
+      - {id: classic-alb-migration, name: Migrating classic Application Load Balancers to global external ALB, match: [classic-alb-migration]}
+  - id: cloud-cdn
+    name: Cloud CDN and caching
+    source: PCA/Designing; Framework/Performance; Cloud CDN how-to guides
+    match: [cloud-cdn, cdn, cache-keys, media-cdn]
+    subtopics:
+      - {id: cache-modes, name: Cache modes and TTL overrides, match: [cache-modes, ttl-overrides]}
+      - {id: cdn-signed, name: Signed URLs and signed cookies, match: [signed-urls-cdn, signed-cookies]}
+      - {id: cache-invalidation, name: Cache invalidation, match: [cache-invalidation]}
+      - {id: backend-bucket, name: Backend buckets, match: [backend-bucket]}
+      - {id: cdn-logging, name: CDN logging and cache hit metrics, match: [cdn-logging, cache-hit-metrics]}
+      - {id: cdn-external-origin, name: External origins and private origin authentication, match: [external-origin, private-origin-auth]}
+      - {id: cdn-enable, name: Enabling CDN on backends with gcloud, match: [backend-service-enable-cdn, cdn-enable-gcloud]}
+      - {id: serve-stale, name: Serve-stale and negative caching, match: [serve-stale, negative-caching]}
+      - {id: media-cdn, name: Media CDN for streaming and large files, match: [media-cdn-edge-cache-services, edge-cache-origins]}
+  - id: cloud-armor
+    name: Cloud Armor WAF and DDoS protection
+    source: PCSE/Boundary protection; Cloud Armor how-to guides
+    match: [cloud-armor, waf, ddos, rate-limiting]
+    subtopics:
+      - {id: preconfigured-waf, name: Preconfigured WAF rules, match: [preconfigured-waf-rules, owasp-crs]}
+      - {id: custom-rules, name: Custom rules language, match: [custom-rules-language, cel-armor]}
+      - {id: bot-management, name: Bot management with reCAPTCHA, match: [bot-management, recaptcha-enterprise]}
+      - {id: adaptive-protection, name: Adaptive Protection, match: [adaptive-protection]}
+      - {id: edge-policies, name: Edge security policies, match: [edge-security-policy]}
+      - {id: armor-logging, name: Logging and monitoring, match: [cloud-armor-logging, armor-monitoring]}
+      - {id: armor-gcloud-terraform, name: Managing policies with gcloud and Terraform, match: [cloud-armor-gcloud, cloud-armor-terraform]}
+      - {id: named-ip-lists, name: Named IP address lists, match: [named-ip-lists]}
+      - {id: waf-tuning, name: Tuning false positives and sensitivity, match: [false-positive-tuning, sensitivity-levels]}
+      - {id: rate-limiting, name: Rate limiting with throttle and rate-based ban rules, match: [rate-based-ban, throttle-rules]}
+  - id: cloud-dns
+    name: Cloud DNS zones, policies and DNSSEC
+    source: ACE/Deploying; PCSE; Cloud DNS how-to guides
+    match: [cloud-dns, dns, private-dns-zones, dnssec, dns-forwarding]
+    subtopics:
+      - {id: forwarding-zones, name: Forwarding zones and inbound forwarding, match: [forwarding-zones, inbound-forwarding]}
+      - {id: dns-peering, name: DNS peering, match: [dns-peering]}
+      - {id: response-policies, name: Response policy zones, match: [response-policies, response-policy-zones]}
+      - {id: routing-policies, name: Geo and failover routing policies, match: [routing-policies, geo-routing]}
+      - {id: dns-logging, name: DNS logging, match: [dns-logging]}
+      - {id: record-sets, name: Managing record sets and transactions, match: [gcloud-dns-record-sets, dns-transaction]}
+      - {id: dns-zone-iam, name: Per-zone IAM, match: [dns-zone-iam, per-zone-iam]}
+      - {id: dns-migration, name: Migrating zones into Cloud DNS, match: [dns-migration, zone-import]}
+      - {id: cloud-domains, name: Cloud Domains registration, match: [cloud-domains, domain-registration]}
+      - {id: dns-cross-project-binding, name: Cross-project zone binding for Shared VPC, match: [cross-project-binding, dns-shared-vpc]}
+  - id: hybrid-connectivity
+    name: Cloud VPN and Cloud Interconnect
+    source: ACE/Deploying; PCA/Network topologies; Cloud VPN and Interconnect how-to guides
+    match: [cloud-vpn, ha-vpn, cloud-interconnect, dedicated-interconnect, partner-interconnect, cross-cloud-interconnect]
+    subtopics:
+      - {id: vlan-attachments, name: VLAN attachments, match: [vlan-attachments]}
+      - {id: cloud-router-bgp, name: Cloud Router and BGP, match: [cloud-router, bgp]}
+      - {id: custom-advertisements, name: Custom route advertisements, match: [custom-route-advertisements]}
+      - {id: macsec, name: MACsec for Interconnect, match: [macsec]}
+      - {id: ha-vpn-setup, name: Building HA VPN with gcloud, match: [ha-vpn-gcloud, vpn-tunnel-setup]}
+      - {id: vpn-multicloud, name: HA VPN to AWS and Azure, match: [vpn-to-aws, multi-cloud-vpn]}
+      - {id: interconnect-ordering, name: Ordering Interconnect and LOA-CFAC, match: [interconnect-ordering, loa-cfac]}
+      - {id: interconnect-monitoring, name: Interconnect monitoring, match: [interconnect-monitoring, interconnect-metrics]}
+      - {id: vpn-troubleshooting, name: Troubleshooting VPN tunnels, match: [vpn-troubleshooting, ike-troubleshooting]}
+      - {id: classic-vpn-migration, name: Migrating Classic VPN to HA VPN, match: [classic-vpn-migration, policy-based-vpn]}
+      - {id: partner-interconnect, name: Partner Interconnect, match: [partner-interconnect]}
+      - {id: cross-cloud-interconnect, name: Cross-Cloud Interconnect to other clouds, match: [cross-cloud-interconnect-provisioning]}
+  - id: private-service-connect
+    name: Private Service Connect and private services access
+    source: PCSE/Boundary protection; PSC how-to guides
+    match: [private-service-connect, private-services-access, psc]
+    subtopics:
+      - {id: psc-google-apis, name: PSC endpoints for Google APIs, match: [psc-google-apis-endpoint, psc-endpoints-googleapis]}
+      - {id: psc-publish, name: Publishing services with service attachments, match: [psc-service-attachment, published-services]}
+      - {id: psc-consume, name: Consumer endpoints and forwarding rules, match: [psc-consumer-endpoint, psc-forwarding-rule]}
+      - {id: psc-backends, name: PSC backends and NEGs, match: [psc-backends, psc-neg]}
+      - {id: psa-setup, name: Private services access allocated ranges, match: [psa-allocated-range, psa-peering-setup]}
+      - {id: psc-interfaces-dns, name: PSC interfaces and DNS, match: [psc-interfaces, psc-dns]}
+      - {id: psc-accept-lists, name: Consumer accept and reject lists and connection limits, match: [psc-consumer-accept-list, psc-connection-preference]}
+      - {id: psc-global-access, name: Global access for PSC endpoints, match: [psc-global-access]}
+      - {id: psc-troubleshooting, name: Troubleshooting PSC connections, match: [psc-troubleshooting]}
+  - id: vpc-service-controls
+    name: VPC Service Controls perimeters
+    source: PCSE/Boundary protection; VPC Service Controls how-to guides
+    match: [vpc-service-controls, vpc-sc, service-perimeter, access-context-manager]
+    subtopics:
+      - {id: perimeter-create, name: Creating perimeters, match: [perimeter-creation, gcloud-access-context-manager-perimeters]}
+      - {id: perimeter-dry-run, name: Dry-run mode, match: [vpc-sc-dry-run, perimeter-dry-run]}
+      - {id: ingress-egress-rules, name: Ingress and egress rules, match: [ingress-egress-rules, ingress-policies]}
+      - {id: perimeter-bridges, name: Perimeter bridges, match: [perimeter-bridges]}
+      - {id: vpc-sc-troubleshooting, name: Troubleshooting violations, match: [vpc-sc-troubleshooting, vpc-sc-violation]}
+      - {id: restricted-services, name: Restricted and accessible services, match: [restricted-services, vpc-accessible-services]}
+      - {id: restricted-vip, name: restricted.googleapis.com VIP and DNS for perimeters, match: [restricted-vip, restricted-googleapis]}
+      - {id: scoped-policies, name: Scoped access policies for delegated administration, match: [scoped-access-policies]}
+      - {id: perimeter-terraform, name: Managing perimeters with Terraform, match: [perimeter-terraform, vpc-sc-terraform]}
+  - id: network-observability
+    name: VPC Flow Logs, Packet Mirroring and Network Intelligence Center
+    source: PCDOE/Monitoring; PCSE; Network Intelligence Center how-to guides
+    match: [vpc-flow-logs, packet-mirroring, network-intelligence-center, connectivity-tests]
+    subtopics:
+      - {id: flow-logs-enable, name: Enabling flow logs and sampling, match: [flow-logs-enable, flow-logs-sampling]}
+      - {id: flow-logs-analysis, name: Analysing flow logs in BigQuery, match: [flow-logs-analysis, flow-logs-bigquery]}
+      - {id: packet-mirroring-setup, name: Packet mirroring policies, match: [packet-mirroring-setup, mirror-policy]}
+      - {id: connectivity-tests-run, name: Running connectivity tests, match: [connectivity-tests-run, reachability-analysis]}
+      - {id: network-topology, name: Network Topology and Performance Dashboard, match: [network-topology, network-performance-dashboard]}
+      - {id: network-analyzer, name: Network Analyzer insights, match: [network-analyzer]}
+      - {id: flow-analyzer, name: Flow Analyzer queries, match: [flow-analyzer]}
+      - {id: vm-packet-capture, name: Packet capture with tcpdump on VMs, match: [vm-packet-capture, tcpdump]}
+      - {id: vm-network-metrics, name: VM and network metrics for throughput and drops, match: [vm-network-metrics]}
+  - id: cloud-ngfw-ids
+    name: Cloud NGFW and Cloud IDS
+    source: PCSE/Boundary protection; Cloud NGFW and Cloud IDS how-to guides
+    match: [cloud-ids, cloud-ngfw, intrusion-detection, ngfw]
+    subtopics:
+      - {id: firewall-endpoint, name: Firewall endpoints, match: [firewall-endpoint]}
+      - {id: security-profiles, name: Security profiles and groups, match: [security-profiles, security-profile-groups]}
+      - {id: tls-inspection, name: TLS inspection, match: [tls-inspection]}
+      - {id: fqdn-geo-rules, name: FQDN and geolocation rules, match: [fqdn-firewall-rules, geo-firewall-rules]}
+      - {id: address-groups, name: Address groups, match: [address-groups]}
+      - {id: ids-endpoint, name: Cloud IDS endpoints, match: [cloud-ids-endpoint, ids-setup]}
+      - {id: ids-alerts, name: IDS threat logs and alerts, match: [ids-threat-logs, ids-alerts]}
+      - {id: ngfw-tiers, name: NGFW tiers and enablement, match: [ngfw-enterprise-setup, ngfw-tiers]}
+      - {id: ngfw-threat-logs, name: NGFW threat logs and alerting, match: [ngfw-threat-logs]}
+  - id: certificate-manager-tls
+    name: Certificate Manager and TLS for load balancers
+    source: PCSE/Securing communications; Certificate Manager how-to guides
+    match: [certificate-manager, managed-certificates, ssl-certificates, tls, ssl-policies]
+    subtopics:
+      - {id: certificate-maps, name: Certificate maps and entries, match: [certificate-maps, certificate-map-entries]}
+      - {id: dns-authorization, name: DNS authorization, match: [dns-authorization]}
+      - {id: wildcard-certs, name: Wildcard certificates, match: [wildcard-certificates]}
+      - {id: frontend-mtls, name: Frontend mTLS and trust configs, match: [frontend-mtls, trust-config]}
+      - {id: ssl-policy-tls-version, name: SSL policies and minimum TLS, match: [ssl-policy-min-tls, tls-1-2]}
+      - {id: certificate-monitoring, name: Certificate expiry monitoring, match: [certificate-monitoring, certificate-expiry-alerts]}
+      - {id: regional-certificates, name: Regional certificates for regional LBs, match: [regional-certificates, regional-lb-tls]}
+      - {id: cas-issued-certs, name: CA Service issued certificates, match: [certificate-issuance-config, cas-issued-certificates]}
+      - {id: compute-ssl-certificates, name: Compute Engine SSL certificate resources and Google-managed certificates, match: [compute-ssl-certificates, classic-managed-certificates]}
+      - {id: managed-cert-failures, name: Troubleshooting managed certificate provisioning, match: [managed-cert-provisioning-failures]}
+  - id: network-service-tiers
+    name: Network Service Tiers and egress cost
+    source: Framework/Performance; Framework/Cost; Network Service Tiers how-to guides
+    match: [network-service-tiers, premium-tier, standard-tier, egress-cost]
+    subtopics:
+      - {id: inter-region-egress, name: Inter-region and inter-zone egress, match: [inter-region-egress, inter-zone-egress]}
+      - {id: cold-hot-potato, name: Cold-potato vs hot-potato routing, match: [cold-potato-routing, hot-potato-routing]}
+      - {id: set-tier, name: Setting the tier per resource and project default, match: [set-network-tier, project-default-tier]}
+      - {id: standard-tier-limits, name: Standard Tier limitations, match: [standard-tier-limitations]}
+      - {id: egress-analysis, name: Egress cost analysis by SKU, match: [egress-cost-analysis, network-sku-analysis]}
+      - {id: egress-monitoring, name: Egress monitoring, match: [egress-monitoring]}
+      - {id: hybrid-egress-pricing, name: Interconnect and VPN egress pricing, match: [interconnect-egress-pricing]}
+      - {id: external-ip-charges, name: External IP address charges and unused addresses, match: [external-ip-charges, unused-static-ips]}
+  - id: api-management
+    name: API Gateway, Cloud Endpoints and Apigee
+    source: PCA/Designing; API Gateway and Apigee how-to guides
+    match: [api-gateway, cloud-endpoints, apigee]
+    subtopics:
+      - {id: api-gateway-deploy, name: Deploying API Gateway configs, match: [gcloud-api-gateway, api-gateway-deploy]}
+      - {id: endpoints-espv2, name: Endpoints with ESPv2, match: [espv2, endpoints-openapi-deploy]}
+      - {id: apigee-proxies, name: Apigee API proxies, match: [apigee-proxies, api-proxy-deploy]}
+      - {id: apigee-policies, name: Apigee policies and flows, match: [apigee-policies, apigee-flows]}
+      - {id: apigee-environments, name: Apigee environments and instances, match: [apigee-environments, apigee-instances]}
+      - {id: api-gateway-auth, name: API Gateway JWT and API key auth, match: [api-gateway-jwt, api-gateway-auth]}
+      - {id: api-products, name: API products and developer portal, match: [api-products, developer-portal]}
+  # --- Security and data protection (PCSE Data protection, Managing operations, Compliance)
+      - {id: apigee-hybrid, name: Apigee hybrid runtime on Kubernetes, match: [apigee-hybrid-install, apigee-hybrid-overrides]}
+      - {id: api-gateway-quotas, name: API Gateway quotas and rate limiting, match: [api-gateway-quotas]}
+      - {id: apigee-analytics, name: Apigee analytics and API monitoring, match: [apigee-analytics]}
+  - id: cloud-kms-cmek
+    name: Cloud KMS, CMEK and Cloud HSM
+    source: PCSE/Data protection; Cloud KMS how-to guides
+    match: [cloud-kms, kms, cmek, cloud-hsm, cloud-external-key-manager]
+    subtopics:
+      - {id: key-rotation, name: Key rotation and versions, match: [key-rotation, key-versions]}
+      - {id: envelope-encryption, name: Envelope encryption, match: [envelope-encryption]}
+      - {id: autokey, name: Cloud KMS Autokey, match: [autokey]}
+      - {id: cmek-org-policy, name: CMEK enforcement org policy, match: [cmek-org-policy]}
+      - {id: asymmetric-keys, name: Asymmetric and MAC keys, match: [asymmetric-keys, mac-keys]}
+      - {id: key-import, name: Importing keys, match: [kms-key-import, import-jobs]}
+      - {id: key-destruction, name: Key destruction and state management, match: [kms-key-destruction, scheduled-destruction, key-state]}
+      - {id: hsm-attestation, name: Cloud HSM attestation, match: [hsm-attestation]}
+      - {id: kms-audit, name: Key usage tracking and audit, match: [key-usage-tracking, kms-audit-logging]}
+      - {id: kms-terraform, name: KMS in Terraform with prevent_destroy, match: [kms-terraform, prevent-destroy-kms]}
+      - {id: cloud-ekm, name: Cloud External Key Manager, match: [cloud-ekm, external-key-manager]}
+  - id: secret-manager
+    name: Secret Manager
+    source: PCSE/Data protection; PCDOE/CI-CD; Secret Manager how-to guides
+    match: [secret-manager, secrets, secret-rotation]
+    subtopics:
+      - {id: secret-versions, name: Versions and replication, match: [secret-versions, secret-replication]}
+      - {id: rotation-schedule, name: Rotation schedules and notifications, match: [rotation-schedule, pubsub-rotation-notification]}
+      - {id: cloud-run-secrets, name: Secrets in Cloud Run, match: [cloud-run-secrets]}
+      - {id: gke-secrets-csi, name: Secret Manager in GKE, match: [gke-secret-manager-csi, external-secrets-operator]}
+      - {id: regional-secrets, name: Regional secrets, match: [regional-secrets]}
+      - {id: secret-gcloud, name: Managing secrets with gcloud, match: [gcloud-secrets, secret-create-gcloud]}
+      - {id: secret-audit, name: Secret access logging, match: [secret-access-logging, secret-audit]}
+      - {id: secret-version-lifecycle, name: Disabling and destroying versions, match: [secret-version-destroy, disable-version]}
+      - {id: secret-terraform, name: Secrets in Terraform, match: [secret-terraform]}
+      - {id: secrets-cloud-build, name: Secrets in Cloud Build, match: [secrets-in-cloud-build]}
+  - id: sensitive-data-protection
+    name: Sensitive Data Protection (DLP) discovery and de-identification
+    source: PCSE/Data protection; Sensitive Data Protection how-to guides
+    match: [sensitive-data-protection, cloud-dlp, dlp, de-identification]
+    subtopics:
+      - {id: infotypes-templates, name: InfoTypes and inspection templates, match: [infotypes, inspection-templates]}
+      - {id: deidentify-templates, name: De-identification templates, match: [deidentify-templates]}
+      - {id: discovery-profiles, name: Discovery scans and data profiles, match: [discovery-scans, data-profiles]}
+      - {id: tokenization-fpe, name: Tokenisation and format-preserving encryption, match: [tokenization, format-preserving-encryption]}
+      - {id: custom-infotypes, name: Custom infoTypes dictionaries and regexes, match: [custom-infotypes, regex-infotypes]}
+      - {id: job-triggers, name: Inspection job triggers, match: [job-triggers, dlp-inspection-triggers]}
+      - {id: dlp-scc, name: Sending findings to Security Command Center, match: [dlp-scc-integration, dlp-findings-scc]}
+      - {id: image-redaction, name: Image redaction, match: [image-redaction, dlp-images]}
+      - {id: dlp-hybrid, name: Hybrid jobs, match: [dlp-hybrid-jobs]}
+      - {id: dlp-cost-control, name: Controlling inspection cost with sampling and row limits, match: [dlp-cost-control, dlp-sampling]}
+  - id: security-command-center
+    name: Security Command Center findings and posture
+    source: PCSE/Managing operations; Security Command Center how-to guides
+    match: [security-command-center, scc, security-posture]
+    subtopics:
+      - {id: sha, name: Security Health Analytics, match: [security-health-analytics]}
+      - {id: etd, name: Event Threat Detection, match: [event-threat-detection]}
+      - {id: mute-rules, name: Mute rules, match: [mute-rules]}
+      - {id: scc-export, name: Findings export to BigQuery and Pub/Sub, match: [scc-bigquery-export, notification-configs]}
+      - {id: posture-management, name: Posture management, match: [posture-management]}
+      - {id: scc-tiers, name: Tiers and activation, match: [scc-tiers, scc-activation]}
+      - {id: scc-findings-api, name: Querying findings with gcloud and API, match: [gcloud-scc-findings, scc-findings-api]}
+      - {id: scc-custom-modules, name: Custom SHA and ETD modules, match: [scc-custom-modules, custom-sha-modules]}
+      - {id: scc-remediation, name: Finding remediation workflows, match: [scc-remediation, finding-remediation]}
+      - {id: vm-vulnerability, name: VM vulnerability assessment, match: [vm-vulnerability-scanning, scc-vulnerability-assessment]}
+      - {id: attack-path-simulation, name: Attack exposure scores and high-value resource sets, match: [attack-path-simulation, high-value-resource-sets]}
+  - id: assured-workloads-compliance
+    name: Assured Workloads, data residency and Access Transparency
+    source: PCSE/Compliance; Assured Workloads how-to guides
+    match: [assured-workloads, compliance, data-residency, access-transparency, access-approval]
+    subtopics:
+      - {id: resource-locations, name: Resource location constraints, match: [resource-locations]}
+      - {id: sovereign-controls, name: Sovereign controls, match: [sovereign-controls]}
+      - {id: key-access-justifications, name: Key Access Justifications, match: [key-access-justifications]}
+      - {id: assured-create, name: Creating Assured Workloads folders, match: [assured-workloads-create, folder-creation-assured]}
+      - {id: assured-monitoring, name: Compliance violation monitoring, match: [assured-workloads-monitoring, compliance-violations]}
+      - {id: data-boundary, name: Data boundary and regions-and-support restriction, match: [data-boundary, regions-and-support-restriction]}
+      - {id: access-approval-config, name: Configuring Access Approval, match: [access-approval-config, approval-requests]}
+      - {id: audit-manager, name: Audit Manager and compliance reports, match: [audit-manager, compliance-manager]}
+      - {id: access-transparency, name: Access Transparency logs, match: [access-transparency-logs]}
+  - id: shielded-confidential-vms
+    name: Shielded VM and Confidential Computing
+    source: PCSE/Data protection; Shielded VM and Confidential VM how-to guides
+    match: [shielded-vm, confidential-vm, confidential-computing]
+    subtopics:
+      - {id: secure-boot-vtpm, name: Secure Boot vTPM and integrity monitoring, match: [secure-boot, vtpm, integrity-monitoring]}
+      - {id: confidential-space, name: Confidential Space, match: [confidential-space]}
+      - {id: confidential-gke, name: Confidential GKE Nodes, match: [confidential-gke]}
+      - {id: shielded-enable, name: Enabling Shielded VM options, match: [shielded-vm-enable, enable-vtpm-secure-boot]}
+      - {id: integrity-alerts, name: Integrity monitoring alerts and baseline updates, match: [integrity-monitoring-alerts, late-boot-validation]}
+      - {id: confidential-vm-create, name: Creating Confidential VMs, match: [confidential-vm-create]}
+      - {id: attestation-verification, name: Verifying attestation tokens, match: [attestation-token-verification, confidential-space-workload]}
+      - {id: confidential-tech, name: Choosing AMD SEV SEV-SNP or Intel TDX, match: [amd-sev-snp, intel-tdx]}
+      - {id: require-shielded-vm, name: Requiring Shielded and Confidential VMs by org policy, match: [require-shielded-vm, restrict-non-confidential-computing]}
+  - id: certificate-authority-service
+    name: Certificate Authority Service private PKI
+    source: PCSE/Securing communications; CA Service how-to guides
+    match: [certificate-authority-service, cas, private-ca, private-pki]
+    subtopics:
+      - {id: ca-pools, name: CA pools and tiers, match: [ca-pools, devops-tier, enterprise-tier]}
+      - {id: subordinate-ca, name: Root and subordinate CAs, match: [subordinate-ca, root-ca]}
+      - {id: certificate-templates, name: Certificate templates and issuance policies, match: [certificate-templates, issuance-policy]}
+      - {id: cas-issuer, name: cert-manager Google CAS issuer, match: [cert-manager-google-cas-issuer]}
+      - {id: ca-pool-create, name: Creating CA pools with gcloud privateca, match: [ca-pool-create, gcloud-privateca]}
+      - {id: issue-certificate, name: Issuing certificates, match: [issue-certificate, gcloud-privateca-certificates-create]}
+      - {id: ca-rotation, name: CA rotation and disabling, match: [ca-rotation, ca-disable]}
+      - {id: cas-iam, name: CA Service IAM roles, match: [cas-iam, certificate-requester]}
+      - {id: crl-publishing, name: CRL and CA cert publishing, match: [crl-publishing, cas-publishing]}
+      - {id: cas-revocation, name: Revoking certificates in CA Service, match: [certificate-revocation]}
+  - id: security-log-export
+    name: Log sinks, retention and SIEM export
+    source: PCSE/Managing operations; Cloud Logging routing how-to guides
+    match: [log-sinks, log-router, log-retention, log-buckets, siem, security-operations]
+    subtopics:
+      - {id: aggregated-sinks, name: Aggregated organisation sinks, match: [aggregated-sinks]}
+      - {id: google-secops, name: Export to Google SecOps, match: [google-secops, chronicle]}
+      - {id: splunk-export, name: Export to Splunk, match: [splunk-export]}
+      - {id: log-views, name: Log views, match: [log-views]}
+      - {id: locked-buckets, name: Locked buckets, match: [locked-buckets]}
+      - {id: sink-filters, name: Inclusion and exclusion filters, match: [sink-filters, inclusion-exclusion-filters]}
+      - {id: cross-project-sinks, name: Cross-project sinks to a central project, match: [cross-project-sinks, project-sink-to-central]}
+      - {id: log-bucket-location, name: Log bucket regions, match: [log-bucket-regions, log-bucket-location]}
+      - {id: retention-config, name: Configuring retention days, match: [log-retention-config, retention-days]}
+      - {id: restricted-fields, name: Field-level access restrictions, match: [field-level-access, restricted-fields]}
+      - {id: sink-errors, name: Monitoring sink export errors, match: [sink-errors, export-errors]}
+  - id: software-supply-chain
+    name: Artifact Analysis, Binary Authorization and SLSA
+    source: PCDOE/CI-CD security; PCSE; Binary Authorization how-to guides
+    match: [artifact-analysis, container-scanning, vulnerability-scanning, software-supply-chain, slsa, assured-oss]
+    subtopics:
+      - {id: attestations, name: Attestations and attestors, match: [attestations, attestors]}
+      - {id: provenance, name: Build provenance, match: [provenance, cloud-build-provenance]}
+      - {id: sbom, name: SBOMs, match: [sbom]}
+      - {id: on-demand-scanning, name: On-demand scanning, match: [on-demand-scanning]}
+      - {id: binauthz-policy, name: Binary Authorization policy configuration, match: [binauthz-policy-config, binauthz-policy-yaml]}
+      - {id: binauthz-platforms, name: Binary Authorization for GKE and Cloud Run, match: [binauthz-gke-cloud-run, platform-policy]}
+      - {id: notes-occurrences, name: Artifact Analysis notes and occurrences, match: [notes-occurrences, artifact-analysis-api]}
+      - {id: slsa-level3, name: SLSA level 3 builds, match: [cloud-build-slsa-level3, slsa-level-3]}
+      - {id: assured-oss-setup, name: Assured OSS setup, match: [assured-oss-setup]}
+      - {id: vulnerability-exemptions, name: Handling vulnerability findings and exemptions, match: [vulnerability-exemptions, cve-triage]}
+  # --- Operations, monitoring and DevOps (ACE 4; PCDOE; PCA Reliability)
+      - {id: vex, name: VEX statements for vulnerability status, match: [vex]}
+  - id: cloud-monitoring
+    name: Cloud Monitoring metrics, dashboards and uptime checks
+    source: ACE/Operations; PCDOE/Service monitoring; Cloud Monitoring how-to guides
+    match: [cloud-monitoring, monitoring, dashboards, uptime-checks, metrics-scopes]
+    subtopics:
+      - {id: custom-metrics, name: Custom metrics, match: [custom-metrics]}
+      - {id: mql-promql, name: MQL and PromQL queries, match: [mql, promql]}
+      - {id: synthetic-monitors, name: Synthetic monitors, match: [synthetic-monitors]}
+      - {id: dashboards-as-code, name: Dashboards as code, match: [dashboards-as-code, dashboard-json]}
+      - {id: private-uptime, name: Private uptime checks, match: [private-uptime-checks]}
+      - {id: metrics-scope-multi, name: Multi-project metrics scopes, match: [metrics-scope-multi-project, add-monitored-project]}
+      - {id: write-custom-metric, name: Writing custom metrics via API, match: [write-custom-metric, custom-metrics-write]}
+      - {id: monitoring-cost, name: Monitoring ingestion cost, match: [monitoring-cost, metrics-ingestion-cost]}
+      - {id: metric-retention, name: Metric retention and export, match: [metric-retention, metric-exports]}
+      - {id: metric-cardinality, name: Metric label cardinality and descriptor management, match: [metric-label-cardinality, delete-metric-descriptor]}
+      - {id: monitoring-groups, name: Resource groups in Cloud Monitoring, match: [monitoring-groups]}
+  - id: alerting
+    name: Alerting policies and notification channels
+    source: PCDOE/Service monitoring; Cloud Monitoring alerting how-to guides
+    match: [alerting-policies, alerting, notification-channels, alert-routing]
+    subtopics:
+      - {id: alert-channels, name: PagerDuty Slack webhook and Pub/Sub channels, match: [pagerduty-gcp, slack-alerts, webhook-channel]}
+      - {id: mql-promql-alerts, name: MQL and PromQL alert conditions, match: [mql-alerts, promql-alerts]}
+      - {id: log-based-alerts, name: Log-based alerts, match: [log-based-alerts]}
+      - {id: alert-docs-severity, name: Alert documentation and severity, match: [alert-documentation, severity-labels]}
+      - {id: snooze, name: Snoozing alerts, match: [snooze]}
+      - {id: absence-alerts, name: Metric absence alerts, match: [absence-alerts]}
+      - {id: alerting-as-code, name: Alerting as code, match: [alerting-as-code, alerting-policies-yaml]}
+      - {id: alert-rate-limits, name: Notification rate limits and auto-close, match: [alert-notification-rate-limit, auto-close]}
+      - {id: alert-incidents, name: Managing alert incidents, match: [alert-incidents, incident-acknowledge]}
+      - {id: condition-combiners, name: Multi-condition policies and combiners, match: [condition-combiners]}
+  - id: cloud-logging
+    name: Cloud Logging queries, log-based metrics and exclusions
+    source: ACE/Operations; PCDOE; Cloud Logging how-to guides
+    match: [cloud-logging, logging, log-queries, log-based-metrics, log-exclusions]
+    subtopics:
+      - {id: logging-query-language, name: Logging query language, match: [logging-query-language]}
+      - {id: log-analytics, name: Log Analytics with SQL, match: [log-analytics]}
+      - {id: structured-logging, name: Structured logging, match: [structured-logging, jsonpayload]}
+      - {id: log-ingestion-cost, name: Controlling ingestion cost, match: [log-ingestion-cost]}
+      - {id: gcloud-logging-read, name: Reading logs with gcloud, match: [gcloud-logging-read]}
+      - {id: log-view-iam, name: Log views and field access, match: [log-view-access, log-views-iam]}
+      - {id: log-scopes, name: Log scopes, match: [log-scopes]}
+      - {id: analytics-bucket-upgrade, name: Upgrading buckets for Log Analytics, match: [analytics-enabled-bucket, log-bucket-upgrade]}
+      - {id: saved-queries, name: Saved and shared queries, match: [saved-queries]}
+      - {id: default-sinks, name: _Default and _Required sinks and buckets, match: [default-log-sink-config, required-log-bucket]}
+  - id: slo-monitoring
+    name: SLIs, SLOs and error budgets
+    source: PCDOE/SRE practices; Cloud Monitoring SLO how-to guides
+    match: [slo, sli, error-budget, service-monitoring]
+    subtopics:
+      - {id: burn-rate-alerts, name: Burn-rate alerts, match: [burn-rate-alerts, multi-window-burn-rate]}
+      - {id: request-vs-windows, name: Request-based vs windows-based SLIs, match: [request-based-sli, windows-based-sli]}
+      - {id: slo-api, name: SLO API and custom services, match: [slo-api, custom-services]}
+      - {id: error-budget-policy, name: Error budget policies, match: [error-budget-policy]}
+      - {id: slo-dashboards, name: SLO dashboards and reporting, match: [slo-dashboards, slo-reporting]}
+      - {id: slo-review, name: SLO review and tuning, match: [slo-review, slo-tuning]}
+      - {id: slo-terraform, name: SLOs in Terraform, match: [slo-terraform]}
+      - {id: distribution-cut-sli, name: Latency SLIs with distribution cut, match: [distribution-cut-sli, latency-sli]}
+      - {id: load-balancer-sli, name: Availability SLIs from load balancer metrics, match: [load-balancer-sli]}
+  - id: trace-profiler
+    name: Cloud Trace, Cloud Profiler and OpenTelemetry
+    source: PCDOE/Service monitoring; Cloud Trace how-to guides
+    match: [cloud-trace, cloud-profiler, opentelemetry, distributed-tracing]
+    subtopics:
+      - {id: trace-context, name: Trace context propagation, match: [trace-context, traceparent]}
+      - {id: otel-collector, name: OpenTelemetry Collector, match: [otel-collector]}
+      - {id: sampling, name: Sampling configuration, match: [sampling]}
+      - {id: profiler, name: CPU and heap profiling, match: [cpu-profiling, heap-profiling]}
+      - {id: trace-serverless, name: Tracing on Cloud Run and GKE, match: [cloud-run-tracing, trace-cloud-run-gke]}
+      - {id: trace-bigquery, name: Trace export to BigQuery, match: [trace-bigquery-export]}
+      - {id: profiler-agent, name: Profiler agent setup per language, match: [profiler-agent-setup, profiler-languages]}
+      - {id: otel-operator, name: OpenTelemetry Operator on GKE, match: [otel-operator, otel-collector-gke]}
+      - {id: trace-alerts, name: Latency alerts from traces, match: [trace-latency-alerts]}
+      - {id: trace-explorer, name: Trace Explorer analysis of latency, match: [trace-explorer]}
+  - id: ops-agent
+    name: Ops Agent on VMs
+    source: ACE/Operations; PCDOE; Ops Agent how-to guides
+    match: [ops-agent, monitoring-agent, logging-agent]
+    subtopics:
+      - {id: agent-policies, name: Fleet install with agent policies, match: [agent-policies, fleet-agent-install]}
+      - {id: agent-config, name: Agent config YAML, match: [agent-config-yaml]}
+      - {id: third-party-receivers, name: Third-party app receivers, match: [nginx-metrics, mysql-metrics, prometheus-receiver]}
+      - {id: agent-troubleshooting, name: Agent troubleshooting, match: [agent-troubleshooting]}
+      - {id: agent-upgrade, name: Upgrades and version pinning, match: [ops-agent-upgrade, agent-version-pinning]}
+      - {id: agent-windows, name: Ops Agent on Windows, match: [ops-agent-windows, windows-event-log]}
+      - {id: custom-log-files, name: Custom log file receivers, match: [ops-agent-custom-logs, file-receiver]}
+      - {id: otlp-receiver, name: OTLP receiver, match: [ops-agent-otlp-receiver, otlp-ingest]}
+      - {id: ops-agent-prometheus, name: Prometheus receiver in Ops Agent, match: [prometheus-receiver-ops-agent]}
+  - id: error-reporting-debugging
+    name: Error Reporting and production debugging
+    source: PCDOE/Optimizing performance; Troubleshooting how-to guides
+    match: [error-reporting, production-debugging, troubleshooting]
+    subtopics:
+      - {id: error-groups, name: Error groups and notifications, match: [error-groups, error-notifications]}
+      - {id: vm-boot-troubleshooting, name: VM boot troubleshooting with serial logs and rescue VMs, match: [vm-boot-troubleshooting, rescue-vm, serial-console-logs]}
+      - {id: cloud-run-start-failures, name: Cloud Run container start failures, match: [cloud-run-troubleshooting, container-failed-to-start]}
+      - {id: gke-pod-troubleshooting, name: GKE pod and CrashLoopBackOff troubleshooting, match: [gke-troubleshooting, crashloopbackoff]}
+      - {id: network-debugging, name: VM network and firewall debugging, match: [network-troubleshooting-gce, firewall-debugging]}
+      - {id: permission-denied, name: Permission denied diagnosis, match: [permission-denied, 403-troubleshooting]}
+      - {id: error-reporting-setup, name: Error Reporting client setup, match: [error-reporting-setup, reported-errors-api]}
+      - {id: cloud-sql-connection-errors, name: Debugging Cloud SQL connection failures, match: [cloud-sql-connection-errors]}
+      - {id: lb-5xx-errors, name: Troubleshooting load balancer 502 and 503 errors, match: [lb-502-errors, load-balancer-5xx]}
+  - id: cloud-build
+    name: Cloud Build pipelines and triggers
+    source: PCDOE/CI-CD; Cloud Build how-to guides
+    match: [cloud-build, cloudbuild, build-triggers, private-pools]
+    subtopics:
+      - {id: cloudbuild-yaml, name: cloudbuild.yaml and substitutions, match: [cloudbuild-yaml, build-substitutions]}
+      - {id: build-service-account, name: Build service accounts, match: [build-service-account]}
+      - {id: kaniko-buildpacks, name: Kaniko and buildpacks, match: [kaniko, buildpacks]}
+      - {id: build-approvals, name: Build approvals, match: [build-approvals]}
+      - {id: repository-connections, name: Repository connections, match: [repository-connections, developer-connect]}
+      - {id: build-caching, name: Build caching, match: [build-caching]}
+      - {id: build-deploy-gke, name: Deploying to GKE from Cloud Build, match: [cloud-build-gke-deploy, build-deploy-gke]}
+      - {id: build-deploy-run, name: Deploying to Cloud Run from Cloud Build, match: [cloud-build-cloud-run-deploy]}
+      - {id: build-terraform, name: Terraform in Cloud Build, match: [terraform-in-cloud-build, cloud-build-terraform]}
+      - {id: build-notifications, name: Build notifiers, match: [cloud-build-notifications, build-notifier]}
+      - {id: build-secrets, name: Secrets in builds, match: [cloud-build-secrets, availablesecrets]}
+      - {id: build-timeouts, name: Timeouts machine types and concurrency, match: [build-timeouts, build-machine-type]}
+  - id: artifact-registry
+    name: Artifact Registry
+    source: PCDOE/CI-CD; Artifact Registry how-to guides
+    match: [artifact-registry, container-registry, remote-repositories]
+    subtopics:
+      - {id: gcr-migration, name: Migrating from Container Registry, match: [gcr-migration]}
+      - {id: virtual-repositories, name: Virtual repositories, match: [virtual-repositories]}
+      - {id: cleanup-policies, name: Cleanup policies, match: [cleanup-policies]}
+      - {id: immutable-tags, name: Immutable tags, match: [immutable-tags]}
+      - {id: language-repos, name: Maven npm Python and apt repositories, match: [maven-repository, npm-repository, python-repository]}
+      - {id: ar-push-pull, name: Docker push and pull auth, match: [docker-push-ar, docker-credential-helper]}
+      - {id: ar-cmek, name: CMEK for repositories, match: [artifact-registry-cmek]}
+      - {id: ar-vpc-sc, name: Artifact Registry inside VPC-SC, match: [artifact-registry-vpc-sc]}
+      - {id: remote-upstream-auth, name: Remote repository upstream credentials, match: [artifact-registry-upstream-auth, remote-repo-credentials]}
+      - {id: image-tagging, name: Image tagging strategy, match: [image-tagging-strategy, artifact-registry-labels]}
+  - id: cloud-deploy
+    name: Cloud Deploy delivery pipelines and deployment strategies
+    source: PCDOE/CI-CD; Cloud Deploy how-to guides
+    match: [cloud-deploy, delivery-pipeline, deployment-strategies, canary, blue-green]
+    subtopics:
+      - {id: skaffold, name: Skaffold configuration, match: [skaffold]}
+      - {id: promotion-approvals, name: Promotion and approvals, match: [promotion, approvals]}
+      - {id: deploy-hooks-verify, name: Deploy hooks and verify, match: [deploy-hooks, verify-phase]}
+      - {id: automation-rules, name: Automation rules, match: [automation-rules]}
+      - {id: custom-targets, name: Custom targets, match: [custom-targets]}
+      - {id: deploy-policies, name: Deploy policies, match: [deploy-policies]}
+      - {id: pipeline-yaml, name: Pipeline and target YAML, match: [clouddeploy-yaml, pipeline-yaml]}
+      - {id: deploy-gcloud, name: Creating releases with gcloud, match: [gcloud-deploy-releases]}
+      - {id: deploy-parameters, name: Deploy parameters, match: [deploy-parameters]}
+      - {id: deploy-notifications, name: Cloud Deploy notifications, match: [cloud-deploy-notifications]}
+      - {id: deploy-iam, name: Cloud Deploy IAM, match: [cloud-deploy-iam, deploy-roles]}
+  - id: infrastructure-as-code
+    name: Terraform, Config Connector and Infrastructure Manager on GCP
+    source: ACE/Deploying; PCDOE/Bootstrapping; Terraform on Google Cloud docs
+    match: [terraform, config-connector, infrastructure-manager, deployment-manager]
+    subtopics:
+      - {id: gcs-backend, name: GCS backend and state locking, match: [gcs-backend, state-locking]}
+      - {id: impersonate-sa, name: Provider impersonation, match: [impersonate-service-account]}
+      - {id: terraform-vet, name: gcloud terraform vet policy validation, match: [gcloud-terraform-vet, policy-validation]}
+      - {id: import-existing, name: Importing existing resources, match: [import-existing-resources]}
+      - {id: terraform-layout, name: Module structure and environment layout, match: [terraform-module-structure, terraform-layout]}
+      - {id: kcc-install, name: Installing Config Connector, match: [config-connector-install, kcc-setup]}
+      - {id: infra-manager-deploy, name: Infrastructure Manager deployments, match: [infra-manager-deploy, gcloud-infra-manager]}
+      - {id: provider-upgrade, name: Provider version upgrades, match: [terraform-provider-versions, provider-upgrade]}
+      - {id: deployment-manager-migration, name: Migrating from Deployment Manager, match: [deployment-manager-migration]}
+      - {id: terraform-drift, name: Detecting and reconciling Terraform drift, match: [terraform-drift-detection]}
+  - id: incident-management
+    name: Incident response and postmortems
+    source: PCDOE/SRE practices; PCA/Reliability; SRE book incident chapters
+    match: [incident-response, postmortem, incident-management, on-call]
+    subtopics:
+      - {id: incident-commander, name: Incident command roles, match: [incident-commander, communications-lead]}
+      - {id: blameless-postmortem, name: Blameless postmortems, match: [blameless-postmortem]}
+      - {id: severity-levels, name: Severity levels, match: [severity-levels]}
+      - {id: service-health, name: Personalized Service Health, match: [personalized-service-health]}
+      - {id: game-days, name: Game days, match: [game-days]}
+      - {id: incident-detection, name: From alert to incident, match: [incident-detection, alert-to-incident]}
+      - {id: status-comms, name: Status pages and customer communication, match: [status-page, customer-communication]}
+      - {id: on-call-rotation, name: On-call rotations and escalation policies, match: [on-call-rotation, escalation-policies]}
+      - {id: postmortem-template, name: Postmortem template and action item tracking, match: [postmortem-template, action-item-tracking]}
+      - {id: incident-metrics, name: Incident metrics MTTD and MTTR, match: [mttr-metrics, mttd]}
+  - id: toil-automation
+    name: Toil reduction and runbook automation
+    source: PCDOE/SRE practices; SRE book toil chapter
+    match: [toil, sre-practices, runbook-automation, automation]
+    subtopics:
+      - {id: auto-remediation, name: Auto-remediation with functions, match: [auto-remediation, cloud-run-functions-remediation]}
+      - {id: toil-measurement, name: Toil budgets and measurement, match: [toil-budget, toil-measurement]}
+      - {id: chatops, name: ChatOps, match: [chatops]}
+      - {id: toil-identification, name: Identifying toil with surveys, match: [toil-identification, toil-survey]}
+      - {id: automation-sa, name: Service accounts for automation, match: [automation-service-accounts]}
+      - {id: self-service, name: Self-service provisioning, match: [self-service-provisioning]}
+      - {id: automation-testing, name: Testing and rolling back automation, match: [automation-testing, automation-rollback]}
+      - {id: scheduled-ops, name: Scheduled operations with Cloud Scheduler and Workflows, match: [scheduled-ops-automation]}
+      - {id: runbook-authoring, name: Writing runbooks and playbooks, match: [runbook-authoring]}
+  - id: recommender-active-assist
+    name: Recommender and Active Assist
+    source: Framework/Operational excellence; Framework/Cost; Recommender how-to guides
+    match: [recommender, active-assist, idle-resources, iam-recommender]
+    subtopics:
+      - {id: recommender-api, name: Recommender API and gcloud, match: [recommender-api, gcloud-recommender]}
+      - {id: vm-rightsizing, name: VM machine type recommendations, match: [vm-rightsizing-recommender, machine-type-recommendations]}
+      - {id: idle-recommenders, name: Idle VM and disk recommenders, match: [idle-vm-recommender, idle-disk-recommender]}
+      - {id: iam-recommendations, name: Applying IAM role recommendations, match: [role-recommendations, iam-recommender-apply]}
+      - {id: recommender-export, name: Recommendations export to BigQuery, match: [recommender-bigquery-export]}
+      - {id: recommendation-hub, name: Recommendation Hub and automation, match: [recommendation-hub, active-assist-automation]}
+  # --- Architecture framework (PCA Designing; Framework pillars)
+      - {id: unattended-projects, name: Unattended project recommender, match: [unattended-project-cleanup, project-utilization-recommender]}
+      - {id: cloud-sql-recommender, name: Cloud SQL overprovisioned and idle instance recommenders, match: [cloud-sql-overprovisioned-recommender]}
+      - {id: recommendation-state, name: Recommendation state transitions and tracking, match: [recommendation-state, mark-recommendation-claimed]}
+  - id: ha-dr-design
+    name: High availability and disaster recovery design
+    source: PCA/Designing; Framework/Reliability; DR planning guide
+    match: [high-availability, disaster-recovery, rpo-rto, regional-vs-zonal, multi-region]
+    subtopics:
+      - {id: dr-tiers, name: DR tiers cold warm hot, match: [dr-tiers, cold-warm-hot-standby]}
+      - {id: active-active, name: Active-active architectures, match: [active-active]}
+      - {id: dr-testing, name: DR testing and runbooks, match: [dr-testing, dr-runbook]}
+      - {id: failover-automation, name: Failover automation, match: [failover-automation]}
+      - {id: dr-plan, name: DR plan document and strategy, match: [dr-plan-document, dr-strategy]}
+      - {id: database-dr, name: DR for databases, match: [database-dr, dr-for-databases]}
+      - {id: chaos-engineering, name: Chaos engineering and fault injection, match: [chaos-engineering, fault-injection]}
+      - {id: zone-outage-runbook, name: Zone outage runbook, match: [zone-outage-runbook]}
+      - {id: multi-region-patterns, name: Multi-region architecture patterns, match: [multi-region-architecture-patterns]}
+      - {id: rto-rpo, name: Defining RTO and RPO from business impact analysis, match: [rto-rpo, business-impact-analysis]}
+  - id: migration-planning
+    name: Migration assessment and Migrate to Virtual Machines
+    source: PCA/Designing; PCA/Managing implementation; Migration Center how-to guides
+    match: [migration, migrate-to-virtual-machines, migration-center, migrate-for-compute, migration-assessment]
+    subtopics:
+      - {id: discovery-client, name: Discovery client and TCO reports, match: [discovery-client, tco-report]}
+      - {id: wave-planning, name: Wave planning, match: [wave-planning, migration-waves]}
+      - {id: test-clone, name: Test clones and cutover, match: [test-clone, cutover]}
+      - {id: migrate-to-containers, name: Migrate to Containers, match: [migrate-to-containers]}
+      - {id: m2vm-setup, name: Setting up Migrate to VMs sources, match: [migrate-vm-setup, m2vm-source]}
+      - {id: cutover-runbook, name: Migration cutover runbook, match: [migration-runbook, cutover-runbook]}
+      - {id: database-migration-planning, name: Database migration planning, match: [database-migration-planning]}
+      - {id: migration-cost, name: Migration cost estimation, match: [migration-cost-estimation, tco-calculator]}
+      - {id: dependency-mapping, name: Application dependency mapping, match: [workload-assessment, application-dependency-mapping]}
+      - {id: migration-center-import, name: Importing inventory into Migration Center from RVTools and CSV, match: [rvtools-import, migration-center-import]}
+  - id: cost-optimisation
+    name: Committed use discounts, rightsizing and cost controls
+    source: Framework/Cost optimization; ACE/Planning; Cloud Billing cost optimisation docs
+    match: [cost-optimization, committed-use-discounts, cud, sustained-use-discounts, rightsizing, cost-controls]
+    subtopics:
+      - {id: cud-types, name: Spend-based vs resource-based and flexible CUDs, match: [spend-based-cud, resource-based-cud, flexible-cud]}
+      - {id: cost-anomaly, name: Cost anomaly detection, match: [cost-anomaly-detection]}
+      - {id: finops, name: FinOps practice, match: [finops]}
+      - {id: cost-reports-analysis, name: Cost reports analysis, match: [cost-reports-analysis, billing-reports-filter]}
+      - {id: cud-purchase, name: CUD recommendations and purchase, match: [cud-recommendations, cud-purchase]}
+      - {id: gke-cost, name: GKE cost optimisation, match: [gke-cost-optimization, gke-cost]}
+      - {id: cloud-run-cost, name: Cloud Run cost optimisation, match: [cloud-run-cost-optimization]}
+      - {id: finops-dashboards, name: FinOps dashboards in Looker Studio, match: [finops-dashboards, looker-studio-billing]}
+      - {id: storage-cost, name: Storage cost optimisation, match: [storage-cost-optimisation]}
+      - {id: egress-cost-reduction, name: Network egress cost reduction, match: [egress-cost-reduction]}
+  - id: sustainability
+    name: Carbon footprint and sustainability
+    source: Framework/Sustainability; Carbon Footprint how-to guides
+    match: [sustainability, carbon-footprint, low-carbon-regions]
+    subtopics:
+      - {id: carbon-export, name: Carbon footprint export to BigQuery, match: [carbon-footprint-export]}
+      - {id: region-picker, name: Region picker, match: [region-picker]}
+      - {id: carbon-dashboard, name: Carbon footprint dashboard, match: [carbon-footprint-dashboard]}
+      - {id: carbon-recommendations, name: Carbon reduction recommendations, match: [carbon-reduction-recommendations, unattended-project-recommender]}
+      - {id: cfe-percentage, name: Region carbon-free energy percentage and grid intensity, match: [region-cfe-percentage, low-carbon-region-selection]}
+      - {id: carbon-aware-scheduling, name: Carbon-aware scheduling of batch workloads, match: [carbon-aware-batch-scheduling, time-shifting-workloads]}
+      - {id: ghg-reporting, name: GHG Protocol reporting with Carbon Footprint data, match: [ghg-protocol-reporting, carbon-footprint-methodology]}
+      - {id: sustainability-pillar, name: Architecture Framework sustainability practices, match: [sustainability-pillar]}
+  - id: shared-responsibility
+    name: Shared responsibility and shared fate
+    source: PCSE/Compliance; Framework/Security; Enterprise foundations blueprint
+    match: [shared-responsibility, shared-fate, security-foundations-blueprint]
+    subtopics:
+      - {id: control-matrix, name: Control matrix and compliance mapping, match: [control-matrix, compliance-mapping]}
+      - {id: cis-benchmark, name: CIS GCP Benchmark, match: [cis-gcp-benchmark]}
+      - {id: risk-protection, name: Risk Protection Program, match: [risk-protection-program]}
+      - {id: foundations-deploy, name: Deploying the enterprise foundations blueprint, match: [security-foundations-deploy, enterprise-foundations-deploy]}
+      - {id: responsibility-matrix, name: Customer responsibility matrix, match: [responsibility-matrix, customer-responsibility-matrix]}
+      - {id: compliance-reports-manager, name: Downloading audit reports from Compliance Reports Manager, match: [compliance-reports-download, soc2-iso-report-access]}
+      - {id: penetration-testing, name: Penetration testing policy and scoping on Google Cloud, match: [penetration-testing-policy]}
+      - {id: security-best-practices-center, name: Security foundations checklist and best practices centre, match: [security-foundations-checklist]}
+  - id: support-and-sre-engagement
+    name: Cloud Customer Care and escalation
+    source: PCA/Managing implementation; Customer Care docs
+    match: [customer-care, support-cases, escalation, support-tiers]
+    subtopics:
+      - {id: case-priority, name: Case priority and P1 cases, match: [case-priority, p1-case]}
+      - {id: tam, name: Technical Account Manager engagement, match: [technical-account-manager, tam]}
+      - {id: support-api, name: Cloud Support API automation, match: [cloud-support-api, support-api]}
+      - {id: open-case, name: Opening a support case well, match: [open-support-case, case-creation]}
+      - {id: service-health-dashboard, name: Service Health dashboard, match: [service-health]}
+      - {id: billing-support, name: Billing support cases, match: [billing-support]}
+      - {id: support-iam, name: Support IAM roles and case access, match: [support-iam-roles]}
+      - {id: issue-tracker, name: Reporting bugs and feature requests in the public Issue Tracker, match: [public-issue-tracker]}

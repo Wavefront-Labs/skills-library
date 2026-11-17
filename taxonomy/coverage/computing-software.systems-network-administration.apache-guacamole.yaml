@@ -1,0 +1,266 @@
+# Coverage spec for Apache Guacamole (computing-software / systems-network-administration).
+subject: Apache Guacamole
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [apache-guacamole]
+sources:
+  - "Apache Guacamole Manual 1.6.0 (https://guacamole.apache.org/doc/gug/)"
+topics:
+  - id: architecture
+    name: "Implementation and architecture"
+    source: https://guacamole.apache.org/doc/gug/guacamole-architecture.html
+    match: ["architecture", "guacd", "client-plugins", "libguac"]
+  - id: build-guacamole-server
+    name: "Building and installing guacamole-server"
+    source: https://guacamole.apache.org/doc/gug/guacamole-native.html
+    match: ["build-from-source", "guacamole-server", "native-installation", "configure"]
+  - id: run-guacd
+    name: "Running guacd"
+    source: https://guacamole.apache.org/doc/gug/guacamole-native.html
+    match: ["start-guacd", "systemd", "sysv-init"]
+  - id: guacd-configuration
+    name: "guacd.conf and command-line options"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["guacd-conf", "bind-host", "tls-guacd", "command-line-options"]
+  - id: web-app-install
+    name: "Installing the web application on Tomcat"
+    source: https://guacamole.apache.org/doc/gug/guacamole-native.html
+    match: ["tomcat", "guacamole-war", "webapps", "maven"]
+  - id: docker-installation
+    name: "Docker installation"
+    source: https://guacamole.apache.org/doc/gug/guacamole-docker.html
+    match: ["docker", "guacamole-guacd-image", "guacamole-image", "container"]
+    subtopics:
+      - {id: docker-env-vars, name: "Environment variable configuration", match: ["environment-variables", "container-configuration"]}
+      - {id: docker-proxy-valve, name: "Docker reverse proxy variables", match: ["remote-ip-valve", "webapp-context"]}
+  - id: database-auth
+    name: "Database authentication overview"
+    source: https://guacamole.apache.org/doc/gug/jdbc-auth.html
+    match: ["database-authentication", "jdbc-auth", "admin-interface"]
+  - id: mysql-auth
+    name: "MariaDB / MySQL authentication"
+    source: https://guacamole.apache.org/doc/gug/mysql-auth.html
+    match: ["mysql", "mariadb", "mysql-auth", "connector-j"]
+  - id: postgresql-auth
+    name: "PostgreSQL authentication"
+    source: https://guacamole.apache.org/doc/gug/postgresql-auth.html
+    match: ["postgresql", "postgresql-auth", "postgresql-ssl-mode"]
+    subtopics:
+      - {id: postgresql-password-policy, name: "Password policy and connection limits", match: ["password-policy", "connection-limits"]}
+  - id: sqlserver-auth
+    name: "SQL Server authentication"
+    source: https://guacamole.apache.org/doc/gug/sqlserver-auth.html
+    match: ["sql-server", "sqlserver", "sqlserver-auth", "sqlcmd"]
+  - id: database-schema
+    name: "Database schema reference"
+    source: https://guacamole.apache.org/doc/gug/jdbc-auth-schema.html
+    match: ["database-schema", "jdbc-auth-schema", "guacamole-entity", "permissions-tables"]
+  - id: security
+    name: "Securing a Guacamole install"
+    source: https://guacamole.apache.org/doc/gug/security.html
+    match: ["security", "hardening", "securing-guacamole", "ssl-termination"]
+  - id: reverse-proxy
+    name: "SSL termination and reverse proxy"
+    source: https://guacamole.apache.org/doc/gug/reverse-proxy.html
+    match: ["reverse-proxy", "websocket", "proxy-buffering"]
+    subtopics:
+      - {id: proxy-nginx, name: "Nginx", match: ["nginx", "client-max-body-size"]}
+      - {id: proxy-apache, name: "Apache httpd", match: ["apache-httpd", "mod-proxy-wstunnel", "flushpackets"]}
+      - {id: proxy-tomcat-valve, name: "Tomcat RemoteIpValve", match: ["remoteipvalve", "internalproxies", "x-forwarded-for"]}
+  - id: brute-force
+    name: "Blocking brute-force attacks"
+    source: https://guacamole.apache.org/doc/gug/auth-ban.html
+    match: ["auth-ban", "brute-force", "ban-max-invalid-attempts", "fail2ban"]
+  - id: configuration-home
+    name: "GUACAMOLE_HOME and configuration layout"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["guacamole-home", "extensions-directory", "lib-directory", "configuration-location"]
+  - id: guacamole-properties
+    name: "guacamole.properties settings"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["guacamole-properties", "case-sensitivity", "skip-if-unavailable", "api-session-timeout"]
+    subtopics:
+      - {id: logging, name: "Logging with logback.xml and log-level", match: ["logback", "log-level"]}
+      - {id: env-properties, name: "Environment variable overrides", match: ["environment-properties"]}
+  - id: user-mapping
+    name: "user-mapping.xml file-based authentication"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["user-mapping-xml", "file-based-authentication", "authorize"]
+  - id: parameter-tokens
+    name: "Parameter tokens"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["parameter-tokens", "guac-username", "token-modifiers"]
+  - id: general-usage
+    name: "General usage: the Guacamole menu"
+    source: https://guacamole.apache.org/doc/gug/using-guacamole.html
+    match: ["guacamole-menu", "ctrl-alt-shift", "on-screen-keyboard", "user-settings"]
+    subtopics:
+      - {id: multi-connection, name: "Multiple connections and tiling", match: ["multiple-connections", "tiled-view"]}
+      - {id: touch-input, name: "Touch and text input modes", match: ["text-input", "touch-input"]}
+  - id: connection-sharing
+    name: "Connection sharing"
+    source: https://guacamole.apache.org/doc/gug/using-guacamole.html
+    match: ["connection-sharing", "sharing-profile", "share-link"]
+  - id: sessions-history
+    name: "Active sessions and connection history"
+    source: https://guacamole.apache.org/doc/gug/administration.html
+    match: ["active-sessions", "connection-history", "kill-sessions"]
+  - id: user-management
+    name: "User and user group management"
+    source: https://guacamole.apache.org/doc/gug/administration.html
+    match: ["user-management", "user-groups", "login-disabled", "permissions"]
+  - id: connection-groups
+    name: "Connection groups and load balancing"
+    source: https://guacamole.apache.org/doc/gug/administration.html
+    match: ["connection-groups", "balancing-group", "session-affinity", "load-balancing"]
+  - id: batch-import
+    name: "Importing connections from CSV, JSON or YAML"
+    source: https://guacamole.apache.org/doc/gug/batch-import.html
+    match: ["batch-import", "import-connections", "csv", "yaml"]
+  - id: rdp-security
+    name: "RDP network and security parameters"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["rdp", "rdp-parameters", "nla", "security-mode"]
+  - id: rdp-gateway-session
+    name: "RDP gateway, session and load balancing"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["rd-gateway", "server-layout", "load-balance-info", "console-session"]
+  - id: rdp-display
+    name: "RDP display settings"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["display-settings", "resize-method", "force-lossless", "disable-gfx"]
+  - id: rdp-drive
+    name: "RDP drive redirection"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["drive-redirection", "enable-drive", "drive-path", "static-channels"]
+  - id: rdp-audio-printing
+    name: "RDP audio, microphone and printing"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["audio", "microphone", "printing", "ghostscript"]
+  - id: rdp-hyperv
+    name: "Hyper-V VMConnect and preconnection PDU"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["hyper-v", "vmconnect", "preconnection-pdu"]
+  - id: rdp-remoteapp
+    name: "RDP RemoteApp"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["remoteapp", "remote-app", "published-application"]
+  - id: rdp-performance
+    name: "RDP performance flags"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["performance-flags", "bitmap-caching", "enable-wallpaper", "glyph-caching"]
+  - id: vnc
+    name: "VNC connection parameters"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["vnc", "vnc-parameters", "swap-red-blue", "clipboard-encoding"]
+    subtopics:
+      - {id: vnc-reverse, name: "Reverse connections", match: ["reverse-connect", "listen-timeout"]}
+      - {id: vnc-repeater, name: "VNC repeater", match: ["vnc-repeater", "dest-host"]}
+      - {id: vnc-audio, name: "PulseAudio sound", match: ["pulseaudio", "enable-audio"]}
+  - id: ssh
+    name: "SSH connection parameters"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["ssh", "ssh-parameters", "private-key", "ssh-known-hosts"]
+  - id: telnet
+    name: "Telnet connection parameters"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["telnet", "telnet-parameters", "login-success-regex"]
+  - id: kubernetes
+    name: "Kubernetes connections"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["kubernetes", "kubernetes-parameters", "exec-command"]
+  - id: sftp
+    name: "SFTP file transfer"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["sftp", "file-transfer", "enable-sftp", "guacctl"]
+  - id: session-recording
+    name: "Graphical and text session recording"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["session-recording", "recording-path", "typescript-path", "guacenc"]
+  - id: recording-playback
+    name: "In-browser recording playback"
+    source: https://guacamole.apache.org/doc/gug/recording-playback.html
+    match: ["recording-playback", "history-recording-storage", "recording-search-path"]
+  - id: clipboard-terminal
+    name: "Clipboard control and terminal display"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["clipboard-control", "disable-copy", "color-scheme", "scrollback"]
+  - id: wake-on-lan
+    name: "Wake-on-LAN"
+    source: https://guacamole.apache.org/doc/gug/configuring-guacamole.html
+    match: ["wake-on-lan", "wol", "magic-packet"]
+  - id: ldap-auth
+    name: "Active Directory / LDAP authentication"
+    source: https://guacamole.apache.org/doc/gug/ldap-auth.html
+    match: ["ldap", "active-directory", "ldap-auth", "ldap-user-base-dn"]
+    subtopics:
+      - {id: ldap-multi, name: "Multiple servers (ldap-servers.yml)", match: ["ldap-servers-yml", "match-usernames"]}
+      - {id: ldap-schema, name: "Connections stored in LDAP", match: ["guacconfiggroup", "ldap-schema"]}
+  - id: mfa
+    name: "Multi-factor authentication overview"
+    source: https://guacamole.apache.org/doc/gug/mfa.html
+    match: ["mfa", "multi-factor-authentication", "authentication-overview"]
+  - id: duo
+    name: "Duo two-factor"
+    source: https://guacamole.apache.org/doc/gug/duo-auth.html
+    match: ["duo", "duo-client-id", "web-sdk"]
+  - id: totp
+    name: "TOTP two-factor"
+    source: https://guacamole.apache.org/doc/gug/totp-auth.html
+    match: ["totp", "totp-issuer", "authenticator-app", "enrollment"]
+  - id: sso-cas
+    name: "CAS single sign-on"
+    source: https://guacamole.apache.org/doc/gug/cas-auth.html
+    match: ["cas", "clearpass", "cas-redirect-uri"]
+  - id: sso-openid
+    name: "OpenID Connect single sign-on"
+    source: https://guacamole.apache.org/doc/gug/openid-auth.html
+    match: ["openid-connect", "oidc", "implicit-flow"]
+  - id: sso-saml
+    name: "SAML single sign-on"
+    source: https://guacamole.apache.org/doc/gug/saml-auth.html
+    match: ["saml", "saml-entity-id", "identity-provider"]
+  - id: sso-certificates
+    name: "Smart card / client certificate authentication"
+    source: https://guacamole.apache.org/doc/gug/ssl-auth.html
+    match: ["smart-card", "client-certificate", "ssl-auth", "mutual-tls"]
+  - id: sso-overview
+    name: "Single sign-on and extension priority"
+    source: https://guacamole.apache.org/doc/gug/sso.html
+    match: ["sso", "single-sign-on", "extension-priority"]
+  - id: vault
+    name: "Retrieving secrets from a vault"
+    source: https://guacamole.apache.org/doc/gug/vault.html
+    match: ["vault", "keeper-secrets-manager", "ksm-config", "secrets"]
+  - id: external-json
+    name: "Encrypted, signed JSON authentication"
+    source: https://guacamole.apache.org/doc/gug/json-auth.html
+    match: ["json-auth", "json-secret-key", "encrypted-json"]
+  - id: external-header
+    name: "HTTP header authentication"
+    source: https://guacamole.apache.org/doc/gug/header-auth.html
+    match: ["header-auth", "http-auth-header", "remote-user", "external-authentication"]
+  - id: radius
+    name: "RADIUS authentication"
+    source: https://guacamole.apache.org/doc/gug/radius-auth.html
+    match: ["radius", "radius-auth", "radius-shared-secret"]
+  - id: quickconnect
+    name: "Ad-hoc connections (quickconnect)"
+    source: https://guacamole.apache.org/doc/gug/adhoc-connections.html
+    match: ["quickconnect", "ad-hoc-connections", "uri-syntax"]
+  - id: login-restrictions
+    name: "Login and connection restrictions"
+    source: https://guacamole.apache.org/doc/gug/auth-restrict.html
+    match: ["auth-restrict", "login-restrictions", "time-windows", "denied-hosts"]
+  - id: troubleshooting
+    name: "Troubleshooting"
+    source: https://guacamole.apache.org/doc/gug/troubleshooting.html
+    match: ["troubleshooting", "syslog", "tunnel-errors", "blank-display"]
+    subtopics:
+      - {id: troubleshoot-guacd, name: "guacd and plugin errors", match: ["guacd-errors", "client-plugin-errors"]}
+      - {id: troubleshoot-webapp, name: "Servlet container errors", match: ["tomcat-logs", "authentication-errors"]}
+  - id: extensions-branding
+    name: "Extensions, branding and event listeners (guacamole-ext)"
+    source: https://guacamole.apache.org/doc/gug/guacamole-ext.html
+    match: ["extensions", "guac-manifest-json", "branding", "event-listeners"]

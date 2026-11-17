@@ -1,0 +1,1660 @@
+# Canonical coverage spec: Firmware / embedded development (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (official docs tables of contents, the
+# ARMv7-M/ARMv8-M Architecture Reference Manuals, MISRA C and the Barr Embedded C standard, the
+# Yocto and Linux kernel driver-api manuals), not from what we happened to write.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (docs page
+# sub-headings, API group lists, manual chapter sections, CLI sub-commands).
+# Match keywords are unique across the field: every product is in one scope, so a shared keyword
+# would let one skill cover two unrelated subtopics.
+subject: firmware-embedded-development
+scope:
+  category: computing-software
+  field: firmware-embedded-development
+  products: [arduino, esp-idf, stm32, platformio, freertos, zephyr, bare-metal-programming, device-driver-development, bootloader-development, hardware-debugging, low-power-design]
+sources:
+  - "Zephyr Project documentation ToC (docs.zephyrproject.org) - Getting Started, Developing with Zephyr (west, build system/CMake, sysbuild, snippets, Kconfig, devicetree, application development, testing with Twister/ztest), Kernel services (threads, scheduling, interrupts, synchronization, data passing, timers, memory), Device driver model, OS services (logging, shell, settings, storage NVS/ZMS/flash map/file systems, DFU/MCUmgr, networking, Bluetooth, power management, userspace/memory protection), Hardware support (board porting, hardware model v2, pinctrl)"
+  - "FreeRTOS kernel documentation (freertos.org/Documentation) - Tasks and co-routines, Queues/queue sets, Semaphores and mutexes, Direct-to-task notifications, Stream and message buffers, Event groups, Software timers, Interrupt management, Memory management (heap_1..5, static allocation), Low power/tickless idle, Customisation (FreeRTOSConfig.h), Debugging (stack overflow, configASSERT, run-time stats, trace hooks), SMP and MPU, FreeRTOS-Plus libraries; Mastering the FreeRTOS Real Time Kernel (Barry) chapter sub-sections"
+  - "ESP-IDF Programming Guide ToC (docs.espressif.com/projects/esp-idf) - API Guides (build system, partition tables, sleep modes, deep-sleep stub, ULP, OTA/bootloader, core dump, fatal errors, JTAG debugging, app trace, Wi-Fi/BLE coexistence), API Reference (Wi-Fi, ESP-NOW, NimBLE, provisioning, peripherals GPIO/LEDC/RMT/I2C/ADC, storage NVS/VFS/FAT/SPIFFS, system logging/heap/watchdogs/event loop/power management, protocols HTTP/MQTT/SNTP/mDNS), Security (flash encryption, secure boot v2, eFuse, NVS encryption), Tools (idf.py, IDF monitor, esptool, component manager)"
+  - "STM32Cube documentation - UM1718 STM32CubeMX user manual, UM2609 STM32CubeIDE, UM2237 STM32CubeProgrammer, HAL/LL driver user manuals (e.g. UM1725/UM1884), STM32 reference manual chapters (RCC, PWR, GPIO, EXTI, DMA/DMAMUX, ADC, TIM, RTC, IWDG/WWDG, USART, I2C, SPI, FLASH option bytes), AN2606 system bootloader, AN4013 timer cookbook, AN2834 ADC accuracy, AN4776 general-purpose timer cookbook"
+  - "ARMv7-M and ARMv8-M Architecture Reference Manuals and Cortex-M Generic User Guides - exception model and NVIC, SysTick, System Control Block, fault status registers, MPU, FPU and lazy stacking, memory barriers and exclusive access, power management WFI/WFE/SLEEPDEEP, debug (DWT, ITM, ETM, FPB), Cortex-M7 caches/TCM, ARMv8-M Security Extension (SAU, NSC, CMSE); CMSIS-Core documentation"
+  - "Arduino documentation (docs.arduino.cc) - Language reference, Arduino CLI reference (compile/upload/core/lib, sketch project files), Library specification (library.properties, keywords.txt, Library Manager), Arduino platform specification (boards.txt, platform.txt, programmers.txt, variants), Built-in libraries (Wire, SPI, Servo, EEPROM, SoftwareSerial)"
+  - "PlatformIO documentation ToC (docs.platformio.org) - Project configuration platformio.ini (sections, options, extends, extra_configs), Library Management (lib_deps, LDF, library.json, publishing), Unit Testing (test runner, native/embedded, frameworks), Debugging (debug options, SVD, tools), Advanced scripting (extra_scripts, middlewares, custom targets), Custom boards/platforms, Static code analysis (pio check), Remote development, CI integration"
+  - "MISRA C:2012 (with Amendments) guideline categories (directives, rules, essential type model, deviation records) and the Barr Group Embedded C Coding Standard (BARR-C:2018); SEI CERT C"
+  - "Yocto Project Mega-Manual (docs.yoctoproject.org) - Board Support Package developer guide, Linux kernel development manual (out-of-tree modules, kernel bbappend, config fragments), devtool reference, SDK manual; Linux kernel driver-api documentation (driver model, platform devices, devres, regmap, IIO, GPIO, I2C/SPI client drivers, threaded IRQs)"
+  - "MCUboot design docs and imgtool reference, U-Boot documentation (environment, FIT, SPL, verified boot), Trusted Firmware-M docs, OpenOCD user guide, GDB manual, SEGGER J-Link/RTT/SystemView docs, sigrok documentation, Tektronix ABCs of Probes, Nordic and ST low-power application notes (AN4365, AN4621)"
+topics:
+  # --- Bare-metal programming (ARMv7-M ARM, CMSIS-Core, GCC/binutils docs)
+  - id: bm-startup-linker
+    name: Startup code and linker scripts
+    source: ARM GCC ld manual / CMSIS-Core startup
+    match: [startup-code, linker-script]
+    subtopics:
+      - {id: bm-sl-reset-handler, name: Reset handler data/bss initialisation, match: [reset-handler]}
+      - {id: bm-sl-memory-regions, name: MEMORY regions and section placement, match: [memory-regions]}
+      - {id: bm-sl-ramfunc, name: Running code from RAM (ramfunc sections), match: [ramfunc, code-in-ram]}
+      - {id: bm-sl-map-file, name: Map file and footprint analysis, match: [map-file]}
+      - {id: bm-sl-noinit, name: No-init RAM sections surviving reset, match: [noinit-section]}
+      - {id: bm-startup-linker-weak-handler-alias, name: Weak default handlers and handler aliasing, match: [weak-handler-alias]}
+      - {id: bm-startup-linker-stack-heap-placement, name: Stack and heap size symbols and placement, match: [stack-heap-placement]}
+      - {id: bm-startup-linker-linker-symbols, name: Linker-defined symbols with LOADADDR and ALIGN, match: [linker-symbols]}
+      - {id: bm-startup-linker-fixed-address-section, name: Placing objects at fixed addresses with custom sections, match: [fixed-address-section]}
+      - {id: bm-startup-linker-init-array, name: C++ static constructors and init_array, match: [init-array]}
+      - {id: bm-startup-linker-post-link-crc, name: Post-link image CRC and metadata patching, match: [post-link-crc]}
+  - id: bm-exceptions-nvic
+    name: Exception model and NVIC
+    source: ARMv7-M ARM B1.5 exception model / NVIC
+    match: [nvic, vector-table]
+    subtopics:
+      - {id: bm-ex-priority-grouping, name: Priority grouping and preemption, match: [priority-grouping]}
+      - {id: bm-ex-vtor, name: Vector table relocation (VTOR), match: [scb-vtor]}
+      - {id: bm-ex-tail-chaining, name: Tail-chaining and late arrival, match: [tail-chaining]}
+      - {id: bm-ex-pendsv-svc, name: PendSV and SVCall usage, match: [pendsv, svcall]}
+      - {id: bm-ex-critical-sections, name: Critical sections with PRIMASK and BASEPRI, match: [basepri, primask]}
+      - {id: bm-exceptions-nvic-shcsr-fault-enable, name: Fault exception enables (SHCSR) and escalation to HardFault, match: [shcsr-fault-enable]}
+      - {id: bm-exceptions-nvic-nvic-set-pending, name: Software-triggered interrupts (NVIC_SetPendingIRQ and STIR), match: [nvic-set-pending]}
+      - {id: bm-exceptions-nvic-spurious-interrupt, name: Spurious re-entry from late flag clearing, match: [spurious-interrupt]}
+      - {id: bm-exceptions-nvic-exc-return, name: EXC_RETURN values and exception return, match: [exc-return]}
+      - {id: bm-exceptions-nvic-sysresetreq, name: System reset via AIRCR SYSRESETREQ, match: [sysresetreq]}
+  - id: bm-mmio
+    name: Memory-mapped register access
+    source: ARMv7-M ARM A3 memory model / CMSIS device headers
+    match: [mmio]
+    subtopics:
+      - {id: bm-mm-volatile, name: Volatile correctness, match: [volatile]}
+      - {id: bm-mm-rmw, name: Read-modify-write hazards, match: [read-modify-write]}
+      - {id: bm-mm-bitband, name: Bit-banding, match: [bit-banding]}
+      - {id: bm-mm-barriers, name: Memory barriers DMB/DSB/ISB, match: [memory-barrier]}
+      - {id: bm-mmio-register-struct-overlay, name: Register struct overlays and CMSIS IO qualifiers, match: [register-struct-overlay]}
+      - {id: bm-mmio-write-one-to-clear, name: Write-1-to-clear and read-to-clear status flags, match: [write-one-to-clear]}
+      - {id: bm-mmio-peripheral-clock-enable, name: Peripheral clock enable before register access, match: [peripheral-clock-enable]}
+      - {id: bm-mmio-device-memory-type, name: Device vs Normal memory types and access ordering, match: [device-memory-type]}
+      - {id: bm-mmio-register-access-width, name: Register access width and unaligned access, match: [register-access-width]}
+  - id: bm-timebase
+    name: SysTick and cycle-accurate timebase
+    source: ARMv7-M ARM B3.3 SysTick / DWT
+    match: [systick-timebase]
+    subtopics:
+      - {id: bm-tb-systick, name: SysTick configuration, match: [systick-config]}
+      - {id: bm-tb-dwt, name: DWT cycle counter, match: [dwt-cyccnt]}
+      - {id: bm-tb-busy-wait, name: Calibrated microsecond delays, match: [busy-wait-delay]}
+      - {id: bm-tb-wraparound, name: Tick counter wraparound arithmetic, match: [tick-wraparound]}
+      - {id: bm-timebase-software-timer-list, name: Timeout lists driven by a tick, match: [software-timer-list]}
+      - {id: bm-timebase-timestamp-extension, name: 64-bit timestamp extension of a 32-bit counter, match: [timestamp-extension]}
+      - {id: bm-timebase-free-running-timer, name: Hardware timer as free-running microsecond clock, match: [free-running-timer]}
+      - {id: bm-timebase-systick-clksource, name: SysTick clock source and calibration register, match: [systick-clksource]}
+      - {id: bm-timebase-dwt-lar-unlock, name: Unlocking DWT on Cortex-M7 (LAR), match: [dwt-lar-unlock]}
+  - id: bm-mpu
+    name: Memory Protection Unit
+    source: ARMv7-M ARM B3.5 / ARMv8-M MPU
+    match: [mpu]
+    subtopics:
+      - {id: bm-mpu-regions, name: Region size/alignment and attributes, match: [mpu-region]}
+      - {id: bm-mpu-stack-guard, name: Stack guard regions, match: [stack-guard-region]}
+      - {id: bm-mpu-xn, name: Execute-never for RAM and peripherals, match: [execute-never]}
+      - {id: bm-mpu-v8m, name: ARMv8-M MPU (RBAR/RLAR) programming, match: [armv8m-mpu]}
+      - {id: bm-mpu-mpu-subregion, name: MPU subregion disable, match: [mpu-subregion]}
+      - {id: bm-mpu-privdefena, name: Background region and PRIVDEFENA, match: [privdefena]}
+      - {id: bm-mpu-memmanage-fault, name: MemManage fault handling and MMFAR, match: [memmanage-fault]}
+      - {id: bm-mpu-null-pointer-trap, name: Null-pointer dereference trap region, match: [null-pointer-trap]}
+      - {id: bm-mpu-mpu-context-switch, name: Reprogramming MPU regions on context switch, match: [mpu-context-switch]}
+  - id: bm-fpu
+    name: Floating-point unit
+    source: ARMv7-M ARM B1.5.7 / Cortex-M4 FPU
+    match: [fpu]
+    subtopics:
+      - {id: bm-fpu-enable, name: Enabling the FPU via CPACR, match: [cpacr-fpu-enable]}
+      - {id: bm-fpu-lazy, name: Lazy stacking and context size, match: [lazy-stacking]}
+      - {id: bm-fpu-abi, name: Float ABI selection (soft/softfp/hard), match: [float-abi]}
+      - {id: bm-fpu-isr, name: FPU use in interrupt handlers, match: [fpu-in-isr]}
+      - {id: bm-fpu-fpscr, name: FPSCR exception flags and flush-to-zero, match: [fpscr]}
+      - {id: bm-fpu-double-promotion, name: Avoiding accidental double precision, match: [double-promotion]}
+      - {id: bm-fpu-cmsis-dsp, name: CMSIS-DSP library, match: [cmsis-dsp]}
+      - {id: bm-fpu-fixed-point-q15, name: Fixed-point Q15/Q31 arithmetic, match: [fixed-point-q15]}
+      - {id: bm-fpu-helium-mve, name: Helium (MVE) vector extension on Cortex-M55/M85, match: [helium-mve]}
+  - id: bm-cache-tcm
+    name: Cortex-M7 caches and TCM
+    source: Cortex-M7 TRM / AN4839 L1 cache
+    match: [cortex-m7-cache]
+    subtopics:
+      - {id: bm-c-enable, name: Enabling I-cache and D-cache, match: [dcache-enable]}
+      - {id: bm-c-dma-coherency, name: Cache maintenance for DMA buffers, match: [dcache-invalidate]}
+      - {id: bm-c-noncacheable, name: Non-cacheable regions via MPU, match: [non-cacheable-region]}
+      - {id: bm-c-tcm, name: Placing code and data in TCM, match: [tcm]}
+      - {id: bm-cache-tcm-cache-line-alignment, name: Cache-line alignment of DMA buffers, match: [cache-line-alignment]}
+      - {id: bm-cache-tcm-write-back-cache, name: Write-back vs write-through policy, match: [write-back-cache]}
+      - {id: bm-cache-tcm-dcache-clean, name: Cleaning D-cache by address before DMA TX, match: [dcache-clean]}
+      - {id: bm-cache-tcm-speculative-read, name: Speculative reads to external memory on Cortex-M7, match: [speculative-read]}
+      - {id: bm-cache-tcm-art-accelerator, name: Vendor flash accelerators (ART and ICACHE), match: [art-accelerator]}
+  - id: bm-concurrency
+    name: Concurrency without an OS
+    source: ARMv7-M ARM A3.4 exclusive access / C11 atomics
+    match: [bare-metal-concurrency]
+    subtopics:
+      - {id: bm-cc-ldrex, name: LDREX/STREX exclusive access, match: [ldrex-strex]}
+      - {id: bm-cc-c11, name: C11 stdatomic on Cortex-M, match: [c11-atomics]}
+      - {id: bm-cc-ringbuf, name: Lock-free single-producer ring buffers, match: [lock-free-ring-buffer]}
+      - {id: bm-cc-isr-shared, name: Sharing data between ISR and main loop, match: [isr-shared-data]}
+      - {id: bm-concurrency-irq-save-restore, name: Nesting-safe interrupt save and restore, match: [irq-save-restore]}
+      - {id: bm-concurrency-torn-read, name: Torn reads of multi-word variables, match: [torn-read]}
+      - {id: bm-concurrency-event-flags-bitmask, name: Interrupt-safe event flag bitmasks, match: [event-flags-bitmask]}
+      - {id: bm-concurrency-reentrancy, name: Reentrancy and non-reentrant library calls, match: [reentrancy]}
+  - id: bm-architecture
+    name: Firmware architecture without an RTOS
+    source: Samek Practical UML Statecharts / Pont Patterns for Time-Triggered Embedded Systems
+    match: [superloop]
+    subtopics:
+      - {id: bm-ar-hsm, name: Hierarchical state machines, match: [hierarchical-state-machine]}
+      - {id: bm-ar-coop, name: Cooperative run-to-completion scheduler, match: [cooperative-scheduler]}
+      - {id: bm-ar-active-object, name: Active objects and event queues, match: [active-object]}
+      - {id: bm-ar-tt, name: Time-triggered scheduler, match: [time-triggered-scheduler]}
+      - {id: bm-architecture-event-driven-superloop, name: Race-free sleep in an event-driven superloop, match: [event-driven-superloop]}
+      - {id: bm-architecture-board-support-package, name: Board support package layering, match: [board-support-package]}
+      - {id: bm-architecture-uart-cli, name: UART command line interface, match: [uart-cli]}
+      - {id: bm-architecture-embedded-assert, name: Assertion and error handling strategy, match: [embedded-assert]}
+      - {id: bm-architecture-firmware-version-info, name: Embedding firmware version and build info, match: [firmware-version-info]}
+  - id: bm-toolchain
+    name: GCC cross toolchain and build
+    source: GCC ARM options / GNU ld / CMake toolchains manual
+    match: [arm-none-eabi-gcc]
+    subtopics:
+      - {id: bm-tc-gc-sections, name: Section garbage collection, match: [gc-sections]}
+      - {id: bm-tc-cmake, name: CMake toolchain file for bare-metal, match: [cmake-toolchain-file]}
+      - {id: bm-tc-size, name: Code size optimisation, match: [code-size-optimization]}
+      - {id: bm-tc-lto, name: Link-time optimisation pitfalls, match: [link-time-optimization]}
+      - {id: bm-tc-newlib-nano, name: newlib-nano and syscall stubs, match: [newlib-nano]}
+      - {id: bm-toolchain-compiler-warnings, name: Warning flags for embedded C, match: [compiler-warnings]}
+      - {id: bm-toolchain-objcopy, name: Generating hex/bin images with objcopy and srec_cat, match: [objcopy]}
+      - {id: bm-toolchain-puncover, name: "Footprint analysis with nm, size and puncover", match: [puncover]}
+      - {id: bm-toolchain-reproducible-build, name: Reproducible firmware builds, match: [reproducible-build]}
+      - {id: bm-toolchain-multilib, name: Multilib selection for Cortex-M variants, match: [multilib]}
+      - {id: bm-toolchain-ceedling, name: "Host unit testing with Unity, CMock and Ceedling", match: [ceedling]}
+  - id: bm-misra
+    name: MISRA C compliance
+    source: MISRA C:2012 guidelines
+    match: [misra-c]
+    subtopics:
+      - {id: bm-mi-essential-types, name: Essential type model, match: [essential-type-model]}
+      - {id: bm-mi-deviations, name: Deviation records and permits, match: [misra-deviation]}
+      - {id: bm-mi-static-analysis, name: Static analysis for MISRA (cppcheck addon), match: [misra-static-analysis]}
+      - {id: bm-mi-dynamic-memory, name: No dynamic memory and Directive 4.12, match: [no-dynamic-memory]}
+      - {id: bm-misra-misra-compliance-2020, name: MISRA Compliance 2020 guideline re-categorisation, match: [misra-compliance-2020]}
+      - {id: bm-misra-misra-pointer-conversion, name: Pointer conversion rules (Rule 11), match: [misra-pointer-conversion]}
+      - {id: bm-misra-misra-control-flow, name: Control flow rules (Rules 14-16), match: [misra-control-flow]}
+      - {id: bm-misra-misra-c-2023, name: MISRA C 2023 and C11 support, match: [misra-c-2023]}
+      - {id: bm-misra-guideline-enforcement-plan, name: Guideline enforcement plan, match: [guideline-enforcement-plan]}
+  - id: bm-embedded-c
+    name: Embedded C coding practice
+    source: BARR-C:2018 / SEI CERT C
+    match: [embedded-c-coding-standard]
+    subtopics:
+      - {id: bm-ec-stdint, name: Fixed-width integer types, match: [stdint-fixed-width]}
+      - {id: bm-ec-promotion, name: Integer promotion and undefined behaviour, match: [integer-promotion]}
+      - {id: bm-ec-bitops, name: Bit manipulation idioms, match: [bit-manipulation]}
+      - {id: bm-ec-const, name: Const and static scope discipline, match: [const-correctness]}
+      - {id: bm-embedded-c-struct-packing, name: Struct packing and alignment, match: [struct-packing]}
+      - {id: bm-embedded-c-endian-conversion, name: Endianness and byte-order serialisation, match: [endian-conversion]}
+      - {id: bm-embedded-c-bit-fields, name: Bit-field portability, match: [bit-fields]}
+      - {id: bm-embedded-c-static-assert, name: Static assertions, match: [static-assert]}
+      - {id: bm-embedded-c-error-codes, name: Error code conventions, match: [error-codes]}
+      - {id: bm-embedded-c-function-like-macros, name: Function-like macros vs inline functions, match: [function-like-macros]}
+  - id: bm-debug-io
+    name: Debug output channels
+    source: ARM semihosting spec / SEGGER RTT docs / CoreSight ITM
+    match: [semihosting]
+    subtopics:
+      - {id: bm-io-retarget, name: Retargeting printf, match: [retarget]}
+      - {id: bm-io-rtt, name: SEGGER RTT, match: [segger-rtt]}
+      - {id: bm-io-itm, name: ITM stimulus ports over SWO, match: [itm]}
+      - {id: bm-io-deferred-log, name: Deferred (binary) logging, match: [deferred-logging]}
+      - {id: bm-debug-io-log-level-filtering, name: Log levels and compile-time stripping, match: [log-level-filtering]}
+      - {id: bm-debug-io-log-ring-buffer, name: Non-blocking log ring buffer, match: [log-ring-buffer]}
+      - {id: bm-debug-io-rtt-viewer, name: RTT viewer and logger tools, match: [rtt-viewer]}
+      - {id: bm-debug-io-semihosting-hang, name: Semihosting hang without a debugger, match: [semihosting-hang]}
+      - {id: bm-debug-io-debug-uart-dma, name: Debug UART with DMA transmit, match: [debug-uart-dma]}
+  - id: bm-trustzone
+    name: ARMv8-M TrustZone
+    source: ARMv8-M ARM Security Extension / TF-M docs
+    match: [trustzone-m]
+    subtopics:
+      - {id: bm-tz-sau, name: SAU and IDAU configuration, match: [sau-configuration]}
+      - {id: bm-tz-nsc, name: Non-secure callable veneers, match: [nsc-veneer]}
+      - {id: bm-tz-cmse, name: CMSE compiler support, match: [cmse]}
+      - {id: bm-tz-tfm, name: Trusted Firmware-M partitions, match: [tf-m]}
+
+      - {id: bm-trustzone-secure-alias, name: Secure and non-secure memory aliases, match: [secure-alias]}
+      - {id: bm-trustzone-securefault, name: SecureFault handling (SFSR and SFAR), match: [securefault]}
+      - {id: bm-trustzone-ns-callback, name: Non-secure callbacks (cmse_nsfptr_create), match: [ns-callback]}
+      - {id: bm-trustzone-psa-api, name: PSA Functional APIs on TF-M, match: [psa-api]}
+      - {id: bm-trustzone-ns-image-boot, name: Booting the non-secure image, match: [ns-image-boot]}
+  # --- Device drivers (bus specs, Linux driver-api, Yocto)
+  - id: dd-i2c
+    name: I2C drivers
+    source: NXP UM10204 I2C-bus specification
+    match: [i2c]
+    subtopics:
+      - {id: dd-i2c-register-map, name: Register map from datasheet, match: [register-map]}
+      - {id: dd-i2c-bus-recovery, name: Bus recovery (SDA stuck low), match: [bus-recovery]}
+      - {id: dd-i2c-stretching, name: Clock stretching, match: [clock-stretching]}
+      - {id: dd-i2c-async, name: Interrupt/DMA driven I2C transactions, match: [i2c-interrupt-transfer]}
+      - {id: dd-i2c-arbitration, name: Multi-master arbitration, match: [i2c-arbitration]}
+      - {id: dd-i2c-repeated-start, name: Repeated start and combined transactions, match: [repeated-start]}
+      - {id: dd-i2c-i2c-pull-up, name: Pull-up sizing and bus capacitance, match: [i2c-pull-up]}
+      - {id: dd-i2c-i2c-address-scan, name: Bus scanning and 10-bit addressing, match: [i2c-address-scan]}
+      - {id: dd-i2c-i2c-target, name: I2C target (slave) mode, match: [i2c-target]}
+      - {id: dd-i2c-smbus-pec, name: SMBus and PMBus (PEC and timeouts), match: [smbus-pec]}
+  - id: dd-spi
+    name: SPI drivers
+    source: Motorola SPI block guide / vendor SPI reference chapters
+    match: [spi]
+    subtopics:
+      - {id: dd-spi-mode, name: CPOL/CPHA modes, match: [spi-mode]}
+      - {id: dd-spi-dma, name: SPI with DMA, match: [spi-dma]}
+      - {id: dd-spi-daisy, name: Daisy-chained devices, match: [daisy-chain]}
+      - {id: dd-spi-flash, name: SPI/QSPI NOR flash drivers, match: [qspi-flash]}
+      - {id: dd-spi-chip-select, name: Chip-select management (NSS vs GPIO), match: [chip-select]}
+      - {id: dd-spi-spi-max-clock, name: Maximum SPI clock and sampling delay, match: [spi-max-clock]}
+      - {id: dd-spi-spi-slave, name: SPI slave mode, match: [spi-slave]}
+      - {id: dd-spi-shared-spi-bus, name: Sharing one SPI bus between drivers, match: [shared-spi-bus]}
+      - {id: dd-spi-spi-display, name: SPI display drivers, match: [spi-display]}
+  - id: dd-uart
+    name: UART drivers and protocols
+    source: TIA-232/485 / vendor USART reference chapters
+    match: [uart]
+    subtopics:
+      - {id: dd-uart-framing, name: Packet framing (COBS/SLIP), match: [cobs]}
+      - {id: dd-uart-ringbuf, name: Interrupt-driven RX ring buffer, match: [uart-ring-buffer]}
+      - {id: dd-uart-rs485, name: RS-485 direction control, match: [rs-485]}
+      - {id: dd-uart-baud, name: Baud rate error budgeting, match: [baud-rate-error]}
+      - {id: dd-uart-flow, name: Hardware flow control, match: [hardware-flow-control]}
+      - {id: dd-uart-auto-baud, name: Auto-baud detection, match: [auto-baud]}
+      - {id: dd-uart-lin-bus, name: LIN and break detection, match: [lin-bus]}
+      - {id: dd-uart-modbus-rtu-framing, name: Modbus RTU framing, match: [modbus-rtu-framing]}
+      - {id: dd-uart-uart-overrun, name: "Framing, noise and overrun errors", match: [uart-overrun]}
+      - {id: dd-uart-half-duplex-uart, name: Single-wire half-duplex UART, match: [half-duplex-uart]}
+  - id: dd-can
+    name: CAN bus drivers
+    source: ISO 11898-1 / Bosch CAN FD spec / ISO 15765-2
+    match: [can-bus]
+    subtopics:
+      - {id: dd-can-bit-timing, name: Bit timing and sample point, match: [can-bit-timing]}
+      - {id: dd-can-filters, name: Acceptance filters, match: [can-acceptance-filter]}
+      - {id: dd-can-errors, name: Error counters and bus-off recovery, match: [can-bus-off]}
+      - {id: dd-can-fd, name: CAN FD, match: [can-fd]}
+      - {id: dd-can-isotp, name: ISO-TP segmentation, match: [iso-tp]}
+      - {id: dd-can-can-termination, name: Transceivers and bus termination, match: [can-termination]}
+      - {id: dd-can-canopen, name: CANopen, match: [canopen]}
+      - {id: dd-can-j1939, name: SAE J1939, match: [j1939]}
+      - {id: dd-can-socketcan, name: SocketCAN on Linux, match: [socketcan]}
+      - {id: dd-can-can-error-frame, name: Diagnosing error frames, match: [can-error-frame]}
+  - id: dd-usb
+    name: USB device stacks
+    source: USB 2.0 spec ch9 / TinyUSB docs
+    match: [usb-device]
+    subtopics:
+      - {id: dd-usb-descriptors, name: Descriptors and enumeration, match: [usb-descriptors]}
+      - {id: dd-usb-cdc, name: CDC-ACM virtual COM port, match: [usb-cdc-acm]}
+      - {id: dd-usb-hid, name: HID reports, match: [usb-hid]}
+      - {id: dd-usb-msc, name: Mass storage class, match: [usb-msc]}
+      - {id: dd-usb-tinyusb, name: TinyUSB integration, match: [tinyusb]}
+      - {id: dd-usb-usb-iad-composite, name: Composite devices and IADs, match: [usb-iad-composite]}
+      - {id: dd-usb-usb-host, name: USB host mode, match: [usb-host]}
+      - {id: dd-usb-winusb, name: WinUSB and Microsoft OS descriptors, match: [winusb]}
+      - {id: dd-usb-usb-suspend, name: "Suspend, resume and remote wakeup", match: [usb-suspend]}
+      - {id: dd-usb-usb-compliance, name: VID/PID and USB-IF compliance testing, match: [usb-compliance]}
+      - {id: dd-usb-usb-audio, name: USB Audio Class 2, match: [usb-audio]}
+  - id: dd-datasheet
+    name: Reading datasheets and errata
+    source: vendor datasheet structure / errata sheets
+    match: [datasheet]
+    subtopics:
+      - {id: dd-ds-timing, name: Timing diagrams, match: [timing-diagram]}
+      - {id: dd-ds-ratings, name: Absolute maximum vs recommended conditions, match: [absolute-maximum-ratings]}
+      - {id: dd-ds-errata, name: Silicon errata workarounds, match: [silicon-errata]}
+      - {id: dd-ds-power-seq, name: Power-up sequencing and reset timing, match: [power-up-sequence]}
+      - {id: dd-datasheet-electrical-characteristics, name: Electrical characteristics (min/typ/max), match: [electrical-characteristics]}
+      - {id: dd-datasheet-reference-manual-navigation, name: Reference manual vs datasheet vs programming manual, match: [reference-manual-navigation]}
+      - {id: dd-datasheet-pinout-table, name: Pinout and alternate function tables, match: [pinout-table]}
+      - {id: dd-datasheet-application-note, name: Application notes and reference designs, match: [application-note]}
+      - {id: dd-datasheet-reserved-bits, name: Reset values and reserved bits, match: [reserved-bits]}
+  - id: dd-architecture
+    name: Driver architecture
+    source: Linux driver-api design / embedded HAL patterns
+    match: [interrupt-driven]
+    subtopics:
+      - {id: dd-ar-hal, name: Hardware abstraction layer boundaries, match: [hal-abstraction-layer]}
+      - {id: dd-ar-async, name: Asynchronous APIs with callbacks, match: [async-driver-api]}
+      - {id: dd-ar-tophalf, name: Top-half/bottom-half split, match: [top-half-bottom-half]}
+      - {id: dd-ar-double-buffer, name: Double buffering, match: [double-buffering]}
+      - {id: dd-architecture-driver-state-machine, name: Driver state machines, match: [driver-state-machine]}
+      - {id: dd-architecture-polling-vs-interrupt, name: Polling vs interrupt vs DMA trade-offs, match: [polling-vs-interrupt]}
+      - {id: dd-architecture-register-mocking, name: Unit testing drivers with register mocks, match: [register-mocking]}
+      - {id: dd-architecture-driver-timeout, name: Driver timeouts and error propagation, match: [driver-timeout]}
+      - {id: dd-architecture-driver-instance, name: Multi-instance driver handles, match: [driver-instance]}
+  - id: dd-linux-module
+    name: Linux kernel modules
+    source: Linux kernel driver-api / LDD3 / kbuild docs
+    match: [linux-kernel-module]
+    subtopics:
+      - {id: dd-lm-kbuild, name: Out-of-tree Kbuild modules, match: [kbuild-out-of-tree]}
+      - {id: dd-lm-params, name: Module parameters, match: [module-param]}
+      - {id: dd-lm-chardev, name: Character device drivers, match: [char-device]}
+      - {id: dd-lm-dyndbg, name: printk and dynamic debug, match: [dynamic-debug]}
+      - {id: dd-linux-module-module-signing, name: Kernel module signing, match: [module-signing]}
+      - {id: dd-linux-module-ioctl, name: ioctl interface design, match: [ioctl]}
+      - {id: dd-linux-module-kernel-spinlock, name: Spinlocks and mutexes in drivers, match: [kernel-spinlock]}
+      - {id: dd-linux-module-kmalloc, name: kmalloc and GFP flags, match: [kmalloc]}
+      - {id: dd-linux-module-dkms, name: DKMS packaging, match: [dkms]}
+      - {id: dd-linux-module-kernel-oops, name: Debugging kernel oops, match: [kernel-oops]}
+  - id: dd-linux-platform
+    name: Linux platform and devicetree drivers
+    source: Linux driver-api driver-model/platform and devres
+    match: [platform-driver]
+    subtopics:
+      - {id: dd-lp-of-match, name: OF match table and DT bindings, match: [of-match-table]}
+      - {id: dd-lp-devm, name: Managed resources (devm), match: [devm-managed-resources]}
+      - {id: dd-lp-irq, name: Threaded IRQ handlers, match: [request-threaded-irq]}
+      - {id: dd-lp-regmap, name: regmap register access, match: [regmap]}
+      - {id: dd-lp-defer, name: Probe deferral, match: [probe-defer]}
+      - {id: dd-linux-platform-clk-api, name: Clock and reset consumers, match: [clk-api]}
+      - {id: dd-linux-platform-regulator-api, name: Regulator consumers, match: [regulator-api]}
+      - {id: dd-linux-platform-linux-pinctrl, name: Pinctrl states in drivers, match: [linux-pinctrl]}
+      - {id: dd-linux-platform-linux-runtime-pm, name: Runtime PM in drivers, match: [linux-runtime-pm]}
+      - {id: dd-linux-platform-dmaengine, name: DMA engine API, match: [dmaengine]}
+      - {id: dd-linux-platform-dt-schema, name: Binding validation with dt-schema, match: [dt-schema]}
+  - id: dd-linux-subsystems
+    name: Linux subsystem drivers
+    source: Linux driver-api I2C/SPI/IIO/GPIO
+    match: [linux-driver-subsystem]
+    subtopics:
+      - {id: dd-ls-i2c-client, name: I2C client drivers, match: [linux-i2c-client]}
+      - {id: dd-ls-iio, name: IIO sensor drivers, match: [iio-driver]}
+      - {id: dd-ls-libgpiod, name: GPIO character device and libgpiod, match: [libgpiod]}
+      - {id: dd-ls-sysfs, name: sysfs attributes, match: [sysfs-attribute]}
+      - {id: dd-linux-subsystems-linux-spi-client, name: SPI client drivers, match: [linux-spi-client]}
+      - {id: dd-linux-subsystems-input-driver, name: Input subsystem drivers, match: [input-driver]}
+      - {id: dd-linux-subsystems-hwmon, name: hwmon drivers, match: [hwmon]}
+      - {id: dd-linux-subsystems-linux-pwm, name: PWM subsystem drivers, match: [linux-pwm]}
+      - {id: dd-linux-subsystems-led-class, name: LED class drivers, match: [led-class]}
+      - {id: dd-linux-subsystems-uio, name: UIO userspace drivers, match: [uio]}
+      - {id: dd-linux-subsystems-mtd, name: MTD flash drivers, match: [mtd]}
+  - id: dd-yocto
+    name: Yocto BSP and driver integration
+    source: Yocto BSP guide / kernel-dev manual / devtool reference
+    match: [yocto]
+    subtopics:
+      - {id: dd-y-layer, name: Creating a BSP layer, match: [bitbake-layer]}
+      - {id: dd-y-bbappend, name: Kernel bbappend patches and config fragments, match: [bbappend]}
+      - {id: dd-y-machine, name: Machine configuration, match: [machine-configuration]}
+      - {id: dd-y-devtool, name: devtool modify workflow, match: [devtool]}
+      - {id: dd-y-module-recipe, name: Out-of-tree module recipes, match: [module-recipe]}
+
+      - {id: dd-yocto-kernel-devicetree, name: KERNEL_DEVICETREE and DT in kernel recipes, match: [kernel-devicetree]}
+      - {id: dd-yocto-image-recipe, name: Image recipes and IMAGE_INSTALL, match: [image-recipe]}
+      - {id: dd-yocto-populate-sdk, name: SDK generation with populate_sdk, match: [populate-sdk]}
+      - {id: dd-yocto-wic-kickstart, name: WIC images and kickstart files, match: [wic-kickstart]}
+      - {id: dd-yocto-sstate-cache, name: Shared state cache, match: [sstate-cache]}
+      - {id: dd-yocto-kernel-diffconfig, name: Kernel config with menuconfig and diffconfig, match: [kernel-diffconfig]}
+      - {id: dd-yocto-license-manifest, name: License compliance manifests, match: [license-manifest]}
+  # --- Bootloaders (MCUboot design, U-Boot docs, vendor ANs)
+  - id: bl-architecture
+    name: Bootloader architecture
+    source: MCUboot design / AN2606-style vendor bootloader notes
+    match: [bootloader-architecture]
+    subtopics:
+      - {id: bl-ar-partitioning, name: Flash partitioning, match: [flash-partitioning]}
+      - {id: bl-ar-jump, name: Jumping to the application, match: [jump-to-application]}
+      - {id: bl-ar-handoff, name: Bootloader-to-app handoff data, match: [bootloader-app-handoff]}
+      - {id: bl-ar-size, name: Bootloader size budgeting, match: [bootloader-size]}
+      - {id: bl-architecture-app-validation, name: Validating the application before jumping, match: [app-validation]}
+      - {id: bl-architecture-peripheral-deinit, name: De-initialising peripherals before the jump, match: [peripheral-deinit]}
+      - {id: bl-architecture-enter-bootloader, name: Entering the bootloader from the application, match: [enter-bootloader]}
+      - {id: bl-architecture-bootloader-self-update, name: Bootloader self-update, match: [bootloader-self-update]}
+      - {id: bl-architecture-multi-stage-boot, name: Multi-stage boot chains, match: [multi-stage-boot]}
+  - id: bl-update
+    name: Firmware update with rollback
+    source: MCUboot design (swap modes / image trailer)
+    match: [ab-update]
+    subtopics:
+      - {id: bl-up-swap, name: Swap-using-move/scratch, match: [swap-using-move]}
+      - {id: bl-up-confirm, name: Trial boot and image confirmation, match: [confirm-image]}
+      - {id: bl-up-antirollback, name: Anti-rollback counters, match: [anti-rollback]}
+      - {id: bl-up-header, name: Image header and TLVs, match: [image-header]}
+      - {id: bl-up-delta, name: Delta updates, match: [delta-update]}
+      - {id: bl-update-mcuboot-direct-xip, name: Overwrite-only and direct-XIP modes, match: [mcuboot-direct-xip]}
+      - {id: bl-update-image-version, name: Image versioning policy, match: [image-version]}
+      - {id: bl-update-suit-manifest, name: SUIT update manifests, match: [suit-manifest]}
+      - {id: bl-update-resumable-download, name: Resumable chunked downloads, match: [resumable-download]}
+      - {id: bl-update-staged-rollout, name: Staged fleet rollout, match: [staged-rollout]}
+      - {id: bl-update-multi-image-update, name: Multi-image updates with dependencies, match: [multi-image-update]}
+  - id: bl-secure-boot
+    name: Secure boot
+    source: MCUboot/TF-M secure boot / PSA Root of Trust
+    match: [secure-boot]
+    subtopics:
+      - {id: bl-sb-chain, name: Chain of trust, match: [chain-of-trust]}
+      - {id: bl-sb-keys, name: Key provisioning, match: [key-provisioning]}
+      - {id: bl-sb-debug-lock, name: Debug port lockout, match: [debug-lockout]}
+      - {id: bl-sb-fi, name: Fault-injection hardening, match: [fault-injection]}
+      - {id: bl-sb-encrypt, name: Encrypted images, match: [encrypted-image]}
+      - {id: bl-secure-boot-image-signature, name: Image signature algorithms, match: [image-signature]}
+      - {id: bl-secure-boot-root-of-trust, name: Hardware root of trust, match: [root-of-trust]}
+      - {id: bl-secure-boot-key-revocation, name: Key revocation, match: [key-revocation]}
+      - {id: bl-secure-boot-measured-boot, name: Measured boot and attestation, match: [measured-boot]}
+      - {id: bl-secure-boot-hsm-signing, name: HSM-backed signing in CI, match: [hsm-signing]}
+  - id: bl-mcuboot
+    name: MCUboot
+    source: MCUboot docs / imgtool reference
+    match: [mcuboot]
+    subtopics:
+      - {id: bl-mb-imgtool, name: Signing with imgtool, match: [imgtool]}
+      - {id: bl-mb-serial, name: Serial recovery mode, match: [mcuboot-serial-recovery]}
+      - {id: bl-mb-port, name: Porting MCUboot to a new platform, match: [mcuboot-porting]}
+      - {id: bl-mb-sysbuild, name: Building MCUboot with Zephyr sysbuild, match: [sysbuild-mcuboot]}
+      - {id: bl-mb-mcumgr, name: MCUmgr image upload, match: [mcumgr]}
+      - {id: bl-mcuboot-image-trailer, name: Image trailer and swap status, match: [image-trailer]}
+      - {id: bl-mcuboot-downgrade-prevention, name: Downgrade prevention, match: [downgrade-prevention]}
+      - {id: bl-mcuboot-mcuboot-hw-key, name: Hardware key and key hash, match: [mcuboot-hw-key]}
+      - {id: bl-mcuboot-mcuboot-espressif, name: MCUboot on Espressif chips, match: [mcuboot-espressif]}
+      - {id: bl-mcuboot-smp-client, name: SMP clients (mcumgr CLI and smpmgr), match: [smp-client]}
+  - id: bl-uboot
+    name: U-Boot
+    source: U-Boot documentation
+    match: [u-boot]
+    subtopics:
+      - {id: bl-ub-env, name: Environment and bootcmd, match: [bootcmd]}
+      - {id: bl-ub-fit, name: FIT images, match: [fit-image]}
+      - {id: bl-ub-spl, name: SPL, match: [u-boot-spl]}
+      - {id: bl-ub-verified, name: Verified boot, match: [u-boot-verified-boot]}
+      - {id: bl-uboot-fdt-command, name: Devicetree handling with fdt commands, match: [fdt-command]}
+      - {id: bl-uboot-tftp-boot, name: TFTP and network boot, match: [tftp-boot]}
+      - {id: bl-uboot-u-boot-bootstd, name: Standard boot (bootstd and extlinux), match: [u-boot-bootstd]}
+      - {id: bl-uboot-u-boot-porting, name: Porting U-Boot to a new board, match: [u-boot-porting]}
+      - {id: bl-uboot-u-boot-dm, name: U-Boot driver model, match: [u-boot-dm]}
+      - {id: bl-uboot-falcon-mode, name: Falcon mode, match: [falcon-mode]}
+      - {id: bl-uboot-fw-setenv, name: fw_setenv from Linux, match: [fw-setenv]}
+  - id: bl-transport
+    name: Update transports
+    source: USB DFU 1.1 spec / XMODEM-YMODEM / vendor OTA docs
+    match: [firmware-transport]
+    subtopics:
+      - {id: bl-tr-ymodem, name: UART YMODEM loader, match: [ymodem]}
+      - {id: bl-tr-dfu, name: USB DFU, match: [dfu]}
+      - {id: bl-tr-ble, name: BLE DFU, match: [ble-dfu]}
+      - {id: bl-tr-can, name: CAN bootloader, match: [can-bootloader]}
+      - {id: bl-transport-coap-block-transfer, name: CoAP block-wise firmware transfer, match: [coap-block-transfer]}
+      - {id: bl-transport-lwm2m-firmware, name: LwM2M firmware update object, match: [lwm2m-firmware]}
+      - {id: bl-transport-nb-iot-fota, name: FOTA over NB-IoT and LTE-M, match: [nb-iot-fota]}
+      - {id: bl-transport-chunk-ack-protocol, name: Chunk acknowledgement and resume protocol, match: [chunk-ack-protocol]}
+      - {id: bl-transport-i2c-bootloader, name: I2C and SPI host-driven bootloaders, match: [i2c-bootloader]}
+  - id: bl-flash
+    name: Flash programming
+    source: vendor FLASH reference chapters
+    match: [flash-programming]
+    subtopics:
+      - {id: bl-fl-erase, name: Erase-before-write and granularity, match: [erase-before-write]}
+      - {id: bl-fl-option-bytes, name: Option bytes and write protection, match: [option-bytes]}
+      - {id: bl-fl-stall, name: Read-while-write and bus stalls, match: [flash-stall]}
+      - {id: bl-fl-power-loss, name: Power-loss safe updates, match: [power-loss-safety]}
+      - {id: bl-flash-flash-ecc, name: ECC flash and double-word programming, match: [flash-ecc]}
+      - {id: bl-flash-flash-bank-swap, name: Dual-bank flash and bank swap, match: [flash-bank-swap]}
+      - {id: bl-flash-flash-endurance, name: Flash endurance and wear, match: [flash-endurance]}
+      - {id: bl-flash-flash-unlock, name: Flash unlock sequences and error flags, match: [flash-unlock]}
+      - {id: bl-flash-sfdp, name: External NOR discovery with SFDP, match: [sfdp]}
+      - {id: bl-flash-eeprom-emulation, name: EEPROM emulation in flash, match: [eeprom-emulation]}
+  - id: bl-recovery
+    name: Recovery and unbrick strategy
+    source: vendor ROM bootloader docs / MCUboot fallback
+    match: [recovery-mode]
+    subtopics:
+      - {id: bl-rc-golden, name: Golden image, match: [golden-image]}
+      - {id: bl-rc-strap, name: Boot pin strapping, match: [boot-pin-strap]}
+      - {id: bl-rc-factory, name: Factory reset, match: [factory-reset]}
+      - {id: bl-rc-attempts, name: Boot attempt counters, match: [boot-attempt-counter]}
+
+      - {id: bl-recovery-watchdog-rollback, name: Watchdog-triggered rollback, match: [watchdog-rollback]}
+      - {id: bl-recovery-safe-mode, name: Safe mode firmware, match: [safe-mode]}
+      - {id: bl-recovery-rom-bootloader, name: Recovery through the ROM bootloader, match: [rom-bootloader]}
+      - {id: bl-recovery-unbrick, name: Field unbrick procedure over SWD, match: [unbrick]}
+  # --- Hardware debugging (OpenOCD, GDB, CoreSight, probes)
+  - id: hd-probes
+    name: JTAG/SWD probes
+    source: OpenOCD user guide / SEGGER J-Link manual / ADIv5
+    match: [jtag, swd]
+    subtopics:
+      - {id: hd-pr-openocd, name: OpenOCD configuration files, match: [openocd-config]}
+      - {id: hd-pr-under-reset, name: Connect under reset, match: [connect-under-reset]}
+      - {id: hd-pr-jlink, name: J-Link Commander scripting, match: [jlink-commander]}
+      - {id: hd-pr-cmsis-dap, name: CMSIS-DAP and pyOCD, match: [cmsis-dap]}
+      - {id: hd-probes-swd-wiring, name: SWD wiring and reset line, match: [swd-wiring]}
+      - {id: hd-probes-multidrop-swd, name: Multi-drop SWD and multi-core targets, match: [multidrop-swd]}
+      - {id: hd-probes-openocd-program, name: Flashing with the OpenOCD program command, match: [openocd-program]}
+      - {id: hd-probes-probe-rs, name: probe-rs, match: [probe-rs]}
+      - {id: hd-probes-black-magic-probe, name: Black Magic Probe, match: [black-magic-probe]}
+      - {id: hd-probes-approtect, name: nRF APPROTECT recovery, match: [approtect]}
+  - id: hd-gdb
+    name: GDB for embedded targets
+    source: GDB manual
+    match: [gdb]
+    subtopics:
+      - {id: hd-gdb-watch, name: Watchpoints, match: [watchpoint]}
+      - {id: hd-gdb-rtos, name: RTOS-aware debugging, match: [rtos-awareness]}
+      - {id: hd-gdb-python, name: GDB Python scripting, match: [gdb-python-scripting]}
+      - {id: hd-gdb-hwbp, name: Hardware breakpoint limits, match: [hardware-breakpoint]}
+      - {id: hd-gdb-postmortem, name: Post-mortem core dump analysis, match: [core-dump-analysis]}
+      - {id: hd-gdb-gdbinit-setup, name: .gdbinit and extended-remote setup, match: [gdbinit-setup]}
+      - {id: hd-gdb-add-symbol-file, name: Loading multiple symbol files, match: [add-symbol-file]}
+      - {id: hd-gdb-pycortexmdebug, name: Peripheral registers with SVD in GDB, match: [pycortexmdebug]}
+      - {id: hd-gdb-dprintf, name: Breakpoint commands and dprintf, match: [dprintf]}
+      - {id: hd-gdb-optimized-code-debugging, name: Debugging optimised code, match: [optimized-code-debugging]}
+      - {id: hd-gdb-cortex-debug, name: VS Code Cortex-Debug, match: [cortex-debug]}
+  - id: hd-faults
+    name: Fault analysis
+    source: ARMv7-M ARM B1.5.14 fault handling / Cortex-M fault status registers
+    match: [hardfault]
+    subtopics:
+      - {id: hd-fa-cfsr, name: Decoding CFSR/HFSR, match: [cfsr]}
+      - {id: hd-fa-frame, name: Exception stack frame unwinding, match: [exception-stack-frame]}
+      - {id: hd-fa-imprecise, name: Imprecise bus faults, match: [imprecise-bus-fault]}
+      - {id: hd-fa-fault-log, name: Persisting crash info across reset, match: [fault-log-noinit]}
+      - {id: hd-faults-stack-painting, name: Stack painting and overflow diagnosis, match: [stack-painting]}
+      - {id: hd-faults-usage-fault, name: "Usage faults (divide by zero, unaligned)", match: [usage-fault]}
+      - {id: hd-faults-lockup, name: Lockup state, match: [lockup]}
+      - {id: hd-faults-addr2line, name: Symbolicating PC and LR with addr2line, match: [addr2line]}
+      - {id: hd-faults-crash-reporting, name: Field crash reporting pipelines, match: [crash-reporting]}
+      - {id: hd-faults-watchdog-reset-diagnosis, name: Diagnosing watchdog resets, match: [watchdog-reset-diagnosis]}
+  - id: hd-trace
+    name: Trace and runtime visualisation
+    source: CoreSight ETM/ITM / SEGGER SystemView / Percepio docs
+    match: [trace]
+    subtopics:
+      - {id: hd-tr-swo, name: SWO configuration, match: [swo]}
+      - {id: hd-tr-etm, name: ETM instruction trace, match: [etm-trace]}
+      - {id: hd-tr-systemview, name: SEGGER SystemView, match: [systemview]}
+      - {id: hd-tr-tracealyzer, name: Percepio Tracealyzer, match: [tracealyzer]}
+      - {id: hd-trace-dwt-data-trace, name: DWT data watchpoint trace, match: [dwt-data-trace]}
+      - {id: hd-trace-micro-trace-buffer, name: Micro Trace Buffer on Cortex-M0+, match: [micro-trace-buffer]}
+      - {id: hd-trace-orbuculum, name: Orbuculum SWO tools, match: [orbuculum]}
+      - {id: hd-trace-pc-sampling, name: Statistical PC sampling profiling, match: [pc-sampling]}
+      - {id: hd-trace-tpiu, name: TPIU and trace port configuration, match: [tpiu]}
+  - id: hd-logic
+    name: Logic analysers
+    source: sigrok docs / Saleae Logic manual
+    match: [logic-analyzer]
+    subtopics:
+      - {id: hd-la-decoders, name: Protocol decoders, match: [bus-decoder]}
+      - {id: hd-la-trigger, name: Trigger setup, match: [trigger-setup]}
+      - {id: hd-la-sigrok-cli, name: Scripted capture with sigrok-cli, match: [sigrok-cli]}
+      - {id: hd-la-gpio-timing, name: GPIO toggle timing instrumentation, match: [gpio-toggle-timing]}
+      - {id: hd-logic-sample-rate, name: Sample rate selection, match: [sample-rate]}
+      - {id: hd-logic-saleae-hla, name: Saleae Logic 2 high-level analyzers, match: [saleae-hla]}
+      - {id: hd-logic-mixed-signal, name: Mixed-signal capture, match: [mixed-signal]}
+      - {id: hd-logic-logic-threshold, name: Logic thresholds and level compatibility, match: [logic-threshold]}
+      - {id: hd-logic-streaming-capture, name: Long streaming captures, match: [streaming-capture]}
+  - id: hd-scope
+    name: Oscilloscope diagnosis
+    source: Tektronix ABCs of Probes / XYZs of Oscilloscopes
+    match: [oscilloscope]
+    subtopics:
+      - {id: hd-sc-ground, name: Probe ground lead technique, match: [probe-ground-lead]}
+      - {id: hd-sc-si, name: Ringing and signal integrity, match: [signal-integrity]}
+      - {id: hd-sc-rail, name: Power rail ripple and droop capture, match: [power-rail-measurement]}
+      - {id: hd-sc-trigger, name: Advanced triggering, match: [scope-triggering]}
+      - {id: hd-scope-scope-bandwidth, name: Bandwidth and rise-time selection, match: [scope-bandwidth]}
+      - {id: hd-scope-scope-serial-decode, name: Serial decode on the oscilloscope, match: [scope-serial-decode]}
+      - {id: hd-scope-current-probe, name: Current probes, match: [current-probe]}
+      - {id: hd-scope-differential-probe, name: Differential probing, match: [differential-probe]}
+      - {id: hd-scope-scope-fft, name: FFT and EMI spectrum view, match: [scope-fft]}
+      - {id: hd-scope-segmented-memory, name: Segmented memory capture, match: [segmented-memory]}
+  - id: hd-bringup
+    name: Board bring-up
+    source: vendor hardware design guides (AN2586-style getting started)
+    match: [board-bring-up]
+    subtopics:
+      - {id: hd-bu-power, name: Power-on checklist, match: [power-on-checklist]}
+      - {id: hd-bu-mco, name: Clock verification via MCO, match: [mco-clock-output]}
+      - {id: hd-bu-smoke, name: First-firmware smoke test, match: [smoke-test]}
+      - {id: hd-bu-boundary, name: Boundary scan, match: [boundary-scan]}
+      - {id: hd-bringup-schematic-review, name: Firmware-oriented schematic review, match: [schematic-review]}
+      - {id: hd-bringup-peripheral-test, name: Peripheral-by-peripheral bring-up tests, match: [peripheral-test]}
+      - {id: hd-bringup-manufacturing-test, name: Manufacturing test firmware, match: [manufacturing-test]}
+      - {id: hd-bringup-hardware-rework, name: Hardware rework and bug isolation, match: [hardware-rework]}
+      - {id: hd-bringup-thermal-imaging, name: Thermal imaging during bring-up, match: [thermal-imaging]}
+  - id: hd-timing
+    name: Timing and latency analysis
+    source: ARMv7-M DWT / real-time analysis texts
+    match: [timing-analysis]
+    subtopics:
+      - {id: hd-ti-isr, name: Interrupt latency measurement, match: [interrupt-latency]}
+      - {id: hd-ti-cycles, name: Cycle counting code sections, match: [cycle-counting]}
+      - {id: hd-ti-wcet, name: Worst-case execution time, match: [wcet]}
+      - {id: hd-ti-jitter, name: Jitter measurement, match: [jitter-measurement]}
+
+      - {id: hd-timing-response-time-analysis, name: Response-time schedulability analysis, match: [response-time-analysis]}
+      - {id: hd-timing-isr-duration, name: ISR duration budgeting, match: [isr-duration]}
+      - {id: hd-timing-deadline-monitoring, name: Runtime deadline monitoring, match: [deadline-monitoring]}
+      - {id: hd-timing-clock-drift, name: Clock drift and timebase accuracy, match: [clock-drift]}
+  # --- Low-power design (ARM power management, ST/Nordic app notes)
+  - id: lp-budget
+    name: Power budgeting
+    source: Nordic/ST low-power application notes
+    match: [power-budget]
+    subtopics:
+      - {id: lp-bu-duty, name: Duty-cycle budgeting, match: [duty-cycle]}
+      - {id: lp-bu-avg, name: Average current calculation, match: [average-current]}
+      - {id: lp-bu-derating, name: Battery derating, match: [battery-derating]}
+      - {id: lp-bu-harvest, name: Energy harvesting budgets, match: [energy-harvesting]}
+      - {id: lp-budget-peak-current, name: Peak current and battery internal resistance, match: [peak-current]}
+      - {id: lp-budget-coin-cell, name: Coin cell pulse loads, match: [coin-cell]}
+      - {id: lp-budget-self-discharge, name: Self-discharge and shelf life, match: [self-discharge]}
+      - {id: lp-budget-fuel-gauge, name: Fuel gauges and state-of-charge, match: [fuel-gauge]}
+      - {id: lp-budget-supercapacitor, name: Supercapacitor backup, match: [supercapacitor]}
+  - id: lp-measurement
+    name: Current measurement
+    source: Nordic PPK2 / Joulescope docs
+    match: [current-profiling]
+    subtopics:
+      - {id: lp-me-ppk2, name: Power Profiler Kit II, match: [ppk2]}
+      - {id: lp-me-burden, name: Burden voltage, match: [burden-voltage]}
+      - {id: lp-me-joulescope, name: Joulescope, match: [joulescope]}
+      - {id: lp-me-sleep-debug, name: Debugging high sleep current, match: [sleep-current-debug]}
+      - {id: lp-measurement-shunt-measurement, name: Shunt resistor and amplifier measurement, match: [shunt-measurement]}
+      - {id: lp-measurement-otii, name: Otii Arc, match: [otii]}
+      - {id: lp-measurement-debugger-current-draw, name: Debugger-attached measurement pitfalls, match: [debugger-current-draw]}
+      - {id: lp-measurement-energy-per-operation, name: Energy per operation, match: [energy-per-operation]}
+      - {id: lp-measurement-power-regression-test, name: Automated power regression tests, match: [power-regression-test]}
+  - id: lp-modes
+    name: MCU sleep modes
+    source: ARMv7-M ARM B1.5.17 power management / ST AN4621
+    match: [sleep-mode]
+    subtopics:
+      - {id: lp-mo-stop, name: Stop/standby selection, match: [stop-mode]}
+      - {id: lp-mo-wake-time, name: Wake-up time trade-offs, match: [wake-up-time]}
+      - {id: lp-mo-gating, name: Clock gating, match: [clock-gating]}
+      - {id: lp-mo-retention, name: Retention RAM, match: [retention-ram]}
+      - {id: lp-mo-wfi, name: WFI/WFE and SLEEPDEEP, match: [wfi]}
+      - {id: lp-modes-shutdown-mode, name: Shutdown mode, match: [shutdown-mode]}
+      - {id: lp-modes-sleep-on-exit, name: Sleep-on-exit, match: [sleep-on-exit]}
+      - {id: lp-modes-autonomous-peripheral, name: Autonomous peripherals in stop modes, match: [autonomous-peripheral]}
+      - {id: lp-modes-low-power-run, name: Low-power run mode, match: [low-power-run]}
+      - {id: lp-modes-analog-power-down, name: Powering down analog blocks, match: [analog-power-down]}
+  - id: lp-wake
+    name: Wake sources
+    source: vendor PWR/EXTI chapters
+    match: [wake-source]
+    subtopics:
+      - {id: lp-wa-rtc, name: RTC wake-up, match: [rtc-wakeup]}
+      - {id: lp-wa-gpio, name: GPIO/EXTI wake-up, match: [gpio-wakeup]}
+      - {id: lp-wa-lpuart, name: LPUART wake-up, match: [lpuart-wakeup]}
+      - {id: lp-wa-lptim, name: Low-power timer, match: [lptim]}
+      - {id: lp-wake-comparator-wakeup, name: Comparator wake-up, match: [comparator-wakeup]}
+      - {id: lp-wake-wakeup-pin, name: Wake-up pins and polarity, match: [wakeup-pin]}
+      - {id: lp-wake-sensor-interrupt-wake, name: Sensor interrupt wake-up, match: [sensor-interrupt-wake]}
+      - {id: lp-wake-wakeup-cause, name: Determining the wake-up cause, match: [wakeup-cause]}
+      - {id: lp-wake-touch-wakeup, name: Capacitive touch wake-up, match: [touch-wakeup]}
+  - id: lp-hardware
+    name: Hardware power design for firmware
+    source: TI/ADI power management handbooks
+    match: [power-supply-design]
+    subtopics:
+      - {id: lp-hw-iq, name: Regulator quiescent current, match: [quiescent-current]}
+      - {id: lp-hw-load-switch, name: Load switches for peripherals, match: [load-switch]}
+      - {id: lp-hw-leakage, name: GPIO leakage, match: [gpio-leakage]}
+      - {id: lp-hw-vscale, name: Voltage scaling, match: [voltage-scaling]}
+      - {id: lp-hw-vbat, name: Battery voltage monitoring, match: [battery-voltage-monitoring]}
+      - {id: lp-hardware-pull-resistor-current, name: Pull resistor current, match: [pull-resistor-current]}
+      - {id: lp-hardware-dc-dc-converter, name: DC-DC vs LDO selection, match: [dc-dc-converter]}
+      - {id: lp-hardware-unused-pins, name: Unused pin configuration, match: [unused-pins]}
+      - {id: lp-hardware-brown-out-reset, name: Brown-out reset thresholds, match: [brown-out-reset]}
+      - {id: lp-hardware-oscillator-power, name: Oscillator power, match: [oscillator-power]}
+  - id: lp-radio
+    name: Radio power
+    source: Bluetooth Core spec / IEEE 802.11 PS / LoRaWAN regional parameters
+    match: [radio-power]
+    subtopics:
+      - {id: lp-ra-adv, name: BLE advertising interval, match: [ble-advertising-interval]}
+      - {id: lp-ra-conn, name: BLE connection interval and latency, match: [ble-connection-interval]}
+      - {id: lp-ra-dtim, name: Wi-Fi DTIM power save, match: [dtim]}
+      - {id: lp-ra-lora, name: LoRaWAN duty cycle, match: [lorawan-duty-cycle]}
+
+      - {id: lp-radio-sleepy-end-device, name: Sleepy end devices (Thread and Zigbee), match: [sleepy-end-device]}
+      - {id: lp-radio-psm-edrx, name: Cellular PSM and eDRX, match: [psm-edrx]}
+      - {id: lp-radio-tx-power, name: TX power selection, match: [tx-power]}
+      - {id: lp-radio-wifi-fast-connect, name: Fast Wi-Fi reconnect, match: [wifi-fast-connect]}
+      - {id: lp-radio-ble-phy, name: BLE PHY selection, match: [ble-phy]}
+  # --- FreeRTOS (freertos.org kernel docs ToC)
+  - id: fr-tasks
+    name: Tasks
+    source: FreeRTOS docs/Tasks
+    match: [xtaskcreate]
+    subtopics:
+      - {id: fr-ta-priority, name: Priority assignment, match: [task-priority]}
+      - {id: fr-ta-stack, name: Stack sizing with high-water mark, match: [uxtaskgetstackhighwatermark]}
+      - {id: fr-ta-static, name: Static task creation, match: [xtaskcreatestatic]}
+      - {id: fr-ta-delete, name: Task deletion and suspension, match: [vtaskdelete]}
+      - {id: fr-ta-delayuntil, name: Periodic tasks with vTaskDelayUntil, match: [vtaskdelayuntil]}
+      - {id: fr-tasks-task-parameters, name: Passing parameters to tasks, match: [task-parameters]}
+      - {id: fr-tasks-task-states, name: Task states, match: [task-states]}
+      - {id: fr-tasks-vapplicationidlehook, name: Idle hook, match: [vapplicationidlehook]}
+      - {id: fr-tasks-thread-local-storage-pointers, name: Thread local storage pointers, match: [thread-local-storage-pointers]}
+      - {id: fr-tasks-vtaskpriorityset, name: Changing priority at runtime, match: [vtaskpriorityset]}
+  - id: fr-queues
+    name: Queues
+    source: FreeRTOS docs/Queues
+    match: [queue]
+    subtopics:
+      - {id: fr-qu-sets, name: Queue sets, match: [queue-set]}
+      - {id: fr-qu-isr, name: Queue use from ISRs, match: [fromisr]}
+      - {id: fr-qu-mailbox, name: Mailboxes with xQueueOverwrite, match: [queue-mailbox]}
+      - {id: fr-qu-registry, name: Queue registry for debuggers, match: [queue-registry]}
+      - {id: fr-queues-queue-length, name: Queue length and block time, match: [queue-length]}
+      - {id: fr-queues-queue-by-reference, name: Queuing pointers vs copies, match: [queue-by-reference]}
+      - {id: fr-queues-xqueuecreatestatic, name: Static queues, match: [xqueuecreatestatic]}
+      - {id: fr-queues-xqueuepeek, name: Peeking and resetting queues, match: [xqueuepeek]}
+  - id: fr-sync
+    name: Semaphores and mutexes
+    source: FreeRTOS docs/Semaphores and mutexes
+    match: [mutex]
+    subtopics:
+      - {id: fr-sy-inheritance, name: Priority inheritance, match: [priority-inheritance]}
+      - {id: fr-sy-recursive, name: Recursive mutexes, match: [recursive-mutex]}
+      - {id: fr-sy-counting, name: Counting semaphores, match: [counting-semaphore]}
+      - {id: fr-sy-deadlock, name: Deadlock avoidance, match: [deadlock-avoidance]}
+      - {id: fr-sy-gatekeeper, name: Gatekeeper tasks, match: [gatekeeper-task]}
+      - {id: fr-sync-isr-binary-semaphore, name: Binary semaphores for ISR signalling, match: [isr-binary-semaphore]}
+      - {id: fr-sync-static-semaphore, name: Static semaphores and mutexes, match: [static-semaphore]}
+      - {id: fr-sync-xsemaphoregetmutexholder, name: Mutex holder queries and timeouts, match: [xsemaphoregetmutexholder]}
+      - {id: fr-sync-reader-writer-lock, name: Reader-writer locks, match: [reader-writer-lock]}
+  - id: fr-notifications
+    name: Notifications/event groups/stream buffers
+    source: FreeRTOS docs/Task notifications/Event groups/Stream buffers
+    match: [task-notification]
+    subtopics:
+      - {id: fr-no-event-groups, name: Event groups, match: [event-group]}
+      - {id: fr-no-stream, name: Stream buffers, match: [stream-buffer]}
+      - {id: fr-no-message, name: Message buffers, match: [message-buffer]}
+      - {id: fr-no-arrays, name: Notification arrays (indexed), match: [notification-index]}
+      - {id: fr-notifications-ultasknotifytake, name: ulTaskNotifyTake as a lightweight semaphore, match: [ultasknotifytake]}
+      - {id: fr-notifications-xtasknotify-action, name: xTaskNotify actions, match: [xtasknotify-action]}
+      - {id: fr-notifications-xeventgroupsync, name: Task rendezvous with xEventGroupSync, match: [xeventgroupsync]}
+      - {id: fr-notifications-trigger-level, name: Stream buffer trigger level, match: [trigger-level]}
+      - {id: fr-notifications-amp-message-buffer, name: Message buffers for AMP inter-core links, match: [amp-message-buffer]}
+  - id: fr-timers
+    name: Software timers
+    source: FreeRTOS docs/Software timers
+    match: [software-timer]
+    subtopics:
+      - {id: fr-ti-service, name: Timer service task tuning, match: [timer-service-task]}
+      - {id: fr-ti-reload, name: One-shot vs auto-reload, match: [auto-reload-timer]}
+      - {id: fr-ti-pend, name: Deferring work with xTimerPendFunctionCall, match: [xtimerpendfunctioncall]}
+      - {id: fr-ti-tickless, name: Tickless idle, match: [tickless-idle]}
+      - {id: fr-timers-timer-command-queue, name: Timer command queue sizing and failures, match: [timer-command-queue]}
+      - {id: fr-timers-timer-callback, name: Timer callback rules, match: [timer-callback]}
+      - {id: fr-timers-xtimercreatestatic, name: Static timers, match: [xtimercreatestatic]}
+      - {id: fr-timers-xtimerreset, name: Resetting timers (watchdog pattern), match: [xtimerreset]}
+      - {id: fr-timers-pvtimergettimerid, name: Timer IDs, match: [pvtimergettimerid]}
+  - id: fr-memory
+    name: Memory management
+    source: FreeRTOS docs/Memory management
+    match: [heap-4]
+    subtopics:
+      - {id: fr-me-heap5, name: heap_5 multi-region, match: [heap-5]}
+      - {id: fr-me-static, name: Fully static allocation, match: [static-allocation]}
+      - {id: fr-me-malloc-failed, name: Malloc-failed hook, match: [malloc-failed-hook]}
+      - {id: fr-me-fragmentation, name: Fragmentation, match: [fragmentation]}
+      - {id: fr-memory-heap-1, name: "heap_1, heap_2 and heap_3 selection", match: [heap-1]}
+      - {id: fr-memory-heap-stats, name: Heap statistics, match: [heap-stats]}
+      - {id: fr-memory-application-allocated-heap, name: Application-allocated heap placement, match: [application-allocated-heap]}
+      - {id: fr-memory-newlib-reentrant, name: Thread-safe newlib malloc, match: [newlib-reentrant]}
+      - {id: fr-memory-memory-pool, name: Fixed-block memory pools, match: [memory-pool]}
+  - id: fr-config
+    name: Kernel configuration and porting
+    source: FreeRTOS docs/Customisation (FreeRTOSConfig.h) / Porting
+    match: [freertosconfig-h]
+    subtopics:
+      - {id: fr-co-assert, name: configASSERT, match: [configassert]}
+      - {id: fr-co-tick, name: Tick rate selection, match: [configtick-rate-hz]}
+      - {id: fr-co-syscall-prio, name: Max syscall interrupt priority, match: [configmax-syscall-interrupt-priority]}
+      - {id: fr-co-port, name: Port layer selection, match: [freertos-port]}
+      - {id: fr-config-configkernel-interrupt-priority, name: configKERNEL_INTERRUPT_PRIORITY and priority bits, match: [configkernel-interrupt-priority]}
+      - {id: fr-config-include-macros, name: INCLUDE_ feature macros, match: [include-macros]}
+      - {id: fr-config-getidletaskmemory, name: Idle and timer task memory for static allocation, match: [getidletaskmemory]}
+      - {id: fr-config-freertos-upgrade, name: Upgrading kernel versions, match: [freertos-upgrade]}
+      - {id: fr-config-freertos-posix-port, name: POSIX and Windows simulator ports, match: [freertos-posix-port]}
+      - {id: fr-config-configtick-type-width, name: Tick type width, match: [configtick-type-width]}
+  - id: fr-interrupts
+    name: Interrupt management
+    source: FreeRTOS docs/Interrupt management / Mastering FreeRTOS ch7
+    match: [freertos-interrupts]
+    subtopics:
+      - {id: fr-in-deferred, name: Deferred interrupt processing, match: [deferred-interrupt-processing]}
+      - {id: fr-in-yield, name: Yield from ISR, match: [portyield-from-isr]}
+      - {id: fr-in-nesting, name: Interrupt nesting, match: [interrupt-nesting]}
+      - {id: fr-in-critical, name: Critical sections and scheduler suspension, match: [taskenter-critical]}
+      - {id: fr-interrupts-higherprioritytaskwoken, name: xHigherPriorityTaskWoken pattern, match: [higherprioritytaskwoken]}
+      - {id: fr-interrupts-isr-stream-buffer, name: ISR to task streaming with stream buffers, match: [isr-stream-buffer]}
+      - {id: fr-interrupts-vportvalidateinterruptpriority, name: vPortValidateInterruptPriority asserts, match: [vportvalidateinterruptpriority]}
+      - {id: fr-interrupts-zero-latency-interrupt, name: Zero-latency interrupts above the syscall priority, match: [zero-latency-interrupt]}
+  - id: fr-debugging
+    name: Debugging FreeRTOS applications
+    source: FreeRTOS docs/Debugging (stack overflow, run-time stats, trace)
+    match: [freertos-debugging]
+    subtopics:
+      - {id: fr-db-runtime, name: Run-time statistics, match: [run-time-stats]}
+      - {id: fr-db-stack-overflow, name: Stack overflow detection, match: [configcheck-for-stack-overflow]}
+      - {id: fr-db-trace, name: Trace hook macros, match: [trace-hook-macros]}
+      - {id: fr-db-tasklist, name: Task state dumps, match: [vtasklist]}
+      - {id: fr-debugging-psp-unwinding, name: Unwinding faults from task context (PSP), match: [psp-unwinding]}
+      - {id: fr-debugging-uxtaskgetsystemstate, name: uxTaskGetSystemState and vTaskGetInfo, match: [uxtaskgetsystemstate]}
+      - {id: fr-debugging-cpu-load, name: CPU load measurement, match: [cpu-load]}
+      - {id: fr-debugging-freertos-troubleshooting, name: Troubleshooting common FreeRTOS failures, match: [freertos-troubleshooting]}
+  - id: fr-smp-mpu
+    name: SMP and MPU ports
+    source: FreeRTOS docs/SMP / FreeRTOS-MPU
+    match: [freertos-smp]
+    subtopics:
+      - {id: fr-sm-affinity, name: Core affinity, match: [core-affinity]}
+      - {id: fr-sm-sched, name: SMP scheduling rules, match: [smp-scheduling]}
+      - {id: fr-sm-mpu, name: FreeRTOS-MPU restricted tasks, match: [freertos-mpu]}
+      - {id: fr-sm-unpriv, name: Unprivileged tasks, match: [unprivileged-task]}
+      - {id: fr-smp-mpu-passive-idle, name: Passive idle tasks, match: [passive-idle]}
+      - {id: fr-smp-mpu-smp-critical-section, name: SMP critical sections and spinlocks, match: [smp-critical-section]}
+      - {id: fr-smp-mpu-xtaskcreaterestricted, name: xTaskCreateRestricted region settings, match: [xtaskcreaterestricted]}
+      - {id: fr-smp-mpu-amp-architecture, name: AMP vs SMP architectures, match: [amp-architecture]}
+      - {id: fr-smp-mpu-configrun-multiple-priorities, name: configRUN_MULTIPLE_PRIORITIES, match: [configrun-multiple-priorities]}
+  - id: fr-scheduling
+    name: Scheduling policy
+    source: FreeRTOS docs/Scheduling / Mastering FreeRTOS ch4
+    match: [freertos-scheduler]
+    subtopics:
+      - {id: fr-sc-timeslice, name: Time slicing, match: [time-slicing]}
+      - {id: fr-sc-preemption, name: Co-operative vs preemptive config, match: [configuse-preemption]}
+      - {id: fr-sc-rma, name: Rate-monotonic priority assignment, match: [rate-monotonic]}
+      - {id: fr-sc-starvation, name: Starvation and idle task, match: [task-starvation]}
+
+      - {id: fr-scheduling-vtaskstartscheduler, name: vTaskStartScheduler failures, match: [vtaskstartscheduler]}
+      - {id: fr-scheduling-port-optimised-task-selection, name: Port-optimised task selection, match: [port-optimised-task-selection]}
+      - {id: fr-scheduling-event-driven-task, name: Event-driven task design, match: [event-driven-task]}
+      - {id: fr-scheduling-taskyield, name: taskYIELD, match: [taskyield]}
+  # --- Zephyr (docs.zephyrproject.org ToC)
+  - id: z-west
+    name: West workspaces
+    source: Zephyr docs/west
+    match: [west]
+    subtopics:
+      - {id: z-we-manifest, name: West manifests, match: [west-manifest]}
+      - {id: z-we-topology, name: Workspace topologies, match: [west-workspace]}
+      - {id: z-we-flash, name: west flash/debug runners, match: [west-flash]}
+      - {id: z-we-update, name: west update and imports, match: [west-update]}
+      - {id: z-west-west-build, name: west build options, match: [west-build]}
+      - {id: z-west-west-group-filter, name: Manifest groups and project filters, match: [west-group-filter]}
+      - {id: z-west-west-extension, name: West extension commands, match: [west-extension]}
+      - {id: z-west-zephyr-sdk, name: Zephyr SDK installation, match: [zephyr-sdk]}
+      - {id: z-west-west-blobs, name: Binary blobs, match: [west-blobs]}
+      - {id: z-west-west-config, name: west config, match: [west-config]}
+  - id: z-build
+    name: Zephyr build system
+    source: Zephyr docs/Build system (CMake, sysbuild, snippets)
+    match: [zephyr-build-system]
+    subtopics:
+      - {id: z-bu-sysbuild, name: Sysbuild multi-image builds, match: [sysbuild]}
+      - {id: z-bu-snippets, name: Snippets, match: [zephyr-snippets]}
+      - {id: z-bu-app, name: Application structure and freestanding apps, match: [zephyr-application-structure]}
+      - {id: z-bu-pristine, name: Pristine and incremental builds, match: [pristine-build]}
+      - {id: z-build-zephyr-library, name: CMake extensions (zephyr_library), match: [zephyr-library]}
+      - {id: z-build-zephyr-build-output, name: Build output artefacts, match: [zephyr-build-output]}
+      - {id: z-build-rom-report, name: ROM and RAM footprint reports, match: [rom-report]}
+      - {id: z-build-board-revision, name: Board qualifiers and revisions, match: [board-revision]}
+      - {id: z-build-board-root, name: "BOARD_ROOT, DTS_ROOT and SOC_ROOT", match: [board-root]}
+      - {id: z-build-toolchain-variant, name: Toolchain variants, match: [toolchain-variant]}
+  - id: z-devicetree
+    name: Devicetree
+    source: Zephyr docs/Devicetree guide
+    match: [devicetree]
+    subtopics:
+      - {id: z-dt-overlay, name: Overlays, match: [overlay]}
+      - {id: z-dt-bindings, name: Writing bindings, match: [devicetree-bindings]}
+      - {id: z-dt-macros, name: Devicetree C macros, match: [dt-nodelabel]}
+      - {id: z-dt-pinctrl, name: Pin control, match: [pinctrl]}
+      - {id: z-dt-chosen, name: Chosen nodes and aliases, match: [dt-alias]}
+      - {id: z-devicetree-devicetree-troubleshooting, name: Troubleshooting devicetree errors, match: [devicetree-troubleshooting]}
+      - {id: z-devicetree-dt-status, name: Node status and compatible matching, match: [dt-status]}
+      - {id: z-devicetree-gpio-dt-spec, name: gpio_dt_spec and specifiers, match: [gpio-dt-spec]}
+      - {id: z-devicetree-fixed-partitions, name: Fixed partitions, match: [fixed-partitions]}
+      - {id: z-devicetree-zephyr-user, name: "The zephyr,user node", match: [zephyr-user]}
+      - {id: z-devicetree-dt-kconfig-functions, name: Devicetree functions in Kconfig, match: [dt-kconfig-functions]}
+  - id: z-kconfig
+    name: Kconfig
+    source: Zephyr docs/Configuration system (Kconfig)
+    match: [kconfig]
+    subtopics:
+      - {id: z-kc-prj, name: prj.conf and fragments, match: [prj-conf]}
+      - {id: z-kc-menuconfig, name: menuconfig/guiconfig, match: [menuconfig]}
+      - {id: z-kc-symbols, name: Defining Kconfig symbols, match: [kconfig-symbols]}
+      - {id: z-kc-hardening, name: Hardening tool and unmet dependencies, match: [kconfig-hardening]}
+      - {id: z-kconfig-dotconfig, name: Inspecting the merged .config, match: [dotconfig]}
+      - {id: z-kconfig-kconfig-defconfig, name: Kconfig.defconfig defaults, match: [kconfig-defconfig]}
+      - {id: z-kconfig-module-kconfig, name: Kconfig in out-of-tree modules, match: [module-kconfig]}
+      - {id: z-kconfig-kconfig-select, name: select vs depends on, match: [kconfig-select]}
+      - {id: z-kconfig-extra-conf-file, name: EXTRA_CONF_FILE and FILE_SUFFIX, match: [extra-conf-file]}
+  - id: z-threads
+    name: Threads and scheduling
+    source: Zephyr docs/Kernel services/Threads/Scheduling/Workqueue
+    match: [k-thread]
+    subtopics:
+      - {id: z-th-workqueue, name: Work queues, match: [work-queue]}
+      - {id: z-th-coop, name: Cooperative vs preemptive threads, match: [cooperative-vs-preemptive]}
+      - {id: z-th-stack, name: Thread stack analysis, match: [stack-analyze]}
+      - {id: z-th-timers, name: Kernel timers, match: [k-timer]}
+      - {id: z-threads-meta-irq, name: Meta-IRQ priorities, match: [meta-irq]}
+      - {id: z-threads-k-sleep, name: "Sleeping, suspending and aborting threads", match: [k-sleep]}
+      - {id: z-threads-thread-local-storage, name: Thread-local storage, match: [thread-local-storage]}
+      - {id: z-threads-k-work-delayable, name: Delayable work items, match: [k-work-delayable]}
+      - {id: z-threads-edf-scheduling, name: Deadline (EDF) scheduling, match: [edf-scheduling]}
+      - {id: z-threads-cpu-mask, name: CPU affinity masks on SMP, match: [cpu-mask]}
+      - {id: z-threads-thread-runtime-stats, name: Thread runtime statistics, match: [thread-runtime-stats]}
+  - id: z-data-passing
+    name: Synchronisation and data passing
+    source: Zephyr docs/Kernel services/Synchronization/Data passing
+    match: [zephyr-data-passing]
+    subtopics:
+      - {id: z-dp-msgq, name: Message queues, match: [k-msgq]}
+      - {id: z-dp-fifo, name: FIFOs and LIFOs, match: [k-fifo]}
+      - {id: z-dp-poll, name: Polling multiple objects, match: [k-poll]}
+      - {id: z-dp-zbus, name: zbus, match: [zbus]}
+      - {id: z-dp-sem, name: Semaphores and mutexes, match: [k-sem]}
+      - {id: z-data-passing-k-pipe, name: Pipes, match: [k-pipe]}
+      - {id: z-data-passing-k-mbox, name: Mailboxes, match: [k-mbox]}
+      - {id: z-data-passing-k-condvar, name: Condition variables, match: [k-condvar]}
+      - {id: z-data-passing-k-event, name: Event objects, match: [k-event]}
+      - {id: z-data-passing-sys-ring-buf, name: Ring buffer library, match: [sys-ring-buf]}
+      - {id: z-data-passing-k-stack, name: Stacks, match: [k-stack]}
+  - id: z-drivers
+    name: Device driver model
+    source: Zephyr docs/Device driver model
+    match: [device-driver-model]
+    subtopics:
+      - {id: z-dr-api, name: Device API structures, match: [device-api]}
+      - {id: z-dr-inst, name: DT_INST instance macros, match: [dt-inst]}
+      - {id: z-dr-init, name: Init levels and priorities, match: [init-level]}
+      - {id: z-dr-module, name: Out-of-tree drivers as Zephyr modules, match: [zephyr-module]}
+      - {id: z-dr-emul, name: Emulators for driver testing, match: [zephyr-emul]}
+      - {id: z-drivers-irq-connect, name: IRQ_CONNECT and direct ISRs, match: [irq-connect]}
+      - {id: z-drivers-device-is-ready, name: device_is_ready checks, match: [device-is-ready]}
+      - {id: z-drivers-sensor-channel-get, name: Sensor API, match: [sensor-channel-get]}
+      - {id: z-drivers-zephyr-gpio, name: GPIO API, match: [zephyr-gpio]}
+      - {id: z-drivers-i2c-dt-spec, name: Bus specs (i2c_dt_spec and spi_dt_spec), match: [i2c-dt-spec]}
+      - {id: z-drivers-uart-async-api, name: UART async API, match: [uart-async-api]}
+      - {id: z-drivers-device-deferred-init, name: Deferred device initialisation, match: [device-deferred-init]}
+  - id: z-boards
+    name: Board porting
+    source: Zephyr docs/Board porting guide (hardware model v2)
+    match: [board-porting]
+    subtopics:
+      - {id: z-bo-hwmv2, name: board.yml and hardware model v2, match: [hwmv2]}
+      - {id: z-bo-defconfig, name: Board defconfig and Kconfig.board, match: [board-defconfig]}
+      - {id: z-bo-oot, name: Out-of-tree boards, match: [out-of-tree-board]}
+      - {id: z-bo-runners, name: board.cmake flash runners, match: [board-runners]}
+      - {id: z-boards-soc-porting, name: SoC porting, match: [soc-porting]}
+      - {id: z-boards-zephyr-shield, name: Shields, match: [zephyr-shield]}
+      - {id: z-boards-board-twister-yaml, name: Board twister YAML and documentation, match: [board-twister-yaml]}
+      - {id: z-boards-board-cpucluster, name: Multi-core board targets, match: [board-cpucluster]}
+      - {id: z-boards-hwmv2-migration, name: Migrating boards to HWMv2, match: [hwmv2-migration]}
+  - id: z-logging-shell
+    name: Logging/shell/console
+    source: Zephyr docs/OS services/Logging/Shell
+    match: [zephyr-logging]
+    subtopics:
+      - {id: z-lo-backends, name: Log backends and levels, match: [log-backend]}
+      - {id: z-lo-shell, name: Shell commands, match: [zephyr-shell]}
+      - {id: z-lo-deferred, name: Deferred vs immediate logging, match: [log-mode-deferred]}
+      - {id: z-lo-coredump, name: Coredump subsystem, match: [zephyr-coredump]}
+      - {id: z-logging-shell-log-module-register, name: Module log registration and runtime filtering, match: [log-module-register]}
+      - {id: z-logging-shell-dictionary-logging, name: Dictionary-based logging, match: [dictionary-logging]}
+      - {id: z-logging-shell-shell-subcommands, name: Shell subcommands and dynamic commands, match: [shell-subcommands]}
+      - {id: z-logging-shell-zephyr-printk, name: printk and console, match: [zephyr-printk]}
+      - {id: z-logging-shell-zephyr-assert, name: Kernel assertions, match: [zephyr-assert]}
+      - {id: z-logging-shell-fatal-error-handler, name: Fatal error handler, match: [fatal-error-handler]}
+  - id: z-storage
+    name: Storage and settings
+    source: Zephyr docs/OS services/Storage/Settings/File systems
+    match: [zephyr-storage]
+    subtopics:
+      - {id: z-st-settings, name: Settings subsystem, match: [zephyr-settings]}
+      - {id: z-st-nvs, name: NVS and ZMS, match: [zephyr-nvs]}
+      - {id: z-st-littlefs, name: LittleFS file system, match: [zephyr-littlefs]}
+      - {id: z-st-flash-map, name: Flash map partitions, match: [flash-map]}
+      - {id: z-storage-zephyr-flash-api, name: Flash API and page layout, match: [zephyr-flash-api]}
+      - {id: z-storage-zephyr-fatfs, name: FAT FS on SD cards, match: [zephyr-fatfs]}
+      - {id: z-storage-disk-access, name: Disk access and SDMMC, match: [disk-access]}
+      - {id: z-storage-zephyr-eeprom, name: EEPROM API, match: [zephyr-eeprom]}
+      - {id: z-storage-retained-mem, name: Retained memory and boot mode, match: [retained-mem]}
+      - {id: z-storage-stream-flash, name: Stream flash, match: [stream-flash]}
+  - id: z-networking
+    name: Networking and Bluetooth
+    source: Zephyr docs/Networking/Bluetooth
+    match: [zephyr-networking]
+    subtopics:
+      - {id: z-ne-sockets, name: BSD sockets, match: [zephyr-sockets]}
+      - {id: z-ne-mgmt, name: Network management events, match: [net-mgmt]}
+      - {id: z-ne-gatt, name: Bluetooth GATT services, match: [zephyr-bluetooth-gatt]}
+      - {id: z-ne-adv, name: Bluetooth advertising, match: [zephyr-ble-advertising]}
+      - {id: z-networking-net-if, name: Network interfaces and L2 layers, match: [net-if]}
+      - {id: z-networking-net-buf-pool, name: Network buffer sizing, match: [net-buf-pool]}
+      - {id: z-networking-zephyr-mqtt, name: MQTT client, match: [zephyr-mqtt]}
+      - {id: z-networking-zephyr-lwm2m, name: LwM2M client, match: [zephyr-lwm2m]}
+      - {id: z-networking-tls-credentials, name: TLS credentials and secure sockets, match: [tls-credentials]}
+      - {id: z-networking-zephyr-bt-conn, name: Bluetooth connection management, match: [zephyr-bt-conn]}
+      - {id: z-networking-bt-mtu, name: Bluetooth ATT MTU and L2CAP buffers, match: [bt-mtu]}
+      - {id: z-networking-zephyr-wifi, name: Wi-Fi management, match: [zephyr-wifi]}
+  - id: z-testing
+    name: Testing with Twister and ztest
+    source: Zephyr docs/Testing (Twister/ztest/native_sim)
+    match: [twister]
+    subtopics:
+      - {id: z-te-ztest, name: ztest suites, match: [ztest]}
+      - {id: z-te-native, name: native_sim target, match: [native-sim]}
+      - {id: z-te-hwmap, name: Twister hardware map, match: [twister-hardware-map]}
+      - {id: z-te-coverage, name: Code coverage, match: [gcov-coverage]}
+      - {id: z-testing-testcase-yaml, name: testcase.yaml and sample.yaml filtering, match: [testcase-yaml]}
+      - {id: z-testing-fff, name: Fake Function Framework mocks, match: [fff]}
+      - {id: z-testing-twister-pytest, name: Twister pytest harness, match: [twister-pytest]}
+      - {id: z-testing-qemu-testing, name: Twister on QEMU in CI, match: [qemu-testing]}
+      - {id: z-testing-ztest-fixture, name: ztest fixtures and rules, match: [ztest-fixture]}
+      - {id: z-testing-babblesim, name: BabbleSim, match: [babblesim]}
+  - id: z-pm
+    name: Power management
+    source: Zephyr docs/Power management
+    match: [system-pm]
+    subtopics:
+      - {id: z-pm-runtime, name: Device runtime PM, match: [pm-device-runtime]}
+      - {id: z-pm-policy, name: PM policy, match: [pm-policy]}
+      - {id: z-pm-residency, name: Residency and latency constraints, match: [residency]}
+      - {id: z-pm-wakeup, name: Wake-up sources, match: [wakeup-source]}
+      - {id: z-pm-cpu-power-states, name: CPU power states in devicetree, match: [cpu-power-states]}
+      - {id: z-pm-pm-device-action, name: Device PM actions, match: [pm-device-action]}
+      - {id: z-pm-sys-poweroff, name: System off, match: [sys-poweroff]}
+      - {id: z-pm-pm-notifier, name: PM notifiers, match: [pm-notifier]}
+      - {id: z-pm-pm-stats, name: PM state statistics, match: [pm-stats]}
+  - id: z-userspace
+    name: Userspace and memory protection
+    source: Zephyr docs/User mode/Memory protection
+    match: [zephyr-userspace]
+    subtopics:
+      - {id: z-us-domains, name: Memory domains and partitions, match: [memory-domain]}
+      - {id: z-us-syscalls, name: System calls, match: [syscall]}
+      - {id: z-us-perms, name: Kernel object permissions, match: [kernel-object-permissions]}
+      - {id: z-us-stack-guard, name: Hardware stack protection, match: [hw-stack-protection]}
+
+      - {id: z-userspace-user-mode-thread, name: User mode threads, match: [user-mode-thread]}
+      - {id: z-userspace-app-memory-partition, name: Application memory partitions, match: [app-memory-partition]}
+      - {id: z-userspace-stack-canaries, name: Stack canaries, match: [stack-canaries]}
+      - {id: z-userspace-userspace-fault, name: Userspace fault troubleshooting, match: [userspace-fault]}
+      - {id: z-userspace-dynamic-kernel-objects, name: Dynamic kernel objects, match: [dynamic-kernel-objects]}
+  # --- ESP-IDF (Programming Guide ToC)
+  - id: esp-build
+    name: ESP-IDF build system and idf.py
+    source: ESP-IDF API Guides/Build system / Tools/idf.py / component manager
+    match: [idf-py]
+    subtopics:
+      - {id: esp-bu-sdkconfig, name: sdkconfig.defaults and menuconfig, match: [sdkconfig-defaults]}
+      - {id: esp-bu-component, name: Writing components, match: [idf-component]}
+      - {id: esp-bu-manager, name: IDF component manager, match: [idf-component-manager]}
+      - {id: esp-bu-target, name: Multiple chip targets, match: [idf-set-target]}
+      - {id: esp-build-priv-requires, name: Component requirements (REQUIRES and PRIV_REQUIRES), match: [priv-requires]}
+      - {id: esp-build-idf-size, name: idf.py size analysis, match: [idf-size]}
+      - {id: esp-build-linker-fragment, name: Linker fragments, match: [linker-fragment]}
+      - {id: esp-build-esp-idf-docker, name: ESP-IDF Docker builds, match: [esp-idf-docker]}
+      - {id: esp-build-esp-idf-migration, name: Migrating between ESP-IDF versions, match: [esp-idf-migration]}
+      - {id: esp-build-embed-files, name: Embedding binary files, match: [embed-files]}
+  - id: esp-wifi
+    name: Wi-Fi
+    source: ESP-IDF API Reference/Wi-Fi / Provisioning / ESP-NOW
+    match: [esp-wifi]
+    subtopics:
+      - {id: esp-wi-prov, name: Wi-Fi provisioning, match: [wifi-provisioning]}
+      - {id: esp-wi-reconnect, name: Reconnect strategy, match: [reconnect-backoff]}
+      - {id: esp-wi-softap, name: SoftAP and AP+STA, match: [softap]}
+      - {id: esp-wi-espnow, name: ESP-NOW, match: [esp-now]}
+      - {id: esp-wi-ps, name: Wi-Fi power save modes, match: [wifi-power-save]}
+      - {id: esp-wifi-wifi-event, name: Wi-Fi and IP events, match: [wifi-event]}
+      - {id: esp-wifi-wifi-scan, name: Scanning, match: [wifi-scan]}
+      - {id: esp-wifi-wpa2-enterprise, name: WPA2/WPA3 Enterprise, match: [wpa2-enterprise]}
+      - {id: esp-wifi-esp-netif, name: esp_netif and static IP, match: [esp-netif]}
+      - {id: esp-wifi-wifi-throughput, name: Throughput tuning, match: [wifi-throughput]}
+      - {id: esp-wifi-wifi-roaming, name: Roaming (802.11k/v), match: [wifi-roaming]}
+  - id: esp-ble
+    name: Bluetooth LE (NimBLE)
+    source: ESP-IDF API Reference/Bluetooth/NimBLE / coexistence guide
+    match: [esp-ble]
+    subtopics:
+      - {id: esp-bl-gatt, name: NimBLE GATT server, match: [nimble-gatt-server]}
+      - {id: esp-bl-adv, name: NimBLE advertising, match: [nimble-advertising]}
+      - {id: esp-bl-security, name: Pairing and bonding, match: [ble-pairing]}
+      - {id: esp-bl-coex, name: Wi-Fi/BLE coexistence, match: [wifi-ble-coexistence]}
+      - {id: esp-ble-nimble-central, name: NimBLE central and GATT client, match: [nimble-central]}
+      - {id: esp-ble-ble-throughput, name: BLE throughput and MTU, match: [ble-throughput]}
+      - {id: esp-ble-bluedroid, name: Bluedroid vs NimBLE, match: [bluedroid]}
+      - {id: esp-ble-esp-ble-mesh, name: ESP-BLE-MESH, match: [esp-ble-mesh]}
+      - {id: esp-ble-nimble-extended-advertising, name: Extended advertising, match: [nimble-extended-advertising]}
+  - id: esp-sleep
+    name: Sleep modes
+    source: ESP-IDF API Reference/Sleep modes / ULP / Power management
+    match: [deep-sleep]
+    subtopics:
+      - {id: esp-sl-ext, name: EXT0/EXT1 wake-up, match: [ext0]}
+      - {id: esp-sl-rtc-mem, name: RTC memory retention, match: [rtc-memory]}
+      - {id: esp-sl-ulp, name: ULP coprocessor, match: [ulp]}
+      - {id: esp-sl-light, name: Automatic light sleep, match: [light-sleep]}
+      - {id: esp-sl-pm-lock, name: Power management locks, match: [esp-pm-lock]}
+      - {id: esp-sleep-sleep-timer-wakeup, name: Timer wake-up, match: [sleep-timer-wakeup]}
+      - {id: esp-sleep-deep-sleep-stub, name: Deep-sleep wake stub, match: [deep-sleep-stub]}
+      - {id: esp-sleep-gpio-hold, name: GPIO hold in deep sleep, match: [gpio-hold]}
+      - {id: esp-sleep-deep-sleep-current, name: Diagnosing high deep-sleep current, match: [deep-sleep-current]}
+      - {id: esp-sleep-ulp-riscv, name: ULP RISC-V and LP core, match: [ulp-riscv]}
+  - id: esp-storage
+    name: Storage
+    source: ESP-IDF API Reference/Storage / Partition tables
+    match: [nvs]
+    subtopics:
+      - {id: esp-st-partitions, name: Partition tables, match: [partition-table]}
+      - {id: esp-st-nvs-enc, name: NVS encryption, match: [nvs-encryption]}
+      - {id: esp-st-vfs, name: VFS and FAT, match: [esp-vfs]}
+      - {id: esp-st-littlefs, name: LittleFS/SPIFFS, match: [esp-littlefs]}
+      - {id: esp-storage-nvs-partition-gen, name: NVS partition generator, match: [nvs-partition-gen]}
+      - {id: esp-storage-esp-wear-levelling, name: Wear levelling component, match: [esp-wear-levelling]}
+      - {id: esp-storage-esp-sdmmc, name: SD cards (SDMMC and SDSPI), match: [esp-sdmmc]}
+      - {id: esp-storage-esp-partition, name: Raw partition access, match: [esp-partition]}
+      - {id: esp-storage-nvs-blob, name: NVS namespaces and blobs, match: [nvs-blob]}
+  - id: esp-ota
+    name: OTA updates
+    source: ESP-IDF API Reference/OTA / esp_https_ota
+    match: [esp-ota]
+    subtopics:
+      - {id: esp-ot-https, name: esp_https_ota, match: [esp-https-ota]}
+      - {id: esp-ot-rollback, name: App rollback, match: [esp-app-rollback]}
+      - {id: esp-ot-secure-version, name: Anti-rollback secure version, match: [esp-secure-version]}
+      - {id: esp-ot-partitions, name: OTA partition layout, match: [ota-partition]}
+      - {id: esp-ota-esp-ota-ops, name: Custom transports with esp_ota_ops, match: [esp-ota-ops]}
+      - {id: esp-ota-esp-app-desc, name: App descriptor and version checks, match: [esp-app-desc]}
+      - {id: esp-ota-pre-encrypted-ota, name: Pre-encrypted OTA, match: [pre-encrypted-ota]}
+      - {id: esp-ota-partial-http-download, name: Partial HTTP download, match: [partial-http-download]}
+      - {id: esp-ota-esp-bootloader-update, name: Updating the bootloader over the air, match: [esp-bootloader-update]}
+  - id: esp-security
+    name: Security features
+    source: ESP-IDF Security guides
+    match: [esp-security]
+    subtopics:
+      - {id: esp-se-flash-enc, name: Flash encryption, match: [flash-encryption]}
+      - {id: esp-se-sbv2, name: Secure Boot v2, match: [esp-secure-boot-v2]}
+      - {id: esp-se-efuse, name: eFuse management, match: [efuse]}
+      - {id: esp-se-tls, name: TLS and certificate bundle, match: [esp-tls-certificate-bundle]}
+      - {id: esp-security-esp-ds-peripheral, name: Digital signature and HMAC peripherals, match: [esp-ds-peripheral]}
+      - {id: esp-security-download-mode, name: ROM download mode and JTAG disable, match: [download-mode]}
+      - {id: esp-security-flash-encryption-release-mode, name: Release vs development mode flash encryption, match: [flash-encryption-release-mode]}
+      - {id: esp-security-esp-memprot, name: Memory protection, match: [esp-memprot]}
+      - {id: esp-security-esp-secure-cert, name: esp_secure_cert manufacturing partition, match: [esp-secure-cert]}
+  - id: esp-peripherals
+    name: Peripherals
+    source: ESP-IDF API Reference/Peripherals
+    match: [esp-peripherals]
+    subtopics:
+      - {id: esp-pe-gpio, name: GPIO ISR service, match: [gpio-isr-service]}
+      - {id: esp-pe-ledc, name: LEDC PWM, match: [ledc]}
+      - {id: esp-pe-rmt, name: RMT, match: [rmt]}
+      - {id: esp-pe-i2c, name: I2C master driver (new API), match: [esp-i2c-master]}
+      - {id: esp-pe-adc, name: ADC oneshot/continuous and calibration, match: [esp-adc-calibration]}
+      - {id: esp-peripherals-esp-uart, name: UART driver and event queue, match: [esp-uart]}
+      - {id: esp-peripherals-esp-spi-master, name: SPI master driver, match: [esp-spi-master]}
+      - {id: esp-peripherals-gptimer, name: GPTimer, match: [gptimer]}
+      - {id: esp-peripherals-mcpwm, name: MCPWM, match: [mcpwm]}
+      - {id: esp-peripherals-esp-touch-sensor, name: Touch sensor, match: [esp-touch-sensor]}
+      - {id: esp-peripherals-i2s, name: I2S, match: [i2s]}
+      - {id: esp-peripherals-pcnt, name: Pulse counter, match: [pcnt]}
+      - {id: esp-peripherals-twai, name: TWAI (CAN), match: [twai]}
+  - id: esp-system
+    name: System APIs
+    source: ESP-IDF API Reference/System
+    match: [esp-system]
+    subtopics:
+      - {id: esp-sy-log, name: Logging, match: [esp-log]}
+      - {id: esp-sy-heap, name: Heap capabilities and PSRAM, match: [heap-caps]}
+      - {id: esp-sy-coredump, name: Core dump, match: [esp-core-dump]}
+      - {id: esp-sy-wdt, name: Task watchdog, match: [esp-task-wdt]}
+      - {id: esp-sy-event, name: Event loop library, match: [esp-event]}
+      - {id: esp-system-interrupt-watchdog, name: Interrupt watchdog, match: [interrupt-watchdog]}
+      - {id: esp-system-esp-timer, name: esp_timer high-resolution timers, match: [esp-timer]}
+      - {id: esp-system-esp-reset-reason, name: Reset reasons and restart, match: [esp-reset-reason]}
+      - {id: esp-system-esp-brownout, name: Brownout detector, match: [esp-brownout]}
+      - {id: esp-system-esp-random, name: Random number generation, match: [esp-random]}
+      - {id: esp-system-esp-system-time, name: System time and timezone, match: [esp-system-time]}
+  - id: esp-dual-core
+    name: Dual-core and cache constraints
+    source: ESP-IDF API Guides/FreeRTOS (IDF) / Interrupt allocation
+    match: [dual-core]
+    subtopics:
+      - {id: esp-dc-pinning, name: Task pinning, match: [xtaskcreatepinnedtocore]}
+      - {id: esp-dc-iram, name: IRAM_ATTR and cache-disabled code, match: [iram-attr]}
+      - {id: esp-dc-spinlock, name: Spinlocks, match: [portmux]}
+      - {id: esp-dc-intr, name: Interrupt allocation, match: [esp-intr-alloc]}
+      - {id: esp-dual-core-cache-error, name: Cache errors during flash operations, match: [cache-error]}
+      - {id: esp-dual-core-esp-ipc, name: Inter-processor calls, match: [esp-ipc]}
+      - {id: esp-dual-core-idf-freertos-smp, name: IDF FreeRTOS SMP differences, match: [idf-freertos-smp]}
+      - {id: esp-dual-core-unicore, name: Single-core mode, match: [unicore]}
+      - {id: esp-dual-core-dram-attr, name: DRAM_ATTR data placement, match: [dram-attr]}
+  - id: esp-protocols
+    name: Application protocols
+    source: ESP-IDF API Reference/Application protocols
+    match: [esp-networking]
+    subtopics:
+      - {id: esp-pr-http-client, name: HTTP client, match: [esp-http-client]}
+      - {id: esp-pr-mqtt, name: MQTT client, match: [esp-mqtt]}
+      - {id: esp-pr-http-server, name: HTTP server, match: [esp-http-server]}
+      - {id: esp-pr-sntp, name: SNTP time sync, match: [sntp]}
+      - {id: esp-pr-mdns, name: mDNS, match: [mdns]}
+      - {id: esp-protocols-esp-websocket, name: WebSocket client, match: [esp-websocket]}
+      - {id: esp-protocols-mbedtls-memory-tuning, name: mbedTLS configuration and memory, match: [mbedtls-memory-tuning]}
+      - {id: esp-protocols-esp-modem, name: Cellular modems with esp_modem, match: [esp-modem]}
+      - {id: esp-protocols-esp-eth, name: Ethernet, match: [esp-eth]}
+      - {id: esp-protocols-esp-https-server, name: HTTPS server, match: [esp-https-server]}
+      - {id: esp-protocols-mqtt-mutual-tls, name: MQTT with mutual TLS, match: [mqtt-mutual-tls]}
+  - id: esp-debug
+    name: Debugging ESP-IDF apps
+    source: ESP-IDF API Guides/Fatal errors/JTAG debugging/App trace / IDF monitor
+    match: [idf-monitor]
+    subtopics:
+      - {id: esp-db-panic, name: Panic backtrace decoding, match: [esp-panic-backtrace]}
+      - {id: esp-db-usb-jtag, name: Built-in USB-JTAG, match: [esp-usb-jtag]}
+      - {id: esp-db-apptrace, name: Application level tracing, match: [esp-app-trace]}
+      - {id: esp-db-heap-trace, name: Heap tracing, match: [esp-heap-trace]}
+
+      - {id: esp-debug-esp-openocd, name: OpenOCD with external JTAG, match: [esp-openocd]}
+      - {id: esp-debug-gdbstub, name: GDB stub, match: [gdbstub]}
+      - {id: esp-debug-guru-meditation, name: Guru Meditation error types, match: [guru-meditation]}
+      - {id: esp-debug-heap-corruption, name: Heap corruption detection, match: [heap-corruption]}
+      - {id: esp-debug-esp-stack-smashing, name: Stack smashing protection, match: [esp-stack-smashing]}
+      - {id: esp-debug-esptool, name: esptool, match: [esptool]}
+  # --- STM32Cube (UM1718, UM2609, UM2237, HAL/LL UMs, reference manuals)
+  - id: stm32-cube
+    name: STM32CubeMX/IDE projects
+    source: UM1718 / UM2609
+    match: [stm32cubemx]
+    subtopics:
+      - {id: stm32-cu-regen, name: Code regeneration and user sections, match: [user-code-begin]}
+      - {id: stm32-cu-ide, name: STM32CubeIDE build configuration, match: [stm32cubeide]}
+      - {id: stm32-cu-cmake, name: CMake/VS Code workflow, match: [stm32cube-cmake]}
+      - {id: stm32-cu-packs, name: X-CUBE expansion packs, match: [x-cube-packs]}
+      - {id: stm32-cube-cubemx-middleware, name: Middleware configuration in CubeMX, match: [cubemx-middleware]}
+      - {id: stm32-cube-cubemx-project-manager, name: Project Manager options, match: [cubemx-project-manager]}
+      - {id: stm32-cube-stm32cube-firmware-package, name: Cube firmware package versions, match: [stm32cube-firmware-package]}
+      - {id: stm32-cube-st-link-gdb-server, name: ST-LINK GDB server debug configurations, match: [st-link-gdb-server]}
+      - {id: stm32-cube-build-analyzer, name: Build Analyzer and Static Stack Analyzer, match: [build-analyzer]}
+      - {id: stm32-cube-stm32cubemonitor, name: STM32CubeMonitor, match: [stm32cubemonitor]}
+  - id: stm32-clocks
+    name: RCC clock tree
+    source: STM32 reference manual RCC chapter
+    match: [clock-tree]
+    subtopics:
+      - {id: stm32-cl-pll, name: PLL configuration, match: [pll]}
+      - {id: stm32-cl-css, name: HSE startup and clock security system, match: [clock-security-system]}
+      - {id: stm32-cl-wait, name: Flash wait states and voltage range, match: [flash-wait-states]}
+      - {id: stm32-cl-lse, name: LSE crystal for RTC, match: [lse-rtc-clock]}
+      - {id: stm32-clocks-msi-pll-mode, name: MSI with LSE auto-calibration, match: [msi-pll-mode]}
+      - {id: stm32-clocks-crs, name: HSI48 and the clock recovery system, match: [crs]}
+      - {id: stm32-clocks-kernel-clock, name: Peripheral kernel clock selection, match: [kernel-clock]}
+      - {id: stm32-clocks-apb-prescaler, name: Bus prescalers and timer clock doubling, match: [apb-prescaler]}
+      - {id: stm32-clocks-sysclk-switch, name: Switching SYSCLK at runtime, match: [sysclk-switch]}
+      - {id: stm32-clocks-hse-bypass, name: HSE bypass and crystal selection, match: [hse-bypass]}
+  - id: stm32-gpio
+    name: GPIO and EXTI
+    source: STM32 reference manual GPIO/EXTI chapters
+    match: [stm32-gpio]
+    subtopics:
+      - {id: stm32-gp-af, name: Alternate function mapping, match: [alternate-function]}
+      - {id: stm32-gp-exti, name: EXTI line configuration, match: [exti]}
+      - {id: stm32-gp-speed, name: Output speed and slew, match: [gpio-speed]}
+      - {id: stm32-gp-lock, name: GPIO configuration lock, match: [gpio-lock-register]}
+      - {id: stm32-gpio-open-drain, name: Open-drain and pull configuration, match: [open-drain]}
+      - {id: stm32-gpio-bsrr, name: Atomic set and reset with BSRR, match: [bsrr]}
+      - {id: stm32-gpio-afio-remap, name: AFIO remapping on STM32F1, match: [afio-remap]}
+      - {id: stm32-gpio-five-volt-tolerant, name: Five-volt tolerant pins, match: [five-volt-tolerant]}
+      - {id: stm32-gpio-swd-pin-reuse, name: Reusing SWD pins as GPIO, match: [swd-pin-reuse]}
+  - id: stm32-timers
+    name: Timers
+    source: AN4776 general-purpose timer cookbook / RM TIM chapter
+    match: [stm32-timer]
+    subtopics:
+      - {id: stm32-ti-pwm, name: PWM generation, match: [pwm-generation]}
+      - {id: stm32-ti-ic, name: Input capture, match: [input-capture]}
+      - {id: stm32-ti-encoder, name: Encoder interface mode, match: [encoder-mode]}
+      - {id: stm32-ti-sync, name: Timer synchronisation, match: [timer-synchronization]}
+      - {id: stm32-ti-opm, name: One-pulse mode, match: [one-pulse-mode]}
+      - {id: stm32-timers-timer-prescaler, name: Prescaler and ARR calculation, match: [timer-prescaler]}
+      - {id: stm32-timers-dead-time, name: Complementary outputs and dead time, match: [dead-time]}
+      - {id: stm32-timers-output-compare, name: Output compare, match: [output-compare]}
+      - {id: stm32-timers-timer-dma-burst, name: Timer DMA burst (WS2812 and DShot), match: [timer-dma-burst]}
+      - {id: stm32-timers-pwm-input, name: PWM input mode, match: [pwm-input]}
+      - {id: stm32-timers-timer-break-input, name: Break input, match: [timer-break-input]}
+  - id: stm32-adc
+    name: ADC
+    source: AN2834 / RM ADC chapter
+    match: [stm32-adc]
+    subtopics:
+      - {id: stm32-ad-scan, name: Scan mode with DMA, match: [adc-scan-dma]}
+      - {id: stm32-ad-injected, name: Injected channels, match: [adc-injected]}
+      - {id: stm32-ad-cal, name: Self-calibration, match: [stm32-adc-calibration]}
+      - {id: stm32-ad-vref, name: VREFINT and temperature sensor, match: [vrefint]}
+      - {id: stm32-adc-adc-oversampling, name: Hardware oversampling, match: [adc-oversampling]}
+      - {id: stm32-adc-adc-sampling-time, name: Sampling time and source impedance, match: [adc-sampling-time]}
+      - {id: stm32-adc-analog-watchdog, name: Analog watchdog, match: [analog-watchdog]}
+      - {id: stm32-adc-adc-external-trigger, name: Timer-triggered conversions, match: [adc-external-trigger]}
+      - {id: stm32-adc-dual-adc, name: Dual ADC modes, match: [dual-adc]}
+      - {id: stm32-adc-stm32-dac, name: DAC output, match: [stm32-dac]}
+  - id: stm32-hal-comms
+    name: HAL communication peripherals
+    source: HAL driver UM (UART/I2C/SPI sections)
+    match: [stm32-hal-uart]
+    subtopics:
+      - {id: stm32-hc-idle, name: UART idle-line DMA reception, match: [idle-line]}
+      - {id: stm32-hc-i2c-mem, name: HAL I2C memory read/write, match: [hal-i2c-mem-read]}
+      - {id: stm32-hc-callbacks, name: HAL callbacks and register callbacks, match: [hal-callbacks]}
+      - {id: stm32-hc-timeouts, name: HAL error and timeout handling, match: [hal-timeout-handling]}
+      - {id: stm32-hal-comms-hal-spi-dma, name: HAL SPI with DMA, match: [hal-spi-dma]}
+      - {id: stm32-hal-comms-hal-i2c-seq, name: HAL I2C sequential transfers, match: [hal-i2c-seq]}
+      - {id: stm32-hal-comms-stm32-fdcan, name: FDCAN with HAL, match: [stm32-fdcan]}
+      - {id: stm32-hal-comms-msp-init, name: MSP init callbacks, match: [msp-init]}
+      - {id: stm32-hal-comms-hal-timebase, name: HAL timebase with an RTOS, match: [hal-timebase]}
+      - {id: stm32-hal-comms-stm32-usb-device, name: STM32 USB device library, match: [stm32-usb-device]}
+  - id: stm32-dma
+    name: DMA
+    source: RM DMA/DMAMUX chapters / AN4031
+    match: [dma]
+    subtopics:
+      - {id: stm32-dm-circular, name: Circular mode, match: [circular-mode]}
+      - {id: stm32-dm-mux, name: DMAMUX request routing, match: [dma-mux]}
+      - {id: stm32-dm-ht, name: Half-transfer ping-pong, match: [half-transfer-interrupt]}
+      - {id: stm32-dm-m2m, name: Memory-to-memory, match: [memory-to-memory]}
+      - {id: stm32-dma-gpdma-linked-list, name: GPDMA linked lists, match: [gpdma-linked-list]}
+      - {id: stm32-dma-dma-fifo, name: DMA FIFO and burst configuration, match: [dma-fifo]}
+      - {id: stm32-dma-dma-double-buffer, name: Double-buffer mode, match: [dma-double-buffer]}
+      - {id: stm32-dma-dma-request-mapping, name: Stream and channel request mapping, match: [dma-request-mapping]}
+      - {id: stm32-dma-dma-transfer-error, name: DMA transfer and FIFO errors, match: [dma-transfer-error]}
+      - {id: stm32-dma-mdma, name: MDMA and BDMA on STM32H7, match: [mdma]}
+  - id: stm32-low-power
+    name: STM32 low-power modes
+    source: RM PWR chapter / AN4621
+    match: [stm32-low-power]
+    subtopics:
+      - {id: stm32-lp-stop2, name: Stop 2 mode, match: [stop2-mode]}
+      - {id: stm32-lp-standby, name: Standby and wake-up flags, match: [standby-wakeup]}
+      - {id: stm32-lp-rtc, name: RTC wake-up timer, match: [stm32-rtc-wakeup]}
+      - {id: stm32-lp-dbgmcu, name: Debugging in low-power modes, match: [dbgmcu]}
+      - {id: stm32-low-power-low-power-sleep, name: Sleep and low-power sleep, match: [low-power-sleep]}
+      - {id: stm32-low-power-stm32-shutdown-mode, name: Shutdown mode and the backup domain, match: [stm32-shutdown-mode]}
+      - {id: stm32-low-power-sram2-retention, name: SRAM2 retention in standby, match: [sram2-retention]}
+      - {id: stm32-low-power-power-consumption-calculator, name: Power consumption calculator, match: [power-consumption-calculator]}
+      - {id: stm32-low-power-stop-mode-clock-restore, name: Restoring clocks after stop mode, match: [stop-mode-clock-restore]}
+  - id: stm32-programmer
+    name: STM32CubeProgrammer
+    source: UM2237
+    match: [stm32cubeprogrammer]
+    subtopics:
+      - {id: stm32-pg-rdp, name: Readout protection levels, match: [rdp]}
+      - {id: stm32-pg-sysboot, name: System memory bootloader, match: [system-memory-bootloader]}
+      - {id: stm32-pg-cli, name: CLI scripting, match: [stm32-programmer-cli]}
+      - {id: stm32-pg-extloader, name: External flash loaders, match: [external-loader]}
+      - {id: stm32-programmer-flash-provisioning, name: Provisioning serial numbers and data, match: [flash-provisioning]}
+      - {id: stm32-programmer-sfi, name: Secure firmware install (SFI), match: [sfi]}
+      - {id: stm32-programmer-cubeprogrammer-dfu, name: Programming over UART and USB DFU, match: [cubeprogrammer-dfu]}
+      - {id: stm32-programmer-production-programming, name: Production programming automation, match: [production-programming]}
+      - {id: stm32-programmer-st-link-upgrade, name: ST-LINK firmware upgrade, match: [st-link-upgrade]}
+      - {id: stm32-programmer-cubeprogrammer-verify, name: Verifying flash contents, match: [cubeprogrammer-verify]}
+  - id: stm32-security
+    name: STM32 security features
+    source: AN5156 security / X-CUBE-SBSFU docs
+    match: [stm32-security]
+    subtopics:
+      - {id: stm32-se-pcrop, name: PCROP and WRP, match: [pcrop]}
+      - {id: stm32-se-sbsfu, name: SBSFU, match: [sbsfu]}
+      - {id: stm32-se-tz, name: TrustZone on L5/U5, match: [stm32-trustzone]}
+      - {id: stm32-se-crypto, name: Hardware crypto and RNG, match: [stm32-hw-crypto]}
+      - {id: stm32-security-oemirot, name: OEMiRoT and STM32Trust TEE, match: [oemirot]}
+      - {id: stm32-security-hdp, name: Secure hide protection (HDP), match: [hdp]}
+      - {id: stm32-security-tamper-detection, name: Tamper detection and backup registers, match: [tamper-detection]}
+      - {id: stm32-security-unique-device-id, name: Unique device ID, match: [unique-device-id]}
+      - {id: stm32-security-rdp-regression, name: RDP regression and lifecycle, match: [rdp-regression]}
+      - {id: stm32-security-stm32-firewall, name: Firewall on STM32L4, match: [stm32-firewall]}
+  - id: stm32-ll
+    name: LL drivers and register-level code
+    source: LL driver UM / CMSIS device headers
+    match: [ll-library]
+    subtopics:
+      - {id: stm32-ll-register, name: Register-level programming, match: [register-level]}
+      - {id: stm32-ll-init, name: LL init structures, match: [ll-init]}
+      - {id: stm32-ll-mixing, name: Mixing HAL and LL, match: [hal-ll-mixing]}
+      - {id: stm32-ll-cmsis, name: CMSIS device headers, match: [cmsis-device-header]}
+      - {id: stm32-ll-ll-utils, name: LL utilities, match: [ll-utils]}
+      - {id: stm32-ll-modify-reg, name: Register macros (MODIFY_REG and SET_BIT), match: [modify-reg]}
+      - {id: stm32-ll-ll-dma, name: LL DMA, match: [ll-dma]}
+      - {id: stm32-ll-ll-usart, name: LL USART interrupt driver, match: [ll-usart]}
+      - {id: stm32-ll-hal-to-ll-porting, name: Porting HAL code to LL, match: [hal-to-ll-porting]}
+  - id: stm32-watchdog
+    name: Independent and window watchdogs
+    source: RM IWDG/WWDG chapters
+    match: [iwdg]
+    subtopics:
+      - {id: stm32-wd-wwdg, name: Window watchdog, match: [wwdg]}
+      - {id: stm32-wd-freeze, name: Freezing watchdogs in debug, match: [watchdog-debug-freeze]}
+      - {id: stm32-wd-cause, name: Reset cause decoding, match: [reset-cause]}
+      - {id: stm32-wd-monitor, name: Multi-task watchdog supervision, match: [watchdog-task-monitor]}
+
+      - {id: stm32-watchdog-iwdg-timeout, name: IWDG timeout calculation, match: [iwdg-timeout]}
+      - {id: stm32-watchdog-iwdg-stop, name: Freezing IWDG in stop and standby, match: [iwdg-stop]}
+      - {id: stm32-watchdog-hardware-watchdog, name: Hardware watchdog option byte, match: [hardware-watchdog]}
+      - {id: stm32-watchdog-wwdg-early-wakeup, name: WWDG early wakeup interrupt, match: [wwdg-early-wakeup]}
+  # --- Arduino (docs.arduino.cc)
+  - id: ard-sketch
+    name: Sketch structure and language
+    source: Arduino Language Reference
+    match: [sketch]
+    subtopics:
+      - {id: ard-sk-millis, name: Non-blocking timing with millis, match: [millis]}
+      - {id: ard-sk-state, name: State machines, match: [state-machine]}
+      - {id: ard-sk-isr, name: attachInterrupt, match: [attachinterrupt]}
+      - {id: ard-sk-serial, name: Serial debugging, match: [serial-debugging]}
+      - {id: ard-sk-progmem, name: PROGMEM and F(), match: [progmem]}
+      - {id: ard-sketch-analogwrite, name: analogRead and analogWrite, match: [analogwrite]}
+      - {id: ard-sketch-arduino-string, name: String class and heap fragmentation, match: [arduino-string]}
+      - {id: ard-sketch-arduino-tone, name: tone and timer conflicts, match: [arduino-tone]}
+      - {id: ard-sketch-debounce, name: Debouncing buttons, match: [debounce]}
+      - {id: ard-sketch-pulsein, name: pulseIn timing measurement, match: [pulsein]}
+      - {id: ard-sketch-nointerrupts, name: noInterrupts and shared variables, match: [nointerrupts]}
+  - id: ard-cli
+    name: Arduino CLI
+    source: Arduino CLI reference
+    match: [arduino-cli]
+    subtopics:
+      - {id: ard-cl-fqbn, name: FQBN and board options, match: [fqbn]}
+      - {id: ard-cl-pin, name: Core version pinning, match: [board-package-pinning]}
+      - {id: ard-cl-profiles, name: sketch.yaml profiles, match: [sketch-profiles]}
+      - {id: ard-cl-ci, name: compile-sketches CI, match: [arduino-ci]}
+      - {id: ard-cli-arduino-cli-config, name: arduino-cli configuration, match: [arduino-cli-config]}
+      - {id: ard-cli-arduino-lib-install, name: Library installation, match: [arduino-lib-install]}
+      - {id: ard-cli-arduino-cli-monitor, name: Board detection and serial monitor, match: [arduino-cli-monitor]}
+      - {id: ard-cli-arduino-cli-debug, name: arduino-cli debug, match: [arduino-cli-debug]}
+      - {id: ard-cli-export-binaries, name: Exporting compiled binaries, match: [export-binaries]}
+      - {id: ard-cli-arduino-cli-daemon, name: arduino-cli daemon, match: [arduino-cli-daemon]}
+  - id: ard-libraries
+    name: Library authoring
+    source: Arduino Library specification
+    match: [arduino-library]
+    subtopics:
+      - {id: ard-li-properties, name: library.properties, match: [library-properties]}
+      - {id: ard-li-keywords, name: keywords.txt and examples, match: [keywords-txt]}
+      - {id: ard-li-registry, name: Library Manager submission, match: [library-registry]}
+      - {id: ard-li-arch, name: Architecture compatibility, match: [library-architectures]}
+      - {id: ard-libraries-arduino-api-style, name: Arduino API style guide, match: [arduino-api-style]}
+      - {id: ard-libraries-library-depends, name: Library dependencies, match: [library-depends]}
+      - {id: ard-libraries-precompiled-library, name: Precompiled libraries, match: [precompiled-library]}
+      - {id: ard-libraries-library-release, name: Versioning and releases, match: [library-release]}
+      - {id: ard-libraries-arduino-lint, name: arduino-lint, match: [arduino-lint]}
+  - id: ard-platform
+    name: Platforms and board cores
+    source: Arduino platform specification
+    match: [arduino-core]
+    subtopics:
+      - {id: ard-pl-boards, name: boards.txt, match: [boards-txt]}
+      - {id: ard-pl-platform, name: platform.txt recipes, match: [platform-txt]}
+      - {id: ard-pl-bootloader, name: Burning bootloaders, match: [burn-bootloader]}
+      - {id: ard-pl-variant, name: Variant pin mapping, match: [pins-arduino-h]}
+      - {id: ard-platform-package-index, name: Board Manager package index, match: [package-index]}
+      - {id: ard-platform-programmers-txt, name: programmers.txt, match: [programmers-txt]}
+      - {id: ard-platform-custom-arduino-board, name: Custom board definitions, match: [custom-arduino-board]}
+      - {id: ard-platform-platform-debug, name: Platform debug properties, match: [platform-debug]}
+      - {id: ard-platform-upload-pattern, name: Upload tool patterns, match: [upload-pattern]}
+  - id: ard-storage
+    name: EEPROM and persistent storage
+    source: Arduino EEPROM library / ESP32 Preferences
+    match: [eeprom]
+    subtopics:
+      - {id: ard-st-update, name: EEPROM.update and put/get, match: [eeprom-update]}
+      - {id: ard-st-wear, name: Wear levelling, match: [wear-leveling]}
+      - {id: ard-st-prefs, name: ESP32 Preferences, match: [esp32-preferences]}
+      - {id: ard-st-crc, name: Record CRC validation, match: [crc]}
+      - {id: ard-storage-arduino-sd, name: SD library, match: [arduino-sd]}
+      - {id: ard-storage-arduino-littlefs, name: LittleFS on ESP and RP2040, match: [arduino-littlefs]}
+      - {id: ard-storage-flash-storage-samd, name: FlashStorage on SAMD, match: [flash-storage-samd]}
+      - {id: ard-storage-fram, name: External I2C EEPROM and FRAM, match: [fram]}
+      - {id: ard-storage-config-versioning, name: Versioned config records, match: [config-versioning]}
+  - id: ard-watchdog
+    name: Watchdog and brownout
+    source: AVR datasheet WDT/BOD / Arduino core
+    match: [watchdog]
+    subtopics:
+      - {id: ard-wd-avr, name: AVR watchdog, match: [avr-wdt]}
+      - {id: ard-wd-bod, name: Brown-out detection, match: [bod]}
+      - {id: ard-wd-mcusr, name: Reset reason (MCUSR), match: [mcusr]}
+      - {id: ard-wd-bootloop, name: Bootloader watchdog bug, match: [bootloader-watchdog-bug]}
+      - {id: ard-watchdog-arm-arduino-watchdog, name: Watchdogs on ARM-based boards, match: [arm-arduino-watchdog]}
+      - {id: ard-watchdog-wdt-sleep-wake, name: Watchdog wake from sleep, match: [wdt-sleep-wake]}
+      - {id: ard-watchdog-wdt-interrupt-diagnosis, name: Watchdog interrupt hang diagnosis, match: [wdt-interrupt-diagnosis]}
+      - {id: ard-watchdog-software-reset, name: Software reset, match: [software-reset]}
+  - id: ard-avr
+    name: AVR register-level programming
+    source: ATmega328P datasheet / avrdude manual
+    match: [avr-registers]
+    subtopics:
+      - {id: ard-av-ports, name: Direct port manipulation, match: [direct-port-manipulation]}
+      - {id: ard-av-timers, name: Timer registers, match: [avr-timer-registers]}
+      - {id: ard-av-avrdude, name: avrdude and ISP, match: [avrdude]}
+      - {id: ard-av-fuses, name: Fuse bits, match: [avr-fuses]}
+      - {id: ard-av-sleep, name: AVR sleep modes, match: [avr-sleep]}
+
+      - {id: ard-avr-pin-change-interrupt, name: Pin change interrupts, match: [pin-change-interrupt]}
+      - {id: ard-avr-avr-adc, name: ADC registers, match: [avr-adc]}
+      - {id: ard-avr-avr-usart, name: USART registers, match: [avr-usart]}
+      - {id: ard-avr-avr-isr, name: ISR macro and vectors, match: [avr-isr]}
+      - {id: ard-avr-avr-gcc, name: avr-gcc outside Arduino, match: [avr-gcc]}
+      - {id: ard-avr-osccal, name: Oscillator calibration (OSCCAL), match: [osccal]}
+  # --- PlatformIO (docs.platformio.org)
+  - id: pio-ini
+    name: platformio.ini configuration
+    source: PlatformIO docs/Project Configuration File
+    match: [platformio-ini]
+    subtopics:
+      - {id: pio-in-extends, name: Environment inheritance, match: [extends]}
+      - {id: pio-in-flags, name: build_flags, match: [build-flags]}
+      - {id: pio-in-filter, name: build_src_filter, match: [build-src-filter]}
+      - {id: pio-in-platform, name: Platform version pinning, match: [platform-version]}
+      - {id: pio-in-extra, name: extra_configs and sysenv, match: [extra-configs]}
+      - {id: pio-ini-default-envs, name: default_envs and multiple environments, match: [default-envs]}
+      - {id: pio-ini-upload-protocol, name: Upload options, match: [upload-protocol]}
+      - {id: pio-ini-monitor-filters, name: Monitor options and filters, match: [monitor-filters]}
+      - {id: pio-ini-board-build, name: board_build overrides, match: [board-build]}
+      - {id: pio-ini-build-type, name: Debug vs release build_type, match: [build-type]}
+      - {id: pio-ini-pio-interpolation, name: Variable interpolation, match: [pio-interpolation]}
+  - id: pio-libs
+    name: Library management
+    source: PlatformIO docs/Library Management
+    match: [library-json]
+    subtopics:
+      - {id: pio-li-deps, name: lib_deps, match: [lib-deps]}
+      - {id: pio-li-ldf, name: LDF modes, match: [lib-ldf-mode]}
+      - {id: pio-li-private, name: Private libraries, match: [private-lib]}
+      - {id: pio-li-publish, name: Publishing packages, match: [pio-pkg-publish]}
+      - {id: pio-libs-semver-requirements, name: Version requirements, match: [semver-requirements]}
+      - {id: pio-libs-lib-ignore, name: lib_ignore and lib_compat_mode, match: [lib-ignore]}
+      - {id: pio-libs-library-json-build, name: library.json build options, match: [library-json-build]}
+      - {id: pio-libs-pio-pkg, name: pio pkg commands, match: [pio-pkg]}
+      - {id: pio-libs-git-dependency, name: Git and local dependencies, match: [git-dependency]}
+  - id: pio-test
+    name: Unit testing
+    source: PlatformIO docs/Unit Testing
+    match: [pio-test]
+    subtopics:
+      - {id: pio-te-native, name: Native environment tests, match: [native-env]}
+      - {id: pio-te-target, name: On-target tests, match: [on-target-testing]}
+      - {id: pio-te-runner, name: Custom test runners, match: [custom-test-runner]}
+      - {id: pio-te-filter, name: Test filtering and hierarchy, match: [pio-test-filter]}
+      - {id: pio-test-unity-test, name: Unity assertions, match: [unity-test]}
+      - {id: pio-test-googletest, name: GoogleTest on native, match: [googletest]}
+      - {id: pio-test-test-build-src, name: test_build_src, match: [test-build-src]}
+      - {id: pio-test-pio-mock, name: Mocking hardware in native tests, match: [pio-mock]}
+      - {id: pio-test-renode, name: Simulator-based tests with Renode, match: [renode]}
+      - {id: pio-test-test-port, name: test_port and test_speed, match: [test-port]}
+  - id: pio-debug
+    name: Debugging
+    source: PlatformIO docs/Debugging
+    match: [pio-debug]
+    subtopics:
+      - {id: pio-de-tool, name: debug_tool selection, match: [debug-tool]}
+      - {id: pio-de-svd, name: SVD peripheral view, match: [svd-file]}
+      - {id: pio-de-break, name: debug_init_break, match: [debug-init-break]}
+      - {id: pio-de-extra, name: debug_extra_cmds, match: [debug-extra-cmds]}
+      - {id: pio-debug-debug-server, name: Custom debug servers, match: [debug-server]}
+      - {id: pio-debug-debug-test, name: Debugging unit tests, match: [debug-test]}
+      - {id: pio-debug-debug-load-mode, name: debug_load_mode, match: [debug-load-mode]}
+      - {id: pio-debug-pio-launch-json, name: VS Code launch configuration, match: [pio-launch-json]}
+  - id: pio-scripting
+    name: Advanced scripting
+    source: PlatformIO docs/Advanced Scripting
+    match: [extra-scripts]
+    subtopics:
+      - {id: pio-sc-pre, name: Pre and post scripts, match: [pre-script]}
+      - {id: pio-sc-actions, name: AddPostAction hooks, match: [addpostaction]}
+      - {id: pio-sc-targets, name: Custom targets, match: [custom-target]}
+      - {id: pio-sc-middleware, name: Build middlewares, match: [build-middleware]}
+      - {id: pio-scripting-construction-environment, name: Construction environments, match: [construction-environment]}
+      - {id: pio-scripting-env-append, name: Modifying flags programmatically, match: [env-append]}
+      - {id: pio-scripting-custom-upload, name: Custom upload commands, match: [custom-upload]}
+      - {id: pio-scripting-build-version-header, name: Generated version headers, match: [build-version-header]}
+      - {id: pio-scripting-env-execute, name: Running external tools with env.Execute, match: [env-execute]}
+  - id: pio-boards
+    name: Custom boards and platforms
+    source: PlatformIO docs/Custom Embedded Boards/Custom Platforms
+    match: [custom-board]
+    subtopics:
+      - {id: pio-bo-json, name: Board JSON manifests, match: [board-json]}
+      - {id: pio-bo-partitions, name: Partition tables, match: [board-build-partitions]}
+      - {id: pio-bo-ldscript, name: Custom linker scripts, match: [ldscript]}
+      - {id: pio-bo-platform, name: Custom development platforms, match: [custom-platform]}
+      - {id: pio-boards-board-upload, name: board_upload overrides, match: [board-upload]}
+      - {id: pio-boards-platform-packages, name: platform_packages overrides, match: [platform-packages]}
+      - {id: pio-boards-board-debug-config, name: Debug configuration in board manifests, match: [board-debug-config]}
+      - {id: pio-boards-no-framework, name: Framework-less projects, match: [no-framework]}
+      - {id: pio-boards-variants-dir, name: Custom variants directory, match: [variants-dir]}
+  - id: pio-ci
+    name: CI and code analysis
+    source: PlatformIO docs/CI/Static Code Analysis/Remote
+    match: [pio-ci]
+    subtopics:
+      - {id: pio-ci-cache, name: CI caching, match: [actions-cache]}
+      - {id: pio-ci-check, name: pio check static analysis, match: [pio-check]}
+      - {id: pio-ci-remote, name: PlatformIO Remote, match: [pio-remote]}
+      - {id: pio-ci-size, name: Firmware size tracking, match: [pio-size-check]}
+      - {id: pio-ci-pio-github-actions, name: GitHub Actions workflow, match: [pio-github-actions]}
+      - {id: pio-ci-check-tool, name: Check tool configuration, match: [check-tool]}
+      - {id: pio-ci-remote-test, name: Remote unit testing, match: [remote-test]}
+      - {id: pio-ci-firmware-release-artifacts, name: Release artefacts, match: [firmware-release-artifacts]}
+      - {id: pio-ci-clang-format, name: clang-format enforcement, match: [clang-format]}

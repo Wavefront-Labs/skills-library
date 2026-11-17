@@ -1,0 +1,1299 @@
+# Canonical coverage spec: Game programming (whole field, all eight products).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (engine manuals' tables of contents, the
+# Game Programming Patterns and Game Engine Architecture chapter lists, standard texts for physics,
+# networking and AI), not from what the library already has.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (manual page
+# headings, scripting API class groups, book chapter sub-sections). Round 2 took each topic one level
+# deeper (task pages, API members, troubleshooting and procedures from the same sources) to 8-10 subtopics.
+subject: game-programming
+scope:
+  category: computing-software
+  field: game-programming
+  products: [unity, unreal-engine, godot, gameplay-programming, game-physics, multiplayer-networking, game-engine-architecture, game-ai-programming]
+sources:
+  - "Unity Manual ToC (docs.unity3d.com/Manual) - GameObjects and components, Prefabs, Scenes, Scripting (order of execution, coroutines, Awaitable, assembly definitions, conditional compilation, IL2CPP, managed code stripping), Input System package, Physics (Rigidbody, colliders, raycasts, joints, 2D physics), Animation (Animator, blend trees, root motion, Timeline), UI (uGUI, UI Toolkit, TextMeshPro), Graphics (URP, Shader Graph, lighting), Asset management (Addressables, AssetBundles), Build and Build Profiles, Profiler and Memory Profiler, Editor extensibility, Unity Test Framework, Netcode for GameObjects, Entities/Burst; Unity Scripting API class groups (MonoBehaviour, ScriptableObject, SceneManager, Physics, Animator, Editor) for subtopics"
+  - "Unreal Engine 5 documentation ToC (dev.epicgames.com/documentation/en-us/unreal-engine) - Programming with C++ (gameplay classes, UObject reflection, UPROPERTY/UFUNCTION specifiers, delegates, modules and UnrealBuildTool, smart pointers, subsystems), Blueprints Visual Scripting (Blueprint classes, interfaces, communication, function libraries, macros), Gameplay Framework (GameMode, GameState, PlayerController, Pawn/Character, PlayerState, HUD), Gameplay Ability System, Gameplay Tags, Enhanced Input, Networking and Multiplayer (replication, RPCs, relevancy, Iris), Animation (Animation Blueprints, montages, Control Rig), UMG UI, Asset Management (Primary Asset Labels, soft references), World Partition, AI (Behavior Trees, EQS, StateTree, Smart Objects), Automation testing, Unreal Insights and stat commands, Packaging with BuildCookRun"
+  - "Godot Engine 4 documentation ToC (docs.godotengine.org/en/stable) - Getting started (nodes, scenes, instancing, signals), Scripting (GDScript reference, static typing, exported properties, tool mode, autoloads, C#), Physics (CharacterBody, RigidBody, Area, ray-casting, collision layers), 2D (TileMap/TileMapLayer, animation, particles), Animation (AnimationPlayer, AnimationTree, tweens), UI (Control nodes, containers, themes), Navigation, Audio buses, Input (InputMap, InputEvent), File I/O and saving games, Export (export templates, presets, PCK), Performance (profiler, servers), Shaders, Editor plugins, GDExtension, High-level multiplayer"
+  - "Game Programming Patterns (Robert Nystrom, gameprogrammingpatterns.com) chapters - Design Patterns Revisited (Command, Flyweight, Observer, Prototype, Singleton, State), Sequencing (Double Buffer, Game Loop, Update Method), Behavioral (Bytecode, Subclass Sandbox, Type Object), Decoupling (Component, Event Queue, Service Locator), Optimization (Data Locality, Dirty Flag, Object Pool, Spatial Partition)"
+  - "Game Engine Architecture 3rd ed. (Jason Gregory) chapters - 1 Runtime engine architecture, 3 Fundamentals of software engineering for games, 4 Parallelism and concurrent programming, 5 3D math, 6 Engine support systems (subsystem start-up/shut-down, memory management, containers, strings and hashed ids, engine configuration), 7 Resources and the file system, 8 The game loop and real-time simulation, 9 Human interface devices, 10 Tools for debugging and development, 11 The rendering engine, 12 Animation systems, 13 Collision and rigid body dynamics, 14 Audio, 15 Introduction to gameplay systems, 16 Runtime gameplay foundation systems"
+  - "Real-Time Collision Detection (Christer Ericson) chapters - bounding volumes, primitive tests, BVH, spatial partitioning, GJK/SAT, numerical robustness; Game Physics Engine Development (Ian Millington) - particles, rigid bodies, contacts, resolution; Gaffer On Games physics articles (Integration Basics, Fix Your Timestep) and Erin Catto Box2D GDC solver talks"
+  - "Networking references - Gaffer On Games networking series (UDP vs TCP, reliability over UDP, snapshot interpolation, state synchronization, deterministic lockstep), Valve Developer Community Source Multiplayer Networking (interpolation, lag compensation, prediction), Gabriel Gambetta Fast-Paced Multiplayer, GGPO documentation"
+  - "AI for Games 3rd ed. (Ian Millington) chapters - Movement (kinematic and steering behaviours, flocking), Pathfinding (Dijkstra, A*, world representations, hierarchical pathfinding), Decision making (decision trees, state machines, behaviour trees, fuzzy logic, goal-oriented behaviour, rule-based systems), Tactical and strategic AI (waypoint tactics, influence maps), Board games (minimax, MCTS); Game AI Pro chapters for utility AI and perception"
+  - "Game Feel (Steve Swink) and GDC gameplay-programming talks - input response, simulated space, polish and juice; Nystrom Game Programming Patterns for gameplay state"
+topics:
+  # ===================== Unity (Unity Manual + Scripting API)
+  - id: unity-script-lifecycle
+    name: MonoBehaviour order of execution
+    source: Unity Manual/Scripting/Order of execution for event functions
+    match: [monobehaviour, execution-order, monobehaviour-lifecycle]
+    subtopics:
+      - {id: unity-awake-start-init, name: Awake vs OnEnable vs Start initialisation order, match: [awake-vs-start, script-execution-order]}
+      - {id: unity-fixedupdate-step, name: FixedUpdate and the fixed timestep settings, match: [unity-fixed-timestep, fixedupdate]}
+      - {id: unity-coroutines, name: Coroutines with yield instructions, match: [unity-coroutines, yield-return]}
+      - {id: unity-awaitable-async, name: Awaitable and async/await in Unity 6, match: [unity-awaitable, unity-async-await]}
+      - {id: unity-destroy-disable, name: OnDisable/OnDestroy cleanup and application quit, match: [ondestroy-cleanup, onapplicationquit]}
+      - {id: unity-lateupdate-camera, name: LateUpdate for camera follow and post-animation logic, match: [lateupdate-camera-follow]}
+      - {id: unity-defaultexecutionorder, name: DefaultExecutionOrder attribute and Script Execution Order settings, match: [defaultexecutionorder]}
+      - {id: unity-onvalidate-reset, name: OnValidate and Reset editor-time callbacks, match: [onvalidate-reset]}
+      - {id: unity-application-pause-focus, name: OnApplicationPause and OnApplicationFocus on mobile, match: [onapplicationfocus]}
+      - {id: unity-update-manager, name: Custom update manager replacing per-object Update calls, match: [unity-update-manager]}
+  - id: unity-gameobjects-components
+    name: GameObjects components and transforms
+    source: Unity Manual/GameObjects; Scripting API GameObject/Component/Transform
+    match: [unity-gameobject, unity-components]
+    subtopics:
+      - {id: unity-getcomponent, name: GetComponent/TryGetComponent and RequireComponent, match: [trygetcomponent, requirecomponent]}
+      - {id: unity-transform-hierarchy, name: Transform hierarchy parenting and local vs world space, match: [unity-transform-hierarchy, local-vs-world-space]}
+      - {id: unity-tags-layers, name: Tags and layers and LayerMask filtering, match: [unity-layers, layermask]}
+      - {id: unity-instantiate-destroy, name: Instantiate and Destroy lifetime and InstantiateAsync, match: [unity-instantiate, instantiateasync]}
+      - {id: unity-serialization-rules, name: Unity serialization rules SerializeField and SerializeReference, match: [serializereference, unity-serialization]}
+      - {id: unity-find-objects, name: FindObjectsByType costs and alternatives, match: [findobjectsbytype]}
+      - {id: unity-sendmessage-alternatives, name: SendMessage vs interfaces and GetComponents of an interface, match: [sendmessage]}
+      - {id: unity-hideflags, name: HideFlags and editor-only objects, match: [hideflags-dontsave]}
+      - {id: unity-fake-null, name: Unity fake-null destroyed objects and null-conditional pitfalls, match: [unity-fake-null]}
+      - {id: unity-static-flags, name: Static editor flags for batching navigation and lighting, match: [static-editor-flags]}
+  - id: unity-prefabs
+    name: Prefabs
+    source: Unity Manual/Prefabs
+    match: [unity-prefabs, prefab]
+    subtopics:
+      - {id: unity-nested-prefabs, name: Nested prefabs, match: [nested-prefabs]}
+      - {id: unity-prefab-variants, name: Prefab variants, match: [prefab-variants]}
+      - {id: unity-prefab-overrides, name: Instance overrides apply and revert, match: [prefab-overrides]}
+      - {id: unity-prefabutility, name: Editing prefabs from script with PrefabUtility, match: [prefabutility]}
+      - {id: unity-prefab-mode, name: Prefab Mode in context and isolation, match: [prefab-mode-in-context]}
+      - {id: unity-prefab-unpack, name: Unpacking prefabs and connection loss, match: [unpack-prefab]}
+      - {id: unity-prefab-missing, name: Recovering missing prefabs and missing scripts, match: [missing-prefab]}
+      - {id: unity-prefab-spawning, name: Runtime spawning from prefab references, match: [prefab-spawning]}
+  - id: unity-scenes
+    name: Scenes and scene management
+    source: Unity Manual/Scenes; Scripting API SceneManager
+    match: [unity-scenes, scenemanager]
+    subtopics:
+      - {id: unity-async-scene-load, name: LoadSceneAsync with loading screens and allowSceneActivation, match: [loadsceneasync]}
+      - {id: unity-additive-scenes, name: Additive scene loading and multi-scene editing, match: [additive-scene-loading, multi-scene-editing]}
+      - {id: unity-dontdestroyonload, name: Persistent objects with DontDestroyOnLoad and bootstrap scenes, match: [dontdestroyonload, bootstrap-scene]}
+      - {id: unity-domain-reload, name: Enter Play Mode options and domain reload, match: [domain-reload, enter-play-mode-options]}
+      - {id: unity-scene-unload, name: UnloadSceneAsync and UnloadUnusedAssets, match: [unload-unused-assets]}
+      - {id: unity-active-scene, name: SetActiveScene lighting and instantiation target, match: [active-scene-lighting]}
+      - {id: unity-scene-reference, name: Referencing scenes safely by build index name or address, match: [scene-reference]}
+      - {id: unity-scene-templates, name: Scene templates, match: [scene-templates]}
+  - id: unity-scriptableobjects
+    name: ScriptableObjects
+    source: Unity Manual/ScriptableObject
+    match: [scriptableobject]
+    subtopics:
+      - {id: unity-so-data-containers, name: Data containers with CreateAssetMenu, match: [createassetmenu, so-data-container]}
+      - {id: unity-so-event-channels, name: Event channels, match: [event-channel]}
+      - {id: unity-so-runtime-sets, name: Runtime sets, match: [runtime-set]}
+      - {id: unity-so-runtime-state, name: Runtime state pitfalls and play-mode persistence, match: [so-runtime-state]}
+      - {id: unity-so-enums, name: ScriptableObjects as extensible enums, match: [so-enum]}
+      - {id: unity-so-variables, name: Shared variable assets and reference pattern, match: [so-variable]}
+      - {id: unity-so-strategy, name: Pluggable strategy ScriptableObjects, match: [so-strategy]}
+      - {id: unity-so-createinstance, name: CreateInstance and runtime cloning, match: [scriptableobject-createinstance]}
+  - id: unity-input-system
+    name: Input System package
+    source: Unity Manual/Input System package docs
+    match: [unity-input-system]
+    subtopics:
+      - {id: unity-input-actions-asset, name: Input Actions asset and generated C# class, match: [input-actions-asset]}
+      - {id: unity-player-input, name: PlayerInput component and local multiplayer with PlayerInputManager, match: [playerinput-component, playerinputmanager]}
+      - {id: unity-interactive-rebinding, name: Interactive rebinding and saving overrides, match: [unity-interactive-rebinding]}
+      - {id: unity-input-interactions, name: Interactions and processors (hold/tap/deadzone), match: [input-interactions, input-processors]}
+      - {id: unity-input-polling, name: Direct device polling with Keyboard.current and Gamepad.current, match: [keyboard-current]}
+      - {id: unity-control-schemes, name: Control schemes and automatic device switching, match: [control-schemes]}
+      - {id: unity-enhanced-touch, name: Touch input with EnhancedTouch and on-screen controls, match: [enhancedtouch]}
+      - {id: unity-input-ui-module, name: InputSystemUIInputModule for UI navigation, match: [inputsystemuiinputmodule]}
+      - {id: unity-input-debugger, name: Input Debugger and device troubleshooting, match: [input-debugger]}
+  - id: unity-physics
+    name: Unity physics (3D and 2D)
+    source: Unity Manual/Physics
+    match: [unity-physics]
+    subtopics:
+      - {id: unity-rigidbody, name: Rigidbody settings interpolation and collision detection modes, match: [unity-rigidbody]}
+      - {id: unity-collision-callbacks, name: Collision and trigger callbacks, match: [oncollisionenter, ontriggerenter]}
+      - {id: unity-raycasts-queries, name: Raycasts and overlap queries with NonAlloc buffers, match: [physics-raycast, raycastnonalloc]}
+      - {id: unity-collision-matrix, name: Layer collision matrix, match: [layer-collision-matrix]}
+      - {id: unity-joints, name: Joints (hinge/configurable), match: [unity-joints, configurablejoint]}
+      - {id: unity-physics-2d, name: 2D physics with Rigidbody2D and Collider2D, match: [rigidbody2d, unity-2d-physics]}
+      - {id: unity-charactercontroller, name: CharacterController Move slopes and step offset, match: [unity-charactercontroller]}
+      - {id: unity-physics-materials, name: Physics materials friction bounciness and combine modes, match: [physics-material]}
+      - {id: unity-raycastcommand, name: Batched queries with RaycastCommand in jobs, match: [raycastcommand]}
+      - {id: unity-physics-simulate, name: Physics simulation mode and manual Physics.Simulate, match: [physics-simulate]}
+      - {id: unity-mesh-collider, name: MeshCollider convex and cooking options, match: [mesh-collider]}
+  - id: unity-animation
+    name: Unity animation system (Mecanim)
+    source: Unity Manual/Animation
+    match: [unity-animation, mecanim]
+    subtopics:
+      - {id: unity-animator-controller, name: Animator Controller state machines and parameters, match: [animator-controller]}
+      - {id: unity-blend-trees, name: Blend trees, match: [blend-tree]}
+      - {id: unity-animation-events, name: Animation events and StateMachineBehaviour, match: [statemachinebehaviour, unity-animation-events]}
+      - {id: unity-root-motion, name: Root motion, match: [unity-root-motion]}
+      - {id: unity-timeline, name: Timeline and custom playables, match: [unity-timeline, playables]}
+      - {id: unity-animator-ik, name: Animation layers avatar masks and IK, match: [avatar-mask, animator-ik]}
+      - {id: unity-animator-override, name: AnimatorOverrideController clip swapping, match: [animator-override-controller]}
+      - {id: unity-animator-culling, name: Animator culling mode and animation performance, match: [animator-culling]}
+      - {id: unity-animation-rigging, name: Animation Rigging package constraints, match: [animation-rigging]}
+      - {id: unity-humanoid-retargeting, name: Humanoid avatars and retargeting, match: [humanoid-retargeting]}
+  - id: unity-ui
+    name: Unity UI (uGUI and UI Toolkit)
+    source: Unity Manual/User interface
+    match: [unity-ui, ugui]
+    subtopics:
+      - {id: unity-canvas-layout, name: Canvas render modes anchors and layout groups, match: [canvas-scaler, rect-transform]}
+      - {id: unity-ui-toolkit, name: UI Toolkit with UXML and USS, match: [ui-toolkit, uxml]}
+      - {id: unity-event-system, name: EventSystem and pointer handlers, match: [unity-event-system, ipointerclickhandler]}
+      - {id: unity-ui-performance, name: Canvas rebuild and batching performance, match: [canvas-rebuild]}
+      - {id: unity-textmeshpro, name: TextMeshPro text and font assets, match: [textmeshpro]}
+      - {id: unity-selectable-navigation, name: Gamepad navigation and explicit Selectable navigation, match: [selectable-navigation]}
+      - {id: unity-safe-area, name: Screen.safeArea for notches and cutouts, match: [safe-area]}
+      - {id: unity-scrollrect-pooling, name: Pooled virtualised ScrollRect lists, match: [scrollrect-pooling]}
+      - {id: unity-uitk-data-binding, name: UI Toolkit runtime data binding, match: [ui-toolkit-data-binding]}
+      - {id: unity-localization, name: Localization package string tables and smart strings, match: [unity-localization]}
+  - id: unity-graphics
+    name: Unity graphics and render pipelines
+    source: Unity Manual/Graphics; URP docs
+    match: [unity-urp, unity-render-pipeline]
+    subtopics:
+      - {id: unity-urp-setup, name: URP asset and renderer settings, match: [urp-asset]}
+      - {id: unity-shader-graph, name: Shader Graph, match: [shader-graph]}
+      - {id: unity-renderer-features, name: Scriptable renderer features and render graph, match: [scriptable-renderer-feature]}
+      - {id: unity-srp-batcher, name: SRP Batcher and GPU instancing draw-call reduction, match: [srp-batcher, gpu-instancing]}
+      - {id: unity-lightmapping, name: Baked lighting lightmaps and light probes, match: [lightmapping, light-probes]}
+      - {id: unity-urp-volume, name: Volume framework post-processing, match: [urp-volume]}
+      - {id: unity-urp-hlsl, name: Hand-written URP HLSL shaders, match: [urp-hlsl-shader]}
+      - {id: unity-shader-variants, name: Shader keywords and variant stripping, match: [shader-variants]}
+      - {id: unity-occlusion-culling, name: Baked occlusion culling, match: [unity-occlusion-culling]}
+      - {id: unity-lodgroup, name: LODGroup setup and cross-fade, match: [lodgroup]}
+  - id: unity-asset-management
+    name: Asset management and Addressables
+    source: Unity Manual/Asset management; Addressables package docs
+    match: [addressables]
+    subtopics:
+      - {id: unity-addressables-loading, name: Loading and releasing addressable assets, match: [addressables-release]}
+      - {id: unity-addressables-remote, name: Remote catalogs and content updates, match: [content-update]}
+      - {id: unity-assetbundles, name: AssetBundles directly, match: [asset-bundles]}
+      - {id: unity-asset-import-pipeline, name: Asset import settings and AssetPostprocessor, match: [assetpostprocessor, import-settings]}
+      - {id: unity-addressables-groups, name: Addressables group schemas and bundle packing, match: [addressables-groups]}
+      - {id: unity-addressables-labels, name: Labels and loading by label, match: [addressables-labels]}
+      - {id: unity-resources-folder, name: Resources folder trade-offs and migration, match: [resources-load]}
+      - {id: unity-addressables-analyze, name: Analyze rules and duplicate dependencies, match: [addressables-analyze]}
+  - id: unity-build
+    name: Building and scripting compilation
+    source: Unity Manual/Build; Scripting/Assembly definitions; IL2CPP
+    match: [unity-build, build-pipeline]
+    subtopics:
+      - {id: unity-assembly-definitions, name: Assembly definitions and compile times, match: [assembly-definition, asmdef]}
+      - {id: unity-il2cpp, name: IL2CPP vs Mono scripting backend, match: [il2cpp]}
+      - {id: unity-code-stripping, name: Managed code stripping and link.xml, match: [managed-code-stripping, link-xml]}
+      - {id: unity-batchmode-builds, name: Command-line batchmode builds and BuildPipeline.BuildPlayer, match: [batchmode, buildplayer]}
+      - {id: unity-define-symbols, name: Platform defines and scripting define symbols, match: [scripting-define-symbols, platform-defines]}
+      - {id: unity-build-profiles, name: Build Profiles in Unity 6, match: [unity-build-profiles]}
+      - {id: unity-build-report, name: Build size reduction with the build report, match: [build-report]}
+      - {id: unity-player-settings, name: Player settings per platform, match: [unity-player-settings]}
+      - {id: unity-build-callbacks, name: Build callbacks with IPreprocessBuildWithReport, match: [ipreprocessbuildwithreport]}
+  - id: unity-profiling
+    name: Profiling and optimisation in Unity
+    source: Unity Manual/Profiler; Memory Profiler package; Frame Debugger
+    match: [unity-profiler, profiler]
+    subtopics:
+      - {id: unity-cpu-profiler, name: CPU profiler and ProfilerMarker instrumentation, match: [profilermarker, cpu-profiler]}
+      - {id: unity-memory-profiler, name: Memory Profiler snapshots, match: [memory-profiler]}
+      - {id: unity-frame-debugger, name: Frame Debugger, match: [frame-debugger]}
+      - {id: unity-gc-alloc, name: Eliminating GC allocations and incremental GC, match: [gc-alloc, incremental-gc]}
+      - {id: unity-object-pool, name: ObjectPool<T> pooling, match: [unity-object-pool, object-pooling]}
+      - {id: unity-device-profiling, name: Profiling development builds on device, match: [development-build-profiling]}
+      - {id: unity-profile-analyzer, name: Profile Analyzer frame comparisons, match: [unity-profile-analyzer]}
+      - {id: unity-deep-profiling, name: Deep profiling and allocation call stacks, match: [deep-profiling]}
+      - {id: unity-rendering-stats, name: Rendering statistics and batch counts, match: [rendering-statistics]}
+  - id: unity-dots
+    name: DOTS - Entities Jobs and Burst
+    source: Unity Entities/Jobs/Burst docs
+    match: [dots, unity-dots]
+    subtopics:
+      - {id: unity-jobs, name: C# Job System and native containers, match: [ijobparallelfor, nativearray]}
+      - {id: unity-burst, name: Burst compiler, match: [burst]}
+      - {id: unity-ecs-baking, name: Entities baking with authoring components and bakers, match: [entities-baking, baker]}
+      - {id: unity-ecs-systems, name: ISystem and SystemAPI queries and IJobEntity, match: [isystem, ijobentity]}
+      - {id: unity-ecs-components, name: IComponentData dynamic buffers and shared components, match: [ecs-component-types, dynamicbuffer]}
+      - {id: unity-ecb, name: EntityCommandBuffer structural changes, match: [ecb-playback]}
+      - {id: unity-entities-graphics, name: Entities Graphics rendering, match: [entities-graphics]}
+      - {id: unity-mathematics, name: Unity.Mathematics types and Burst-friendly math, match: [unity-mathematics]}
+      - {id: unity-subscenes, name: Subscenes and entity scene streaming, match: [subscene]}
+  - id: unity-editor-scripting
+    name: Editor extensibility
+    source: Unity Manual/Extending the Editor
+    match: [unity-editor-scripting, editor-extension]
+    subtopics:
+      - {id: unity-custom-inspector, name: Custom inspectors, match: [custom-inspector, customeditor]}
+      - {id: unity-property-drawers, name: Property drawers and attributes, match: [property-drawer]}
+      - {id: unity-editor-window, name: Editor windows and menu items, match: [editorwindow, menuitem]}
+      - {id: unity-gizmos, name: Gizmos and handles, match: [ondrawgizmos, unity-handles]}
+      - {id: unity-serializedproperty, name: SerializedObject and SerializedProperty editing, match: [serializedobject-editing]}
+      - {id: unity-undo, name: Undo API in editor tools, match: [undo-recordobject]}
+      - {id: unity-assetdatabase, name: AssetDatabase scripting and batch asset edits, match: [assetdatabase]}
+      - {id: unity-uitk-inspectors, name: UI Toolkit inspectors with CreateInspectorGUI, match: [createinspectorgui]}
+      - {id: unity-initializeonload, name: InitializeOnLoad and editor lifecycle callbacks, match: [initializeonload]}
+  - id: unity-testing
+    name: Unity Test Framework
+    source: Unity Test Framework package docs
+    match: [unity-test-framework]
+    subtopics:
+      - {id: unity-editmode-tests, name: Edit Mode tests, match: [edit-mode-tests]}
+      - {id: unity-playmode-tests, name: Play Mode tests with UnityTest coroutines, match: [play-mode-tests, unitytest]}
+      - {id: unity-tests-cli, name: Running tests from the command line in CI, match: [unity-tests-cli]}
+      - {id: unity-test-asmdef, name: Test assemblies and testability seams, match: [test-assembly]}
+      - {id: unity-nsubstitute, name: Mocking with NSubstitute in Unity tests, match: [nsubstitute]}
+      - {id: unity-performance-tests, name: Performance Testing package measurements, match: [performance-testing-extension]}
+      - {id: unity-unitysetup, name: UnitySetUp UnityTearDown and test scene setup, match: [unitysetup]}
+      - {id: unity-code-coverage, name: Code Coverage package reports, match: [unity-code-coverage]}
+  - id: unity-netcode
+    name: Netcode for GameObjects
+    source: Unity Multiplayer docs/Netcode for GameObjects
+    match: [netcode-for-gameobjects, ngo]
+    subtopics:
+      - {id: ngo-network-object, name: NetworkManager and NetworkObject spawning, match: [networkobject, networkmanager]}
+      - {id: ngo-network-variable, name: NetworkVariable state sync, match: [networkvariable]}
+      - {id: ngo-rpcs, name: RPCs with the Rpc attribute, match: [ngo-rpc]}
+      - {id: ngo-ownership, name: Ownership and authority, match: [ngo-ownership]}
+      - {id: ngo-transport, name: Unity Transport and Relay, match: [unity-transport, unity-relay]}
+      - {id: ngo-network-transform, name: NetworkTransform and client-authoritative movement, match: [networktransform]}
+      - {id: ngo-scene-management, name: NetworkSceneManager scene loading, match: [network-scene-manager]}
+      - {id: ngo-connection-approval, name: Connection approval and player prefab selection, match: [connection-approval]}
+      - {id: ngo-multiplayer-play-mode, name: Multiplayer Play Mode and network simulator testing, match: [multiplayer-play-mode]}
+      - {id: ngo-custom-messages, name: Custom named messages, match: [custom-messages]}
+  # ===================== Unreal Engine (UE5 documentation)
+  - id: ue-cpp-gameplay-classes
+    name: Unreal C++ gameplay classes and reflection
+    source: UE docs/Programming with C++/Gameplay Classes; Unreal Object Handling
+    match: [uclass, uproperty, ufunction]
+    subtopics:
+      - {id: ue-uproperty-specifiers, name: UPROPERTY specifiers (EditAnywhere/BlueprintReadWrite/meta), match: [uproperty-specifiers]}
+      - {id: ue-ufunction-specifiers, name: UFUNCTION specifiers (BlueprintCallable/Pure/NativeEvent), match: [ufunction-specifiers, blueprintnativeevent]}
+      - {id: ue-ustruct-uenum, name: USTRUCT and UENUM, match: [ustruct, uenum]}
+      - {id: ue-constructor-defaults, name: Constructors CreateDefaultSubobject and CDO, match: [createdefaultsubobject, class-default-object]}
+      - {id: ue-delegates, name: Delegates (single/multicast/dynamic), match: [unreal-delegates, dynamic-multicast-delegate]}
+      - {id: ue-actor-lifecycle, name: Actor lifecycle BeginPlay EndPlay and PostInitializeComponents, match: [actor-lifecycle]}
+      - {id: ue-actor-components, name: UActorComponent vs USceneComponent and attachment, match: [uactorcomponent]}
+      - {id: ue-spawn-actor, name: SpawnActor and deferred spawning, match: [spawnactor]}
+      - {id: ue-timers, name: Timers with FTimerManager, match: [ftimermanager]}
+      - {id: ue-logging, name: UE_LOG categories and on-screen debug messages, match: [ue-log]}
+      - {id: ue-uinterface, name: UINTERFACE declaration and calling in C++, match: [uinterface-cpp]}
+  - id: ue-modules-build
+    name: Modules and the build system
+    source: UE docs/Programming with C++/Modules; Unreal Build Tool
+    match: [unreal-build-tool, ubt]
+    subtopics:
+      - {id: ue-build-cs, name: Module Build.cs dependencies, match: [build-cs]}
+      - {id: ue-target-cs, name: Target.cs and build configurations, match: [target-cs, build-configurations]}
+      - {id: ue-plugins, name: Writing a plugin, match: [unreal-plugin]}
+      - {id: ue-live-coding, name: Live Coding vs hot reload, match: [live-coding]}
+      - {id: ue-module-api, name: MODULE_API exports and unresolved externals, match: [module-api-export]}
+      - {id: ue-project-files, name: Generating project files and IDE setup, match: [generate-project-files]}
+      - {id: ue-iwyu, name: IWYU unity builds and compile times, match: [iwyu]}
+      - {id: ue-third-party, name: Integrating third-party libraries in a module, match: [ue-third-party-library]}
+      - {id: ue-loading-phase, name: Module loading phases, match: [module-loading-phase]}
+  - id: ue-blueprints
+    name: Blueprints visual scripting
+    source: UE docs/Blueprints Visual Scripting
+    match: [blueprints]
+    subtopics:
+      - {id: ue-blueprint-communication, name: Blueprint communication (casting/interfaces/dispatchers), match: [blueprint-communication, event-dispatcher]}
+      - {id: ue-blueprint-interfaces, name: Blueprint interfaces, match: [blueprint-interface]}
+      - {id: ue-blueprint-function-library, name: Blueprint function libraries in C++, match: [blueprint-function-library]}
+      - {id: ue-cpp-blueprint-split, name: C++ base class with Blueprint subclass workflow, match: [cpp-blueprint-workflow]}
+      - {id: ue-blueprint-debugging, name: Blueprint debugging and breakpoints, match: [blueprint-debugging]}
+      - {id: ue-blueprint-macros, name: Macros and collapsed graphs, match: [blueprint-macro]}
+      - {id: ue-blueprint-performance, name: Blueprint performance and moving hot paths to C++, match: [blueprint-performance]}
+      - {id: ue-construction-script, name: Construction script, match: [construction-script]}
+      - {id: ue-latent-actions, name: Latent actions and async Blueprint nodes in C++, match: [latent-action]}
+      - {id: ue-child-actor, name: Child Actor components and their pitfalls, match: [child-actor-component]}
+  - id: ue-gameplay-framework
+    name: Gameplay Framework
+    source: UE docs/Gameplay Framework
+    match: [gameplay-framework]
+    subtopics:
+      - {id: ue-gamemode-gamestate, name: GameMode and GameState rules and match flow, match: [gamemode, gamestate]}
+      - {id: ue-playercontroller-pawn, name: PlayerController possession of Pawns, match: [playercontroller, possession]}
+      - {id: ue-character-movement, name: Character and CharacterMovementComponent, match: [charactermovementcomponent]}
+      - {id: ue-playerstate, name: PlayerState persistent per-player data, match: [playerstate]}
+      - {id: ue-subsystems, name: Programming subsystems (GameInstance/World/LocalPlayer), match: [unreal-subsystems, gameinstancesubsystem]}
+      - {id: ue-gameinstance, name: GameInstance lifetime across levels, match: [gameinstance]}
+      - {id: ue-ahud, name: AHUD and canvas debug drawing, match: [ahud]}
+      - {id: ue-camera-manager, name: PlayerCameraManager and camera modifiers, match: [playercameramanager]}
+      - {id: ue-seamless-travel, name: ServerTravel and seamless travel, match: [seamless-travel]}
+      - {id: ue-game-features, name: Game Feature plugins and modular gameplay, match: [game-feature-plugin]}
+  - id: ue-memory
+    name: UObject memory and references
+    source: UE docs/Unreal Object Handling; Garbage Collection; Smart Pointer Library
+    match: [uobject, unreal-garbage-collection]
+    subtopics:
+      - {id: ue-object-pointers, name: TObjectPtr and UPROPERTY GC references, match: [tobjectptr]}
+      - {id: ue-weak-pointers, name: TWeakObjectPtr and IsValid, match: [tweakobjectptr]}
+      - {id: ue-soft-references, name: Soft object references and async loading, match: [tsoftobjectptr, streamable-manager]}
+      - {id: ue-smart-pointers, name: TSharedPtr/TUniquePtr for non-UObjects, match: [tsharedptr]}
+      - {id: ue-fgcobject, name: FGCObject and AddToRoot for non-UPROPERTY references, match: [fgcobject-addreferencedobjects]}
+      - {id: ue-newobject, name: NewObject outers and object flags, match: [newobject]}
+      - {id: ue-gc-clustering, name: GC clustering and incremental purge settings, match: [gc-clustering]}
+      - {id: ue-markasgarbage, name: Destroy MarkAsGarbage and stale pointers, match: [markasgarbage]}
+  - id: ue-gas
+    name: Gameplay Ability System
+    source: UE docs/Gameplay Ability System
+    match: [gameplay-ability-system, gas]
+    subtopics:
+      - {id: gas-asc-setup, name: AbilitySystemComponent setup and owner/avatar, match: [ability-system-component]}
+      - {id: gas-attribute-sets, name: Attribute sets, match: [attribute-set]}
+      - {id: gas-gameplay-effects, name: Gameplay effects and modifiers, match: [gameplay-effect]}
+      - {id: gas-ability-tasks, name: Gameplay abilities and ability tasks, match: [abilitytask]}
+      - {id: gas-gameplay-cues, name: Gameplay cues, match: [gameplay-cue]}
+      - {id: gas-prediction, name: Ability prediction and prediction keys, match: [predicted-ability]}
+      - {id: gas-cooldowns-costs, name: Ability costs cooldowns and activation policies, match: [ability-cooldown]}
+      - {id: gas-exec-calc, name: Execution calculations and modifier magnitude calculations, match: [execution-calculation]}
+      - {id: gas-target-data, name: Target data and target actors, match: [target-data]}
+      - {id: gas-replication-mode, name: ASC replication modes and attribute OnRep, match: [gas-replication-mode]}
+  - id: ue-gameplay-tags
+    name: Gameplay Tags
+    source: UE docs/Gameplay Tags
+    match: [gameplay-tag, gameplay-tags]
+    subtopics:
+      - {id: ue-tags-native, name: Native gameplay tags in C++, match: [native-gameplay-tags]}
+      - {id: ue-tag-containers, name: Tag containers and queries, match: [gameplay-tag-container, gameplay-tag-query]}
+      - {id: ue-tag-ini, name: Tag tables and ini management, match: [gameplay-tag-table]}
+      - {id: ue-tag-redirects, name: Renaming tags with redirects, match: [gameplay-tag-redirect]}
+      - {id: ue-tag-matching, name: MatchesTag HasAny HasAll and hierarchy semantics, match: [matchestag]}
+      - {id: ue-gameplay-messages, name: Tag-routed events with GameplayMessageSubsystem, match: [gameplay-message-subsystem]}
+      - {id: ue-tag-fast-replication, name: Fast tag replication and net index, match: [fast-replication-tags]}
+      - {id: ue-tag-categories, name: Tag categories and editor filtering, match: [gameplay-tag-categories]}
+  - id: ue-enhanced-input
+    name: Enhanced Input
+    source: UE docs/Enhanced Input
+    match: [enhanced-input, unreal-enhanced-input]
+    subtopics:
+      - {id: ue-input-actions, name: Input Actions and Mapping Contexts, match: [input-mapping-context]}
+      - {id: ue-input-triggers-modifiers, name: Triggers and modifiers, match: [input-triggers, input-modifiers]}
+      - {id: ue-input-binding-cpp, name: Binding actions in C++ with EnhancedInputComponent, match: [enhancedinputcomponent]}
+      - {id: ue-input-remapping, name: Player mappable key settings and remapping, match: [player-mappable-keys]}
+      - {id: ue-input-debug, name: showdebug enhancedinput diagnosis, match: [showdebug-enhancedinput]}
+      - {id: ue-chorded-actions, name: Chorded actions and combo triggers, match: [chorded-action]}
+      - {id: ue-input-platform, name: Platform-specific input settings and mapping context swaps, match: [input-platform-settings]}
+      - {id: ue-input-mode, name: Input modes game vs UI and mouse cursor, match: [setinputmode]}
+  - id: ue-networking
+    name: Networking and multiplayer
+    source: UE docs/Networking and Multiplayer
+    match: [unreal-replication]
+    subtopics:
+      - {id: ue-property-replication, name: Property replication and RepNotify, match: [repnotify, variable-replication]}
+      - {id: ue-rpcs, name: Server/Client/NetMulticast RPCs, match: [server-rpc, multicast]}
+      - {id: ue-relevancy, name: Relevancy dormancy and priority, match: [network-relevancy, net-dormancy]}
+      - {id: ue-net-roles, name: Network roles and authority checks, match: [net-role, has-authority]}
+      - {id: ue-replication-graph-iris, name: Replication Graph and Iris, match: [replication-graph, iris-replication]}
+      - {id: ue-multiplayer-testing, name: Testing multiplayer in PIE and dedicated server builds, match: [pie-multiplayer, unreal-dedicated-server]}
+      - {id: ue-fast-array, name: FFastArraySerializer delta arrays, match: [fast-array-serializer]}
+      - {id: ue-netserialize, name: Custom NetSerialize and quantization, match: [netserialize]}
+      - {id: ue-push-model, name: Push model replication, match: [push-model]}
+      - {id: ue-replicated-subobjects, name: Replicated subobjects list, match: [replicated-subobjects]}
+      - {id: ue-network-insights, name: Network Insights and net logging, match: [network-insights]}
+  - id: ue-animation
+    name: Unreal animation programming
+    source: UE docs/Animating Characters and Objects
+    match: [unreal-animation]
+    subtopics:
+      - {id: ue-anim-blueprint, name: Animation Blueprints and thread-safe update, match: [animation-blueprint, anim-instance]}
+      - {id: ue-montages, name: Animation montages and notifies, match: [anim-montage, anim-notify]}
+      - {id: ue-control-rig-ik, name: Control Rig and IK, match: [control-rig]}
+      - {id: ue-linked-anim-layers, name: Linked anim layers, match: [linked-anim-layers]}
+      - {id: ue-sync-groups, name: Sync groups markers and animation curves, match: [sync-group]}
+      - {id: ue-motion-matching, name: Motion matching with Pose Search, match: [motion-matching]}
+      - {id: ue-aim-offsets, name: Blend spaces and aim offsets, match: [aim-offset]}
+      - {id: ue-root-motion, name: Root motion and networked root motion, match: [ue-root-motion]}
+      - {id: ue-ik-retargeter, name: IK Rig and IK Retargeter, match: [ik-retargeter]}
+  - id: ue-umg
+    name: UMG UI programming
+    source: UE docs/UMG UI Designer
+    match: [umg]
+    subtopics:
+      - {id: ue-umg-cpp-widgets, name: C++ UUserWidget with BindWidget, match: [bindwidget, uuserwidget]}
+      - {id: ue-common-ui, name: CommonUI input routing and activatable widgets, match: [common-ui]}
+      - {id: ue-umg-performance, name: UMG performance (invalidation and retainer boxes), match: [invalidation-box]}
+      - {id: ue-mvvm, name: UMG Viewmodel (MVVM), match: [umg-mvvm]}
+      - {id: ue-widget-animation, name: Widget animations driven from C++, match: [widget-animation]}
+      - {id: ue-listview, name: ListView and TileView with entry widgets, match: [listview]}
+      - {id: ue-dpi-scaling, name: DPI scaling rules, match: [dpi-scaling]}
+      - {id: ue-umg-navigation, name: Focus and gamepad navigation in UMG, match: [umg-navigation]}
+      - {id: ue-slate, name: Slate widgets in C++, match: [slate]}
+  - id: ue-assets-world
+    name: Asset management and world building
+    source: UE docs/Asset Management; World Partition
+    match: [unreal-asset-manager]
+    subtopics:
+      - {id: ue-primary-assets, name: Primary data assets and the Asset Manager, match: [primary-data-asset, primary-asset-id]}
+      - {id: ue-world-partition, name: World Partition and data layers, match: [world-partition]}
+      - {id: ue-level-streaming, name: Level streaming, match: [level-streaming]}
+      - {id: ue-data-tables, name: Data tables and curve tables, match: [data-table]}
+      - {id: ue-asset-registry, name: Asset Registry queries, match: [asset-registry]}
+      - {id: ue-redirectors, name: Redirectors and fixing them up, match: [redirectors]}
+      - {id: ue-hlod, name: HLOD for World Partition, match: [world-partition-hlod]}
+      - {id: ue-ofpa, name: One File Per Actor and source control, match: [ofpa]}
+      - {id: ue-pcg, name: PCG framework graphs, match: [pcg-framework]}
+  - id: ue-ai
+    name: Unreal AI framework
+    source: UE docs/Artificial Intelligence
+    match: [unreal-ai]
+    subtopics:
+      - {id: ue-behavior-tree, name: Behavior Trees and blackboards with custom tasks, match: [bt-task-node, unreal-bt-task]}
+      - {id: ue-eqs, name: Environment Query System, match: [eqs, environment-query-system]}
+      - {id: ue-statetree, name: StateTree, match: [statetree]}
+      - {id: ue-ai-perception, name: AI Perception, match: [unreal-ai-perception]}
+      - {id: ue-smart-objects, name: Smart Objects, match: [smart-objects]}
+      - {id: ue-recast-navmesh, name: Navigation System and RecastNavMesh settings, match: [recastnavmesh]}
+      - {id: ue-aicontroller-moveto, name: AIController MoveTo and path following, match: [ai-moveto]}
+      - {id: ue-bt-observer-aborts, name: BT decorators services and observer aborts, match: [bt-observer-aborts]}
+      - {id: ue-mass-entity, name: Mass Entity crowds, match: [mass-entity]}
+      - {id: ue-gameplay-debugger, name: Gameplay Debugger for AI, match: [gameplay-debugger]}
+  - id: ue-performance
+    name: Unreal profiling and optimisation
+    source: UE docs/Testing and Optimizing/Unreal Insights; Stat commands
+    match: [unreal-insights]
+    subtopics:
+      - {id: ue-stat-commands, name: stat commands (unit/game/gpu) and the frame budget, match: [stat-unit, stat-commands]}
+      - {id: ue-insights-trace, name: Unreal Insights traces and custom CPU scopes, match: [trace-cpuprofiler, insights-trace]}
+      - {id: ue-tick-optimisation, name: Tick optimisation (intervals/disable/significance), match: [tick-optimization, significance-manager]}
+      - {id: ue-memory-report, name: Memory reports and LLM, match: [memreport, low-level-memory-tracker]}
+      - {id: ue-profilegpu, name: ProfileGPU and GPU Visualizer, match: [gpu-visualizer]}
+      - {id: ue-csv-profiler, name: CSV profiler automated captures, match: [csvprofile]}
+      - {id: ue-device-profiles, name: Scalability settings and device profiles, match: [device-profiles]}
+      - {id: ue-pso-cache, name: PSO caching and shader hitch reduction, match: [pso-cache]}
+  - id: ue-packaging-testing
+    name: Packaging and automation testing
+    source: UE docs/Packaging Projects; Automation Test Framework
+    match: [unreal-packaging]
+    subtopics:
+      - {id: ue-buildcookrun, name: BuildCookRun via RunUAT, match: [buildcookrun, runuat]}
+      - {id: ue-cooking-pak, name: Cooking and pak/iostore chunking, match: [pak-files, iostore]}
+      - {id: ue-automation-tests, name: Automation tests (spec and functional tests), match: [unreal-automation-test]}
+      - {id: ue-gauntlet, name: Gauntlet and headless test runs, match: [gauntlet]}
+      - {id: ue-chunk-ids, name: Chunk IDs and patch releases, match: [chunk-id]}
+      - {id: ue-buildgraph, name: BuildGraph scripts for CI, match: [buildgraph]}
+      - {id: ue-ddc, name: Shared Derived Data Cache, match: [derived-data-cache]}
+      - {id: ue-turnkey, name: Turnkey and platform SDK setup, match: [turnkey]}
+      - {id: ue-crash-reporter, name: Crash Report Client and shipping debug symbols, match: [crash-report-client]}
+  # ===================== Godot (Godot 4 docs)
+  - id: godot-nodes-scenes
+    name: Nodes scenes and instancing
+    source: Godot docs/Getting started/Step by step; Scene organization
+    match: [godot-scenes, packedscene]
+    subtopics:
+      - {id: godot-scene-instancing, name: Instancing scenes at runtime, match: [scene-instancing, godot-instancing]}
+      - {id: godot-scene-tree, name: SceneTree lifecycle (_ready/_enter_tree/_process), match: [scenetree, _enter_tree]}
+      - {id: godot-node-groups, name: Groups and node paths/unique names, match: [godot-groups, unique-name]}
+      - {id: godot-scene-change, name: Changing scenes and loading screens, match: [change-scene, resourceloader-threaded]}
+      - {id: godot-queue-free, name: queue_free vs free and orphan nodes, match: [queue_free]}
+      - {id: godot-inherited-scenes, name: Inherited scenes and editable children, match: [inherited-scenes]}
+      - {id: godot-process-mode, name: process_mode and pausing the tree, match: [process-mode]}
+      - {id: godot-node-owner, name: Node owner and reparenting for saved scenes, match: [node-owner]}
+  - id: godot-signals
+    name: Signals
+    source: Godot docs/Using signals
+    match: [signals]
+    subtopics:
+      - {id: godot-custom-signals, name: Custom signals with typed arguments, match: [custom-signals]}
+      - {id: godot-signal-connect, name: Connecting in code with Callable and flags, match: [signal-connect, callable]}
+      - {id: godot-await-signal, name: Awaiting signals with await, match: [await-signal]}
+      - {id: godot-signal-bus, name: Global event bus autoload, match: [signal-bus]}
+      - {id: godot-signal-disconnect, name: Disconnecting signals and freed-object lifetime, match: [signal-disconnect]}
+      - {id: godot-callable-bind, name: Binding and unbinding Callable arguments, match: [callable-bind]}
+      - {id: godot-editor-connections, name: Editor signal connections vs code connections, match: [editor-signal-connections]}
+      - {id: godot-connect-flags, name: CONNECT_DEFERRED and CONNECT_ONE_SHOT flags, match: [connect-deferred]}
+  - id: godot-gdscript
+    name: GDScript
+    source: Godot docs/Scripting/GDScript reference; Static typing; Exported properties
+    match: [gdscript]
+    subtopics:
+      - {id: godot-static-typing, name: Static typing and warnings, match: [gdscript-static-typing]}
+      - {id: godot-exports, name: Exported properties and annotations, match: [export-annotations]}
+      - {id: godot-tool-scripts, name: Tool scripts running in the editor, match: [tool-script]}
+      - {id: godot-class-name-inner, name: class_name and inner classes, match: [class_name]}
+      - {id: godot-gdscript-performance, name: GDScript performance idioms, match: [gdscript-performance]}
+      - {id: godot-setget, name: Properties with setters and getters, match: [gdscript-setget]}
+      - {id: godot-lambdas, name: Lambdas and first-class functions, match: [gdscript-lambda]}
+      - {id: godot-typed-collections, name: Typed arrays and typed dictionaries, match: [typed-array]}
+      - {id: godot-match, name: Enums and match statements, match: [gdscript-match]}
+      - {id: godot-script-debugger, name: Script debugger breakpoints and print_debug, match: [gdscript-debugger]}
+  - id: godot-csharp
+    name: C# in Godot
+    source: Godot docs/Scripting/C#/.NET
+    match: [godot-csharp]
+    subtopics:
+      - {id: godot-csharp-setup, name: .NET build setup and project files, match: [godot-dotnet]}
+      - {id: godot-csharp-signals, name: C# signals and exports, match: [csharp-signals]}
+      - {id: godot-cross-language, name: Cross-language scripting GDScript to C#, match: [cross-language-scripting]}
+      - {id: godot-csharp-differences, name: C# API differences and marshalling costs, match: [variant-marshalling]}
+      - {id: godot-nuget, name: NuGet packages and exporting C# projects, match: [godot-nuget]}
+      - {id: godot-tosignal, name: async await with ToSignal, match: [tosignal]}
+      - {id: godot-collections, name: Godot collections vs .NET collections, match: [godot-collections-array]}
+      - {id: godot-csharp-gc, name: GC pressure and allocations in Godot C#, match: [godot-csharp-gc]}
+  - id: godot-autoloads
+    name: Autoloads and singletons
+    source: Godot docs/Singletons (Autoload)
+    match: [autoload]
+    subtopics:
+      - {id: godot-autoload-setup, name: Registering autoloads and order, match: [autoload-order]}
+      - {id: godot-global-state, name: Global game state management, match: [godot-global-state]}
+      - {id: godot-autoload-alternatives, name: Alternatives to autoload (static vars and resources), match: [static-variables]}
+      - {id: godot-autoload-scenes, name: Scene-based autoloads, match: [autoload-scene]}
+      - {id: godot-autoload-access, name: Accessing autoloads from GDScript and C#, match: [autoload-access]}
+      - {id: godot-gdunit, name: Unit testing autoload-dependent code with GUT and gdUnit4, match: [gdunit4]}
+      - {id: godot-autoload-ready, name: Autoload ready order relative to the main scene, match: [autoload-ready]}
+      - {id: godot-dependency-injection, name: Dependency injection alternatives to autoloads, match: [godot-dependency-injection]}
+  - id: godot-physics
+    name: Godot physics
+    source: Godot docs/Physics
+    match: [godot-physics]
+    subtopics:
+      - {id: godot-characterbody, name: CharacterBody move_and_slide, match: [move_and_slide, characterbody3d]}
+      - {id: godot-rigidbody, name: RigidBody and _integrate_forces, match: [_integrate_forces, godot-rigidbody]}
+      - {id: godot-area, name: Area detection and overlap, match: [area2d, area3d]}
+      - {id: godot-raycast, name: RayCast nodes and direct space state queries, match: [physicsdirectspacestate, raycast3d]}
+      - {id: godot-collision-layers, name: Collision layers and masks, match: [collision-layers]}
+      - {id: godot-jolt, name: Jolt physics in Godot, match: [jolt-physics]}
+      - {id: godot-physics-interpolation, name: Physics interpolation, match: [physics-interpolation]}
+      - {id: godot-animatablebody, name: StaticBody and AnimatableBody moving platforms, match: [animatablebody]}
+      - {id: godot-shapecast, name: ShapeCast nodes, match: [shapecast3d]}
+      - {id: godot-physics-material, name: PhysicsMaterial friction and bounce, match: [godot-physics-material]}
+      - {id: godot-joints, name: Joints in Godot, match: [godot-joints]}
+      - {id: godot-ragdoll, name: PhysicalBone3D ragdolls, match: [physicalbone3d]}
+  - id: godot-2d
+    name: 2D in Godot
+    source: Godot docs/2D
+    match: [godot-2d]
+    subtopics:
+      - {id: godot-tilemaps, name: TileMapLayer and TileSet (terrains/physics), match: [tilemaplayer, tileset]}
+      - {id: godot-2d-animation, name: AnimatedSprite2D and sprite sheets, match: [animatedsprite2d]}
+      - {id: godot-2d-camera, name: Camera2D limits smoothing and parallax, match: [camera2d, parallax2d]}
+      - {id: godot-2d-particles, name: GPUParticles2D/CPUParticles2D, match: [gpuparticles2d]}
+      - {id: godot-2d-lights, name: 2D lights and shadows, match: [pointlight2d]}
+      - {id: godot-skeleton2d, name: Skeleton2D and cutout animation, match: [skeleton2d]}
+      - {id: godot-pixel-art, name: Pixel-perfect rendering settings, match: [pixel-perfect]}
+      - {id: godot-ysort, name: Y-sort and CanvasLayer draw ordering, match: [y-sort]}
+  - id: godot-animation
+    name: Godot animation
+    source: Godot docs/Animation
+    match: [godot-animation]
+    subtopics:
+      - {id: godot-animationplayer, name: AnimationPlayer tracks and call-method tracks, match: [animationplayer]}
+      - {id: godot-animationtree, name: AnimationTree state machines and blend spaces, match: [animationtree]}
+      - {id: godot-tweens, name: Tweens, match: [godot-tween]}
+      - {id: godot-root-motion, name: Root motion in Godot, match: [godot-root-motion]}
+      - {id: godot-animationlibrary, name: AnimationLibrary and imported animations, match: [animationlibrary]}
+      - {id: godot-oneshot, name: AnimationNodeBlendTree and OneShot nodes, match: [animationnodeoneshot]}
+      - {id: godot-skeleton-modifiers, name: SkeletonModifier3D and IK, match: [skeletonmodifier3d]}
+      - {id: godot-retargeting, name: Retargeting with BoneMap, match: [bonemap]}
+  - id: godot-ui
+    name: Godot UI
+    source: Godot docs/User interface (UI)
+    match: [godot-ui]
+    subtopics:
+      - {id: godot-containers, name: Containers anchors and size flags, match: [godot-containers, size-flags]}
+      - {id: godot-themes, name: Themes and theme overrides, match: [godot-theme]}
+      - {id: godot-ui-focus, name: Keyboard/gamepad focus navigation, match: [focus-navigation]}
+      - {id: godot-multiple-resolutions, name: Multiple resolutions and stretch modes, match: [stretch-mode]}
+      - {id: godot-richtextlabel, name: RichTextLabel BBCode and effects, match: [richtextlabel]}
+      - {id: godot-localization, name: Localization with TranslationServer and CSV/PO files, match: [translationserver]}
+      - {id: godot-custom-controls, name: Custom controls with _draw and _gui_input, match: [custom-control-draw]}
+      - {id: godot-mouse-filter, name: mouse_filter and input pass-through, match: [mouse-filter]}
+  - id: godot-input
+    name: Godot input handling
+    source: Godot docs/Inputs
+    match: [godot-input]
+    subtopics:
+      - {id: godot-inputmap, name: InputMap actions and runtime remapping, match: [inputmap]}
+      - {id: godot-input-events, name: _input vs _unhandled_input and event propagation, match: [_unhandled_input, inputevent]}
+      - {id: godot-gamepad, name: Gamepad/joypad input and deadzones, match: [joypad]}
+      - {id: godot-mouse-capture, name: Mouse capture and mouse look, match: [mouse-capture]}
+      - {id: godot-touch, name: Touch input and gestures, match: [inputeventscreentouch]}
+      - {id: godot-input-get-vector, name: Polling with Input.get_vector and action strength, match: [get-vector]}
+      - {id: godot-parse-input-event, name: Simulating input with parse_input_event, match: [parse_input_event]}
+      - {id: godot-custom-cursor, name: Custom mouse cursors, match: [custom-cursor]}
+  - id: godot-save-io
+    name: File I/O and saving games
+    source: Godot docs/Saving games; File system; Runtime file loading
+    match: [godot-save-game]
+    subtopics:
+      - {id: godot-fileaccess-json, name: FileAccess with JSON save data, match: [fileaccess]}
+      - {id: godot-configfile, name: ConfigFile settings, match: [configfile]}
+      - {id: godot-resource-saving, name: Saving with ResourceSaver and its risks, match: [resourcesaver]}
+      - {id: godot-user-paths, name: res vs user paths and file system, match: [user-path]}
+      - {id: godot-encrypted-files, name: Encrypted save files, match: [open_encrypted]}
+      - {id: godot-diraccess, name: DirAccess listing and save slots, match: [save-slots]}
+      - {id: godot-store-var, name: Binary serialization with store_var and var_to_bytes, match: [store_var]}
+      - {id: godot-runtime-loading, name: Runtime loading of images audio and glTF, match: [runtime-file-loading]}
+  - id: godot-export
+    name: Exporting projects
+    source: Godot docs/Export
+    match: [godot-export, export-templates]
+    subtopics:
+      - {id: godot-export-presets, name: Export presets and command-line export, match: [export-presets, headless-export]}
+      - {id: godot-pck-files, name: PCK files DLC and patching, match: [pck-files]}
+      - {id: godot-feature-tags, name: Feature tags and per-platform overrides, match: [feature-tags]}
+      - {id: godot-web-export, name: Web export, match: [godot-web-export]}
+      - {id: godot-android-export, name: Android export with Gradle builds and keystores, match: [godot-android-export]}
+      - {id: godot-ios-export, name: iOS and macOS export signing and notarization, match: [godot-ios-export]}
+      - {id: godot-pck-encryption, name: PCK encryption keys, match: [pck-encryption]}
+      - {id: godot-custom-templates, name: Custom export templates for size reduction, match: [custom-export-templates]}
+  - id: godot-performance
+    name: Godot performance and profiling
+    source: Godot docs/Performance; Debug tools
+    match: [godot-performance]
+    subtopics:
+      - {id: godot-profiler, name: Debugger profiler and monitors, match: [godot-profiler]}
+      - {id: godot-servers, name: Using servers (RenderingServer/PhysicsServer) directly, match: [renderingserver]}
+      - {id: godot-multimesh, name: MultiMesh instancing, match: [multimesh]}
+      - {id: godot-threads, name: Threads and WorkerThreadPool, match: [workerthreadpool]}
+      - {id: godot-visibility-range, name: Occlusion culling and visibility ranges, match: [visibility-range]}
+      - {id: godot-object-pool, name: Node pooling vs instancing, match: [godot-object-pool]}
+      - {id: godot-draw-calls, name: GPU optimisation and draw call reduction, match: [godot-draw-calls]}
+      - {id: godot-custom-monitors, name: Custom Performance monitors, match: [custom-monitor]}
+  - id: godot-shaders
+    name: Godot shaders
+    source: Godot docs/Shaders
+    match: [godot-shaders]
+    subtopics:
+      - {id: godot-canvas-item-shaders, name: canvas_item shaders, match: [canvas-item-shader]}
+      - {id: godot-spatial-shaders, name: spatial shaders, match: [spatial-shader]}
+      - {id: godot-shader-uniforms, name: Uniforms and setting shader parameters, match: [shader-parameters]}
+      - {id: godot-visual-shaders, name: Visual shaders, match: [visual-shader]}
+      - {id: godot-screen-texture, name: Screen-reading shaders with hint_screen_texture, match: [hint_screen_texture]}
+      - {id: godot-global-uniforms, name: Global uniforms and shader includes, match: [global-shader-uniforms]}
+      - {id: godot-particle-shaders, name: Particle shaders, match: [particle-shader]}
+      - {id: godot-compositor, name: CompositorEffect and compute shaders, match: [compositoreffect]}
+      - {id: godot-sky-shaders, name: Sky shaders, match: [sky-shader]}
+  - id: godot-extending
+    name: Extending Godot
+    source: Godot docs/Editor plugins; GDExtension
+    match: [gdextension]
+    subtopics:
+      - {id: godot-editor-plugins, name: EditorPlugin and custom docks, match: [editorplugin]}
+      - {id: godot-inspector-plugins, name: Inspector plugins, match: [editorinspectorplugin]}
+      - {id: godot-gdextension-cpp, name: GDExtension with godot-cpp, match: [godot-cpp]}
+      - {id: godot-custom-resources, name: Custom resource classes, match: [custom-resource]}
+      - {id: godot-rust, name: GDExtension in Rust with godot-rust, match: [godot-rust]}
+      - {id: godot-gizmo-plugins, name: 3D gizmo plugins, match: [editornode3dgizmoplugin]}
+      - {id: godot-import-plugins, name: Import plugins, match: [editorimportplugin]}
+      - {id: godot-modules, name: C++ engine modules, match: [godot-modules]}
+  - id: godot-multiplayer
+    name: Godot high-level multiplayer
+    source: Godot docs/High-level multiplayer
+    match: [multiplayerapi]
+    subtopics:
+      - {id: godot-rpc, name: rpc annotations and authority, match: [godot-rpc]}
+      - {id: godot-synchronizer, name: MultiplayerSynchronizer, match: [multiplayersynchronizer]}
+      - {id: godot-spawner, name: MultiplayerSpawner, match: [multiplayerspawner]}
+      - {id: godot-enet-webrtc, name: ENet and WebRTC peers, match: [enet, webrtc]}
+      - {id: godot-multiplayer-authority, name: Multiplayer authority and peer ids, match: [multiplayer-authority]}
+      - {id: godot-replication-visibility, name: Synchronizer visibility filters, match: [replication-visibility]}
+      - {id: godot-dedicated-server, name: Dedicated server exports, match: [godot-dedicated-server]}
+      - {id: godot-low-level-net, name: PacketPeerUDP StreamPeerTCP and WebSocketPeer, match: [packetpeerudp]}
+  - id: godot-navigation
+    name: Godot navigation
+    source: Godot docs/Navigation
+    match: [godot-navigation]
+    subtopics:
+      - {id: godot-navagent, name: NavigationAgent path following, match: [navigationagent]}
+      - {id: godot-navregion-bake, name: NavigationRegion baking, match: [navigationregion]}
+      - {id: godot-nav-avoidance, name: Avoidance, match: [godot-avoidance]}
+      - {id: godot-navlinks, name: Navigation links, match: [navigationlink]}
+      - {id: godot-navserver, name: NavigationServer direct API, match: [navigationserver]}
+      - {id: godot-runtime-navmesh, name: Runtime navmesh baking from source geometry, match: [navigation-mesh-source-geometry]}
+      - {id: godot-nav-layers, name: Navigation layers and agent sizes, match: [navigation-layers]}
+      - {id: godot-astargrid2d, name: AStarGrid2D for grid games, match: [astargrid2d]}
+  # ===================== Gameplay programming (craft)
+  - id: gp-character-control
+    name: Character control and game feel
+    source: Swink Game Feel; Nystrom/State
+    match: [character-controller, game-feel]
+    subtopics:
+      - {id: gp-platformer-jump, name: Platformer jump (coyote time/buffering/variable height), match: [coyote-time, jump-buffering]}
+      - {id: gp-accel-friction, name: Acceleration and friction curves, match: [acceleration-curves]}
+      - {id: gp-top-down-movement, name: Top-down and twin-stick movement, match: [twin-stick, top-down-movement]}
+      - {id: gp-dash-wall-jump, name: Dash/wall-jump/ledge-grab moves, match: [wall-jump, ledge-grab]}
+      - {id: gp-juice, name: Juice (hit-stop/screen shake/squash and stretch), match: [hit-stop, screen-shake]}
+      - {id: gp-slopes-stairs, name: Slopes stairs and step offset, match: [stairs-handling]}
+      - {id: gp-moving-platforms, name: Moving platforms, match: [moving-platforms]}
+      - {id: gp-ground-check, name: Grounded checks and ground snapping, match: [ground-check]}
+      - {id: gp-ladders, name: Ladder and climbing movement, match: [ladder-climbing]}
+  - id: gp-state-machines
+    name: Gameplay state machines
+    source: Nystrom GPP/State
+    match: [finite-state-machine, state-machine]
+    subtopics:
+      - {id: gp-fsm-state-objects, name: State objects and enter/exit, match: [state-pattern]}
+      - {id: gp-hierarchical-fsm, name: Hierarchical state machines, match: [hierarchical-state-machine]}
+      - {id: gp-pushdown-automata, name: Pushdown automata for menus and states, match: [pushdown-automaton]}
+      - {id: gp-game-flow-states, name: Game flow states (boot/menu/play/pause), match: [game-flow-states, pause-menu]}
+      - {id: gp-enum-fsm, name: Enum switch state machines and when they break, match: [enum-state-machine]}
+      - {id: gp-concurrent-fsm, name: Concurrent orthogonal state machines, match: [concurrent-state-machines]}
+      - {id: gp-transition-tables, name: Transition tables and guards, match: [transition-table]}
+      - {id: gp-state-history, name: Debugging state machines with history logging, match: [state-history]}
+  - id: gp-input
+    name: Gameplay input
+    source: Gregory GEA ch9 Human interface devices
+    match: [input-system, action-maps]
+    subtopics:
+      - {id: gp-rebinding, name: Rebinding, match: [rebinding]}
+      - {id: gp-input-buffer, name: Input buffering and command windows, match: [input-buffering]}
+      - {id: gp-deadzones, name: Stick dead zones and response curves, match: [stick-deadzone]}
+      - {id: gp-haptics, name: Rumble and haptics, match: [rumble, haptics]}
+      - {id: gp-input-contexts, name: Input context priority stacks, match: [input-context-stack]}
+      - {id: gp-motion-inputs, name: Motion inputs and combo detection, match: [motion-inputs]}
+      - {id: gp-input-accessibility, name: Accessible input options, match: [input-accessibility]}
+      - {id: gp-button-prompts, name: Device-aware button prompts and glyphs, match: [input-glyphs]}
+  - id: gp-camera
+    name: Gameplay cameras
+    source: Gregory GEA ch15; GDC 50 Game Camera Mistakes
+    match: [third-person-camera, follow-camera]
+    subtopics:
+      - {id: gp-camera-collision, name: Camera collision and occlusion, match: [camera-collision]}
+      - {id: gp-camera-smoothing, name: Smoothing and damping, match: [camera-smoothing]}
+      - {id: gp-2d-camera, name: 2D platformer camera windows and look-ahead, match: [camera-window, look-ahead-camera]}
+      - {id: gp-aim-assist, name: Aim assist, match: [aim-assist]}
+      - {id: gp-camera-shake, name: Trauma-based camera shake, match: [camera-shake]}
+      - {id: gp-lock-on, name: Lock-on targeting cameras, match: [lock-on]}
+      - {id: gp-first-person-camera, name: First-person camera and head bob, match: [head-bob]}
+      - {id: gp-camera-blending, name: Camera blending rails and cutscene transitions, match: [camera-blending]}
+      - {id: gp-split-screen, name: Split-screen cameras, match: [split-screen-camera]}
+  - id: gp-combat
+    name: Combat systems
+    source: GDC combat-design talks; frame data conventions
+    match: [hitbox, combat-timing]
+    subtopics:
+      - {id: gp-frame-data, name: Frame data (startup/active/recovery), match: [frame-data]}
+      - {id: gp-projectiles, name: Projectiles and hitscan, match: [hitscan, projectiles]}
+      - {id: gp-damage-pipeline, name: Damage pipeline and health components, match: [damage-system, health-component]}
+      - {id: gp-status-effects, name: Status effects and buffs, match: [status-effects, buff-system]}
+      - {id: gp-melee-hit-detection, name: Melee hit detection with sweeps, match: [melee-hit-detection]}
+      - {id: gp-iframes, name: Hit reactions knockback and invincibility frames, match: [knockback]}
+      - {id: gp-cooldowns, name: Cooldown and resource systems, match: [cooldown-system]}
+      - {id: gp-target-selection, name: Target selection and soft lock, match: [target-selection]}
+  - id: gp-game-state
+    name: Game state progression and saves
+    source: Gregory GEA ch15-16
+    match: [game-state]
+    subtopics:
+      - {id: gp-save-load, name: Save/load of gameplay state, match: [save-system]}
+      - {id: gp-inventory, name: Inventory systems, match: [inventory-system]}
+      - {id: gp-quests, name: Quest and objective systems, match: [quest-system]}
+      - {id: gp-progression, name: XP and progression curves, match: [progression-system]}
+      - {id: gp-dialogue, name: Dialogue systems, match: [dialogue-system]}
+      - {id: gp-checkpoints, name: Checkpoints and respawning, match: [checkpoint-system]}
+      - {id: gp-achievements, name: Achievements and stats platform integration, match: [achievements]}
+      - {id: gp-crafting, name: Crafting systems, match: [crafting-system]}
+      - {id: gp-loot-tables, name: Loot tables and weighted drops, match: [loot-table]}
+  - id: gp-data-driven
+    name: Data-driven gameplay
+    source: Nystrom GPP/Type Object; Bytecode; Subclass Sandbox
+    match: [data-driven-design]
+    subtopics:
+      - {id: gp-type-object, name: Type Object pattern, match: [type-object]}
+      - {id: gp-subclass-sandbox, name: Subclass sandbox, match: [subclass-sandbox]}
+      - {id: gp-bytecode, name: Bytecode/scripting VMs for designers, match: [bytecode-vm]}
+      - {id: gp-spreadsheet-data, name: Spreadsheet/table driven tuning, match: [data-tables-tuning]}
+      - {id: gp-live-tuning, name: Live tuning and data hot-reload, match: [live-tuning]}
+      - {id: gp-modding, name: Mod support, match: [modding-support]}
+      - {id: gp-lua, name: Embedding Lua for gameplay scripting, match: [lua-scripting]}
+      - {id: gp-data-validation, name: Validating designer data, match: [data-validation]}
+  - id: gp-patterns
+    name: Gameplay design patterns
+    source: Nystrom GPP/Design Patterns Revisited
+    match: [game-programming-patterns]
+    subtopics:
+      - {id: gp-command, name: Command pattern (input/undo/replay), match: [command-pattern]}
+      - {id: gp-observer, name: Observer and achievements, match: [observer-pattern]}
+      - {id: gp-prototype, name: Prototype spawners, match: [prototype-pattern]}
+      - {id: gp-singleton, name: Singleton avoidance, match: [singleton-pattern]}
+      - {id: gp-flyweight, name: Flyweight, match: [flyweight-pattern]}
+      - {id: gp-strategy, name: Strategy pattern for weapons and AI, match: [strategy-pattern]}
+      - {id: gp-mvp-ui, name: Model-view-presenter for game UI, match: [model-view-presenter]}
+      - {id: gp-dependency-injection, name: Dependency injection containers in games, match: [di-container]}
+      - {id: gp-object-pool-pattern, name: Object pool pattern, match: [object-pool-pattern]}
+  - id: gp-procedural
+    name: Procedural generation
+    source: PCG book (Shaker/Togelius/Nelson) chapters
+    match: [procedural-generation]
+    subtopics:
+      - {id: gp-noise, name: Noise-based terrain (Perlin/simplex), match: [perlin-noise]}
+      - {id: gp-dungeon-gen, name: Dungeon generation (BSP/cellular automata), match: [dungeon-generation]}
+      - {id: gp-wfc, name: Wave function collapse, match: [wave-function-collapse]}
+      - {id: gp-seeded-rng, name: Seeded RNG and reproducibility, match: [seeded-rng]}
+      - {id: gp-poisson-disc, name: Poisson disc sampling for placement, match: [poisson-disc]}
+      - {id: gp-l-systems, name: L-systems, match: [l-system]}
+      - {id: gp-grammars, name: Generative grammars for missions and levels, match: [generative-grammar]}
+      - {id: gp-marching-cubes, name: Marching cubes voxel terrain, match: [marching-cubes]}
+  # ===================== Game physics (craft)
+  - id: phys-integration
+    name: Integration and timestep
+    source: Gaffer On Games/Integration Basics; Fix Your Timestep; Millington ch3
+    match: [fixed-timestep, integration]
+    subtopics:
+      - {id: phys-semi-implicit-euler, name: Semi-implicit Euler, match: [semi-implicit-euler]}
+      - {id: phys-verlet, name: Verlet integration, match: [verlet]}
+      - {id: phys-rk4, name: RK4 and higher-order integrators, match: [rk4]}
+      - {id: phys-accumulator, name: Fixed timestep accumulator and interpolation, match: [accumulator]}
+      - {id: phys-force-accumulator, name: Force accumulation drag and gravity, match: [force-accumulator]}
+      - {id: phys-substepping, name: Substepping, match: [physics-substepping]}
+      - {id: phys-energy-drift, name: Diagnosing instability and energy drift, match: [integrator-stability]}
+      - {id: phys-implicit-euler, name: Implicit integration for stiff springs, match: [implicit-euler]}
+  - id: phys-broad-phase
+    name: Broad phase and spatial partitioning
+    source: Ericson RTCD ch6-7; Nystrom/Spatial Partition
+    match: [broad-phase]
+    subtopics:
+      - {id: phys-sap, name: Sweep and prune, match: [sweep-and-prune]}
+      - {id: phys-bvh, name: Dynamic AABB trees/BVH, match: [bvh, dynamic-aabb-tree]}
+      - {id: phys-spatial-hash, name: Uniform grids and spatial hashing, match: [spatial-hash]}
+      - {id: phys-quadtree, name: Quadtrees and octrees, match: [quadtree, octree]}
+      - {id: phys-pair-cache, name: Pair caches and pair management, match: [pair-cache]}
+      - {id: phys-loose-octree, name: Loose octrees, match: [loose-octrees]}
+      - {id: phys-fat-aabb, name: BVH refit vs rebuild and fat AABBs, match: [fat-aabb]}
+      - {id: phys-collision-filtering, name: Collision groups and bitmask filtering, match: [collision-filtering]}
+  - id: phys-narrow-phase
+    name: Narrow phase collision
+    source: Ericson RTCD ch4-5 and ch9
+    match: [narrow-phase]
+    subtopics:
+      - {id: phys-sat, name: Separating axis theorem, match: [sat]}
+      - {id: phys-gjk-epa, name: GJK and EPA, match: [gjk, epa]}
+      - {id: phys-primitive-tests, name: Primitive tests (sphere/capsule/AABB/ray), match: [primitive-tests, ray-aabb]}
+      - {id: phys-contact-manifolds, name: Contact manifold generation and clipping, match: [contact-manifold]}
+      - {id: phys-closest-point, name: Closest point queries, match: [closest-point]}
+      - {id: phys-internal-edges, name: Triangle mesh collision and internal edges, match: [internal-edges]}
+      - {id: phys-convex-decomposition, name: Convex hulls and convex decomposition, match: [convex-decomposition]}
+      - {id: phys-raycast-query, name: Ray and shape queries against a scene, match: [raycast-query]}
+  - id: phys-ccd
+    name: Continuous collision detection
+    source: Ericson RTCD ch5.5; Box2D TOI
+    match: [ccd, continuous-collision-detection]
+    subtopics:
+      - {id: phys-swept-tests, name: Swept sphere/shape casts, match: [shape-cast, swept-sphere]}
+      - {id: phys-toi, name: Time of impact solving, match: [time-of-impact]}
+      - {id: phys-speculative-contacts, name: Speculative contacts, match: [speculative-contacts]}
+      - {id: phys-tunnelling-fix, name: Diagnosing tunnelling, match: [tunnelling]}
+      - {id: phys-conservative-advancement, name: Conservative advancement, match: [conservative-advancement-ccd]}
+      - {id: phys-rotational-ccd, name: Rotational CCD and thin objects, match: [rotational-ccd]}
+      - {id: phys-motion-clamping, name: Motion clamping, match: [motion-clamping]}
+      - {id: phys-ccd-config, name: Configuring CCD in PhysX Jolt and Box2D, match: [ccd-configuration]}
+  - id: phys-rigid-body
+    name: Rigid body dynamics
+    source: Millington ch9-10; Gregory GEA ch13
+    match: [rigid-body]
+    subtopics:
+      - {id: phys-inertia-tensor, name: Mass properties and inertia tensors, match: [inertia-tensor]}
+      - {id: phys-quaternion-orientation, name: Orientation integration with quaternions, match: [quaternion-integration]}
+      - {id: phys-collision-response, name: Impulse-based collision response with restitution and friction, match: [impulse-resolution, coulomb-friction]}
+      - {id: phys-sleeping, name: Sleeping and islands, match: [sleeping-islands]}
+      - {id: phys-torque, name: Forces at points and torque, match: [torque]}
+      - {id: phys-damping, name: Linear and angular damping, match: [angular-damping]}
+      - {id: phys-kinematic-bodies, name: Kinematic vs dynamic bodies, match: [kinematic-body]}
+      - {id: phys-buoyancy, name: Buoyancy and fluid drag, match: [buoyancy]}
+  - id: phys-constraints
+    name: Constraints and solvers
+    source: Catto GDC solver talks; Box2D docs
+    match: [constraint-solver, joints]
+    subtopics:
+      - {id: phys-sequential-impulse, name: Sequential impulse solver, match: [sequential-impulse]}
+      - {id: phys-warm-starting, name: Warm starting and iterations, match: [warm-starting]}
+      - {id: phys-position-correction, name: Baumgarte and position correction, match: [baumgarte-stabilization]}
+      - {id: phys-soft-constraints, name: Soft constraints and springs, match: [soft-constraints, spring-damper]}
+      - {id: phys-xpbd, name: Position-based dynamics (PBD/XPBD), match: [xpbd, position-based-dynamics]}
+      - {id: phys-jacobians, name: Joint types and constraint Jacobians, match: [constraint-jacobian]}
+      - {id: phys-motors-limits, name: Joint motors and limits, match: [joint-motor]}
+      - {id: phys-stacking, name: Stack stability, match: [stacking-stability]}
+      - {id: phys-rope, name: Rope and chain simulation, match: [rope-simulation]}
+  - id: phys-character-vehicle
+    name: Characters and vehicles
+    source: PhysX docs/Character Controllers; Vehicles
+    match: [kinematic, vehicle-physics]
+    subtopics:
+      - {id: phys-kinematic-controller, name: Kinematic character controller with collide-and-slide, match: [collide-and-slide]}
+      - {id: phys-ragdolls, name: Ragdolls, match: [ragdoll]}
+      - {id: phys-raycast-vehicle, name: Raycast vehicle suspension, match: [raycast-vehicle]}
+      - {id: phys-tire-model, name: Tire friction models, match: [tire-model]}
+      - {id: phys-active-ragdoll, name: Active ragdolls and physical animation, match: [active-ragdolls]}
+      - {id: phys-character-push, name: Character and rigidbody interaction, match: [character-pushing]}
+      - {id: phys-drivetrain, name: Engine gearbox and drivetrain simulation, match: [drivetrain]}
+      - {id: phys-arcade-vehicle, name: Arcade vehicle handling, match: [arcade-vehicle]}
+  - id: phys-determinism
+    name: Determinism and robustness
+    source: Ericson RTCD ch11 Numerical robustness; Gaffer On Games floating point determinism
+    match: [determinism]
+    subtopics:
+      - {id: phys-float-determinism, name: Floating-point determinism across platforms, match: [floating-point-determinism]}
+      - {id: phys-fixed-point, name: Fixed-point math, match: [fixed-point-math]}
+      - {id: phys-epsilon, name: Tolerances and epsilon handling, match: [epsilon-tolerance]}
+      - {id: phys-physics-debug-draw, name: Physics debug visualisation, match: [physics-debug-draw]}
+      - {id: phys-middleware, name: Choosing physics middleware, match: [physics-middleware]}
+      - {id: phys-state-snapshot, name: Saving and restoring physics state, match: [physics-state-snapshot]}
+      - {id: phys-floating-origin, name: World scale units and floating origin, match: [floating-origin]}
+      - {id: phys-regression-tests, name: Physics regression and stress tests, match: [physics-regression-test]}
+  # ===================== Multiplayer networking (craft)
+  - id: net-transport
+    name: Transport layer for games
+    source: Gaffer On Games/UDP vs TCP; Reliability and congestion avoidance over UDP
+    match: [udp, reliable-udp]
+    subtopics:
+      - {id: net-udp-sockets, name: UDP sockets and packet framing, match: [udp-sockets]}
+      - {id: net-reliability-acks, name: Acks and reliable ordered channels, match: [reliable-ordered]}
+      - {id: net-fragmentation, name: Packet fragmentation and MTU, match: [mtu]}
+      - {id: net-connection-handshake, name: Connection handshake and challenge tokens, match: [connection-handshake]}
+      - {id: net-nat-punch, name: NAT punch-through and relays, match: [nat-punchthrough]}
+      - {id: net-bitpacking, name: Bitpacking read and write streams, match: [bitpacker]}
+      - {id: net-congestion, name: Congestion avoidance and send rates, match: [congestion-avoidance]}
+      - {id: net-rtt, name: RTT and packet loss measurement, match: [rtt]}
+      - {id: net-libraries, name: Choosing a transport library, match: [gamenetworkingsockets]}
+  - id: net-state-sync
+    name: State replication
+    source: Gaffer On Games/Snapshot Interpolation; State Synchronization; Snapshot Compression
+    match: [snapshot, delta-compression]
+    subtopics:
+      - {id: net-snapshot-interpolation, name: Snapshot interpolation, match: [snapshot-interpolation]}
+      - {id: net-delta-compression, name: Delta compression and quantisation, match: [quantization]}
+      - {id: net-interest-management, name: Interest management and relevancy, match: [interest-management]}
+      - {id: net-bandwidth-budget, name: Bandwidth budgeting and priority accumulators, match: [bandwidth-budget]}
+      - {id: net-network-ids, name: Network ids and replicated spawning, match: [network-id]}
+      - {id: net-reliable-events, name: Reliable events vs replicated state, match: [reliable-events]}
+      - {id: net-delta-baseline, name: Ack-based delta baselines, match: [delta-baseline]}
+      - {id: net-host-migration, name: Host migration, match: [host-migration]}
+  - id: net-prediction
+    name: Client prediction and reconciliation
+    source: Gambetta Fast-Paced Multiplayer; Valve Source Multiplayer Networking
+    match: [client-side-prediction, server-reconciliation]
+    subtopics:
+      - {id: net-entity-interpolation, name: Entity interpolation of remote players, match: [entity-interpolation]}
+      - {id: net-lag-compensation, name: Server-side lag compensation (rewind), match: [lag-compensation]}
+      - {id: net-extrapolation, name: Dead reckoning and extrapolation, match: [dead-reckoning]}
+      - {id: net-tick-sync, name: Tick rate and clock synchronisation, match: [clock-synchronization]}
+      - {id: net-error-smoothing, name: Misprediction error smoothing, match: [error-smoothing]}
+      - {id: net-input-redundancy, name: Redundant input sending, match: [input-redundancy]}
+      - {id: net-predicted-spawning, name: Predicted projectiles and spawns, match: [predicted-spawning]}
+      - {id: net-physics-prediction, name: Predicting physics objects, match: [physics-prediction]}
+  - id: net-lockstep-rollback
+    name: Lockstep and rollback
+    source: GGPO docs; Gaffer On Games/Deterministic Lockstep
+    match: [lockstep, rollback-netcode]
+    subtopics:
+      - {id: net-ggpo, name: GGPO rollback, match: [ggpo]}
+      - {id: net-desync-detection, name: Desync detection with state hashing, match: [desync]}
+      - {id: net-rts-lockstep, name: RTS deterministic lockstep, match: [deterministic-lockstep]}
+      - {id: net-input-delay, name: Input delay tuning, match: [input-delay]}
+      - {id: net-state-rollback, name: Fast state save and restore for rollback, match: [state-rollback]}
+      - {id: net-synctest, name: Sync test mode, match: [synctest]}
+      - {id: net-input-replay, name: Input-based replays and spectators, match: [input-replay]}
+      - {id: net-rollback-effects, name: Audio and VFX during rollback, match: [rollback-effects]}
+  - id: net-architecture
+    name: Network topology and services
+    source: Valve/AWS GameLift docs; matchmaking literature
+    match: [dedicated-server, matchmaking]
+    subtopics:
+      - {id: net-listen-vs-dedicated, name: Listen server vs dedicated vs P2P, match: [listen-server, peer-to-peer]}
+      - {id: net-lobby-session, name: Lobbies and sessions, match: [lobby]}
+      - {id: net-skill-matchmaking, name: Skill-based matchmaking, match: [skill-based-matchmaking]}
+      - {id: net-fleet-hosting, name: Server fleet hosting and autoscaling, match: [game-server-fleet]}
+      - {id: net-game-backend, name: Player accounts and identity backends, match: [game-backend]}
+      - {id: net-relay, name: Relay servers, match: [relay-servers]}
+      - {id: net-server-browser, name: Server browsers and discovery, match: [server-list]}
+      - {id: net-region-selection, name: Region and ping-based selection, match: [region-selection]}
+  - id: net-security
+    name: Netcode security and anti-cheat
+    source: Gaffer On Games/Securing dedicated servers
+    match: [anti-cheat, server-authority]
+    subtopics:
+      - {id: net-input-validation, name: Server-side input validation, match: [input-validation]}
+      - {id: net-rate-limiting, name: Rate limiting and DoS protection, match: [rate-limiting]}
+      - {id: net-packet-encryption, name: Packet encryption and authentication tokens, match: [connect-token]}
+      - {id: net-cheat-detection, name: Statistical cheat detection, match: [aimbot-detection]}
+      - {id: net-client-trust, name: Never-trust-the-client design, match: [client-trust]}
+      - {id: net-replay-protection, name: Replay attack protection, match: [replay-attack]}
+      - {id: net-wallhack, name: Server-side visibility culling against wallhacks, match: [wallhack-mitigation]}
+      - {id: net-memory-tampering, name: Client integrity and memory tampering, match: [memory-tampering]}
+  - id: net-testing
+    name: Netcode testing and debugging
+    source: Gaffer On Games; engine network emulation docs
+    match: [network-emulation]
+    subtopics:
+      - {id: net-latency-simulation, name: Simulating latency jitter and loss, match: [latency-simulation, network-conditioner]}
+      - {id: net-netgraph, name: Net graphs and bandwidth profiling, match: [net-profiler]}
+      - {id: net-replay-debugging, name: Recording and replaying network sessions, match: [network-replay]}
+      - {id: net-soak-testing, name: Bot soak/load testing servers, match: [load-test-bots]}
+      - {id: net-headless-client, name: Headless client builds for tests, match: [headless-client]}
+      - {id: net-packet-capture, name: Packet capture and Wireshark dissectors, match: [wireshark-dissector]}
+      - {id: net-telemetry, name: Production network telemetry, match: [network-telemetry]}
+      - {id: net-ci-tests, name: Automated multiplayer integration tests, match: [multiplayer-integration-test]}
+  # ===================== Game engine architecture (craft)
+  - id: gea-game-loop
+    name: Game loop and timing
+    source: Nystrom GPP/Game Loop; Update Method; Gregory ch8
+    match: [game-loop]
+    subtopics:
+      - {id: gea-variable-vs-fixed, name: Variable vs fixed vs semi-fixed loops, match: [semi-fixed-timestep]}
+      - {id: gea-update-method, name: Update method ordering and phases, match: [update-method]}
+      - {id: gea-double-buffer, name: Double buffering state, match: [double-buffer]}
+      - {id: gea-frame-pacing, name: Frame pacing and vsync, match: [frame-pacing]}
+      - {id: gea-time-scale, name: Time scale pause and slow motion, match: [slow-motion]}
+      - {id: gea-delta-clamp, name: Clamping delta time spikes, match: [delta-time-clamp]}
+      - {id: gea-frame-rate-cap, name: Frame rate caps and power saving, match: [frame-rate-cap]}
+      - {id: gea-message-pump, name: Platform message pump and window events, match: [message-pump]}
+  - id: gea-entity-systems
+    name: Entity and component systems
+    source: Nystrom GPP/Component; Gregory ch16 Runtime gameplay foundation
+    match: [entity-component-system, ecs]
+    subtopics:
+      - {id: gea-component-pattern, name: Component pattern composition, match: [component-pattern]}
+      - {id: gea-archetype-ecs, name: Archetype ECS storage, match: [archetype]}
+      - {id: gea-sparse-set, name: Sparse-set ECS, match: [sparse-set]}
+      - {id: gea-entity-handles, name: Generational handles, match: [generational-handles]}
+      - {id: gea-world-queries, name: Spawning and world queries, match: [world-queries]}
+      - {id: gea-scene-graph, name: Scene graph and transform propagation, match: [scene-graph]}
+      - {id: gea-deferred-destruction, name: Deferred entity destruction, match: [deferred-destruction]}
+      - {id: gea-entt-flecs, name: Using EnTT and flecs, match: [entt, flecs]}
+      - {id: gea-system-scheduling, name: System scheduling and ordering, match: [system-scheduling]}
+  - id: gea-memory
+    name: Memory management
+    source: Gregory ch6.2 Memory management
+    match: [memory-allocators]
+    subtopics:
+      - {id: gea-stack-allocator, name: Stack and frame allocators, match: [frame-allocator, stack-allocator]}
+      - {id: gea-pool-allocator, name: Pool allocators, match: [pool-allocator]}
+      - {id: gea-fragmentation, name: Fragmentation and defragmentation, match: [memory-fragmentation]}
+      - {id: gea-memory-tracking, name: Memory budgets and tracking, match: [memory-budget]}
+      - {id: gea-custom-allocator, name: Custom allocator interfaces and operator new, match: [custom-allocator]}
+      - {id: gea-leak-detection, name: Memory leak detection, match: [memory-leak-detection]}
+      - {id: gea-alignment, name: Alignment and padding, match: [memory-alignment]}
+      - {id: gea-virtual-memory, name: Virtual memory reservation, match: [virtual-memory]}
+  - id: gea-data-oriented
+    name: Data-oriented design
+    source: Nystrom GPP/Data Locality; Dirty Flag; Gregory ch3
+    match: [data-oriented-design]
+    subtopics:
+      - {id: gea-soa, name: Struct of arrays layout, match: [struct-of-arrays]}
+      - {id: gea-cache-locality, name: Cache locality and hot/cold splitting, match: [cache-locality]}
+      - {id: gea-dirty-flag, name: Dirty flag, match: [dirty-flag]}
+      - {id: gea-simd, name: SIMD vectorisation, match: [simd]}
+      - {id: gea-false-sharing, name: False sharing, match: [cache-line-contention]}
+      - {id: gea-branch-prediction, name: Branch prediction and sorting by type, match: [branch-prediction]}
+      - {id: gea-cache-profiling, name: Measuring cache misses, match: [cache-miss-profiling]}
+      - {id: gea-prefetch, name: Software prefetching, match: [prefetching]}
+  - id: gea-concurrency
+    name: Parallelism and concurrency
+    source: Gregory ch4
+    match: [job-system, multithreading]
+    subtopics:
+      - {id: gea-job-graph, name: Job graphs and dependencies, match: [task-graph]}
+      - {id: gea-fibers, name: Fiber-based job systems, match: [fiber]}
+      - {id: gea-lock-free, name: Lock-free queues and atomics, match: [lock-free]}
+      - {id: gea-render-thread, name: Game/render thread split, match: [render-thread]}
+      - {id: gea-thread-affinity, name: Worker thread pools and affinity, match: [thread-affinity]}
+      - {id: gea-tsan, name: Data race detection with ThreadSanitizer, match: [thread-sanitizer]}
+      - {id: gea-parallel-for, name: Parallel-for patterns, match: [parallel-for-loop]}
+      - {id: gea-spinlock, name: Mutexes spinlocks and condition variables, match: [spinlock]}
+  - id: gea-resources
+    name: Resources and the file system
+    source: Gregory ch7
+    match: [asset-pipeline, resource-manager]
+    subtopics:
+      - {id: gea-asset-cooking, name: Asset conditioning/cooking, match: [cooking]}
+      - {id: gea-streaming, name: Streaming and async IO, match: [streaming]}
+      - {id: gea-hot-reload, name: Hot reloading, match: [hot-reload]}
+      - {id: gea-virtual-fs, name: Virtual file systems and pak archives, match: [virtual-file-system]}
+      - {id: gea-resource-handles, name: Resource handles and reference counting, match: [resource-handle]}
+      - {id: gea-asset-deps, name: Asset dependency graphs and incremental builds, match: [asset-dependency-graph]}
+      - {id: gea-asset-guid, name: Asset GUIDs and metadata, match: [asset-guid]}
+      - {id: gea-texture-compression, name: Texture compression formats, match: [texture-compression]}
+  - id: gea-engine-support
+    name: Engine support systems
+    source: Gregory ch6 Engine support systems
+    match: [engine-support-systems]
+    subtopics:
+      - {id: gea-subsystem-startup, name: Subsystem start-up and shut-down order, match: [subsystem-startup]}
+      - {id: gea-string-ids, name: Hashed string ids, match: [string-id]}
+      - {id: gea-engine-config, name: Engine configuration and cvars, match: [cvars]}
+      - {id: gea-containers, name: Game-friendly containers, match: [game-containers]}
+      - {id: gea-service-locator, name: Service locator, match: [service-locator]}
+      - {id: gea-logging, name: Logging channels and verbosity, match: [logging-system]}
+      - {id: gea-assertions, name: Assertions and verify macros, match: [assertions]}
+      - {id: gea-xorshift, name: Fast game RNGs, match: [pcg32]}
+      - {id: gea-plugin-architecture, name: Plugin and DLL architecture, match: [plugin-architecture]}
+  - id: gea-events
+    name: Events and messaging
+    source: Nystrom GPP/Event Queue; Gregory ch16.8
+    match: [event-system]
+    subtopics:
+      - {id: gea-event-queue, name: Event queue, match: [event-queue]}
+      - {id: gea-message-dispatch, name: Typed message dispatch, match: [message-dispatch]}
+      - {id: gea-deferred-events, name: Deferred vs immediate events, match: [deferred-events]}
+      - {id: gea-event-bus-pitfalls, name: Event bus pitfalls and re-entrancy, match: [event-reentrancy]}
+      - {id: gea-delegates, name: Delegates and callbacks in C++, match: [std-function-callbacks]}
+      - {id: gea-subscription-lifetime, name: Subscription lifetime and dangling listeners, match: [subscription-lifetime]}
+      - {id: gea-event-priority, name: Event priority and consumption, match: [event-priority]}
+      - {id: gea-event-tracing, name: Event tracing and debugging, match: [event-tracing]}
+  - id: gea-serialization
+    name: Serialization and saves
+    source: Gregory ch16; engine docs
+    match: [serialization]
+    subtopics:
+      - {id: gea-save-versioning, name: Save versioning and migration, match: [schema-migration]}
+      - {id: gea-reflection, name: Reflection systems for serialization, match: [reflection-system]}
+      - {id: gea-binary-formats, name: Binary formats and endianness, match: [endianness]}
+      - {id: gea-world-snapshot, name: Level/world serialization, match: [level-serialization]}
+      - {id: gea-text-formats, name: Text formats for assets, match: [text-serialization]}
+      - {id: gea-flatbuffers, name: Zero-copy formats with FlatBuffers, match: [flatbuffers]}
+      - {id: gea-atomic-save, name: Atomic writes and save checksums, match: [atomic-file-write]}
+      - {id: gea-cloud-save, name: Platform cloud saves, match: [cloud-save]}
+  - id: gea-debug-tools
+    name: Debugging and development tools
+    source: Gregory ch10
+    match: [debug-tools]
+    subtopics:
+      - {id: gea-debug-draw, name: Debug drawing, match: [debug-draw]}
+      - {id: gea-dev-console, name: In-game console and cheats, match: [dev-console]}
+      - {id: gea-instrumented-profiling, name: Instrumented profiling (Tracy), match: [tracy]}
+      - {id: gea-crash-reporting, name: Crash reporting and minidumps, match: [crash-reporting]}
+      - {id: gea-imgui, name: Dear ImGui debug UI, match: [dear-imgui]}
+      - {id: gea-replay-system, name: Replay recording systems, match: [gameplay-replay]}
+      - {id: gea-telemetry, name: Gameplay telemetry, match: [gameplay-telemetry]}
+      - {id: gea-renderdoc, name: GPU captures with RenderDoc and PIX, match: [renderdoc]}
+      - {id: gea-test-automation, name: Automated gameplay tests and bots, match: [gameplay-test-automation]}
+  - id: gea-rendering
+    name: Rendering engine architecture
+    source: Gregory ch11
+    match: [rendering-engine]
+    subtopics:
+      - {id: gea-render-graph, name: Frame/render graphs, match: [render-graph-architecture]}
+      - {id: gea-culling, name: Visibility culling, match: [frustum-culling, occlusion-culling]}
+      - {id: gea-draw-call-batching, name: Draw call submission and batching, match: [draw-call-batching]}
+      - {id: gea-lod, name: Level of detail, match: [lod-system]}
+      - {id: gea-deferred-rendering, name: Forward vs deferred rendering, match: [deferred-rendering]}
+      - {id: gea-shadow-mapping, name: Shadow mapping, match: [shadow-mapping]}
+      - {id: gea-shader-permutations, name: Material systems and shader permutations, match: [shader-permutations]}
+      - {id: gea-gpu-driven, name: GPU-driven rendering, match: [gpu-driven-rendering]}
+      - {id: gea-rhi, name: Graphics API abstraction layer, match: [rhi]}
+  - id: gea-animation-audio
+    name: Animation and audio systems
+    source: Gregory ch12 and ch14
+    match: [animation-system, audio-engine]
+    subtopics:
+      - {id: gea-skeletal-animation, name: Skeletal animation pipeline, match: [skeletal-animation]}
+      - {id: gea-anim-blending, name: Animation blending, match: [pose-blending]}
+      - {id: gea-audio-mixing, name: Audio mixing buses and voices, match: [audio-mixing]}
+      - {id: gea-3d-audio, name: 3D audio attenuation, match: [spatial-audio]}
+      - {id: gea-anim-compression, name: Animation compression, match: [animation-compression]}
+      - {id: gea-ik-solvers, name: IK solvers two-bone and FABRIK, match: [two-bone-ik-solver, fabrik]}
+      - {id: gea-audio-streaming, name: Audio streaming and compression, match: [audio-streaming]}
+      - {id: gea-audio-middleware, name: FMOD and Wwise integration, match: [fmod, wwise]}
+  # ===================== Game AI programming (craft)
+  - id: ai-pathfinding
+    name: Pathfinding
+    source: Millington AI for Games ch4
+    match: [pathfinding, a-star]
+    subtopics:
+      - {id: ai-astar-heuristics, name: A* heuristics, match: [heuristic]}
+      - {id: ai-hierarchical-pathfinding, name: Hierarchical pathfinding (HPA*), match: [hierarchical-pathfinding]}
+      - {id: ai-jps, name: Jump point search, match: [jump-point-search]}
+      - {id: ai-flow-fields, name: Flow fields, match: [flow-field]}
+      - {id: ai-path-smoothing, name: Path smoothing, match: [path-smoothing]}
+      - {id: ai-dijkstra, name: Dijkstra and uniform cost search, match: [dijkstra]}
+      - {id: ai-world-representation, name: World representations grids and waypoint graphs, match: [waypoint-graph]}
+      - {id: ai-time-sliced, name: Time-sliced pathfinding, match: [time-sliced-pathfinding]}
+      - {id: ai-d-star-lite, name: Incremental replanning with D* Lite, match: [d-star-lite]}
+  - id: ai-navmesh
+    name: Navigation meshes
+    source: Recast/Detour docs; Millington ch4.4
+    match: [navmesh]
+    subtopics:
+      - {id: ai-navmesh-gen, name: Navmesh generation, match: [recast]}
+      - {id: ai-offmesh-links, name: Off-mesh links, match: [off-mesh-link]}
+      - {id: ai-dynamic-obstacles, name: Dynamic obstacles, match: [dynamic-obstacle]}
+      - {id: ai-crowd, name: Crowd simulation, match: [crowd-simulation]}
+      - {id: ai-funnel, name: Funnel algorithm string pulling, match: [simple-stupid-funnel]}
+      - {id: ai-tiled-navmesh, name: Tiled navmesh and runtime rebuilds, match: [tiled-navmesh]}
+      - {id: ai-nav-area-costs, name: Area types and traversal costs, match: [navigation-area-cost]}
+      - {id: ai-agent-radius, name: Multiple agent sizes, match: [multiple-agent-sizes]}
+  - id: ai-steering
+    name: Steering behaviours
+    source: Millington ch3; Reynolds Steering Behaviors
+    match: [steering-behaviours]
+    subtopics:
+      - {id: ai-seek-arrive, name: Seek/flee/arrive, match: [arrive-behaviour]}
+      - {id: ai-pursue-evade, name: Pursue/evade, match: [pursuit-evasion]}
+      - {id: ai-flocking, name: Flocking, match: [flocking, boids]}
+      - {id: ai-obstacle-avoidance, name: Obstacle avoidance/RVO, match: [rvo]}
+      - {id: ai-wander, name: Wander behaviour, match: [wander-behaviour]}
+      - {id: ai-path-following, name: Path following steering, match: [path-following-steering]}
+      - {id: ai-steering-blending, name: Steering blending and priority arbitration, match: [steering-blending]}
+      - {id: ai-formations, name: Formation movement, match: [formation-movement]}
+  - id: ai-decision-fsm-bt
+    name: Decision making - FSMs and behaviour trees
+    source: Millington ch5
+    match: [behaviour-tree, behavior-tree]
+    subtopics:
+      - {id: ai-bt-blackboard, name: Blackboards, match: [blackboard]}
+      - {id: ai-bt-decorators, name: Decorators and parallel nodes, match: [decorator]}
+      - {id: ai-decision-trees, name: Decision trees, match: [decision-tree]}
+      - {id: ai-fuzzy-logic, name: Fuzzy logic, match: [fuzzy-logic]}
+      - {id: ai-bt-runtime, name: Implementing a behaviour tree runtime, match: [bt-runtime]}
+      - {id: ai-bt-debugging, name: Debugging and visualising behaviour trees, match: [bt-debugging]}
+      - {id: ai-enemy-fsm, name: FSM-based enemy AI, match: [enemy-ai-fsm]}
+      - {id: ai-event-driven-bt, name: Event-driven behaviour trees, match: [event-driven-behavior-tree]}
+  - id: ai-utility-goap
+    name: Utility AI and planning
+    source: Millington ch5.7; Game AI Pro
+    match: [utility-ai, goap]
+    subtopics:
+      - {id: ai-response-curves, name: Response curves, match: [response-curves]}
+      - {id: ai-goap-planner, name: GOAP planners, match: [goal-oriented-action-planning]}
+      - {id: ai-htn, name: HTN planning, match: [htn-planning]}
+      - {id: ai-rule-based, name: Rule-based systems, match: [rule-based-system]}
+      - {id: ai-considerations, name: Utility considerations and score normalisation, match: [utility-considerations]}
+      - {id: ai-goal-oriented-behaviour, name: Goal-oriented behaviour with motives, match: [goal-oriented-behaviour]}
+      - {id: ai-infinite-axis, name: Infinite axis utility system, match: [infinite-axis-utility]}
+      - {id: ai-planner-perf, name: Planner search performance, match: [planner-optimization]}
+  - id: ai-perception
+    name: Perception and knowledge
+    source: Game AI Pro perception chapters
+    match: [perception]
+    subtopics:
+      - {id: ai-vision, name: Vision cones, match: [visibility-cone]}
+      - {id: ai-hearing, name: Hearing, match: [hearing]}
+      - {id: ai-memory, name: AI memory and last known position, match: [last-known-position]}
+      - {id: ai-stimulus-system, name: Stimulus/event sensing systems, match: [stimulus]}
+      - {id: ai-line-of-sight, name: Line-of-sight raycast budgets, match: [los-budget]}
+      - {id: ai-stealth-awareness, name: Awareness meters and alert levels, match: [stealth-awareness]}
+      - {id: ai-shared-knowledge, name: Shared team knowledge, match: [shared-knowledge]}
+      - {id: ai-lod, name: AI level of detail and update throttling, match: [ai-lod]}
+  - id: ai-tactical
+    name: Tactical and strategic AI
+    source: Millington ch6
+    match: [tactical-ai]
+    subtopics:
+      - {id: ai-influence-maps, name: Influence maps, match: [influence-map]}
+      - {id: ai-cover, name: Cover point selection, match: [cover-system]}
+      - {id: ai-squad, name: Squad coordination, match: [squad-ai]}
+      - {id: ai-director, name: AI director pacing, match: [ai-director]}
+      - {id: ai-tactical-waypoints, name: Tactical waypoints, match: [tactical-waypoints]}
+      - {id: ai-tactical-pathfinding, name: Tactical pathfinding and flanking, match: [tactical-pathfinding]}
+      - {id: ai-rts, name: RTS strategic AI, match: [rts-strategic-ai]}
+      - {id: ai-attack-tokens, name: Attack tokens and melee circling, match: [attack-tokens]}
+  - id: ai-board-games
+    name: Board game and search AI
+    source: Millington ch9
+    match: [game-tree-search]
+    subtopics:
+      - {id: ai-minimax, name: Minimax alpha-beta, match: [minimax, alpha-beta]}
+      - {id: ai-mcts, name: Monte Carlo tree search, match: [mcts]}
+      - {id: ai-transposition, name: Transposition tables, match: [transposition-table]}
+      - {id: ai-difficulty, name: Difficulty scaling, match: [ai-difficulty]}
+      - {id: ai-iterative-deepening, name: Iterative deepening and move ordering, match: [move-ordering]}
+      - {id: ai-evaluation, name: Evaluation functions, match: [evaluation-functions]}
+      - {id: ai-opening-books, name: Opening books and endgame tables, match: [opening-book]}
+      - {id: ai-expectimax, name: Expectimax for games of chance, match: [expectimax]}

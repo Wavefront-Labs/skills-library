@@ -1,0 +1,296 @@
+# Canonical coverage spec: R language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: r-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [r]
+sources:
+  - "R Language Definition and An Introduction to R (cran.r-project.org/manuals.html)"
+  - "Writing R Extensions, R Installation and Administration, R Data Import/Export (CRAN manuals)"
+  - "Advanced R, 2nd edition (adv-r.hadley.nz) and R Packages, 2nd edition (r-pkgs.org)"
+  - "R for Data Science, 2nd edition (r4ds.hadley.nz) and the Tidyverse style guide (style.tidyverse.org)"
+  - "CRAN Repository Policy (cran.r-project.org/web/packages/policies.html) and package docs for dplyr, ggplot2, testthat, renv, Shiny"
+topics:
+  - id: r-vectors
+    name: "Vectors and atomic types"
+    source: "R Language Definition 2; Advanced R ch3"
+    match: [r-vectors]
+    subtopics:
+      - {id: r-vectors-vector-recycling, name: "Vector recycling and length mismatches", match: [vector-recycling]}
+      - {id: r-vectors-type-coercion, name: "Implicit coercion and type hierarchy", match: [type-coercion]}
+      - {id: r-vectors-floating-point-comparison, name: "Floating-point equality", match: [floating-point-comparison]}
+      - {id: r-vectors-recycling-coercion-rules, name: "Recycling and type coercion rules", match: [recycling-coercion-rules]}
+      - {id: r-vectors-seq-rep-vector-construction, name: "seq, rep, vector and names", match: [seq-rep-vector-construction]}
+  - id: r-missing
+    name: "Missing values and NULL"
+    source: "R Language Definition 3; Advanced R ch3"
+    match: [r-missing]
+    subtopics:
+      - {id: r-missing-na-handling, name: "NA propagation and na.rm", match: [na-handling]}
+      - {id: r-missing-null-vs-na, name: "NULL versus NA and zero-length vectors", match: [null-vs-na]}
+      - {id: r-missing-na-handling-functions, name: "NA handling: is.na, complete.cases, na.rm", match: [na-handling-functions]}
+  - id: r-subsetting
+    name: "Subsetting"
+    source: "R Language Definition 3.4; Advanced R ch4"
+    match: [r-subsetting]
+    subtopics:
+      - {id: r-subsetting-subset-operators, name: "Single bracket, double bracket and dollar", match: [subset-operators]}
+      - {id: r-subsetting-subset-assignment, name: "Assigning with subsetting and in-place modification", match: [subset-assignment]}
+      - {id: r-subsetting-subset-drop-negative-logical, name: "[, [[, $ and drop semantics", match: [subset-drop-negative-logical]}
+  - id: r-lists
+    name: "Lists and recursive structures"
+    source: "R Language Definition 2.1.3; Advanced R ch3"
+    match: [r-lists]
+    subtopics:
+      - {id: r-lists-list-manipulation, name: "Building, flattening and traversing lists", match: [list-manipulation]}
+      - {id: r-lists-modify-nested-rapply, name: "Nested lists: modifyList, rapply and unlist", match: [modify-nested-rapply]}
+  - id: r-factors
+    name: "Factors"
+    source: "R Language Definition 2.3; R4DS factors chapter"
+    match: [r-factors]
+    subtopics:
+      - {id: r-factors-factor-levels, name: "Factor levels, ordering and dropping", match: [factor-levels]}
+      - {id: r-factors-factor-levels-relevel-forcats, name: "Factor levels, relevel and forcats", match: [factor-levels-relevel-forcats]}
+  - id: r-data-frames
+    name: "Data frames and tibbles"
+    source: "R Language Definition 2.1.7; R4DS tibbles"
+    match: [r-data-frames]
+    subtopics:
+      - {id: r-data-frames-tibble-vs-data-frame, name: "Tibbles versus base data frames", match: [tibble-vs-data-frame]}
+      - {id: r-data-frames-merge-and-joins, name: "Merging data frames in base R", match: [merge-and-joins]}
+      - {id: r-data-frames-merge-joins-bind, name: "merge, joins and binding", match: [merge-joins-bind]}
+  - id: r-control-flow
+    name: "Control flow and iteration"
+    source: "R Language Definition 3.2; Advanced R ch5"
+    match: [r-control-flow]
+    subtopics:
+      - {id: r-control-flow-vectorised-conditionals, name: "ifelse, if_else and switch", match: [vectorised-conditionals]}
+      - {id: r-control-flow-loops-and-seq, name: "Loops, seq_along and preallocation", match: [loops-and-seq]}
+      - {id: r-control-flow-vectorised-ifelse-switch, name: "ifelse, switch, if_else and vectorisation", match: [vectorised-ifelse-switch]}
+  - id: r-functions
+    name: "Functions and arguments"
+    source: "R Language Definition 4; Advanced R ch6"
+    match: [r-functions]
+    subtopics:
+      - {id: r-functions-lazy-evaluation, name: "Lazy evaluation, missing and default arguments", match: [lazy-evaluation]}
+      - {id: r-functions-dots-and-on-exit, name: "Dots, on.exit and return values", match: [dots-and-on-exit]}
+      - {id: r-functions-dots-missing-onexit, name: "... arguments, missing, match.arg and on.exit", match: [dots-missing-onexit]}
+  - id: r-environments
+    name: "Environments and scoping"
+    source: "R Language Definition 2.1.10; Advanced R ch7"
+    match: [r-environments]
+    subtopics:
+      - {id: r-environments-lexical-scoping, name: "Lexical scope, closures and superassignment", match: [lexical-scoping]}
+      - {id: r-environments-lexical-scope-assign-sys-function, name: "Lexical scoping, <<- and environment functions", match: [lexical-scope-assign-sys-function]}
+  - id: r-functional
+    name: "Functional programming and apply family"
+    source: "R-intro 9; Advanced R ch9-11"
+    match: [r-functional]
+    subtopics:
+      - {id: r-functional-apply-family, name: "lapply, sapply, vapply and Map", match: [apply-family]}
+      - {id: r-functional-purrr-mapping, name: "purrr map functions", match: [purrr-mapping]}
+      - {id: r-functional-purrr-map-reduce, name: "purrr map, reduce, safely and walk", match: [purrr-map-reduce]}
+  - id: r-oop-s3
+    name: "S3 object system"
+    source: "Advanced R ch13; R Language Definition 5"
+    match: [r-oop-s3]
+    subtopics:
+      - {id: r-oop-s3-s3-classes-methods, name: "Writing S3 classes, generics and methods", match: [s3-classes-methods]}
+      - {id: r-oop-s3-s3-methods-inheritance-nextmethod, name: "S3 generics, inheritance and NextMethod", match: [s3-methods-inheritance-nextmethod]}
+  - id: r-oop-s4
+    name: "S4 and R6 classes"
+    source: "Advanced R ch15; methods package docs"
+    match: [r-oop-s4]
+    subtopics:
+      - {id: r-oop-s4-s4-classes, name: "S4 classes, generics and validity", match: [s4-classes]}
+      - {id: r-oop-s4-r6-classes, name: "R6 classes and reference semantics", match: [r6-classes]}
+      - {id: r-oop-s4-r6-reference-classes, name: "R6 classes: fields, methods and inheritance", match: [r6-reference-classes]}
+  - id: r-conditions
+    name: "Conditions and error handling"
+    source: "Advanced R ch8"
+    match: [r-conditions]
+    subtopics:
+      - {id: r-conditions-trycatch-handlers, name: "tryCatch, withCallingHandlers and finally", match: [trycatch-handlers]}
+      - {id: r-conditions-trycatch-withcallingHandlers-rlang, name: "tryCatch, withCallingHandlers and custom conditions", match: [trycatch-withcallingHandlers-rlang]}
+  - id: r-strings
+    name: "Strings and regular expressions"
+    source: "R-intro; stringr docs; ?regex"
+    match: [r-strings]
+    subtopics:
+      - {id: r-strings-regex-flavours, name: "grepl, sub, gsub and regex engines", match: [regex-flavours]}
+      - {id: r-strings-sprintf-paste-format, name: "paste, sprintf, format and encoding", match: [sprintf-paste-format]}
+      - {id: r-strings-regex-perl-stringr-glue, name: "Regex flavours, stringr and glue", match: [regex-perl-stringr-glue]}
+  - id: r-dates
+    name: "Dates and times"
+    source: "R-intro; lubridate docs"
+    match: [r-dates]
+    subtopics:
+      - {id: r-dates-date-time-classes, name: "Date, POSIXct, POSIXlt and time zones", match: [date-time-classes]}
+      - {id: r-dates-lubridate-posixct-timezones, name: "POSIXct, lubridate and time zones", match: [lubridate-posixct-timezones]}
+  - id: r-io
+    name: "Data import and export"
+    source: "R Data Import/Export manual; R4DS data import"
+    match: [r-io]
+    subtopics:
+      - {id: r-io-read-write-files, name: "read.csv, readr, data.table::fread and Arrow", match: [read-write-files]}
+      - {id: r-io-paths-and-files, name: "File paths, here and the filesystem", match: [paths-and-files]}
+      - {id: r-io-readr-vroom-arrow-fread, name: "readr, data.table::fread, arrow and parquet", match: [readr-vroom-arrow-fread]}
+  - id: r-dplyr
+    name: "dplyr data manipulation"
+    source: "dplyr reference (dplyr.tidyverse.org); R4DS data transformation"
+    match: [r-dplyr]
+    subtopics:
+      - {id: r-dplyr-dplyr-grouped-summaries, name: "group_by, summarise, mutate and across", match: [dplyr-grouped-summaries]}
+      - {id: r-dplyr-dplyr-joins, name: "Join types, keys and filtering joins", match: [dplyr-joins]}
+      - {id: r-dplyr-across-summarise-group-by, name: "across, summarise, group_by and .by", match: [across-summarise-group-by]}
+  - id: r-tidyr
+    name: "tidyr reshaping"
+    source: "tidyr reference; R4DS data tidying"
+    match: [r-tidyr]
+    subtopics:
+      - {id: r-tidyr-pivot-reshape, name: "pivot_longer and pivot_wider", match: [pivot-reshape]}
+  - id: r-ggplot2
+    name: "ggplot2 graphics"
+    source: "ggplot2 reference (ggplot2.tidyverse.org)"
+    match: [r-ggplot2]
+    subtopics:
+      - {id: r-ggplot2-ggplot-grammar, name: "Aesthetics, geoms, scales and facets", match: [ggplot-grammar]}
+      - {id: r-ggplot2-ggplot-themes-export, name: "Themes, labels, legends and saving", match: [ggplot-themes-export]}
+      - {id: r-ggplot2-ggplot2-scales-themes-facets, name: "ggplot2 scales, themes, facets and ggsave", match: [ggplot2-scales-themes-facets]}
+  - id: r-base-graphics
+    name: "Base graphics and devices"
+    source: "R-intro 12; ?par"
+    match: [r-base-graphics]
+    subtopics:
+      - {id: r-base-graphics-base-plot-par, name: "plot, par, layout and graphics devices", match: [base-plot-par]}
+  - id: r-data-table
+    name: "data.table"
+    source: "data.table docs (rdatatable.gitlab.io/data.table)"
+    match: [r-data-table]
+    subtopics:
+      - {id: r-data-table-data-table-syntax, name: "i, j, by syntax, := and keys", match: [data-table-syntax]}
+  - id: r-pipes
+    name: "Pipes"
+    source: "R 4.1 NEWS; magrittr docs"
+    match: [r-pipes]
+    subtopics:
+      - {id: r-pipes-native-pipe, name: "Native pipe versus magrittr", match: [native-pipe]}
+  - id: r-meta
+    name: "Metaprogramming and tidy evaluation"
+    source: "Advanced R ch17-20; rlang docs"
+    match: [r-meta]
+    subtopics:
+      - {id: r-meta-tidy-eval, name: "Data masking and embracing", match: [tidy-eval]}
+      - {id: r-meta-quote-substitute, name: "quote, substitute, bquote and eval", match: [quote-substitute]}
+  - id: r-stats-models
+    name: "Statistical modelling"
+    source: "R-intro 11; stats package docs"
+    match: [r-stats-models]
+    subtopics:
+      - {id: r-stats-models-lm-glm-formulas, name: "lm, glm, formulas and predict", match: [lm-glm-formulas]}
+      - {id: r-stats-models-htests-pvalues, name: "Hypothesis tests and multiple comparisons", match: [htests-pvalues]}
+      - {id: r-stats-models-lm-glm-diagnostics-broom, name: "lm, glm, diagnostics and broom", match: [lm-glm-diagnostics-broom]}
+  - id: r-random
+    name: "Random numbers and simulation"
+    source: "?Random; ?RNGkind"
+    match: [r-random]
+    subtopics:
+      - {id: r-random-seed-and-sampling, name: "set.seed, sample and RNG kinds", match: [seed-and-sampling]}
+  - id: r-matrices
+    name: "Matrices and linear algebra"
+    source: "R-intro 5; ?solve"
+    match: [r-matrices]
+    subtopics:
+      - {id: r-matrices-matrix-operations, name: "Matrix creation, apply and linear algebra", match: [matrix-operations]}
+  - id: r-performance
+    name: "Performance and profiling"
+    source: "Advanced R ch23-24"
+    match: [r-performance]
+    subtopics:
+      - {id: r-performance-profile-benchmark, name: "Rprof, profvis and bench", match: [profile-benchmark]}
+  - id: r-memory
+    name: "Memory management"
+    source: "Advanced R ch2"
+    match: [r-memory]
+    subtopics:
+      - {id: r-memory-copy-on-modify-memory, name: "Copy-on-modify, gc and object size", match: [copy-on-modify-memory]}
+  - id: r-parallel
+    name: "Parallel computing"
+    source: "parallel package vignette; future docs"
+    match: [r-parallel]
+    subtopics:
+      - {id: r-parallel-parallel-processing, name: "mclapply, parLapply and future", match: [parallel-processing]}
+  - id: r-debugging
+    name: "Debugging"
+    source: "Advanced R ch22; R-exts"
+    match: [r-debugging]
+    subtopics:
+      - {id: r-debugging-debug-tools, name: "traceback, browser, debug and recover", match: [debug-tools]}
+  - id: r-testing
+    name: "Testing"
+    source: "testthat docs; R Packages ch13-14"
+    match: [r-testing]
+    subtopics:
+      - {id: r-testing-testthat-basics, name: "testthat expectations, fixtures and snapshots", match: [testthat-basics]}
+  - id: r-packages
+    name: "Package development"
+    source: "R Packages (2e); Writing R Extensions"
+    match: [r-packages]
+    subtopics:
+      - {id: r-packages-package-structure, name: "DESCRIPTION, NAMESPACE and roxygen2", match: [package-structure]}
+      - {id: r-packages-r-cmd-check, name: "R CMD check and CRAN submission", match: [r-cmd-check]}
+  - id: r-reproducibility
+    name: "Dependencies and reproducibility"
+    source: "renv docs (rstudio.github.io/renv)"
+    match: [r-reproducibility]
+    subtopics:
+      - {id: r-reproducibility-renv-lockfile, name: "renv init, snapshot and restore", match: [renv-lockfile]}
+  - id: r-install-config
+    name: "Installation and startup configuration"
+    source: "R Installation and Administration; ?Startup"
+    match: [r-install-config]
+    subtopics:
+      - {id: r-install-config-startup-files-libpaths, name: ".Rprofile, .Renviron and library paths", match: [startup-files-libpaths]}
+  - id: r-reports
+    name: "Reproducible reports"
+    source: "knitr and Quarto docs"
+    match: [r-reports]
+    subtopics:
+      - {id: r-reports-rmarkdown-quarto-chunks, name: "R Markdown and Quarto chunk options", match: [rmarkdown-quarto-chunks]}
+  - id: r-shiny
+    name: "Shiny"
+    source: "Mastering Shiny (mastering-shiny.org)"
+    match: [r-shiny]
+    subtopics:
+      - {id: r-shiny-shiny-reactivity, name: "Reactive expressions, observers and modules", match: [shiny-reactivity]}
+  - id: r-compiled
+    name: "Compiled code"
+    source: "Rcpp docs; Writing R Extensions"
+    match: [r-compiled]
+    subtopics:
+      - {id: r-compiled-rcpp-integration, name: "Rcpp functions and compiled code", match: [rcpp-integration]}
+  - id: r-databases
+    name: "Databases"
+    source: "DBI, dbplyr and odbc docs"
+    match: [r-databases]
+    subtopics:
+      - {id: r-databases-dbi-dbplyr, name: "DBI connections, parameterised queries and dbplyr", match: [dbi-dbplyr]}
+  - id: r-web
+    name: "Web APIs and JSON"
+    source: "httr2 and jsonlite docs"
+    match: [r-web]
+    subtopics:
+      - {id: r-web-httr2-jsonlite, name: "httr2 requests, retries and jsonlite parsing", match: [httr2-jsonlite]}
+  - id: r-style-linting
+    name: "Style and linting"
+    source: "Tidyverse style guide; lintr and styler docs"
+    match: [r-style-linting]
+    subtopics:
+      - {id: r-style-linting-style-lintr-styler, name: "tidyverse style, styler and lintr", match: [style-lintr-styler]}
+  - id: r-sorting
+    name: "Sorting, sets and searching"
+    source: "?order; ?sets"
+    match: [r-sorting]
+    subtopics:
+      - {id: r-sorting-order-sort-sets, name: "order, sort, unique, match and set operations", match: [order-sort-sets]}

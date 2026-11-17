@@ -1,0 +1,203 @@
+# Coverage spec: haproxy. Topics from the external structures named in `sources`.
+subject: haproxy
+scope:
+  category: computing-software
+  field: networking-hardware-and-wireless
+  products: [haproxy]
+sources:
+  - "HAProxy Configuration Manual (docs.haproxy.org/3.0/configuration.html) - section headings: global, proxies, bind options, server options, ACLs, http-request/response, stick-tables, logging, peers, Lua"
+  - "HAProxy Management Guide (docs.haproxy.org/3.0/management.html) - starting, signals, runtime API, stats socket commands"
+  - "HAProxy Starter Guide (docs.haproxy.org/3.0/intro.html) - architecture and HA"
+topics:
+  - id: config-sections-and-structure
+    name: config sections and structure
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [config-sections, defaults-section, frontend]
+  - id: config-check-and-reload
+    name: config check and reload
+    source: "https://docs.haproxy.org/3.0/management.html"
+    match: [config-check, reload, master-worker]
+  - id: global-maxconn-and-limits
+    name: global maxconn and limits
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [maxconn, ulimit-n, file-descriptors]
+  - id: defaults-timeouts
+    name: defaults timeouts
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [timeout-client, timeout-server, timeout-connect]
+  - id: frontend-bind-options
+    name: frontend bind options
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [bind-line, bind-options, reuseport]
+  - id: backend-balance-algorithms
+    name: backend balance algorithms
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [balance, roundrobin, leastconn]
+  - id: server-line-options
+    name: server line options
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [server-line, inter-rise-fall, slowstart]
+  - id: health-checks-tcp-and-http
+    name: health checks tcp and http
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [health-check, option-httpchk, http-check-send]
+  - id: http-check-expect-and-agent
+    name: http check expect and agent
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [http-check-expect, agent-check, agent-port]
+  - id: acl-definitions-and-matching
+    name: acl definitions and matching
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [acl, acl-fetch, hdr-host]
+  - id: use-backend-and-default-backend-routing
+    name: use backend and default backend routing
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [use-backend, default-backend, content-switching]
+  - id: http-request-rules
+    name: http request rules
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [http-request, http-request-deny, set-header]
+  - id: http-response-rules
+    name: http response rules
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [http-response, hsts-header, set-cookie]
+  - id: http-redirects-and-https-upgrade
+    name: http redirects and https upgrade
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [redirect-scheme, redirect-location, http-to-https]
+  - id: forwarded-headers-and-proxy-protocol
+    name: forwarded headers and proxy protocol
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [forwardfor, x-forwarded-for, proxy-protocol]
+  - id: tls-termination-with-crt-lists
+    name: tls termination with crt lists
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [tls-termination, crt-list, ssl-min-ver]
+  - id: tls-runtime-certificate-updates
+    name: tls runtime certificate updates
+    source: "https://docs.haproxy.org/3.0/management.html"
+    match: [set-ssl-cert, commit-ssl-cert, runtime-certificate-update]
+  - id: ocsp-stapling-and-auto-update
+    name: ocsp stapling and auto update
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [ocsp-stapling, ocsp-update, show-ssl-ocsp-response]
+  - id: backend-tls-verification-and-sni
+    name: backend tls verification and sni
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [backend-tls, verifyhost, ssl-verify]
+  - id: http2-and-alpn
+    name: http2 and alpn
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [http2, alpn-h2, h2-stream-limit]
+  - id: stick-tables-concepts
+    name: stick tables concepts
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [stick-table, track-sc, stick-table-types]
+  - id: cookie-persistence-sticky-sessions
+    name: cookie persistence sticky sessions
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [cookie-persistence, sticky-sessions, cookie-insert]
+  - id: per-ip-rate-limiting
+    name: per ip rate limiting
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [rate-limiting, http-req-rate, conn-cur]
+  - id: backend-queue-and-maxconn-shaping
+    name: backend queue and maxconn shaping
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [server-maxconn, maxqueue, timeout-queue]
+  - id: runtime-api-stats-socket
+    name: runtime api stats socket
+    source: "https://docs.haproxy.org/3.0/management.html"
+    match: [runtime-api, stats-socket, socat]
+  - id: server-drain-maintenance-and-weight
+    name: server drain maintenance and weight
+    source: "https://docs.haproxy.org/3.0/management.html"
+    match: [set-server-state, drain, maint]
+  - id: dns-resolvers-and-service-discovery
+    name: dns resolvers and service discovery
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [resolvers-section, server-template, dns-srv]
+  - id: logging-to-syslog-and-journald
+    name: logging to syslog and journald
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [log-global, syslog, rsyslog]
+  - id: http-log-format-and-termination-fields
+    name: http log format and termination fields
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [log-format, httplog, unique-id-format]
+  - id: stats-page-and-http-monitor
+    name: stats page and http monitor
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [stats-page, stats-uri, stats-auth]
+  - id: prometheus-exporter-built-in
+    name: prometheus exporter built in
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [prometheus-exporter, haproxy-metrics, use-service]
+  - id: tcp-mode-load-balancing
+    name: tcp mode load balancing
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [mode-tcp, tcplog, tcp-request]
+  - id: sni-routing-tls-passthrough
+    name: sni routing tls passthrough
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [ssl-passthrough, req-ssl-sni, sni-routing]
+  - id: peers-section-table-replication
+    name: peers section table replication
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [peers-section, stick-table-sync, peer-replication]
+  - id: keepalived-vrrp-high-availability
+    name: keepalived vrrp high availability
+    source: "https://docs.haproxy.org/3.0/intro.html"
+    match: [keepalived, vrrp, floating-ip]
+  - id: seamless-reload-and-listener-fd-passing
+    name: seamless reload and listener fd passing
+    source: "https://docs.haproxy.org/3.0/management.html"
+    match: [seamless-reload, expose-fd-listeners, master-worker-mode]
+  - id: maps-and-acl-files-runtime-edits
+    name: maps and acl files runtime edits
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [map-file, add-map, set-map]
+  - id: lua-scripting-actions-and-services
+    name: lua scripting actions and services
+    source: "https://www.haproxy.org/download/3.0/doc/lua.txt"
+    match: [lua, load-lua, register-action]
+  - id: http-connection-reuse-and-keepalive
+    name: http connection reuse and keepalive
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [http-reuse, keep-alive, pool-max-conn]
+  - id: http-compression
+    name: http compression
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [compression-filter, gzip-compression, compression-offload]
+  - id: tarpit-and-scanner-defence
+    name: tarpit and scanner defence
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [tarpit, silent-drop, ban-ip]
+  - id: websocket-and-long-lived-connections
+    name: websocket and long lived connections
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [websocket, timeout-tunnel, upgrade-header]
+  - id: termination-state-flags-troubleshooting
+    name: termination state flags troubleshooting
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [termination-state, haproxy-503, haproxy-504]
+  - id: threads-cpu-map-and-performance-tuning
+    name: threads cpu map and performance tuning
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [nbthread, cpu-map, thread-groups]
+  - id: response-caching-small-objects
+    name: response caching small objects
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [cache-section, cache-use, cache-store]
+  - id: client-certificate-authentication
+    name: client certificate authentication
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [client-certificate-auth, mutual-tls, verify-required]
+  - id: basic-auth-userlists
+    name: basic auth userlists
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [userlist, http-auth, basic-auth]
+  - id: custom-error-pages-and-return
+    name: custom error pages and return
+    source: "https://docs.haproxy.org/3.0/configuration.html"
+    match: [errorfile, errorfiles, http-request-return]

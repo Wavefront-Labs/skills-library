@@ -1,0 +1,218 @@
+# Coverage spec for YugabyteDB operations and administration (database-administration).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: yugabytedb
+scope:
+  category: computing-software
+  field: database-administration
+  products: [yugabytedb]
+sources:
+  - https://github.com/yugabyte/yugabyte-db/tree/master/docs/content/stable
+topics:
+  - id: architecture-and-process-roles
+    name: Architecture and process roles
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/yb-master.md
+    match: [yb-master, yb-tserver, architecture, system-catalog, tablets, docdb]
+  - id: raft-replication-and-fault-tolerance
+    name: Raft replication and fault tolerance
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/docdb-replication/raft.md
+    match: [raft, replication-factor, leader-election, fault-tolerance, tablet-peers, follower-unavailable]
+  - id: sharding-and-presplitting
+    name: Sharding choices and presplitting
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/docdb-sharding/sharding.md
+    match: [sharding, hash-sharding, range-sharding, presplit, split-into-tablets, split-at-values]
+  - id: tablet-splitting-operations
+    name: Manual and automatic tablet splitting
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/docdb-sharding/tablet-splitting.md
+    match: [tablet-splitting, automatic-tablet-splitting, split-tablet, post-split-compaction, outstanding-tablet-split-limit]
+  - id: tablet-and-memory-limits
+    name: Tablet replica limits and memory sizing
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/checklist.md
+    match: [tablet-limits, enforce-tablet-replica-limits, tablet-replicas-per-core-limit, tablet-replicas-per-gib-limit, memory, memory-defaults, tablet-replicas, memory-limit-hard-bytes, ysql-connections]
+  - id: storage-engine-and-compaction
+    name: Storage engine and compaction
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/docdb/lsm-sst.md
+    match: [lsm, rocksdb, memtable, sst, bloom-filter, tombstones, compaction, packed-rows, storage-format]
+  - id: manual-and-scheduled-compaction-ops
+    name: Manual and scheduled compaction
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/admin/yb-admin.md
+    match: [compact-table, scheduled-full-compaction, auto-compact, disk-space]
+  - id: transaction-isolation-and-priorities
+    name: Isolation levels and transaction priorities
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/transactions/isolation-levels.md
+    match: [transactions, isolation-levels, serializable, snapshot-isolation, read-committed, transaction-priority, conflict-resolution, select-for-update]
+  - id: read-restart-and-clock-skew
+    name: Read restart errors and clock skew
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/transactions/read-restart-error.md
+    match: [read-restart, clock-skew, hybrid-time, deferrable, yb-read-after-commit-visibility, ysql-output-buffer-size]
+  - id: colocation
+    name: Colocated tables and databases
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/additional-features/colocation.md
+    match: [colocation, ysql-colocate-database-by-default, yb-table-properties, small-datasets]
+  - id: follower-reads-and-staleness
+    name: Follower reads and staleness bounds
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/additional-features/follower-reads.md
+    match: [follower-reads, staleness, yb-follower-read-staleness-ms, max-stale-read-bound-time-ms]
+  - id: ddl-and-ci-best-practices
+    name: DDL concurrency and CI practices
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/best-practices-operations/administration.md
+    match: [best-practices, ddl, catalog-version, ci-testing, durable-wal-write]
+  - id: hardware-and-disk-sizing
+    name: Hardware and disk sizing
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/checklist.md
+    match: [sizing, hardware, checklist, disks, xfs, jbod, ephemeral-disks, production-readiness]
+  - id: os-configuration
+    name: Operating system configuration
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/manual-deployment/system-config.md
+    match: [ulimit, sysctl, limits-conf, vm-swappiness, transparent-hugepages, system-config, linux]
+  - id: clock-synchronization
+    name: Clock synchronization
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/manual-deployment/system-config.md
+    match: [clock-sync, chrony, max-clock-skew-usec, clockbound, ptp, time-source, hybrid-clock-skew]
+  - id: manual-deployment
+    name: Manual deployment of masters and tservers
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/manual-deployment/start-masters.md
+    match: [manual-deployment, flagfile, master-addresses, tserver-master-addrs, verify-deployment, ports]
+  - id: placement-and-leader-affinity
+    name: Placement policy and preferred zones
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/multi-dc/3dc-deployment.md
+    match: [placement, modify-placement-info, preferred-zones, leader-affinity, cluster-config, multi-zone]
+  - id: multi-dc-deployment
+    name: Three-datacenter deployment
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/multi-dc/3dc-deployment.md
+    match: [multi-dc, three-dc, leader-failure-max-missed-heartbeat-periods, raft-heartbeat-interval-ms, multi-region]
+  - id: kubernetes-deployment
+    name: Kubernetes deployment with Helm
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/kubernetes/single-zone/oss/helm-chart.md
+    match: [kubernetes, helm, statefulset, liveness-probe, readiness-probe, partition-tserver, storage-class, pod-resources]
+  - id: cluster-balancing
+    name: Cluster balancing
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/docdb-sharding/cluster-balancing.md
+    match: [cluster-balancer, load-balancer, enable-load-balancing, leader-balancing, remote-bootstrap-rate-limit]
+  - id: decommission-and-node-replacement
+    name: Decommissioning and replacing nodes
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/troubleshoot/cluster/replace_tserver.md
+    match: [blacklist, change-blacklist, decommission, replace-tserver, get-load-move-completion, scale-in]
+  - id: master-quorum-changes
+    name: Master quorum changes
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/troubleshoot/cluster/replace_master.md
+    match: [change-master-config, master-quorum, replace-master, list-all-masters, standby-master]
+  - id: cluster-move
+    name: Moving a cluster to new nodes
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/change-cluster-config.md
+    match: [cluster-move, change-cluster-config, migration]
+  - id: tablet-peer-recovery
+    name: Recovering failed tablet peers
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/troubleshoot/cluster/replace_failed_peers.md
+    match: [tablet-recovery, remote-bootstrap, delete-tablet, crash-loop, tablet-replication, failed-tablets]
+  - id: disk-full-troubleshooting
+    name: Disk full troubleshooting
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/troubleshoot/nodes/disk-full.md
+    match: [disk-full, low-disk-space, reject-writes-min-disk-space-mb, drive-fault, capacity]
+  - id: snapshot-backups
+    name: Snapshot backup and restore
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/backup-restore/snapshot-ysql.md
+    match: [snapshots, backup, restore, create-database-snapshot, hard-links]
+  - id: external-backup-and-migration
+    name: Snapshot export and import
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/backup-restore/snapshot-ysql.md
+    match: [export-snapshot, import-snapshot, ysql-dump, external-backup]
+  - id: pitr-schedules-and-retention
+    name: PITR schedules and history retention
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/backup-restore/point-in-time-recovery/enable-pitr.md
+    match: [pitr, snapshot-schedule, create-snapshot-schedule, retention, timestamp-history-retention-interval-sec, point-in-time-recovery]
+  - id: pitr-rewind
+    name: PITR rewind and restore
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/backup-restore/point-in-time-recovery/rewind.md
+    match: [restore-snapshot-schedule, rewind, restore-to-point-in-time, list-snapshot-restorations]
+  - id: database-clone
+    name: Database clone to point in time
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/backup-restore/point-in-time-recovery/clone.md
+    match: [clone, clone-database, clone-namespace, as-of, yb-database-clones, ysql-clone-pg-schema-rpc-timeout-ms]
+  - id: inspect-at-point-in-time
+    name: Inspecting data at a point in time
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/backup-restore/point-in-time-recovery/inspect.md
+    match: [yb-read-time, inspect-at-pit, read-only, history-retention, snapshot-too-old]
+  - id: rolling-upgrades
+    name: Rolling upgrade procedure
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/upgrade-deployment.md
+    match: [upgrade, rolling-upgrade, pre-checks, rollback, finalize]
+  - id: autoflags-and-finalization
+    name: AutoFlags and finalization
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/upgrade-deployment.md
+    match: [autoflags, promote-auto-flags, upgrade-ysql, finalize-upgrade, get-auto-flags-config]
+  - id: ysql-major-upgrade
+    name: YSQL major version upgrade
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/manage/ysql-major-upgrade-local.md
+    match: [ysql-major-upgrade, pg-upgrade, postgresql-15, yugabyte-upgrade]
+  - id: xcluster-setup-and-monitoring
+    name: xCluster modes, setup and monitoring
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/architecture/docdb-replication/async-replication.md
+    match: [xcluster, async-replication, transactional-xcluster, non-transactional-xcluster, setup-universe-replication, replication-lag, safe-time]
+  - id: xcluster-failover-and-switchover
+    name: xCluster failover and switchover
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/multi-dc/async-replication/async-transactional-failover.md
+    match: [failover, disaster-recovery, delete-universe-replication, rpo, switchover, planned-failover, reverse-replication, rpo-zero, sequences]
+  - id: read-replicas
+    name: Read replica clusters
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/deploy/multi-dc/read-replica-clusters.md
+    match: [read-replicas, observer, add-read-replica-placement-info, placement-uuid]
+  - id: change-data-capture
+    name: Change data capture with logical replication
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/additional-features/change-data-capture/using-logical-replication/key-concepts.md
+    match: [cdc, logical-replication, replication-slot, publication, yboutput, pgoutput, lsn, replica-identity, kafka]
+  - id: metrics-and-alerting
+    name: Metrics for operations
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/launch-and-manage/monitor-and-alert/metrics/ybmaster.md
+    match: [metrics, monitoring, prometheus, handler-latency, ts-live-tablet-peers, throughput, percentile]
+  - id: active-session-history
+    name: Active Session History
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/launch-and-manage/monitor-and-alert/active-session-history-monitor.md
+    match: [ash, active-session-history, wait-events, yb-active-session-history, ysql-yb-enable-ash, query-id]
+  - id: cluster-wide-and-tablet-views
+    name: Cluster-wide and tablet metadata views
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/launch-and-manage/monitor-and-alert/tablet-metadata.md
+    match: [gv-views, yb-enable-global-views, pg-read-all-stats, yb-local-tablets, yb-tablet-metadata, tablet-state]
+  - id: yb-admin-tooling
+    name: yb-admin command usage
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/admin/yb-admin.md
+    match: [yb-admin, cli, list-tablets, change-config, are-nodes-safe-to-take-down, ysql-catalog-version, leader-stepdown]
+  - id: yb-ts-cli-tooling
+    name: yb-ts-cli command usage
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/admin/yb-ts-cli.md
+    match: [yb-ts-cli, tablet-server, flush-tablet, set-flag, refresh-flags, reload-certificates]
+  - id: yb-ctl-local-clusters
+    name: Local clusters with yb-ctl
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/admin/yb-ctl.md
+    match: [yb-ctl, local-cluster, development, num-shards-per-tserver, placement-info, listen-ip, test-cluster]
+  - id: tls-encryption
+    name: TLS encryption
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/tls-encryption/server-to-server.md
+    match: [tls, certificates, openssl, node-to-node-encryption, client-to-server-encryption, allow-insecure-connections, certs-dir, ca-crt]
+  - id: encryption-at-rest
+    name: Encryption at rest
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/encryption-at-rest.md
+    match: [encryption-at-rest, universe-key, key-rotation, add-universe-key-to-all-masters, is-encryption-enabled, openssl-rand]
+  - id: ysql-authentication-and-hba
+    name: YSQL authentication and host-based rules
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/authentication/host-based-authentication.md
+    match: [ysql-authentication, ysql-enable-auth, host-based-authentication, ysql-hba-conf-csv, pg-hba-file-rules, trust, yugabyte-user]
+  - id: passwords-and-login-profiles
+    name: Passwords, SCRAM and login profiles
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/authentication/password-authentication.md
+    match: [passwords, scram-sha-256, md5-migration, password-encryption, login-profiles, ysql-enable-profile, failed-login-attempts, passwordcheck]
+  - id: ldap-authentication
+    name: LDAP authentication
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/authentication/ldap-authentication-ysql.md
+    match: [ldap, ldap-authentication, simple-bind, search-and-bind, ldapbasedn, ldaps]
+  - id: roles-and-privileges
+    name: Roles and privileges
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/authorization/rbac-model.md
+    match: [rbac, roles, grant, revoke, yb-db-admin, yb-extension, yb-fdw, role-hierarchy, privileges]
+  - id: audit-logging
+    name: Audit logging
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/audit-logging/audit-logging-ysql.md
+    match: [audit-logging, pgaudit, ysql-pg-conf-csv, compliance, pgaudit-log, log-parameter, session-audit]
+  - id: security-hardening
+    name: Production security hardening
+    source: https://github.com/yugabyte/yugabyte-db/blob/master/docs/content/stable/secure/security-checklist.md
+    match: [security, hardening, network-exposure, rpc-bind-addresses, least-privilege]

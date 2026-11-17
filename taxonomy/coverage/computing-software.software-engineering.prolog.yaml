@@ -1,0 +1,311 @@
+# Canonical coverage spec: Prolog language (SWI-Prolog focus, ISO core noted).
+subject: prolog-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [prolog]
+sources:
+  - "SWI-Prolog manual table of contents (swi-prolog.org/pldoc/doc_for?object=manual)"
+  - "ISO/IEC 13211-1 core Prolog topics"
+  - "The Power of Prolog (metalevel.at/prolog)"
+  - "SWI-Prolog CLP(FD) docs, DCG, tabling, modules, exceptions manual sections"
+  - "plunit testing package docs"
+topics:
+  - id: prolog-syntax
+    name: "Syntax: terms, atoms, variables and operators"
+    source: "SWI-Prolog manual: Syntax Notes"
+    match: [prolog-syntax]
+    subtopics:
+      - {id: prolog-syntax-terms-atoms-vars, name: "Atoms, variables, numbers and compound terms", match: [atoms-variables-terms]}
+      - {id: prolog-syntax-operators-op, name: "Operators and op/3", match: [operators-op3]}
+  - id: prolog-datatypes
+    name: "Data types: lists, strings and text"
+    source: "SWI-Prolog manual: Section 5 SWI-Prolog extensions (lists, strings)"
+    match: [prolog-datatypes]
+    subtopics:
+      - {id: prolog-datatypes-list-structure, name: "List structure and the head-tail pattern", match: [list-structure]}
+      - {id: prolog-datatypes-strings-codes-atoms, name: "Atoms, strings, code and char lists", match: [strings-vs-atoms]}
+  - id: prolog-unification
+    name: "Unification and term comparison"
+    source: "ISO/IEC 13211-1: unification, term ordering; SWI manual: Comparison and unification of terms"
+    match: [prolog-unification]
+    subtopics:
+      - {id: prolog-unification-unify-occurs-check, name: "Unification and the occurs check", match: [unification-occurs-check]}
+      - {id: prolog-unification-term-ordering, name: "Term identity and standard order", match: [term-ordering]}
+  - id: prolog-execution
+    name: "Execution model: resolution and backtracking"
+    source: "The Power of Prolog: Prolog execution; ISO/IEC 13211-1 control constructs"
+    match: [prolog-execution]
+    subtopics:
+      - {id: prolog-execution-backtracking-model, name: "Resolution, choice points and backtracking", match: [backtracking-resolution]}
+      - {id: prolog-execution-determinism-ordering, name: "Clause order and determinism", match: [clause-order-determinism]}
+  - id: prolog-cut
+    name: "Control: cut, if-then-else and negation"
+    source: "ISO/IEC 13211-1: control constructs; SWI manual: Control Predicates"
+    match: [prolog-cut]
+    subtopics:
+      - {id: prolog-cut-cut-semantics, name: "Cut: green and red cuts", match: [cut-semantics]}
+      - {id: prolog-cut-if-then-else-negation, name: "If-then-else, soft-cut and negation as failure", match: [if-then-else-naf]}
+  - id: prolog-arithmetic
+    name: "Arithmetic"
+    source: "ISO/IEC 13211-1: arithmetic; SWI manual: Arithmetic"
+    match: [prolog-arithmetic]
+    subtopics:
+      - {id: prolog-arithmetic-is-evaluation, name: "Evaluating with is/2", match: [is-evaluation]}
+      - {id: prolog-arithmetic-arith-compare-bigints, name: "Arithmetic comparison and unbounded integers", match: [arithmetic-comparison]}
+  - id: prolog-typecheck
+    name: "Type checking and term inspection"
+    source: "ISO/IEC 13211-1: type testing and term creation; SWI manual: Verify Type of a Term, Analysing and Constructing Terms"
+    match: [prolog-typecheck]
+    subtopics:
+      - {id: prolog-typecheck-type-tests, name: "Type test predicates", match: [type-test-predicates]}
+      - {id: prolog-typecheck-functor-arg-univ, name: "functor/3, arg/3 and =..", match: [functor-arg-univ]}
+      - {id: prolog-typecheck-copy-numbervars, name: "copy_term/2, numbervars/3 and term_variables/2", match: [copy-term-numbervars]}
+  - id: prolog-listlib
+    name: "library(lists) and sorting"
+    source: "SWI manual: library(lists), sorting"
+    match: [prolog-lists-library]
+    subtopics:
+      - {id: prolog-listlib-lists-core, name: "append, member, nth, reverse, sum_list", match: [lists-library-core]}
+      - {id: prolog-listlib-sort-predsort, name: "sort/4, msort/2, predsort/3 and keysort/2", match: [sort-msort-predsort]}
+  - id: prolog-apply
+    name: "Higher-order predicates and lambdas"
+    source: "SWI manual: library(apply), library(yall), call/N"
+    match: [prolog-higher-order]
+    subtopics:
+      - {id: prolog-apply-maplist-foldl, name: "maplist, foldl, include, exclude", match: [maplist-foldl]}
+      - {id: prolog-apply-call-n-yall, name: "call/N and yall lambdas", match: [call-n-yall]}
+  - id: prolog-allsol
+    name: "All-solutions and aggregation"
+    source: "ISO/IEC 13211-1: findall/3, bagof/3, setof/3; SWI manual: library(aggregate)"
+    match: [prolog-all-solutions]
+    subtopics:
+      - {id: prolog-allsol-findall-bagof-setof, name: "findall/3, bagof/3, setof/3", match: [findall-bagof-setof]}
+      - {id: prolog-allsol-aggregate-all, name: "aggregate_all/3 and aggregate/3", match: [aggregate-all]}
+  - id: prolog-exceptions
+    name: "Exception handling"
+    source: "ISO/IEC 13211-1: catch/3, throw/1, error terms; SWI manual: Exception handling"
+    match: [prolog-exceptions]
+    subtopics:
+      - {id: prolog-exceptions-catch-throw, name: "catch/3 and throw/1", match: [catch-throw]}
+      - {id: prolog-exceptions-iso-error-terms, name: "ISO error terms and library(error)", match: [iso-error-terms]}
+      - {id: prolog-exceptions-cleanup-assertions, name: "setup_call_cleanup/3 and assertion/1", match: [setup-call-cleanup]}
+  - id: prolog-database
+    name: "Dynamic database"
+    source: "ISO/IEC 13211-1: clause creation and destruction; SWI manual: Database"
+    match: [prolog-database]
+    subtopics:
+      - {id: prolog-database-assert-retract, name: "assert, retract and abolish", match: [assert-retract]}
+      - {id: prolog-database-dynamic-declarations, name: "dynamic, discontiguous and multifile", match: [dynamic-declaration]}
+  - id: prolog-io
+    name: "Term and stream input/output"
+    source: "ISO/IEC 13211-1: stream selection and control, term I/O; SWI manual: Input and output"
+    match: [prolog-io]
+    subtopics:
+      - {id: prolog-io-read-write-terms, name: "read/1, write/1, print/1 and write_canonical", match: [read-write-terms]}
+      - {id: prolog-io-streams-files, name: "Streams and file I/O", match: [streams-file-io]}
+  - id: prolog-format
+    name: "Formatted output and messages"
+    source: "SWI manual: format/2, print_message/2, portray"
+    match: [prolog-format]
+    subtopics:
+      - {id: prolog-format-format-directives, name: "format/2 directives", match: [format-directives]}
+      - {id: prolog-format-print-message, name: "print_message/2 and portray", match: [print-message-portray]}
+  - id: prolog-modules
+    name: "Modules"
+    source: "SWI manual: Modules; ISO/IEC 13211-2 (modules)"
+    match: [prolog-modules]
+    subtopics:
+      - {id: prolog-modules-module-export, name: "Module declaration and exports", match: [module-declaration-export]}
+      - {id: prolog-modules-use-module-import, name: "use_module/1,2 and import control", match: [use-module-import]}
+      - {id: prolog-modules-meta-predicates, name: "meta_predicate and module-sensitive arguments", match: [meta-predicate-decl]}
+  - id: prolog-loading
+    name: "Loading code and directives"
+    source: "SWI manual: Loading Prolog source files"
+    match: [prolog-loading]
+    subtopics:
+      - {id: prolog-loading-consult-load, name: "consult, ensure_loaded and make", match: [consult-load-files]}
+      - {id: prolog-loading-initialization-directives, name: "initialization/1,2 and directives", match: [initialization-directive]}
+  - id: prolog-dcg
+    name: "Definite clause grammars"
+    source: "SWI manual: DCG grammar rules; The Power of Prolog: DCGs"
+    match: [prolog-dcg]
+    subtopics:
+      - {id: prolog-dcg-dcg-translation, name: "DCG rule syntax and translation", match: [dcg-translation]}
+      - {id: prolog-dcg-dcg-basics-library, name: "library(dcg/basics) and pushback", match: [dcg-basics-library]}
+  - id: prolog-parsing
+    name: "Parsing text and strings"
+    source: "SWI manual: library(readutil), library(pio), strings section"
+    match: [prolog-parsing]
+    subtopics:
+      - {id: prolog-parsing-file-parsing-pio, name: "Parsing files lazily with phrase_from_file/2", match: [phrase-from-file]}
+      - {id: prolog-parsing-split-strings, name: "split_string/4, sub_string and string helpers", match: [split-string-4]}
+  - id: prolog-clpfd
+    name: "CLP(FD): constraints over integers"
+    source: "SWI manual: library(clpfd); The Power of Prolog: CLP(FD)"
+    match: [prolog-clpfd]
+    subtopics:
+      - {id: prolog-clpfd-clpfd-basics, name: "Domains, #= and labeling", match: [clpfd-labeling]}
+      - {id: prolog-clpfd-clpfd-global-reif, name: "Global constraints and reification", match: [clpfd-reification]}
+  - id: prolog-clpfd-apps
+    name: "CLP(FD) applications and optimisation"
+    source: "SWI manual: library(clpfd) examples; The Power of Prolog: Sudoku, N-queens"
+    match: [prolog-clpfd-apps]
+    subtopics:
+      - {id: prolog-clpfd-apps-puzzles-sudoku-queens, name: "Sudoku, N-queens and puzzles", match: [clpfd-sudoku-queens]}
+      - {id: prolog-clpfd-apps-optimisation-labeling, name: "Optimisation with labeling([min/max]) and search options", match: [clpfd-optimisation]}
+  - id: prolog-clpother
+    name: "CLP(B), CLP(Q/R) and CHR"
+    source: "SWI manual: library(clpb), library(clpr), library(clpq), CHR"
+    match: [prolog-clp-other]
+    subtopics:
+      - {id: prolog-clpother-clpb, name: "CLP(B): Boolean constraints", match: [clpb-boolean]}
+      - {id: prolog-clpother-clpqr-chr, name: "CLP(Q/R) and Constraint Handling Rules", match: [clpq-clpr]}
+  - id: prolog-tabling
+    name: "Tabling"
+    source: "SWI manual: Tabled execution (SLG resolution)"
+    match: [prolog-tabling]
+    subtopics:
+      - {id: prolog-tabling-tabling-basics, name: "table/1 and left recursion", match: [tabling-basics]}
+      - {id: prolog-tabling-tabling-modes-wfs, name: "Answer subsumption, incremental tabling and WFS", match: [tabling-advanced]}
+  - id: prolog-pure
+    name: "Pure Prolog and coroutining"
+    source: "The Power of Prolog: Declarative programming, Coroutining; SWI manual: dif/2, freeze/2"
+    match: [prolog-pure]
+    subtopics:
+      - {id: prolog-pure-dif-pure, name: "dif/2 and monotonic programs", match: [dif-constraint]}
+      - {id: prolog-pure-freeze-when, name: "freeze/2, when/2 and coroutines", match: [freeze-when]}
+      - {id: prolog-pure-attributed-vars, name: "Attributed variables", match: [attributed-variables]}
+  - id: prolog-debugging
+    name: "Debugging and tracing"
+    source: "SWI manual: The graphical/text debugger, Tracing"
+    match: [prolog-debugging]
+    subtopics:
+      - {id: prolog-debugging-trace-spy, name: "trace, spy and the four-port model", match: [trace-spy-debugger]}
+      - {id: prolog-debugging-debug-topics, name: "debug/3, print_message and assertion for lightweight debugging", match: [debug-3-topics]}
+  - id: prolog-testing
+    name: "Testing with plunit"
+    source: "SWI manual: plunit package (swi-prolog.org/pldoc/package/plunit.html)"
+    match: [prolog-testing]
+    subtopics:
+      - {id: prolog-testing-plunit-basics, name: "Writing and running plunit tests", match: [plunit-basics]}
+      - {id: prolog-testing-plunit-fixtures, name: "Fixtures, options and CI exit codes", match: [plunit-options]}
+  - id: prolog-performance
+    name: "Performance and memory"
+    source: "SWI manual: Indexing, Memory areas, Profiling"
+    match: [prolog-performance]
+    subtopics:
+      - {id: prolog-performance-indexing-tco, name: "Indexing and last-call optimisation", match: [indexing-last-call]}
+      - {id: prolog-performance-profile-stats, name: "Profiling and statistics", match: [profile-statistics]}
+  - id: prolog-accumulators
+    name: "Accumulators and difference lists"
+    source: "The Power of Prolog: Accumulators; Difference lists"
+    match: [prolog-accumulators]
+    subtopics:
+      - {id: prolog-accumulators-accumulator-pattern, name: "Accumulator pairs and tail recursion", match: [accumulator-pattern]}
+      - {id: prolog-accumulators-difference-lists, name: "Difference lists", match: [difference-lists]}
+  - id: prolog-atomtext
+    name: "Atoms and character processing"
+    source: "ISO/IEC 13211-1: atoms and characters; SWI manual: Analysing and Constructing Atoms"
+    match: [prolog-atom-text]
+    subtopics:
+      - {id: prolog-atomtext-atom-conversion, name: "atom_codes, atom_chars, atom_number, char_code", match: [atom-codes-chars]}
+      - {id: prolog-atomtext-sub-atom, name: "sub_atom/5 and atom_concat/3", match: [sub-atom-5]}
+  - id: prolog-assoc
+    name: "Associations, pairs and ordered sets"
+    source: "SWI manual: library(assoc), library(rbtrees), library(pairs), library(ordsets)"
+    match: [prolog-assoc-sets]
+    subtopics:
+      - {id: prolog-assoc-assoc-rbtrees, name: "library(assoc) and rbtrees", match: [assoc-library]}
+      - {id: prolog-assoc-pairs-ordsets, name: "pairs and ordsets", match: [pairs-ordsets]}
+  - id: prolog-dicts
+    name: "SWI-Prolog dicts"
+    source: "SWI manual: Dicts: structures with named arguments"
+    match: [prolog-dicts]
+    subtopics:
+      - {id: prolog-dicts-dict-basics, name: "Dict syntax and access", match: [dict-basics]}
+      - {id: prolog-dicts-dict-json, name: "Dicts and JSON", match: [dict-json]}
+  - id: prolog-globals
+    name: "Global variables and destructive assignment"
+    source: "SWI manual: Global variables, setarg/3"
+    match: [prolog-global-state]
+    subtopics:
+      - {id: prolog-globals-global-vars, name: "b_setval, nb_setval and flags", match: [global-variables]}
+      - {id: prolog-globals-setarg-mutable, name: "setarg/3 and nb_setarg/3", match: [setarg-mutable]}
+  - id: prolog-threads
+    name: "Threads and concurrency"
+    source: "SWI manual: Multithreaded applications"
+    match: [prolog-threads]
+    subtopics:
+      - {id: prolog-threads-thread-create, name: "thread_create, join and message queues", match: [thread-create-queues]}
+      - {id: prolog-threads-mutex-thread-local, name: "Mutexes, thread_local and with_mutex", match: [mutex-thread-local]}
+  - id: prolog-interop
+    name: "Foreign language interface and Janus"
+    source: "SWI manual: Foreign Language Interface; Janus (Python) section"
+    match: [prolog-interop]
+    subtopics:
+      - {id: prolog-interop-c-foreign, name: "C foreign interface", match: [foreign-c-interface]}
+      - {id: prolog-interop-janus-python, name: "Calling Python via Janus", match: [janus-python]}
+  - id: prolog-web
+    name: "HTTP server and web"
+    source: "SWI manual: HTTP support library"
+    match: [prolog-http]
+    subtopics:
+      - {id: prolog-web-http-server, name: "http_server and handlers", match: [http-server-handlers]}
+      - {id: prolog-web-http-client, name: "HTTP client and web scraping", match: [http-client-open]}
+  - id: prolog-warnings
+    name: "Compiler warnings and code style"
+    source: "SWI manual: Compilation warnings, style_check/1; Coding guidelines for Prolog (Covington et al.)"
+    match: [prolog-warnings]
+    subtopics:
+      - {id: prolog-warnings-singleton-warnings, name: "Singleton, discontiguous and clause-order warnings", match: [singleton-warnings]}
+      - {id: prolog-warnings-static-checks, name: "check/0, listing and portray_clause", match: [listing-portray-clause]}
+  - id: prolog-pldoc
+    name: "Documentation with PlDoc"
+    source: "SWI manual: PlDoc - A Prolog Documentation System"
+    match: [prolog-pldoc]
+    subtopics:
+      - {id: prolog-pldoc-pldoc-comments, name: "PlDoc comments and mode declarations", match: [pldoc-comments]}
+      - {id: prolog-pldoc-pldoc-modules, name: "Module-level documentation and doc_save", match: [doc-save]}
+  - id: prolog-cli
+    name: "Command line and toplevel"
+    source: "SWI manual: Command line options, The toplevel"
+    match: [prolog-cli]
+    subtopics:
+      - {id: prolog-cli-swipl-options, name: "swipl command-line options", match: [swipl-command-line]}
+      - {id: prolog-cli-toplevel-use, name: "Toplevel features and init files", match: [toplevel-features]}
+  - id: prolog-packs
+    name: "Packs, saved states and deployment"
+    source: "SWI manual: Packages (pack_install), Saved states (qsave_program)"
+    match: [prolog-deploy]
+    subtopics:
+      - {id: prolog-packs-pack-manager, name: "pack_install and pack search", match: [pack-install]}
+      - {id: prolog-packs-qsave-deploy, name: "qsave_program and standalone executables", match: [qsave-program]}
+  - id: prolog-iso
+    name: "ISO conformance and flags"
+    source: "ISO/IEC 13211-1:1995; SWI manual: ISO compliance, prolog_flag"
+    match: [prolog-iso]
+    subtopics:
+      - {id: prolog-iso-flags, name: "prolog flags", match: [prolog-flags]}
+      - {id: prolog-iso-iso-core, name: "ISO core builtins and portability", match: [iso-core-builtins]}
+  - id: prolog-metainterp
+    name: "Meta-interpreters and program inspection"
+    source: "The Power of Prolog: Meta-interpreters; SWI manual: clause/2"
+    match: [prolog-meta]
+    subtopics:
+      - {id: prolog-metainterp-vanilla-metainterp, name: "The vanilla meta-interpreter", match: [vanilla-meta-interpreter]}
+      - {id: prolog-metainterp-term-expansion, name: "term_expansion and goal_expansion", match: [term-expansion]}
+  - id: prolog-search
+    name: "Search and graph algorithms"
+    source: "The Power of Prolog: Searching; classic AI texts (Bratko, Prolog Programming for AI)"
+    match: [prolog-search]
+    subtopics:
+      - {id: prolog-search-dfs-bfs-id, name: "Depth-first, breadth-first and iterative deepening", match: [search-dfs-bfs]}
+      - {id: prolog-search-heuristic-search, name: "Best-first and A* search", match: [search-astar]}
+  - id: prolog-modelling
+    name: "Knowledge modelling and puzzles"
+    source: "The Power of Prolog: Prolog by examples; Bratko, Prolog Programming for AI"
+    match: [prolog-modelling]
+    subtopics:
+      - {id: prolog-modelling-facts-rules-family, name: "Facts, rules and relational queries", match: [facts-rules-queries]}
+      - {id: prolog-modelling-logic-puzzles, name: "Logic puzzles with permutation and select", match: [logic-puzzles-permutation]}

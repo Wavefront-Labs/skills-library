@@ -1,0 +1,293 @@
+# Coverage spec: HPC and Parallel Computing. Topics and subtopics from the external structures in `sources`.
+subject: hpc-parallel-computing
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [hpc-parallel-computing]
+sources:
+  - "MPI Standard 4.x table of contents (mpi-forum.org) - point-to-point, collectives, datatypes, communicators, one-sided, I/O, process management, topologies, persistent and partitioned communication"
+  - "OpenMP API 5.x specification and Examples (openmp.org) - parallel regions, worksharing, tasking, SIMD, target offload, memory model, synchronisation, environment variables"
+  - "NVIDIA CUDA C++ Programming Guide and Best Practices Guide ToC"
+  - "Slurm Workload Manager documentation (slurm.schedmd.com) - sbatch, srun, salloc, partitions, accounting, QOS, fair share, job arrays, GRES, cgroups"
+  - "HPC carpentry, Environment Modules/Lmod, Spack, EasyBuild, Lustre/GPFS, HDF5 and ADIOS documentation, NERSC/ALCF/OLCF user guides"
+topics:
+  - id: mpi-p2p
+    name: MPI point-to-point
+    source: "MPI Standard ch.3 Point-to-point"
+    match: [mpi, mpi-send-recv, mpi-nonblocking]
+    subtopics:
+      - {id: blocking-send-recv, name: "Blocking send and receive semantics", match: [mpi-send, mpi-recv, mpi-deadlock]}
+      - {id: nonblocking-and-overlap, name: "Nonblocking communication and overlap", match: [mpi-isend, mpi-irecv, mpi-wait]}
+  - id: mpi-collectives
+    name: MPI collective operations
+    source: "MPI Standard ch.6 Collectives"
+    match: [mpi-collectives, mpi-bcast, mpi-allreduce]
+    subtopics:
+      - {id: reductions-and-broadcast, name: "Bcast, Reduce, Allreduce", match: [mpi-reduce, mpi-bcast-tree, mpi-op]}
+      - {id: scatter-gather-alltoall, name: "Scatter, Gather, Alltoall", match: [mpi-scatter, mpi-gather, mpi-alltoall, mpi-allgatherv]}
+  - id: mpi-datatypes
+    name: MPI derived datatypes
+    source: "MPI Standard ch.5 Datatypes"
+    match: [mpi-datatypes, mpi-type-vector, mpi-pack]
+    subtopics:
+      - {id: vector-subarray-types, name: "Vector and subarray datatypes", match: [mpi-type-vector, mpi-type-create-subarray, mpi-type-commit]}
+      - {id: struct-types-and-pack, name: "Struct types and MPI_Pack", match: [mpi-type-create-struct, mpi-pack-unpack, mpi-get-address]}
+  - id: mpi-comm
+    name: Communicators, groups and topologies
+    source: "MPI Standard ch.7-8"
+    match: [mpi-communicators, mpi-comm-split, mpi-cartesian]
+    subtopics:
+      - {id: comm-split-and-groups, name: "Splitting communicators", match: [mpi-comm-split, mpi-comm-dup, mpi-group]}
+      - {id: cartesian-topologies, name: "Cartesian and graph topologies", match: [mpi-cart-create, mpi-cart-shift, mpi-dims-create]}
+  - id: mpi-onesided
+    name: One-sided communication
+    source: "MPI Standard ch.11 RMA"
+    match: [mpi-rma, mpi-win, mpi-put-get]
+    subtopics:
+      - {id: rma-windows-and-sync, name: "RMA windows and synchronisation", match: [mpi-win-create, mpi-win-fence, mpi-win-lock]}
+      - {id: shared-memory-windows, name: "Shared-memory windows", match: [mpi-win-allocate-shared, mpi-win-shared-query, node-local-shared]}
+  - id: mpi-io
+    name: MPI-IO and parallel I/O
+    source: "MPI Standard ch.13 I/O"
+    match: [mpi-io, mpi-file-write-all, hdf5-parallel]
+    subtopics:
+      - {id: mpi-io-collective-writes, name: "MPI-IO collective I/O", match: [mpi-file-open, mpi-file-set-view, collective-buffering]}
+      - {id: hdf5-and-adios, name: "HDF5 and ADIOS2", match: [parallel-hdf5, adios2, netcdf-parallel]}
+  - id: mpi-processes
+    name: Process management and launching
+    source: "MPI Standard ch.10 + implementation docs"
+    match: [mpirun, mpiexec, process-binding]
+    subtopics:
+      - {id: launching-and-binding, name: "Launching and process binding", match: [mpirun-bind-to, srun-mpi, rank-placement]}
+      - {id: mpi-implementation-choice, name: "Open MPI, MPICH and vendor MPIs", match: [openmpi, mpich, intel-mpi, cray-mpich]}
+  - id: mpi-debug-perf
+    name: MPI debugging and profiling
+    source: "MPI tools documentation"
+    match: [mpi-debugging, mpi-profiling, scalasca]
+    subtopics:
+      - {id: mpi-debugging-tools, name: "Debugging MPI programs", match: [mpi-deadlock-debug, parallel-debugger, valgrind-mpi]}
+      - {id: mpi-profiling-tracing, name: "Profiling and tracing MPI", match: [mpip, tau-profiling, vtune-mpi, ittrace]}
+  - id: omp-parallel
+    name: OpenMP parallel regions
+    source: "OpenMP API spec ch.2"
+    match: [openmp, omp-parallel, omp-threads]
+    subtopics:
+      - {id: parallel-region-and-threads, name: "Parallel regions and thread control", match: [omp-num-threads, omp-get-thread-num, omp-proc-bind]}
+      - {id: data-sharing-clauses, name: "Data-sharing clauses", match: [omp-private, omp-firstprivate, omp-shared]}
+  - id: omp-worksharing
+    name: OpenMP worksharing and loops
+    source: "OpenMP spec/Worksharing"
+    match: [omp-for, omp-schedule, omp-reduction]
+    subtopics:
+      - {id: loop-scheduling, name: "Loop scheduling", match: [omp-schedule-static, omp-schedule-dynamic, omp-schedule-guided]}
+      - {id: reductions-and-atomics, name: "Reductions, atomics and critical", match: [omp-reduction-clause, omp-atomic, omp-critical]}
+  - id: omp-tasks
+    name: OpenMP tasking
+    source: "OpenMP spec/Tasking"
+    match: [omp-task, omp-taskloop, omp-depend]
+    subtopics:
+      - {id: tasks-and-dependencies, name: "Tasks and dependencies", match: [omp-task-depend, omp-taskwait, omp-taskgroup]}
+      - {id: task-priorities-and-affinity, name: "Task priorities and detach", match: [omp-task-priority, omp-detach, omp-affinity]}
+  - id: omp-simd-target
+    name: SIMD and device offload
+    source: "OpenMP spec/SIMD and Device constructs"
+    match: [omp-simd, omp-target, omp-teams]
+    subtopics:
+      - {id: omp-simd-vectorisation, name: "SIMD directives", match: [omp-simd-pragma, aligned-clause, safelen]}
+      - {id: omp-target-offload, name: "Target offload to GPUs", match: [omp-target-teams, omp-map-clause, omp-target-data]}
+  - id: omp-memory-sync
+    name: OpenMP memory model and synchronisation
+    source: "OpenMP spec/Memory model"
+    match: [omp-barrier, omp-flush, omp-locks]
+    subtopics:
+      - {id: barriers-locks-ordered, name: "Barriers, locks and ordered", match: [omp-lock, omp-ordered, omp-master]}
+      - {id: numa-and-first-touch, name: "NUMA, first-touch and affinity", match: [numa-first-touch, omp-places, numactl]}
+  - id: hybrid-mpi-openmp
+    name: Hybrid MPI plus OpenMP
+    source: "Hybrid programming"
+    match: [hybrid-mpi-openmp, mpi-thread-multiple, mpi-init-thread]
+    subtopics:
+      - {id: mpi-thread-levels, name: "MPI thread support levels", match: [mpi-thread-funneled, mpi-thread-serialized, thread-safety]}
+      - {id: hybrid-layout-tuning, name: "Rank and thread layout", match: [ranks-per-node, threads-per-rank, numa-domain-per-rank]}
+  - id: cuda-model
+    name: CUDA programming model
+    source: "CUDA C++ Programming Guide ch.2"
+    match: [cuda, cuda-kernel, thread-hierarchy]
+    subtopics:
+      - {id: kernel-launch-and-indexing, name: "Kernels, grids and indexing", match: [cuda-kernel-launch, threadidx, grid-stride-loop]}
+      - {id: cuda-error-handling, name: "Error handling and debugging", match: [cuda-error-check, cuda-memcheck, compute-sanitizer]}
+  - id: cuda-memory
+    name: CUDA memory
+    source: "CUDA C++ Programming Guide ch.5 and Best Practices"
+    match: [cuda-memory, global-memory, shared-memory]
+    subtopics:
+      - {id: coalescing-and-global-memory, name: "Coalesced global access", match: [memory-coalescing, cudamalloc, cudamemcpy]}
+      - {id: shared-memory-tiling, name: "Shared memory and tiling", match: [shared-memory-tile, bank-conflicts, syncthreads]}
+  - id: cuda-exec
+    name: CUDA execution and optimisation
+    source: "Best Practices Guide"
+    match: [cuda-occupancy, warp-divergence, cuda-streams]
+    subtopics:
+      - {id: occupancy-and-divergence, name: "Occupancy and warp divergence", match: [occupancy-calculator, warp-divergence, register-pressure]}
+      - {id: streams-and-async, name: "Streams, events and async copies", match: [cuda-stream, cuda-event, memcpy-async]}
+  - id: cuda-libs
+    name: CUDA libraries
+    source: "CUDA Toolkit Documentation"
+    match: [cublas, cufft, thrust]
+    subtopics:
+      - {id: cublas-and-cusolver, name: "cuBLAS and cuSOLVER", match: [cublas-sgemm, cusolver, tensor-cores]}
+      - {id: thrust-cub-and-fft, name: "Thrust, CUB and cuFFT", match: [thrust, cub, cufft, cusparse]}
+  - id: cuda-multi-gpu
+    name: Multi-GPU and CUDA-aware MPI
+    source: "NCCL and MPI documentation"
+    match: [multi-gpu, nccl, cuda-aware-mpi]
+    subtopics:
+      - {id: nccl-collectives, name: "NCCL collectives", match: [nccl, nccl-allreduce, nvlink]}
+      - {id: cuda-aware-mpi-gpudirect, name: "CUDA-aware MPI and GPUDirect RDMA", match: [gpudirect-rdma, cuda-aware-mpi, device-pointers]}
+  - id: gpu-portability
+    name: GPU portability layers
+    source: "Kokkos, SYCL, HIP documentation"
+    match: [kokkos, sycl, hip]
+    subtopics:
+      - {id: hip-and-rocm, name: "HIP and ROCm", match: [hip-programming, hipify, rocm]}
+      - {id: kokkos-sycl-portability, name: "Kokkos and SYCL", match: [kokkos-parallel-for, sycl-queue, performance-portability]}
+  - id: slurm-submit
+    name: Slurm job submission
+    source: "Slurm docs/sbatch, srun, salloc"
+    match: [slurm, sbatch, srun]
+    subtopics:
+      - {id: sbatch-scripts, name: "Writing sbatch scripts", match: [sbatch-directives, sbatch-ntasks, sbatch-time]}
+      - {id: srun-and-interactive, name: "srun, salloc and interactive jobs", match: [srun-pty, salloc, interactive-session]}
+  - id: slurm-resources
+    name: Slurm resource requests
+    source: "Slurm docs/Resource options"
+    match: [slurm-gres, slurm-memory, slurm-cpus-per-task]
+    subtopics:
+      - {id: gpu-gres-requests, name: "GPUs and GRES", match: [gres-gpu, sbatch-gpus, cuda-visible-devices]}
+      - {id: memory-and-cpu-binding, name: "Memory, CPUs and binding", match: [mem-per-cpu, cpu-bind, hint-nomultithread]}
+  - id: slurm-arrays
+    name: Job arrays and dependencies
+    source: "Slurm docs/Job arrays"
+    match: [slurm-array, slurm-dependency, job-chains]
+    subtopics:
+      - {id: job-arrays, name: "Job arrays", match: [sbatch-array, slurm-array-task-id, array-throttle]}
+      - {id: job-dependencies, name: "Dependencies and workflows", match: [sbatch-dependency, afterok, slurm-chain]}
+  - id: slurm-admin
+    name: Slurm administration
+    source: "Slurm docs/Administration"
+    match: [slurm-conf, slurmctld, slurmd]
+    subtopics:
+      - {id: slurm-conf-partitions-nodes, name: "slurm.conf, nodes and partitions", match: [slurm-conf-file, nodename, partitionname]}
+      - {id: slurm-accounting-qos, name: "Accounting, QOS and fair share", match: [sacctmgr, slurm-qos, fairshare]}
+  - id: slurm-monitor
+    name: Slurm monitoring and troubleshooting
+    source: "Slurm docs/Troubleshooting"
+    match: [squeue, sacct, scontrol]
+    subtopics:
+      - {id: job-status-and-reasons, name: "Job state and pending reasons", match: [squeue-reason, scontrol-show-job, sprio]}
+      - {id: node-drain-and-health, name: "Draining nodes and health checks", match: [scontrol-update-node, drain-node, nodehealthcheck]}
+  - id: hpc-env
+    name: HPC software environment
+    source: "Lmod, Spack, EasyBuild docs"
+    match: [environment-modules, lmod, spack]
+    subtopics:
+      - {id: modules-lmod, name: "Environment modules and Lmod", match: [module-load, module-avail, modulepath]}
+      - {id: spack-and-easybuild, name: "Spack and EasyBuild", match: [spack-install, spack-env, easybuild]}
+  - id: hpc-containers
+    name: Containers on HPC
+    source: "Apptainer and Pyxis/Enroot docs"
+    match: [apptainer, singularity, enroot]
+    subtopics:
+      - {id: apptainer-usage, name: "Apptainer (Singularity)", match: [apptainer-build, apptainer-exec, sif-image]}
+      - {id: containers-mpi-and-slurm, name: "Containerised MPI under Slurm", match: [srun-apptainer, pyxis-enroot, hybrid-mpi-container]}
+  - id: hpc-perf
+    name: Performance analysis
+    source: "Performance engineering references"
+    match: [roofline, profiling-hpc, amdahl-law]
+    subtopics:
+      - {id: scaling-studies, name: "Strong and weak scaling", match: [strong-scaling, weak-scaling, amdahl]}
+      - {id: roofline-and-counters, name: "Roofline model and hardware counters", match: [roofline-model, perf-counters, likwid]}
+  - id: hpc-storage
+    name: Parallel file systems
+    source: "Lustre and IBM Storage Scale docs"
+    match: [lustre, gpfs, burst-buffer]
+    subtopics:
+      - {id: lustre-striping, name: "Lustre striping and usage", match: [lfs-setstripe, lfs-getstripe, stripe-count]}
+      - {id: io-benchmarks-ior-mdtest, name: "IOR and mdtest", match: [ior, mdtest, io500]}
+  - id: hpc-numerics
+    name: Numerical libraries
+    source: "PETSc, ScaLAPACK, FFTW docs"
+    match: [blas-lapack, scalapack, petsc]
+    subtopics:
+      - {id: blas-lapack-tuned, name: "BLAS/LAPACK implementations", match: [openblas, mkl, blis]}
+      - {id: petsc-and-fftw, name: "PETSc and FFTW", match: [petsc-ksp, fftw-mpi, trilinos]}
+  - id: hpc-checkpoint
+    name: Checkpointing and resilience
+    source: "HPC resilience practice"
+    match: [checkpoint-restart, dmtcp, fault-tolerance]
+    subtopics:
+      - {id: application-checkpoints, name: "Application-level checkpointing", match: [checkpoint-restart, restart-files, checkpoint-frequency]}
+      - {id: slurm-requeue-signals, name: "Requeue and signal handling", match: [slurm-signal, requeue-job, preemption]}
+  - id: hpc-compile
+    name: Compilers and optimisation flags
+    source: "Compiler documentation"
+    match: [compiler-flags-hpc, vectorization-flags, lto]
+    subtopics:
+      - {id: optimisation-flags, name: "Optimisation and architecture flags", match: [march-native, fast-math, fopenmp]}
+      - {id: fortran-and-c-interop, name: "Fortran/C interop in HPC", match: [iso-c-binding, fortran-mpi, mixed-language]}
+  - id: hpc-workflows
+    name: Workflow and ensemble tooling
+    source: "Snakemake, Nextflow docs"
+    match: [snakemake, nextflow, parsl]
+    subtopics:
+      - {id: workflow-managers, name: "Workflow managers on clusters", match: [snakemake-slurm, nextflow-slurm, workflow-dag]}
+      - {id: ensemble-launchers, name: "Ensemble launchers", match: [gnu-parallel, hyperqueue, launcher]}
+  - id: hpc-cluster-arch
+    name: Cluster architecture
+    source: "HPC architecture references"
+    match: [infiniband, interconnect, node-architecture]
+    subtopics:
+      - {id: interconnects-and-topology, name: "Interconnects and topology", match: [infiniband-fabric, fat-tree, dragonfly]}
+      - {id: node-numa-topology, name: "Node hardware topology", match: [hwloc, lstopo, numa-topology]}
+  - id: hpc-gpu-profile
+    name: GPU profiling
+    source: "NVIDIA Nsight docs"
+    match: [nsight-systems, nsight-compute, rocprof]
+    subtopics:
+      - {id: nsight-systems-timelines, name: "Nsight Systems timelines", match: [nsys-profile, gpu-timeline, nvtx-ranges]}
+      - {id: nsight-compute-kernel, name: "Nsight Compute kernel analysis", match: [ncu, kernel-metrics, speed-of-light]}
+  - id: hpc-security-ops
+    name: HPC user operations
+    source: "Site user guides"
+    match: [ssh-hpc, quota, fair-use]
+    subtopics:
+      - {id: ssh-keys-and-access, name: "SSH access and etiquette", match: [ssh-config, login-node-etiquette, proxyjump]}
+      - {id: data-transfer-globus, name: "Moving data", match: [globus-transfer, rsync-hpc, dtn]}
+  - id: hpc-cloud
+    name: Cloud HPC
+    source: "AWS ParallelCluster, Azure CycleCloud docs"
+    match: [cloud-hpc, parallelcluster, efa]
+    subtopics:
+      - {id: cloud-cluster-deployment, name: "Cloud HPC clusters", match: [aws-parallelcluster, slurm-cloud, spot-instances]}
+      - {id: cloud-vs-onprem-economics, name: "Cloud vs on-prem decisions", match: [hpc-cost-model, egress-costs, burst-to-cloud]}
+  - id: python-hpc
+    name: Python in HPC
+    source: "mpi4py, Dask documentation"
+    match: [mpi4py, dask-jobqueue, numba-cuda]
+    subtopics:
+      - {id: mpi4py-usage, name: "mpi4py", match: [mpi4py-comm, mpi4py-buffers, mpi4py-allreduce]}
+      - {id: dask-on-slurm, name: "Dask on Slurm", match: [dask-jobqueue, slurmcluster, dask-workers]}
+  - id: hpc-correctness
+    name: Numerical correctness and reproducibility
+    source: "HPC correctness practice"
+    match: [floating-point-reproducibility, mixed-precision, verification-hpc]
+    subtopics:
+      - {id: floating-point-reproducibility, name: "Floating-point reproducibility", match: [bitwise-reproducibility, reduction-order, fused-multiply-add]}
+      - {id: code-verification-tests, name: "Verification and regression tests", match: [unit-tests-hpc, method-of-manufactured-solutions, regression-baseline]}
+  - id: mpi-advanced
+    name: Advanced MPI features
+    source: "MPI Standard 4.x new features"
+    match: [mpi-persistent, mpi-partitioned, mpi-sessions]
+    subtopics:
+      - {id: persistent-and-partitioned, name: "Persistent and partitioned communication", match: [mpi-psend-init, partitioned-communication, mpi-start]}
+      - {id: mpi-sessions-and-errors, name: "Sessions model and error handling", match: [mpi-session-init, mpi-errhandler, mpi-abort]}

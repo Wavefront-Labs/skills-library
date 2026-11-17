@@ -1,0 +1,1170 @@
+# Canonical coverage spec: IT Support / Help Desk (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (CompTIA A+ 220-1201/220-1202 exam objectives,
+# ITIL 4 practice guides, HDI Support Center Analyst standards, Microsoft Intune / Microsoft 365 admin
+# and Jamf Pro docs tables of contents, Google IT Support Certificate course outline), not from what
+# the library happened to contain. Subtopics come from each source's own objective bullets / page headings.
+subject: it-support-helpdesk
+scope:
+  category: computing-software
+  field: it-support-helpdesk
+  products: [servicenow, intune-mdm, remote-support-tools, desktop-support, troubleshooting-methodology, device-provisioning, user-support-communication]
+sources:
+  - "CompTIA A+ Core 1 (220-1201) exam objectives - 1.0 Mobile Devices (laptop hardware, mobile device accessories, network connectivity and application support), 2.0 Networking (ports/protocols, SOHO network config, wireless standards, networked host services, network tools), 3.0 Hardware (cables/connectors, RAM, storage, motherboards/CPU/add-on cards, power supplies, printers and multifunction devices), 4.0 Virtualization and Cloud Computing, 5.0 Hardware and Network Troubleshooting (methodology, motherboard/RAM/CPU/power, storage/RAID, video/projector/display, mobile devices, printers, wired/wireless network)"
+  - "CompTIA A+ Core 2 (220-1202) exam objectives - 1.0 Operating Systems (Windows editions/installation/upgrade, Microsoft command-line tools, Windows features and tools, Control Panel/Settings, Windows networking, macOS, Linux client, application installation, cloud productivity tools), 2.0 Security (security measures, wireless security, malware, social engineering, SOHO/workstation/mobile security, data destruction, browser security), 3.0 Software Troubleshooting (Windows OS, mobile OS and apps, security issues, malware removal procedure), 4.0 Operational Procedures (documentation and ticketing, change management, backup and recovery, safety, environmental impact, prohibited content/privacy/licensing, communication and professionalism, scripting basics, remote access technologies, AI basics)"
+  - "ITIL 4 practice guides (AXELOS/PeopleCert) - Service desk, Incident management, Service request management, Problem management, Change enablement, Knowledge management, Service level management, Service configuration management, IT asset management, Monitoring and event management; ServiceNow ITSM product docs ToC (Incident, Request/Service Catalog, Problem, Change, Knowledge, SLA, CMDB, Service Portal, Virtual Agent, Agent Workspace, Flow Designer); Jira Service Management and Zendesk Support admin docs ToC"
+  - "HDI Support Center Analyst (SCA) and Desktop Support Technician (DST) standards - customer service skills, communication and active listening, handling difficult customers, call/chat/email handling, incident logging and documentation, escalation, knowledge-centered service (KCS v6 practices guide from Consortium for Service Innovation), metrics and customer satisfaction"
+  - "Microsoft Learn - Microsoft Intune docs ToC (enrollment for Windows/Apple/Android, Windows Autopilot, device compliance, configuration profiles, apps and app protection, endpoint security, remote actions, Windows Update for Business, troubleshooting); Microsoft 365 admin docs ToC (users, licences, passwords/MFA, groups, mailbox management, Teams/OneDrive/SharePoint support); Windows client deployment and troubleshooting docs"
+  - "Jamf Pro documentation ToC (computer/mobile enrollment, PreStage enrollment, policies, configuration profiles, smart groups, Self Service, extension attributes, FileVault management, patch management) and Apple Platform Deployment guide (ADE, declarative device management, Platform SSO, privacy preferences)"
+  - "Google IT Support Professional Certificate course outline - Technical Support Fundamentals, The Bits and Bytes of Computer Networking, Operating Systems and You (users/permissions, packages, filesystems, process management, remote access, logging), System Administration and IT Infrastructure Services (directory services, data recovery and backups), IT Security"
+  - "Depth round 2 subtopics - CompTIA A+ 220-1201/220-1202 objective sub-bullets, ITIL 4 practice guide sections, HDI SCA/DST and KCS v6 practice sections, Microsoft Intune / Microsoft 365 admin / Windows client docs sub-pages, Jamf Pro and Apple Platform Deployment sub-pages, ServiceNow / Jira Service Management / Zendesk admin doc sub-pages, Google IT Support course modules"
+topics:
+  # --- ITSM platforms (ITIL 4 practices + ServiceNow / JSM / Zendesk docs) -> servicenow
+  - id: itsm-incident-management
+    name: Incident logging, categorisation and prioritisation
+    source: ITIL 4 Incident management practice + ServiceNow Incident Management docs + A+ 220-1202 4.1
+    match: [incident-management, priority-matrix, impact-urgency]
+    subtopics:
+      - {id: inc-categorisation, name: Incident categorisation and subcategory schemes, match: [incident-categorization]}
+      - {id: inc-major-incident, name: Major incident procedure and bridge call, match: [major-incident-procedure]}
+      - {id: inc-resolution-closure, name: Resolution codes and incident closure, match: [resolution-codes]}
+      - {id: inc-reopen-duplicate, name: Reopened duplicate and parent-child incidents, match: [parent-child-incidents]}
+      - {id: inc-logging-channels, name: Incident logging from phone / email / chat / event channels, match: [incident-logging]}
+      - {id: inc-on-hold, name: On-hold reasons and awaiting-caller auto-close, match: [incident-on-hold]}
+      - {id: inc-security-handoff, name: Handing suspected security incidents to SecOps / CSIRT, match: [security-incident-handoff]}
+      - {id: inc-work-notes, name: Work notes vs additional comments and customer updates, match: [work-notes-vs-comments]}
+      - {id: inc-outage-records, name: Outage records and linking mass-impact incidents, match: [outage-record]}
+      - {id: inc-major-incident-review, name: Major incident review after restoration, match: [major-incident-review]}
+  - id: itsm-service-request
+    name: Service request fulfilment and the service catalog
+    source: ITIL 4 Service request management + ServiceNow Service Catalog docs
+    match: [service-request, service-catalog]
+    subtopics:
+      - {id: sr-catalog-item, name: Designing catalog items and variables, match: [catalog-item-design]}
+      - {id: sr-fulfilment-tasks, name: Request fulfilment (REQ / RITM / SCTASK) workflow, match: [request-fulfilment]}
+      - {id: sr-approvals, name: Request approvals and delegation, match: [request-approvals]}
+      - {id: sr-standard-request-models, name: Standard request models and automation candidates, match: [request-models]}
+      - {id: sr-order-guides, name: Order guides for multi-item requests, match: [order-guide]}
+      - {id: sr-record-producers, name: Record producers that create task records, match: [record-producer]}
+      - {id: sr-cancellation, name: Cancelling and modifying submitted requests, match: [request-cancellation]}
+      - {id: sr-catalog-ui-policy, name: Catalog UI policies and catalog client scripts, match: [catalog-ui-policy]}
+      - {id: sr-request-stages, name: Request stages and delivery targets, match: [request-stages]}
+      - {id: sr-catalog-retirement, name: Catalog item review and retirement, match: [catalog-item-retirement]}
+  - id: itsm-assignment-routing
+    name: Queue management, assignment and routing
+    source: ServiceNow Assignment rules / Advanced Work Assignment docs + ITIL 4 Service desk
+    match: [queue-triage, assignment-group, queue-management]
+    subtopics:
+      - {id: ar-assignment-rules, name: Assignment rules and data lookup routing, match: [assignment-rules]}
+      - {id: ar-skills-routing, name: Skills-based and capacity routing (Advanced Work Assignment), match: [skills-based-routing]}
+      - {id: ar-aged-tickets, name: Aged-ticket and stale-queue hygiene, match: [aged-tickets]}
+      - {id: ar-ticket-bouncing, name: Preventing ticket bouncing and reassignment loops, match: [ticket-reassignment]}
+      - {id: ar-predictive-intelligence, name: ML auto-categorisation and assignment (Predictive Intelligence), match: [predictive-intelligence]}
+      - {id: ar-on-call, name: On-call scheduling and rota escalation, match: [on-call-scheduling]}
+      - {id: ar-group-membership, name: Assignment group membership and group manager administration, match: [assignment-group-membership]}
+      - {id: ar-inbound-email, name: Inbound email actions creating and updating tickets, match: [inbound-email-actions]}
+      - {id: ar-field-dispatch, name: Dispatching desk-side and field visits, match: [field-dispatch]}
+      - {id: ar-workload-balancing, name: Backlog dashboards and workload balancing across agents, match: [workload-balancing]}
+  - id: itsm-service-level
+    name: Service level management (SLA / OLA / UC)
+    source: ITIL 4 Service level management + ServiceNow SLA definitions docs
+    match: [sla, service-level-management]
+    subtopics:
+      - {id: sl-sla-definitions, name: SLA definitions (start / pause / stop conditions), match: [sla-definition]}
+      - {id: sl-ola-uc, name: OLAs and underpinning contracts, match: [ola]}
+      - {id: sl-breach-escalation, name: SLA warning and breach escalation, match: [sla-escalation]}
+      - {id: sl-business-schedules, name: Business-hours schedules time zones and holidays, match: [business-hours-schedule]}
+      - {id: sl-retroactive, name: Retroactive start and pause recalculation, match: [retroactive-sla]}
+      - {id: sl-attainment-reporting, name: SLA attainment reporting, match: [sla-attainment-report]}
+      - {id: sl-service-review, name: Service review meetings with customers, match: [service-review-meeting]}
+      - {id: sl-sla-repair, name: SLA repair after definition changes, match: [sla-repair]}
+      - {id: sl-response-resolution, name: Response vs resolution SLAs and priority changes mid-ticket, match: [response-resolution-sla]}
+      - {id: sl-target-setting, name: Setting SLA targets from historic data, match: [sla-target-setting]}
+  - id: itsm-problem-management
+    name: Problem management and known errors
+    source: ITIL 4 Problem management practice + ServiceNow Problem Management docs
+    match: [problem-management, known-error]
+    subtopics:
+      - {id: pm-kedb, name: Known error database and workaround publication, match: [kedb]}
+      - {id: pm-trend-analysis, name: Proactive problem identification from incident trends, match: [incident-trend-analysis]}
+      - {id: pm-problem-record, name: Raising and running a problem record, match: [problem-record]}
+      - {id: pm-problem-closure, name: Problem closure and fix verification, match: [problem-closure]}
+      - {id: pm-prioritisation, name: Problem prioritisation, match: [problem-prioritization]}
+      - {id: pm-workaround-mgmt, name: Workaround documentation and communication, match: [workaround-management]}
+      - {id: pm-rca-report, name: Writing the RCA report for a problem, match: [rca-report]}
+      - {id: pm-problem-to-change, name: Raising changes from problems to deploy the fix, match: [problem-to-change]}
+      - {id: pm-problem-tasks, name: Problem tasks and resolver group assignment, match: [problem-tasks]}
+      - {id: pm-review-board, name: Problem review board cadence, match: [problem-review-board]}
+  - id: itsm-change-enablement
+    name: Change enablement for support teams
+    source: ITIL 4 Change enablement + A+ 220-1202 4.2 change management
+    match: [change-management, change-enablement]
+    subtopics:
+      - {id: ch-request-for-change, name: Writing a request for change (scope / risk / backout), match: [request-for-change]}
+      - {id: ch-backout-plan, name: Backout and rollback planning, match: [backout-plan]}
+      - {id: ch-freeze-window, name: Change freeze and maintenance windows, match: [change-freeze]}
+      - {id: ch-post-implementation, name: Post-implementation review of changes, match: [post-implementation-review]}
+      - {id: ch-standard-change, name: Standard change catalogue and pre-approval, match: [standard-change-catalog]}
+      - {id: ch-emergency-change, name: Emergency change and ECAB, match: [emergency-change-ecab]}
+      - {id: ch-cab, name: CAB meeting preparation and approval, match: [cab-meeting]}
+      - {id: ch-risk-assessment, name: Change risk assessment, match: [change-risk-assessment]}
+      - {id: ch-change-schedule, name: Change schedule and collision detection, match: [change-schedule]}
+      - {id: ch-failed-change, name: Failed changes and incidents caused by change, match: [failed-change]}
+  - id: itsm-cmdb
+    name: Configuration management database for support
+    source: ITIL 4 Service configuration management + ServiceNow CMDB docs
+    match: [cmdb, configuration-item]
+    subtopics:
+      - {id: cm-discovery, name: Discovery and CI population, match: [cmdb-discovery]}
+      - {id: cm-health, name: CMDB health (completeness / correctness / compliance), match: [cmdb-health]}
+      - {id: cm-impact-analysis, name: Using CI relationships for impact analysis, match: [ci-impact-analysis]}
+      - {id: cm-reconciliation, name: Identification and reconciliation of duplicate CIs, match: [ci-reconciliation]}
+      - {id: cm-csdm, name: CI class model and CSDM, match: [csdm]}
+      - {id: cm-ci-lifecycle, name: CI lifecycle and operational status, match: [ci-lifecycle]}
+      - {id: cm-relationship-types, name: Relationship types and dependency views, match: [ci-relationships]}
+      - {id: cm-data-manager, name: CMDB Data Manager retire / archive / delete policies, match: [cmdb-data-manager]}
+      - {id: cm-source-precedence, name: IRE data source precedence rules, match: [data-source-precedence]}
+      - {id: cm-affected-ci, name: Populating configuration item and affected CIs on tickets, match: [affected-ci]}
+      - {id: cm-service-mapping, name: Application services and service mapping, match: [service-mapping]}
+  - id: itsm-knowledge-management
+    name: Knowledge management and KCS
+    source: ITIL 4 Knowledge management + KCS v6 Practices Guide + ServiceNow Knowledge docs
+    match: [knowledge-base, kcs, knowledge-centered-service]
+    subtopics:
+      - {id: km-solve-loop, name: KCS solve loop (capture / structure / reuse / improve), match: [kcs-solve-loop]}
+      - {id: km-article-quality, name: Article quality index and coaching, match: [article-quality-index]}
+      - {id: km-feedback-flagging, name: Knowledge feedback and flagged articles, match: [knowledge-feedback]}
+      - {id: km-linking, name: Linking articles to incidents and reuse measurement, match: [article-linking]}
+      - {id: km-article-template, name: KB article templates (issue / environment / resolution / cause), match: [kb-article-template]}
+      - {id: km-lifecycle, name: Article approval / publish / retire workflow, match: [knowledge-lifecycle]}
+      - {id: km-user-criteria, name: Knowledge base access with user criteria, match: [knowledge-user-criteria]}
+      - {id: km-search, name: Knowledge search tuning and findability, match: [knowledge-search]}
+      - {id: km-kcs-licensing, name: KCS licensing model (candidate / contributor / publisher / coach), match: [kcs-licensing]}
+      - {id: km-review-cycle, name: Article review dates and stale-content archiving, match: [knowledge-review-cycle]}
+      - {id: km-new-vs-known, name: KCS evolve loop new-vs-known analysis, match: [new-vs-known]}
+  - id: itsm-self-service
+    name: Self-service portal and virtual agent
+    source: ServiceNow Service Portal / Virtual Agent docs + ITIL 4 Service desk (channels)
+    match: [self-service-portal, self-service]
+    subtopics:
+      - {id: ss-portal-design, name: Portal taxonomy and request forms that users finish, match: [portal-design]}
+      - {id: ss-virtual-agent, name: Virtual agent / chatbot topic design and handoff, match: [virtual-agent]}
+      - {id: ss-password-reset, name: Self-service password reset rollout and support, match: [sspr]}
+      - {id: ss-deflection, name: Measuring self-service deflection, match: [deflection-measurement]}
+      - {id: ss-portal-search, name: Portal search sources and AI search, match: [portal-search]}
+      - {id: ss-status-page, name: Service status page and portal announcements, match: [service-status-page]}
+      - {id: ss-my-requests, name: My requests tracking and user notifications, match: [my-requests-tracking]}
+      - {id: ss-live-chat, name: Live agent chat handoff and chat staffing, match: [live-chat]}
+      - {id: ss-mobile, name: Mobile app self-service, match: [mobile-self-service]}
+      - {id: ss-channel-shift, name: Driving channel shift to self-service, match: [channel-shift]}
+  - id: itsm-metrics-reporting
+    name: Service desk metrics and reporting
+    source: HDI metrics standards + ServiceNow Performance Analytics docs
+    match: [metrics, kpi, first-contact-resolution]
+    subtopics:
+      - {id: mr-csat-surveys, name: Customer satisfaction surveys design and follow-up, match: [csat-survey]}
+      - {id: mr-mttr, name: Mean time to resolve and resolution-time distributions, match: [mttr]}
+      - {id: mr-cost-per-ticket, name: Cost per ticket and shift-left economics, match: [cost-per-ticket]}
+      - {id: mr-xla, name: Experience level agreements and digital experience scores, match: [xla]}
+      - {id: mr-abandon-rate, name: Abandon rate and average speed of answer, match: [abandon-rate]}
+      - {id: mr-backlog, name: Backlog and ticket ageing reports, match: [backlog-report]}
+      - {id: mr-reopen-rate, name: Reopen rate, match: [reopen-rate-analysis]}
+      - {id: mr-utilisation, name: Agent utilisation and occupancy, match: [agent-utilization]}
+      - {id: mr-performance-analytics, name: Performance Analytics indicators and dashboards, match: [performance-analytics-dashboards]}
+      - {id: mr-monthly-report, name: Monthly service report and balanced scorecard, match: [monthly-service-report]}
+  - id: itsm-service-desk-operations
+    name: Service desk operating model
+    source: ITIL 4 Service desk practice + HDI support center standards
+    match: [service-desk, tiered-support]
+    subtopics:
+      - {id: sd-shift-handover, name: Shift handover and follow-the-sun, match: [shift-handover]}
+      - {id: sd-staffing, name: Staffing and forecasting with Erlang C, match: [erlang-c]}
+      - {id: sd-swarming, name: Swarming vs tiered escalation, match: [swarming]}
+      - {id: sd-shift-left, name: Shift-left (moving fixes to L0 / L1), match: [shift-left]}
+      - {id: sd-quality-monitoring, name: Call and ticket quality monitoring scorecards, match: [call-quality-monitoring]}
+      - {id: sd-ivr, name: Telephony IVR and ACD call flows, match: [ivr]}
+      - {id: sd-continuity, name: Service desk continuity during major outages, match: [service-desk-continuity]}
+      - {id: sd-analyst-onboarding, name: Analyst onboarding and training plan, match: [analyst-onboarding]}
+      - {id: sd-vip, name: VIP and executive support model, match: [vip-executive-support]}
+      - {id: sd-outsourcing, name: Managing outsourced service desk providers, match: [service-desk-outsourcing]}
+  - id: itsm-jira-service-management
+    name: Jira Service Management agent and admin tasks
+    source: Atlassian Jira Service Management docs ToC
+    match: [jira-service-management, jsm]
+    subtopics:
+      - {id: jsm-request-types, name: Request types and portal groups, match: [jsm-request-types]}
+      - {id: jsm-queues, name: JSM queues with JQL, match: [jsm-queues]}
+      - {id: jsm-automation, name: JSM automation rules, match: [jsm-automation]}
+      - {id: jsm-sla-goals, name: JSM SLA goals and calendars, match: [jsm-sla]}
+      - {id: jsm-help-center, name: Help center and portal customisation, match: [jsm-help-center]}
+      - {id: jsm-organizations, name: Customers and organizations, match: [jsm-organizations]}
+      - {id: jsm-approvals, name: Approvals in JSM workflows, match: [jsm-approvals]}
+      - {id: jsm-assets, name: Assets object schemas, match: [jsm-assets]}
+      - {id: jsm-alerts, name: Alerts and on-call in JSM, match: [jsm-alerts]}
+      - {id: jsm-reports, name: JSM reports and CSAT, match: [jsm-reports]}
+      - {id: jsm-knowledge-base, name: Confluence knowledge base linked to JSM, match: [jsm-knowledge-base]}
+  - id: itsm-zendesk
+    name: Zendesk Support agent and admin tasks
+    source: Zendesk Support admin docs ToC
+    match: [zendesk]
+    subtopics:
+      - {id: zd-triggers-automations, name: Triggers and automations, match: [zendesk-triggers]}
+      - {id: zd-macros, name: Macros for consistent replies, match: [zendesk-macros]}
+      - {id: zd-views, name: Views for queue management, match: [zendesk-views]}
+      - {id: zd-sla-policies, name: Zendesk SLA policies, match: [zendesk-sla]}
+      - {id: zd-ticket-forms, name: Ticket fields and forms, match: [zendesk-ticket-forms]}
+      - {id: zd-omnichannel-routing, name: Omnichannel routing and skills, match: [zendesk-omnichannel-routing]}
+      - {id: zd-guide, name: Help Center (Guide) articles, match: [zendesk-guide]}
+      - {id: zd-explore, name: Explore reporting, match: [zendesk-explore]}
+      - {id: zd-csat, name: CSAT surveys in Zendesk, match: [zendesk-csat]}
+      - {id: zd-side-conversations, name: Side conversations, match: [zendesk-side-conversations]}
+      - {id: zd-messaging, name: Messaging and web widget, match: [zendesk-messaging]}
+  - id: itsm-servicenow-agent
+    name: ServiceNow agent productivity
+    source: ServiceNow docs - Lists and filters, Agent Workspace, Notifications, Flow Designer
+    match: [servicenow, list-filter, encoded-query]
+    subtopics:
+      - {id: sn-agent-workspace, name: Agent Workspace and contextual side panel, match: [agent-workspace]}
+      - {id: sn-templates, name: Record templates and quick messages, match: [servicenow-templates]}
+      - {id: sn-notifications, name: Notifications and watch lists, match: [servicenow-notifications]}
+      - {id: sn-flow-designer, name: Flow Designer for support automation, match: [flow-designer]}
+      - {id: sn-list-personalization, name: List personalisation and list editing, match: [list-personalization]}
+      - {id: sn-reports, name: Reports and report sharing, match: [servicenow-reports]}
+      - {id: sn-email-client, name: Email client from records, match: [servicenow-email-client]}
+      - {id: sn-navigation, name: Navigation / favourites / keyboard shortcuts, match: [servicenow-navigation]}
+      - {id: sn-agent-assist, name: Agent Assist and process playbooks, match: [agent-assist]}
+      - {id: sn-business-rules, name: Business rules basics for support admins, match: [servicenow-business-rules]}
+      - {id: sn-import-sets, name: Import sets and transform maps, match: [import-sets]}
+  # --- Endpoint management (Microsoft Intune docs, Jamf Pro docs, Apple Platform Deployment) -> intune-mdm
+  - id: mdm-windows-enrollment
+    name: Windows enrollment into Intune
+    source: Intune docs/Enrollment for Windows devices
+    match: [windows-enrollment, entra-join]
+    subtopics:
+      - {id: we-auto-enrollment, name: Automatic enrollment (MDM user scope), match: [mdm-user-scope]}
+      - {id: we-co-management, name: ConfigMgr co-management and workload sliders, match: [co-management-workloads]}
+      - {id: we-provisioning-package, name: Bulk enrollment with provisioning packages, match: [provisioning-package]}
+      - {id: we-gpo-enrollment, name: Enrollment of hybrid joined devices via GPO, match: [gpo-mdm-enrollment]}
+      - {id: we-entra-join-oobe, name: User-driven Entra join in OOBE and Settings, match: [entra-join-oobe]}
+      - {id: we-byod-register, name: BYOD Entra registration (add work or school account), match: [entra-registered-byod]}
+      - {id: we-restrictions, name: Enrollment restrictions (platform and device limit), match: [enrollment-restrictions]}
+      - {id: we-dem, name: Device enrollment manager accounts, match: [device-enrollment-manager]}
+      - {id: we-dsregcmd, name: Hybrid join status and dsregcmd troubleshooting, match: [hybrid-join-troubleshooting]}
+      - {id: we-corporate-identifiers, name: Corporate device identifiers, match: [corporate-identifiers]}
+      - {id: we-unenroll, name: Unenrolling and re-enrolling a Windows device, match: [mdm-unenroll]}
+  - id: mdm-apple-enrollment
+    name: Apple device enrollment (ADE / user enrollment)
+    source: Intune docs/Enrollment for Apple devices + Apple Platform Deployment
+    match: [apple-ade, apple-business-manager]
+    subtopics:
+      - {id: ae-apns-cert, name: Apple MDM push certificate renewal, match: [apns-certificate]}
+      - {id: ae-ade-token, name: ADE token and enrollment profiles, match: [ade-token]}
+      - {id: ae-user-enrollment, name: Account-driven user enrollment for BYOD, match: [account-driven-user-enrollment]}
+      - {id: ae-setup-assistant, name: Setup Assistant screens and await-configuration, match: [setup-assistant]}
+      - {id: ae-company-portal, name: User-initiated iOS enrollment with Company Portal, match: [company-portal-ios-enrollment]}
+      - {id: ae-shared-ipad, name: Shared iPad, match: [shared-ipad]}
+      - {id: ae-configurator, name: Apple Configurator to add devices to ABM, match: [apple-configurator-abm]}
+      - {id: ae-supervision, name: Supervised mode capabilities, match: [supervised-mode-capabilities]}
+      - {id: ae-managed-apple-account, name: Managed Apple Accounts and federation, match: [managed-apple-account]}
+      - {id: ae-macos-ade, name: macOS ADE enrollment in Intune, match: [macos-ade-intune]}
+      - {id: ae-troubleshooting, name: Apple enrollment failures, match: [apple-enrollment-troubleshooting]}
+  - id: mdm-android-enrollment
+    name: Android Enterprise enrollment
+    source: Intune docs/Enrollment for Android devices
+    match: [android-enterprise]
+    subtopics:
+      - {id: an-work-profile, name: Personally owned work profile enrollment, match: [android-work-profile-enrollment]}
+      - {id: an-fully-managed, name: Corporate fully managed enrollment (QR / token), match: [android-fully-managed]}
+      - {id: an-dedicated, name: Dedicated (kiosk) devices, match: [android-dedicated-device]}
+      - {id: an-zero-touch, name: Zero-touch and Knox Mobile Enrollment, match: [android-zero-touch-enrollment]}
+      - {id: an-managed-google-play, name: Managed Google Play binding and app approval, match: [managed-google-play]}
+      - {id: an-aosp, name: AOSP enrollment for headsets and rugged devices, match: [aosp-enrollment]}
+      - {id: an-da-migration, name: Device administrator deprecation migration, match: [device-administrator-migration]}
+      - {id: an-oemconfig, name: OEMConfig profiles, match: [oemconfig]}
+      - {id: an-mhs, name: Managed Home Screen, match: [managed-home-screen]}
+      - {id: an-system-updates, name: Android system update and FOTA policies, match: [android-system-updates]}
+      - {id: an-troubleshooting, name: Android enrollment failures, match: [android-enrollment-troubleshooting]}
+  - id: mdm-compliance
+    name: Device compliance and conditional access
+    source: Intune docs/Device compliance
+    match: [compliance-policy, conditional-access]
+    subtopics:
+      - {id: co-noncompliance-actions, name: Actions for noncompliance and grace periods, match: [noncompliance-actions]}
+      - {id: co-not-evaluated, name: Not evaluated / in grace period states troubleshooting, match: [compliance-not-evaluated]}
+      - {id: co-ca-blocked-user, name: Supporting users blocked by conditional access, match: [conditional-access-blocked]}
+      - {id: co-custom-compliance, name: Custom compliance scripts, match: [custom-compliance]}
+      - {id: co-windows-settings, name: Windows compliance settings (BitLocker / Secure Boot / OS version), match: [windows-compliance-settings]}
+      - {id: co-mtd, name: Mobile threat defense and Defender risk score, match: [mobile-threat-defense]}
+      - {id: co-require-compliant, name: Conditional access policy requiring a compliant device, match: [require-compliant-device]}
+      - {id: co-validity-period, name: Compliance policy settings (no policy assigned / validity period), match: [compliance-validity-period]}
+      - {id: co-what-if, name: Conditional access What If and sign-in log analysis, match: [conditional-access-what-if]}
+      - {id: co-jailbreak, name: Mobile compliance (jailbreak / root / minimum OS), match: [jailbreak-detection]}
+      - {id: co-reports, name: Compliance reports, match: [compliance-reports]}
+  - id: mdm-configuration-profiles
+    name: Configuration profiles and policy assignment
+    source: Intune docs/Device configuration
+    match: [configuration-profile, settings-catalog]
+    subtopics:
+      - {id: cp-admx, name: Administrative templates and ADMX ingestion, match: [admx-ingestion]}
+      - {id: cp-oma-uri, name: Custom OMA-URI profiles, match: [oma-uri]}
+      - {id: cp-conflicts, name: Profile conflicts and GPO vs MDM precedence, match: [mdm-wins-over-gp]}
+      - {id: cp-filters-groups, name: Assignment filters and group targeting, match: [assignment-filter-targeting]}
+      - {id: cp-group-policy-analytics, name: Group Policy analytics migration, match: [group-policy-analytics]}
+      - {id: cp-device-restrictions, name: Device restrictions profiles, match: [device-restrictions-profile]}
+      - {id: cp-wifi, name: Wi-Fi and VPN profiles in Intune, match: [wifi-profile-intune]}
+      - {id: cp-certificates, name: SCEP and PKCS certificate profiles, match: [scep-certificate-profile]}
+      - {id: cp-deployment-status, name: Profile deployment status and per-setting errors, match: [profile-deployment-status]}
+      - {id: cp-kiosk, name: Windows kiosk and assigned access, match: [windows-kiosk]}
+      - {id: cp-delivery-optimization, name: Delivery Optimization settings, match: [delivery-optimization]}
+  - id: mdm-app-deployment
+    name: App deployment and lifecycle
+    source: Intune docs/Apps
+    match: [win32-app, app-deployment]
+    subtopics:
+      - {id: ad-supersedence, name: App supersedence and dependencies, match: [app-supersedence]}
+      - {id: ad-store-winget, name: Microsoft Store (winget) apps, match: [store-app-winget]}
+      - {id: ad-m365-apps, name: Microsoft 365 Apps deployment and update channels, match: [m365-apps-deployment]}
+      - {id: ad-install-failures, name: Troubleshooting app install failures, match: [app-install-failure]}
+      - {id: ad-apple-vpp, name: Apple VPP / Apps and Books distribution, match: [apps-and-books]}
+      - {id: ad-intunewin, name: Win32 packaging with IntuneWinAppUtil, match: [intunewin-packaging]}
+      - {id: ad-detection-rules, name: Detection and requirement rules, match: [win32-detection-rules]}
+      - {id: ad-lob-msix, name: LOB apps (MSI / MSIX), match: [msix]}
+      - {id: ad-required-available, name: Required vs available assignments, match: [required-vs-available]}
+      - {id: ad-company-portal, name: Company Portal app support, match: [company-portal-app-support]}
+      - {id: ad-uninstall, name: Uninstall assignments and app removal, match: [app-uninstall-assignment]}
+  - id: mdm-app-protection
+    name: App protection (MAM) and app configuration
+    source: Intune docs/App protection policies
+    match: [app-protection-policy, mam]
+    subtopics:
+      - {id: ap-policy-settings, name: Data transfer and access requirement settings, match: [app-protection-settings]}
+      - {id: ap-app-config, name: App configuration policies (managed apps / devices), match: [app-configuration-policy]}
+      - {id: ap-selective-wipe, name: Selective wipe of corporate data, match: [selective-wipe]}
+      - {id: ap-mam-troubleshooting, name: Troubleshooting MAM policy not applying, match: [mam-troubleshooting]}
+      - {id: ap-mam-windows, name: MAM for Windows (Edge on unmanaged PCs), match: [mam-for-windows]}
+      - {id: ap-require-app-protection, name: Require app protection policy grant in conditional access, match: [require-app-protection]}
+      - {id: ap-conditional-launch, name: Conditional launch settings, match: [conditional-launch]}
+      - {id: ap-app-pin, name: App PIN and biometrics, match: [app-pin]}
+      - {id: ap-wrapping, name: LOB apps with Intune SDK and App Wrapping Tool, match: [app-wrapping-tool]}
+      - {id: ap-reports, name: App protection status reports, match: [app-protection-reports]}
+      - {id: ap-edge-mobile, name: Managed Edge mobile settings, match: [edge-mobile-managed]}
+  - id: mdm-endpoint-security
+    name: Endpoint security policies
+    source: Intune docs/Endpoint security
+    match: [endpoint-security, bitlocker]
+    subtopics:
+      - {id: es-bitlocker-silent, name: Silent BitLocker enablement and key escrow, match: [bitlocker-silent-encryption]}
+      - {id: es-laps, name: Windows LAPS local admin password, match: [windows-laps]}
+      - {id: es-defender-av, name: Defender Antivirus policy and exclusions, match: [defender-antivirus-policy]}
+      - {id: es-firewall, name: Windows Firewall policy, match: [firewall-policy]}
+      - {id: es-epm, name: Endpoint Privilege Management elevation rules, match: [endpoint-privilege-management]}
+      - {id: es-asr, name: Attack surface reduction rules, match: [asr-rules]}
+      - {id: es-mde-onboarding, name: Defender for Endpoint onboarding via Intune, match: [mde-onboarding]}
+      - {id: es-security-baselines, name: Intune security baselines, match: [intune-security-baselines]}
+      - {id: es-edr, name: EDR policy, match: [edr-policy]}
+      - {id: es-whfb, name: Windows Hello for Business, match: [windows-hello-for-business]}
+      - {id: es-device-control, name: Device control (removable storage) policies, match: [device-control]}
+      - {id: es-tamper, name: Tamper protection, match: [tamper-protection]}
+  - id: mdm-remote-actions
+    name: Device remote actions
+    source: Intune docs/Remote actions
+    match: [remote-actions, remote-wipe]
+    subtopics:
+      - {id: ra-wipe-retire, name: Wipe vs retire vs delete, match: [wipe-vs-retire]}
+      - {id: ra-autopilot-reset, name: Autopilot Reset and Fresh Start, match: [autopilot-reset]}
+      - {id: ra-lost-mode, name: Lost mode and locate device, match: [lost-mode]}
+      - {id: ra-collect-diagnostics, name: Collect diagnostics remote action, match: [collect-diagnostics]}
+      - {id: ra-bulk, name: Bulk device actions, match: [bulk-device-actions]}
+      - {id: ra-rename, name: Rename device action, match: [rename-device]}
+      - {id: ra-passcode, name: Passcode reset and remove passcode, match: [passcode-reset]}
+      - {id: ra-defender-scan, name: Defender scan and signature update actions, match: [defender-remote-scan]}
+      - {id: ra-remote-help, name: Intune Remote Help, match: [intune-remote-help]}
+      - {id: ra-bitlocker-rotation, name: BitLocker key rotation action, match: [bitlocker-key-rotation]}
+      - {id: ra-on-demand-remediation, name: Run remediation on demand, match: [on-demand-remediation]}
+  - id: mdm-windows-updates
+    name: Windows update management in Intune
+    source: Intune docs/Windows updates + Windows Autopatch docs
+    match: [windows-update-for-business, update-rings]
+    subtopics:
+      - {id: wu-feature-update-policy, name: Feature update policies (target version), match: [feature-update-policy]}
+      - {id: wu-expedite, name: Expedited quality updates, match: [expedite-quality-update]}
+      - {id: wu-driver-policy, name: Driver and firmware update policies, match: [driver-update-policy]}
+      - {id: wu-autopatch, name: Windows Autopatch groups and rings, match: [windows-autopatch]}
+      - {id: wu-reset-components, name: Resetting Windows Update components on a client, match: [reset-windows-update]}
+      - {id: wu-deadlines, name: Update ring deferrals / deadlines / grace periods, match: [update-deadlines]}
+      - {id: wu-reports, name: Windows Update reports, match: [windows-update-reports]}
+      - {id: wu-hotpatch, name: Hotpatch updates, match: [hotpatch]}
+      - {id: wu-pause-uninstall, name: Pausing and uninstalling updates from a ring, match: [update-ring-pause]}
+      - {id: wu-safeguard, name: Safeguard holds, match: [safeguard-hold]}
+  - id: mdm-troubleshooting
+    name: Intune client troubleshooting
+    source: Intune docs/Troubleshooting + Windows MDM diagnostics docs
+    match: [intune-troubleshooting, mdm-diagnostics]
+    subtopics:
+      - {id: tr-ime-logs, name: Intune Management Extension logs, match: [ime-logs]}
+      - {id: tr-enrollment-errors, name: Enrollment error codes, match: [enrollment-error-codes]}
+      - {id: tr-device-sync, name: Forcing and verifying device check-in, match: [device-check-in]}
+      - {id: tr-stale-devices, name: Stale and duplicate device records cleanup, match: [stale-device-cleanup]}
+      - {id: tr-mdm-diag-report, name: MDM diagnostic report (MdmDiagnosticsTool), match: [mdm-diagnostic-report]}
+      - {id: tr-dmedp-events, name: DeviceManagement-Enterprise-Diagnostics-Provider event log, match: [devicemanagement-event-log]}
+      - {id: tr-policy-not-applied, name: Policy not applied (pending / conflict / not applicable), match: [policy-not-applied]}
+      - {id: tr-company-portal-logs, name: Company Portal log upload from mobile devices, match: [company-portal-logs]}
+      - {id: tr-macos-agent-logs, name: macOS Intune agent logs, match: [intune-macos-agent-logs]}
+      - {id: tr-troubleshooting-pane, name: Intune troubleshooting + support pane, match: [troubleshooting-pane]}
+      - {id: tr-graph, name: Microsoft Graph PowerShell device queries, match: [graph-device-queries]}
+  - id: mdm-jamf-pro
+    name: Jamf Pro macOS management
+    source: Jamf Pro documentation ToC
+    match: [jamf, jamf-pro]
+    subtopics:
+      - {id: jp-policies, name: Policies (triggers / scope / frequency), match: [jamf-policies]}
+      - {id: jp-smart-groups, name: Smart groups and extension attributes, match: [jamf-smart-groups]}
+      - {id: jp-prestage, name: PreStage enrollment, match: [jamf-prestage]}
+      - {id: jp-self-service, name: Jamf Self Service catalogue, match: [jamf-self-service]}
+      - {id: jp-patch, name: Patch management titles, match: [jamf-patch-management]}
+      - {id: jp-config-profiles, name: Jamf configuration profiles, match: [jamf-configuration-profiles]}
+      - {id: jp-scripts, name: Scripts and script parameters, match: [jamf-scripts]}
+      - {id: jp-composer, name: Packages and Jamf Composer, match: [jamf-composer]}
+      - {id: jp-recon, name: Inventory collection (recon), match: [jamf-recon]}
+      - {id: jp-mobile, name: Jamf mobile device management, match: [jamf-mobile-devices]}
+      - {id: jp-api, name: Jamf Pro API, match: [jamf-pro-api]}
+      - {id: jp-remote-commands, name: Remote commands and management history, match: [jamf-remote-commands]}
+  - id: mdm-macos-management
+    name: macOS management features (any MDM)
+    source: Apple Platform Deployment guide + Intune macOS docs
+    match: [macos-management]
+    subtopics:
+      - {id: mm-filevault-escrow, name: FileVault enablement and recovery key escrow, match: [filevault-escrow]}
+      - {id: mm-pppc, name: Privacy preferences (PPPC / TCC) and system extensions, match: [pppc-profile]}
+      - {id: mm-platform-sso, name: Platform SSO with Entra ID, match: [platform-sso]}
+      - {id: mm-ddm-updates, name: Declarative software update enforcement, match: [declarative-device-management]}
+      - {id: mm-login-items, name: Managed login items and background tasks, match: [managed-login-items]}
+      - {id: mm-bootstrap-token, name: Bootstrap token and secure token, match: [bootstrap-token]}
+      - {id: mm-local-admin, name: macOS local admin accounts and rotation, match: [macos-local-admin]}
+      - {id: mm-gatekeeper, name: Gatekeeper and notarization, match: [gatekeeper-notarization]}
+      - {id: mm-shell-scripts, name: Intune macOS shell scripts and custom attributes, match: [macos-shell-scripts-intune]}
+      - {id: mm-pkg, name: macOS pkg and dmg app deployment, match: [macos-pkg-deployment]}
+      - {id: mm-return-to-service, name: Erase All Content and Settings and Return to Service, match: [return-to-service]}
+  # --- Remote support tools (A+ 220-1202 4.9 remote access technologies + vendor docs) -> remote-support-tools
+  - id: rs-attended-sessions
+    name: Attended remote support sessions
+    source: A+ 220-1202 4.9 + Quick Assist / TeamViewer docs
+    match: [remote-support, quick-assist, attended-access]
+    subtopics:
+      - {id: at-quick-assist, name: Quick Assist session setup and limits, match: [quick-assist-session]}
+      - {id: at-teamviewer, name: TeamViewer / AnyDesk session controls, match: [teamviewer-session]}
+      - {id: at-elevation, name: Handling UAC elevation during a session, match: [uac-in-remote-session]}
+      - {id: at-low-bandwidth, name: Working over poor connections (quality / view-only), match: [low-bandwidth-session]}
+      - {id: at-session-recording, name: Session consent disclosure and recording, match: [session-recording]}
+      - {id: at-macos-remote, name: Remote control of macOS (screen sharing permissions), match: [macos-remote-control]}
+      - {id: at-narration, name: Narrating actions during a session, match: [session-narration]}
+      - {id: at-reboot-reconnect, name: Reconnecting after reboot and safe mode, match: [reboot-and-reconnect]}
+      - {id: at-mobile-screen, name: Viewing mobile device screens remotely, match: [mobile-screen-sharing]}
+      - {id: at-teams-control, name: Teams give and take control, match: [teams-give-control]}
+  - id: rs-unattended-rmm
+    name: Unattended access and RMM agents
+    source: A+ 220-1202 4.9 (RMM) + vendor RMM docs
+    match: [unattended-access, rmm]
+    subtopics:
+      - {id: un-rmm-agent, name: RMM agent deployment and health, match: [rmm-agent]}
+      - {id: un-wake-on-lan, name: Wake-on-LAN for out-of-hours work, match: [wake-on-lan]}
+      - {id: un-rmm-monitoring, name: RMM monitors and alert thresholds, match: [rmm-monitoring]}
+      - {id: un-rmm-patching, name: RMM patch policies for third-party apps, match: [third-party-patching]}
+      - {id: un-rmm-scripting, name: RMM scripting and components, match: [rmm-scripting]}
+      - {id: un-policy-hierarchy, name: RMM site and policy hierarchy, match: [rmm-policy-hierarchy]}
+      - {id: un-psa, name: PSA integration and alert-to-ticket, match: [psa-integration]}
+      - {id: un-offline-agent, name: Offline agent triage, match: [offline-agent]}
+      - {id: un-intel-amt, name: Intel AMT / vPro out-of-band management, match: [intel-amt]}
+      - {id: un-backup-monitoring, name: Backup job monitoring through RMM, match: [backup-monitoring]}
+  - id: rs-remote-desktop
+    name: Remote Desktop Protocol support
+    source: Microsoft Remote Desktop Services docs + A+ 220-1202 4.9
+    match: [rdp, remote-desktop]
+    subtopics:
+      - {id: rd-connection-failures, name: RDP connection failure troubleshooting, match: [rdp-troubleshooting]}
+      - {id: rd-shadowing, name: Shadowing RDS sessions, match: [rdp-shadow]}
+      - {id: rd-gateway, name: RD Gateway and RD Web access, match: [rd-gateway-troubleshooting]}
+      - {id: rd-avd, name: Azure Virtual Desktop / Windows 365 user support, match: [azure-virtual-desktop]}
+      - {id: rd-credssp, name: NLA and CredSSP errors, match: [credssp]}
+      - {id: rd-licensing, name: RDS licensing and grace period, match: [rds-licensing]}
+      - {id: rd-performance, name: RDP display and bandwidth tuning, match: [rdp-performance]}
+      - {id: rd-redirection, name: Device redirection (printers / drives / clipboard), match: [rdp-redirection]}
+      - {id: rd-enable, name: Enabling RDP and Remote Desktop Users, match: [enable-remote-desktop]}
+      - {id: rd-qwinsta, name: Session management with qwinsta / rwinsta / logoff, match: [qwinsta]}
+  - id: rs-remote-diagnostics
+    name: Remote diagnostics and command-line tools
+    source: Microsoft PowerShell remoting docs + Sysinternals docs
+    match: [powershell-remoting, psexec]
+    subtopics:
+      - {id: rdg-remote-logs, name: Pulling event logs remotely, match: [remote-log-collection]}
+      - {id: rdg-remote-software, name: Remote software inventory and uninstall, match: [remote-software-inventory]}
+      - {id: rdg-ssh, name: SSH to Linux and macOS endpoints, match: [ssh-support]}
+      - {id: rdg-remote-file-transfer, name: Moving files to and from remote endpoints, match: [remote-file-transfer]}
+      - {id: rdg-winrm, name: Enabling WinRM and TrustedHosts, match: [winrm-configuration]}
+      - {id: rdg-cim, name: Remote CIM / WMI inventory queries, match: [cim-wmi-queries]}
+      - {id: rdg-services, name: Remote service and process management, match: [remote-service-management]}
+      - {id: rdg-registry, name: Remote registry access, match: [remote-registry-access]}
+      - {id: rdg-invoke-command, name: Running commands across many machines, match: [invoke-command-fan-out]}
+      - {id: rdg-systeminfo, name: Remote system information (systeminfo / msinfo32), match: [systeminfo]}
+  - id: rs-remote-security
+    name: Remote access security
+    source: A+ 220-1202 2.x / 4.9 + CISA remote monitoring and management advisories
+    match: [remote-access-security, tech-support-scam]
+    subtopics:
+      - {id: sec-rmm-hardening, name: Hardening RMM and remote tool accounts, match: [rmm-hardening]}
+      - {id: sec-caller-verification, name: Caller identity verification before remote access, match: [caller-verification]}
+      - {id: sec-scam-response, name: Responding to a user who allowed a scammer in, match: [scam-remote-access-response]}
+      - {id: sec-unapproved-tools, name: Detecting unapproved remote access tools, match: [unauthorized-remote-tools]}
+      - {id: sec-session-audit, name: Auditing remote support sessions, match: [remote-session-audit]}
+      - {id: sec-tiered-admin, name: Tiered admin model for support accounts, match: [tiered-admin-model]}
+      - {id: sec-pim, name: Just-in-time admin with Privileged Identity Management, match: [privileged-identity-management]}
+      - {id: sec-vendor-access, name: Third-party vendor remote access, match: [vendor-remote-access]}
+      - {id: sec-rmm-compromise, name: Responding to an RMM compromise, match: [rmm-compromise]}
+      - {id: sec-helpdesk-social-engineering, name: Help desk social engineering (MFA reset attacks), match: [help-desk-social-engineering]}
+  - id: rs-vpn-connectivity
+    name: VPN and remote connectivity
+    source: A+ 220-1202 4.9 (VPN) + vendor VPN client docs
+    match: [vpn, always-on-vpn]
+    subtopics:
+      - {id: vpn-client-errors, name: VPN client error triage, match: [vpn-client-errors]}
+      - {id: vpn-home-network, name: Home network issues for remote workers, match: [home-network-troubleshooting]}
+      - {id: vpn-ztna, name: Zero trust network access client support, match: [ztna]}
+      - {id: vpn-mtu, name: MTU and fragmentation problems over tunnels, match: [vpn-mtu]}
+      - {id: vpn-split-tunnel, name: Split vs full tunnel, match: [split-tunnel-design]}
+      - {id: vpn-certificate, name: Certificate-based VPN authentication failures, match: [vpn-certificate]}
+      - {id: vpn-nrpt, name: DNS over VPN and NRPT, match: [nrpt-vpn-dns]}
+      - {id: vpn-ikev2, name: VPN protocols and ports (IKEv2 / SSTP / IPsec), match: [vpn-protocols-ports]}
+      - {id: vpn-radius, name: VPN MFA through RADIUS / NPS, match: [radius-nps]}
+      - {id: vpn-client-logs, name: Vendor VPN client logs (GlobalProtect / Secure Client), match: [vpn-client-logs]}
+  # --- Desktop support (A+ 220-1202 domains 1-3 + 220-1201 hardware) -> desktop-support
+  - id: ds-windows-installation
+    name: Windows installation and upgrade
+    source: A+ 220-1202 1.1-1.2 Windows editions / installation and upgrade
+    match: [windows-installation, windows-upgrade]
+    subtopics:
+      - {id: wi-bootable-media, name: Creating bootable installation media, match: [bootable-usb]}
+      - {id: wi-in-place-upgrade, name: In-place upgrade and repair install, match: [in-place-upgrade]}
+      - {id: wi-edition-upgrade, name: Windows edition and activation issues, match: [windows-activation]}
+      - {id: wi-partitioning, name: GPT / UEFI vs MBR partitioning, match: [gpt-uefi]}
+      - {id: wi-secure-boot-tpm, name: Secure Boot and TPM requirements, match: [secure-boot-tpm]}
+      - {id: wi-unattend, name: Answer files (autounattend.xml), match: [unattend-xml]}
+      - {id: wi-drivers, name: Driver installation after setup, match: [driver-installation]}
+      - {id: wi-setupdiag, name: Upgrade failure codes and SetupDiag, match: [setupdiag]}
+      - {id: wi-oobe, name: OOBE choices and local accounts, match: [oobe-local-account]}
+      - {id: wi-editions, name: Choosing Windows editions, match: [windows-editions]}
+      - {id: wi-clean-install, name: Clean install with data backup, match: [clean-install]}
+  - id: ds-windows-tools
+    name: Windows administrative tools
+    source: A+ 220-1202 1.4 Windows features and tools
+    match: [windows-admin-tools, event-viewer]
+    subtopics:
+      - {id: wt-task-scheduler, name: Task Scheduler for support tasks, match: [task-scheduler]}
+      - {id: wt-disk-management, name: Disk Management and diskpart, match: [disk-management]}
+      - {id: wt-services, name: Services console and service recovery, match: [services-msc]}
+      - {id: wt-registry, name: Registry editing safely, match: [regedit]}
+      - {id: wt-local-users-groups, name: Local users and groups / lusrmgr, match: [local-users-groups]}
+      - {id: wt-device-manager, name: Device Manager and driver rollback, match: [device-manager-driver-rollback]}
+      - {id: wt-clean-boot, name: msconfig and clean boot, match: [clean-boot-msconfig]}
+      - {id: wt-resource-monitor, name: Resource Monitor, match: [resmon]}
+      - {id: wt-gpedit, name: Local Group Policy Editor, match: [local-group-policy]}
+      - {id: wt-certmgr, name: Certificate Manager (certmgr / certlm), match: [certificate-manager]}
+      - {id: wt-reliability, name: Reliability Monitor, match: [reliability-monitor]}
+      - {id: wt-control-panel, name: Control Panel applets vs Settings, match: [control-panel]}
+  - id: ds-command-line
+    name: Windows command-line tools
+    source: A+ 220-1202 1.3 Microsoft command-line tools
+    match: [command-line-tools, sfc, dism]
+    subtopics:
+      - {id: cl-robocopy, name: Robocopy for data moves, match: [robocopy]}
+      - {id: cl-net-commands, name: net use / net user and drive mapping from CLI, match: [net-use]}
+      - {id: cl-winget, name: winget package management, match: [winget-cli]}
+      - {id: cl-gpresult, name: gpresult and gpupdate for policy troubleshooting, match: [gpresult-report]}
+      - {id: cl-netstat, name: netstat and connection inspection, match: [netstat]}
+      - {id: cl-chkdsk, name: chkdsk, match: [chkdsk-repair]}
+      - {id: cl-taskkill, name: tasklist / taskkill / shutdown, match: [taskkill]}
+      - {id: cl-xcopy, name: copy / xcopy / md / rmdir basics, match: [xcopy]}
+      - {id: cl-format, name: format and file system choice, match: [format-command]}
+      - {id: cl-icacls, name: icacls and takeown, match: [icacls]}
+      - {id: cl-whoami, name: whoami / hostname / winver identity commands, match: [whoami]}
+  - id: ds-windows-networking
+    name: Windows client network configuration
+    source: A+ 220-1202 1.6 Windows networking
+    match: [windows-networking]
+    subtopics:
+      - {id: wn-domain-join, name: Domain join and trust relationship repair, match: [domain-trust-relationship]}
+      - {id: wn-mapped-drives, name: Mapped drives and file share access, match: [mapped-drives]}
+      - {id: wn-proxy, name: Proxy and PAC settings, match: [proxy-settings]}
+      - {id: wn-wifi-profiles, name: Wi-Fi profiles and 802.1X certificates, match: [wifi-8021x]}
+      - {id: wn-static-ip, name: Static IP and DNS configuration, match: [static-ip-configuration]}
+      - {id: wn-network-profile, name: Network profiles and network discovery, match: [network-profile]}
+      - {id: wn-defender-firewall, name: Windows Defender Firewall client rules, match: [windows-defender-firewall]}
+      - {id: wn-winsock-reset, name: Network reset and winsock reset, match: [netsh-winsock-reset]}
+      - {id: wn-hosts, name: hosts file, match: [hosts-file]}
+      - {id: wn-smb, name: SMB versions and signing access errors, match: [smb-troubleshooting]}
+      - {id: wn-ipv6, name: IPv6 on clients, match: [ipv6-client]}
+  - id: ds-boot-recovery
+    name: Windows boot and recovery troubleshooting
+    source: A+ 220-1202 3.1 Windows OS troubleshooting
+    match: [boot-failure, windows-recovery]
+    subtopics:
+      - {id: br-winre, name: Windows Recovery Environment options, match: [winre]}
+      - {id: br-bootrec, name: Rebuilding boot configuration (bootrec / bcdboot), match: [bcdboot]}
+      - {id: br-system-restore, name: System Restore and restore points, match: [system-restore]}
+      - {id: br-bsod, name: Blue screen stop code analysis, match: [stop-code-analysis]}
+      - {id: br-update-rollback, name: Uninstalling a bad update from WinRE, match: [uninstall-updates-winre]}
+      - {id: br-safe-mode, name: Safe mode, match: [safe-mode]}
+      - {id: br-startup-repair, name: Startup Repair, match: [startup-repair]}
+      - {id: br-inaccessible-boot, name: INACCESSIBLE_BOOT_DEVICE, match: [inaccessible-boot-device]}
+      - {id: br-bitlocker-loop, name: BitLocker recovery loops, match: [bitlocker-recovery-loop]}
+      - {id: br-reset-pc, name: Reset this PC, match: [reset-this-pc]}
+      - {id: br-boot-loop, name: Boot loops and undoing changes loops, match: [boot-loop]}
+      - {id: br-windbg, name: Memory dumps and WinDbg analysis, match: [windbg]}
+  - id: ds-user-profiles
+    name: User profile and data problems
+    source: A+ 220-1202 3.1 + Microsoft profile troubleshooting docs + OneDrive admin docs
+    match: [user-profile, temporary-profile]
+    subtopics:
+      - {id: up-profile-rebuild, name: Rebuilding a corrupt profile while keeping data, match: [profile-rebuild]}
+      - {id: up-known-folder-move, name: OneDrive Known Folder Move, match: [known-folder-move]}
+      - {id: up-fslogix, name: FSLogix profile containers, match: [fslogix]}
+      - {id: up-data-migration, name: Migrating user data to a new PC, match: [user-data-migration]}
+      - {id: up-cleanup, name: Profile disk usage cleanup, match: [profile-cleanup]}
+      - {id: up-folder-redirection, name: Roaming profiles and folder redirection, match: [roaming-profiles-folder-redirection]}
+      - {id: up-deletion, name: Deleting profiles properly (ProfileList), match: [profile-deletion]}
+      - {id: up-shell-folders, name: Broken user shell folder paths, match: [shell-folders]}
+      - {id: up-start-search, name: Start menu and search broken per profile, match: [start-menu-search]}
+      - {id: up-appx, name: AppX re-registration per user, match: [appx-reregister]}
+  - id: ds-application-support
+    name: Application installation and troubleshooting
+    source: A+ 220-1202 1.7 application installation + 3.1 application troubleshooting
+    match: [application-troubleshooting, application-installation]
+    subtopics:
+      - {id: as-app-crash, name: Application crash diagnosis (event 1000 / WER), match: [application-crash]}
+      - {id: as-compatibility, name: Compatibility mode and legacy apps, match: [compatibility-mode]}
+      - {id: as-msi-logging, name: MSI install logging and repair, match: [msi-logging]}
+      - {id: as-browser, name: Browser troubleshooting (cache / extensions / certificates), match: [browser-troubleshooting]}
+      - {id: as-vc-redist, name: Visual C++ and .NET runtimes, match: [vc-redist]}
+      - {id: as-hang, name: Hung applications, match: [application-hang]}
+      - {id: as-app-repair, name: Settings app repair and reset, match: [app-repair]}
+      - {id: as-file-associations, name: Default apps and file associations, match: [file-associations]}
+      - {id: as-java, name: Java runtime dependent apps, match: [java-runtime]}
+      - {id: as-acrobat, name: PDF reader and Acrobat issues, match: [acrobat-support]}
+      - {id: as-activation, name: Third-party software activation, match: [software-activation]}
+  - id: ds-m365-support
+    name: Microsoft 365 end-user support
+    source: Microsoft 365 admin docs ToC + A+ 220-1202 1.8 cloud productivity tools
+    match: [microsoft-365, m365-support]
+    subtopics:
+      - {id: m365-outlook-profile, name: Outlook profile and OST rebuild, match: [outlook-profile]}
+      - {id: m365-shared-mailbox, name: Shared mailbox and calendar permissions, match: [mailbox-permissions]}
+      - {id: m365-teams, name: Teams client troubleshooting, match: [teams-troubleshooting]}
+      - {id: m365-onedrive-sync, name: OneDrive sync issues, match: [onedrive-sync]}
+      - {id: m365-licensing, name: Licence assignment and group-based licensing, match: [license-assignment]}
+      - {id: m365-activation, name: Office activation and shared computer activation, match: [office-activation]}
+      - {id: m365-mailbox-quota, name: Mailbox quota and archive mailbox, match: [mailbox-quota]}
+      - {id: m365-message-trace, name: Message trace for missing email, match: [message-trace]}
+      - {id: m365-distribution-lists, name: Distribution lists and Microsoft 365 groups, match: [distribution-list]}
+      - {id: m365-sharepoint, name: SharePoint permissions and sharing, match: [sharepoint-sharing-access]}
+      - {id: m365-calendar, name: Calendar and meeting issues, match: [calendar-troubleshooting]}
+      - {id: m365-autodiscover, name: Autodiscover and Outlook connectivity, match: [autodiscover-troubleshooting]}
+      - {id: m365-quarantine, name: Email quarantine release, match: [email-quarantine]}
+      - {id: m365-forwarding, name: Out of office and mail forwarding, match: [mail-forwarding]}
+  - id: ds-identity-accounts
+    name: Account and identity support
+    source: Microsoft Entra ID admin docs + A+ 220-1202 2.x account security
+    match: [identity-support, account-lockout]
+    subtopics:
+      - {id: id-password-reset, name: Password reset and unlock with identity verification, match: [password-reset]}
+      - {id: id-mfa-reset, name: MFA method reset and re-registration, match: [mfa-reset]}
+      - {id: id-lockout-source, name: Finding the source of repeated lockouts, match: [lockout-source]}
+      - {id: id-group-access, name: Group membership and access requests, match: [group-membership]}
+      - {id: id-aadsts, name: Entra sign-in log and AADSTS error codes, match: [aadsts-errors]}
+      - {id: id-password-expiry, name: Password and account expiry, match: [password-expiry]}
+      - {id: id-aduc, name: Active Directory Users and Computers tasks, match: [active-directory-users-computers]}
+      - {id: id-passkeys, name: Passkeys and passwordless sign-in, match: [passkeys]}
+      - {id: id-tap, name: Temporary Access Pass, match: [temporary-access-pass]}
+      - {id: id-risky-users, name: Risky users and sign-ins, match: [risky-users]}
+      - {id: id-guest, name: B2B guest access, match: [guest-access]}
+  - id: ds-printers
+    name: Printer and multifunction device support
+    source: A+ 220-1201 3.6 printers + 5.6 printer troubleshooting
+    match: [printer, printing]
+    subtopics:
+      - {id: pr-driver-install, name: Printer driver install and Point and Print, match: [point-and-print]}
+      - {id: pr-spooler, name: Clearing a stuck print spooler, match: [print-spooler-reset]}
+      - {id: pr-print-quality, name: Print quality and paper path faults, match: [print-quality]}
+      - {id: pr-scan-to, name: Scan to email / folder setup, match: [scan-to-email]}
+      - {id: pr-universal-print, name: Universal Print and cloud printing, match: [universal-print]}
+      - {id: pr-tcpip-port, name: Adding printers by IP (TCP/IP port), match: [tcp-ip-printer-port]}
+      - {id: pr-print-server, name: Print server queues and deployment, match: [print-server]}
+      - {id: pr-maintenance, name: Printer maintenance kits and consumables, match: [printer-maintenance]}
+      - {id: pr-secure-release, name: Secure print release, match: [secure-print-release]}
+      - {id: pr-thermal, name: Label and thermal printers, match: [label-printer]}
+      - {id: pr-printnightmare, name: PrintNightmare driver install restrictions, match: [printnightmare]}
+  - id: ds-macos-support
+    name: macOS end-user support
+    source: A+ 220-1202 1.9 macOS + Apple Support docs
+    match: [macos]
+    subtopics:
+      - {id: mac-reinstall, name: macOS Recovery reinstall and erase, match: [macos-reinstall]}
+      - {id: mac-keychain, name: Keychain password prompts and resets, match: [keychain]}
+      - {id: mac-privacy-prompts, name: Privacy and security permission prompts, match: [macos-privacy-permissions]}
+      - {id: mac-printing-network, name: macOS network and Wi-Fi diagnostics, match: [wireless-diagnostics]}
+      - {id: mac-disk-utility, name: Disk Utility First Aid and APFS, match: [disk-utility-first-aid]}
+      - {id: mac-time-machine, name: Time Machine, match: [time-machine-backup]}
+      - {id: mac-startup-options, name: Startup options and safe mode on Apple silicon, match: [macos-startup-options]}
+      - {id: mac-migration-assistant, name: Migration Assistant, match: [migration-assistant]}
+      - {id: mac-unified-log, name: Console and the unified log, match: [macos-unified-log]}
+      - {id: mac-activity-monitor, name: Activity Monitor, match: [activity-monitor]}
+      - {id: mac-dfu, name: DFU revive and restore, match: [dfu-restore]}
+  - id: ds-linux-client
+    name: Linux client support basics
+    source: A+ 220-1202 1.10 Linux + Google IT Support Operating Systems course
+    match: [linux-client]
+    subtopics:
+      - {id: lx-packages, name: Package management (apt / dnf), match: [linux-package-management]}
+      - {id: lx-permissions, name: File permissions and sudo, match: [linux-permissions]}
+      - {id: lx-processes-logs, name: Processes and journalctl logs, match: [journalctl]}
+      - {id: lx-disk-space, name: Disk space and mounts (df / du / fstab), match: [linux-disk-space]}
+      - {id: lx-users, name: Linux user and group management, match: [linux-user-management]}
+      - {id: lx-systemctl, name: systemd services with systemctl, match: [systemd-service-management]}
+      - {id: lx-nmcli, name: Linux networking with ip and nmcli, match: [nmcli]}
+      - {id: lx-cups, name: CUPS printing, match: [cups]}
+      - {id: lx-grub, name: GRUB and boot problems, match: [grub]}
+      - {id: lx-sssd, name: Joining Linux to AD with realmd and SSSD, match: [sssd]}
+      - {id: lx-fsck, name: File system checks with fsck, match: [fsck]}
+  - id: ds-mobile-devices
+    name: Mobile device support
+    source: A+ 220-1201 1.x mobile devices + 220-1202 3.2 mobile OS troubleshooting
+    match: [mobile-device-support]
+    subtopics:
+      - {id: mb-email-setup, name: Corporate email setup on phones, match: [mobile-email-setup]}
+      - {id: mb-app-issues, name: Mobile app crashes and storage problems, match: [mobile-app-troubleshooting]}
+      - {id: mb-battery-heat, name: Battery drain and overheating, match: [mobile-battery-drain]}
+      - {id: mb-new-phone, name: Moving a user to a new phone (authenticator / backup), match: [phone-migration]}
+      - {id: mb-bluetooth, name: Bluetooth pairing issues, match: [bluetooth-troubleshooting]}
+      - {id: mb-hotspot, name: Cellular data / APN / hotspot, match: [mobile-hotspot]}
+      - {id: mb-os-update, name: Mobile OS update failures, match: [mobile-os-update]}
+      - {id: mb-frp, name: Factory reset and factory reset protection, match: [factory-reset-protection]}
+      - {id: mb-touchscreen, name: Unresponsive touchscreen and physical damage, match: [touchscreen-troubleshooting]}
+      - {id: mb-esim, name: eSIM transfer, match: [esim]}
+  - id: ds-laptop-hardware
+    name: Laptop and workstation hardware service
+    source: A+ 220-1201 1.1 laptop hardware + 3.x RAM / storage / power
+    match: [laptop-hardware, hardware-replacement]
+    subtopics:
+      - {id: lh-ram-ssd, name: Replacing RAM and SSDs, match: [ram-ssd-upgrade]}
+      - {id: lh-battery, name: Battery replacement and swelling, match: [battery-replacement]}
+      - {id: lh-keyboard-screen, name: Keyboard / touchpad / screen replacement, match: [laptop-screen-replacement]}
+      - {id: lh-esd-safety, name: ESD and electrical safety, match: [esd-safety]}
+      - {id: lh-docking, name: Docking stations and USB-C / Thunderbolt, match: [docking-station-troubleshooting]}
+      - {id: lh-bios, name: BIOS / UEFI firmware updates, match: [bios-update]}
+      - {id: lh-peripherals, name: Peripheral troubleshooting (monitors / keyboards / mice), match: [peripheral-troubleshooting]}
+      - {id: lh-wireless-card, name: Wireless card and antenna replacement, match: [wireless-card]}
+      - {id: lh-desktop-components, name: Desktop PSU / GPU / motherboard replacement, match: [desktop-component-replacement]}
+      - {id: lh-vendor-diagnostics, name: Vendor diagnostics (Dell / HP / Lenovo), match: [vendor-diagnostics]}
+      - {id: lh-cmos, name: CMOS battery replacement, match: [cmos-battery]}
+  - id: ds-endpoint-security
+    name: Workstation security tasks
+    source: A+ 220-1202 2.x security + 3.4 malware removal
+    match: [workstation-security, malware]
+    subtopics:
+      - {id: sec-malware-procedure, name: CompTIA malware removal procedure, match: [malware-removal-procedure]}
+      - {id: sec-phishing-triage, name: Phishing report triage, match: [phishing-triage]}
+      - {id: sec-bitlocker-recovery, name: BitLocker recovery key retrieval, match: [bitlocker-recovery-key]}
+      - {id: sec-browser-security, name: Browser security settings and extensions, match: [browser-security]}
+      - {id: sec-local-admin, name: Removing local admin rights safely, match: [least-privilege-workstation]}
+      - {id: sec-windows-security-app, name: Windows Security app health checks, match: [windows-security-app]}
+      - {id: sec-manage-bde, name: Checking encryption status with manage-bde, match: [manage-bde]}
+      - {id: sec-screen-lock, name: Screen lock and physical security, match: [screen-lock]}
+      - {id: sec-ransomware, name: Suspected ransomware on an endpoint, match: [ransomware-response]}
+      - {id: sec-certificate-errors, name: Certificate errors and warnings, match: [certificate-errors]}
+      - {id: sec-adware, name: Adware and potentially unwanted apps, match: [adware-removal]}
+  - id: ds-backup-recovery
+    name: Backup and data recovery
+    source: A+ 220-1202 4.3 backup and recovery + Google IT Support data recovery
+    match: [backup, data-recovery]
+    subtopics:
+      - {id: bk-file-recovery, name: Restoring deleted files (Previous Versions / recycle bins), match: [file-restore]}
+      - {id: bk-onedrive-restore, name: OneDrive / SharePoint restore and ransomware rollback, match: [onedrive-restore]}
+      - {id: bk-failing-drive, name: Recovering data from a failing drive, match: [failing-drive-recovery]}
+      - {id: bk-backup-rotation, name: Backup types and rotation (3-2-1 / GFS), match: [backup-rotation]}
+      - {id: bk-file-history, name: File History, match: [file-history]}
+      - {id: bk-system-image, name: System image backup and restore, match: [system-image-backup]}
+      - {id: bk-pst, name: PST backup and recovery, match: [pst-recovery]}
+      - {id: bk-restore-testing, name: Restore testing, match: [restore-test-procedure]}
+      - {id: bk-m365-backup, name: Microsoft 365 backup and retention, match: [m365-backup]}
+      - {id: bk-endpoint-agent, name: Endpoint backup agent troubleshooting, match: [endpoint-backup-agent]}
+  - id: ds-virtualization-cloud
+    name: Client virtualization and cloud
+    source: A+ 220-1201 4.0 Virtualization and Cloud Computing
+    match: [virtualization, client-virtualization]
+    subtopics:
+      - {id: vc-hyperv, name: Client Hyper-V and virtualization prerequisites, match: [client-hyper-v]}
+      - {id: vc-sandbox, name: Windows Sandbox for testing, match: [windows-sandbox]}
+      - {id: vc-wsl, name: WSL support, match: [wsl]}
+      - {id: vc-cloud-models, name: Cloud models and shared responsibility for support, match: [cloud-service-models]}
+      - {id: vc-checkpoints, name: VM checkpoints for testing, match: [vm-checkpoints]}
+      - {id: vc-desktop-hypervisor, name: VirtualBox and VMware Workstation, match: [desktop-hypervisor]}
+      - {id: vc-memory-integrity, name: VBS and memory integrity conflicts, match: [memory-integrity]}
+      - {id: vc-saas-sso, name: SaaS SSO access troubleshooting, match: [saas-sso-troubleshooting]}
+      - {id: vc-cloud-storage, name: Cloud storage sync clients, match: [cloud-storage-sync]}
+      - {id: vc-vm-networking, name: VM networking modes (NAT / bridged / internal), match: [vm-networking]}
+  # --- Troubleshooting methodology (A+ 220-1201 5.1 methodology + 5.x domains) -> troubleshooting-methodology
+  - id: tm-comptia-method
+    name: CompTIA troubleshooting methodology
+    source: A+ 220-1201 5.1 Best practice methodology to resolve problems
+    match: [troubleshooting, seven-step-method]
+    subtopics:
+      - {id: cm-identify-problem, name: Identify the problem (questioning / changes / backups first), match: [identify-the-problem]}
+      - {id: cm-theory, name: Establish and test a theory of probable cause, match: [theory-of-probable-cause]}
+      - {id: cm-plan-action, name: Establish a plan of action and implement, match: [plan-of-action]}
+      - {id: cm-verify, name: Verify full system functionality and preventive measures, match: [verify-full-functionality]}
+      - {id: cm-document-findings, name: Document findings / actions / outcomes, match: [document-findings]}
+      - {id: cm-escalate, name: Re-establish a theory or escalate, match: [escalate-or-retheorize]}
+      - {id: cm-impact-before-change, name: Consider corporate policies and impact before changes, match: [impact-assessment-before-change]}
+      - {id: cm-question-obvious, name: Question the obvious, match: [question-the-obvious]}
+      - {id: cm-half-split, name: Half-split / divide and conquer, match: [half-split]}
+      - {id: cm-reproduce, name: Reproducing the issue, match: [reproduce-issue]}
+  - id: tm-hardware
+    name: Motherboard / RAM / CPU / power troubleshooting
+    source: A+ 220-1201 5.2 motherboard RAM CPU and power
+    match: [hardware, no-boot]
+    subtopics:
+      - {id: hw-no-post, name: No power / no POST diagnosis, match: [no-post]}
+      - {id: hw-ram-faults, name: RAM fault isolation, match: [ram-diagnostics]}
+      - {id: hw-overheating, name: Overheating and thermal throttling, match: [thermal-throttling]}
+      - {id: hw-psu, name: Power supply testing, match: [psu-testing]}
+      - {id: hw-beep-codes, name: POST beep codes and LED diagnostics, match: [post-beep-codes]}
+      - {id: hw-clear-cmos, name: Clearing CMOS, match: [clear-cmos]}
+      - {id: hw-cpu, name: CPU faults, match: [cpu-troubleshooting]}
+      - {id: hw-visual-inspection, name: Visual inspection (swollen capacitors / burning smell), match: [visual-inspection]}
+      - {id: hw-random-shutdowns, name: Random shutdowns and reboots, match: [random-shutdowns]}
+      - {id: hw-usb, name: USB device not recognized, match: [usb-not-recognized]}
+      - {id: hw-audio, name: No sound and audio faults, match: [audio-troubleshooting]}
+  - id: tm-storage
+    name: Storage drive and RAID troubleshooting
+    source: A+ 220-1201 5.3 storage drives and RAID arrays
+    match: [storage-troubleshooting]
+    subtopics:
+      - {id: st-smart, name: SMART data and drive health, match: [smart-status]}
+      - {id: st-nvme, name: NVMe / SSD not detected, match: [drive-not-detected]}
+      - {id: st-raid, name: RAID degraded and rebuild, match: [raid-degraded]}
+      - {id: st-slow-disk, name: Slow disk and 100 percent disk usage, match: [disk-100-percent]}
+      - {id: st-drive-noise, name: Grinding and clicking drives, match: [drive-noise]}
+      - {id: st-boot-device, name: Bootable device not found, match: [boot-device-not-found]}
+      - {id: st-fs-corruption, name: File system corruption, match: [file-system-corruption]}
+      - {id: st-raid-levels, name: Choosing RAID levels, match: [raid-level-selection]}
+      - {id: st-trim, name: SSD wear and TRIM, match: [ssd-trim]}
+      - {id: st-external, name: External drive not showing, match: [external-drive]}
+      - {id: st-storage-spaces, name: Storage Spaces, match: [windows-storage-spaces]}
+  - id: tm-display
+    name: Video projector and display troubleshooting
+    source: A+ 220-1201 5.4 video projector and display issues
+    match: [display-troubleshooting]
+    subtopics:
+      - {id: dp-no-image, name: No image / black screen isolation, match: [no-display]}
+      - {id: dp-artifacts, name: Flicker artifacts and dead pixels, match: [display-artifacts]}
+      - {id: dp-scaling, name: Resolution and DPI scaling issues, match: [dpi-scaling]}
+      - {id: dp-projector, name: Projector and meeting-room AV, match: [projector-troubleshooting]}
+      - {id: dp-multi-monitor, name: Multi-monitor detection and arrangement, match: [multi-monitor-setup]}
+      - {id: dp-gpu-driver, name: GPU driver crashes and TDR, match: [gpu-driver]}
+      - {id: dp-color, name: Incorrect colour and calibration, match: [color-calibration]}
+      - {id: dp-burn-in, name: Burn-in and image retention, match: [burn-in]}
+      - {id: dp-cables, name: Display cables and USB-C alt mode, match: [display-cables]}
+      - {id: dp-backlight, name: Dim display and backlight faults, match: [backlight]}
+  - id: tm-network
+    name: Wired and wireless network troubleshooting
+    source: A+ 220-1201 5.7 wired and wireless network + 2.x networking
+    match: [networking, network-troubleshooting]
+    subtopics:
+      - {id: nt-apipa, name: APIPA / no DHCP lease, match: [apipa]}
+      - {id: nt-dns, name: DNS resolution failures and flushing caches, match: [dns-troubleshooting]}
+      - {id: nt-wifi, name: Wi-Fi signal / interference / roaming, match: [wifi-troubleshooting]}
+      - {id: nt-cabling, name: Cable and port testing (toner / tester / link lights), match: [cable-testing]}
+      - {id: nt-ip-conflict, name: IP address conflicts, match: [ip-conflict]}
+      - {id: nt-limited, name: Limited or no connectivity, match: [limited-connectivity]}
+      - {id: nt-iperf, name: Slow network throughput testing, match: [iperf]}
+      - {id: nt-port-test, name: Port reachability testing, match: [test-netconnection]}
+      - {id: nt-traceroute, name: tracert and pathping, match: [traceroute]}
+      - {id: nt-vlan, name: Switch port and VLAN issues, match: [switch-port-vlan]}
+      - {id: nt-captive-portal, name: Captive portals, match: [captive-portal-login]}
+      - {id: nt-soho-router, name: SOHO router configuration, match: [soho-router]}
+  - id: tm-performance
+    name: Performance troubleshooting
+    source: A+ 220-1202 3.1 (slow performance) + Windows Performance docs
+    match: [performance, slow-pc]
+    subtopics:
+      - {id: pf-perfmon, name: Performance Monitor counters and data collector sets, match: [perfmon]}
+      - {id: pf-wpr, name: Windows Performance Recorder / Analyzer traces, match: [windows-performance-recorder]}
+      - {id: pf-boot-time, name: Slow boot and logon analysis, match: [slow-logon]}
+      - {id: pf-memory, name: Memory pressure and paging, match: [memory-pressure]}
+      - {id: pf-high-cpu, name: High CPU processes, match: [high-cpu-usage]}
+      - {id: pf-startup, name: Startup programs, match: [startup-programs]}
+      - {id: pf-disk-cleanup, name: Disk Cleanup and Storage Sense, match: [disk-cleanup]}
+      - {id: pf-process-explorer, name: Process Explorer, match: [process-explorer-analysis]}
+      - {id: pf-memory-leak, name: Memory leak identification, match: [memory-leak]}
+      - {id: pf-office-add-ins, name: Office slowness from add-ins, match: [office-add-ins]}
+  - id: tm-evidence-gathering
+    name: Evidence and log gathering
+    source: Google IT Support (logging) + Sysinternals docs + Windows troubleshooting docs
+    match: [log-analysis, evidence-gathering]
+    subtopics:
+      - {id: ev-procmon, name: Process Monitor capture and filtering, match: [procmon]}
+      - {id: ev-steps-recorder, name: Capturing user repro (screen recording / Steps Recorder), match: [repro-capture]}
+      - {id: ev-packet-capture, name: Basic packet capture (pktmon / Wireshark), match: [packet-capture]}
+      - {id: ev-event-filtering, name: Filtering and exporting event logs, match: [event-log-filtering]}
+      - {id: ev-autoruns, name: Autoruns, match: [autoruns-persistence]}
+      - {id: ev-procdump, name: Process dumps with ProcDump, match: [procdump]}
+      - {id: ev-har, name: Browser HAR capture, match: [har-file]}
+      - {id: ev-msinfo32, name: System information export (msinfo32), match: [msinfo32]}
+      - {id: ev-log-bundle, name: Application diagnostic log bundles, match: [log-bundle]}
+      - {id: ev-timeline, name: Building an incident timeline from logs, match: [incident-timeline]}
+  - id: tm-rca
+    name: Root cause and recurring-fault analysis
+    source: ITIL 4 Problem management techniques + HDI DST standards
+    match: [root-cause-analysis, rca]
+    subtopics:
+      - {id: rca-kepner-tregoe, name: Kepner-Tregoe is / is-not analysis, match: [kepner-tregoe]}
+      - {id: rca-pareto, name: Pareto analysis of ticket data, match: [pareto-analysis]}
+      - {id: rca-change-correlation, name: Correlating faults with recent changes, match: [change-correlation]}
+      - {id: rca-intermittent, name: Intermittent fault strategies, match: [intermittent-faults]}
+      - {id: rca-five-whys, name: Five whys, match: [five-whys]}
+      - {id: rca-ishikawa, name: Ishikawa fishbone diagram, match: [ishikawa]}
+      - {id: rca-fault-tree, name: Fault tree analysis, match: [fault-tree-analysis]}
+      - {id: rca-blameless, name: Blameless post-mortem, match: [blameless-postmortem]}
+      - {id: rca-corrective-actions, name: Corrective and preventive action tracking, match: [corrective-actions]}
+      - {id: rca-one-change, name: One change at a time testing, match: [one-change-at-a-time]}
+  # --- Device provisioning (Windows deployment docs, Intune Autopilot, A+ 220-1202 2.x data destruction) -> device-provisioning
+  - id: dp-imaging
+    name: Windows imaging and OS deployment
+    source: Windows client deployment docs + ConfigMgr OSD docs
+    match: [imaging, os-deployment]
+    subtopics:
+      - {id: im-wim, name: Capturing and servicing WIM images, match: [wim-image]}
+      - {id: im-task-sequence, name: Task sequences (MDT / ConfigMgr), match: [task-sequence]}
+      - {id: im-pxe, name: PXE boot and WDS, match: [pxe-boot]}
+      - {id: im-drivers, name: Driver packs and injection, match: [driver-injection]}
+      - {id: im-sysprep, name: Sysprep generalize, match: [sysprep]}
+      - {id: im-offline-servicing, name: Offline image servicing with DISM, match: [offline-servicing]}
+      - {id: im-usmt, name: USMT state migration, match: [usmt]}
+      - {id: im-winpe, name: WinPE boot images, match: [winpe-boot-images]}
+      - {id: im-multicast, name: Multicast deployment, match: [multicast-deployment]}
+      - {id: im-smsts, name: Task sequence troubleshooting with smsts.log, match: [smsts-log]}
+  - id: dp-autopilot
+    name: Windows Autopilot deployment
+    source: Windows Autopilot docs
+    match: [windows-autopilot]
+    subtopics:
+      - {id: apx-hash-import, name: Hardware hash import and group tags, match: [autopilot-group-tag]}
+      - {id: apx-pre-provisioning, name: Pre-provisioning technician flow, match: [autopilot-pre-provisioning]}
+      - {id: apx-self-deploying, name: Self-deploying mode for kiosks, match: [self-deploying-mode]}
+      - {id: apx-esp-tuning, name: Enrollment Status Page tuning, match: [esp-blocking-apps]}
+      - {id: apx-device-prep, name: Autopilot device preparation (v2), match: [autopilot-device-preparation]}
+      - {id: apx-user-driven, name: User-driven mode (Entra join), match: [autopilot-user-driven]}
+      - {id: apx-hybrid, name: Hybrid join Autopilot and the Intune Connector for AD, match: [intune-connector-for-ad]}
+      - {id: apx-profile-assignment, name: Deployment profile assignment and convert existing devices, match: [autopilot-profile-assignment]}
+      - {id: apx-diagnostics, name: Autopilot error codes and diagnostics, match: [autopilot-diagnostics]}
+      - {id: apx-reseller, name: OEM and reseller registration, match: [autopilot-reseller-registration]}
+      - {id: apx-branding, name: Company branding in OOBE, match: [oobe-company-branding]}
+  - id: dp-onboarding
+    name: New-starter onboarding
+    source: ITIL 4 Service request management + Microsoft 365 admin docs (add users)
+    match: [onboarding]
+    subtopics:
+      - {id: on-account-creation, name: Account creation and licensing for joiners, match: [account-provisioning]}
+      - {id: on-device-handover, name: Device handover and first login, match: [device-handover]}
+      - {id: on-movers, name: Movers (role change) access review, match: [movers]}
+      - {id: on-hr-integration, name: HR-driven provisioning triggers, match: [hr-driven-provisioning]}
+      - {id: on-checklist, name: Joiner checklist and lead times, match: [joiner-checklist]}
+      - {id: on-orientation, name: First-day IT orientation, match: [it-orientation]}
+      - {id: on-scim, name: SaaS provisioning with SCIM, match: [scim-provisioning]}
+      - {id: on-access-packages, name: Entitlement management access packages, match: [access-packages]}
+      - {id: on-contractors, name: Contractor accounts with expiry, match: [contractor-accounts]}
+      - {id: on-remote-shipping, name: Shipping devices to remote starters, match: [remote-device-shipping]}
+  - id: dp-offboarding
+    name: Leaver offboarding
+    source: Microsoft 365 admin docs (remove a former employee) + A+ 220-1202 2.x
+    match: [offboarding]
+    subtopics:
+      - {id: off-account-disable, name: Disabling accounts and revoking sessions, match: [account-disable]}
+      - {id: off-mailbox, name: Mailbox and OneDrive retention for leavers, match: [leaver-data-retention]}
+      - {id: off-device-recovery, name: Recovering and wiping returned devices, match: [device-return]}
+      - {id: off-activation-lock, name: Clearing Activation Lock and account locks, match: [activation-lock-removal]}
+      - {id: off-checklist, name: Leaver checklist, match: [leaver-checklist]}
+      - {id: off-auth-methods, name: Removing authentication methods and tokens, match: [authentication-methods-removal]}
+      - {id: off-saas, name: SaaS deprovisioning, match: [saas-deprovisioning]}
+      - {id: off-credential-rotation, name: Rotating shared credentials known to the leaver, match: [credential-rotation]}
+      - {id: off-immediate, name: Immediate and hostile terminations, match: [immediate-termination]}
+      - {id: off-mailbox-delegation, name: Leaver mailbox delegation / auto-reply / forwarding, match: [leaver-mailbox-delegation]}
+      - {id: off-license-reclaim, name: Licence reclamation, match: [license-reclamation]}
+  - id: dp-data-sanitization
+    name: Data destruction and disposal
+    source: A+ 220-1202 2.9 data destruction + NIST SP 800-88 + 4.5 environmental
+    match: [data-sanitization, disposal]
+    subtopics:
+      - {id: dsn-nist-80088, name: NIST 800-88 clear / purge / destroy, match: [nist-800-88]}
+      - {id: dsn-ssd-erase, name: SSD secure erase and crypto erase, match: [crypto-erase]}
+      - {id: dsn-certificates, name: Certificates of destruction and ITAD vendors, match: [certificate-of-destruction]}
+      - {id: dsn-ewaste, name: E-waste and battery disposal rules, match: [e-waste]}
+      - {id: dsn-overwrite, name: HDD overwrite tools, match: [disk-overwrite]}
+      - {id: dsn-physical, name: Physical destruction (shred / degauss / drill), match: [physical-destruction]}
+      - {id: dsn-mobile, name: Phone and tablet sanitization, match: [mobile-device-sanitization]}
+      - {id: dsn-copier, name: Copier and MFP hard drives, match: [copier-hard-drive]}
+      - {id: dsn-verification, name: Sanitization verification and sampling, match: [sanitization-verification]}
+      - {id: dsn-custody, name: Chain of custody for disposal, match: [disposal-chain-of-custody]}
+  - id: dp-asset-lifecycle
+    name: IT asset lifecycle
+    source: ITIL 4 IT asset management
+    match: [asset-management, asset-tag]
+    subtopics:
+      - {id: al-receiving, name: Receiving and tagging new hardware, match: [asset-receiving]}
+      - {id: al-warranty-claims, name: Warranty and vendor repair claims, match: [warranty-claim]}
+      - {id: al-refresh-planning, name: Hardware refresh planning, match: [refresh-cycle]}
+      - {id: al-software-licensing, name: Software licence compliance, match: [software-license-compliance]}
+      - {id: al-inventory-audit, name: Physical inventory audits, match: [inventory-audit]}
+      - {id: al-loaner, name: Spare stock and loaner pool, match: [loaner-pool]}
+      - {id: al-procurement, name: Hardware procurement and standard models, match: [hardware-procurement]}
+      - {id: al-assignment, name: Assigning assets to users and check-in, match: [asset-assignment]}
+      - {id: al-retirement, name: Asset retirement records, match: [asset-retirement]}
+      - {id: al-saas-licenses, name: SaaS licence usage management, match: [saas-license-management]}
+      - {id: al-depreciation, name: TCO and depreciation, match: [asset-depreciation]}
+  - id: dp-standard-build
+    name: Standard build definition
+    source: CIS Benchmarks + Windows deployment docs
+    match: [standard-build, gold-image]
+    subtopics:
+      - {id: sb-baseline, name: Security baseline for the build, match: [security-baseline]}
+      - {id: sb-debloat, name: Removing bloatware and provisioned apps, match: [debloat]}
+      - {id: sb-build-qa, name: Build QA checklist and sign-off, match: [build-qa]}
+      - {id: sb-naming, name: Device naming conventions, match: [device-naming]}
+      - {id: sb-core-apps, name: Core application set, match: [core-applications]}
+      - {id: sb-firmware-baseline, name: Driver and firmware baseline, match: [firmware-baseline]}
+      - {id: sb-power, name: Power settings, match: [power-settings]}
+      - {id: sb-start-layout, name: Default Start and taskbar layout, match: [start-layout]}
+      - {id: sb-versioning, name: Build documentation and versioning, match: [build-versioning]}
+      - {id: sb-language, name: Language packs and regional settings, match: [language-packs]}
+  # --- User support communication (HDI SCA, A+ 220-1202 4.1 / 4.7 / 4.6 / 4.8 / 4.10) -> user-support-communication
+  - id: uc-professionalism
+    name: Communication and professionalism
+    source: A+ 220-1202 4.7 communication techniques and professionalism + HDI SCA
+    match: [customer-service, active-listening]
+    subtopics:
+      - {id: pr-difficult-users, name: Handling difficult and abusive users, match: [difficult-customers]}
+      - {id: pr-saying-no, name: Saying no and offering alternatives, match: [declining-requests]}
+      - {id: pr-cultural, name: Cross-cultural and non-native-speaker support, match: [cross-cultural-communication]}
+      - {id: pr-onsite-etiquette, name: Desk-side visit etiquette, match: [desk-side-etiquette]}
+      - {id: pr-expectations, name: Setting expectations and timelines, match: [expectation-timelines]}
+      - {id: pr-empathy, name: Empathy and acknowledgement, match: [empathy-statements]}
+      - {id: pr-phone, name: Telephone etiquette (greeting / hold / transfer), match: [phone-etiquette]}
+      - {id: pr-chat, name: Chat support etiquette and concurrency, match: [chat-support]}
+      - {id: pr-plain-language, name: Avoiding jargon, match: [plain-language]}
+      - {id: pr-user-property, name: Respecting user property and confidential materials, match: [user-property-respect]}
+      - {id: pr-follow-up, name: Call-backs and follow-up, match: [callback-follow-up]}
+  - id: uc-ticket-documentation
+    name: Ticket documentation standards
+    source: A+ 220-1202 4.1 documentation and ticketing + HDI SCA incident logging
+    match: [ticket-documentation, ticket-notes]
+    subtopics:
+      - {id: td-incident-description, name: Writing a reproducible problem description, match: [problem-statement]}
+      - {id: td-resolution-notes, name: Resolution notes that feed knowledge, match: [resolution-notes]}
+      - {id: td-asset-info, name: Capturing environment and asset details, match: [environment-details]}
+      - {id: td-audit-quality, name: Ticket quality audits, match: [ticket-quality-audit]}
+      - {id: td-time-tracking, name: Time tracking on tickets, match: [time-tracking]}
+      - {id: td-redaction, name: Screenshots and redaction, match: [screenshot-redaction]}
+      - {id: td-sop, name: Standard operating procedures, match: [standard-operating-procedure]}
+      - {id: td-closure-confirmation, name: Closure confirmation with the user, match: [user-closure-confirmation]}
+      - {id: td-runbook, name: Runbooks, match: [runbook]}
+      - {id: td-network-diagram, name: Network diagrams for support, match: [network-diagram]}
+      - {id: td-incident-report, name: Incident reports, match: [incident-report]}
+  - id: uc-escalation
+    name: Escalation practice
+    source: HDI SCA escalation + ITIL 4 Incident management (functional / hierarchical escalation)
+    match: [escalation]
+    subtopics:
+      - {id: es-functional-hierarchical, name: Functional vs hierarchical escalation, match: [hierarchical-escalation]}
+      - {id: es-warm-handoff, name: Warm handoff to L2 / L3, match: [warm-handoff]}
+      - {id: es-vendor-escalation, name: Escalating to vendors and managing vendor cases, match: [vendor-escalation]}
+      - {id: es-management-escalation, name: Escalating to management with a clear ask, match: [escalation-briefing]}
+      - {id: es-criteria, name: Escalation criteria and time thresholds, match: [escalation-criteria]}
+      - {id: es-matrix, name: Escalation matrix and contacts, match: [escalation-matrix]}
+      - {id: es-de-escalation, name: De-escalating an upset caller, match: [de-escalation]}
+      - {id: es-complaints, name: Complaint handling, match: [complaint-handling]}
+      - {id: es-template, name: Information required before escalating, match: [escalation-template]}
+      - {id: es-ownership, name: Retaining ticket ownership during escalation, match: [ticket-ownership]}
+  - id: uc-written-channels
+    name: Email and written support
+    source: HDI SCA written communication + Zendesk / ServiceNow customer communication docs
+    match: [email-support, written-communication]
+    subtopics:
+      - {id: wc-email-structure, name: Structuring support emails and updates, match: [support-email-writing]}
+      - {id: wc-outage-notice, name: Outage and maintenance notifications, match: [outage-notification]}
+      - {id: wc-instructions, name: Step-by-step instructions for non-technical users, match: [user-instructions]}
+      - {id: wc-tone, name: Tone in written replies, match: [written-tone]}
+      - {id: wc-canned, name: Canned responses, match: [canned-responses]}
+      - {id: wc-status-updates, name: Status update cadence, match: [status-updates]}
+      - {id: wc-closure-email, name: Closure emails, match: [closure-email]}
+      - {id: wc-exec-summary, name: Executive summaries, match: [executive-summary]}
+      - {id: wc-minimalist, name: Minimalist writing for help content, match: [minimalist-writing]}
+      - {id: wc-accessible, name: Accessible written communication, match: [accessible-communication]}
+  - id: uc-privacy-policy
+    name: Privacy, prohibited content and policy compliance
+    source: A+ 220-1202 4.6 prohibited content / privacy / licensing / policy
+    match: [privacy, acceptable-use-policy]
+    subtopics:
+      - {id: pp-pii, name: Handling PII and confidential data in tickets, match: [pii-handling]}
+      - {id: pp-prohibited-content, name: Discovering prohibited content (chain of custody), match: [prohibited-content]}
+      - {id: pp-aup, name: Acceptable use policy enforcement, match: [aup-enforcement]}
+      - {id: pp-licensing-eula, name: Licensing EULAs and unlicensed software requests, match: [eula]}
+      - {id: pp-dsr, name: Data subject requests, match: [data-subject-request]}
+      - {id: pp-mailbox-access, name: Authorising access to another user's data, match: [mailbox-access-request]}
+      - {id: pp-regulated, name: Regulated data (PCI / HIPAA) in support, match: [regulated-data-handling]}
+      - {id: pp-retention, name: Ticket data retention, match: [ticket-data-retention]}
+      - {id: pp-oss, name: Open-source licensing, match: [open-source-licensing]}
+      - {id: pp-breach, name: Reporting a data breach, match: [data-breach-reporting]}
+  - id: uc-scripting-basics
+    name: Scripting basics for support
+    source: A+ 220-1202 4.8 basics of scripting
+    match: [scripting, powershell]
+    subtopics:
+      - {id: sc-batch, name: Batch files for simple support tasks, match: [batch-script]}
+      - {id: sc-powershell-support, name: PowerShell one-liners for support, match: [powershell-for-support]}
+      - {id: sc-bash, name: Shell scripts for macOS / Linux support, match: [bash-script]}
+      - {id: sc-script-risk, name: Script risks (untested scripts / malware / system damage), match: [script-safety]}
+      - {id: sc-python, name: Python for support tasks, match: [python-scripting]}
+      - {id: sc-vbscript, name: Legacy VBScript and JScript, match: [vbscript]}
+      - {id: sc-automation, name: Support automation use cases (remap drives / install apps / gather info), match: [support-automation]}
+      - {id: sc-constructs, name: Variables / loops / conditionals / comments, match: [script-constructs]}
+      - {id: sc-execution-policy, name: PowerShell execution policy and signing, match: [execution-policy-signing]}
+      - {id: sc-repo, name: Script repository and version control, match: [script-repository]}
+  - id: uc-ai-in-support
+    name: AI use in support
+    source: A+ 220-1202 4.10 AI basics (appropriate use / data privacy / hallucination)
+    match: [ai-in-support]
+    subtopics:
+      - {id: ai-data-protection, name: Keeping sensitive data out of AI tools, match: [ai-data-privacy]}
+      - {id: ai-verify-output, name: Verifying AI-suggested fixes, match: [ai-hallucination]}
+      - {id: ai-ticket-summaries, name: AI ticket summaries and drafting replies, match: [ai-ticket-summarization]}
+      - {id: ai-copilot-support, name: Supporting users of Microsoft 365 Copilot, match: [copilot-support]}
+      - {id: ai-prompting, name: Prompting AI for troubleshooting, match: [prompt-engineering-support]}
+      - {id: ai-kb-drafting, name: AI-drafted knowledge articles, match: [ai-knowledge-drafting]}
+      - {id: ai-aup, name: AI acceptable use policy, match: [ai-acceptable-use]}
+      - {id: ai-limitations, name: AI limitations and bias, match: [ai-limitations]}
+      - {id: ai-now-assist, name: Generative AI in the ITSM tool (Now Assist), match: [now-assist]}
+      - {id: ai-copilot-oversharing, name: Copilot oversharing and data governance, match: [copilot-oversharing]}
+  - id: uc-training-adoption
+    name: User training and technology adoption
+    source: Google IT Support (Technical Support Fundamentals) + HDI SCA
+    match: [end-user-training]
+    subtopics:
+      - {id: tr-quick-reference, name: Quick reference cards, match: [quick-reference-guide]}
+      - {id: tr-rollout-comms, name: Rollout communications for change, match: [rollout-communications]}
+      - {id: tr-floor-walking, name: Floor walking / hypercare after go-live, match: [hypercare]}
+      - {id: tr-security-awareness, name: Security awareness coaching after incidents, match: [security-awareness]}
+      - {id: tr-sessions, name: Delivering training sessions, match: [training-session]}
+      - {id: tr-video, name: Short how-to videos, match: [how-to-video]}
+      - {id: tr-champions, name: Champions network, match: [champions-network]}
+      - {id: tr-adoption-metrics, name: Adoption metrics, match: [adoption-metrics]}
+      - {id: tr-assistive, name: Assistive technology support, match: [assistive-technology]}
+      - {id: tr-phishing-sim, name: Phishing simulations, match: [phishing-simulation]}

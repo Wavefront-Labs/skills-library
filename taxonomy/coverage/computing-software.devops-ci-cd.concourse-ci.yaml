@@ -1,0 +1,212 @@
+# Coverage spec: concourse-ci. Topics from the Concourse CI docs (concourse-ci.org/docs).
+subject: concourse-ci
+scope:
+  category: computing-software
+  field: devops-ci-cd
+  products: [concourse-ci]
+sources:
+  - "Concourse CI docs (concourse-ci.org/docs)"
+topics:
+  # --- Architecture and workers ---
+  - id: concourse-ci-architecture-components
+    name: "Architecture: ATC, TSA, workers, Baggageclaim"
+    source: "https://concourse-ci.org/docs/internals/"
+    match: [architecture,atc,tsa,garden,baggageclaim,postgresql]
+  - id: concourse-ci-worker-landing-retiring-stalled
+    name: "Worker lifecycle: landing, retiring, stalled"
+    source: "https://concourse-ci.org/docs/internals/"
+    match: [lifecycle,landing,retiring,stalled,sigusr1,sigusr2]
+  - id: concourse-ci-worker-admin-with-fly
+    name: "Worker administration with fly"
+    source: "https://concourse-ci.org/docs/operation/administration/"
+    match: [workers,prune-worker,land-worker,containers,volumes,wall]
+  - id: concourse-ci-container-placement
+    name: "Container placement strategies"
+    source: "https://concourse-ci.org/docs/operation/container-placement/"
+    match: [container-placement,volume-locality,fewest-build-containers,limit-active-tasks,limit-active-containers,limit-active-volumes,chaining,worker-capacity]
+  # --- Resources and versions ---
+  - id: concourse-ci-resource-checking-internals
+    name: "Resource checking, lidar and global resources"
+    source: "https://concourse-ci.org/docs/internals/checker/"
+    match: [checker,lidar,check-every,global-resources,resource-config,version-history]
+  - id: concourse-ci-resource-check-tuning
+    name: "Resource check load tuning"
+    source: "https://concourse-ci.org/docs/operation/tuning/"
+    match: [resource-checking,check-interval,max-checks-per-second,pause-pipelines,timeouts,tuning]
+  - id: concourse-ci-resource-webhooks
+    name: "Triggering checks with webhooks"
+    source: "https://concourse-ci.org/docs/resources/"
+    match: [webhooks,webhook-token,api]
+  - id: concourse-ci-resource-schema
+    name: "Resource configuration schema"
+    source: "https://concourse-ci.org/docs/resources/"
+    match: [resources,resource-schema,check-timeout,icon,old-name]
+  - id: concourse-ci-resource-version-pinning
+    name: "Pinning and disabling resource versions"
+    source: "https://concourse-ci.org/docs/resources/resource-versions/"
+    match: [resource-versions,pinning,unpinning,disable-version]
+  - id: concourse-ci-resource-types
+    name: "Resource types, defaults and overriding"
+    source: "https://concourse-ci.org/docs/resource-types/"
+    match: [resource-types,defaults,registry-image,core-types,overriding]
+  - id: concourse-ci-custom-resource-implementation
+    name: "Implementing a custom resource type"
+    source: "https://concourse-ci.org/docs/resource-types/implementing/"
+    match: [check,in,out,opt-resource,json,metadata,stdin]
+  - id: concourse-ci-resource-commands-with-fly
+    name: "Resource management with fly"
+    source: "https://concourse-ci.org/docs/resources/managing-resources/"
+    match: [check-resource,pin-resource,unpin-resource,disable-resource-version,clear-resource-cache]
+  # --- Jobs, scheduling and builds ---
+  - id: concourse-ci-scheduler-and-passed-constraints
+    name: "Build scheduler and passed constraints"
+    source: "https://concourse-ci.org/docs/internals/scheduler/"
+    match: [scheduler,algorithm,build-tracker,passed-constraints,inputs,trigger]
+  - id: concourse-ci-job-concurrency
+    name: "Job concurrency: serial, serial groups, max-in-flight"
+    source: "https://concourse-ci.org/docs/jobs/"
+    match: [serial,serial-groups,max-in-flight,concurrency]
+  - id: concourse-ci-job-visibility-and-trigger-control
+    name: "Job visibility and manual trigger control"
+    source: "https://concourse-ci.org/docs/jobs/"
+    match: [public,disable-manual-trigger,disable-reruns,hooks]
+  - id: concourse-ci-build-log-retention
+    name: "Build log retention"
+    source: "https://concourse-ci.org/docs/operation/tuning/"
+    match: [build-logs,retention,database-size,days-to-retain,builds-to-retain,minimum-succeeded-builds,logs]
+  - id: concourse-ci-build-reruns
+    name: "Build reruns and their caveats"
+    source: "https://concourse-ci.org/docs/builds/"
+    match: [rerun-build,rerun]
+  - id: concourse-ci-build-debugging
+    name: "Debugging builds: intercept, watch, abort"
+    source: "https://concourse-ci.org/docs/builds/"
+    match: [intercept,hijack,watch,abort-build,debugging]
+  - id: concourse-ci-job-commands-with-fly
+    name: "Job management with fly"
+    source: "https://concourse-ci.org/docs/jobs/"
+    match: [trigger-job,pause-job,unpause-job,clear-task-cache,jobs]
+  # --- Steps and task configuration ---
+  - id: concourse-ci-get-and-put-steps
+    name: "Get and put steps"
+    source: "https://concourse-ci.org/docs/steps/get/"
+    match: [get-step,put-step,implicit-get,no-get,get-params,every,artifacts]
+  - id: concourse-ci-task-step
+    name: "Task step configuration"
+    source: "https://concourse-ci.org/docs/steps/task/"
+    match: [task-step,config,file,external-task,input-mapping,output-mapping,reusable-tasks,generic-tasks]
+  - id: concourse-ci-task-config-schema
+    name: "Task config schema and runtime environment"
+    source: "https://concourse-ci.org/docs/tasks/"
+    match: [task-config,platform,image-resource,run,working-directory,environment,runtime]
+  - id: concourse-ci-task-caches-and-outputs
+    name: "Task caches and outputs"
+    source: "https://concourse-ci.org/docs/tasks/"
+    match: [caches,node-modules,outputs]
+  - id: concourse-ci-task-security-and-limits
+    name: "Task privileges and resource limits"
+    source: "https://concourse-ci.org/docs/steps/task/"
+    match: [privileged,hermetic,container-limits,cpu-shares,memory,security]
+  - id: concourse-ci-composite-and-across-steps
+    name: "Composite steps: in_parallel, do, try, across"
+    source: "https://concourse-ci.org/docs/steps/in-parallel/"
+    match: [in-parallel,do-step,try-step,across,matrix,fail-fast,build-matrix,dynamic-steps]
+  - id: concourse-ci-across-dynamic-pipelines
+    name: "Across limitations and dynamic pipelines"
+    source: "https://concourse-ci.org/docs/steps/modifier-and-hooks/across/"
+    match: [limitations,multi-branch,validation,instance-vars]
+  - id: concourse-ci-step-hooks
+    name: "Step hooks and failure handling"
+    source: "https://concourse-ci.org/docs/steps/modifier-and-hooks/ensure/"
+    match: [on-success,on-failure,on-error,on-abort,ensure,build-status]
+  - id: concourse-ci-step-modifiers
+    name: "Attempts, timeout and step tags"
+    source: "https://concourse-ci.org/docs/steps/modifier-and-hooks/attempts/"
+    match: [attempts,timeout,retry,worker-selection,private-network]
+  - id: concourse-ci-set-pipeline-and-load-var
+    name: "set_pipeline and load_var steps"
+    source: "https://concourse-ci.org/docs/steps/set-pipeline/"
+    match: [set-pipeline-step,self-updating,var-files,team,archive,load-var-step,local-var,reveal]
+  # --- Pipelines and variables ---
+  - id: concourse-ci-pipeline-schema
+    name: "Pipeline schema, groups and display"
+    source: "https://concourse-ci.org/docs/pipelines/"
+    match: [pipeline,schema,groups,display,user-data]
+  - id: concourse-ci-instanced-pipelines
+    name: "Instanced pipelines and instance groups"
+    source: "https://concourse-ci.org/docs/pipelines/grouping-pipelines/"
+    match: [instanced-pipelines,instance-group,templating]
+  - id: concourse-ci-vars-syntax
+    name: "Vars syntax and interpolation"
+    source: "https://concourse-ci.org/docs/vars/"
+    match: [syntax,interpolation,yaml-merge,credential-manager]
+  - id: concourse-ci-static-vars-and-flags
+    name: "Static vars, var flags and validation"
+    source: "https://concourse-ci.org/docs/vars/"
+    match: [static-vars,var-flags,yaml-var,load-vars-from,validate-pipeline]
+  - id: concourse-ci-dynamic-vars-and-var-sources
+    name: "Dynamic vars and var sources"
+    source: "https://concourse-ci.org/docs/vars/"
+    match: [dynamic-vars,var-sources,ssm,secretsmanager,dummy,experimental]
+  - id: concourse-ci-secret-redaction
+    name: "Secret redaction in build logs"
+    source: "https://concourse-ci.org/docs/operation/creds/redacting/"
+    match: [redaction,secrets,credentials,leaks,set-x]
+  - id: concourse-ci-pipeline-management-with-fly
+    name: "Setting and managing pipelines with fly"
+    source: "https://concourse-ci.org/docs/pipelines/setting-pipelines/"
+    match: [set-pipeline,check-creds,format-pipeline,pipelines,pause-pipeline,archive-pipeline,expose-pipeline,destroy-pipeline,rename-pipeline]
+  - id: concourse-ci-one-off-builds
+    name: "One-off builds with fly execute"
+    source: "https://concourse-ci.org/docs/tasks/"
+    match: [execute,one-off-build,inputs-from,tag]
+  # --- Credential managers ---
+  - id: concourse-ci-credential-manager-overview
+    name: "Credential managers overview"
+    source: "https://concourse-ci.org/docs/operation/creds/"
+    match: [credentials,vars,idtoken]
+  - id: concourse-ci-vault-integration
+    name: "Vault credential manager"
+    source: "https://concourse-ci.org/docs/operation/creds/vault/"
+    match: [vault,kv,secrets-engine,lookup-templates,shared-path,namespace,policy]
+  - id: concourse-ci-vault-authentication
+    name: "Vault authentication backends"
+    source: "https://concourse-ci.org/docs/operation/creds/vault/"
+    match: [authentication,approle,userpass,cert,periodic-token,token-renewal]
+  - id: concourse-ci-aws-credential-managers
+    name: "AWS SSM and Secrets Manager"
+    source: "https://concourse-ci.org/docs/operation/creds/aws-ssm/"
+    match: [aws,ssm,parameter-store,secrets-manager,iam,kms,session-token,instance-profile,health-check,rate-limits,scaling]
+  - id: concourse-ci-kubernetes-credential-manager
+    name: "Kubernetes secrets credential manager"
+    source: "https://concourse-ci.org/docs/operation/creds/kubernetes/"
+    match: [kubernetes,rbac,namespace,serviceaccount,rolebinding]
+  - id: concourse-ci-credhub-and-conjur
+    name: "CredHub and Conjur credential managers"
+    source: "https://concourse-ci.org/docs/operation/creds/credhub/"
+    match: [credhub,mtls,tls,lookup-paths,cloud-foundry,conjur,cyberark,token-file,secret-templates,lookup]
+  - id: concourse-ci-credential-caching
+    name: "Credential caching and retries"
+    source: "https://concourse-ci.org/docs/operation/creds/caching/"
+    match: [caching,secret-cache,secret-retry-attempts]
+  - id: concourse-ci-idtoken-identity-federation
+    name: "ID token var source and identity federation"
+    source: "https://concourse-ci.org/docs/operation/creds/id-token/"
+    match: [jwt,oidc,identity-federation,subject-scope,jwks,key-rotation]
+  # --- Teams, auth and housekeeping ---
+  - id: concourse-ci-fly-login-and-targets
+    name: "Fly login, targets and flyrc"
+    source: "https://concourse-ci.org/docs/fly/"
+    match: [fly,login,targets,flyrc,ca-cert,client-cert,sync,userinfo,logout]
+  - id: concourse-ci-auth-providers
+    name: "Authentication providers: local, GitHub, LDAP"
+    source: "https://concourse-ci.org/docs/auth-and-teams/"
+    match: [auth,local-user,github,ldap,bcrypt,oauth]
+  - id: concourse-ci-teams-and-roles
+    name: "Teams and roles"
+    source: "https://concourse-ci.org/docs/auth-and-teams/"
+    match: [teams,set-team,roles,main-team,active-users,destroy-team]
+  - id: concourse-ci-garbage-collection
+    name: "Garbage collection and web:worker ratio"
+    source: "https://concourse-ci.org/docs/internals/garbage-collector/"
+    match: [garbage-collection,gc,grace-period,failed-builds,web-worker-ratio,database]

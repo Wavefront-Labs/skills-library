@@ -1,0 +1,344 @@
+# Canonical coverage spec: Networking Hardware & Wireless (whole field).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: networking-hardware-and-wireless
+scope:
+  category: computing-software
+  field: networking-hardware-and-wireless
+  products: [wifi-80211, structured-cabling, switching-routing-hardware, network-device-administration, sd-wan]
+sources:
+  - "IEEE 802.11 standard family (ieee802.org/11; standards.ieee.org) - amendments by designation: a/b/g/n/ac/ax/be, e (QoS), i (security), k/v/r (roaming), w (PMF)"
+  - "Wi-Fi Alliance programme pages (wi-fi.org) - Wi-Fi 4/5/6/6E/7, WPA3, Enhanced Open, Passpoint, Agile Multiband"
+  - "CWNP CWNA/CWDP/CWSP exam objectives (cwnp.com) - RF fundamentals, hardware, design, security, troubleshooting"
+  - "ANSI/TIA-568 series, TIA-569 pathways and spaces, TIA-606 administration, TIA-942 data centres (designations only; tiaonline.org); ISO/IEC 11801 generic cabling"
+  - "BICSI Information Technology Systems Installation Methods Manual and CommScope/Fluke Networks cabling test guides (site roots)"
+  - "IEEE 802.3 Ethernet standard clauses (ieee802.org/3) - 802.3af/at/bt PoE, 802.3an 10GBASE-T, 802.3bz multigig, fibre PMDs"
+  - "Cisco documentation and CCNA 200-301 blueprint (cisco.com) - switching, routing, wireless, SD-WAN design and operations guides"
+  - "Juniper documentation (juniper.net/documentation) - Junos OS fundamentals, configuration/commit model, EVPN-VXLAN data-centre guides"
+  - "Ubiquiti UniFi help centre (help.ui.com) - UniFi Network application, gateways, switches, access points"
+  - "RFC 7348 VXLAN, RFC 4271 BGP-4, RFC 2328 OSPFv2, RFC 5880 BFD, RFC 5798 VRRPv3, RFC 7432 EVPN"
+  - "MEF and ONUG SD-WAN service definitions (site roots); vendor SD-WAN design guides (Cisco, Fortinet, Palo Alto, HPE Aruba)"
+topics:
+  - id: wifi-standards-generations
+    name: "802.11 amendments and Wi-Fi generations"
+    source: "IEEE 802.11 amendments; Wi-Fi Alliance generations"
+    match: [wifi-standards-generations]
+    subtopics:
+      - {id: wifi-standards-generations-wifi-generations-and-phy-rates, name: "Map Wi-Fi 4/5/6/6E/7 to 802.11n/ac/ax/be and PHY rates", match: [wifi-generations]}
+      - {id: wifi-standards-generations-wifi-mcs-and-guard-interval, name: "Read MCS index, spatial streams, channel width and guard interval", match: [wifi-mcs-index]}
+      - {id: wifi-standards-generations-wifi-airtime-and-legacy-protection, name: "Explain airtime, legacy rates and protection overhead", match: [wifi-airtime]}
+  - id: wifi-bands-channels
+    name: "Bands, channel plans and regulatory domains"
+    source: "IEEE 802.11 channelisation; CWNA RF chapters"
+    match: [wifi-bands-channels]
+    subtopics:
+      - {id: wifi-bands-channels-wifi-24ghz-channel-plan, name: "Plan 2.4 GHz channels 1/6/11 and avoid overlap", match: [wifi-24ghz-channels]}
+      - {id: wifi-bands-channels-wifi-5ghz-dfs-channels, name: "Use 5 GHz UNII bands, DFS channels and channel width safely", match: [wifi-5ghz-dfs]}
+      - {id: wifi-bands-channels-wifi-6ghz-psc-and-afc, name: "Deploy 6 GHz: PSC channels, AFC and standard power", match: [wifi-6ghz]}
+  - id: wifi-rf-fundamentals
+    name: "RF fundamentals"
+    source: "CWNA exam objectives; RF physics for WLAN"
+    match: [wifi-rf-fundamentals]
+    subtopics:
+      - {id: wifi-rf-fundamentals-wifi-link-budget-and-rssi-snr, name: "Compute link budget and read RSSI, SNR and noise floor", match: [wifi-link-budget]}
+      - {id: wifi-rf-fundamentals-wifi-antenna-patterns-and-polarisation, name: "Choose AP antennas: omni, patch, directional and polarisation", match: [wifi-antennas]}
+      - {id: wifi-rf-fundamentals-wifi-mimo-mu-mimo-ofdma, name: "Explain MIMO, MU-MIMO, beamforming and OFDMA", match: [wifi-mimo]}
+  - id: wifi-security
+    name: "WLAN security: WPA2/WPA3, 802.1X, PMF"
+    source: "IEEE 802.11i/w; Wi-Fi Alliance WPA3; CWSP objectives"
+    match: [wifi-security]
+    subtopics:
+      - {id: wifi-security-wifi-wpa3-sae-transition, name: "Deploy WPA3-Personal (SAE) with transition mode", match: [wifi-wpa3-sae]}
+      - {id: wifi-security-wifi-8021x-eap-design, name: "Design WPA2/WPA3-Enterprise with 802.1X, EAP-TLS and RADIUS", match: [wifi-8021x]}
+      - {id: wifi-security-wifi-pmf-and-deauth-protection, name: "Enable Protected Management Frames and handle deauth attacks", match: [wifi-pmf-80211w]}
+      - {id: wifi-security-wifi-guest-captive-portal-and-owe, name: "Build a guest WLAN: isolation, captive portal and Enhanced Open", match: [wifi-guest-network]}
+  - id: wifi-roaming
+    name: "Roaming and fast transition"
+    source: "IEEE 802.11k/v/r; CWNA roaming"
+    match: [wifi-roaming]
+    subtopics:
+      - {id: wifi-roaming-wifi-80211r-fast-transition, name: "Configure 802.11r Fast BSS Transition", match: [wifi-80211r]}
+      - {id: wifi-roaming-wifi-80211k-v-assisted-roaming, name: "Use 802.11k neighbor reports and 802.11v BSS transition", match: [wifi-80211k]}
+      - {id: wifi-roaming-wifi-layer2-vs-layer3-roaming, name: "Design L2 and L3 roaming and mobility tunnels", match: [wifi-layer3-roaming]}
+  - id: wifi-site-survey
+    name: "Surveys and WLAN design"
+    source: "CWNP CWDP; Ekahau/AirMagnet vendor survey workflows"
+    match: [wifi-site-survey]
+    subtopics:
+      - {id: wifi-site-survey-wifi-predictive-vs-onsite-survey, name: "Choose predictive, pre-deployment and post-deployment surveys", match: [wifi-site-survey]}
+      - {id: wifi-site-survey-wifi-capacity-and-density-design, name: "Design for capacity: clients per AP, cell sizing and high density", match: [wifi-capacity-planning]}
+      - {id: wifi-site-survey-wifi-wired-uplink-and-poe-for-aps, name: "Size AP uplinks and PoE class for Wi-Fi 6/7", match: [wifi-ap-uplink]}
+  - id: wifi-troubleshooting
+    name: "Troubleshooting WLANs"
+    source: "CWNA troubleshooting; Wireshark WLAN capture practices"
+    match: [wifi-troubleshooting]
+    subtopics:
+      - {id: wifi-troubleshooting-wifi-connectivity-triage, name: "Triage WLAN problems: association, auth, DHCP, roaming, throughput", match: [wifi-troubleshooting]}
+      - {id: wifi-troubleshooting-wifi-packet-capture-80211, name: "Capture 802.11 traffic in monitor mode and decode association problems", match: [wifi-packet-capture]}
+      - {id: wifi-troubleshooting-wifi-interference-and-spectrum-analysis, name: "Identify interference with spectrum analysis", match: [wifi-spectrum-analysis]}
+  - id: wifi-architectures
+    name: "WLAN architectures: controller, cloud, mesh, bridge"
+    source: "Vendor architecture guides; 802.11s"
+    match: [wifi-architectures]
+    subtopics:
+      - {id: wifi-architectures-wifi-controller-cloud-autonomous, name: "Compare controller-based, cloud-managed and autonomous WLAN architectures", match: [wlan-architectures]}
+      - {id: wifi-architectures-wifi-mesh-and-wireless-backhaul, name: "Design wireless mesh and point-to-point backhaul", match: [wifi-mesh]}
+      - {id: wifi-architectures-wifi-qos-wmm-and-voice, name: "Configure WMM QoS and voice/video on WLAN", match: [wifi-wmm-qos]}
+  - id: cabling-categories-channels
+    name: "Copper categories, links and channels"
+    source: "ANSI/TIA-568.2 copper; ISO/IEC 11801"
+    match: [cabling-categories-channels]
+    subtopics:
+      - {id: cabling-categories-channels-cabling-cat5e-6-6a-8-selection, name: "Choose Cat5e, Cat6, Cat6A or Cat8 for the application", match: [cabling-category-selection]}
+      - {id: cabling-categories-channels-cabling-solid-vs-stranded-and-cm-ratings, name: "Solid versus stranded cable, plenum/riser ratings and patch cords", match: [cabling-solid-vs-stranded]}
+  - id: cabling-termination
+    name: "Termination and installation practice"
+    source: "BICSI installation methods; TIA-568 termination"
+    match: [cabling-termination]
+    subtopics:
+      - {id: cabling-termination-cabling-punchdown-t568b-keystone, name: "Terminate 8P8C jacks and punch blocks with correct pairing", match: [cabling-t568b-termination]}
+      - {id: cabling-termination-cabling-bend-radius-pull-tension-and-separation, name: "Pull cables safely: tension, bend radius, separation from power", match: [cabling-pull-tension]}
+  - id: cabling-testing
+    name: "Cable testing and certification"
+    source: "TIA-1152; Fluke test procedures"
+    match: [cabling-testing]
+    subtopics:
+      - {id: cabling-testing-cabling-certification-testing, name: "Certify copper links: permanent link tests and what pass/fail means", match: [cabling-certification]}
+      - {id: cabling-testing-cabling-tdr-and-fault-location, name: "Locate cable faults with TDR and tone generators", match: [cabling-tdr]}
+  - id: cabling-fibre
+    name: "Optical fibre cabling"
+    source: "TIA-568.3; IEEE 802.3 PMDs; IEC fibre standards"
+    match: [cabling-fibre]
+    subtopics:
+      - {id: cabling-fibre-fibre-om-os-types-and-reach, name: "Pick OM3/OM4/OM5 multimode and OS2 singlemode and know their reach", match: [fibre-om3-om4-om5]}
+      - {id: cabling-fibre-fibre-connectors-polish-and-cleaning, name: "Select LC/SC/MPO connectors, polish types and clean before every mating", match: [fibre-connectors-lc-sc-mpo]}
+      - {id: cabling-fibre-fibre-otdr-and-loss-testing, name: "Test fibre with OLTS loss budget and OTDR traces", match: [fibre-otdr]}
+  - id: cabling-poe
+    name: "Power over Ethernet"
+    source: "IEEE 802.3af/at/bt"
+    match: [cabling-poe]
+    subtopics:
+      - {id: cabling-poe-poe-standards-and-power-budgets, name: "Plan PoE 802.3af/at/bt classes and switch power budgets", match: [poe-802-3at-bt]}
+      - {id: cabling-poe-poe-troubleshooting-and-heat, name: "Troubleshoot PoE faults: no power, cycling, heat in bundles", match: [poe-troubleshooting]}
+  - id: cabling-pathways-admin
+    name: "Pathways, spaces and administration"
+    source: "TIA-569, TIA-606, TIA-607"
+    match: [cabling-pathways-admin]
+    subtopics:
+      - {id: cabling-pathways-admin-cabling-telecom-rooms-and-pathways, name: "Design telecom rooms, cable trays and conduit capacity", match: [cabling-telecom-room]}
+      - {id: cabling-pathways-admin-cabling-labeling-and-documentation, name: "Label and document cabling to TIA-606", match: [cabling-labelling-tia-606]}
+  - id: sw-forwarding-architecture
+    name: "Switch and router forwarding hardware"
+    source: "Vendor architecture whitepapers (CAM/TCAM, ASICs)"
+    match: [sw-forwarding-architecture]
+    subtopics:
+      - {id: sw-forwarding-architecture-sw-mac-table-cam-and-tcam, name: "Size MAC, FIB and TCAM tables and read hardware resource limits", match: [switch-tcam-sizing]}
+      - {id: sw-forwarding-architecture-sw-store-forward-vs-cut-through, name: "Compare store-and-forward, cut-through, buffers and oversubscription", match: [switch-cut-through]}
+  - id: sw-stacking-mlag
+    name: "Stacking, MLAG and chassis redundancy"
+    source: "Vendor design guides (StackWise, VSS, vPC, Virtual Chassis)"
+    match: [sw-stacking-mlag]
+    subtopics:
+      - {id: sw-stacking-mlag-sw-stacking-vs-mlag-vs-chassis, name: "Choose stacking, virtual chassis, MLAG or single chassis", match: [switch-stacking]}
+      - {id: sw-stacking-mlag-sw-stack-upgrade-and-split-brain, name: "Upgrade stacks and avoid split-brain or dual-active conditions", match: [switch-split-brain]}
+  - id: sw-l2-design
+    name: "Layer 2 design: VLANs, STP, loop prevention"
+    source: "IEEE 802.1Q/802.1D/802.1w/802.1s; CCNA switching"
+    match: [sw-l2-design]
+    subtopics:
+      - {id: sw-l2-design-sw-stp-rstp-mst-root-placement, name: "Place STP roots and run RSTP or MST with guard features", match: [stp-root-placement]}
+      - {id: sw-l2-design-sw-vlan-design-and-trunk-hygiene, name: "Design VLANs, trunks, native VLAN and prune allowed lists", match: [vlan-design]}
+  - id: sw-l3-fabric
+    name: "Layer 3 switching, ECMP and data-centre fabrics"
+    source: "RFC 7348, RFC 7432, spine-leaf design guides"
+    match: [sw-l3-fabric]
+    subtopics:
+      - {id: sw-l3-fabric-sw-spine-leaf-underlay-bgp-ecmp, name: "Design a spine-leaf underlay with BGP or OSPF and ECMP", match: [spine-leaf-design]}
+      - {id: sw-l3-fabric-sw-vxlan-evpn-overlay, name: "Explain VXLAN with EVPN control plane for L2/L3 overlay", match: [vxlan-evpn]}
+  - id: sw-high-availability
+    name: "Gateway redundancy and fast failure detection"
+    source: "RFC 5798, RFC 5880"
+    match: [sw-high-availability]
+    subtopics:
+      - {id: sw-high-availability-sw-fhrp-vrrp-hsrp-and-bfd, name: "Configure first-hop redundancy (VRRP/HSRP) and BFD", match: [fhrp-vrrp-hsrp]}
+      - {id: sw-high-availability-sw-power-cooling-and-spares, name: "Plan redundant power, airflow direction and spares for network devices", match: [network-power-redundancy]}
+  - id: sw-optics
+    name: "Transceivers and optics"
+    source: "SFF MSA; IEEE 802.3 PMDs"
+    match: [sw-optics]
+    subtopics:
+      - {id: sw-optics-sw-sfp-qsfp-dac-aoc-selection, name: "Choose SFP/SFP+/SFP28/QSFP optics, DAC and AOC and check compatibility", match: [sfp-qsfp-optics]}
+  - id: nda-config-models
+    name: "Configuration models: IOS-XE, Junos, UniFi"
+    source: "Cisco IOS-XE and Junos fundamentals; UniFi Network docs"
+    match: [nda-config-models]
+    subtopics:
+      - {id: nda-config-models-nda-ios-xe-running-vs-startup, name: "Manage IOS-XE running versus startup config, archive and rollback", match: [ios-xe-config-management]}
+      - {id: nda-config-models-nda-junos-commit-model, name: "Use the Junos candidate config, commit confirmed and rollback", match: [junos-commit-model]}
+      - {id: nda-config-models-nda-unifi-controller-model, name: "Operate the UniFi Network application: sites, devices, adoption and settings", match: [unifi-network-controller]}
+  - id: nda-access-aaa
+    name: "Management access and AAA"
+    source: "Cisco/Juniper security hardening guides; RFC 2865/8907"
+    match: [nda-access-aaa]
+    subtopics:
+      - {id: nda-access-aaa-nda-secure-management-plane, name: "Harden device management: SSH, no telnet, VRFs and ACLs", match: [management-plane-hardening]}
+      - {id: nda-access-aaa-nda-tacacs-radius-aaa-design, name: "Design AAA with TACACS+ or RADIUS, local fallback and command authorisation", match: [tacacs-plus-aaa]}
+  - id: nda-monitoring
+    name: "Monitoring and telemetry"
+    source: "SNMP RFC 3411-3418, syslog RFC 5424, streaming telemetry"
+    match: [nda-monitoring]
+    subtopics:
+      - {id: nda-monitoring-nda-snmpv3-syslog-ntp-baseline, name: "Baseline SNMPv3, syslog and NTP on every network device", match: [snmpv3-baseline]}
+      - {id: nda-monitoring-nda-streaming-telemetry-gnmi-netconf, name: "Use model-driven telemetry and NETCONF/gNMI for config and state", match: [gnmi-telemetry]}
+  - id: nda-lifecycle
+    name: "Firmware, backups and lifecycle"
+    source: "Vendor release notes and recommended-release guidance"
+    match: [nda-lifecycle]
+    subtopics:
+      - {id: nda-lifecycle-nda-firmware-upgrade-procedure, name: "Plan and execute a network firmware upgrade with rollback", match: [network-firmware-upgrade]}
+      - {id: nda-lifecycle-nda-config-backup-and-drift, name: "Back up device configs and detect drift from the golden config", match: [network-config-backup]}
+      - {id: nda-lifecycle-nda-device-hardening-checklist, name: "Apply a device hardening baseline (CIS/vendor guides)", match: [network-device-hardening]}
+  - id: sdwan-architecture
+    name: "SD-WAN architecture and planes"
+    source: "MEF 70 SD-WAN service attributes; vendor architecture guides"
+    match: [sdwan-architecture]
+    subtopics:
+      - {id: sdwan-architecture-sdwan-control-management-data-planes, name: "Explain SD-WAN planes: orchestrator, controller and edge data plane", match: [sdwan-architecture]}
+      - {id: sdwan-architecture-sdwan-overlay-underlay-transport-design, name: "Design overlay and underlay transports: MPLS, broadband, LTE/5G", match: [sdwan-overlay-underlay]}
+  - id: sdwan-policy
+    name: "Policy: application-aware routing and QoS"
+    source: "Vendor policy guides; DSCP/QoS RFC 4594"
+    match: [sdwan-policy]
+    subtopics:
+      - {id: sdwan-policy-sdwan-app-aware-routing-sla, name: "Define application-aware routing with SLA thresholds", match: [sdwan-app-aware-routing]}
+      - {id: sdwan-policy-sdwan-qos-and-traffic-engineering, name: "Apply QoS, shaping and per-flow load-balancing on SD-WAN edges", match: [sdwan-qos]}
+  - id: sdwan-topology
+    name: "Topology and templates"
+    source: "Vendor design guides: hub-and-spoke, full mesh, regional hubs"
+    match: [sdwan-topology]
+    subtopics:
+      - {id: sdwan-topology-sdwan-topology-hub-spoke-mesh, name: "Choose hub-and-spoke, partial mesh or full mesh topologies", match: [sdwan-topology]}
+      - {id: sdwan-topology-sdwan-templates-zero-touch-provisioning, name: "Roll out branches with templates and zero-touch provisioning", match: [sdwan-templates]}
+  - id: sdwan-security
+    name: "SD-WAN security and SASE"
+    source: "Vendor SASE/SD-WAN security guides"
+    match: [sdwan-security]
+    subtopics:
+      - {id: sdwan-security-sdwan-security-segmentation-and-sase, name: "Segment with VPNs/VRFs and connect to SSE/SASE cloud security", match: [sdwan-segmentation]}
+  - id: sdwan-operations
+    name: "SD-WAN operations and assurance"
+    source: "Vendor assurance and monitoring guides"
+    match: [sdwan-operations]
+    subtopics:
+      - {id: sdwan-operations-sdwan-monitoring-and-troubleshooting, name: "Monitor tunnels and troubleshoot SD-WAN path, policy and control issues", match: [sdwan-troubleshooting]}
+      - {id: sdwan-operations-sdwan-migration-from-mpls, name: "Migrate a WAN from MPLS to SD-WAN in waves", match: [mpls-to-sdwan-migration]}
+  - id: wifi-clients-iot
+    name: "Client behaviour and IoT onboarding"
+    source: "Wi-Fi Alliance programmes; vendor PPSK/IPSK docs"
+    match: [wifi-clients-iot]
+    subtopics:
+      - {id: wifi-clients-iot-wifi-client-roaming-and-power-save, name: "Account for client behaviour: roaming thresholds, power save and MAC randomisation", match: [wifi-client-behaviour]}
+      - {id: wifi-clients-iot-wifi-ppsk-ipsk-iot-onboarding, name: "Onboard IoT with per-device or per-group pre-shared keys", match: [wifi-ppsk-ipsk]}
+  - id: wifi-wips-rogue
+    name: "Rogue detection and wireless intrusion prevention"
+    source: "CWSP objectives; vendor WIPS docs (defensive)"
+    match: [wifi-wips-rogue]
+    subtopics:
+      - {id: wifi-wips-rogue-wifi-rogue-ap-detection-and-containment, name: "Detect rogue and evil-twin APs and handle them lawfully", match: [wifi-rogue-ap]}
+  - id: wifi-7-features
+    name: "Wi-Fi 7 (802.11be) features"
+    source: "IEEE 802.11be; Wi-Fi Alliance Wi-Fi 7"
+    match: [wifi-7-features]
+    subtopics:
+      - {id: wifi-7-features-wifi-7-mlo-and-320mhz, name: "Plan for Wi-Fi 7: MLO, 320 MHz channels, 4096-QAM and preamble puncturing", match: [wifi-7-mlo]}
+  - id: cabling-data-centre
+    name: "Data-centre cabling"
+    source: "TIA-942; MPO parallel optics guidance"
+    match: [cabling-data-centre]
+    subtopics:
+      - {id: cabling-data-centre-cabling-dc-mpo-trunks-and-topologies, name: "Design data-centre cabling: MPO trunks, ToR versus EoR and patch fields", match: [dc-mpo-trunk]}
+  - id: cabling-special-environments
+    name: "Outdoor, industrial and building-wide cabling"
+    source: "TIA-1005 industrial; outdoor cable standards"
+    match: [cabling-special-environments]
+    subtopics:
+      - {id: cabling-special-environments-cabling-outdoor-industrial-and-surge, name: "Install outdoor and industrial Ethernet: cable type, grounding and surge protection", match: [outdoor-ethernet-cabling]}
+  - id: cabling-crossconnect-patching
+    name: "Cross-connect, patch and rack practice"
+    source: "BICSI rack and cable management practice"
+    match: [cabling-crossconnect-patching]
+    subtopics:
+      - {id: cabling-crossconnect-patching-cabling-rack-patching-and-cable-management, name: "Keep racks maintainable: patch panels, colour schemes, slack and moves-adds-changes", match: [rack-cable-management]}
+  - id: sw-routing-platforms
+    name: "Routers, branch gateways and WAN edge hardware"
+    source: "Vendor router platform guides"
+    match: [sw-routing-platforms]
+    subtopics:
+      - {id: sw-routing-platforms-sw-router-sizing-throughput-and-licensing, name: "Size branch routers and gateways for real throughput with services on", match: [router-throughput-sizing]}
+      - {id: sw-routing-platforms-sw-wan-edge-nat-and-dual-isp-failover, name: "Configure WAN edge NAT and dual-ISP failover with tracking", match: [wan-edge-nat]}
+  - id: sw-edge-access-security
+    name: "Access-layer security features"
+    source: "IEEE 802.1X, 802.1AB LLDP; vendor edge security guides"
+    match: [sw-edge-access-security]
+    subtopics:
+      - {id: sw-edge-access-security-sw-8021x-mab-and-dynamic-vlan, name: "Deploy 802.1X with MAB fallback and dynamic VLAN assignment on access ports", match: [wired-8021x]}
+      - {id: sw-edge-access-security-sw-dhcp-snooping-dai-and-port-security, name: "Enable DHCP snooping, Dynamic ARP Inspection and port security", match: [dhcp-snooping]}
+  - id: nda-unifi-network
+    name: "UniFi gateways, switches and network design"
+    source: "UniFi Network application guides"
+    match: [nda-unifi-network]
+    subtopics:
+      - {id: nda-unifi-network-nda-unifi-vlans-firewall-and-zones, name: "Configure UniFi networks, VLANs, firewall zones and traffic rules", match: [unifi-vlans]}
+      - {id: nda-unifi-network-nda-unifi-switch-poe-and-port-profiles, name: "Manage UniFi switches: port profiles, PoE modes, LACP and STP", match: [unifi-switch-profiles]}
+  - id: nda-junos-ops
+    name: "Junos operations"
+    source: "Junos OS fundamentals and operational mode"
+    match: [nda-junos-ops]
+    subtopics:
+      - {id: nda-junos-ops-nda-junos-operational-commands-and-filters, name: "Use Junos operational mode: show, pipes, monitor and firewall filters", match: [junos-operational-mode]}
+  - id: nda-ios-xe-troubleshooting
+    name: "IOS-XE troubleshooting"
+    source: "Cisco IOS-XE show and debug practice"
+    match: [nda-ios-xe-troubleshooting]
+    subtopics:
+      - {id: nda-ios-xe-troubleshooting-nda-ios-xe-show-and-debug-practice, name: "Troubleshoot IOS-XE safely: show commands, counters, conditional debug and EEM", match: [ios-xe-show-commands]}
+  - id: wifi-passpoint-openroaming
+    name: "Passpoint and OpenRoaming"
+    source: "Wi-Fi Alliance Passpoint (Hotspot 2.0); IEEE 802.11u"
+    match: [wifi-passpoint-openroaming]
+    subtopics:
+      - {id: wifi-passpoint-openroaming-wifi-passpoint-hotspot-2, name: "Deploy Passpoint (Hotspot 2.0) for seamless secure public Wi-Fi", match: [wifi-passpoint]}
+      - {id: wifi-passpoint-openroaming-wifi-passpoint-profile-lifecycle, name: "Provision and revoke Passpoint client profiles", match: [passpoint-profile-provisioning]}
+  - id: cabling-fibre-termination-splicing
+    name: "Fibre termination and splicing"
+    source: "BICSI/FOA fibre installation practice"
+    match: [cabling-fibre-termination-splicing]
+    subtopics:
+      - {id: cabling-fibre-termination-splicing-fibre-fusion-splice-and-pigtails, name: "Fusion-splice pigtails and manage splice trays", match: [fibre-fusion-splicing]}
+      - {id: cabling-fibre-termination-splicing-fibre-mechanical-splice-and-field-connectors, name: "Use mechanical splices and field-installable connectors appropriately", match: [fibre-mechanical-splice]}
+  - id: cabling-ap-and-device-drops
+    name: "Cabling for APs, cameras and endpoint devices"
+    source: "TIA-568 horizontal cabling guidance; vendor install guides"
+    match: [cabling-ap-and-device-drops]
+    subtopics:
+      - {id: cabling-ap-and-device-drops-cabling-ap-drop-placement-and-mounting, name: "Run and label cable drops for ceiling APs and cameras", match: [cabling-ap-drops]}
+  - id: sw-multicast-qos-hw
+    name: "Multicast and QoS on switches"
+    source: "IGMP RFC 3376, PIM RFC 7761, RFC 4594"
+    match: [sw-multicast-qos-hw]
+    subtopics:
+      - {id: sw-multicast-qos-hw-sw-igmp-snooping-and-multicast, name: "Configure IGMP snooping and querier for multicast on LANs", match: [igmp-snooping]}
+      - {id: sw-multicast-qos-hw-sw-qos-trust-boundary-and-queueing, name: "Set the QoS trust boundary, classification and queuing on switches", match: [qos-trust-boundary]}
+  - id: nda-automation
+    name: "Network automation for administrators"
+    source: "Ansible network modules; Netmiko; NAPALM; vendor APIs"
+    match: [nda-automation]
+    subtopics:
+      - {id: nda-automation-nda-ansible-netmiko-config-push, name: "Automate safe config changes with Ansible, Netmiko or NAPALM", match: [network-automation-ansible]}
+      - {id: nda-automation-nda-device-inventory-and-lifecycle-tracking, name: "Track device inventory, support contracts, end-of-life and licences", match: [network-inventory-eol]}
+  - id: sdwan-cloud-resilience
+    name: "Cloud on-ramp and resilience"
+    source: "Vendor SD-WAN cloud and HA guides"
+    match: [sdwan-cloud-resilience]
+    subtopics:
+      - {id: sdwan-cloud-resilience-sdwan-cloud-onramp-saas-iaas, name: "Connect SD-WAN to SaaS and IaaS with cloud on-ramp", match: [sdwan-cloud-onramp]}
+      - {id: sdwan-cloud-resilience-sdwan-hub-ha-and-failover-testing, name: "Design edge, hub and controller high availability and test failover", match: [sdwan-high-availability]}

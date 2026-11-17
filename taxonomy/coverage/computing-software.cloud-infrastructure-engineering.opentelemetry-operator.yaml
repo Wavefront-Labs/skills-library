@@ -1,0 +1,200 @@
+# Coverage spec for opentelemetry-operator, from the official documentation.
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: opentelemetry-operator
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [opentelemetry-operator]
+sources:
+  - "OpenTelemetry Operator documentation (docs/ in open-telemetry/opentelemetry-operator)"
+topics:
+  # Getting started
+  - id: install-operator-cert-manager
+    name: "Install the OpenTelemetry Operator"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/README.md"
+    match: [install, cert-manager]
+  - id: create-first-collector
+    name: "Create your first OpenTelemetryCollector"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/getting-started/collector.md"
+    match: [opentelemetrycollector, first-collector]
+  - id: compatibility-matrix
+    name: "Operator compatibility and version policy"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/getting-started/compatibility.md"
+    match: [compatibility, kubernetes-versions]
+  # Collector
+  - id: collector-config-inspection
+    name: "How the operator inspects collector config"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/getting-started/collector.md"
+    match: [config-parsing, receiver-ports]
+  - id: collector-deployment-modes
+    name: "Collector deployment modes"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/collector/deployment-modes.md"
+    match: [deployment-modes, daemonset]
+  - id: collector-sidecar-injection
+    name: "Inject a Collector sidecar into pods"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/collector/sidecar-injection.md"
+    match: [sidecar-injection, inject-annotation]
+  - id: sidecar-annotation-precedence
+    name: "Sidecar annotation precedence"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/collector/sidecar-injection.md"
+    match: [annotation-precedence, namespace-annotation]
+  - id: cluster-observability-controller
+    name: "ClusterObservability controller"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/collector/cluster-observability.md"
+    match: [clusterobservability, controller-of-controllers]
+  - id: collector-autoscaling-pdb
+    name: "Autoscaler and PodDisruptionBudget fields"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/api/opentelemetrycollectors.md"
+    match: [autoscaler, hpa]
+  - id: collector-ingress
+    name: "Expose a Collector with ingress or route"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/api/opentelemetrycollectors.md"
+    match: [ingress, openshift-route]
+  - id: collector-pod-spec-fields
+    name: "Pod-level fields on OpenTelemetryCollector"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/api/opentelemetrycollectors.md"
+    match: [probes, topologyspreadconstraints]
+  # Security
+  - id: collector-privileged-pod-security
+    name: "Privileged pod fields in the Collector spec"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/collector/security.md"
+    match: [hostpath, hostnetwork]
+  - id: collector-admission-policies
+    name: "Restrict Collector privileges with admission policies"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/collector/security.md"
+    match: [validatingadmissionpolicy, kyverno]
+  - id: target-allocator-monitor-file-access-security
+    name: "ServiceMonitor file access escalation"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/security.md"
+    match: [denyfsaccessthroughsms, arbitrary-file-access]
+  - id: target-allocator-mtls-credentials
+    name: "Monitor credentials and mTLS between allocator and collector"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/README.md"
+    match: [mtls, usecertmanager]
+  # Operations
+  - id: upgrade-strategy
+    name: "Upgrades and spec.upgradeStrategy"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/getting-started/upgrading.md"
+    match: [upgrades, upgradestrategy]
+  - id: crd-v1beta1-migration
+    name: "Migrate OpenTelemetryCollector to v1beta1"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/reference/crd-changelog.md"
+    match: [v1beta1, crd-migration]
+  - id: crd-v1beta1-config-and-selectors
+    name: "v1beta1 structured config and label selectors"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/reference/crd-changelog.md"
+    match: [structured-config, label-selectors]
+  - id: operator-troubleshooting-logging
+    name: "Operator log format and debugging"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/troubleshooting/README.md"
+    match: [troubleshooting, zap-devel]
+  # Target Allocator
+  - id: targetallocator-crd-split
+    name: "Standalone TargetAllocator CRD"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/reference/crd-changelog.md"
+    match: [targetallocator-crd, opentelemetry-io-target-allocator]
+  - id: target-allocator-overview-config
+    name: "Target Allocator overview and configuration file"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/README.md"
+    match: [target-allocator, targetallocator-config]
+  - id: target-allocator-allocation-strategies
+    name: "Target allocation strategies"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/README.md"
+    match: [allocation-strategy, consistent-hashing]
+  - id: target-allocator-collector-cr-usage
+    name: "Enable the Target Allocator from the Collector CR"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/README.md"
+    match: [targetallocator-enabled, dollar-escaping]
+  - id: target-allocator-prometheus-cr-discovery
+    name: "Prometheus CR discovery and selectors"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/prometheus-cr.md"
+    match: [prometheus-cr, servicemonitor-selector]
+  - id: target-allocator-rbac
+    name: "Target Allocator RBAC"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/target-allocator/README.md"
+    match: [targetallocator-rbac, clusterrole]
+  # Operator configuration
+  - id: manager-configuration-sources
+    name: "Operator manager configuration sources"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/reference/configuration.md"
+    match: [manager-configuration, config-file]
+  # Auto-instrumentation
+  - id: instrumentation-language-gates
+    name: "Enable or disable languages for auto-instrumentation"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/reference/feature-gates.md"
+    match: [instrumentation-gates, enable-go-instrumentation]
+  - id: instrumentation-resource-basics
+    name: "The Instrumentation resource"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/README.md"
+    match: [instrumentation, otelinst]
+  - id: instrumentation-inject-annotations
+    name: "Enable injection with annotations"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/README.md"
+    match: [inject-annotation, instrumentation-opentelemetry-io]
+  - id: instrumentation-java
+    name: "Java auto-instrumentation and agent extensions"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/languages/java.md"
+    match: [java, javaagent]
+  - id: instrumentation-python
+    name: "Python auto-instrumentation and musl images"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/languages/python.md"
+    match: [python, musl]
+  - id: instrumentation-dotnet
+    name: "DotNet auto-instrumentation runtime identifiers"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/languages/dotnet.md"
+    match: [dotnet, runtime-identifier]
+  - id: instrumentation-go
+    name: "Go auto-instrumentation requirements"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/languages/go.md"
+    match: [go, otel-go-auto-target-exe]
+  - id: instrumentation-php
+    name: "PHP auto-instrumentation annotations"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/languages/php.md"
+    match: [php, otel-php-api-version]
+  - id: instrumentation-nginx-apache
+    name: "Nginx and Apache HTTPD instrumentation"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/languages/nginx.md"
+    match: [nginx, apache-httpd]
+  - id: instrumentation-multi-language
+    name: "Multiple language instrumentations in one pod"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/multi-instrumentation.md"
+    match: [multi-instrumentation, java-container-names]
+  - id: instrumentation-init-containers
+    name: "Instrument init containers"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/init-containers.md"
+    match: [init-containers, init-container-instrumentation]
+  - id: instrumentation-resource-attributes
+    name: "Resource attributes and their priority"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/resource-attributes.md"
+    match: [resource-attributes, uselabelsforresourceattributes]
+  - id: resource-attribute-derivation
+    name: "How service.name and friends are derived"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/resource-attributes.md"
+    match: [service-instance-id, service-version]
+  # Operator architecture
+  - id: webhook-high-availability
+    name: "Webhook high availability design"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/rfcs/webhook-high-availability.md"
+    match: [webhook-high-availability, webhook-server]
+  - id: crd-version-graduation
+    name: "CRD version graduation strategies"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/rfcs/crd-version-graduation-strategies.md"
+    match: [crd-graduation, conversion-strategy]
+  # Use cases
+  - id: obi-ebpf-receiver
+    name: "eBPF instrumentation with the OBI receiver"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/use-cases/obi-ebpf-receiver.md"
+    match: [obi, ebpf]
+  # OpAMP Bridge
+  - id: opamp-bridge-overview
+    name: "OpAMP Bridge overview and installation"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/cmd/operator-opamp-bridge/README.md"
+    match: [opamp-bridge, opamp]
+  - id: opamp-bridge-crd-labels
+    name: "OpAMPBridge resource and collector labels"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/cmd/operator-opamp-bridge/README.md"
+    match: [opamp-managed, opamp-reporting]
+  - id: opamp-bridge-standalone-mode
+    name: "OpAMP Bridge standalone mode"
+    source: "https://github.com/open-telemetry/opentelemetry-operator/blob/main/cmd/operator-opamp-bridge/README.md"
+    match: [opamp-standalone, configmap-backed-config]

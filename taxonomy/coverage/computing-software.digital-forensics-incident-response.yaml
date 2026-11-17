@@ -1,0 +1,1102 @@
+# Canonical coverage spec: Digital Forensics & Incident Response (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (NIST SP 800-61r3 and SP 800-86, RFC 3227,
+# SANS FOR500/FOR508/FOR572/FOR610 course outlines, GCFE/GCFA/GNFA/GREM exam objectives, and the
+# Volatility 3 / Autopsy / The Sleuth Kit / Wireshark / Velociraptor / KAPE / Plaso docs tables of
+# contents), not from what the library happened to contain.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (NIST section
+# headings, course-day module lists, exam objective bullets, tool plugin / sub-command lists).
+# Depth round 2 adds the next level: SP 800-61r3 / 800-86 section tasks, FOR500/508/572/610 module
+# sub-bullets, Volatility 3 plugins, TSK tools, Velociraptor artifact categories, KAPE target groups, Plaso parsers.
+# Scope is defensive and investigative only.
+subject: digital-forensics-incident-response
+scope:
+  category: computing-software
+  field: digital-forensics-incident-response
+  products: [volatility, autopsy-sleuthkit, wireshark-forensics, incident-response-process, malware-analysis, disk-memory-forensics, log-analysis, evidence-handling]
+sources:
+  - "NIST SP 800-61 Rev. 3 (2025) Incident Response Recommendations and Considerations for Cybersecurity Risk Management - CSF 2.0 profile (Govern, Identify, Protect, Detect, Respond, Recover), incident response roles, policies and plans, incident handling (declaration, analysis, prioritization, containment, eradication, recovery), lessons learned and improvement; Rev. 2 lifecycle sections 3.1-3.4 for sub-structure"
+  - "NIST SP 800-86 Guide to Integrating Forensic Techniques into Incident Response - sections 3 (process - collection, examination, analysis, reporting), 4 (data files), 5 (operating systems - volatile and non-volatile data), 6 (network traffic), 7 (applications), 8 (multiple sources)"
+  - "RFC 3227 Guidelines for Evidence Collection and Archiving - 2.1 order of volatility, 2.2 things to avoid, 2.3 privacy, 2.4 legal, 3 collection procedure (transparency, steps), 4 archiving (chain of custody, where and how to archive), 5 tools"
+  - "SANS FOR500 Windows Forensic Analysis course outline - evidence acquisition, registry analysis, shell items (LNK, jump lists, shellbags), USB and BYOD devices, email, Windows event logs, browser forensics, Windows timeline; GIAC GCFE exam objectives"
+  - "SANS FOR508 Advanced Incident Response, Threat Hunting and Digital Forensics course outline - incident response and hunting, intrusion analysis (credential theft, lateral movement, persistence, evidence of execution), memory forensics, timeline analysis, anti-forensics detection and enterprise remediation; GIAC GCFA exam objectives"
+  - "SANS FOR572 Advanced Network Forensics course outline - off-the-disk and on-the-wire evidence, core protocols (HTTP, DNS, TLS, SMB, email), NetFlow, Zeek, encryption and protocol reverse engineering, commercial tools; GIAC GNFA exam objectives"
+  - "SANS FOR610 Reverse-Engineering Malware course outline and GIAC GREM objectives - lab setup, behavioural analysis, static code analysis, malicious documents and scripts, packed and obfuscated malware, .NET analysis"
+  - "Volatility 3 documentation (volatility3.readthedocs.io) plugin list - windows.*, linux.*, mac.* plugins, symbol tables, timeliner, yarascan; Autopsy user documentation (sleuthkit.org/autopsy/docs) and The Sleuth Kit tool list (mmls, fsstat, fls, icat, istat, blkls, mactime, tsk_recover); Wireshark User's Guide and tshark/editcap/mergecap/capinfos manual pages; Velociraptor docs (VQL, artifacts, hunts, notebooks); KAPE documentation (targets, modules); Plaso documentation (log2timeline, psort, pinfo, filters)"
+topics:
+  # ===== Incident response process (NIST SP 800-61r3; FOR508 day 1)
+  - id: ir-policy-plan
+    name: Incident response policy, plan and procedures
+    source: NIST SP 800-61r3 Govern (GV.PO, GV.RR); 800-61r2 2.3
+    match: [ir-plan, incident-response-plan, ir-policy]
+    subtopics:
+      - {id: ir-plan-writing, name: Writing the incident response plan and its approval path, match: [incident-response-plan]}
+      - {id: ir-roles-raci, name: Defining IR roles and responsibilities (RACI), match: [ir-raci, incident-roles]}
+      - {id: ir-severity-matrix, name: Building the incident severity and classification matrix, match: [severity-matrix, incident-classification]}
+      - {id: ir-third-party-retainer, name: IR retainers and third-party / MSSP coordination, match: [ir-retainer, third-party-ir]}
+      - {id: ir-metrics, name: IR program metrics (MTTD, MTTR, dwell time), match: [ir-metrics, mttd, dwell-time]}
+      - {id: ir-plan-review, name: Annual IR plan review and update cycle, match: [ir-plan-review]}
+      - {id: ir-csf-profile, name: Mapping the IR program to the NIST CSF 2.0 community profile in SP 800-61r3, match: [csf-2-profile]}
+      - {id: ir-escalation-matrix, name: Escalation and notification contact matrix, match: [escalation-matrix]}
+      - {id: ir-authority-to-act, name: Pre-authorising responders to disconnect / seize systems, match: [ir-authority-to-act]}
+  - id: ir-team-comms
+    name: CSIRT organisation and incident communications
+    source: NIST SP 800-61r3 roles and responsibilities; 800-61r2 2.4-2.6
+    match: [csirt, incident-communications]
+    subtopics:
+      - {id: ir-csirt-model, name: Choosing a CSIRT model (central, distributed, coordinating), match: [csirt-model]}
+      - {id: ir-incident-commander, name: Running the incident as incident commander (bridge, cadence, handover), match: [incident-commander]}
+      - {id: ir-out-of-band-comms, name: Out-of-band communications when the network is compromised, match: [out-of-band-communications]}
+      - {id: ir-stakeholder-updates, name: Executive and stakeholder status updates during an incident, match: [stakeholder-updates, executive-briefing]}
+      - {id: ir-media-statement, name: Coordinating public and media statements with legal and PR, match: [media-statement, public-relations-incident]}
+      - {id: ir-war-room, name: Standing up a physical or virtual war room, match: [war-room]}
+      - {id: ir-shift-handover, name: Shift rotation and handover on multi-week incidents, match: [shift-handover]}
+      - {id: ir-tlp, name: Information sharing with TLP 2.0 and need-to-know, match: [traffic-light-protocol]}
+      - {id: ir-customer-notice, name: Drafting customer and data-subject notification letters, match: [customer-notification]}
+  - id: ir-preparation
+    name: Preparation and readiness
+    source: NIST SP 800-61r3 Identify/Protect; 800-61r2 3.1
+    match: [ir-preparation, incident-readiness]
+    subtopics:
+      - {id: ir-jump-kit, name: Assembling the incident jump kit, match: [jump-kit]}
+      - {id: ir-forensic-workstation, name: Building a forensic analysis workstation (SIFT, Windows FE), match: [forensic-workstation, sift-workstation]}
+      - {id: ir-logging-readiness, name: Forensic readiness logging baseline (what to log and keep), match: [forensic-readiness, logging-baseline]}
+      - {id: ir-tabletop, name: Running incident response tabletop exercises, match: [tabletop-exercise]}
+      - {id: ir-playbook-authoring, name: Writing incident-type playbooks and runbooks, match: [playbook-authoring, ir-runbook]}
+      - {id: ir-crown-jewels, name: Asset and crown-jewel inventory for incident response, match: [crown-jewels]}
+      - {id: ir-call-tree, name: Maintaining contact lists and call trees, match: [call-tree]}
+      - {id: ir-agent-predeploy, name: Pre-deploying EDR / Velociraptor agents and collection access, match: [agent-predeployment]}
+      - {id: ir-compromise-assessment, name: Running a proactive compromise assessment, match: [compromise-assessment]}
+  - id: ir-detection-triage
+    name: Detection, declaration and triage
+    source: NIST SP 800-61r3 Detect (DE.AE) and Respond (RS.MA); 800-61r2 3.2
+    match: [incident-triage, incident-declaration]
+    subtopics:
+      - {id: ir-alert-validation, name: Validating an alert as true or false positive, match: [alert-validation]}
+      - {id: ir-declaring, name: Declaring an incident and opening the case, match: [incident-declaration]}
+      - {id: ir-prioritization, name: Prioritizing incidents by functional, information and recoverability impact, match: [incident-prioritization]}
+      - {id: ir-initial-scoping, name: Initial scoping of affected hosts, accounts and data, match: [initial-scoping, scoping]}
+      - {id: ir-attack-vector, name: Identifying the initial access vector, match: [initial-access-vector]}
+      - {id: ir-precursors, name: Distinguishing precursors from indicators (800-61 3.2.2), match: [precursors]}
+      - {id: ir-user-reports, name: Handling user-reported phishing and suspicious activity, match: [user-reported-phishing]}
+      - {id: ir-external-notification, name: Responding to third-party or law-enforcement notification of compromise, match: [external-notification]}
+      - {id: ir-triage-questions, name: First-hour triage questions and data requests, match: [first-hour-triage]}
+  - id: ir-documentation
+    name: Incident documentation and case tracking
+    source: NIST SP 800-61r2 3.2.5-3.2.6; SP 800-86 3.4
+    match: [incident-documentation, case-tracking]
+    subtopics:
+      - {id: ir-case-notes, name: Contemporaneous investigation notes, match: [investigation-notes, contemporaneous-notes]}
+      - {id: ir-incident-timeline, name: Maintaining the master incident timeline, match: [incident-timeline]}
+      - {id: ir-ticketing, name: Incident ticketing and case platforms (TheHive, IRIS), match: [thehive, incident-ticketing]}
+      - {id: ir-ioc-tracking, name: Tracking indicators and affected assets through the case, match: [ioc-tracking, affected-asset-tracking]}
+      - {id: ir-evidence-register, name: Keeping the evidence register for the case, match: [evidence-register]}
+      - {id: ir-decision-log, name: Recording decisions and rationale in a decision log, match: [decision-log]}
+      - {id: ir-sitrep, name: Writing the daily situation report (SITREP), match: [sitrep]}
+      - {id: ir-case-closure, name: Case closure criteria and case archiving, match: [case-closure]}
+  - id: ir-containment
+    name: Containment
+    source: NIST SP 800-61r3 RS.MI; 800-61r2 3.3.1
+    match: [containment]
+    subtopics:
+      - {id: ir-containment-strategy, name: Choosing a containment strategy and timing (watch vs act), match: [containment-strategy]}
+      - {id: ir-host-isolation, name: EDR host isolation and network quarantine, match: [host-isolation, network-quarantine]}
+      - {id: ir-account-containment, name: Disabling and containing compromised accounts and sessions, match: [account-containment, session-revocation]}
+      - {id: ir-dns-sinkhole, name: Blocking and sinkholing C2 domains and IPs, match: [dns-sinkhole, c2-blocking]}
+      - {id: ir-cloud-containment, name: Containing compromised cloud identities and workloads, match: [cloud-containment]}
+      - {id: ir-emergency-block, name: Emergency perimeter and proxy block rules, match: [emergency-firewall-block]}
+      - {id: ir-vlan-isolation, name: Segment / VLAN isolation of compromised enclaves, match: [vlan-isolation]}
+      - {id: ir-lm-blocking, name: Blocking lateral movement protocols with GPO and host firewall, match: [lateral-movement-blocking]}
+      - {id: ir-tipoff, name: Monitor-versus-contain decisions and avoiding attacker tip-off, match: [attacker-tipoff]}
+  - id: ir-eradication
+    name: Eradication
+    source: NIST SP 800-61r3 RS.MI; 800-61r2 3.3.4; FOR508 enterprise remediation
+    match: [eradication]
+    subtopics:
+      - {id: ir-remediation-event, name: Planning a coordinated remediation event, match: [remediation-event, coordinated-remediation]}
+      - {id: ir-krbtgt-reset, name: Resetting KRBTGT and domain-wide credentials after AD compromise, match: [krbtgt-reset, ad-credential-reset]}
+      - {id: ir-persistence-removal, name: Removing attacker persistence and backdoors, match: [persistence-removal]}
+      - {id: ir-vuln-remediation, name: Closing the exploited vulnerability and initial access path, match: [vulnerability-remediation]}
+      - {id: ir-malware-removal, name: Removing malware binaries and dropped artefacts, match: [malware-removal]}
+      - {id: ir-password-reset, name: Running an enterprise password reset campaign, match: [password-reset-campaign]}
+      - {id: ir-secret-rotation, name: Rotating service accounts / API keys / secrets after compromise, match: [secret-rotation]}
+      - {id: ir-malicious-gpo, name: Removing malicious GPOs and rogue AD objects, match: [malicious-gpo]}
+      - {id: ir-ioc-sweep, name: Verifying eradication with enterprise IOC sweeps, match: [eradication-verification]}
+  - id: ir-recovery
+    name: Recovery
+    source: NIST SP 800-61r3 Recover (RC.RP); 800-61r2 3.3.4
+    match: [incident-recovery, recovery-planning]
+    subtopics:
+      - {id: ir-rebuild-vs-clean, name: Rebuild versus clean decision for compromised systems, match: [rebuild-vs-clean]}
+      - {id: ir-restore-from-backup, name: Restoring from known-good backups and verifying integrity, match: [restore-from-backup, backup-integrity]}
+      - {id: ir-recovery-validation, name: Validating recovery and returning systems to production, match: [recovery-validation]}
+      - {id: ir-post-incident-monitoring, name: Heightened post-incident monitoring for re-entry, match: [post-incident-monitoring]}
+      - {id: ir-recovery-sequencing, name: Sequencing restoration by dependency (identity first), match: [recovery-sequencing]}
+      - {id: ir-ad-forest-recovery, name: Active Directory forest recovery, match: [ad-forest-recovery]}
+      - {id: ir-golden-image, name: Rebuilding from hardened golden images, match: [golden-image]}
+      - {id: ir-bcp-coordination, name: Coordinating incident recovery with BCP / DR teams, match: [bcp-dr-coordination]}
+  - id: ir-lessons-learned
+    name: Post-incident activity and lessons learned
+    source: NIST SP 800-61r3 Improvement (ID.IM); 800-61r2 3.4
+    match: [lessons-learned, postmortem]
+    subtopics:
+      - {id: ir-lessons-meeting, name: Running the lessons-learned meeting, match: [lessons-learned]}
+      - {id: ir-root-cause, name: Root cause analysis of the intrusion, match: [root-cause-analysis]}
+      - {id: ir-final-report, name: Writing the final incident report, match: [incident-report]}
+      - {id: ir-control-improvements, name: Turning findings into control and detection improvements, match: [control-improvements]}
+      - {id: ir-blameless, name: Facilitating a blameless post-incident review, match: [blameless-postmortem]}
+      - {id: ir-action-items, name: Tracking remediation action items to closure, match: [action-item-tracking]}
+      - {id: ir-incident-to-detection, name: Converting incident TTPs into new detections, match: [incident-to-detection]}
+      - {id: ir-playbook-update, name: Updating playbooks and the IR plan after an incident, match: [playbook-update]}
+  - id: ir-ransomware
+    name: Ransomware incident response
+    source: NIST SP 800-61r3; CISA StopRansomware guide; FOR508 ransomware case
+    match: [ransomware]
+    subtopics:
+      - {id: ir-rw-strain-id, name: Identifying the ransomware strain and checking for decryptors, match: [ransomware-identification, decryptor]}
+      - {id: ir-rw-encryption-scope, name: Scoping encryption and exfiltration before restore, match: [encryption-scoping]}
+      - {id: ir-rw-backup-protect, name: Protecting and validating backups during a ransomware event, match: [immutable-backups]}
+      - {id: ir-rw-negotiation, name: Ransom decision and negotiation governance (legal, sanctions), match: [ransomware-negotiation]}
+      - {id: ir-rw-leak-site, name: Monitoring data leak sites after double extortion, match: [data-leak-site]}
+      - {id: ir-rw-ransom-note, name: Ransom note / extension / encryptor triage, match: [ransom-note]}
+      - {id: ir-rw-precursors, name: Hunting ransomware precursors (staging / exfil tools), match: [ransomware-precursors]}
+      - {id: ir-rw-esxi, name: ESXi and hypervisor ransomware response, match: [esxi-ransomware]}
+      - {id: ir-rw-ofac, name: Sanctions (OFAC) screening before any ransom payment, match: [ofac-sanctions]}
+  - id: ir-bec
+    name: Business email compromise investigation
+    source: FBI IC3 BEC guidance; Microsoft 365 incident response playbooks
+    match: [business-email-compromise, bec]
+    subtopics:
+      - {id: ir-bec-inbox-rules, name: Finding malicious inbox rules and forwarding, match: [inbox-rules, mail-forwarding-rules]}
+      - {id: ir-bec-message-trace, name: Message trace and phishing email scoping and purge, match: [message-trace, email-purge]}
+      - {id: ir-bec-oauth, name: Investigating malicious OAuth app consent, match: [oauth-consent-grant]}
+      - {id: ir-bec-wire-recall, name: Wire fraud recall and financial kill chain, match: [wire-recall]}
+      - {id: ir-bec-mailitemsaccessed, name: Determining mailbox data accessed with MailItemsAccessed, match: [mailitemsaccessed]}
+      - {id: ir-bec-aitm, name: Adversary-in-the-middle phishing and session token theft, match: [aitm-phishing]}
+      - {id: ir-bec-mfa-registration, name: Rogue MFA method registration after takeover, match: [mfa-method-registration]}
+      - {id: ir-bec-lookalike, name: Vendor impersonation and lookalike domains, match: [lookalike-domain]}
+  - id: ir-insider
+    name: Insider threat and data exfiltration investigation
+    source: CERT Insider Threat Center guide; NIST SP 800-86 8
+    match: [insider-threat, data-exfiltration]
+    subtopics:
+      - {id: ir-insider-exfil-usb, name: Proving data exfiltration to removable media, match: [usb-exfiltration]}
+      - {id: ir-insider-cloud-upload, name: Proving exfiltration to personal cloud storage and webmail, match: [cloud-upload-exfiltration]}
+      - {id: ir-insider-hr-legal, name: Running an insider case with HR and legal, match: [hr-investigation]}
+      - {id: ir-insider-dlp, name: Using DLP and CASB alerts as investigative leads, match: [dlp-investigation]}
+      - {id: ir-insider-personal-email, name: Exfiltration to personal webmail, match: [personal-email-exfiltration]}
+      - {id: ir-insider-print, name: Print-based exfiltration evidence, match: [print-forensics]}
+      - {id: ir-insider-departing, name: Departing-employee investigations, match: [departing-employee]}
+      - {id: ir-insider-sabotage, name: IT sabotage and destructive insider investigations, match: [it-sabotage]}
+  - id: ir-threat-intel
+    name: Threat intelligence in incident response
+    source: FOR578 outline; MITRE ATT&CK; STIX/TAXII 2.1 spec
+    match: [threat-intelligence, cyber-threat-intelligence]
+    subtopics:
+      - {id: ir-ti-ioc-enrichment, name: Enriching IOCs and pivoting infrastructure, match: [ioc-enrichment, ioc-pivoting]}
+      - {id: ir-ti-attack-mapping, name: Mapping observed behaviour to MITRE ATT&CK, match: [attack-mapping, mitre-attack]}
+      - {id: ir-ti-misp, name: Sharing and consuming indicators with MISP and STIX/TAXII, match: [misp, stix]}
+      - {id: ir-ti-diamond-model, name: Intrusion analysis with the Diamond Model and kill chain, match: [diamond-model, kill-chain]}
+      - {id: ir-ti-pyramid-of-pain, name: Prioritising detections with the Pyramid of Pain, match: [pyramid-of-pain]}
+      - {id: ir-ti-taxii, name: Consuming and publishing indicators over TAXII 2.1, match: [taxii-feeds]}
+      - {id: ir-ti-pirs, name: Defining intelligence requirements (PIRs) for an incident, match: [intelligence-requirements]}
+      - {id: ir-ti-estimative, name: Attribution confidence and estimative language, match: [estimative-language]}
+      - {id: ir-ti-isac, name: Sharing incident indicators with ISACs and peers, match: [isac-sharing]}
+  - id: ir-legal-regulatory
+    name: Breach notification, legal and regulatory obligations
+    source: NIST SP 800-61r3 RS.CO; GDPR Art. 33-34; SEC Form 8-K Item 1.05; HIPAA Breach Notification Rule
+    match: [breach-notification, regulatory-reporting]
+    subtopics:
+      - {id: ir-gdpr-72h, name: GDPR 72-hour supervisory authority notification, match: [gdpr]}
+      - {id: ir-sec-8k, name: SEC 8-K Item 1.05 materiality and disclosure, match: [sec-disclosure]}
+      - {id: ir-hipaa-breach, name: HIPAA breach risk assessment and notification, match: [hipaa]}
+      - {id: ir-privilege, name: Running the investigation under attorney-client privilege, match: [attorney-client-privilege]}
+      - {id: ir-law-enforcement, name: Engaging law enforcement and reporting to CISA/FBI, match: [law-enforcement-engagement]}
+      - {id: ir-cyber-insurance, name: Cyber insurance notification and panel vendor process, match: [cyber-insurance]}
+      - {id: ir-state-laws, name: US state breach notification laws, match: [state-breach-laws]}
+      - {id: ir-nis2-dora, name: EU NIS2 and DORA incident reporting timelines, match: [nis2]}
+      - {id: ir-pci-pfi, name: PCI DSS card-data breaches and PFI investigations, match: [pci-forensic-investigator]}
+      - {id: ir-circia, name: CIRCIA and sector incident reporting to CISA, match: [circia]}
+  - id: ir-cloud
+    name: Cloud incident response
+    source: AWS Security Incident Response Guide; Microsoft Incident Response playbooks; FOR509 outline
+    match: [cloud-incident-response, cloud-forensics]
+    subtopics:
+      - {id: ir-aws, name: AWS incident response (IAM keys, CloudTrail, EC2 isolation), match: [aws-incident-response]}
+      - {id: ir-azure, name: Azure and Entra ID incident response, match: [azure-incident-response, entra-id]}
+      - {id: ir-gcp, name: Google Cloud incident response, match: [gcp-incident-response]}
+      - {id: ir-k8s, name: Kubernetes and container incident response, match: [container-forensics, kubernetes-forensics]}
+      - {id: ir-m365-tenant, name: Microsoft 365 tenant compromise response, match: [m365-tenant-compromise]}
+      - {id: ir-saas-oauth, name: SaaS OAuth token and integration compromise, match: [oauth-token-theft]}
+      - {id: ir-leaked-keys, name: Responding to leaked cloud access keys, match: [leaked-access-key]}
+      - {id: ir-serverless, name: Serverless function compromise investigation, match: [serverless-forensics]}
+  # ===== Evidence handling (RFC 3227; SP 800-86 3.1; ISO/IEC 27037)
+  - id: ev-order-of-volatility
+    name: Order of volatility and collection procedure
+    source: RFC 3227 2.1-3.2; SP 800-86 5.2
+    match: [order-of-volatility, rfc-3227]
+    subtopics:
+      - {id: ev-ov-sequence, name: Collecting in order of volatility (registers to archival media), match: [rfc-3227]}
+      - {id: ev-ov-avoid, name: Things to avoid during collection (shutdown, trusting system binaries), match: [trusted-binaries]}
+      - {id: ev-ov-pull-plug, name: Live versus dead-box decision (pull the plug or not), match: [live-vs-dead-acquisition]}
+      - {id: ev-ov-footprint, name: Minimising and documenting responder footprint, match: [responder-footprint]}
+      - {id: ev-ov-network-state, name: Capturing network state (connections / ARP / routes) first, match: [network-state-capture]}
+      - {id: ev-ov-collection-log, name: Documenting each collection step (who / when / what / tool), match: [collection-log]}
+      - {id: ev-ov-privacy, name: Privacy constraints during collection (RFC 3227 2.3), match: [collection-privacy]}
+      - {id: ev-ov-admissibility, name: Collecting for admissibility (RFC 3227 2.4), match: [evidence-admissibility]}
+  - id: ev-chain-of-custody
+    name: Chain of custody and evidence management
+    source: RFC 3227 4.1; ISO/IEC 27037 5-7; SWGDE best practices
+    match: [chain-of-custody]
+    subtopics:
+      - {id: ev-coc-form, name: Completing chain-of-custody forms and evidence logs, match: [chain-of-custody-form]}
+      - {id: ev-labeling, name: Evidence labeling, bagging and seizure photography, match: [evidence-labeling]}
+      - {id: ev-storage, name: Secure evidence storage and access control, match: [evidence-storage]}
+      - {id: ev-transfer, name: Evidence transfer and shipping, match: [evidence-transfer]}
+      - {id: ev-retention, name: Evidence retention and disposal, match: [evidence-retention]}
+      - {id: ev-digital-coc, name: Digital chain of custody for remote and cloud collections, match: [digital-chain-of-custody]}
+      - {id: ev-intake, name: Laboratory evidence intake and case numbering, match: [evidence-intake]}
+      - {id: ev-custody-gap, name: Handling a broken or incomplete chain of custody, match: [custody-gap]}
+  - id: ev-integrity
+    name: Hashing and integrity verification
+    source: SP 800-86 3.1.2; NIST NSRL; SWGDE
+    match: [evidence-integrity, hashing]
+    subtopics:
+      - {id: ev-hash-verify, name: Acquisition and verification hashing of images, match: [hash-verification]}
+      - {id: ev-nsrl, name: Known-file filtering with NSRL and hash sets, match: [nsrl, hash-sets]}
+      - {id: ev-fuzzy-hash, name: Fuzzy hashing with ssdeep and TLSH, match: [ssdeep, fuzzy-hashing]}
+      - {id: ev-hash-collisions, name: Hash algorithm choice and MD5/SHA-1 collision considerations, match: [hash-algorithm-choice]}
+      - {id: ev-hashdeep, name: Hash manifests and audit mode with hashdeep, match: [hashdeep]}
+      - {id: ev-hash-mismatch, name: Investigating a hash mismatch on re-verification, match: [hash-mismatch]}
+      - {id: ev-piecewise, name: Piecewise / sector hashing of failing media, match: [piecewise-hashing]}
+      - {id: ev-known-bad, name: Known-bad hash set matching, match: [known-bad-hashes]}
+  - id: ev-write-blocking
+    name: Write blocking
+    source: NIST CFTT write blocker specifications; SP 800-86 4.2
+    match: [write-blocker, write-blocking]
+    subtopics:
+      - {id: ev-hw-write-blocker, name: Using hardware write blockers (Tableau, WiebeTech), match: [hardware-write-blocker]}
+      - {id: ev-sw-write-blocker, name: Software write blocking on Linux and Windows, match: [software-write-blocker]}
+      - {id: ev-wb-validation, name: Validating a write blocker before use, match: [write-blocker-validation]}
+      - {id: ev-wb-usb-registry, name: USB write protection via the StorageDevicePolicies registry key, match: [usb-write-protect]}
+      - {id: ev-wb-boot-media, name: Forensic boot media (CAINE / Paladin / Tsurugi), match: [forensic-boot-media]}
+      - {id: ev-wb-nvme, name: Write blocking NVMe / Thunderbolt / USB-C media, match: [nvme-write-blocker]}
+      - {id: ev-wb-journal-replay, name: Preventing filesystem journal replay and auto-mount writes, match: [journal-replay]}
+      - {id: ev-wb-blockdev, name: Linux blockdev --setro and udev read-only rules, match: [blockdev-setro]}
+  - id: ev-disk-acquisition
+    name: Disk acquisition and imaging
+    source: SP 800-86 4.2; FOR500 evidence acquisition; libewf docs
+    match: [forensic-acquisition, imaging, disk-imaging]
+    subtopics:
+      - {id: ev-dd-dc3dd, name: Imaging with dd, dc3dd and dcfldd, match: [dc3dd, dcfldd]}
+      - {id: ev-ewf, name: E01 imaging with ewfacquire and FTK Imager, match: [ewfacquire, ftk-imager]}
+      - {id: ev-ssd-nvme, name: Acquiring SSD and NVMe drives (TRIM, HPA/DCO), match: [ssd-forensics, hpa-dco]}
+      - {id: ev-encrypted-volumes, name: Acquiring BitLocker and other encrypted volumes, match: [bitlocker, encrypted-volume]}
+      - {id: ev-vm-acquisition, name: Acquiring virtual machine disks and snapshots, match: [vm-acquisition, vmdk]}
+      - {id: ev-logical-acquisition, name: Targeted logical acquisition when full imaging is impossible, match: [logical-acquisition]}
+      - {id: ev-guymager, name: Imaging with Guymager, match: [guymager]}
+      - {id: ev-ddrescue, name: Imaging failing drives with GNU ddrescue, match: [ddrescue]}
+      - {id: ev-remote-acquisition, name: Remote disk acquisition over the network, match: [remote-acquisition]}
+      - {id: ev-mac-disk, name: Acquiring Mac disks (T2 / Apple silicon / target disk mode), match: [mac-disk-acquisition]}
+  - id: ev-memory-acquisition
+    name: Memory acquisition
+    source: SP 800-86 5.2.1; FOR508 memory acquisition; WinPmem, LiME, AVML docs
+    match: [memory-acquisition]
+    subtopics:
+      - {id: ev-winpmem, name: Windows RAM capture with WinPmem, DumpIt or Magnet RAM Capture, match: [winpmem, dumpit]}
+      - {id: ev-lime-avml, name: Linux RAM capture with LiME and AVML, match: [lime, avml]}
+      - {id: ev-vm-memory, name: Capturing VM memory from the hypervisor (vmem, vmsn, savestate), match: [vm-memory-capture]}
+      - {id: ev-hiberfil-pagefile, name: Collecting hiberfil.sys, pagefile.sys and crash dumps, match: [hiberfil, pagefile]}
+      - {id: ev-macos-memory, name: macOS memory acquisition constraints, match: [macos-memory-acquisition]}
+      - {id: ev-mem-validate, name: Validating a memory image after capture, match: [memory-image-validation]}
+      - {id: ev-mem-remote, name: Remote memory acquisition via EDR or Velociraptor, match: [remote-memory-acquisition]}
+      - {id: ev-mem-smear, name: Memory smear and acquisition consistency, match: [memory-smear]}
+      - {id: ev-mem-cloud, name: Cloud VM memory capture (AWS / Azure / GCP), match: [cloud-memory-acquisition]}
+  - id: ev-live-triage
+    name: Live response and triage collection
+    source: KAPE documentation; Velociraptor docs; UAC docs; FOR508 live response
+    match: [live-response, triage-collection]
+    subtopics:
+      - {id: ev-kape-targets, name: KAPE targets for triage image collection, match: [kape, kape-targets]}
+      - {id: ev-kape-modules, name: KAPE modules for parsing collected artefacts, match: [kape-modules]}
+      - {id: ev-velociraptor-offline, name: Velociraptor offline collector, match: [velociraptor-offline-collector]}
+      - {id: ev-uac, name: Unix-like Artifacts Collector (UAC) for Linux/macOS triage, match: [uac]}
+      - {id: ev-live-commands, name: Live response command set and volatile data capture, match: [volatile-data]}
+      - {id: ev-kape-remote, name: KAPE collection to SFTP / S3 / VHDX containers, match: [kape-remote-collection]}
+      - {id: ev-aftermath, name: macOS triage collection with Aftermath, match: [aftermath]}
+      - {id: ev-cylr, name: Lightweight triage with CyLR, match: [cylr]}
+      - {id: ev-locked-files, name: Copying locked files with raw NTFS access, match: [locked-file-copy]}
+  - id: ev-cloud-evidence
+    name: Cloud and SaaS evidence preservation
+    source: SP 800-86 8; AWS/Azure/GCP forensic guidance; ISO/IEC 27037
+    match: [cloud-evidence]
+    subtopics:
+      - {id: ev-cloud-snapshot, name: Snapshotting cloud volumes for forensics, match: [cloud-snapshot]}
+      - {id: ev-cloud-log-export, name: Exporting and preserving cloud audit logs, match: [cloud-log-preservation]}
+      - {id: ev-legal-hold, name: Legal hold and preservation letters, match: [legal-hold, preservation-letter]}
+      - {id: ev-m365-export, name: Exporting Microsoft 365 evidence (UAL, mailboxes, Purview), match: [purview-ediscovery]}
+      - {id: ev-azure-snapshot, name: Snapshotting Azure managed disks for forensics, match: [azure-disk-snapshot]}
+      - {id: ev-gcp-snapshot, name: Snapshotting GCP persistent disks for forensics, match: [gcp-disk-snapshot]}
+      - {id: ev-google-vault, name: Preserving Google Workspace data with Google Vault, match: [google-vault]}
+      - {id: ev-saas-api, name: Collecting SaaS evidence via vendor APIs (Slack / Box / GitHub), match: [saas-evidence-collection]}
+      - {id: ev-container-preserve, name: Preserving container images and filesystems, match: [container-image-preservation]}
+  - id: ev-mobile
+    name: Mobile device evidence
+    source: NIST SP 800-101r1 Guidelines on Mobile Device Forensics
+    match: [mobile-forensics]
+    subtopics:
+      - {id: ev-mobile-isolation, name: Isolating a seized phone (airplane mode, Faraday), match: [faraday-bag]}
+      - {id: ev-ios-backup, name: iOS logical acquisition and backup analysis, match: [ios-forensics]}
+      - {id: ev-android, name: Android acquisition and artefact analysis, match: [android-forensics]}
+      - {id: ev-mobile-apps, name: Messaging app artefacts (WhatsApp, Signal, iMessage), match: [messaging-app-forensics]}
+      - {id: ev-mobile-ffs, name: Choosing logical / full-file-system / physical mobile extraction, match: [full-file-system-extraction]}
+      - {id: ev-sysdiagnose, name: iOS sysdiagnose collection and analysis, match: [sysdiagnose]}
+      - {id: ev-leapp, name: Parsing mobile extractions with iLEAPP / ALEAPP, match: [ileapp]}
+      - {id: ev-mvt, name: Checking phones for spyware with Mobile Verification Toolkit, match: [mvt]}
+  - id: ev-reporting
+    name: Forensic reporting and testimony
+    source: SP 800-86 3.4; SWGDE report writing; Federal Rules of Evidence 702
+    match: [forensic-report, expert-testimony]
+    subtopics:
+      - {id: ev-report-writing, name: Writing a forensic examination report, match: [forensic-report-writing]}
+      - {id: ev-expert-witness, name: Preparing for expert witness testimony and Daubert, match: [expert-witness, daubert]}
+      - {id: ev-peer-review, name: Technical peer review of forensic findings, match: [forensic-peer-review]}
+      - {id: ev-tool-validation, name: Forensic tool validation (NIST CFTT, ISO 17025), match: [tool-validation, iso-17025]}
+      - {id: ev-exhibits, name: Preparing exhibits and visualisations for reports, match: [forensic-exhibits]}
+      - {id: ev-affidavit, name: Writing declarations and affidavits, match: [affidavit]}
+      - {id: ev-deposition, name: Preparing for deposition, match: [deposition]}
+      - {id: ev-rebuttal, name: Reviewing opposing expert reports and writing rebuttals, match: [rebuttal-report]}
+      - {id: ev-confidence, name: Expressing confidence and limitations in findings, match: [findings-confidence]}
+  # ===== Windows artefacts (FOR500 / GCFE; FOR508 / GCFA) - disk-memory-forensics
+  - id: win-registry
+    name: Windows registry analysis
+    source: FOR500 registry analysis; GCFE registry objectives
+    match: [windows-registry, registry]
+    subtopics:
+      - {id: reg-sam, name: SAM hive user accounts and logon data, match: [sam-hive]}
+      - {id: reg-system, name: SYSTEM hive (ControlSet, timezone, network, services), match: [system-hive]}
+      - {id: reg-software, name: SOFTWARE hive (OS version, installed programs, network profiles), match: [software-hive]}
+      - {id: reg-ntuser, name: NTUSER.DAT user activity keys (MRU, typed paths, RecentDocs), match: [ntuser, recentdocs]}
+      - {id: reg-transaction-logs, name: Replaying registry transaction logs and dirty hives, match: [transaction-log, dirty-hive]}
+      - {id: reg-deleted-keys, name: Recovering deleted registry keys, match: [deleted-registry-key]}
+      - {id: reg-usrclass, name: UsrClass.dat analysis, match: [usrclass]}
+      - {id: reg-recmd, name: Batch registry parsing with RECmd and Registry Explorer, match: [recmd]}
+      - {id: reg-last-write, name: Interpreting key last-write times, match: [key-last-write-time]}
+      - {id: reg-regripper, name: Running and writing RegRipper plugins, match: [regripper]}
+  - id: win-execution
+    name: Evidence of program execution
+    source: FOR500/FOR508 evidence of execution; SANS Windows Forensic Analysis poster
+    match: [evidence-of-execution, program-execution]
+    subtopics:
+      - {id: exec-prefetch, name: Prefetch analysis with PECmd, match: [prefetch]}
+      - {id: exec-amcache, name: Amcache.hve analysis, match: [amcache]}
+      - {id: exec-shimcache, name: ShimCache / AppCompatCache analysis, match: [shimcache]}
+      - {id: exec-bam, name: BAM/DAM background activity moderator, match: [bam-dam]}
+      - {id: exec-userassist, name: UserAssist GUI execution evidence, match: [userassist]}
+      - {id: exec-srum, name: SRUM resource usage and network data, match: [srum]}
+      - {id: exec-wer, name: Windows Error Reporting crash artefacts, match: [windows-error-reporting]}
+      - {id: exec-applocker, name: AppLocker and WDAC event logs as execution evidence, match: [applocker-logs]}
+      - {id: exec-featureusage, name: FeatureUsage taskbar interaction keys, match: [featureusage]}
+      - {id: exec-defender, name: Defender MPLog and detection history, match: [defender-mplog]}
+  - id: win-file-access
+    name: File and folder opening evidence
+    source: FOR500 shell items; SANS Windows Forensic Analysis poster
+    match: [file-access-evidence, shell-items]
+    subtopics:
+      - {id: fa-lnk, name: LNK shortcut file analysis, match: [lnk]}
+      - {id: fa-jumplists, name: Jump list analysis, match: [jump-lists]}
+      - {id: fa-shellbags, name: Shellbags folder access analysis, match: [shellbags]}
+      - {id: fa-office-mru, name: Office file MRU and trust records, match: [office-mru, trust-records]}
+      - {id: fa-recycle-bin, name: Recycle Bin $I/$R file analysis, match: [recycle-bin]}
+      - {id: fa-thumbcache, name: Thumbcache and Windows Search database, match: [thumbcache, windows-search-db]}
+      - {id: fa-opensavemru, name: OpenSaveMRU / LastVisitedMRU dialog history, match: [opensavemru]}
+      - {id: fa-wordwheel, name: TypedPaths and WordWheelQuery search terms, match: [wordwheelquery]}
+  - id: win-usb
+    name: USB and external device forensics
+    source: FOR500 USB and BYOD devices; GCFE external device objectives
+    match: [usb-forensics, removable-media]
+    subtopics:
+      - {id: usb-device-id, name: Identifying devices from USBSTOR and SYSTEM hive, match: [usbstor]}
+      - {id: usb-first-last, name: First, last connected and removal times, match: [usb-device-timestamps]}
+      - {id: usb-user-attribution, name: Attributing a device to a user (MountPoints2, volume serial), match: [mountpoints2, volume-serial-number]}
+      - {id: usb-setupapi, name: setupapi.dev.log and Partition/Diagnostic event logs, match: [setupapi, partition-diagnostic-log]}
+      - {id: usb-mtp, name: MTP devices and phones connected to Windows, match: [mtp-devices]}
+      - {id: usb-emdmgmt, name: Volume names via EMDMgmt and Windows Portable Devices, match: [emdmgmt]}
+      - {id: usb-pnp-events, name: USB connection events in Kernel-PnP and DriverFrameworks logs, match: [kernel-pnp-events]}
+      - {id: usb-linux-mac, name: USB device history on Linux and macOS, match: [linux-usb-history]}
+  - id: win-browser
+    name: Browser forensics
+    source: FOR500 browser forensics; GCFE browser objectives
+    match: [browser-forensics]
+    subtopics:
+      - {id: br-chromium, name: Chrome and Edge (Chromium) history, downloads and cache, match: [chrome-forensics, chromium-history]}
+      - {id: br-firefox, name: Firefox places.sqlite and session data, match: [firefox-forensics]}
+      - {id: br-private-browsing, name: Private browsing residue and session restore, match: [private-browsing]}
+      - {id: br-cookies-tokens, name: Cookies, session tokens and saved credentials, match: [browser-cookies]}
+      - {id: br-sqlite, name: SQLite database forensics (WAL, freelists), match: [sqlite-forensics]}
+      - {id: br-edge, name: Microsoft Edge and legacy WebCacheV01 analysis, match: [webcachev01]}
+      - {id: br-safari, name: Safari history / downloads / cache, match: [safari-forensics]}
+      - {id: br-extensions, name: Malicious browser extension investigation, match: [browser-extensions]}
+      - {id: br-cache, name: Browser cache analysis, match: [browser-cache]}
+  - id: win-email
+    name: Email forensics
+    source: FOR500 email forensics; SP 800-86 7
+    match: [email-forensics]
+    subtopics:
+      - {id: em-headers, name: Email header analysis (Received, SPF/DKIM/DMARC), match: [email-header-analysis]}
+      - {id: em-pst-ost, name: PST and OST mailbox examination, match: [pst-ost]}
+      - {id: em-webmail, name: Webmail and cloud mailbox artefacts, match: [webmail-forensics]}
+      - {id: em-phishing, name: Phishing email analysis and attachment triage, match: [phishing-analysis]}
+      - {id: em-eml-msg, name: Parsing EML / MSG / mbox files, match: [eml-msg]}
+      - {id: em-dkim, name: Verifying SPF / DKIM / DMARC / ARC during investigations, match: [dkim-verification]}
+      - {id: em-exchange-tracking, name: Exchange on-premises message tracking logs, match: [exchange-message-tracking]}
+      - {id: em-apple-mail, name: Apple Mail and Outlook for Mac stores, match: [apple-mail]}
+  - id: win-activity-timeline
+    name: Windows user activity artefacts
+    source: FOR500 Windows timeline and cloud files; GCFE
+    match: [user-activity-artefacts]
+    subtopics:
+      - {id: act-onedrive, name: OneDrive and cloud sync artefacts, match: [onedrive-forensics]}
+      - {id: act-network-profiles, name: Network history and WLAN profiles, match: [network-profiles, wlan-profiles]}
+      - {id: act-rdp-cache, name: RDP bitmap cache and client artefacts, match: [rdp-bitmap-cache]}
+      - {id: act-pca, name: Windows 11 Program Compatibility Assistant logs, match: [pca-launch-dictionary]}
+      - {id: act-timezone, name: Establishing system time zone and clock skew, match: [clock-skew, timezone-analysis]}
+      - {id: act-activitiescache, name: Windows Timeline ActivitiesCache.db, match: [activitiescache]}
+      - {id: act-notifications, name: Windows notification database (wpndatabase.db), match: [notification-database]}
+      - {id: act-teams, name: Teams / Slack desktop client artefacts, match: [teams-forensics]}
+      - {id: act-power-events, name: Boot / shutdown / sleep times from logs and registry, match: [system-power-events]}
+  - id: win-lateral-movement
+    name: Lateral movement artefacts
+    source: FOR508 lateral movement; JPCERT Detecting Lateral Movement through Tracking Event Logs
+    match: [lateral-movement]
+    subtopics:
+      - {id: lm-psexec, name: PsExec and service-based execution artefacts, match: [psexec]}
+      - {id: lm-wmi, name: WMI remote execution artefacts, match: [wmi-lateral-movement]}
+      - {id: lm-rdp, name: RDP source and destination artefacts, match: [rdp-forensics]}
+      - {id: lm-winrm, name: PowerShell remoting and WinRM artefacts, match: [winrm]}
+      - {id: lm-schtasks, name: Remote scheduled task and at-job artefacts, match: [remote-scheduled-task]}
+      - {id: lm-smb-admin-shares, name: Admin share and SMB file transfer artefacts, match: [admin-shares]}
+      - {id: lm-dcom, name: DCOM lateral movement artefacts, match: [dcom-lateral-movement]}
+      - {id: lm-openssh, name: OpenSSH server and client on Windows, match: [windows-openssh]}
+      - {id: lm-rmm, name: Remote monitoring and management tools (AnyDesk / ScreenConnect), match: [rmm-tools]}
+      - {id: lm-impacket, name: Impacket smbexec / atexec / wmiexec footprints, match: [impacket-footprints]}
+  - id: win-persistence
+    name: Persistence mechanisms
+    source: FOR508 persistence; MITRE ATT&CK TA0003
+    match: [persistence]
+    subtopics:
+      - {id: per-run-keys, name: Run keys and startup folder, match: [run-keys]}
+      - {id: per-services, name: Malicious services, match: [service-persistence]}
+      - {id: per-schtasks, name: Scheduled task persistence and task XML, match: [scheduled-task-persistence]}
+      - {id: per-wmi, name: WMI event subscription persistence, match: [wmi-persistence]}
+      - {id: per-autoruns, name: Autoruns baselining and stacking, match: [autoruns]}
+      - {id: per-com-hijack, name: COM hijacking and DLL search-order hijacking, match: [com-hijacking, dll-search-order-hijacking]}
+      - {id: per-winlogon, name: Startup folders and Winlogon keys, match: [winlogon]}
+      - {id: per-ifeo, name: IFEO debugger and accessibility-feature backdoors, match: [ifeo]}
+      - {id: per-bits, name: BITS job persistence, match: [bits-jobs]}
+      - {id: per-office, name: Office add-in and template persistence, match: [office-addin-persistence]}
+  - id: win-credential-theft
+    name: Credential theft and Active Directory attack artefacts
+    source: FOR508 credential theft; MITRE ATT&CK TA0006
+    match: [credential-theft]
+    subtopics:
+      - {id: cred-lsass-dump, name: Detecting LSASS memory dumping, match: [lsass-dumping]}
+      - {id: cred-pth, name: Pass-the-hash and pass-the-ticket evidence, match: [pass-the-hash, pass-the-ticket]}
+      - {id: cred-kerberoast, name: Kerberoasting and AS-REP roasting evidence, match: [kerberoasting]}
+      - {id: cred-golden-ticket, name: Golden and silver ticket detection, match: [golden-ticket]}
+      - {id: cred-ntds, name: NTDS.dit theft and DCSync detection, match: [dcsync, ntds-dit]}
+      - {id: cred-dpapi, name: DPAPI master key and secret theft, match: [dpapi-masterkey]}
+      - {id: cred-adcs, name: AD CS certificate abuse (ESC1-ESC8), match: [adcs-abuse]}
+      - {id: cred-spray, name: Password spraying and brute force evidence, match: [password-spraying]}
+      - {id: cred-reg-save, name: SAM / SECURITY hive dumping with reg save, match: [reg-save-hives]}
+      - {id: cred-ntlm-relay, name: NTLM relay and authentication coercion, match: [ntlm-relay]}
+  - id: win-anti-forensics
+    name: Anti-forensics detection
+    source: FOR508 anti-forensics detection; GCFA objectives
+    match: [anti-forensics]
+    subtopics:
+      - {id: af-timestomp, name: Detecting timestomping ($SI vs $FN), match: [timestomping]}
+      - {id: af-log-clearing, name: Detecting event log clearing and tampering, match: [log-clearing]}
+      - {id: af-wiping, name: Detecting secure deletion and wiping tools, match: [secure-deletion]}
+      - {id: af-vss-deletion, name: Shadow copy deletion and recovery, match: [shadow-copy-deletion]}
+      - {id: af-hidden-data, name: Hidden data (ADS, slack, steganography), match: [steganography]}
+      - {id: af-usn-delete, name: USN journal deletion and fsutil abuse, match: [usn-journal-deletion]}
+      - {id: af-cleaners, name: Artefact cleaners (CCleaner / PrivaZer) traces, match: [ccleaner]}
+      - {id: af-veracrypt, name: Encrypted containers and hidden volumes, match: [veracrypt]}
+      - {id: af-etw, name: Disabled auditing and ETW / Defender tampering, match: [etw-tampering]}
+  - id: win-vss
+    name: Volume shadow copies
+    source: FOR508 volume shadow copy analysis; libvshadow docs
+    match: [volume-shadow-copy, vss]
+    subtopics:
+      - {id: vss-mount, name: Mounting shadow copies (vshadowmount, Arsenal), match: [vshadowmount]}
+      - {id: vss-diff, name: Diffing shadow copies to find changed files, match: [vss-diff]}
+      - {id: vss-timeline, name: Timelining across shadow copies, match: [vss-timeline]}
+      - {id: vss-enumerate, name: Enumerating shadow copies (vshadowinfo / vssadmin), match: [vshadowinfo]}
+      - {id: vss-live, name: Accessing shadow copies on a live system with mklink, match: [vss-symlink]}
+      - {id: vss-carver, name: Recovering deleted shadow copy stores with vss_carver, match: [vss-carver]}
+      - {id: vss-historical-hives, name: Extracting historical registry hives and logs from VSS, match: [historical-hives]}
+      - {id: vss-kape, name: Processing every shadow copy with KAPE --vss, match: [kape-vss]}
+  # ===== Filesystems (Carrier, File System Forensic Analysis; FOR500/508) - disk-memory-forensics / autopsy-sleuthkit
+  - id: fs-ntfs
+    name: NTFS forensics
+    source: FOR508 NTFS; Carrier File System Forensic Analysis ch. 11-13
+    match: [ntfs]
+    subtopics:
+      - {id: ntfs-mft, name: $MFT record parsing with MFTECmd, match: [mftecmd, mft]}
+      - {id: ntfs-usnjrnl, name: $UsnJrnl change journal analysis, match: [usnjrnl]}
+      - {id: ntfs-logfile, name: $LogFile transaction analysis, match: [ntfs-logfile]}
+      - {id: ntfs-i30, name: $I30 index slack and directory entries, match: [indx, i30-index]}
+      - {id: ntfs-ads, name: Alternate data streams and Zone.Identifier, match: [alternate-data-stream, zone-identifier]}
+      - {id: ntfs-si-fn, name: Comparing $STANDARD_INFORMATION and $FILE_NAME timestamps, match: [si-fn-comparison]}
+      - {id: ntfs-mft-slack, name: Resident data and MFT record slack, match: [mft-slack]}
+      - {id: ntfs-boot, name: $Boot / VBR and NTFS metadata files, match: [ntfs-boot-sector]}
+      - {id: ntfs-efs, name: EFS-encrypted files, match: [efs]}
+      - {id: ntfs-reparse, name: Reparse points / junctions / symlinks, match: [reparse-points]}
+  - id: fs-other
+    name: Non-NTFS filesystems
+    source: Carrier File System Forensic Analysis (FAT, Ext); Apple APFS reference
+    match: [filesystem-forensics]
+    subtopics:
+      - {id: fs-ext4, name: ext4 forensics (inodes, journal, deleted files), match: [ext4-forensics]}
+      - {id: fs-fat-exfat, name: FAT and exFAT forensics, match: [exfat-forensics, fat-forensics]}
+      - {id: fs-apfs, name: APFS forensics (snapshots, encryption), match: [apfs-forensics]}
+      - {id: fs-xfs-btrfs, name: XFS and Btrfs forensics, match: [xfs-forensics, btrfs-forensics]}
+      - {id: fs-hfsplus, name: HFS+ forensics, match: [hfs-plus]}
+      - {id: fs-refs, name: ReFS forensics, match: [refs-forensics]}
+      - {id: fs-ext4-journal, name: Recovering ext4 data via the journal (debugfs / ext4magic), match: [ext4-journal]}
+      - {id: fs-zfs, name: ZFS forensics, match: [zfs-forensics]}
+  - id: fs-partitions-images
+    name: Partitions, image formats and mounting
+    source: TSK mmls/img_stat docs; libewf/xmount docs
+    match: [image-mounting, partition-analysis]
+    subtopics:
+      - {id: img-mmls, name: Partition table analysis with mmls (MBR, GPT), match: [mmls]}
+      - {id: img-ewfmount, name: Mounting E01 images read-only (ewfmount, loop devices), match: [ewfmount]}
+      - {id: img-convert, name: Converting between image formats (raw, E01, VHD, VMDK), match: [image-conversion]}
+      - {id: img-lvm-raid, name: LVM, RAID and Storage Spaces reconstruction, match: [lvm-forensics, raid-reconstruction]}
+      - {id: img-gpt, name: MBR and GPT partition table analysis, match: [gpt-analysis]}
+      - {id: img-arsenal, name: Mounting images on Windows with Arsenal Image Mounter, match: [arsenal-image-mounter]}
+      - {id: img-qemu-nbd, name: Mounting VM disks with qemu-nbd, match: [qemu-nbd]}
+      - {id: img-aff4, name: AFF4 images, match: [aff4]}
+  - id: fs-deleted-recovery
+    name: Deleted data recovery and carving
+    source: TSK/Autopsy docs; PhotoRec, bulk_extractor docs
+    match: [file-carving, deleted-file-recovery]
+    subtopics:
+      - {id: carve-photorec, name: Carving with PhotoRec, match: [photorec]}
+      - {id: carve-foremost-scalpel, name: Header/footer carving with foremost and scalpel, match: [foremost, scalpel]}
+      - {id: carve-bulk-extractor, name: Feature extraction with bulk_extractor, match: [bulk-extractor]}
+      - {id: carve-tsk-recover, name: Recovering deleted files with fls and tsk_recover, match: [tsk_recover]}
+      - {id: carve-slack, name: Slack space and unallocated analysis, match: [slack-space, unallocated-space]}
+      - {id: carve-sqlite, name: Recovering deleted SQLite records (freelist / WAL), match: [sqlite-deleted-records]}
+      - {id: carve-fragmented, name: Fragmented file carving limits, match: [fragmented-file-carving]}
+      - {id: carve-validate, name: Validating carved files, match: [carved-file-validation]}
+      - {id: carve-evtx, name: Carving EVTX records from unallocated space, match: [evtx-carving]}
+  # ===== Non-Windows hosts - disk-memory-forensics
+  - id: os-linux
+    name: Linux host forensics
+    source: FOR577 Linux Incident Response outline; SP 800-86 5
+    match: [linux-forensics]
+    subtopics:
+      - {id: lnx-user-artefacts, name: Shell history and user artefacts, match: [bash-history]}
+      - {id: lnx-persistence, name: Linux persistence (cron, systemd, rc, ld.so.preload, SSH keys), match: [linux-persistence]}
+      - {id: lnx-package-integrity, name: Package integrity verification (rpm -V, debsums), match: [package-verification]}
+      - {id: lnx-webshell, name: Web server compromise and webshell investigation, match: [webshell]}
+      - {id: lnx-live-triage, name: Live Linux triage (/proc, deleted binaries, hidden processes), match: [proc-filesystem]}
+      - {id: lnx-ssh-keys, name: authorized_keys and SSH artefacts, match: [authorized-keys]}
+      - {id: lnx-ld-preload, name: LD_PRELOAD and userland rootkits, match: [ld-preload-rootkit]}
+      - {id: lnx-docker, name: Docker host and container forensics, match: [docker-forensics]}
+      - {id: lnx-accounts, name: Account / sudoers / shadow file analysis, match: [sudoers]}
+      - {id: lnx-timeline, name: Linux filesystem timelines with crtime, match: [linux-timeline]}
+  - id: os-macos
+    name: macOS forensics
+    source: FOR518 Mac and iOS Forensic Analysis outline
+    match: [macos-forensics]
+    subtopics:
+      - {id: mac-unified-logs, name: Unified logs analysis, match: [unified-logs]}
+      - {id: mac-fsevents, name: FSEvents analysis, match: [fsevents]}
+      - {id: mac-knowledgec, name: KnowledgeC and Biome usage databases, match: [knowledgec]}
+      - {id: mac-persistence, name: macOS persistence (LaunchAgents, LaunchDaemons, login items), match: [launchagents]}
+      - {id: mac-plists, name: Plist parsing and key system plists, match: [plist-forensics]}
+      - {id: mac-tcc, name: TCC.db privacy permission analysis, match: [tcc-database]}
+      - {id: mac-quarantine, name: QuarantineEventsV2 and Gatekeeper download provenance, match: [quarantine-events]}
+      - {id: mac-spotlight, name: Spotlight store analysis, match: [spotlight-forensics]}
+      - {id: mac-mac-apt, name: Parsing Mac images with mac_apt, match: [mac-apt-parsing]}
+      - {id: mac-keychain, name: Keychain forensics, match: [keychain-forensics]}
+  # ===== Timelines (Plaso docs; FOR508 timeline analysis)
+  - id: tl-super-timeline
+    name: Super timeline creation and analysis
+    source: Plaso documentation; FOR508 timeline analysis
+    match: [super-timeline, plaso]
+    subtopics:
+      - {id: tl-log2timeline, name: log2timeline parsers and targeted collection, match: [log2timeline]}
+      - {id: tl-psort, name: psort filtering and output formats, match: [psort]}
+      - {id: tl-timesketch, name: Collaborative timeline analysis in Timesketch, match: [timesketch]}
+      - {id: tl-mactime, name: Filesystem timelines with fls bodyfile and mactime, match: [mactime, bodyfile]}
+      - {id: tl-timeline-explorer, name: Pivoting a timeline in Timeline Explorer, match: [timeline-explorer]}
+      - {id: tl-pinfo, name: Inspecting Plaso storage with pinfo, match: [pinfo]}
+      - {id: tl-filter-file, name: Targeted collection with Plaso filter files, match: [plaso-filter-file]}
+      - {id: tl-parsers, name: Choosing Plaso parsers and presets, match: [plaso-parsers]}
+      - {id: tl-psteal, name: Quick timelines with psteal, match: [psteal]}
+      - {id: tl-pivot, name: Timeline analysis technique (pivot points / temporal proximity), match: [pivot-point-analysis]}
+  # ===== Memory forensics (Volatility 3 docs; FOR508 memory forensics)
+  - id: mem-triage
+    name: Memory image triage
+    source: Volatility 3 windows.* plugins; FOR508 memory analysis steps
+    match: [memory-forensics, volatility3]
+    subtopics:
+      - {id: mem-symbols, name: Symbol tables and ISF setup, match: [symbol-tables, isf]}
+      - {id: mem-process-analysis, name: Process listing and scanning (pslist, psscan, pstree), match: [pslist, psscan]}
+      - {id: mem-cmdline-env, name: Command lines, environment and privileges (cmdline, envars, privileges), match: [envars, privileges-plugin]}
+      - {id: mem-network, name: Network artefacts from memory (netscan, netstat), match: [netscan]}
+      - {id: mem-handles-dlls, name: Handles, DLLs and mutexes, match: [handles, dlllist]}
+      - {id: mem-services-sessions, name: Services and logon sessions (svcscan, sessions), match: [svcscan]}
+      - {id: mem-info, name: Identifying the image with windows.info, match: [windows-info]}
+      - {id: mem-pstree, name: Process tree anomaly review, match: [pstree]}
+      - {id: mem-cmdline, name: Command lines with windows.cmdline, match: [cmdline-plugin]}
+      - {id: mem-getsids, name: Process SIDs and integrity with getsids, match: [getsids]}
+  - id: mem-injection
+    name: Code injection and process anomalies in memory
+    source: Volatility 3 malfind, vadinfo, ldrmodules, hollowprocesses; FOR508 code injection
+    match: [code-injection, process-injection]
+    subtopics:
+      - {id: mem-malfind, name: malfind interpretation and false positives, match: [malfind]}
+      - {id: mem-ldrmodules, name: Unlinked DLL detection with ldrmodules, match: [ldrmodules]}
+      - {id: mem-vad, name: VAD tree analysis (vadinfo, vadwalk), match: [vadinfo]}
+      - {id: mem-hollowing, name: Process hollowing detection (hollowprocesses), match: [process-hollowing]}
+      - {id: mem-dump-process, name: Dumping processes and memory regions for analysis, match: [memory-region-dump, procdump-plugin]}
+      - {id: mem-hollows-hunter, name: Live scanning with PE-sieve / HollowsHunter, match: [hollows-hunter]}
+      - {id: mem-shellcode, name: Analysing extracted shellcode, match: [shellcode-analysis]}
+      - {id: mem-threads, name: Suspicious threads and start addresses, match: [suspicious-threads]}
+      - {id: mem-module-stomping, name: Unbacked executable memory and module stomping, match: [module-stomping]}
+  - id: mem-artefacts
+    name: Artefact extraction from memory
+    source: Volatility 3 filescan, dumpfiles, mftscan, registry plugins, timeliner
+    match: [memory-artefacts]
+    subtopics:
+      - {id: mem-files, name: Recovering files from memory (filescan, dumpfiles), match: [filescan, dumpfiles]}
+      - {id: mem-registry, name: Registry in memory (hivelist, printkey, userassist), match: [registry-in-memory, printkey]}
+      - {id: mem-credentials, name: Credential material in memory (hashdump, lsadump, cachedump), match: [hashdump, lsadump]}
+      - {id: mem-mft, name: MFT and resident file content in memory (mftscan), match: [mftscan]}
+      - {id: mem-timeliner, name: Memory timelines with timeliner, match: [timeliner]}
+      - {id: mem-yarascan, name: YARA scanning memory (yarascan, vadyarascan), match: [yarascan]}
+      - {id: mem-consoles, name: Console command history from memory, match: [consoles-plugin]}
+      - {id: mem-strings, name: Mapping strings to processes, match: [strings-mapping]}
+      - {id: mem-mutants, name: Mutex enumeration with mutantscan, match: [mutantscan]}
+  - id: mem-rootkits
+    name: Kernel and rootkit analysis
+    source: Volatility 3 ssdt, callbacks, driverscan, modscan, driverirp; Art of Memory Forensics
+    match: [rootkit, kernel-memory]
+    subtopics:
+      - {id: mem-ssdt, name: SSDT hook detection, match: [ssdt]}
+      - {id: mem-callbacks, name: Kernel callbacks and driver IRP hooks, match: [callback-scanning, driverirp]}
+      - {id: mem-drivers, name: Driver and module scanning (modscan, driverscan), match: [driver-scan, modscan]}
+      - {id: mem-dkom, name: DKOM and hidden process detection, match: [dkom]}
+      - {id: mem-devicetree, name: Device stacks with windows.devicetree, match: [devicetree]}
+      - {id: mem-unloaded, name: Unloaded kernel modules, match: [unloadedmodules]}
+      - {id: mem-byovd, name: Vulnerable driver (BYOVD) detection, match: [byovd]}
+      - {id: mem-psxview, name: Cross-view hidden process detection, match: [psxview]}
+  - id: mem-linux-mac
+    name: Linux and macOS memory forensics
+    source: Volatility 3 linux.* and mac.* plugins; dwarf2json docs
+    match: [linux-memory-forensics]
+    subtopics:
+      - {id: mem-dwarf2json, name: Building Linux ISF with dwarf2json, match: [dwarf2json]}
+      - {id: mem-linux-procs, name: Linux process and bash history plugins, match: [linux-pslist, linux-bash]}
+      - {id: mem-linux-rootkit, name: Linux rootkit detection (check_syscall, check_modules, hidden_modules), match: [linux-rootkit-detection]}
+      - {id: mem-mac-plugins, name: macOS memory plugins, match: [mac-memory-forensics]}
+      - {id: mem-linux-sockstat, name: Linux open files and sockets (lsof / sockstat), match: [linux-sockstat]}
+      - {id: mem-linux-malfind, name: Linux code injection with linux.malfind, match: [linux-malfind]}
+      - {id: mem-linux-elfs, name: Dumping Linux process ELFs and maps, match: [linux-elfs]}
+      - {id: mem-linux-banners, name: Matching kernel banners to symbol files, match: [linux-banners]}
+  - id: mem-formats
+    name: Memory image formats and alternative sources
+    source: Volatility 3 layers docs; FOR508 alternative memory sources
+    match: [memory-image-formats]
+    subtopics:
+      - {id: mem-hibernation, name: Analysing hibernation files, match: [hibernation-file-analysis]}
+      - {id: mem-crash-dumps, name: Analysing crash dumps and converting formats, match: [crash-dump-analysis]}
+      - {id: mem-vm-snapshots, name: Analysing VMware and Hyper-V snapshot memory, match: [vmware-vmem]}
+      - {id: mem-memprocfs, name: MemProcFS as an alternative analysis view, match: [memprocfs]}
+      - {id: mem-pagefile, name: pagefile.sys and swapfile.sys analysis, match: [pagefile-analysis]}
+      - {id: mem-swap, name: Linux swap and zram analysis, match: [swap-analysis]}
+      - {id: mem-compression, name: Windows 10+ compressed memory store, match: [memory-compression-store]}
+      - {id: mem-vbox, name: VirtualBox core dumps and saved states, match: [virtualbox-memory]}
+  # ===== Autopsy / The Sleuth Kit (Autopsy user docs; TSK tool list)
+  - id: tsk-cli
+    name: The Sleuth Kit command-line analysis
+    source: TSK tool reference (mmls, fsstat, fls, icat, istat, ifind, ffind, blkls, blkcat, sigfind)
+    match: [the-sleuth-kit, sleuthkit]
+    subtopics:
+      - {id: tsk-fsstat, name: Filesystem details with fsstat, match: [fsstat]}
+      - {id: tsk-fls, name: File listing with fls (deleted, recursive, bodyfile), match: [fls]}
+      - {id: tsk-icat-istat, name: Inode metadata and extraction with istat and icat, match: [istat, icat]}
+      - {id: tsk-ifind-ffind, name: Mapping blocks to files with ifind and ffind, match: [ifind, ffind]}
+      - {id: tsk-blk-tools, name: Block-level tools (blkls, blkcat, blkstat), match: [blkls, blkcat]}
+      - {id: tsk-sigfind-srch, name: Searching raw images (srch_strings, sigfind), match: [sigfind, srch-strings]}
+      - {id: tsk-img-stat, name: Image information with img_stat / img_cat, match: [img-stat]}
+      - {id: tsk-jls, name: Filesystem journals with jls / jcat, match: [jls]}
+      - {id: tsk-fiwalk, name: DFXML generation with fiwalk, match: [fiwalk]}
+      - {id: tsk-hfind, name: Hash databases with hfind, match: [hfind]}
+  - id: autopsy-case
+    name: Autopsy case analysis
+    source: Autopsy user documentation (cases, data sources, ingest modules, views, reports)
+    match: [autopsy]
+    subtopics:
+      - {id: autopsy-ingest, name: Ingest module selection and profiles, match: [ingest-modules]}
+      - {id: autopsy-keyword, name: Keyword search and regex lists, match: [keyword-search]}
+      - {id: autopsy-hash-db, name: Hash databases and known bad sets, match: [hash-lookup]}
+      - {id: autopsy-timeline, name: Autopsy timeline viewer, match: [autopsy-timeline]}
+      - {id: autopsy-tagging-reports, name: Tagging and report generation, match: [report-generation, tagging]}
+      - {id: autopsy-central-repo, name: Central repository and multi-user cases, match: [central-repository, multi-user-case]}
+      - {id: autopsy-communications, name: Communications and geolocation views, match: [communications-view]}
+      - {id: autopsy-python, name: Writing Autopsy Python ingest modules, match: [autopsy-python-module]}
+      - {id: autopsy-gallery, name: Image gallery and EXIF analysis, match: [image-gallery]}
+  # ===== Network forensics (Wireshark User's Guide; FOR572 / GNFA)
+  - id: net-pcap-triage
+    name: Packet capture triage in Wireshark
+    source: Wireshark User's Guide (Statistics, Display Filters, Expert Info); FOR572
+    match: [pcap-triage, wireshark]
+    subtopics:
+      - {id: net-statistics, name: Protocol hierarchy, conversations and endpoints, match: [protocol-hierarchy, statistics-conversations]}
+      - {id: net-display-filters, name: Display filter construction for investigations, match: [display-filters]}
+      - {id: net-follow-stream, name: Following and reconstructing TCP/UDP streams, match: [follow-tcp-stream]}
+      - {id: net-expert-info, name: Expert info and anomaly spotting, match: [expert-info]}
+      - {id: net-profiles-columns, name: Investigation profiles, custom columns and coloring rules, match: [wireshark-profiles]}
+      - {id: net-coloring, name: Coloring rules for triage, match: [wireshark-coloring-rules]}
+      - {id: net-io-graph, name: I/O graphs for traffic patterns, match: [io-graph]}
+      - {id: net-time-format, name: Time display formats and time references, match: [time-display-format]}
+      - {id: net-geoip, name: Endpoints and GeoIP / ASN enrichment, match: [geoip]}
+  - id: net-tshark-cli
+    name: Command-line capture processing
+    source: tshark, editcap, mergecap, capinfos, dumpcap manual pages
+    match: [tshark]
+    subtopics:
+      - {id: net-tshark-fields, name: Field extraction with tshark -T fields, match: [tshark-fields]}
+      - {id: net-capinfos, name: Capture metadata with capinfos, match: [capinfos]}
+      - {id: net-editcap-mergecap, name: Splitting, slicing and merging captures, match: [editcap, mergecap]}
+      - {id: net-dumpcap-ring, name: Ring-buffer evidence capture with dumpcap, match: [dumpcap, ring-buffer]}
+      - {id: net-two-pass, name: Two-pass tshark analysis with read filters, match: [two-pass-analysis]}
+      - {id: net-tshark-stats, name: tshark -z statistics, match: [tshark-statistics]}
+      - {id: net-reordercap, name: Fixing and annotating captures (reordercap / pcapng comments), match: [reordercap]}
+      - {id: net-bpf, name: BPF capture filters for evidence capture, match: [bpf-capture-filter]}
+  - id: net-object-extraction
+    name: File and object extraction from traffic
+    source: Wireshark Export Objects; NetworkMiner docs; FOR572
+    match: [export-objects, file-extraction-pcap]
+    subtopics:
+      - {id: net-export-http, name: Exporting HTTP objects, match: [export-objects]}
+      - {id: net-export-smb, name: Exporting SMB transferred files, match: [smb-file-extraction]}
+      - {id: net-networkminer, name: NetworkMiner artefact extraction, match: [networkminer]}
+      - {id: net-email-protocols, name: Reconstructing SMTP, POP and IMAP email from traffic, match: [smtp-forensics]}
+      - {id: net-ftp, name: FTP and TFTP data reconstruction, match: [ftp-forensics]}
+      - {id: net-tcpflow, name: Stream carving with tcpflow, match: [tcpflow]}
+      - {id: net-zeek-files, name: Zeek file extraction and files.log, match: [zeek-file-extraction]}
+  - id: net-protocols
+    name: Core protocol forensics
+    source: FOR572 core protocols (HTTP, DNS, SMB, Kerberos, DHCP)
+    match: [protocol-forensics]
+    subtopics:
+      - {id: net-http, name: HTTP forensic analysis (methods, user agents, status codes), match: [http-forensics]}
+      - {id: net-dns, name: DNS forensic analysis, match: [dns-forensics]}
+      - {id: net-smb, name: SMB2/3 traffic analysis, match: [smb-traffic-analysis]}
+      - {id: net-kerberos-ntlm, name: Kerberos and NTLM authentication traffic, match: [kerberos-traffic]}
+      - {id: net-dhcp-arp, name: DHCP and ARP for host attribution, match: [dhcp-forensics]}
+      - {id: net-rdp-traffic, name: RDP and remote access protocols on the wire, match: [rdp-traffic]}
+      - {id: net-icmp, name: ICMP tunnelling and covert channels, match: [icmp-tunneling]}
+      - {id: net-ldap, name: LDAP / LDAPS traffic analysis, match: [ldap-traffic]}
+      - {id: net-ssh, name: SSH metadata analysis with HASSH, match: [hassh]}
+      - {id: net-dcerpc, name: DCE/RPC traffic (DRSUAPI / SVCCTL / ATSVC), match: [dcerpc-drsuapi]}
+  - id: net-tls
+    name: Encrypted traffic analysis
+    source: Wireshark TLS decryption wiki; FOR572 encryption
+    match: [tls-decryption, encrypted-traffic-analysis]
+    subtopics:
+      - {id: net-sslkeylog, name: Decrypting TLS with SSLKEYLOGFILE and RSA keys, match: [sslkeylogfile]}
+      - {id: net-ja3-ja4, name: TLS client fingerprinting with JA3 and JA4, match: [ja3, ja4]}
+      - {id: net-certificates, name: Certificate analysis and certificate transparency, match: [certificate-forensics]}
+      - {id: net-quic, name: QUIC and HTTP/3 analysis, match: [quic]}
+      - {id: net-sni, name: TLS handshake / SNI / ALPN analysis, match: [tls-client-hello]}
+      - {id: net-mitmproxy, name: Decrypting lab malware traffic with mitmproxy, match: [mitmproxy-lab-decryption]}
+      - {id: net-rsa-key, name: RSA private key decryption and its limits, match: [rsa-key-decryption]}
+      - {id: net-doh, name: DNS-over-HTTPS / DoT detection, match: [dns-over-https]}
+  - id: net-c2
+    name: Command and control and exfiltration detection
+    source: FOR572 C2 and exfil; RITA docs
+    match: [c2-beaconing, beaconing]
+    subtopics:
+      - {id: net-beacon-stats, name: Statistical beacon detection (interval, jitter), match: [beacon-interval-analysis]}
+      - {id: net-dns-tunnel, name: DNS tunneling detection, match: [dns-tunneling]}
+      - {id: net-rita, name: Beacon hunting with RITA, match: [rita]}
+      - {id: net-exfil-volume, name: Exfiltration detection by volume and asymmetry, match: [exfiltration]}
+      - {id: net-c2-frameworks, name: Recognising common C2 framework traffic (Cobalt Strike, Sliver), match: [cobalt-strike]}
+      - {id: net-domain-fronting, name: Domain fronting and CDN-hosted C2, match: [domain-fronting-detection]}
+      - {id: net-dga, name: Domain generation algorithm detection, match: [dga]}
+      - {id: net-c2-saas, name: C2 over legitimate services (Telegram / Discord / cloud storage), match: [c2-over-legitimate-services]}
+      - {id: net-jarm, name: Active C2 server fingerprinting with JARM, match: [jarm]}
+  - id: net-flow-zeek
+    name: Flow and network security monitoring data
+    source: FOR572 NetFlow and Zeek; Zeek docs; Suricata docs; Arkime docs
+    match: [network-security-monitoring, zeek]
+    subtopics:
+      - {id: net-zeek-logs, name: Zeek log analysis (conn, dns, http, ssl, files), match: [conn-log]}
+      - {id: net-netflow, name: NetFlow / IPFIX analysis with nfdump, match: [netflow, nfdump]}
+      - {id: net-suricata, name: Suricata alert and EVE JSON analysis, match: [suricata]}
+      - {id: net-arkime, name: Full packet capture search with Arkime, match: [arkime]}
+      - {id: net-pcap-from-logs, name: Proxy, firewall and VPN logs as network evidence, match: [proxy-logs, firewall-logs]}
+      - {id: net-zeek-scripts, name: Writing Zeek scripts for investigations, match: [zeek-scripts]}
+      - {id: net-zeek-cut, name: Querying Zeek logs with zeek-cut, match: [zeek-cut]}
+      - {id: net-zeek-intel, name: Zeek intel framework, match: [zeek-intel-framework]}
+      - {id: net-silk, name: Flow analysis with SiLK, match: [silk]}
+      - {id: net-community-id, name: Pivoting across tools with Community ID, match: [community-id]}
+  # ===== Malware analysis (FOR610 / GREM)
+  - id: mal-lab
+    name: Malware analysis lab setup
+    source: FOR610 lab setup; REMnux and FLARE-VM docs
+    match: [malware-lab]
+    subtopics:
+      - {id: mal-lab-vms, name: Building REMnux and FLARE-VM analysis VMs, match: [remnux, flare-vm]}
+      - {id: mal-lab-network-sim, name: Network simulation with INetSim and FakeNet-NG, match: [inetsim, fakenet-ng]}
+      - {id: mal-lab-safe-handling, name: Safe sample handling, storage and transfer, match: [sample-handling]}
+      - {id: mal-lab-anti-vm, name: Hardening the lab against VM detection, match: [anti-vm]}
+      - {id: mal-lab-snapshots, name: Snapshot and revert workflow, match: [vm-snapshot-workflow]}
+      - {id: mal-lab-isolation, name: Isolating lab networking, match: [lab-network-isolation]}
+      - {id: mal-lab-sourcing, name: Sourcing samples (MalwareBazaar / VirusTotal / incident), match: [malwarebazaar]}
+      - {id: mal-lab-windows-sandbox, name: Quick detonation in Windows Sandbox, match: [windows-sandbox]}
+  - id: mal-static
+    name: Static properties analysis
+    source: FOR610 static properties; GREM objectives
+    match: [static-analysis, malware-triage]
+    subtopics:
+      - {id: mal-pe-structure, name: PE header, sections and imports analysis, match: [pe-file, pe-header]}
+      - {id: mal-strings-floss, name: String extraction with strings and FLOSS, match: [floss]}
+      - {id: mal-capa, name: Capability detection with capa, match: [capa]}
+      - {id: mal-packer-detect, name: Packer and compiler detection (DIE, entropy), match: [detect-it-easy, entropy]}
+      - {id: mal-imphash, name: Imphash, rich header and similarity pivots, match: [imphash, rich-header]}
+      - {id: mal-pe-resources, name: Extracting PE resources, match: [pe-resources]}
+      - {id: mal-authenticode, name: Authenticode signature validation, match: [authenticode]}
+      - {id: mal-virustotal, name: VirusTotal lookups and OPSEC, match: [virustotal-opsec]}
+      - {id: mal-overlay, name: PE overlay analysis, match: [pe-overlay]}
+  - id: mal-dynamic
+    name: Behavioural (dynamic) analysis
+    source: FOR610 behavioural analysis; CAPE sandbox docs
+    match: [dynamic-analysis]
+    subtopics:
+      - {id: mal-procmon, name: Process Monitor capture and filtering, match: [procmon]}
+      - {id: mal-regshot, name: System change diffing with Regshot, match: [regshot]}
+      - {id: mal-sandbox, name: Automated sandbox analysis (CAPE, ANY.RUN, Joe), match: [sandbox, cape-sandbox]}
+      - {id: mal-api-monitor, name: API call monitoring and tracing, match: [api-monitoring]}
+      - {id: mal-network-behaviour, name: Capturing malware network behaviour, match: [malware-network-behaviour]}
+      - {id: mal-system-informer, name: Process inspection with System Informer, match: [system-informer]}
+      - {id: mal-noriben, name: Noriben-driven Procmon collection, match: [noriben]}
+      - {id: mal-frida, name: Dynamic instrumentation with Frida, match: [frida]}
+      - {id: mal-interactive-sandbox, name: Interactive sandboxes (ANY.RUN / Triage), match: [interactive-sandbox]}
+  - id: mal-code-analysis
+    name: Code reversing
+    source: FOR610 code analysis; Ghidra and x64dbg docs
+    match: [reverse-engineering, disassembly]
+    subtopics:
+      - {id: mal-ghidra, name: Static reversing with Ghidra, match: [ghidra]}
+      - {id: mal-x64dbg, name: Debugging malware with x64dbg, match: [x64dbg]}
+      - {id: mal-unpacking, name: Unpacking packed samples, match: [unpacking]}
+      - {id: mal-anti-analysis, name: Defeating anti-debugging and anti-analysis, match: [anti-debugging]}
+      - {id: mal-config-extraction, name: Extracting malware configurations, match: [config-extraction]}
+      - {id: mal-string-deobfuscation, name: Decoding obfuscated strings and API hashing, match: [api-hashing, string-decryption]}
+      - {id: mal-ida, name: Disassembly with IDA, match: [ida-pro]}
+      - {id: mal-constructs, name: Recognising x86 / x64 code constructs, match: [assembly-constructs]}
+      - {id: mal-ghidra-scripting, name: Ghidra scripting for analysis automation, match: [ghidra-scripting]}
+      - {id: mal-bindiff, name: Binary diffing with BinDiff, match: [bindiff]}
+  - id: mal-documents-scripts
+    name: Malicious documents and scripts
+    source: FOR610 malicious documents; oletools and pdfid docs
+    match: [maldoc, malicious-document]
+    subtopics:
+      - {id: mal-office-vba, name: Office VBA macro analysis with oletools, match: [olevba, vba-macro]}
+      - {id: mal-pdf, name: PDF malware analysis, match: [pdf-malware]}
+      - {id: mal-powershell, name: PowerShell deobfuscation, match: [powershell-deobfuscation]}
+      - {id: mal-javascript, name: JavaScript and HTA deobfuscation, match: [javascript-deobfuscation]}
+      - {id: mal-lnk-iso, name: LNK, ISO and container-file delivery analysis, match: [lnk-malware, iso-delivery]}
+      - {id: mal-onenote, name: OneNote and HTML smuggling lures, match: [html-smuggling]}
+      - {id: mal-rtf, name: RTF exploit documents, match: [rtf-malware]}
+      - {id: mal-xlm, name: Excel 4.0 (XLM) macros, match: [xlm-macros]}
+      - {id: mal-hta, name: HTA / VBScript / JScript droppers, match: [hta-malware]}
+      - {id: mal-template-injection, name: Remote template injection in OOXML, match: [template-injection]}
+  - id: mal-dotnet-other
+    name: Managed code and non-Windows malware
+    source: FOR610 .NET analysis; GREM objectives
+    match: [dotnet-malware, managed-code-malware]
+    subtopics:
+      - {id: mal-dnspy, name: .NET decompilation with dnSpy/ILSpy and de4dot, match: [dnspy, de4dot]}
+      - {id: mal-elf, name: Linux ELF malware analysis, match: [elf-malware]}
+      - {id: mal-python-compiled, name: PyInstaller and compiled script malware, match: [pyinstaller]}
+      - {id: mal-macho, name: macOS Mach-O malware triage, match: [macho-malware]}
+      - {id: mal-jar, name: Java JAR malware, match: [jar-malware]}
+      - {id: mal-apk, name: Android APK malware triage, match: [apk-analysis]}
+      - {id: mal-golang, name: Go and Rust malware binaries, match: [golang-malware]}
+      - {id: mal-shell-script, name: Linux shell script droppers and cryptominers, match: [shell-script-malware]}
+  - id: mal-yara
+    name: YARA rule development
+    source: YARA documentation (writing rules, modules); FOR610
+    match: [yara]
+    subtopics:
+      - {id: mal-yara-writing, name: Writing YARA rules (strings, conditions, modifiers), match: [yara-rule-writing]}
+      - {id: mal-yara-pe-module, name: Using YARA modules (pe, math, hash), match: [yara-pe-module]}
+      - {id: mal-yara-testing, name: Testing and tuning YARA rules against goodware, match: [yara-testing]}
+      - {id: mal-yara-hunting, name: Retro-hunting with YARA across endpoints and repositories, match: [yara-hunting]}
+      - {id: mal-yara-x, name: Migrating to and using YARA-X, match: [yara-x]}
+      - {id: mal-yara-perf, name: YARA rule performance (atoms / slow rules), match: [yara-atom-optimization]}
+      - {id: mal-yargen, name: Generating rule candidates with yarGen, match: [yargen]}
+      - {id: mal-yara-forge, name: Curated rule sets (YARA Forge / signature-base), match: [yara-forge]}
+  - id: mal-reporting
+    name: Malware analysis reporting
+    source: FOR610 reporting; MITRE ATT&CK and MBC
+    match: [malware-report]
+    subtopics:
+      - {id: mal-ioc-extraction, name: Extracting host and network IOCs, match: [ioc-extraction]}
+      - {id: mal-mbc-mapping, name: Mapping behaviour to ATT&CK and MBC, match: [malware-behavior-catalog]}
+      - {id: mal-family-attribution, name: Family classification and attribution caveats, match: [malware-family-classification]}
+      - {id: mal-report-writing, name: Writing the malware analysis report, match: [malware-report-writing]}
+      - {id: mal-detection-content, name: Turning analysis into detection content, match: [detection-content]}
+      - {id: mal-suricata-rules, name: Writing network signatures for malware traffic, match: [suricata-rules]}
+      - {id: mal-exec-summary, name: Malware executive summary for non-technical readers, match: [malware-executive-summary]}
+      - {id: mal-defang, name: Defanging and formatting IOCs for sharing, match: [defang]}
+  # ===== Logs and hunting (FOR508 hunting; FOR532/FOR509; Velociraptor docs)
+  - id: log-windows-events
+    name: Windows event log analysis
+    source: FOR500/FOR508 event logs; JPCERT event log research; Microsoft audit policy docs
+    match: [windows-event-logs, evtx]
+    subtopics:
+      - {id: log-logon-events, name: Logon events and logon types (4624, 4625, 4634, 4672), match: [4624, logon-types]}
+      - {id: log-process-creation, name: Process creation auditing (4688), match: [4688]}
+      - {id: log-account-mgmt, name: Account and group management events, match: [4720, account-management-events]}
+      - {id: log-service-task, name: Service and scheduled task events (7045, 4698), match: [7045, 4698]}
+      - {id: log-powershell, name: PowerShell logging (4103, 4104, transcription), match: [4104, powershell-logging]}
+      - {id: log-audit-policy, name: Configuring advanced audit policy for forensics, match: [audit-policy]}
+      - {id: log-evtx-tools, name: Fast EVTX triage with Chainsaw, Hayabusa and EvtxECmd, match: [chainsaw, hayabusa]}
+      - {id: log-kerberos-events, name: Kerberos events 4768 / 4769 / 4771, match: [4769]}
+      - {id: log-ntlm-events, name: NTLM credential validation 4776, match: [4776]}
+      - {id: log-evtxecmd, name: Parsing EVTX at scale with EvtxECmd maps, match: [evtxecmd]}
+  - id: log-sysmon
+    name: Sysmon telemetry
+    source: Sysmon documentation (event IDs, configuration schema)
+    match: [sysmon]
+    subtopics:
+      - {id: log-sysmon-config, name: Deploying and tuning a Sysmon configuration, match: [sysmon-config]}
+      - {id: log-sysmon-process, name: Process and image load events (1, 7, 10), match: [sysmon-process-events]}
+      - {id: log-sysmon-network-dns, name: Network and DNS events (3, 22), match: [sysmon-network-events]}
+      - {id: log-sysmon-file-registry, name: File and registry events (11, 12-14, 23, 26), match: [sysmon-file-events]}
+      - {id: log-sysmon-wmi, name: Sysmon WMI events 19-21, match: [sysmon-wmi-events]}
+      - {id: log-sysmon-processaccess, name: Sysmon ProcessAccess event 10, match: [sysmon-process-access]}
+      - {id: log-sysmon-linux, name: Sysmon for Linux, match: [sysmon-for-linux]}
+      - {id: log-sysmon-filedelete, name: Sysmon FileDelete archiving (23 / 26), match: [sysmon-filedelete]}
+  - id: log-linux
+    name: Linux log analysis
+    source: FOR577 outline; auditd and journald man pages
+    match: [linux-logs, syslog]
+    subtopics:
+      - {id: log-auth-log, name: auth.log and secure SSH authentication analysis, match: [authentication-log, ssh-forensics]}
+      - {id: log-auditd, name: auditd rules and ausearch/aureport, match: [auditd, ausearch]}
+      - {id: log-journald, name: systemd journal analysis with journalctl, match: [journald]}
+      - {id: log-wtmp, name: wtmp, btmp and lastlog login records, match: [wtmp, lastlog]}
+      - {id: log-sudo, name: sudo log analysis, match: [sudo-logs]}
+      - {id: log-cron, name: cron and systemd timer execution logs, match: [cron-logs]}
+      - {id: log-rsyslog, name: Central Linux log collection with rsyslog, match: [rsyslog]}
+      - {id: log-pkg, name: Package manager logs (apt / dnf / yum history), match: [package-manager-logs]}
+  - id: log-cloud
+    name: Cloud and identity log analysis
+    source: FOR509 Enterprise Cloud Forensics outline; AWS/Azure/GCP/Okta log docs
+    match: [cloud-logs, saas-forensics]
+    subtopics:
+      - {id: log-cloudtrail, name: AWS CloudTrail investigation, match: [cloudtrail, aws-cloudtrail]}
+      - {id: log-entra-signin, name: Entra ID sign-in and audit logs, match: [sign-in-logs]}
+      - {id: log-m365-ual, name: Microsoft 365 Unified Audit Log, match: [unified-audit-log]}
+      - {id: log-gcp-audit, name: Google Cloud audit logs, match: [gcp-audit-logs]}
+      - {id: log-okta, name: Okta system log investigation, match: [okta-system-log]}
+      - {id: log-google-workspace, name: Google Workspace audit logs, match: [google-workspace-audit]}
+      - {id: log-azure-activity, name: Azure Activity Log investigation, match: [azure-activity-log]}
+      - {id: log-vpc-flow, name: VPC flow log analysis, match: [vpc-flow-logs]}
+      - {id: log-s3-data-events, name: S3 data events and server access logs, match: [s3-data-events]}
+      - {id: log-entra-audit, name: Entra ID audit log investigation, match: [entra-audit-logs]}
+  - id: log-web-app
+    name: Web server and application log analysis
+    source: SP 800-86 7; OWASP logging cheat sheet; FOR508 web compromise
+    match: [web-server-logs]
+    subtopics:
+      - {id: log-iis-apache, name: IIS, Apache and Nginx access log analysis, match: [iis-logs, apache-logs]}
+      - {id: log-web-attack-patterns, name: Recognising web attack patterns in logs (SQLi, LFI, scanners), match: [web-attack-detection]}
+      - {id: log-waf-lb, name: WAF and load balancer logs, match: [waf-logs]}
+      - {id: log-tomcat, name: Java application server logs (Tomcat / log4j exploitation), match: [tomcat-logs]}
+      - {id: log-exchange, name: Exchange IIS / OWA / ECP log investigation, match: [exchange-logs]}
+      - {id: log-db-audit, name: Database audit logs, match: [database-audit-logs]}
+      - {id: log-vpn, name: VPN and edge appliance logs, match: [vpn-logs]}
+      - {id: log-xff, name: Client attribution through X-Forwarded-For and proxies, match: [xff-attribution]}
+  - id: log-siem-query
+    name: SIEM search and correlation
+    source: Splunk SPL reference; Microsoft KQL reference; Elastic EQL/ES|QL docs
+    match: [siem, log-correlation]
+    subtopics:
+      - {id: log-spl, name: Investigative searches in Splunk SPL, match: [splunk-spl]}
+      - {id: log-kql, name: Investigative queries in KQL (Sentinel, Defender), match: [kql]}
+      - {id: log-eql, name: Sequence queries in Elastic EQL, match: [elastic-eql]}
+      - {id: log-normalization, name: Log normalisation and timestamp alignment across sources, match: [log-normalization]}
+      - {id: log-sentinel-rules, name: Microsoft Sentinel analytics rules, match: [sentinel-analytics-rules]}
+      - {id: log-esql, name: Elastic ES/QL hunting queries, match: [esql]}
+      - {id: log-lookups, name: SIEM lookups and watchlists for enrichment, match: [siem-lookups]}
+      - {id: log-query-perf, name: SIEM query performance optimisation, match: [query-optimization]}
+  - id: log-detection-engineering
+    name: Detection engineering
+    source: Sigma specification; Palantir ADS framework; MITRE ATT&CK
+    match: [detection-engineering, sigma]
+    subtopics:
+      - {id: log-sigma-writing, name: Writing Sigma rules, match: [sigma-rules]}
+      - {id: log-sigma-convert, name: Converting Sigma with pySigma backends, match: [pysigma]}
+      - {id: log-detection-testing, name: Testing detections with Atomic Red Team, match: [atomic-red-team]}
+      - {id: log-detection-gaps, name: Detection gap analysis against ATT&CK, match: [detection-gaps]}
+      - {id: log-ads, name: Documenting detections with the ADS framework, match: [ads-framework]}
+      - {id: log-detection-as-code, name: Detection-as-code pipelines, match: [detection-ci-pipeline]}
+      - {id: log-tuning, name: Detection false-positive tuning, match: [detection-tuning]}
+      - {id: log-navigator, name: ATT&CK Navigator coverage mapping, match: [attack-navigator]}
+  - id: log-threat-hunting
+    name: Threat hunting methodology
+    source: FOR508 hunting; PEAK and TaHiTI hunting frameworks; Sqrrl hunting maturity model
+    match: [threat-hunting]
+    subtopics:
+      - {id: log-hunt-hypothesis, name: Hypothesis-driven hunting, match: [hypothesis-driven-hunting]}
+      - {id: log-hunt-stacking, name: Stacking and long-tail analysis, match: [stacking, long-tail-analysis]}
+      - {id: log-hunt-baseline, name: Baselining normal to find anomalies, match: [baselining]}
+      - {id: log-hunt-peak, name: Running hunts with the PEAK framework, match: [peak-framework]}
+      - {id: log-hunt-lolbins, name: Hunting living-off-the-land binary abuse, match: [lolbins, living-off-the-land]}
+      - {id: log-hunt-intel, name: Intelligence-driven hunts, match: [intel-driven-hunting]}
+      - {id: log-hunt-report, name: Documenting hunts and outcomes, match: [hunt-report]}
+      - {id: log-hunt-maturity, name: Hunting maturity model assessment, match: [hunting-maturity-model]}
+      - {id: log-hunt-tahiti, name: TaHiTI hunting process, match: [tahiti]}
+  - id: log-velociraptor
+    name: Enterprise hunting with Velociraptor
+    source: Velociraptor documentation (VQL, artifacts, hunts, notebooks, server deployment)
+    match: [velociraptor]
+    subtopics:
+      - {id: vr-deploy, name: Deploying Velociraptor server and clients, match: [velociraptor-deployment]}
+      - {id: vr-vql, name: Writing VQL queries, match: [vql]}
+      - {id: vr-hunts, name: Running hunts across the fleet, match: [velociraptor-hunts]}
+      - {id: vr-custom-artifacts, name: Writing custom Velociraptor artifacts, match: [velociraptor-artifacts]}
+      - {id: vr-notebooks, name: Post-processing in Velociraptor notebooks, match: [velociraptor-notebooks]}
+      - {id: vr-event-monitoring, name: Client event monitoring artifacts, match: [velociraptor-event-monitoring]}
+      - {id: vr-quarantine, name: Quarantine and remediation from Velociraptor, match: [velociraptor-quarantine]}
+      - {id: vr-server-artifacts, name: Server artifacts and automation, match: [velociraptor-server-artifacts]}
+      - {id: vr-api, name: Velociraptor API and pyvelociraptor, match: [velociraptor-api]}
+      - {id: vr-kapefiles, name: Triage with Windows.KapeFiles.Targets, match: [kapefiles-targets]}
+  - id: log-edr
+    name: EDR telemetry investigation
+    source: FOR508 enterprise IR; vendor EDR advanced hunting docs; osquery docs
+    match: [edr]
+    subtopics:
+      - {id: edr-process-tree, name: Process tree investigation in EDR, match: [edr-process-tree]}
+      - {id: edr-advanced-hunting, name: Defender advanced hunting tables, match: [advanced-hunting]}
+      - {id: edr-osquery, name: Fleet queries with osquery, match: [osquery]}
+      - {id: edr-response-actions, name: EDR live response and remediation actions, match: [edr-live-response]}
+      - {id: edr-mde-timeline, name: Defender for Endpoint device timeline investigation, match: [mde-timeline]}
+      - {id: edr-falcon, name: CrowdStrike Falcon investigation, match: [crowdstrike-falcon]}
+      - {id: edr-sentinelone, name: SentinelOne Deep Visibility investigation, match: [sentinelone-deep-visibility]}
+      - {id: edr-tampering, name: Detecting EDR tampering and blinding, match: [edr-tampering]}

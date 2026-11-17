@@ -1,0 +1,352 @@
+# Canonical coverage spec: Elixir language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: elixir-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [elixir]
+sources:
+  - "Elixir documentation (hexdocs.pm/elixir) - Getting Started guides, Kernel, Enum, Stream, String, Map, Process, Task, Agent, Typespecs, Writing Documentation, Naming Conventions, Library and Code/Design/Process anti-patterns guides"
+  - "Erlang/OTP documentation (erlang.org/doc) - GenServer, Supervisor, ETS, Telemetry, kernel and stdlib applications"
+  - "Mix and Hex documentation (hexdocs.pm/mix, hex.pm/docs), ExUnit, Ecto and Phoenix documentation"
+  - "Credo and mix format documentation and the Elixir community style guide"
+topics:
+  - id: elixir-basic-types
+    name: "Basic types and literals"
+    source: "Elixir Getting Started - Basic types"
+    match: [elixir-basic-types]
+    subtopics:
+      - {id: elixir-basic-types-numbers-atoms, name: "Integers, floats and atoms", match: [numbers-atoms]}
+      - {id: elixir-basic-types-strings-binaries, name: "Strings, binaries and charlists", match: [strings-binaries]}
+      - {id: elixir-basic-types-collection-literals, name: "Tuples, lists and keyword lists", match: [collection-literals]}
+  - id: elixir-pattern-matching
+    name: "Pattern matching"
+    source: "Elixir Getting Started - Pattern matching"
+    match: [elixir-pattern-matching]
+    subtopics:
+      - {id: elixir-pattern-matching-match-operator-pin, name: "The match operator, pin and underscores", match: [match-operator-pin]}
+      - {id: elixir-pattern-matching-guards-clauses, name: "Guards and multi-clause matching", match: [guards-clauses]}
+  - id: elixir-control-flow
+    name: "Control flow"
+    source: "Elixir Getting Started - case, cond, and if"
+    match: [elixir-control-flow]
+    subtopics:
+      - {id: elixir-control-flow-case-cond-if, name: "case, cond, if and unless", match: [case-cond-if]}
+      - {id: elixir-control-flow-with-expression, name: "The with special form", match: [with-expression]}
+  - id: elixir-functions
+    name: "Functions"
+    source: "Elixir Getting Started - Anonymous functions, Modules and functions"
+    match: [elixir-functions]
+    subtopics:
+      - {id: elixir-functions-anonymous-functions, name: "Anonymous functions and the capture operator", match: [anonymous-functions]}
+      - {id: elixir-functions-named-functions, name: "Named functions, defaults and private functions", match: [named-functions]}
+      - {id: elixir-functions-recursion-tail, name: "Recursion and tail calls", match: [recursion-tail]}
+  - id: elixir-modules
+    name: "Modules and directives"
+    source: "Elixir Getting Started - Modules, alias, require, import, use"
+    match: [elixir-modules]
+    subtopics:
+      - {id: elixir-modules-alias-import-require, name: "alias, import, require and use", match: [alias-import-require]}
+      - {id: elixir-modules-module-attributes, name: "Module attributes and compile-time values", match: [module-attributes]}
+      - {id: elixir-modules-structs, name: "Structs", match: [structs]}
+  - id: elixir-protocols-behaviours
+    name: "Protocols and behaviours"
+    source: "Elixir Getting Started - Protocols, behaviours"
+    match: [elixir-protocols-behaviours]
+    subtopics:
+      - {id: elixir-protocols-behaviours-protocols-defimpl, name: "Protocols and implementations", match: [protocols-defimpl]}
+      - {id: elixir-protocols-behaviours-behaviours-callbacks, name: "Behaviours and callbacks", match: [behaviours-callbacks]}
+  - id: elixir-metaprogramming
+    name: "Macros and metaprogramming"
+    source: "Elixir Getting Started - Meta-programming, Kernel.SpecialForms"
+    match: [elixir-metaprogramming]
+    subtopics:
+      - {id: elixir-metaprogramming-quote-macros, name: "quote, unquote and macros", match: [quote-macros]}
+      - {id: elixir-metaprogramming-sigils, name: "Sigils and custom sigils", match: [sigils]}
+  - id: elixir-enum-stream
+    name: "Enum, comprehensions and Stream"
+    source: "Elixir Enum, Stream and Kernel.SpecialForms for"
+    match: [elixir-enum-stream]
+    subtopics:
+      - {id: elixir-enum-stream-enum-essentials, name: "Enum functions: map, filter, reduce, group_by", match: [enum-essentials]}
+      - {id: elixir-enum-stream-comprehensions, name: "for comprehensions", match: [comprehensions]}
+      - {id: elixir-enum-stream-stream-lazy, name: "Stream and lazy evaluation", match: [stream-lazy]}
+  - id: elixir-collections
+    name: "Maps and nested data"
+    source: "Elixir Map, MapSet, Access, Keyword"
+    match: [elixir-collections]
+    subtopics:
+      - {id: elixir-collections-map-api, name: "Map and MapSet", match: [map-api]}
+      - {id: elixir-collections-nested-access, name: "Nested access: get_in, put_in, update_in", match: [nested-access]}
+  - id: elixir-strings-text
+    name: "Strings and regular expressions"
+    source: "String and Regex modules"
+    match: [elixir-strings-text]
+    subtopics:
+      - {id: elixir-strings-text-string-module, name: "String module: split, replace, trim, normalize", match: [string-module]}
+      - {id: elixir-strings-text-regex-usage, name: "Regex: run, scan, named captures", match: [regex-usage]}
+  - id: elixir-datetime
+    name: "Dates, times and calendars"
+    source: "Elixir Calendar, Date, Time, DateTime"
+    match: [elixir-datetime]
+    subtopics:
+      - {id: elixir-datetime-date-time-types, name: "Date, Time, NaiveDateTime and DateTime", match: [date-time-types]}
+      - {id: elixir-datetime-time-zones, name: "Time zones with tzdata or tz", match: [time-zones]}
+  - id: elixir-typespecs
+    name: "Typespecs and static analysis"
+    source: "Elixir Typespecs reference, Dialyxir"
+    match: [elixir-typespecs]
+    subtopics:
+      - {id: elixir-typespecs-spec-type, name: "@type, @spec and @typep", match: [spec-type]}
+      - {id: elixir-typespecs-dialyzer, name: "Dialyzer with dialyxir", match: [dialyzer]}
+  - id: elixir-docs
+    name: "Documentation"
+    source: "Elixir Writing Documentation guide, ExDoc"
+    match: [elixir-docs]
+    subtopics:
+      - {id: elixir-docs-moduledoc-doctest, name: "@moduledoc, @doc and doctests", match: [moduledoc-doctest]}
+      - {id: elixir-docs-exdoc, name: "Generating docs with ExDoc", match: [exdoc]}
+  - id: elixir-naming-style
+    name: "Naming conventions and formatting"
+    source: "Elixir Naming Conventions, mix format, community style guide"
+    match: [elixir-naming-style]
+    subtopics:
+      - {id: elixir-naming-style-naming-conventions, name: "Naming conventions", match: [naming-conventions]}
+      - {id: elixir-naming-style-formatter, name: "mix format and .formatter.exs", match: [formatter]}
+  - id: elixir-anti-patterns
+    name: "Anti-patterns"
+    source: "Elixir Library Guidelines and Code, Design, Process, Meta-programming anti-patterns guides"
+    match: [elixir-anti-patterns]
+    subtopics:
+      - {id: elixir-anti-patterns-code-anti-patterns, name: "Code-related anti-patterns", match: [code-anti-patterns]}
+      - {id: elixir-anti-patterns-design-anti-patterns, name: "Design-related anti-patterns", match: [design-anti-patterns]}
+      - {id: elixir-anti-patterns-process-anti-patterns, name: "Process-related anti-patterns", match: [process-anti-patterns]}
+  - id: elixir-errors
+    name: "Error handling"
+    source: "Elixir try/catch/rescue, exceptions, tagged tuples"
+    match: [elixir-errors]
+    subtopics:
+      - {id: elixir-errors-tagged-tuples, name: "Tagged tuples and {:ok, _}/{:error, _}", match: [tagged-tuples]}
+      - {id: elixir-errors-raise-rescue, name: "raise, try/rescue/catch/after", match: [raise-rescue]}
+      - {id: elixir-errors-defexception, name: "Custom exceptions with defexception", match: [defexception]}
+  - id: elixir-processes
+    name: "Processes"
+    source: "Elixir Process module, spawn, send and receive"
+    match: [elixir-processes]
+    subtopics:
+      - {id: elixir-processes-spawn-send-receive, name: "spawn, send and receive", match: [spawn-send-receive]}
+      - {id: elixir-processes-links-monitors, name: "Links, monitors and trapping exits", match: [links-monitors]}
+  - id: elixir-task
+    name: "Tasks"
+    source: "Elixir Task and Task.Supervisor"
+    match: [elixir-task]
+    subtopics:
+      - {id: elixir-task-task-async, name: "Task.async, await and async_stream", match: [task-async]}
+      - {id: elixir-task-task-supervisor, name: "Task.Supervisor for fire-and-forget and isolated work", match: [task-supervisor]}
+  - id: elixir-agent
+    name: "Agent"
+    source: "Elixir Agent"
+    match: [elixir-agent]
+    subtopics:
+      - {id: elixir-agent-agent-state, name: "Agent for simple shared state", match: [agent-state]}
+  - id: elixir-genserver
+    name: "GenServer"
+    source: "Elixir GenServer, Erlang gen_server"
+    match: [elixir-genserver]
+    subtopics:
+      - {id: elixir-genserver-genserver-callbacks, name: "GenServer callbacks: init, call, cast, info", match: [genserver-callbacks]}
+      - {id: elixir-genserver-genserver-timeouts, name: "GenServer timeouts, continue and calling pitfalls", match: [genserver-timeouts]}
+      - {id: elixir-genserver-genserver-naming, name: "Naming and registering GenServers", match: [genserver-naming]}
+  - id: elixir-supervision
+    name: "Supervision trees"
+    source: "Elixir Supervisor, DynamicSupervisor, Application"
+    match: [elixir-supervision]
+    subtopics:
+      - {id: elixir-supervision-supervisor-strategies, name: "Supervisor strategies and child specs", match: [supervisor-strategies]}
+      - {id: elixir-supervision-dynamic-supervisor, name: "DynamicSupervisor and PartitionSupervisor", match: [dynamic-supervisor]}
+      - {id: elixir-supervision-application-callback, name: "Application module and the supervision tree root", match: [application-callback]}
+  - id: elixir-registry
+    name: "Registry and process lookup"
+    source: "Elixir Registry"
+    match: [elixir-registry]
+    subtopics:
+      - {id: elixir-registry-registry-usage, name: "Registry: unique and duplicate keys", match: [registry-usage]}
+  - id: elixir-ets
+    name: "ETS and in-memory storage"
+    source: "Erlang/OTP ETS, persistent_term, Elixir :ets usage"
+    match: [elixir-ets]
+    subtopics:
+      - {id: elixir-ets-ets-tables, name: "ETS tables: types, access and ownership", match: [ets-tables]}
+      - {id: elixir-ets-ets-alternatives, name: "persistent_term, DETS and Mnesia choices", match: [ets-alternatives]}
+  - id: elixir-distribution
+    name: "Distribution and clustering"
+    source: "Erlang distribution protocol, Node, :erpc, :pg"
+    match: [elixir-distribution]
+    subtopics:
+      - {id: elixir-distribution-distributed-nodes, name: "Nodes, cookies and connecting", match: [distributed-nodes]}
+      - {id: elixir-distribution-clustering-libs, name: "Clustering with libcluster and :pg", match: [clustering-libs]}
+  - id: elixir-config
+    name: "Configuration"
+    source: "Elixir Config module, Application env, runtime.exs"
+    match: [elixir-config]
+    subtopics:
+      - {id: elixir-config-runtime-config, name: "config.exs, runtime.exs and Application.get_env", match: [runtime-config]}
+  - id: elixir-mix-build
+    name: "Mix build tool"
+    source: "Mix documentation - mix.exs, tasks, aliases"
+    match: [elixir-mix-build]
+    subtopics:
+      - {id: elixir-mix-build-mix-project, name: "mix new, mix.exs and compilation", match: [mix-project]}
+      - {id: elixir-mix-build-mix-tasks, name: "Custom Mix tasks and aliases", match: [mix-tasks]}
+  - id: elixir-deps-hex
+    name: "Dependencies and Hex"
+    source: "Hex documentation, Mix.Tasks.Deps"
+    match: [elixir-deps-hex]
+    subtopics:
+      - {id: elixir-deps-hex-hex-deps, name: "Declaring dependencies and version requirements", match: [hex-deps]}
+      - {id: elixir-deps-hex-hex-publish, name: "Publishing a package to Hex", match: [hex-publish]}
+  - id: elixir-umbrella
+    name: "Umbrella and multi-app projects"
+    source: "Elixir umbrella projects, in_umbrella"
+    match: [elixir-umbrella]
+    subtopics:
+      - {id: elixir-umbrella-umbrella-apps, name: "Umbrella projects", match: [umbrella-apps]}
+  - id: elixir-testing
+    name: "Testing with ExUnit"
+    source: "ExUnit documentation, Mox, StreamData"
+    match: [elixir-testing]
+    subtopics:
+      - {id: elixir-testing-exunit-basics, name: "ExUnit tests, assertions and describe", match: [exunit-basics]}
+      - {id: elixir-testing-exunit-setup-tags, name: "setup, tags, async and context", match: [exunit-setup-tags]}
+      - {id: elixir-testing-mocks-mox, name: "Mocking with Mox and behaviours", match: [mocks-mox]}
+      - {id: elixir-testing-property-testing, name: "Property-based testing with StreamData", match: [property-testing]}
+  - id: elixir-releases
+    name: "Releases and deployment"
+    source: "Mix.Tasks.Release, Phoenix deployment guides"
+    match: [elixir-releases]
+    subtopics:
+      - {id: elixir-releases-mix-release, name: "Building releases with mix release", match: [mix-release]}
+      - {id: elixir-releases-docker-deploy, name: "Docker images for Elixir releases", match: [docker-deploy]}
+  - id: elixir-ecto
+    name: "Ecto"
+    source: "Ecto documentation - Schema, Changeset, Query, Repo, Multi, Migration"
+    match: [elixir-ecto]
+    subtopics:
+      - {id: elixir-ecto-ecto-schema-changeset, name: "Schemas and changesets", match: [ecto-schema-changeset]}
+      - {id: elixir-ecto-ecto-queries, name: "Ecto.Query: where, join, preload, select", match: [ecto-queries]}
+      - {id: elixir-ecto-ecto-migrations, name: "Migrations and schema changes", match: [ecto-migrations]}
+      - {id: elixir-ecto-ecto-multi-transactions, name: "Ecto.Multi and transactions", match: [ecto-multi-transactions]}
+      - {id: elixir-ecto-ecto-repo-config, name: "Repo configuration, pooling and sandbox testing", match: [ecto-repo-config]}
+  - id: elixir-phoenix
+    name: "Phoenix framework"
+    source: "Phoenix documentation - Routing, Controllers, LiveView, Channels, Contexts, Testing"
+    match: [elixir-phoenix]
+    subtopics:
+      - {id: elixir-phoenix-phoenix-router-plugs, name: "Router, pipelines and plugs", match: [phoenix-router-plugs]}
+      - {id: elixir-phoenix-phoenix-controllers-contexts, name: "Controllers, contexts and templates", match: [phoenix-controllers-contexts]}
+      - {id: elixir-phoenix-phoenix-liveview, name: "LiveView lifecycle and events", match: [phoenix-liveview]}
+      - {id: elixir-phoenix-phoenix-channels-pubsub, name: "Channels and PubSub", match: [phoenix-channels-pubsub]}
+      - {id: elixir-phoenix-phoenix-testing, name: "Testing Phoenix controllers and LiveViews", match: [phoenix-testing]}
+  - id: elixir-credo
+    name: "Credo and static checks"
+    source: "Credo documentation"
+    match: [elixir-credo]
+    subtopics:
+      - {id: elixir-credo-credo-config, name: "Credo setup, strict mode and .credo.exs", match: [credo-config]}
+      - {id: elixir-credo-custom-credo-check, name: "Writing custom Credo checks", match: [custom-credo-check]}
+  - id: elixir-debugging
+    name: "Debugging"
+    source: "IEx, dbg, Observer, tracing"
+    match: [elixir-debugging]
+    subtopics:
+      - {id: elixir-debugging-iex-debugging, name: "IEx helpers, dbg and IEx.pry", match: [iex-debugging]}
+      - {id: elixir-debugging-observer-tracing, name: "Observer, recon and tracing", match: [observer-tracing]}
+  - id: elixir-profiling
+    name: "Profiling and benchmarking"
+    source: "Benchee, eprof, fprof, tprof, :timer"
+    match: [elixir-profiling]
+    subtopics:
+      - {id: elixir-profiling-benchee, name: "Benchmarking with Benchee", match: [benchee]}
+      - {id: elixir-profiling-profilers, name: "eprof, fprof, tprof and flame graphs", match: [profilers]}
+  - id: elixir-telemetry
+    name: "Telemetry and metrics"
+    source: "Erlang telemetry library, telemetry_metrics"
+    match: [elixir-telemetry]
+    subtopics:
+      - {id: elixir-telemetry-telemetry-events, name: "Emitting and handling Telemetry events", match: [telemetry-events]}
+      - {id: elixir-telemetry-telemetry-metrics, name: "Telemetry.Metrics and reporters", match: [telemetry-metrics]}
+  - id: elixir-logging
+    name: "Logging"
+    source: "Elixir Logger"
+    match: [elixir-logging]
+    subtopics:
+      - {id: elixir-logging-logger-config, name: "Logger levels, backends and formatting", match: [logger-config]}
+  - id: elixir-interop
+    name: "Interop with Erlang, ports and native code"
+    source: "Erlang/OTP docs - interoperability tutorial, Port, Rustler"
+    match: [elixir-interop]
+    subtopics:
+      - {id: elixir-interop-erlang-interop, name: "Calling Erlang modules and OTP libraries", match: [erlang-interop]}
+      - {id: elixir-interop-ports-system-cmd, name: "Ports, System.cmd and external programs", match: [ports-system-cmd]}
+      - {id: elixir-interop-nifs-rustler, name: "NIFs and Rustler", match: [nifs-rustler]}
+  - id: elixir-security
+    name: "Security"
+    source: "Sobelow, Plug CSRF, OWASP applied to Elixir"
+    match: [elixir-security]
+    subtopics:
+      - {id: elixir-security-sobelow, name: "Static security scanning with Sobelow", match: [sobelow]}
+      - {id: elixir-security-plug-security, name: "CSRF, headers, sessions and secrets in Phoenix", match: [plug-security]}
+      - {id: elixir-security-untrusted-input, name: "Atom exhaustion and untrusted data", match: [untrusted-input]}
+  - id: elixir-performance
+    name: "Performance and memory"
+    source: "BEAM efficiency guide"
+    match: [elixir-performance]
+    subtopics:
+      - {id: elixir-performance-iodata-binaries, name: "iodata, binaries and string building", match: [iodata-binaries]}
+      - {id: elixir-performance-concurrency-tuning, name: "Schedulers, backpressure and bottlenecks", match: [concurrency-tuning]}
+  - id: elixir-data-formats
+    name: "JSON, binary formats and parsing"
+    source: "Jason, NimbleParsec, Elixir bitstrings"
+    match: [elixir-data-formats]
+    subtopics:
+      - {id: elixir-data-formats-json-jason, name: "JSON with Jason and the JSON module", match: [json-jason]}
+      - {id: elixir-data-formats-binary-parsing, name: "Binary pattern matching and NimbleParsec", match: [binary-parsing]}
+  - id: elixir-http-clients
+    name: "HTTP clients and servers"
+    source: "Req, Finch, Plug, Bandit"
+    match: [elixir-http-clients]
+    subtopics:
+      - {id: elixir-http-clients-http-client-req, name: "HTTP requests with Req and Finch", match: [http-client-req]}
+      - {id: elixir-http-clients-plug-bandit-cowboy, name: "Plug, Bandit and Cowboy servers", match: [plug-bandit-cowboy]}
+  - id: elixir-background-jobs
+    name: "Background jobs and data pipelines"
+    source: "Oban, GenStage, Broadway"
+    match: [elixir-background-jobs]
+    subtopics:
+      - {id: elixir-background-jobs-oban-jobs, name: "Oban background jobs", match: [oban-jobs]}
+      - {id: elixir-background-jobs-broadway-genstage, name: "GenStage and Broadway pipelines", match: [broadway-genstage]}
+  - id: elixir-notebooks-data
+    name: "Livebook and Nx"
+    source: "Livebook, Mix.install, Nx and Explorer"
+    match: [elixir-notebooks-data]
+    subtopics:
+      - {id: elixir-notebooks-data-livebook-mix-install, name: "Livebook and Mix.install for scripting", match: [livebook-mix-install]}
+      - {id: elixir-notebooks-data-nx-explorer, name: "Numerical Elixir (Nx), Explorer and Bumblebee overview", match: [nx-explorer]}
+  - id: elixir-io-files
+    name: "Files, IO and paths"
+    source: "Elixir File, IO, Path"
+    match: [elixir-io-files]
+    subtopics:
+      - {id: elixir-io-files-file-io, name: "File, Path and IO operations", match: [file-io]}
+  - id: elixir-versions
+    name: "Toolchain and version management"
+    source: "asdf, mise, Elixir compatibility"
+    match: [elixir-versions]
+    subtopics:
+      - {id: elixir-versions-version-management, name: "Installing Elixir/OTP and managing versions", match: [version-management]}
+  - id: elixir-state-machines
+    name: "State machines with OTP"
+    source: "Erlang/OTP gen_statem"
+    match: [elixir-state-machines]
+    subtopics:
+      - {id: elixir-state-machines-gen-statem, name: "gen_statem state machines", match: [gen-statem]}

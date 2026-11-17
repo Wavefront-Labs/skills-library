@@ -1,0 +1,928 @@
+# Canonical coverage spec for v-language, drawn from external sources listed below.
+subject: v-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products:
+  - v-lang
+sources:
+- 'V documentation (https://docs.vlang.io/): table of contents covering hello world, functions, variables, types, strings, arrays, maps, structs, sum types, option/result, interfaces, generics, modules,
+  control flow, memory management, concurrency, testing, attributes, comptime, C interop, JS/WASM backends'
+- 'V standard library modules index (https://modules.vlang.io/): os, io, net.http, json, arrays, math, time, strconv, regex, cli, flag, sync, term, gg, ui, veb, orm, db.sqlite, db.pg'
+- 'V command line help and CLI docs (https://github.com/vlang/v/blob/master/doc/docs.md and v help): run, build, fmt, doc, test, up, install, self, translate, backends, cross compilation'
+- 'V Tour and Awesome V (https://github.com/vlang/v/blob/master/doc/docs.md and https://github.com/vlang/awesome-v): learning resources, packages, ecosystem; VPM (https://vpm.vlang.io/)'
+topics:
+- id: hello-world-and-program-structure
+  name: Hello world and program structure
+  source: 'docs.vlang.io: Hello world'
+  match:
+  - hello-world-and-program-structure
+  subtopics:
+  - id: v-main-function-and-entry
+    name: main function and program entry
+    match:
+    - v-main-function-and-entry
+  - id: v-run-build-first-program
+    name: Running and building a first program
+    match:
+    - v-run-build-first-program
+- id: comments-and-doc-comments
+  name: Comments and documentation comments
+  source: 'docs.vlang.io: Comments'
+  match:
+  - comments-and-doc-comments
+  subtopics:
+  - id: v-comment-syntax
+    name: Line and block comments
+    match:
+    - v-comment-syntax
+  - id: v-doc-comments-and-v-doc
+    name: Doc comments and v doc
+    match:
+    - v-doc-comments-and-v-doc
+- id: functions
+  name: Functions
+  source: 'docs.vlang.io: Functions'
+  match:
+  - functions
+  subtopics:
+  - id: v-function-basics-and-multiple-returns
+    name: Function declarations and multiple return values
+    match:
+    - v-function-basics-and-multiple-returns
+  - id: v-variadic-functions
+    name: Variadic functions
+    match:
+    - v-variadic-functions
+  - id: v-anonymous-functions-and-closures
+    name: Anonymous functions and closures
+    match:
+    - v-anonymous-functions-and-closures
+  - id: v-pure-impure-and-pub-functions
+    name: Function visibility, pub and purity
+    match:
+    - v-pure-impure-and-pub-functions
+- id: variables-and-mutability
+  name: Variables and mutability
+  source: 'docs.vlang.io: Variables'
+  match:
+  - variables-and-mutability
+  subtopics:
+  - id: v-variable-declaration-and-inference
+    name: Declaring variables with := and type inference
+    match:
+    - v-variable-declaration-and-inference
+  - id: v-mut-and-immutability
+    name: mut and immutability by default
+    match:
+    - v-mut-and-immutability
+  - id: v-no-shadowing-and-scope
+    name: No shadowing and block scope
+    match:
+    - v-no-shadowing-and-scope
+- id: primitive-types
+  name: Primitive types
+  source: 'docs.vlang.io: Primitive types'
+  match:
+  - primitive-types
+  subtopics:
+  - id: v-integer-types-and-literals
+    name: Integer types and literals
+    match:
+    - v-integer-types-and-literals
+  - id: v-floats-bool-and-numeric-conversion
+    name: Floats, bool and numeric conversion
+    match:
+    - v-floats-bool-and-numeric-conversion
+  - id: v-type-aliases-and-casting-rules
+    name: Type aliases and explicit casting
+    match:
+    - v-type-aliases-and-casting-rules
+- id: strings
+  name: Strings and interpolation
+  source: 'docs.vlang.io: Strings'
+  match:
+  - strings
+  subtopics:
+  - id: v-string-literals-and-immutability
+    name: String literals, raw strings and immutability
+    match:
+    - v-string-literals-and-immutability
+  - id: v-string-interpolation-and-formatting
+    name: String interpolation and format specifiers
+    match:
+    - v-string-interpolation-and-formatting
+  - id: v-string-methods-and-builder
+    name: String methods and strings.Builder
+    match:
+    - v-string-methods-and-builder
+- id: runes-and-unicode
+  name: Runes and Unicode
+  source: 'docs.vlang.io: Runes'
+  match:
+  - runes-and-unicode
+  subtopics:
+  - id: v-rune-type-and-literals
+    name: The rune type and character literals
+    match:
+    - v-rune-type-and-literals
+  - id: v-utf8-iteration-and-bytes
+    name: Iterating UTF-8 text and bytes
+    match:
+    - v-utf8-iteration-and-bytes
+- id: arrays
+  name: Arrays
+  source: 'docs.vlang.io: Arrays'
+  match:
+  - arrays
+  subtopics:
+  - id: v-dynamic-array-basics
+    name: 'Dynamic arrays: create, append, index'
+    match:
+    - v-dynamic-array-basics
+  - id: v-array-higher-order-methods
+    name: Array map, filter, any, all, reduce
+    match:
+    - v-array-higher-order-methods
+  - id: v-array-sorting-and-searching
+    name: Sorting, searching and reversing arrays
+    match:
+    - v-array-sorting-and-searching
+- id: fixed-arrays-and-slices
+  name: Fixed-size arrays and slices
+  source: 'docs.vlang.io: Arrays: fixed size, slices, multidimensional'
+  match:
+  - fixed-arrays-and-slices
+  subtopics:
+  - id: v-fixed-size-arrays
+    name: Fixed-size arrays
+    match:
+    - v-fixed-size-arrays
+  - id: v-array-slicing
+    name: Slicing arrays and strings
+    match:
+    - v-array-slicing
+  - id: v-multidimensional-arrays
+    name: Multi-dimensional arrays and matrices
+    match:
+    - v-multidimensional-arrays
+- id: maps
+  name: Maps
+  source: 'docs.vlang.io: Maps'
+  match:
+  - maps
+  subtopics:
+  - id: v-map-basics
+    name: Map creation, access and deletion
+    match:
+    - v-map-basics
+  - id: v-map-iteration-and-ordering
+    name: Iterating maps and ordering
+    match:
+    - v-map-iteration-and-ordering
+  - id: v-nested-maps-and-struct-values
+    name: Nested maps and complex value types
+    match:
+    - v-nested-maps-and-struct-values
+- id: sum-types
+  name: Sum types
+  source: 'docs.vlang.io: Sum types'
+  match:
+  - sum-types
+  subtopics:
+  - id: v-sum-type-declaration
+    name: Declaring sum types
+    match:
+    - v-sum-type-declaration
+  - id: v-match-on-sum-types
+    name: Matching on sum types
+    match:
+    - v-match-on-sum-types
+  - id: v-sum-type-is-as-smartcast
+    name: is, !is, as and smartcasting
+    match:
+    - v-sum-type-is-as-smartcast
+- id: option-and-result-types
+  name: Option and result types
+  source: 'docs.vlang.io: Option/Result types and error handling'
+  match:
+  - option-and-result-types
+  subtopics:
+  - id: v-option-type
+    name: Option types ?T and none
+    match:
+    - v-option-type
+  - id: v-result-type-and-errors
+    name: Result types !T and returning errors
+    match:
+    - v-result-type-and-errors
+  - id: v-or-blocks-and-propagation
+    name: or blocks, propagation and combining option/result
+    match:
+    - v-or-blocks-and-propagation
+- id: structs
+  name: Structs
+  source: 'docs.vlang.io: Structs'
+  match:
+  - structs
+  subtopics:
+  - id: v-struct-declaration-and-init
+    name: Struct declaration and initialisation
+    match:
+    - v-struct-declaration-and-init
+  - id: v-struct-defaults-required-params
+    name: Default values, [required] and [params] structs
+    match:
+    - v-struct-defaults-required-params
+  - id: v-struct-embedding
+    name: Struct embedding and composition
+    match:
+    - v-struct-embedding
+  - id: v-struct-field-visibility-and-heap
+    name: Field access modifiers and @[heap]
+    match:
+    - v-struct-field-visibility-and-heap
+- id: methods
+  name: Methods
+  source: 'docs.vlang.io: Methods'
+  match:
+  - methods
+  subtopics:
+  - id: v-method-declaration-and-receivers
+    name: Methods and receivers
+    match:
+    - v-method-declaration-and-receivers
+  - id: v-mutable-receivers-and-static-methods
+    name: Mutable receivers and static methods
+    match:
+    - v-mutable-receivers-and-static-methods
+  - id: v-operator-overloading
+    name: Operator overloading
+    match:
+    - v-operator-overloading
+- id: unions-and-type-aliases
+  name: Unions and type definitions
+  source: 'docs.vlang.io: Unions, Type aliases'
+  match:
+  - unions-and-type-aliases
+  subtopics:
+  - id: v-union-types
+    name: Unions
+    match:
+    - v-union-types
+  - id: v-type-definitions-and-function-types
+    name: Type definitions and function types
+    match:
+    - v-type-definitions-and-function-types
+- id: enums
+  name: Enums
+  source: 'docs.vlang.io: Enums'
+  match:
+  - enums
+  subtopics:
+  - id: v-enum-basics
+    name: Declaring and using enums
+    match:
+    - v-enum-basics
+  - id: v-enum-flag-attribute
+    name: Flag enums with @[flag]
+    match:
+    - v-enum-flag-attribute
+  - id: v-enum-methods-and-match
+    name: Enum methods and exhaustive match
+    match:
+    - v-enum-methods-and-match
+- id: interfaces
+  name: Interfaces
+  source: 'docs.vlang.io: Interfaces'
+  match:
+  - interfaces
+  subtopics:
+  - id: v-interface-declaration-and-implementation
+    name: Declaring interfaces and implicit implementation
+    match:
+    - v-interface-declaration-and-implementation
+  - id: v-interface-fields-and-embedding
+    name: Interface fields, embedding and type checks
+    match:
+    - v-interface-fields-and-embedding
+- id: generics
+  name: Generics
+  source: 'docs.vlang.io: Generics'
+  match:
+  - generics
+  subtopics:
+  - id: v-generic-functions
+    name: Generic functions
+    match:
+    - v-generic-functions
+  - id: v-generic-structs-and-methods
+    name: Generic structs and methods
+    match:
+    - v-generic-structs-and-methods
+  - id: v-generic-constraints-and-comptime-checks
+    name: Comptime type checks inside generics
+    match:
+    - v-generic-constraints-and-comptime-checks
+- id: modules-and-imports
+  name: Modules and imports
+  source: 'docs.vlang.io: Modules'
+  match:
+  - modules-and-imports
+  subtopics:
+  - id: v-module-declaration-and-import
+    name: Declaring modules and importing
+    match:
+    - v-module-declaration-and-import
+  - id: v-import-aliases-and-selective-imports
+    name: Import aliases and selective imports
+    match:
+    - v-import-aliases-and-selective-imports
+  - id: v-module-init-and-project-layout
+    name: Module init functions and project layout
+    match:
+    - v-module-init-and-project-layout
+- id: v-mod-and-module-search
+  name: v.mod, project creation and module paths
+  source: 'docs.vlang.io: Modules; v CLI: v init, v new'
+  match:
+  - v-mod-and-module-search
+  subtopics:
+  - id: v-mod-file-format
+    name: The v.mod manifest
+    match:
+    - v-mod-file-format
+  - id: v-new-init-create-project
+    name: Scaffolding projects with v init and v new
+    match:
+    - v-new-init-create-project
+  - id: v-module-search-paths-and-vmodules
+    name: Module search paths and VMODULES
+    match:
+    - v-module-search-paths-and-vmodules
+- id: const-and-globals
+  name: Constants and global variables
+  source: 'docs.vlang.io: Constants, Global variables'
+  match:
+  - const-and-globals
+  subtopics:
+  - id: v-const-declarations
+    name: Constants
+    match:
+    - v-const-declarations
+  - id: v-global-variables
+    name: Global variables and -enable-globals
+    match:
+    - v-global-variables
+  - id: v-compile-time-constants-and-defines
+    name: Compile-time constants and -d defines
+    match:
+    - v-compile-time-constants-and-defines
+- id: control-flow-if-and-match
+  name: Conditionals and match
+  source: 'docs.vlang.io: If, Match'
+  match:
+  - control-flow-if-and-match
+  subtopics:
+  - id: v-if-expressions
+    name: if statements and if expressions
+    match:
+    - v-if-expressions
+  - id: v-match-expressions
+    name: match expressions
+    match:
+    - v-match-expressions
+  - id: v-if-guard-and-optional-unwrapping
+    name: if guards with option and result
+    match:
+    - v-if-guard-and-optional-unwrapping
+- id: loops-and-labels
+  name: Loops and labels
+  source: 'docs.vlang.io: For loops, Break and continue, Labels'
+  match:
+  - loops-and-labels
+  subtopics:
+  - id: v-for-in-loops
+    name: for-in loops over arrays, maps, ranges and strings
+    match:
+    - v-for-in-loops
+  - id: v-conditional-and-c-style-loops
+    name: while-style, infinite and C-style loops
+    match:
+    - v-conditional-and-c-style-loops
+  - id: v-break-continue-and-labels
+    name: break, continue and labeled loops
+    match:
+    - v-break-continue-and-labels
+- id: defer-and-goto
+  name: defer and goto
+  source: 'docs.vlang.io: Defer, Goto'
+  match:
+  - defer-and-goto
+  subtopics:
+  - id: v-defer-statements
+    name: defer for cleanup
+    match:
+    - v-defer-statements
+  - id: v-goto-and-labels
+    name: goto statements
+    match:
+    - v-goto-and-labels
+- id: compile-time-programming
+  name: Compile-time programming
+  source: 'docs.vlang.io: Compile time code, comptime reflection'
+  match:
+  - compile-time-programming
+  subtopics:
+  - id: v-comptime-if-conditionals
+    name: Compile-time $if conditionals
+    match:
+    - v-comptime-if-conditionals
+  - id: v-comptime-for-reflection
+    name: Compile-time reflection with $for
+    match:
+    - v-comptime-for-reflection
+  - id: v-comptime-embed-file-and-env
+    name: Embedding files and compile-time helpers
+    match:
+    - v-comptime-embed-file-and-env
+- id: memory-management
+  name: Memory management
+  source: 'docs.vlang.io: Memory management, Memory-unsafe code'
+  match:
+  - memory-management
+  subtopics:
+  - id: v-autofree
+    name: Autofree
+    match:
+    - v-autofree
+  - id: v-boehm-gc-and-gc-modes
+    name: Boehm GC and -gc modes
+    match:
+    - v-boehm-gc-and-gc-modes
+  - id: v-prealloc-and-arena-allocation
+    name: -prealloc and arena style allocation
+    match:
+    - v-prealloc-and-arena-allocation
+  - id: v-manual-memory-and-manualfree
+    name: Manual memory with malloc, free and @[manualfree]
+    match:
+    - v-manual-memory-and-manualfree
+- id: pointers-and-unsafe
+  name: References, pointers and unsafe
+  source: 'docs.vlang.io: References, Memory-unsafe code'
+  match:
+  - pointers-and-unsafe
+  subtopics:
+  - id: v-references-and-pointers
+    name: References, &T and automatic dereferencing
+    match:
+    - v-references-and-pointers
+  - id: v-unsafe-blocks
+    name: unsafe blocks and @[unsafe]
+    match:
+    - v-unsafe-blocks
+  - id: v-sizeof-and-low-level-casts
+    name: sizeof, typeof and low-level conversions
+    match:
+    - v-sizeof-and-low-level-casts
+- id: concurrency-basics
+  name: 'Concurrency: spawn and channels'
+  source: 'docs.vlang.io: Concurrency'
+  match:
+  - concurrency-basics
+  subtopics:
+  - id: v-spawn-and-thread-wait
+    name: spawn and waiting on threads
+    match:
+    - v-spawn-and-thread-wait
+  - id: v-channels
+    name: Channels
+    match:
+    - v-channels
+  - id: v-select-statement
+    name: select on multiple channels
+    match:
+    - v-select-statement
+- id: shared-state-and-sync
+  name: Shared state and sync primitives
+  source: 'docs.vlang.io: Concurrency; modules.vlang.io sync'
+  match:
+  - shared-state-and-sync
+  subtopics:
+  - id: v-shared-lock-rlock
+    name: shared objects with lock and rlock
+    match:
+    - v-shared-lock-rlock
+  - id: v-sync-mutex-waitgroup
+    name: sync.Mutex, WaitGroup and atomics
+    match:
+    - v-sync-mutex-waitgroup
+  - id: v-thread-pools-and-workers
+    name: Worker pools and parallel processing
+    match:
+    - v-thread-pools-and-workers
+- id: testing
+  name: Testing
+  source: 'docs.vlang.io: Testing'
+  match:
+  - testing
+  subtopics:
+  - id: v-test-files-and-assert
+    name: Test files, test functions and assert
+    match:
+    - v-test-files-and-assert
+  - id: v-running-tests-with-v-test
+    name: Running tests with v test
+    match:
+    - v-running-tests-with-v-test
+  - id: v-test-fixtures-and-benchmarks
+    name: Fixtures, table tests and benchmarking
+    match:
+    - v-test-fixtures-and-benchmarks
+- id: v-cli-run-and-build
+  name: 'The v command: run, build, fmt, vet, doc'
+  source: 'V command line help (v help) and docs.vlang.io: Building a project, Tools'
+  match:
+  - v-cli-run-and-build
+  subtopics:
+  - id: v-run-and-watch-workflow
+    name: v run, v watch and the REPL
+    match:
+    - v-run-and-watch-workflow
+  - id: v-build-prod-and-output
+    name: 'v build flags: -prod, -o, -cc, -skip-unused'
+    match:
+    - v-build-prod-and-output
+  - id: v-fmt-vet-and-doc-tools
+    name: v fmt, v vet, v doc and v check-md
+    match:
+    - v-fmt-vet-and-doc-tools
+- id: v-cli-maintenance
+  name: v up, v self, v install and other maintenance commands
+  source: 'V command line help (v help) and docs.vlang.io: Upgrading V'
+  match:
+  - v-cli-maintenance
+  subtopics:
+  - id: v-up-and-v-self
+    name: Updating V with v up and rebuilding with v self
+    match:
+    - v-up-and-v-self
+  - id: v-install-and-package-commands
+    name: v install, update, remove, search and outdated
+    match:
+    - v-install-and-package-commands
+  - id: v-cli-flags-and-env-reference
+    name: Useful compiler flags and environment variables
+    match:
+    - v-cli-flags-and-env-reference
+- id: v-cross-compilation-and-backends
+  name: Cross compilation, C compilers and shared libraries
+  source: 'docs.vlang.io: Cross compilation, Building libraries; v help build'
+  match:
+  - v-cross-compilation-and-backends
+  subtopics:
+  - id: v-choosing-c-compiler
+    name: Choosing and configuring the C compiler (-cc)
+    match:
+    - v-choosing-c-compiler
+  - id: v-cross-compiling-with-os-flag
+    name: Cross-compiling with -os
+    match:
+    - v-cross-compiling-with-os-flag
+  - id: v-shared-libraries-and-exports
+    name: Building shared libraries with -shared
+    match:
+    - v-shared-libraries-and-exports
+- id: javascript-backend
+  name: JavaScript backend
+  source: 'docs.vlang.io: JavaScript backend'
+  match:
+  - javascript-backend
+  subtopics:
+  - id: v-b-js-compile
+    name: Compiling V to JavaScript with -b js
+    match:
+    - v-b-js-compile
+  - id: v-js-interop
+    name: 'JS interop: JS. namespace, async and DOM'
+    match:
+    - v-js-interop
+- id: webassembly-backend
+  name: WebAssembly backend
+  source: 'docs.vlang.io: WebAssembly backend; v help build'
+  match:
+  - webassembly-backend
+  subtopics:
+  - id: v-wasm-browser-target
+    name: Compiling to WASM for the browser
+    match:
+    - v-wasm-browser-target
+  - id: v-wasm-wasi-target
+    name: WASI target and running with runtimes
+    match:
+    - v-wasm-wasi-target
+- id: translating-c-to-v
+  name: Translating C to V
+  source: 'docs.vlang.io: Translating C to V; v translate'
+  match:
+  - translating-c-to-v
+  subtopics:
+  - id: v-translate-c-to-v
+    name: 'v translate: converting C code to V'
+    match:
+    - v-translate-c-to-v
+  - id: v-translate-wrapper
+    name: 'v translate wrapper: generating C bindings'
+    match:
+    - v-translate-wrapper
+- id: c-interop
+  name: C interoperability
+  source: 'docs.vlang.io: V and C'
+  match:
+  - c-interop
+  subtopics:
+  - id: v-c-include-flag-pkgconfig
+    name: '#include, #flag and #pkgconfig'
+    match:
+    - v-c-include-flag-pkgconfig
+  - id: v-c-functions-structs-and-types
+    name: Declaring C functions, structs and enums
+    match:
+    - v-c-functions-structs-and-types
+  - id: v-c-strings-and-pointer-conversion
+    name: C strings and converting pointers
+    match:
+    - v-c-strings-and-pointer-conversion
+  - id: v-wrapping-c-libraries
+    name: Wrapping a C library as a V module
+    match:
+    - v-wrapping-c-libraries
+- id: os-module
+  name: 'os module: files, processes and environment'
+  source: 'modules.vlang.io: os'
+  match:
+  - os-module
+  subtopics:
+  - id: v-os-files-and-directories
+    name: Reading, writing and walking files
+    match:
+    - v-os-files-and-directories
+  - id: v-os-process-execution-and-env
+    name: Running processes and environment variables
+    match:
+    - v-os-process-execution-and-env
+  - id: v-os-args-input-and-stdin
+    name: Command-line args and standard input
+    match:
+    - v-os-args-input-and-stdin
+- id: io-and-streams
+  name: io and buffered streams
+  source: 'modules.vlang.io: io, bufio'
+  match:
+  - io-and-streams
+  subtopics:
+  - id: v-io-reader-writer-interfaces
+    name: io.Reader, io.Writer and helpers
+    match:
+    - v-io-reader-writer-interfaces
+  - id: v-bufio-and-line-reading
+    name: 'bufio: buffered readers, scanners and writers'
+    match:
+    - v-bufio-and-line-reading
+- id: net-http
+  name: net.http and networking
+  source: 'modules.vlang.io: net.http, net, net.urllib'
+  match:
+  - net-http
+  subtopics:
+  - id: v-http-client-requests
+    name: 'HTTP client: get, post, fetch'
+    match:
+    - v-http-client-requests
+  - id: v-http-server-basics
+    name: Minimal HTTP server with net.http
+    match:
+    - v-http-server-basics
+  - id: v-net-sockets-tcp-udp
+    name: TCP and UDP sockets with net
+    match:
+    - v-net-sockets-tcp-udp
+- id: json-module
+  name: JSON encoding and decoding
+  source: 'modules.vlang.io: json, x.json2'
+  match:
+  - json-module
+  subtopics:
+  - id: v-json-encode-decode
+    name: json.encode and json.decode
+    match:
+    - v-json-encode-decode
+  - id: v-json-attributes-and-custom-names
+    name: JSON field attributes
+    match:
+    - v-json-attributes-and-custom-names
+  - id: v-json2-and-other-formats
+    name: 'Other data formats: toml, yaml-style configs, csv, base64'
+    match:
+    - v-json2-and-other-formats
+- id: arrays-math-strconv
+  name: arrays, math and strconv modules
+  source: 'modules.vlang.io: arrays, math, strconv, rand'
+  match:
+  - arrays-math-strconv
+  subtopics:
+  - id: v-arrays-module-helpers
+    name: The arrays module
+    match:
+    - v-arrays-module-helpers
+  - id: v-math-and-random
+    name: math and rand modules
+    match:
+    - v-math-and-random
+  - id: v-strconv-parsing-and-formatting
+    name: 'strconv: parsing and formatting numbers'
+    match:
+    - v-strconv-parsing-and-formatting
+- id: time-module
+  name: time module
+  source: 'modules.vlang.io: time'
+  match:
+  - time-module
+  subtopics:
+  - id: v-time-now-format-parse
+    name: Current time, formatting and parsing
+    match:
+    - v-time-now-format-parse
+  - id: v-time-durations-sleep-stopwatch
+    name: Durations, sleep, tickers and stopwatch
+    match:
+    - v-time-durations-sleep-stopwatch
+- id: regex-module
+  name: regex module
+  source: 'modules.vlang.io: regex'
+  match:
+  - regex-module
+  subtopics:
+  - id: v-regex-matching-basics
+    name: Compiling and matching regular expressions
+    match:
+    - v-regex-matching-basics
+  - id: v-regex-groups-and-replace
+    name: Capture groups, replace and split
+    match:
+    - v-regex-groups-and-replace
+- id: cli-and-flag-modules
+  name: cli and flag modules
+  source: 'modules.vlang.io: flag, cli'
+  match:
+  - cli-and-flag-modules
+  subtopics:
+  - id: v-flag-module-parsing
+    name: Parsing flags with the flag module
+    match:
+    - v-flag-module-parsing
+  - id: v-cli-module-subcommands
+    name: Subcommands with the cli module
+    match:
+    - v-cli-module-subcommands
+- id: terminal-gui-modules
+  name: term, gg and ui modules
+  source: 'modules.vlang.io: term, term.ui, gg, ui'
+  match:
+  - terminal-gui-modules
+  subtopics:
+  - id: v-term-colors-and-tui
+    name: term colors and term.ui terminal apps
+    match:
+    - v-term-colors-and-tui
+  - id: v-gg-graphics
+    name: 'gg: 2D graphics and games'
+    match:
+    - v-gg-graphics
+  - id: v-ui-toolkit
+    name: 'ui: native widget toolkit'
+    match:
+    - v-ui-toolkit
+- id: web-framework-veb
+  name: Web development with veb (vweb)
+  source: 'modules.vlang.io: veb, vweb; V docs: Web'
+  match:
+  - web-framework-veb
+  subtopics:
+  - id: v-veb-routing-and-handlers
+    name: veb app structure, routes and handlers
+    match:
+    - v-veb-routing-and-handlers
+  - id: v-veb-templates-static-and-middleware
+    name: veb templates, static files and middleware
+    match:
+    - v-veb-templates-static-and-middleware
+  - id: v-veb-vs-vweb-migration
+    name: vweb to veb migration and deployment notes
+    match:
+    - v-veb-vs-vweb-migration
+- id: orm-and-databases
+  name: ORM and databases
+  source: 'docs.vlang.io: ORM; modules.vlang.io: orm, db.sqlite, db.pg, db.mysql'
+  match:
+  - orm-and-databases
+  subtopics:
+  - id: v-orm-sql-blocks
+    name: 'V ORM: sql blocks, create, insert, select'
+    match:
+    - v-orm-sql-blocks
+  - id: v-db-sqlite
+    name: 'db.sqlite: opening, exec and queries'
+    match:
+    - v-db-sqlite
+  - id: v-db-postgres-and-mysql
+    name: db.pg and db.mysql
+    match:
+    - v-db-postgres-and-mysql
+  - id: v-orm-relations-and-migrations
+    name: ORM relations, transactions and schema management
+    match:
+    - v-orm-relations-and-migrations
+- id: attributes
+  name: Attributes
+  source: 'docs.vlang.io: Attributes'
+  match:
+  - attributes
+  subtopics:
+  - id: v-attributes-syntax-and-common
+    name: Attribute syntax and common attributes
+    match:
+    - v-attributes-syntax-and-common
+  - id: v-attributes-deprecated-export-and-codegen
+    name: Deprecation, export and codegen attributes in practice
+    match:
+    - v-attributes-deprecated-export-and-codegen
+- id: vpm-packages
+  name: VPM packages and publishing
+  source: 'vpm.vlang.io; docs.vlang.io: Modules'
+  match:
+  - vpm-packages
+  subtopics:
+  - id: v-using-vpm-packages
+    name: Finding and using packages from VPM
+    match:
+    - v-using-vpm-packages
+  - id: v-publishing-a-vpm-module
+    name: Publishing a module to VPM
+    match:
+    - v-publishing-a-vpm-module
+- id: errors-debugging-and-diagnostics
+  name: Errors, panics and debugging
+  source: 'docs.vlang.io: Debugging, Panics; v help'
+  match:
+  - errors-debugging-and-diagnostics
+  subtopics:
+  - id: v-debug-builds-and-debuggers
+    name: Debug builds with -g and using gdb or lldb
+    match:
+    - v-debug-builds-and-debuggers
+  - id: v-panics-backtraces-and-crashes
+    name: Panics, backtraces and error exit codes
+    match:
+    - v-panics-backtraces-and-crashes
+  - id: v-checking-vetting-and-diagnostics
+    name: 'Static checks: v -check, vet, warnings and notices'
+    match:
+    - v-checking-vetting-and-diagnostics
+- id: standard-library-misc
+  name: 'More standard library: log, crypto, hashing, collections'
+  source: 'modules.vlang.io: log, crypto, hash, datatypes, sync, runtime'
+  match:
+  - standard-library-misc
+  subtopics:
+  - id: v-logging-with-log-module
+    name: Logging with the log module
+    match:
+    - v-logging-with-log-module
+  - id: v-crypto-and-hashing
+    name: Hashing and crypto modules
+    match:
+    - v-crypto-and-hashing
+  - id: v-datatypes-and-collections
+    name: datatypes, sets and other collections
+    match:
+    - v-datatypes-and-collections
+- id: ecosystem-learning-and-stability
+  name: Learning resources, ecosystem and stability
+  source: V Tour / V docs introduction and Awesome V
+  match:
+  - ecosystem-learning-and-stability
+  subtopics:
+  - id: v-tour-playground-and-learning-path
+    name: V Tour, playground and learning path
+    match:
+    - v-tour-playground-and-learning-path
+  - id: v-awesome-v-and-ecosystem
+    name: Awesome V and ecosystem survey
+    match:
+    - v-awesome-v-and-ecosystem
+  - id: v-stability-caveats-and-version-pinning
+    name: Pre-1.0 stability caveats and version pinning
+    match:
+    - v-stability-caveats-and-version-pinning

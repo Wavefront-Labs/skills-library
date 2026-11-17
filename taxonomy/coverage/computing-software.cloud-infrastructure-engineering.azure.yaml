@@ -1,0 +1,1363 @@
+# Canonical coverage spec: Microsoft Azure.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (Microsoft certification skills-measured
+# outlines and the Azure Well-Architected Framework), not from what we happened to write.
+# Depth: each topic lists `subtopics` taken from the Microsoft Learn service documentation table of
+# contents (How-to guides / Concepts sections) and the AZ-104/305/400/500 skills-measured sub-bullets.
+# Depth round 2: next-level subtopics from the Learn service ToCs (how-to guides, tutorials,
+# troubleshooting), az CLI command groups and AZ-104/305/400/500 skills-measured sub-bullets.
+subject: azure
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [azure]
+sources:
+  - "AZ-104 Microsoft Azure Administrator skills measured: Manage identities and governance 20-25%, Implement and manage storage 15-20%, Deploy and manage compute 20-25%, Implement and manage virtual networking 15-20%, Monitor and maintain resources 10-15%"
+  - "AZ-305 Designing Microsoft Azure Infrastructure Solutions: Design identity, governance and monitoring 25-30%, Design data storage 20-25%, Design business continuity 15-20%, Design infrastructure (compute, application architecture, migrations, network) 30-35%"
+  - "AZ-400 Designing and Implementing Microsoft DevOps Solutions: Design and implement processes and communications, Design and implement a source control strategy, Design and implement build and release pipelines, Develop a security and compliance plan, Implement an instrumentation strategy"
+  - "AZ-500 Microsoft Azure Security Technologies: Manage identity and access 25-30%, Secure networking 20-25%, Secure compute, storage and databases 20-25%, Manage security operations 25-30%"
+  - "Azure Well-Architected Framework pillars: Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency (learn.microsoft.com/azure/well-architected)"
+  - "Microsoft Learn service documentation tables of contents (How-to guides and Concepts sections per service) for subtopics"
+topics:
+  # --- Identity, access and governance (AZ-104 Manage identities and governance; AZ-305 Design identity/governance; AZ-500 Manage identity and access)
+  - id: entra-users-groups
+    name: Entra ID users, groups, dynamic membership and licences
+    source: AZ-104/Manage identities; Learn/Entra ID fundamentals How-to
+    match: [entra-users, entra-groups, dynamic-groups, dynamic-membership, user-management, guest-users, b2b]
+    subtopics:
+      - {id: bulk-user-operations, name: Bulk create, invite and delete users via CSV or Graph, match: [bulk-operations, bulk-invite, bulk-create-users]}
+      - {id: dynamic-membership-rules, name: Dynamic membership rule syntax and validation, match: [membership-rules, dynamic-membership-rules, rule-syntax]}
+      - {id: group-based-licensing, name: Group-based licensing and licence errors, match: [group-based-licensing, licence-assignment, license-assignment]}
+      - {id: b2b-guest-invitations, name: B2B guest invitations and cross-tenant access settings, match: [guest-invitations, cross-tenant-access, b2b-collaboration]}
+      - {id: administrative-units, name: Administrative units and scoped directory roles, match: [administrative-units, directory-roles, entra-roles]}
+      - {id: sspr-setup, name: Self-service password reset and authentication methods policy, match: [sspr, self-service-password-reset, authentication-methods-policy]}
+      - {id: entra-user-lifecycle, name: User lifecycle - block sign-in and restore deleted users, match: [restore-deleted-user, block-sign-in, user-lifecycle]}
+      - {id: group-expiration-naming, name: Microsoft 365 group expiration and naming policy, match: [group-expiration, group-naming-policy]}
+      - {id: entra-user-settings, name: Tenant user settings and default user permissions, match: [default-user-permissions, guest-restrictions, user-settings]}
+      - {id: entra-graph-powershell-users, name: Managing users and groups with az ad and Microsoft Graph PowerShell, match: [az-ad-user, graph-powershell, mg-user]}
+  - id: hybrid-identity
+    name: Entra Connect / Cloud Sync, PHS, PTA, seamless SSO
+    source: AZ-500/Manage identity and access; Learn/Entra Connect How-to
+    match: [entra-connect, cloud-sync, hybrid-identity, password-hash-sync, pass-through-authentication]
+    subtopics:
+      - {id: connect-sync-install, name: Install Entra Connect Sync with custom settings and staging mode, match: [staging-mode, connect-sync-install, custom-installation]}
+      - {id: ou-attribute-filtering, name: OU and attribute filtering of synced objects, match: [ou-filtering, attribute-filtering, sync-scope]}
+      - {id: password-writeback, name: Password and device writeback, match: [password-writeback, device-writeback, writeback]}
+      - {id: seamless-sso, name: Seamless SSO and Kerberos decryption key rollover, match: [seamless-sso, kerberos-key-rollover, azureadsso]}
+      - {id: cloud-sync-provisioning, name: Cloud Sync provisioning agent and configuration, match: [cloud-sync-agent, provisioning-agent, cloud-sync-configuration]}
+      - {id: sync-troubleshooting, name: Sync errors, duplicate attributes and Connect Health, match: [sync-errors, idfix, duplicate-attribute, entra-connect-health]}
+      - {id: pass-through-auth, name: Pass-through authentication agents, match: [pass-through-authentication, pta-agent]}
+      - {id: phs-staged-rollout, name: Password hash sync and staged rollout off federation, match: [password-hash-sync, staged-rollout, federation-cutover]}
+      - {id: connect-upgrade-swing, name: Entra Connect upgrade and swing migration, match: [connect-upgrade, swing-migration, connect-auto-upgrade]}
+      - {id: sync-rules-editor, name: Synchronization Rules Editor custom rules and precedence, match: [sync-rules-editor, sync-rule-precedence]}
+  - id: conditional-access
+    name: Conditional Access, MFA and authentication strengths
+    source: AZ-500/Manage identity and access; Learn/Conditional Access How-to
+    match: [conditional-access, mfa, authentication-strength, named-locations, identity-protection]
+    subtopics:
+      - {id: ca-report-only, name: Report-only mode and the What If tool, match: [report-only, ca-what-if, policy-impact]}
+      - {id: ca-named-locations, name: Named locations and IP/country conditions, match: [named-locations, trusted-locations, country-locations]}
+      - {id: ca-auth-strengths, name: Authentication strengths and phishing-resistant MFA, match: [authentication-strengths, phishing-resistant-mfa, passkeys]}
+      - {id: ca-risk-policies, name: Sign-in and user risk policies with Identity Protection, match: [sign-in-risk, user-risk, risk-policies]}
+      - {id: ca-device-controls, name: Device compliance and hybrid-join requirements, match: [device-compliance, require-compliant-device, hybrid-joined]}
+      - {id: ca-session-controls, name: Session controls, sign-in frequency and token protection, match: [session-controls, sign-in-frequency, token-protection]}
+      - {id: ca-break-glass, name: Break-glass accounts and exclusions, match: [break-glass, emergency-access, ca-exclusions]}
+      - {id: ca-legacy-auth-block, name: Blocking legacy authentication, match: [block-legacy-auth, legacy-authentication]}
+      - {id: ca-signin-troubleshooting, name: Troubleshooting Conditional Access with sign-in logs and AADSTS codes, match: [ca-sign-in-logs, aadsts-errors, ca-troubleshooting]}
+      - {id: ca-workload-identities, name: Conditional Access for workload identities, match: [ca-workload-identity, service-principal-risk]}
+      - {id: ca-as-code, name: Conditional Access templates and policy-as-code via Graph, match: [ca-templates, ca-as-code, ca-graph-api]}
+  - id: pim
+    name: Privileged Identity Management
+    source: AZ-500/Manage identity and access; Learn/PIM How-to
+    match: [pim, privileged-identity-management, eligible-assignments]
+    subtopics:
+      - {id: pim-role-settings, name: Role settings (activation duration, approval, MFA, justification), match: [pim-role-settings, activation-duration, pim-approval]}
+      - {id: pim-eligible-assignments, name: Assign eligible and time-bound roles, match: [eligible-assignment, time-bound-assignment, pim-assign]}
+      - {id: pim-activation, name: Activate roles via portal, Graph and CLI, match: [pim-activation, role-activation, activate-role]}
+      - {id: pim-alerts, name: PIM security alerts and audit history, match: [pim-alerts, pim-audit, audit-history]}
+      - {id: pim-groups, name: PIM for groups, match: [pim-for-groups, privileged-access-groups]}
+      - {id: pim-access-reviews, name: Access reviews of privileged roles, match: [access-reviews, role-access-review]}
+      - {id: pim-azure-resource-roles, name: PIM for Azure resource roles at management group and subscription scope, match: [pim-azure-resources, pim-resource-roles]}
+      - {id: pim-notifications, name: PIM notification settings, match: [pim-notifications]}
+      - {id: pim-graph-automation, name: PIM automation with Microsoft Graph schedules, match: [pim-graph, role-eligibility-schedule, pim-powershell]}
+  - id: management-groups-subscriptions
+    name: Management groups and subscription design
+    source: AZ-104/Manage governance; Learn/Management groups How-to
+    match: [management-groups, subscriptions, subscription-vending]
+    subtopics:
+      - {id: mg-hierarchy, name: Build and move within the management group hierarchy, match: [management-group-hierarchy, move-subscription, mg-hierarchy]}
+      - {id: subscription-vending-automation, name: Subscription vending automation (Bicep/Terraform), match: [subscription-vending, lz-vending, subscription-creation]}
+      - {id: subscription-quotas, name: Quotas and quota increase requests, match: [quotas, quota-increase, subscription-limits]}
+      - {id: billing-scopes, name: EA/MCA billing accounts, invoice sections and transfers, match: [billing-scopes, billing-account, subscription-transfer]}
+      - {id: subscription-policies, name: Subscription policies and directory transfer control, match: [subscription-policies, leave-tenant, enter-tenant]}
+      - {id: mg-root-settings, name: Root management group default group and hierarchy protection, match: [default-management-group, hierarchy-settings, root-management-group]}
+      - {id: subscription-cancel-rename, name: Subscription rename cancel reactivate and delete, match: [subscription-cancel, subscription-rename, subscription-reactivate]}
+      - {id: resource-providers, name: Resource provider and preview feature registration, match: [resource-provider-registration, feature-registration, az-provider]}
+  - id: azure-rbac
+    name: Azure RBAC built-in roles and role assignments
+    source: AZ-104/Manage governance; Learn/Azure RBAC How-to
+    match: [azure-rbac, role-assignments, built-in-roles]
+    subtopics:
+      - {id: rbac-scope-choice, name: Choose assignment scope and inheritance, match: [assignment-scope, scope-inheritance, rbac-scope]}
+      - {id: rbac-check-access, name: Check and list access for a principal, match: [check-access, list-role-assignments, access-check]}
+      - {id: rbac-deny-assignments, name: Deny assignments, match: [deny-assignments]}
+      - {id: rbac-troubleshooting, name: Troubleshoot RBAC (limits, propagation, stale principals), match: [rbac-troubleshooting, role-assignment-limit, unknown-principal]}
+      - {id: rbac-elevate-access, name: Elevate Global Administrator access to all subscriptions, match: [elevate-access, user-access-administrator, root-scope]}
+      - {id: rbac-data-plane-roles, name: Data-plane roles for Storage, Key Vault and SQL, match: [data-actions, data-plane-roles, storage-data-roles]}
+      - {id: rbac-assignment-iac, name: Role assignments in Bicep and Terraform with deterministic names, match: [role-assignment-bicep, principal-type, role-assignment-guid]}
+      - {id: rbac-classic-admins, name: Classic administrators retirement and co-administrator removal, match: [classic-administrators, co-administrator]}
+      - {id: rbac-change-audit, name: Auditing role assignment changes in the activity log, match: [role-assignment-audit, rbac-change-log]}
+  - id: custom-roles-abac
+    name: Custom roles and ABAC conditions
+    source: AZ-104/Manage governance; Learn/Azure RBAC custom roles and ABAC
+    match: [custom-roles, abac, role-assignment-conditions]
+    subtopics:
+      - {id: custom-role-definition, name: Author a custom role JSON (Actions, NotActions, DataActions), match: [custom-role-json, notactions, role-definition]}
+      - {id: custom-role-assignable-scopes, name: Assignable scopes and tenant limits, match: [assignable-scopes, custom-role-limits]}
+      - {id: abac-storage-conditions, name: ABAC conditions on blob data roles, match: [abac-conditions, blob-conditions, condition-syntax]}
+      - {id: abac-principal-attributes, name: Custom security attributes as principal attributes, match: [custom-security-attributes, principal-attributes]}
+      - {id: custom-role-lifecycle, name: Update, version and delete custom roles safely, match: [custom-role-update, role-definition-update]}
+      - {id: abac-queue-conditions, name: ABAC conditions for queues and blob index tag attributes, match: [queue-conditions, blob-index-tags-condition, environment-attributes]}
+      - {id: rbac-delegate-assignments, name: Delegating role assignment management with conditions, match: [delegate-role-assignments, constrained-delegation, rbac-administrator]}
+      - {id: custom-role-discovery, name: Discovering provider operations for custom roles, match: [provider-operations, permission-discovery]}
+  - id: azure-policy
+    name: Azure Policy definitions, initiatives and remediation
+    source: AZ-104/Manage governance; Learn/Azure Policy How-to
+    match: [azure-policy, policy-definitions, initiatives]
+    subtopics:
+      - {id: policy-definition-authoring, name: Author definitions with aliases and parameters, match: [policy-aliases, custom-policy-definitions, policy-authoring]}
+      - {id: policy-effects-choice, name: Choose effects (Audit, Deny, Modify, DINE, DenyAction), match: [policy-effects, deployifnotexists, denyaction]}
+      - {id: policy-assignments, name: Assignments, exclusions and managed identity, match: [policy-assignments, assignment-exclusions, not-scopes]}
+      - {id: policy-remediation, name: Remediation tasks and compliance scans, match: [remediation-tasks, compliance-scan, trigger-scan]}
+      - {id: policy-exemptions, name: Exemptions with expiry, match: [policy-exemptions, exemptions, waiver]}
+      - {id: machine-configuration, name: Machine configuration (guest configuration) policies, match: [machine-configuration, guest-configuration]}
+      - {id: policy-as-code, name: Policy as code with EPAC, Bicep or Terraform, match: [policy-as-code, epac]}
+      - {id: policy-compliance-reporting, name: Compliance states reasons and policy state export, match: [compliance-states, compliance-reasons, policy-states]}
+      - {id: policy-modify-append, name: Modify and append effects with remediation identity, match: [modify-effect, append-effect]}
+      - {id: policy-troubleshooting, name: Troubleshooting policy evaluation and RequestDisallowedByPolicy, match: [policy-troubleshooting, policy-evaluation, requestdisallowedbypolicy]}
+      - {id: policy-initiatives, name: Initiative definitions parameters and policy versioning, match: [policy-initiatives, policy-set-definition, policy-versioning]}
+  - id: resource-locks-tags
+    name: Resource locks and tagging strategy
+    source: AZ-104/Manage governance; Learn/Resource Manager How-to
+    match: [resource-locks, tags, tagging-strategy]
+    subtopics:
+      - {id: lock-types, name: CanNotDelete vs ReadOnly locks and their side effects, match: [cannotdelete, readonly-lock, lock-side-effects]}
+      - {id: tag-inheritance, name: Tag inheritance and enforcement via Policy, match: [tag-inheritance, require-tag, inherit-tag]}
+      - {id: tag-taxonomy, name: Tag taxonomy and naming convention, match: [tag-taxonomy, naming-convention, naming-standard]}
+      - {id: resource-move, name: Move resources across resource groups and subscriptions, match: [resource-move, move-resources, move-validation]}
+      - {id: resource-group-design, name: Resource group design and deletion, match: [resource-groups, resource-group-design, rg-delete]}
+      - {id: locks-iac-removal, name: Locks in IaC and safe lock removal, match: [lock-bicep, remove-lock, lock-permissions]}
+      - {id: tag-operations, name: Tag operations merge vs replace and tag limits, match: [az-tag, tag-limits, tag-merge]}
+      - {id: tags-cost-reporting, name: Tags in cost analysis and billing tag inheritance, match: [cost-tag-inheritance, tag-cost-reporting]}
+  - id: landing-zone
+    name: Cloud Adoption Framework landing zones
+    source: AZ-305/Design governance; CAF/ALZ design areas
+    match: [landing-zone, caf, enterprise-scale, alz]
+    subtopics:
+      - {id: alz-accelerator, name: Deploy ALZ with the Bicep or Terraform accelerator, match: [alz-bicep, alz-terraform, alz-accelerator]}
+      - {id: platform-landing-zones, name: Platform landing zones (connectivity, identity, management), match: [platform-landing-zone, connectivity-subscription, management-subscription]}
+      - {id: application-landing-zones, name: Application landing zones (corp vs online), match: [application-landing-zone, corp-landing-zone, online-landing-zone]}
+      - {id: alz-policies, name: ALZ policy baseline and sovereign landing zones, match: [alz-policies, policy-baseline, sovereign-landing-zone]}
+      - {id: caf-naming, name: CAF naming and tagging standards, match: [caf-naming, resource-naming, abbreviations]}
+      - {id: alz-design-review, name: Landing zone review and governance maturity, match: [landing-zone-review, governance-benchmark, design-areas]}
+      - {id: alz-brownfield, name: Brownfield migration into the ALZ hierarchy, match: [brownfield-alz, alz-brownfield]}
+      - {id: alz-updates, name: Keeping ALZ current with policy refreshes and version updates, match: [alz-update, alz-policy-refresh]}
+      - {id: alz-sandbox-decommission, name: Sandbox and decommissioned management groups, match: [sandbox-management-group, decommissioned-mg]}
+  - id: managed-identities
+    name: Managed identities (system and user assigned)
+    source: AZ-500/Manage identity and access; Learn/Managed identities How-to
+    match: [managed-identity, managed-identities, system-assigned, user-assigned]
+    subtopics:
+      - {id: mi-choose-type, name: Choose system- vs user-assigned identity, match: [system-vs-user-assigned, identity-choice]}
+      - {id: mi-token-acquisition, name: Acquire tokens via IMDS and DefaultAzureCredential, match: [imds, defaultazurecredential, token-acquisition]}
+      - {id: mi-grant-access, name: Grant the identity data-plane RBAC and Graph permissions, match: [mi-rbac, graph-permissions-mi, mi-grant]}
+      - {id: mi-service-config, name: Enable managed identity on App Service, Functions, VMs and AKS, match: [mi-on-app-service, mi-on-vm, enable-managed-identity]}
+      - {id: mi-troubleshooting, name: Troubleshoot 401/403 and token caching, match: [mi-troubleshooting, token-cache, 403-managed-identity]}
+      - {id: mi-iac, name: Managed identities in Bicep and Terraform and assignment timing, match: [mi-bicep, identity-iac]}
+      - {id: mi-limits-moves, name: Managed identity limits cross-tenant use and subscription move effects, match: [mi-limits, mi-cross-tenant, mi-subscription-move]}
+      - {id: mi-sql-contained-users, name: Managed identity access to Azure SQL via contained users, match: [contained-user, create-user-from-external-provider]}
+  - id: app-registrations
+    name: App registrations, service principals and enterprise apps
+    source: AZ-500/Manage identity and access; Learn/Identity platform How-to
+    match: [app-registration, app-registrations, service-principal, service-principals, enterprise-applications]
+    subtopics:
+      - {id: client-credentials, name: Client credentials flow and certificate credentials, match: [client-credentials, certificate-credentials, client-secret]}
+      - {id: api-permissions-consent, name: API permissions and admin consent, match: [api-permissions, admin-consent, consent-workflow]}
+      - {id: app-roles, name: App roles and group claims, match: [app-roles, group-claims, roles-claim]}
+      - {id: saml-sso-enterprise-app, name: SAML/OIDC SSO for enterprise applications, match: [saml-sso, enterprise-app-sso, gallery-apps]}
+      - {id: app-credential-rotation, name: Credential rotation and expiry monitoring, match: [client-secret-rotation, credential-expiry, secret-expiry]}
+      - {id: application-proxy, name: Entra Application Proxy for on-prem apps, match: [application-proxy, app-proxy, private-access]}
+      - {id: app-optional-claims, name: Token configuration optional claims and the app manifest, match: [optional-claims, app-manifest, token-configuration]}
+      - {id: expose-api-scopes, name: Expose an API with scopes app ID URI and pre-authorised clients, match: [expose-api, oauth2-scopes, app-id-uri]}
+      - {id: multi-tenant-apps, name: Multi-tenant apps and publisher verification, match: [multi-tenant-app, publisher-verification]}
+      - {id: app-assignment-required, name: Assignment required and user or group assignment to enterprise apps, match: [assignment-required, user-assignment]}
+  - id: workload-identity-federation
+    name: Workload identity federation (OIDC, no secrets)
+    source: AZ-400/Develop a security plan; Learn/Workload identity federation
+    match: [workload-identity-federation, federated-credentials, oidc-federation]
+    subtopics:
+      - {id: wif-github-actions, name: GitHub Actions OIDC login to Azure, match: [github-actions-oidc, azure-login-oidc, github-federation]}
+      - {id: wif-azure-devops, name: Azure DevOps service connection with WIF, match: [service-connection-wif, azure-devops-wif, wif-service-connection]}
+      - {id: wif-uami, name: Federated credentials on user-assigned managed identities, match: [uami-federated-credential, managed-identity-federation]}
+      - {id: wif-kubernetes, name: Kubernetes service account federation (AKS and external), match: [kubernetes-federation, service-account-federation]}
+      - {id: wif-terraform, name: Terraform and other tools authenticating via OIDC, match: [terraform-oidc, oidc-terraform, azurerm-oidc]}
+      - {id: wif-flexible-fic, name: Flexible federated identity credentials and claims matching, match: [flexible-federated-credential, claims-matching-expression]}
+      - {id: wif-troubleshooting, name: Troubleshooting AADSTS70021 subject and issuer mismatches, match: [aadsts70021, subject-mismatch, wif-troubleshooting]}
+      - {id: wif-other-idps, name: Federation from GitLab Google Cloud and AWS, match: [gitlab-oidc, gcp-federation, aws-federation]}
+  - id: key-vault
+    name: Key Vault secrets, keys, certificates and access model
+    source: AZ-500/Manage security operations; Learn/Key Vault How-to
+    match: [key-vault, key-vault-secrets, key-vault-keys, key-vault-certificates, keyvault, certificate-rotation]
+    subtopics:
+      - {id: kv-rbac-model, name: RBAC permission model and migration from access policies, match: [rbac-permission-model, access-policies, kv-rbac]}
+      - {id: kv-soft-delete-purge, name: Soft delete, purge protection and recovery, match: [purge-protection, kv-recovery, kv-soft-delete]}
+      - {id: kv-network, name: Private endpoint, firewall and trusted services, match: [key-vault-firewall, kv-private-endpoint, trusted-services]}
+      - {id: kv-key-rotation, name: Key auto-rotation policies, match: [key-rotation, auto-rotation, rotation-policy]}
+      - {id: kv-certificate-lifecycle, name: Certificate issuance and auto-renewal with CAs, match: [certificate-auto-renewal, certificate-issuer, kv-certificates]}
+      - {id: kv-monitoring, name: Key Vault logging, near-expiry events and alerts, match: [kv-diagnostics, event-grid-near-expiry, kv-logging]}
+      - {id: kv-backup-restore, name: Backup, restore and multi-region strategy, match: [kv-backup, kv-restore, key-vault-backup]}
+      - {id: kv-references, name: Key Vault references in App Service Functions and Container Apps, match: [key-vault-reference, kv-reference]}
+      - {id: kv-throttling, name: Key Vault service limits throttling and client caching, match: [kv-throttling, kv-service-limits]}
+      - {id: kv-secret-versioning, name: Secret versions expiry dates and content types, match: [secret-versions, secret-expiry-date, nbf-exp]}
+  - id: customer-managed-keys
+    name: Customer-managed keys, Managed HSM and BYOK
+    source: AZ-500/Secure storage; Learn/Managed HSM and CMK How-to
+    match: [customer-managed-keys, cmk, managed-hsm, byok, encryption-scopes]
+    subtopics:
+      - {id: cmk-storage, name: Storage account CMK with user-assigned identity, match: [storage-cmk, storage-encryption, cmk-storage]}
+      - {id: cmk-disks, name: Disk encryption sets for managed disks, match: [disk-encryption-sets, cmk-disks]}
+      - {id: cmk-sql-cosmos, name: SQL TDE and Cosmos DB with CMK, match: [sql-tde-cmk, cosmos-cmk, tde-cmk]}
+      - {id: managed-hsm-provisioning, name: Provision Managed HSM and activate the security domain, match: [security-domain, hsm-activation, managed-hsm-provisioning]}
+      - {id: byok-import, name: BYOK key import from on-prem HSM, match: [byok-import, key-import, hsm-key-transfer]}
+      - {id: encryption-scopes-setup, name: Encryption scopes and infrastructure encryption, match: [encryption-scope, infrastructure-encryption, double-encryption]}
+      - {id: cmk-key-revocation, name: CMK key revocation and recovery from access loss, match: [key-revocation, cmk-access-loss]}
+      - {id: cmk-versionless-keys, name: Versionless key URIs and automatic key version update, match: [versionless-key, auto-key-version]}
+      - {id: managed-hsm-rbac, name: Managed HSM local RBAC, match: [managed-hsm-rbac, hsm-local-rbac]}
+  - id: cost-management
+    name: Cost Management budgets, analysis and alerts
+    source: AZ-104/Manage governance; WAF Cost Optimization; Learn/Cost Management How-to
+    match: [cost-management, budgets, cost-analysis, cost-alerts, finops]
+    subtopics:
+      - {id: budget-alerts, name: Budgets with action groups and forecast alerts, match: [budget-alerts, forecast-alerts, budget-action-group]}
+      - {id: cost-exports, name: Scheduled exports (FOCUS) to storage, match: [cost-exports, focus, usage-exports]}
+      - {id: anomaly-alerts, name: Anomaly detection alerts, match: [anomaly-alerts, cost-anomaly]}
+      - {id: cost-allocation, name: Cost allocation rules and showback/chargeback, match: [cost-allocation, showback, chargeback]}
+      - {id: cost-analysis-views, name: Cost analysis views, amortized vs actual, saved views, match: [amortized-cost, actual-cost, saved-views]}
+      - {id: pricing-estimation, name: Pricing calculator and TCO estimates, match: [pricing-calculator, tco-calculator, cost-estimate]}
+      - {id: cost-optimisation-actions, name: Rightsizing and idle resource cleanup, match: [rightsizing, idle-resources, orphaned-resources]}
+      - {id: cost-api-automation, name: Cost Details and Query APIs and scheduled reports, match: [cost-details-api, cost-query-api, scheduled-cost-reports]}
+      - {id: finops-toolkit, name: FinOps toolkit hubs and Power BI reports, match: [finops-toolkit, finops-hubs]}
+      - {id: cost-scopes-access, name: Cost Management scopes and access roles, match: [cost-management-reader, cost-scopes]}
+  - id: reservations-savings-plans
+    name: Reservations, savings plans and Hybrid Benefit
+    source: WAF/Cost Optimization; Learn/Reservations How-to
+    match: [reservations, reserved-instances, savings-plan, azure-hybrid-benefit]
+    subtopics:
+      - {id: reservation-purchase, name: Purchase and scope reservations, match: [reservation-purchase, reservation-scope, scope-shared]}
+      - {id: savings-plan-purchase, name: Compute savings plan sizing and purchase, match: [savings-plan-purchase, hourly-commitment]}
+      - {id: reservation-utilisation, name: Utilisation monitoring and alerts, match: [reservation-utilization, utilisation-alerts, reservation-recommendations]}
+      - {id: reservation-exchange, name: Exchanges, refunds and instance size flexibility, match: [reservation-exchange, reservation-refund, instance-size-flexibility]}
+      - {id: hybrid-benefit-apply, name: Apply Hybrid Benefit for Windows, SQL and Linux, match: [ahb, hybrid-benefit-windows, hybrid-benefit-sql]}
+      - {id: dev-test-spot, name: Dev/Test pricing and Spot VMs for cost, match: [dev-test-pricing, spot-pricing, spot-vms]}
+      - {id: reservation-management, name: Reservation split scope change renewal and owners, match: [reservation-split, auto-renew, reservation-owner]}
+      - {id: reservation-chargeback, name: Reservation and savings plan chargeback and amortisation reporting, match: [reservation-chargeback, amortised-reservations]}
+  - id: azure-arc
+    name: Azure Arc for servers and Kubernetes
+    source: AZ-305/Design infrastructure; Learn/Azure Arc How-to
+    match: [azure-arc, arc-enabled-servers, arc-enabled-kubernetes]
+    subtopics:
+      - {id: arc-server-onboarding, name: Onboard servers at scale with azcmagent and service principal, match: [azcmagent, connected-machine-agent, arc-onboarding]}
+      - {id: arc-extensions, name: Arc VM extensions (AMA, Defender, Update Manager), match: [arc-extensions, arc-ama, arc-defender]}
+      - {id: arc-kubernetes-connect, name: Connect Kubernetes clusters and cluster connect, match: [connectedk8s, cluster-connect, arc-k8s-connect]}
+      - {id: arc-gitops, name: GitOps with Flux on Arc-enabled Kubernetes, match: [gitops-flux, flux-configuration, arc-gitops]}
+      - {id: arc-private-link, name: Arc gateway and Private Link scope, match: [arc-gateway, private-link-scope, arc-private-link]}
+      - {id: arc-sql-server, name: Arc-enabled SQL Server and ESU, match: [arc-sql-server, extended-security-updates, esu]}
+      - {id: arc-server-management, name: Arc-enabled server SSH run command and machine configuration, match: [arc-ssh, arc-run-command, arc-machine-configuration]}
+      - {id: arc-agent-troubleshooting, name: Arc agent check logs and upgrades, match: [azcmagent-check, arc-agent-upgrade, arc-troubleshooting]}
+      - {id: arc-at-scale, name: Onboarding Arc servers at scale with a service principal, match: [arc-at-scale, arc-service-principal]}
+      - {id: arc-custom-locations, name: Custom locations and Arc-enabled data services, match: [custom-locations, arc-data-controller]}
+  - id: resource-graph
+    name: Azure Resource Graph queries
+    source: AZ-104/Manage governance; Learn/Resource Graph How-to
+    match: [resource-graph, azure-resource-graph, resource-queries, azure-cli, azure-powershell]
+    subtopics:
+      - {id: arg-query-language, name: ARG KQL (joins, summarize, mv-expand), match: [arg-kql, arg-joins, resource-graph-queries]}
+      - {id: arg-shared-queries, name: Shared queries and ARG Explorer, match: [shared-queries, arg-explorer]}
+      - {id: arg-change-analysis, name: Resource change history, match: [resource-changes, change-analysis, change-history]}
+      - {id: az-cli-idioms, name: Azure CLI output, JMESPath and non-interactive login, match: [jmespath, az-login, az-cli-query]}
+      - {id: az-powershell-idioms, name: Azure PowerShell automation idioms, match: [az-powershell, az-module, connect-azaccount]}
+      - {id: az-rest-cloud-shell, name: az rest and Cloud Shell, match: [az-rest, cloud-shell]}
+      - {id: arg-governance-tables, name: Resource Graph policy health and advisor tables, match: [policyresources, healthresources, advisorresources]}
+      - {id: arg-paging-throttling, name: Resource Graph paging skip tokens and throttling, match: [arg-paging, skip-token, arg-throttling]}
+      - {id: arg-alerts-workbooks, name: Resource Graph queries in log alerts and workbooks, match: [arg-alerts, arg-workbooks]}
+  # --- Storage (AZ-104 Implement and manage storage; AZ-305 Design data storage; AZ-500 Secure storage)
+  - id: storage-account-design
+    name: Storage account types, performance tiers and redundancy
+    source: AZ-104/Manage storage; Learn/Storage account How-to
+    match: [storage-account, storage-accounts, redundancy, lrs, zrs, grs, gzrs, hierarchical-namespace, data-lake-storage]
+    subtopics:
+      - {id: redundancy-choice, name: Choose and change redundancy (LRS/ZRS/GRS/GZRS), match: [redundancy-change, change-redundancy, ra-grs]}
+      - {id: account-failover, name: Customer-initiated account failover, match: [account-failover, storage-failover, unplanned-failover]}
+      - {id: scalability-targets, name: Scalability targets and throttling, match: [scalability-targets, ingress-egress-limits, storage-throttling]}
+      - {id: adls-gen2-setup, name: ADLS Gen2 hierarchical namespace and ACLs, match: [adls-gen2, hierarchical-namespace-acl, posix-acls]}
+      - {id: premium-storage-choice, name: Premium block blob and premium file accounts, match: [premium-block-blob, premium-performance, premium-storage]}
+      - {id: storage-account-migration, name: Migrate classic or v1 accounts and move between regions, match: [storage-account-migration, gpv1-upgrade, region-move]}
+      - {id: storage-endpoints-routing, name: DNS zone endpoints and routing preference, match: [dns-zone-endpoints, routing-preference]}
+      - {id: queue-table-storage, name: Queue and Table storage design, match: [storage-queues-design, azure-table-storage]}
+      - {id: storage-monitoring, name: Storage metrics logs and Storage insights, match: [storage-insights, storagebloblogs, storage-metrics]}
+      - {id: blob-sftp-nfs, name: SFTP and NFS 3.0 for Blob Storage, match: [blob-sftp, nfs-3-blob, sftp-local-users]}
+  - id: storage-security
+    name: Storage firewalls, SAS, stored access policies and key management
+    source: AZ-104/Secure storage; Learn/Storage security How-to
+    match: [storage-firewall, sas, shared-access-signature, stored-access-policy, storage-keys, shared-key-access]
+    subtopics:
+      - {id: user-delegation-sas, name: User delegation SAS, match: [user-delegation-sas]}
+      - {id: stored-access-policies, name: Stored access policies and SAS revocation, match: [stored-access-policies, sas-revocation]}
+      - {id: storage-network-rules, name: Firewall rules, service endpoints and resource instance rules, match: [storage-network-rules, resource-instance-rules, service-endpoint]}
+      - {id: disable-shared-key, name: Disable shared key and anonymous access, match: [disable-shared-key, anonymous-access, allow-shared-key-access]}
+      - {id: storage-key-rotation, name: Key rotation reminders and Key Vault managed keys, match: [storage-key-rotation, key-rotation-reminder, key-vault-managed-storage-keys]}
+      - {id: defender-for-storage, name: Defender for Storage and malware scanning, match: [defender-for-storage, malware-scanning]}
+      - {id: sas-expiration-policy, name: SAS expiration policy and monitoring, match: [sas-expiration-policy, sas-monitoring]}
+      - {id: storage-entra-authorization, name: Entra authorization for data access and default to OAuth in portal, match: [entra-authorization-storage, auth-mode-login, default-to-oauth]}
+      - {id: storage-tls-secure-transfer, name: Minimum TLS version and secure transfer required, match: [minimum-tls, secure-transfer-required]}
+      - {id: network-security-perimeter, name: Network security perimeter for PaaS resources, match: [network-security-perimeter, nsp]}
+  - id: azure-files
+    name: Azure Files SMB/NFS shares and File Sync
+    source: AZ-104/Manage storage; Learn/Azure Files How-to
+    match: [azure-files, file-shares, smb, nfs-shares, azure-file-sync]
+    subtopics:
+      - {id: smb-share-mount, name: Create and mount SMB shares on Windows/Linux, match: [smb-mount, mount-file-share, net-use]}
+      - {id: nfs-share-setup, name: NFS 4.1 shares on premium accounts, match: [nfs-4-1, nfs-share-setup, nfs-mount]}
+      - {id: files-identity-auth, name: Identity-based auth (AD DS, Entra Kerberos) and ACLs, match: [identity-based-authentication, entra-kerberos, ad-ds-authentication]}
+      - {id: file-sync-deploy, name: Deploy Azure File Sync and sync groups, match: [sync-group, server-endpoint, file-sync-deploy]}
+      - {id: cloud-tiering, name: Cloud tiering policies, match: [cloud-tiering, tiering-policy]}
+      - {id: share-snapshots-backup, name: Share snapshots and Azure Files backup, match: [share-snapshots, azure-files-backup]}
+      - {id: port-445-workarounds, name: Port 445, SMB over QUIC and VPN access, match: [port-445, smb-over-quic]}
+      - {id: files-performance, name: Azure Files performance provisioned v2 and SMB multichannel, match: [smb-multichannel, provisioned-v2, files-performance]}
+      - {id: files-ntfs-acls, name: Share-level permissions and NTFS ACLs, match: [share-level-permissions, ntfs-acls, icacls]}
+      - {id: file-sync-troubleshooting, name: File Sync per-item errors and sync health troubleshooting, match: [file-sync-troubleshooting, per-item-errors, sync-health]}
+      - {id: files-migration-robocopy, name: Migrating file servers to Azure Files with Robocopy, match: [robocopy, file-server-migration]}
+  - id: blob-lifecycle-tiers
+    name: Blob access tiers and lifecycle management
+    source: AZ-104/Manage storage; Learn/Blob storage How-to
+    match: [lifecycle-management, access-tiers, blob-versioning, archive-tier]
+    subtopics:
+      - {id: lifecycle-rules, name: Lifecycle policy rules on modification or last-access time, match: [lifecycle-rules, last-access-time-tracking, lifecycle-policy]}
+      - {id: set-blob-tier, name: Set blob tier manually and in bulk, match: [set-blob-tier, batch-tier-change, tier-change]}
+      - {id: archive-rehydration, name: Archive rehydration priority and cost, match: [rehydration, rehydrate-priority]}
+      - {id: blob-inventory, name: Blob inventory reports, match: [blob-inventory, inventory-reports]}
+      - {id: tier-cost-model, name: Tier cost model and early-deletion fees, match: [early-deletion-fee, tier-pricing, cold-tier]}
+      - {id: lifecycle-troubleshooting, name: Lifecycle policy run timing and troubleshooting, match: [lifecycle-run, lifecycle-troubleshooting]}
+      - {id: blob-index-tags, name: Blob index tags for discovery and lifecycle filters, match: [blob-index-tag-queries, find-blobs-by-tags]}
+      - {id: default-access-tier, name: Account default access tier choice and changes, match: [account-access-tier, default-tier-change]}
+  - id: blob-data-protection
+    name: Soft delete, versioning, immutability, point-in-time restore
+    source: AZ-500/Secure storage; Learn/Blob data protection
+    match: [soft-delete, immutability, point-in-time-restore, object-replication]
+    subtopics:
+      - {id: blob-soft-delete, name: Blob and container soft delete and undelete, match: [blob-soft-delete, container-soft-delete, undelete]}
+      - {id: versioning-snapshots, name: Versioning vs snapshots, match: [versioning, blob-snapshots]}
+      - {id: immutability-policies, name: Time-based retention and legal hold (WORM), match: [time-based-retention, legal-hold, worm]}
+      - {id: blob-pitr, name: Point-in-time restore for block blobs, match: [blob-pitr, blob-restore]}
+      - {id: object-replication-policy, name: Object replication policies across accounts, match: [object-replication-policy, blob-replication]}
+      - {id: blob-change-feed, name: Change feed, match: [change-feed, blob-change-feed]}
+      - {id: version-level-immutability, name: Version-level WORM immutability, match: [version-level-immutability, container-level-worm]}
+      - {id: restore-previous-version, name: Restoring previous blob versions and promoting snapshots, match: [promote-version, restore-previous-version]}
+      - {id: data-protection-baseline, name: Recommended data protection baseline against accidental deletion, match: [data-protection-baseline, accidental-deletion]}
+  - id: data-transfer-tools
+    name: AzCopy, Storage Explorer and Data Box
+    source: AZ-104/Manage storage; Learn/AzCopy and Data Box How-to
+    match: [azcopy, storage-explorer, data-transfer, data-box]
+    subtopics:
+      - {id: azcopy-copy-sync, name: azcopy copy and sync with include/exclude filters, match: [azcopy-copy, azcopy-sync]}
+      - {id: azcopy-auth, name: AzCopy authentication (Entra, SAS, managed identity), match: [azcopy-login, azcopy-auth]}
+      - {id: azcopy-jobs, name: Jobs, resume and performance tuning, match: [azcopy-jobs, resume, throughput-tuning]}
+      - {id: cloud-to-cloud-copy, name: S3/GCS/blob server-to-server copies, match: [s3-to-azure, server-to-server-copy, gcs-to-azure]}
+      - {id: data-box-order, name: Data Box ordering, copy and verification, match: [data-box-order, data-box-disk, offline-transfer]}
+      - {id: storage-mover, name: Storage Mover for NAS migrations, match: [storage-mover]}
+      - {id: azcopy-filters-logging, name: AzCopy include and exclude patterns logs and plan files, match: [azcopy-filters, azcopy-logs, include-pattern]}
+      - {id: azcopy-bench-sync-delete, name: AzCopy bench and sync delete-destination safety, match: [azcopy-bench, delete-destination]}
+      - {id: import-export-service, name: Azure Import/Export jobs, match: [import-export-service, waimportexport]}
+      - {id: blobfuse2, name: Mounting blob containers with BlobFuse2, match: [blobfuse2, blobfuse]}
+  # --- Compute (AZ-104 Deploy and manage compute; AZ-305 Design compute; AZ-500 Secure compute)
+  - id: bicep-arm-templates
+    name: ARM templates, Bicep and what-if deployments
+    source: AZ-104/Automate deployment; Learn/Bicep How-to
+    match: [bicep, arm-templates, arm-template, what-if, template-specs, azurerm, terraform-azure]
+    subtopics:
+      - {id: bicep-modules-registry, name: Modules, private registry and Azure Verified Modules, match: [bicep-modules, bicep-registry, azure-verified-modules]}
+      - {id: bicep-parameters, name: .bicepparam files and secure parameters, match: [bicepparam, secure-parameters, parameter-files]}
+      - {id: what-if-gating, name: What-if previews in CI, match: [what-if-gating, what-if-preview]}
+      - {id: deployment-stacks, name: Deployment stacks and deny settings, match: [deployment-stacks, deny-settings]}
+      - {id: deployment-modes-scopes, name: Deployment scopes, incremental vs complete mode, match: [deployment-scopes, complete-mode, incremental-mode]}
+      - {id: template-specs-sharing, name: Template specs, match: [template-spec, template-specs]}
+      - {id: deployment-troubleshooting, name: Deployment errors and operations diagnostics, match: [deployment-errors, deployment-operations, deployment-troubleshooting]}
+      - {id: terraform-azurerm, name: Terraform azurerm/azapi provider patterns, match: [azurerm, azapi, terraform-azure]}
+      - {id: bicep-linter-config, name: bicepconfig.json and linter rules, match: [bicepconfig, linter-rules]}
+      - {id: bicep-loops-types, name: Bicep loops conditions existing resources and user-defined types, match: [bicep-loops, user-defined-types, existing-keyword]}
+      - {id: deployment-scripts, name: Deployment scripts in Bicep, match: [deployment-scripts]}
+      - {id: bicep-decompile-export, name: Exporting and decompiling ARM templates to Bicep, match: [bicep-decompile, decompile-arm]}
+  - id: vm-provisioning
+    name: VM creation, sizing and series selection
+    source: AZ-104/Create and configure VMs; Learn/Virtual machines How-to
+    match: [virtual-machines, vm-sizing, vm-sizes, vm-creation, vm-series]
+    subtopics:
+      - {id: vm-series-selection, name: Decode series names and pick a size, match: [vm-series-selection, size-naming, dsv5]}
+      - {id: az-vm-create, name: az vm create flags and cloud-init, match: [az-vm, cloud-init, vm-create-cli]}
+      - {id: trusted-launch, name: Gen2, Trusted Launch and confidential VMs, match: [trusted-launch, generation-2, confidential-vms]}
+      - {id: vm-resize-deallocate, name: Resize, deallocate and stop semantics, match: [vm-resize, deallocate, stop-vs-deallocate]}
+      - {id: vm-quotas, name: vCPU quotas and capacity planning, match: [vcpu-quota, quota-request, capacity-planning]}
+      - {id: spot-vms, name: Spot VMs and eviction handling, match: [spot-vms, eviction-policy, spot-eviction]}
+      - {id: dedicated-hosts, name: Dedicated hosts and host groups, match: [dedicated-hosts, host-groups]}
+      - {id: ephemeral-os-disk, name: Ephemeral OS disks, match: [ephemeral-os-disk]}
+      - {id: vm-delete-options, name: VM delete options for attached disks NICs and IPs, match: [delete-option, vm-delete]}
+      - {id: accelerated-networking, name: Accelerated networking and multiple NICs, match: [accelerated-networking, multiple-nics]}
+  - id: managed-disks
+    name: Managed disk types, performance and snapshots
+    source: AZ-104/Create and configure VMs; Learn/Managed disks How-to
+    match: [managed-disks, disk-types, premium-ssd-v2, ultra-disk, disk-snapshots, encryption-at-host, azure-disk-encryption, disk-encryption-sets]
+    subtopics:
+      - {id: disk-type-selection, name: Choose Premium SSD, v2, Ultra or Standard, match: [disk-type-selection, premium-ssd, standard-ssd]}
+      - {id: disk-performance-tuning, name: IOPS/throughput caps, host caching and bursting, match: [host-caching, disk-bursting, disk-iops]}
+      - {id: disk-resize, name: Expand OS and data disks online, match: [disk-resize, expand-os-disk, expand-disk]}
+      - {id: incremental-snapshots, name: Incremental snapshots and restore, match: [incremental-snapshots, snapshot-restore]}
+      - {id: shared-disks, name: Shared disks for clusters, match: [shared-disks, clustered-storage]}
+      - {id: disk-encryption-choice, name: SSE, encryption at host, ADE and DES, match: [encryption-at-host, ade, disk-encryption-choice]}
+      - {id: os-disk-swap, name: OS disk swap, detach/attach and export, match: [os-disk-swap, disk-export-sas, detach-disk]}
+      - {id: premium-ssd-v2-ultra, name: Premium SSD v2 and Ultra Disk configuration, match: [premium-ssd-v2, ultra-disk]}
+      - {id: disk-access-private, name: Disk access resources and network access policy for export, match: [disk-access, network-access-policy]}
+      - {id: disk-tier-conversion, name: Changing performance tier and converting disk type, match: [performance-tier, disk-type-conversion]}
+  - id: vm-availability
+    name: Availability sets, zones, PPGs and capacity reservations
+    source: AZ-104/Create and configure VMs; Learn/VM availability
+    match: [availability-sets, capacity-reservation, proximity-placement-group, vm-availability]
+    subtopics:
+      - {id: availability-sets-domains, name: Availability sets, fault and update domains, match: [fault-domains, update-domains]}
+      - {id: zonal-placement, name: Zonal VMs and zone-redundant design, match: [zonal-vms, zone-placement, availability-zones]}
+      - {id: ppg-setup, name: Proximity placement groups, match: [ppg, proximity-placement]}
+      - {id: capacity-reservations, name: Capacity reservation groups, match: [capacity-reservation-group, on-demand-capacity]}
+      - {id: scheduled-events, name: Scheduled Events and maintenance handling, match: [scheduled-events, maintenance-events, live-migration]}
+      - {id: vm-sla, name: VM SLA tiers, match: [vm-sla, sla-tiers]}
+      - {id: vm-zone-migration, name: Moving VMs into availability zones, match: [zone-migration, move-to-zone]}
+      - {id: maintenance-control, name: Maintenance configurations for platform updates, match: [maintenance-control, platform-maintenance]}
+  - id: vmss
+    name: Virtual Machine Scale Sets and autoscale
+    source: AZ-104/Create and configure VMs; Learn/VMSS How-to
+    match: [vmss, virtual-machine-scale-sets, autoscale]
+    subtopics:
+      - {id: orchestration-mode, name: Flexible vs Uniform orchestration, match: [flexible-orchestration, uniform-orchestration, orchestration-mode]}
+      - {id: autoscale-rules, name: Metric and schedule autoscale rules, match: [autoscale-rules, azure-monitor-autoscale, predictive-autoscale]}
+      - {id: health-auto-repair, name: Application Health extension and automatic repairs, match: [application-health-extension, automatic-instance-repairs]}
+      - {id: upgrade-policy, name: Upgrade policy and rolling image upgrades, match: [upgrade-policy, rolling-upgrade, automatic-os-image-upgrade]}
+      - {id: spot-mix, name: Spot priority mix, match: [spot-priority-mix]}
+      - {id: scale-in-protection, name: Scale-in policy and instance protection, match: [scale-in-policy, instance-protection]}
+      - {id: vmss-instance-ops, name: Scale set instance reimage and manual upgrade, match: [reimage, update-instances, manual-upgrade]}
+      - {id: vmss-standby-pools, name: Standby pools for fast scale-out, match: [standby-pools]}
+      - {id: vmss-zone-balancing, name: Zone balancing and zonal scale sets, match: [zone-balance, zonal-scale-set]}
+      - {id: autoscale-troubleshooting, name: Autoscale flapping and run history troubleshooting, match: [autoscale-flapping, autoscale-run-history]}
+  - id: vm-extensions
+    name: VM extensions, Custom Script and Run Command
+    source: AZ-104/Create and configure VMs; Learn/VM extensions How-to
+    match: [vm-extensions, custom-script-extension, run-command, vm-applications]
+    subtopics:
+      - {id: custom-script-usage, name: Custom Script Extension with protected settings, match: [protected-settings, custom-script]}
+      - {id: run-command-usage, name: Managed Run Command, match: [managed-run-command, run-command-managed]}
+      - {id: vm-applications-usage, name: VM Applications from Compute Gallery, match: [vm-applications]}
+      - {id: dsc-machine-config, name: DSC extension and machine configuration, match: [dsc-extension, machine-configuration]}
+      - {id: extension-troubleshooting, name: Extension failures and handler logs, match: [extension-troubleshooting, handler-logs, provisioning-failed]}
+      - {id: vm-agent, name: VM agent (waagent, Windows guest agent) health, match: [vm-agent, waagent, windows-guest-agent]}
+      - {id: extension-sequencing, name: Extension sequencing with provisionAfterExtensions, match: [extension-sequencing, provision-after-extensions]}
+      - {id: extension-auto-upgrade, name: Automatic extension upgrade, match: [automatic-extension-upgrade, auto-upgrade-minor-version]}
+      - {id: key-vault-vm-extension, name: Key Vault VM extension for certificate distribution, match: [key-vault-vm-extension]}
+  - id: vm-images
+    name: Custom images, Image Builder and Compute Gallery
+    source: AZ-104/Create and configure VMs; Learn/Compute Gallery How-to
+    match: [image-builder, vm-image-builder, custom-images, image-definitions, generalized-image]
+    subtopics:
+      - {id: image-builder-template, name: Image Builder templates and customizers, match: [image-template, customizers, aib]}
+      - {id: compute-gallery, name: Compute Gallery definitions and versions, match: [azure-compute-gallery, image-versions, shared-image-gallery]}
+      - {id: image-replication, name: Image replication and end-of-life, match: [image-replication, image-lifecycle, end-of-life]}
+      - {id: generalize-vm, name: Generalize with sysprep/waagent deprovision, match: [sysprep, waagent-deprovision, generalize]}
+      - {id: specialized-images, name: Specialized images, match: [specialized-image]}
+      - {id: gallery-sharing, name: Community and direct-shared galleries, match: [community-gallery, direct-shared-gallery, gallery-sharing]}
+      - {id: packer-azure, name: Packer builds for Azure, match: [packer]}
+      - {id: marketplace-image-terms, name: Marketplace image URNs purchase plans and terms, match: [marketplace-terms, image-urn, purchase-plan]}
+      - {id: capture-managed-image, name: Capturing a VM to a managed or gallery image, match: [capture-vm-image, managed-image]}
+      - {id: aib-troubleshooting, name: Image Builder customization log troubleshooting, match: [customization-log, aib-troubleshooting]}
+  - id: update-manager
+    name: Azure Update Manager and patch orchestration
+    source: AZ-500/Secure compute; Learn/Update Manager How-to
+    match: [update-manager, azure-update-manager, patch-orchestration, maintenance-configurations, hotpatch]
+    subtopics:
+      - {id: periodic-assessment, name: Periodic assessment and compliance, match: [periodic-assessment, patch-assessment, patch-compliance]}
+      - {id: maintenance-schedules, name: Maintenance configurations and schedules, match: [maintenance-configuration, maintenance-schedule]}
+      - {id: dynamic-scoping, name: Dynamic scoping, match: [dynamic-scoping, dynamic-scope]}
+      - {id: patch-modes, name: Patch orchestration modes and automatic guest patching, match: [patch-mode, azure-orchestrated, automatic-vm-guest-patching]}
+      - {id: hotpatching, name: Hotpatch for Windows Server, match: [hotpatching, hotpatch]}
+      - {id: pre-post-events, name: Pre/post maintenance events, match: [pre-post-events, maintenance-events-eventgrid]}
+      - {id: one-time-update, name: One-time update and update history, match: [one-time-update, update-now, update-history]}
+      - {id: update-manager-arc, name: Update Manager for Arc-enabled servers, match: [update-manager-arc]}
+      - {id: update-compliance-reporting, name: Update compliance reporting with Resource Graph, match: [patchassessmentresources, update-compliance-report]}
+      - {id: update-management-migration, name: Migrating from Automation Update Management, match: [update-management-migration]}
+  - id: vm-troubleshooting
+    name: Boot diagnostics, serial console, redeploy and repair
+    source: AZ-104/Monitor and maintain; Learn/VM troubleshooting
+    match: [boot-diagnostics, serial-console, vm-redeploy, vm-repair, vm-troubleshooting]
+    subtopics:
+      - {id: boot-diag-use, name: Boot diagnostics screenshots and logs, match: [boot-screenshot, boot-log, boot-diagnostics-storage]}
+      - {id: serial-console-use, name: Serial Console (GRUB, SysRq, SAC), match: [sac, grub, sysrq]}
+      - {id: redeploy-reapply, name: Redeploy vs reapply, match: [redeploy, reapply]}
+      - {id: vm-repair-rescue, name: az vm repair rescue VM workflow, match: [az-vm-repair, rescue-vm, nested-repair]}
+      - {id: vmaccess-reset, name: VMAccess password/SSH reset, match: [vmaccess-extension, vm-reset-password, reset-ssh]}
+      - {id: allocation-failures, name: Allocation failures and capacity errors, match: [allocation-failed, overconstrained-allocation]}
+      - {id: rdp-ssh-connectivity, name: RDP/SSH connectivity troubleshooting, match: [rdp-troubleshooting, ssh-troubleshooting]}
+      - {id: perfinsights, name: Performance diagnostics with PerfInsights, match: [perfinsights, performance-diagnostics]}
+      - {id: boot-errors, name: Common boot failures fstab BSOD and full disks, match: [fstab, bsod, boot-errors]}
+      - {id: vm-start-failures, name: VM start failures and OS provisioning timeouts, match: [osprovisioningtimedout, vm-start-failure]}
+  - id: jit-vm-access
+    name: Just-in-time VM access and Bastion
+    source: AZ-500/Secure compute; Learn/Bastion How-to
+    match: [just-in-time, jit-access, jit-vm-access, bastion]
+    subtopics:
+      - {id: jit-policy, name: Configure JIT policies per VM, match: [jit-policy, jit-configure]}
+      - {id: jit-request, name: Request and audit JIT access, match: [jit-request, jit-audit]}
+      - {id: bastion-deploy, name: Deploy Bastion (SKUs, subnet, Developer SKU), match: [bastion-deploy, bastion-sku, azurebastionsubnet]}
+      - {id: bastion-native-client, name: Native client and tunnel via az network bastion, match: [bastion-native-client, bastion-tunnel, bastion-ssh]}
+      - {id: bastion-shareable-links, name: Shareable links and session recording, match: [bastion-shareable-link, session-recording]}
+      - {id: bastion-peered-vnets, name: Bastion across peered VNets and hub designs, match: [bastion-peering, bastion-hub]}
+      - {id: bastion-ip-connect-kerberos, name: Bastion IP-based connection and Kerberos auth, match: [ip-based-connection, bastion-kerberos]}
+      - {id: bastion-developer, name: Bastion Developer SKU and private-only Bastion, match: [bastion-developer, private-only-bastion]}
+      - {id: bastion-troubleshooting, name: Bastion NSG requirements and troubleshooting, match: [bastion-nsg, bastion-troubleshooting]}
+  - id: container-apps
+    name: Azure Container Apps, KEDA scaling and Dapr
+    source: AZ-104/Create and configure containers; Learn/Container Apps How-to
+    match: [container-apps, aca, keda, dapr, container-instances, aci]
+    subtopics:
+      - {id: aca-environment, name: Environments, workload profiles and VNet, match: [container-apps-environment, workload-profiles, aca-vnet]}
+      - {id: aca-revisions, name: Revisions and traffic splitting, match: [revisions, traffic-splitting, revision-mode]}
+      - {id: keda-scale-rules, name: KEDA scale rules and scale to zero, match: [scale-rules, scale-to-zero, keda-scalers]}
+      - {id: dapr-components, name: Dapr components (state, pub/sub, bindings), match: [dapr-components, dapr-pubsub, dapr-state]}
+      - {id: aca-jobs, name: Container Apps jobs, match: [container-apps-jobs, aca-jobs, event-driven-jobs]}
+      - {id: aca-ingress-domains, name: Ingress, custom domains and certificates, match: [ingress, custom-domains-aca, aca-certificates]}
+      - {id: aca-identity-registry, name: Managed identity and ACR pull, match: [acr-pull, aca-managed-identity]}
+      - {id: aci-container-groups, name: ACI container groups and VNet, match: [container-groups, aci-vnet, aci-deploy]}
+      - {id: aca-secrets, name: Container Apps secrets and Key Vault references, match: [aca-secrets, container-app-secrets]}
+      - {id: aca-health-probes, name: Container Apps health probes and graceful termination, match: [aca-probes, liveness-probe-aca]}
+      - {id: aca-troubleshooting, name: Container Apps log streaming console exec and system logs, match: [containerappconsolelogs, aca-console, aca-troubleshooting]}
+  - id: aks-cluster-design
+    name: AKS cluster design, node pools and networking
+    source: AZ-305/Design compute; Learn/AKS How-to
+    match: [aks, aks-cluster, node-pools, aks-networking, azure-cni]
+    subtopics:
+      - {id: aks-cni-choice, name: CNI overlay, Cilium and subnet sizing, match: [azure-cni-overlay, cilium, kubenet]}
+      - {id: aks-node-pools, name: System vs user node pools and taints, match: [system-node-pool, user-node-pool, node-pool-taints]}
+      - {id: aks-autoscaling, name: Cluster autoscaler and node auto-provisioning, match: [cluster-autoscaler, node-autoprovisioning, karpenter]}
+      - {id: aks-upgrades, name: Upgrades, auto-upgrade channels and maintenance windows, match: [aks-upgrades, auto-upgrade-channel, node-os-upgrade]}
+      - {id: aks-outbound, name: Outbound type and egress control, match: [outbound-type, managed-nat-gateway, aks-egress]}
+      - {id: aks-storage, name: CSI drivers and persistent volumes, match: [csi-drivers, aks-storage, persistent-volumes]}
+      - {id: aks-ingress, name: Application routing add-on and ingress, match: [app-routing, aks-ingress, ingress-nginx]}
+      - {id: aks-monitoring, name: Container Insights and managed Prometheus/Grafana, match: [container-insights, managed-prometheus, managed-grafana]}
+      - {id: aks-node-images, name: Node image upgrades and Azure Linux node OS, match: [node-image-upgrade, azure-linux-node-os]}
+      - {id: aks-stop-start-cost, name: AKS cluster stop/start and cost analysis add-on, match: [aks-stop-start, aks-cost-analysis]}
+      - {id: aks-troubleshooting, name: Node NotReady kubectl debug and AKS diagnostics, match: [node-not-ready, kubectl-debug, aks-diagnose]}
+  - id: aks-security
+    name: AKS security (workload identity, Defender, policy, private cluster)
+    source: AZ-500/Secure compute; Learn/AKS security How-to
+    match: [aks-security, workload-identity, aks-rbac, defender-for-containers, private-cluster]
+    subtopics:
+      - {id: aks-workload-identity, name: Workload identity setup, match: [workload-identity-setup, federated-credentials, azure-workload-identity]}
+      - {id: aks-entra-rbac, name: Entra integration and Azure RBAC for Kubernetes, match: [azure-rbac-for-kubernetes, entra-integration, kubelogin]}
+      - {id: aks-api-access, name: Private cluster, authorized IP ranges, API server VNet integration, match: [authorized-ip-ranges, api-server-vnet-integration, private-aks]}
+      - {id: aks-defender, name: Defender for Containers, match: [defender-containers, aks-defender]}
+      - {id: aks-policy, name: Azure Policy for Kubernetes and pod security, match: [azure-policy-for-kubernetes, gatekeeper, pod-security-admission]}
+      - {id: aks-secrets-csi, name: Secrets Store CSI with Key Vault, match: [secrets-store-csi, key-vault-provider]}
+      - {id: aks-network-policy, name: Network policy (Azure, Calico, Cilium), match: [network-policy, calico]}
+      - {id: aks-image-hygiene, name: Image Cleaner and local account lockdown, match: [image-cleaner, disable-local-accounts]}
+      - {id: aks-certificate-rotation, name: AKS certificate rotation and credential reset, match: [aks-cert-rotation, aks-credential-reset]}
+      - {id: aks-egress-lockdown, name: AKS egress lockdown with Azure Firewall FQDN tags, match: [aks-egress-lockdown, aks-fqdn-tag]}
+  - id: container-registry
+    name: Azure Container Registry, tasks and image security
+    source: AZ-500/Secure compute; Learn/ACR How-to
+    match: [container-registry, acr, acr-tasks, image-scanning, geo-replication]
+    subtopics:
+      - {id: acr-tasks-build, name: ACR Tasks builds and triggers, match: [acr-build, acr-task-triggers, multi-step-tasks]}
+      - {id: acr-geo-replication, name: Geo-replication and zone redundancy, match: [acr-geo-replication, acr-zone-redundancy]}
+      - {id: acr-auth, name: Authentication (managed identity, tokens, admin user), match: [acr-pull, acr-tokens, admin-user]}
+      - {id: acr-network, name: Private endpoint and dedicated data endpoints, match: [acr-private-endpoint, dedicated-data-endpoints, acr-firewall]}
+      - {id: acr-retention-purge, name: Retention, purge and soft delete, match: [acr-purge, retention-policy, acr-soft-delete]}
+      - {id: acr-signing, name: Image signing with Notation, match: [notation, image-signing, content-trust]}
+      - {id: acr-cache-import, name: Artifact cache rules and image import, match: [artifact-cache, cache-rules, acr-import]}
+      - {id: acr-oras-artifacts, name: OCI artifacts with ORAS, match: [oras, referrers-api]}
+      - {id: acr-connected-registry, name: ACR connected registry, match: [connected-registry]}
+      - {id: acr-troubleshooting, name: ACR login and pull troubleshooting with check-health, match: [acr-check-health, acr-troubleshooting]}
+  - id: app-service
+    name: App Service plans, slots, scaling and custom domains
+    source: AZ-104/Create and configure App Service; Learn/App Service How-to
+    match: [app-service, app-service-plan, deployment-slots, custom-domains, app-service-scaling]
+    subtopics:
+      - {id: plan-tier-choice, name: Plan tiers, zone redundancy and Premium v3, match: [premium-v3, plan-tiers, zone-redundancy]}
+      - {id: slot-swap, name: Slot swap with sticky settings and warm-up, match: [slot-swap, sticky-settings, swap-with-preview]}
+      - {id: app-service-autoscale, name: Autoscale and automatic scaling, match: [automatic-scaling, app-service-autoscale]}
+      - {id: custom-domain-tls, name: Custom domains and managed certificates, match: [managed-certificate, app-service-tls, domain-verification]}
+      - {id: app-service-deploy, name: Deployment (zip, run-from-package, Deployment Center), match: [zip-deploy, run-from-package, deployment-center]}
+      - {id: app-service-health-check, name: Health check and Always On, match: [health-check, always-on]}
+      - {id: app-service-auth, name: Built-in authentication (Easy Auth), match: [easy-auth, app-service-authentication]}
+      - {id: app-service-diagnostics, name: Diagnostics, log stream and Kudu, match: [kudu, log-stream, diagnose-and-solve]}
+      - {id: app-service-backup, name: App Service backup and restore, match: [webapp-backup, webapp-restore]}
+      - {id: app-service-config, name: App settings connection strings and runtime stack, match: [appsettings-config, runtime-stack]}
+      - {id: webjobs, name: WebJobs, match: [webjobs]}
+  - id: app-service-networking
+    name: App Service VNet integration, private endpoints, access restrictions
+    source: AZ-104/Create and configure App Service; Learn/App Service networking
+    match: [app-service-networking, vnet-integration, access-restrictions, app-service-environment, ase]
+    subtopics:
+      - {id: regional-vnet-integration, name: Regional VNet integration and route-all, match: [regional-vnet-integration, route-all, vnet-route-all]}
+      - {id: app-service-private-endpoint, name: Private endpoints for inbound, match: [app-service-private-endpoint, inbound-private-endpoint]}
+      - {id: access-restriction-rules, name: Access restriction rules and service tags, match: [access-restriction-rules, ip-restrictions, scm-restrictions]}
+      - {id: ase-v3, name: App Service Environment v3, match: [ase-v3, isolated-v2]}
+      - {id: app-service-outbound, name: Outbound IPs and NAT Gateway, match: [outbound-ips, app-service-nat-gateway]}
+      - {id: hybrid-connections, name: Hybrid Connections, match: [hybrid-connections, relay]}
+      - {id: app-service-dns, name: Private DNS resolution from VNet-integrated apps, match: [website-dns-server, app-service-dns]}
+      - {id: app-service-net-troubleshooting, name: App Service network troubleshooting with tcpping and nameresolver, match: [tcpping, nameresolver]}
+  - id: azure-functions
+    name: Azure Functions hosting, triggers and bindings
+    source: AZ-305/Design compute; Learn/Azure Functions How-to
+    match: [azure-functions, durable-functions, flex-consumption]
+    subtopics:
+      - {id: functions-hosting-plan, name: Choose Flex Consumption, Premium or Dedicated, match: [consumption-plan, premium-plan, hosting-plan]}
+      - {id: triggers-bindings, name: Triggers and bindings configuration, match: [triggers, bindings, service-bus-trigger]}
+      - {id: durable-patterns, name: Durable Functions patterns, match: [fan-out-fan-in, orchestrations, durable-patterns]}
+      - {id: host-json-tuning, name: host.json concurrency and retry policies, match: [host-json, retry-policy, concurrency]}
+      - {id: identity-connections, name: Identity-based connections, match: [identity-based-connections]}
+      - {id: functions-deployment, name: Deployment, slots and Core Tools, match: [func-core-tools, functions-deploy, functions-slots]}
+      - {id: functions-networking, name: VNet integration and private endpoints for Functions, match: [functions-vnet, functions-private-endpoint]}
+      - {id: cold-start, name: Cold start and always-ready instances, match: [cold-start, always-ready]}
+      - {id: flex-consumption, name: Flex Consumption plan, match: [flex-consumption]}
+      - {id: functions-monitoring, name: Functions monitoring and log levels, match: [functions-monitoring, functions-logging]}
+      - {id: functions-isolated-worker, name: .NET isolated worker model migration, match: [isolated-worker, in-process-migration]}
+      - {id: functions-host-storage, name: AzureWebJobsStorage and identity-based host storage, match: [azurewebjobsstorage, host-storage]}
+  # --- Networking (AZ-104 Implement and manage virtual networking; AZ-305 Design network; AZ-500 Secure networking)
+  - id: vnet-subnets
+    name: VNet address space, subnets and delegation
+    source: AZ-104/Configure virtual networks; Learn/Virtual Network How-to
+    match: [vnet, virtual-network, subnets, subnet-delegation]
+    subtopics:
+      - {id: address-planning, name: Address space and subnet sizing (IPAM), match: [address-space, ipam, subnet-sizing]}
+      - {id: subnet-delegation-setup, name: Subnet delegation for PaaS, match: [delegated-subnets, delegation]}
+      - {id: service-endpoints, name: Service endpoints and policies, match: [service-endpoints, service-endpoint-policies]}
+      - {id: ipv6-dual-stack, name: IPv6 dual-stack VNets, match: [ipv6, dual-stack]}
+      - {id: vnet-encryption, name: VNet encryption, match: [vnet-encryption]}
+      - {id: virtual-network-manager, name: Virtual Network Manager and IPAM pools, match: [virtual-network-manager, avnm, ipam-pools]}
+      - {id: vnet-address-expansion, name: Adding address space to peered VNets and resizing subnets, match: [add-address-space, resync-peering, subnet-resize]}
+      - {id: static-private-ips, name: Reserved subnet addresses and static private IPs, match: [static-private-ip, reserved-addresses]}
+      - {id: subnet-peering, name: Subnet peering, match: [subnet-level-peering, peer-complete-vnets]}
+  - id: nsg-asg
+    name: NSGs, ASGs and service tags
+    source: AZ-104/Secure access to virtual networks; Learn/NSG How-to
+    match: [nsg, network-security-groups, application-security-groups, service-tags]
+    subtopics:
+      - {id: nsg-rule-design, name: Rule priority, default rules and subnet vs NIC, match: [nsg-rules, default-rules, rule-priority]}
+      - {id: asg-usage, name: Application security groups, match: [asg, asg-rules]}
+      - {id: service-tag-usage, name: Service tags and downloadable ranges, match: [service-tag-ranges, service-tag-discovery]}
+      - {id: effective-security-rules, name: Effective security rules, match: [effective-security-rules]}
+      - {id: security-admin-rules, name: Security admin rules via Virtual Network Manager, match: [security-admin-rules, avnm-security]}
+      - {id: nsg-flow-logging, name: NSG and VNet flow logs, match: [nsg-flow-logs, vnet-flow-logs]}
+      - {id: nsg-augmented-rules, name: Augmented security rules with multiple prefixes, match: [augmented-rules]}
+      - {id: nsg-outbound-restriction, name: Deny-all outbound baselines and outbound restriction, match: [deny-all-outbound, outbound-restriction]}
+  - id: routing-udr
+    name: User-defined routes and forced tunnelling
+    source: AZ-104/Configure virtual networks; Learn/Virtual network routing
+    match: [user-defined-routes, udr, route-tables, forced-tunnelling]
+    subtopics:
+      - {id: route-table-setup, name: Route tables and next hop types, match: [next-hop, next-hop-types, route-table-create]}
+      - {id: nva-routing, name: Routing spokes through an NVA or firewall, match: [nva-routing, virtual-appliance-next-hop]}
+      - {id: forced-tunnelling-setup, name: Forced tunnelling via VPN/ExpressRoute, match: [forced-tunneling, default-route-advertisement]}
+      - {id: bgp-propagation, name: Disable BGP route propagation, match: [disable-bgp-propagation, bgp-route-propagation]}
+      - {id: azure-route-server, name: Azure Route Server, match: [route-server, azure-route-server]}
+      - {id: effective-routes-check, name: Effective routes and asymmetric routing, match: [effective-routes, asymmetric-routing]}
+      - {id: route-selection, name: Route selection longest prefix and system routes, match: [longest-prefix-match, system-routes]}
+      - {id: udr-service-tags, name: Service tags as route address prefixes, match: [service-tag-routes]}
+      - {id: gatewaysubnet-udr, name: UDRs on the GatewaySubnet, match: [gatewaysubnet-udr]}
+  - id: vnet-peering-hub-spoke
+    name: VNet peering and hub-and-spoke topology
+    source: AZ-104/Configure virtual networks; Learn/VNet peering How-to
+    match: [vnet-peering, hub-and-spoke, gateway-transit]
+    subtopics:
+      - {id: peering-setup, name: Create peering (local/global) and verify, match: [peering-create, global-peering, peering-state]}
+      - {id: gateway-transit-setup, name: Gateway transit and remote gateways, match: [use-remote-gateways, allow-gateway-transit]}
+      - {id: spoke-to-spoke, name: Spoke-to-spoke via hub firewall, match: [spoke-to-spoke, transitive-routing]}
+      - {id: avnm-connectivity, name: Virtual Network Manager connectivity configurations (mesh), match: [connectivity-configuration, mesh-topology, avnm-connectivity]}
+      - {id: peering-troubleshooting, name: Peering troubleshooting (overlap, disconnected), match: [address-overlap, peering-disconnected, peering-troubleshooting]}
+      - {id: hub-spoke-design, name: Hub-and-spoke vs Virtual WAN decision, match: [hub-spoke-design, topology-choice]}
+      - {id: cross-tenant-peering, name: Cross-tenant and cross-subscription peering, match: [cross-tenant-peering]}
+      - {id: peering-iac, name: Bidirectional peering in Bicep and Terraform, match: [peering-bicep, bidirectional-peering]}
+  - id: outbound-connectivity
+    name: NAT Gateway, default outbound access and SNAT
+    source: AZ-104/Configure virtual networks; Learn/NAT Gateway How-to
+    match: [nat-gateway, default-outbound-access, snat-exhaustion]
+    subtopics:
+      - {id: nat-gateway-deploy, name: Deploy NAT Gateway with public IP prefix, match: [nat-gateway-deploy, public-ip-prefix]}
+      - {id: default-outbound-retirement, name: Default outbound access retirement and private subnets, match: [private-subnet, default-outbound-retirement]}
+      - {id: snat-troubleshooting, name: SNAT port exhaustion diagnosis, match: [snat-port-exhaustion, snat-troubleshooting]}
+      - {id: nat-gateway-metrics, name: NAT Gateway metrics and idle timeout, match: [nat-gateway-metrics, nat-idle-timeout]}
+      - {id: outbound-method-choice, name: Choose NAT Gateway vs LB outbound rules vs instance IPs, match: [outbound-method, outbound-choice]}
+      - {id: nat-gateway-zones, name: NAT gateway zonal design and StandardV2, match: [nat-gateway-zones, standardv2-nat]}
+      - {id: public-ip-management, name: Public IP SKUs and Basic IP retirement upgrade, match: [public-ip-sku, basic-ip-retirement, public-ip-upgrade]}
+      - {id: egress-allowlisting, name: Static egress IPs for partner allow-listing, match: [egress-allowlist, static-egress]}
+  - id: azure-dns
+    name: Azure DNS public zones, private zones and Private Resolver
+    source: AZ-104/Configure virtual networks; Learn/Azure DNS How-to
+    match: [azure-dns, public-dns-zones, dns-private-resolver, alias-records, dns-zones]
+    subtopics:
+      - {id: public-zone-delegation, name: Public zone delegation and record sets, match: [dns-delegation, record-sets, name-servers]}
+      - {id: alias-record-usage, name: Alias records to Azure resources, match: [alias-record, alias-records-usage]}
+      - {id: private-dns-zones, name: Private DNS zones, VNet links and auto-registration, match: [private-dns-zones, vnet-links, auto-registration]}
+      - {id: private-resolver-setup, name: Private Resolver inbound/outbound endpoints and rulesets, match: [inbound-endpoint, outbound-endpoint, dns-forwarding-ruleset]}
+      - {id: dnssec, name: DNSSEC signing, match: [dnssec]}
+      - {id: dns-troubleshooting, name: DNS troubleshooting (168.63.129.16, split-horizon), match: [dns-troubleshooting, split-horizon, 168-63-129-16]}
+      - {id: dns-zone-migration, name: Zone file import and migrating DNS from other providers, match: [zone-file-import, dns-migration]}
+      - {id: dns-security-policy, name: DNS security policy and DNS query logs, match: [dns-security-policy, dns-query-logs]}
+      - {id: private-dns-fallback, name: Private DNS fallback to internet resolution, match: [nxdomain-redirect, fallback-to-internet]}
+  - id: private-link
+    name: Private endpoints and Private Link Service
+    source: AZ-500/Secure networking; Learn/Private Link How-to
+    match: [private-link, private-link-service, private-endpoints]
+    subtopics:
+      - {id: private-endpoint-create, name: Create private endpoints for PaaS, match: [private-endpoint-create, private-endpoint-setup]}
+      - {id: private-endpoint-dns, name: Private DNS zone groups and privatelink zones, match: [dns-zone-group, privatelink-zones, private-endpoint-dns]}
+      - {id: private-link-service-setup, name: Private Link Service behind Standard LB, match: [private-link-service-setup, pls-nat]}
+      - {id: private-endpoint-network-policies, name: NSG/UDR on private endpoints (network policies), match: [private-endpoint-network-policies, pe-nsg]}
+      - {id: private-endpoint-approval, name: Manual approval and cross-tenant connections, match: [connection-approval, cross-tenant-private-endpoint]}
+      - {id: private-endpoint-hub-dns, name: Centralised DNS for private endpoints in hub-spoke, match: [central-private-dns, private-endpoint-hub-dns]}
+      - {id: private-endpoint-policy, name: Policy to auto-create DNS records, match: [private-endpoint-policy, dine-private-dns]}
+      - {id: private-endpoint-troubleshooting, name: Private endpoint connectivity troubleshooting, match: [private-endpoint-troubleshooting]}
+      - {id: on-prem-private-dns, name: On-premises resolution of private endpoints via conditional forwarders, match: [conditional-forwarder, on-prem-private-dns]}
+  - id: load-balancer
+    name: Azure Load Balancer (standard) rules, probes and outbound rules
+    source: AZ-104/Configure load balancing; Learn/Load Balancer How-to
+    match: [load-balancer, azure-load-balancer, standard-load-balancer, health-probes, outbound-rules]
+    subtopics:
+      - {id: lb-rules-setup, name: Frontends, backend pools and rules, match: [backend-pool, lb-rules, frontend-ip]}
+      - {id: lb-probe-design, name: Health probe design, match: [probe-design, http-probe]}
+      - {id: lb-outbound-snat, name: Outbound rules and SNAT allocation, match: [snat, snat-port-exhaustion, outbound-snat]}
+      - {id: ha-ports-floating-ip, name: HA ports and floating IP for NVAs, match: [ha-ports, floating-ip]}
+      - {id: inbound-nat-rules, name: Inbound NAT rules, match: [inbound-nat-rules, nat-rules]}
+      - {id: gateway-cross-region-lb, name: Gateway and cross-region load balancer, match: [gateway-load-balancer, cross-region-load-balancer]}
+      - {id: basic-lb-migration, name: Migrate Basic to Standard LB, match: [basic-lb-retirement, basic-lb-migration]}
+      - {id: lb-diagnostics, name: Load balancer metrics health probe status and insights, match: [lb-insights, health-probe-status, lb-metrics]}
+      - {id: lb-session-persistence, name: Distribution mode and session persistence, match: [source-ip-affinity, distribution-mode]}
+      - {id: lb-admin-state, name: Backend pool admin state, match: [admin-state]}
+  - id: application-gateway
+    name: Application Gateway v2 listeners, rules and backends
+    source: AZ-104/Configure load balancing; Learn/Application Gateway How-to
+    match: [application-gateway, app-gateway, agw, agic]
+    subtopics:
+      - {id: agw-listeners-routing, name: Multi-site listeners and path-based routing, match: [multi-site-listener, path-based-routing, listeners]}
+      - {id: agw-tls, name: TLS with Key Vault certificates and end-to-end TLS, match: [end-to-end-tls, ssl-termination, key-vault-certificates]}
+      - {id: agw-probes-settings, name: Backend settings and custom probes, match: [backend-settings, custom-probes, http-settings]}
+      - {id: agw-rewrite, name: Rewrite rules and URL rewrite, match: [rewrite-rules, url-rewrite, header-rewrite]}
+      - {id: agw-scaling-frontend, name: Autoscaling and private frontend, match: [private-frontend, agw-autoscale]}
+      - {id: agw-kubernetes, name: AGIC and Application Gateway for Containers, match: [app-gateway-for-containers, agic-setup]}
+      - {id: agw-troubleshooting, name: 502 triage and diagnostics logs, match: [502-bad-gateway, agw-logs, access-logs]}
+      - {id: agw-mtls, name: Application Gateway mutual TLS, match: [ssl-profile, mtls]}
+      - {id: agw-redirects, name: HTTP to HTTPS and redirect configurations, match: [http-to-https-redirect, redirect-configuration]}
+      - {id: agw-v1-migration, name: Application Gateway v1 to v2 migration, match: [agw-v1-migration]}
+  - id: front-door
+    name: Azure Front Door and CDN
+    source: AZ-305/Design network; Learn/Front Door How-to
+    match: [front-door, azure-front-door, afd, cdn, traffic-manager]
+    subtopics:
+      - {id: afd-origins, name: Origin groups, origins and health probes, match: [origin-groups, origins, afd-probes]}
+      - {id: afd-routes-rules, name: Routes and rules engine, match: [routes, rules-engine]}
+      - {id: afd-caching, name: Caching, compression and purge, match: [afd-caching, cache-purge, compression]}
+      - {id: afd-private-link, name: Private Link origins and origin lock-down, match: [private-link-origin, origin-lock-down, x-azure-fdid]}
+      - {id: afd-domains, name: Custom domains and managed certificates, match: [afd-custom-domains, afd-certificates, apex-domain]}
+      - {id: traffic-manager-profiles, name: Traffic Manager routing methods and monitoring, match: [priority-routing, weighted-routing, endpoint-monitoring]}
+      - {id: afd-migration, name: Migrate Front Door classic/CDN to Standard/Premium, match: [afd-migration, cdn-migration]}
+      - {id: afd-monitoring, name: Front Door logs metrics and reports, match: [afd-logs, frontdooraccesslog]}
+      - {id: afd-cache-key, name: Query string caching and cache key behaviour, match: [query-string-caching, cache-key]}
+      - {id: traffic-manager-nested, name: Traffic Manager nested profiles and performance or geographic routing, match: [nested-profiles, tm-performance-routing, tm-geographic-routing]}
+  - id: azure-firewall
+    name: Azure Firewall policy, rule collections and Firewall Manager
+    source: AZ-500/Secure networking; Learn/Azure Firewall How-to
+    match: [azure-firewall-policy, firewall-manager, rule-collection-groups, dnat, fqdn-tags]
+    subtopics:
+      - {id: firewall-deploy, name: Deploy firewall in hub with SKUs and zones, match: [firewall-deploy, firewall-sku, azurefirewallsubnet]}
+      - {id: firewall-rules, name: Network, application and DNAT rules, match: [network-rules, application-rules, dnat-rules]}
+      - {id: policy-hierarchy, name: Policy hierarchy and IP groups, match: [policy-hierarchy, ip-groups, parent-policy]}
+      - {id: dns-proxy-fqdn, name: DNS proxy and FQDN filtering in network rules, match: [dns-proxy, fqdn-filtering]}
+      - {id: premium-features, name: Premium IDPS and TLS inspection, match: [idps, tls-inspection, firewall-premium]}
+      - {id: firewall-logs, name: Structured logs and KQL triage, match: [firewall-logs, structured-logs]}
+      - {id: secured-hub, name: Firewall Manager and secured virtual hub, match: [secured-virtual-hub, hub-firewall]}
+      - {id: threat-intel, name: Threat intelligence and web categories, match: [threat-intelligence, web-categories]}
+      - {id: firewall-snat-tunnel, name: Firewall SNAT private ranges and forced tunnelling management NIC, match: [snat-private-ranges, management-nic]}
+      - {id: firewall-troubleshooting, name: Firewall troubleshooting with policy analytics, match: [policy-analytics, firewall-troubleshooting]}
+      - {id: firewall-scale-ips, name: Firewall public IPs scaling and SNAT ports, match: [firewall-public-ips, firewall-snat-ports]}
+  - id: waf
+    name: Web Application Firewall policies
+    source: AZ-500/Secure networking; Learn/WAF How-to
+    match: [waf, web-application-firewall, waf-policy, owasp-crs, bot-protection, ddos-protection]
+    subtopics:
+      - {id: managed-rule-sets, name: Managed rule sets (DRS/CRS) and anomaly scoring, match: [managed-rules, drs, anomaly-scoring]}
+      - {id: waf-custom-rules, name: Custom rules, rate limiting and geo-filtering, match: [custom-rules, rate-limiting, geo-filtering]}
+      - {id: waf-exclusions, name: Exclusions and false positive tuning, match: [exclusions, false-positives]}
+      - {id: waf-modes, name: Detection to prevention rollout, match: [detection-mode, prevention-mode]}
+      - {id: bot-manager, name: Bot protection rules, match: [bot-manager, bot-rules]}
+      - {id: waf-logs, name: WAF logs analysis, match: [waf-logs, waf-kql]}
+      - {id: ddos-protection-plans, name: DDoS Network vs IP Protection, match: [ddos-network-protection, ddos-ip-protection]}
+      - {id: ddos-response, name: DDoS telemetry and Rapid Response, match: [ddos-rapid-response, ddos-telemetry]}
+      - {id: waf-policy-scope, name: Per-site and per-URI WAF policies, match: [per-site-policy, per-uri-policy]}
+      - {id: waf-tuning, name: WAF tuning workflow from detection to prevention, match: [waf-tuning]}
+      - {id: waf-js-challenge, name: JavaScript challenge and CAPTCHA actions, match: [javascript-challenge, captcha]}
+  - id: vpn-gateway
+    name: VPN Gateway site-to-site and point-to-site
+    source: AZ-305/Design network; Learn/VPN Gateway How-to
+    match: [vpn-gateway, site-to-site, point-to-site, s2s-vpn, p2s-vpn]
+    subtopics:
+      - {id: s2s-connection, name: S2S connection with local network gateway, match: [local-network-gateway, s2s-connection, shared-key]}
+      - {id: p2s-setup, name: P2S with OpenVPN, Entra auth or certificates, match: [openvpn, azure-vpn-client, certificate-authentication]}
+      - {id: vpn-bgp-active-active, name: BGP and active-active gateways, match: [vpn-bgp, active-active]}
+      - {id: ipsec-policy, name: Custom IPsec/IKE policy, match: [ipsec-policy, ike-policy]}
+      - {id: vpn-sku-zones, name: Gateway SKU and zone-redundant selection, match: [gateway-sku, vpngw2az]}
+      - {id: vnet-to-vnet, name: VNet-to-VNet connections, match: [vnet-to-vnet]}
+      - {id: vpn-troubleshooting, name: VPN diagnostics and IKE failure triage, match: [vpn-troubleshooting, vpn-diagnostics, ike-failure]}
+      - {id: vpn-nat, name: NAT on VPN Gateway for overlapping ranges, match: [vpn-nat, nat-rules-vpn]}
+      - {id: p2s-entra-auth, name: P2S Entra ID authentication, match: [p2s-entra-id, vpn-entra-auth]}
+      - {id: vpn-gateway-migration, name: VPN gateway Basic SKU and public IP migration, match: [basic-sku-migration, vpn-gateway-migration]}
+      - {id: vpn-device-config, name: On-premises VPN device configuration, match: [vpn-device-config, device-configuration-script]}
+  - id: expressroute
+    name: ExpressRoute circuits, peering and Global Reach
+    source: AZ-305/Design network; Learn/ExpressRoute How-to
+    match: [expressroute, expressroute-circuit, global-reach, fastpath, vwan, virtual-wan-hub]
+    subtopics:
+      - {id: circuit-provisioning, name: Circuit creation and provider provisioning, match: [service-key, circuit-provisioning, provider-circuit]}
+      - {id: private-peering, name: Private peering configuration, match: [private-peering]}
+      - {id: microsoft-peering, name: Microsoft peering and route filters, match: [microsoft-peering, route-filters, bgp-communities]}
+      - {id: expressroute-gateway, name: ExpressRoute gateway SKUs and FastPath, match: [expressroute-gateway, ergw-az, fastpath-setup]}
+      - {id: global-reach-setup, name: Global Reach, match: [global-reach-setup]}
+      - {id: expressroute-resiliency, name: Maximum resiliency and dual circuits, match: [maximum-resiliency, expressroute-resiliency, dual-circuits]}
+      - {id: expressroute-monitoring, name: Monitoring BGP and circuit health, match: [expressroute-monitoring, bgp-peers, circuit-health]}
+      - {id: vwan-hub, name: Virtual WAN hub and routing intent, match: [routing-intent, hub-routing, secured-hub-routing]}
+      - {id: vwan-branches, name: Virtual WAN VPN sites and branches, match: [vpn-sites, vwan-branches, vwan-vpn]}
+      - {id: expressroute-direct, name: ExpressRoute Direct ports and MACsec, match: [er-direct-ports, macsec]}
+      - {id: er-vpn-coexistence, name: ExpressRoute and site-to-site VPN coexistence and failover, match: [coexistence, vpn-failover]}
+  - id: network-troubleshooting
+    name: Network Watcher diagnostics and flow logs
+    source: AZ-104/Monitor and maintain; Learn/Network Watcher How-to
+    match: [connection-troubleshoot, ip-flow-verify, nsg-diagnostics, packet-capture, connection-monitor]
+    subtopics:
+      - {id: ip-flow-nsg-diag, name: IP flow verify and NSG diagnostics, match: [ip-flow, nsg-diag]}
+      - {id: next-hop-effective-routes, name: Next hop and effective routes, match: [next-hop-check, effective-route-table]}
+      - {id: connection-troubleshoot-use, name: Connection troubleshoot, match: [connection-troubleshoot-use, connectivity-check]}
+      - {id: packet-capture-use, name: Packet capture with filters, match: [packet-capture-use, pcap]}
+      - {id: connection-monitor-setup, name: Connection Monitor tests and alerts, match: [connection-monitor-setup, connection-monitor-tests]}
+      - {id: flow-logs-traffic-analytics, name: VNet flow logs and Traffic Analytics, match: [traffic-analytics, flow-logs]}
+      - {id: topology-vpn-diag, name: Topology view and VPN troubleshoot, match: [topology, vpn-troubleshoot]}
+      - {id: network-watcher-enable, name: Network Watcher enablement and required permissions, match: [network-watcher-enable, networkwatcherrg]}
+      - {id: latency-testing, name: Latency and throughput testing with psping latte and iperf, match: [psping, latte, iperf]}
+      - {id: mtu-mss, name: MTU fragmentation and TCP MSS clamping, match: [mtu, mss-clamping]}
+  - id: api-management
+    name: API Management gateway and policies
+    source: AZ-305/Design application architecture; Learn/API Management How-to
+    match: [api-management, apim, api-gateway, apim-policies]
+    subtopics:
+      - {id: apim-tier-vnet, name: Tier selection, v2 tiers and VNet modes, match: [apim-v2, internal-vnet, apim-tiers]}
+      - {id: openapi-import, name: Import OpenAPI and manage revisions/versions, match: [openapi-import, api-revisions, api-versions]}
+      - {id: apim-auth-policies, name: validate-jwt and authentication policies, match: [validate-jwt, apim-authentication]}
+      - {id: apim-rate-limit-cache, name: Rate limit, quota and caching policies, match: [rate-limit-by-key, quota, cache-lookup]}
+      - {id: apim-backends, name: Backends, load balancing and circuit breaker, match: [backends, circuit-breaker, load-balanced-backend]}
+      - {id: named-values-kv, name: Named values with Key Vault, match: [named-values]}
+      - {id: products-subscriptions, name: Products, subscriptions and developer portal, match: [products, developer-portal]}
+      - {id: self-hosted-gateway, name: Self-hosted gateway, match: [self-hosted-gateway]}
+      - {id: apiops, name: APIOps CI/CD, match: [apiops]}
+      - {id: apim-observability, name: APIM diagnostics and Application Insights, match: [apim-diagnostics, apim-logging]}
+      - {id: apim-workspaces, name: APIM workspaces for federated API management, match: [apim-workspaces]}
+      - {id: apim-ai-gateway, name: APIM AI gateway token limits and semantic caching, match: [ai-gateway, azure-openai-token-limit]}
+      - {id: apim-backup-dr, name: APIM backup restore and multi-region deployment, match: [apim-backup, apim-multi-region]}
+  # --- Monitoring and operations (AZ-104 Monitor and maintain; AZ-305 Design monitoring; AZ-400 Instrumentation; WAF Operational Excellence)
+  - id: azure-monitor-alerts
+    name: Azure Monitor metric/log alerts and action groups
+    source: AZ-104/Monitor resources; Learn/Azure Monitor alerts How-to
+    match: [azure-monitor, metric-alerts, alert-rules, action-groups, alert-processing-rules]
+    subtopics:
+      - {id: metric-alert-rules, name: Metric alerts with dynamic thresholds, match: [dynamic-thresholds, metric-alert-rules]}
+      - {id: log-search-alerts, name: Log search alerts, match: [log-alerts, log-search-alerts]}
+      - {id: activity-log-alerts, name: Activity log alerts, match: [activity-log-alerts]}
+      - {id: action-group-design, name: Action groups, webhooks and common schema, match: [common-alert-schema, webhook, itsm-connector]}
+      - {id: alert-processing, name: Alert processing rules and suppression, match: [alert-suppression, maintenance-suppression]}
+      - {id: alerts-at-scale, name: Alerts at scale via Policy and multi-resource rules, match: [multi-resource-alerts, alerts-at-scale]}
+      - {id: prometheus-alerts, name: Prometheus rule groups, match: [prometheus-alerts, prometheus-rule-groups]}
+      - {id: alert-state-management, name: Alert states auto-resolve and stateful alerts, match: [alert-state, auto-resolve, stateful-alerts]}
+      - {id: alerts-as-code, name: Alert rules in Bicep and Terraform, match: [alert-rules-bicep, alerts-as-code]}
+      - {id: smart-detection, name: Smart detection and failure anomalies migration to alerts, match: [failure-anomalies-alert-rule, smart-detection-migration]}
+  - id: log-analytics-kql
+    name: Log Analytics workspaces and KQL
+    source: AZ-104/Monitor resources; Learn/Log Analytics How-to
+    match: [log-analytics, kql, kusto, log-queries, log-analytics-workspace, basic-logs, commitment-tiers, workbooks]
+    subtopics:
+      - {id: workspace-design, name: Workspace topology and access mode, match: [workspace-design, resource-context-access]}
+      - {id: table-plans, name: Table plans (Analytics, Basic, Auxiliary), match: [table-plans, auxiliary-logs]}
+      - {id: retention-archive, name: Retention, archive and search jobs, match: [log-retention, search-jobs, archive]}
+      - {id: ingestion-transformations, name: Ingestion-time transformations, match: [ingestion-transformations, dcr-transformations]}
+      - {id: ingestion-cost-analysis, name: Usage table cost analysis, match: [usage-table, ingestion-cost]}
+      - {id: kql-operators, name: KQL operators and ops query patterns, match: [kql-patterns, summarize, kql-operators]}
+      - {id: workbooks-authoring, name: Workbooks authoring, match: [workbooks-authoring, workbook-templates]}
+      - {id: data-export, name: Data export to Event Hub/Storage, match: [data-export]}
+      - {id: table-rbac, name: Table-level RBAC, match: [table-level-rbac]}
+      - {id: summary-rules, name: Summary rules, match: [summary-rules]}
+      - {id: commitment-tiers, name: Commitment tiers and daily cap, match: [commitment-tiers, daily-cap]}
+      - {id: workspace-replication, name: Workspace replication and Log Analytics dedicated clusters, match: [workspace-replication-failover, log-analytics-dedicated-cluster]}
+      - {id: kql-functions-series, name: KQL saved functions and time series with make-series, match: [make-series, kql-functions]}
+  - id: diagnostic-settings
+    name: Diagnostic settings, resource logs and activity log
+    source: AZ-104/Monitor resources; Learn/Diagnostic settings How-to
+    match: [diagnostic-settings, resource-logs, activity-log, platform-logs]
+    subtopics:
+      - {id: diagnostic-setting-create, name: Create diagnostic settings with category groups, match: [category-groups, alllogs, diagnostic-setting-create]}
+      - {id: log-destinations, name: Destinations (Log Analytics, Storage, Event Hub, partner), match: [event-hub-export, storage-archive, partner-solutions]}
+      - {id: resource-specific-tables, name: Resource-specific vs AzureDiagnostics tables, match: [resource-specific-tables, azurediagnostics]}
+      - {id: activity-log-export, name: Activity log export and retention, match: [activity-log-export, azureactivity]}
+      - {id: entra-logs-export, name: Entra ID diagnostic settings (sign-in, audit), match: [entra-diagnostic-settings, signin-logs, audit-logs]}
+      - {id: policy-deploy-diagnostics, name: Deploy diagnostics at scale via Policy, match: [policy-deploy-diagnostics, diagnostics-at-scale]}
+      - {id: diagnostic-settings-troubleshooting, name: Diagnostic settings limits and missing log troubleshooting, match: [diagnostic-settings-limits, missing-logs]}
+      - {id: metrics-export, name: Platform metrics export with data collection rules, match: [metrics-export, platform-metrics]}
+  - id: azure-monitor-agent
+    name: Azure Monitor Agent, data collection rules and VM Insights
+    source: AZ-104/Monitor resources; Learn/Azure Monitor Agent How-to
+    match: [azure-monitor-agent, ama, data-collection-rules, dcr, vm-insights]
+    subtopics:
+      - {id: ama-install, name: Install AMA and associate DCRs via Policy, match: [ama-install, policy-deploy-ama, dcr-association]}
+      - {id: dcr-perf-events, name: DCRs for performance counters and Windows events, match: [performance-counters, windows-event-logs]}
+      - {id: dcr-syslog, name: Syslog collection, match: [syslog]}
+      - {id: custom-logs, name: Custom text/JSON logs and IIS logs, match: [custom-text-logs, json-logs, iis-logs]}
+      - {id: logs-ingestion-api, name: Logs Ingestion API with DCE, match: [logs-ingestion-api, data-collection-endpoint, dce]}
+      - {id: vm-insights-setup, name: VM Insights and dependency map, match: [vm-insights-setup, dependency-agent]}
+      - {id: ama-troubleshooting, name: Agent health and heartbeat troubleshooting, match: [agent-health, heartbeat, ama-troubleshooting]}
+      - {id: mma-migration, name: Migrate from Log Analytics agent, match: [mma-migration]}
+      - {id: ampls, name: Azure Monitor Private Link Scope and AMA proxy settings, match: [ampls, monitor-private-link-scope, ama-proxy]}
+      - {id: ama-windows-client, name: AMA on Windows client devices, match: [windows-client-installer]}
+      - {id: dcr-xpath, name: XPath filtering for Windows event collection, match: [xpath-queries, event-filtering-xpath]}
+  - id: application-insights
+    name: Application Insights and OpenTelemetry
+    source: AZ-400/Instrumentation strategy; Learn/Application Insights How-to
+    match: [application-insights, app-insights, availability-tests, opentelemetry, distributed-tracing]
+    subtopics:
+      - {id: otel-distro, name: Azure Monitor OpenTelemetry distro setup, match: [otel, azure-monitor-opentelemetry-distro]}
+      - {id: auto-instrumentation, name: Codeless auto-instrumentation, match: [auto-instrumentation, codeless]}
+      - {id: sampling-config, name: Sampling for cost, match: [sampling, adaptive-sampling]}
+      - {id: availability-test-setup, name: Standard availability tests, match: [standard-test, availability-test-setup]}
+      - {id: application-map-triage, name: Application map, failures and performance triage, match: [application-map, failures-blade, performance-blade]}
+      - {id: live-metrics-profiler, name: Live metrics, Profiler and Snapshot Debugger, match: [live-metrics, profiler, snapshot-debugger]}
+      - {id: app-insights-kql, name: Querying requests/dependencies/exceptions, match: [app-insights-kql, requests-table, dependencies-table]}
+      - {id: telemetry-auth, name: Connection strings and Entra-based ingestion, match: [connection-string, entra-ingestion-auth]}
+      - {id: workspace-based-migration, name: Classic to workspace-based Application Insights migration, match: [workspace-based-application-insights, classic-ai-migration]}
+      - {id: custom-telemetry, name: Custom events metrics and telemetry processors, match: [custom-events, custom-metrics, telemetry-processors]}
+      - {id: browser-sdk, name: JavaScript SDK real user monitoring, match: [javascript-sdk, real-user-monitoring]}
+  - id: service-health-advisor
+    name: Service Health, Resource Health and Advisor
+    source: AZ-104/Monitor resources; Learn/Service Health How-to
+    match: [service-health, resource-health, azure-advisor, advisor]
+    subtopics:
+      - {id: service-health-alerts, name: Service Health alerts by region and service, match: [service-health-alerts, service-issues]}
+      - {id: resource-health-alerts, name: Resource Health alerts and KQL, match: [resource-health-alerts, resource-health-kql]}
+      - {id: planned-maintenance-notices, name: Planned maintenance notifications and self-service maintenance, match: [planned-maintenance, health-advisories]}
+      - {id: advisor-recommendations, name: Advisor recommendations and score, match: [advisor-recommendations, advisor-score]}
+      - {id: advisor-alerts, name: Advisor alerts and digests, match: [advisor-alerts, advisor-digest]}
+      - {id: impacted-resources, name: Impacted resources and incident communications, match: [impacted-resources, incident-communications]}
+      - {id: resource-health-states, name: Resource Health states and root cause analysis, match: [resource-health-states, root-cause-analysis]}
+      - {id: security-advisories, name: Security advisories and Service Health access, match: [security-advisory-alerts, service-health-rbac]}
+      - {id: service-retirements, name: Service retirement tracking with the retirement workbook, match: [retirement-workbook, service-retirements]}
+  - id: well-architected-review
+    name: Well-Architected Framework assessment and review
+    source: WAF (all pillars); Learn/Well-Architected
+    match: [well-architected, waf-review, azure-well-architected, design-review, chaos-studio, azure-load-testing]
+    subtopics:
+      - {id: waf-assessment-tool, name: Run the Well-Architected Review assessment, match: [waf-assessment, review-assessment]}
+      - {id: reliability-pillar, name: Reliability pillar and failure mode analysis, match: [failure-mode-analysis, reliability, health-model]}
+      - {id: security-pillar, name: Security pillar checklist, match: [security-baseline, security-pillar]}
+      - {id: cost-pillar, name: Cost Optimization pillar, match: [cost-optimisation, cost-pillar]}
+      - {id: opex-pillar, name: Operational Excellence pillar, match: [operational-excellence, opex-pillar]}
+      - {id: performance-pillar, name: Performance Efficiency pillar, match: [performance-efficiency, performance-pillar]}
+      - {id: load-testing, name: Azure Load Testing runs and CI gates, match: [load-testing, jmeter, locust]}
+      - {id: chaos-experiments, name: Chaos Studio experiments, match: [chaos-experiments, fault-injection]}
+      - {id: review-checklists, name: Azure review checklists tooling, match: [azure-review-checklist, review-checklists]}
+      - {id: waf-service-guides, name: Well-Architected service guides per Azure service, match: [waf-service-guide, service-guide-checklist]}
+  # --- Business continuity (AZ-104 Backup and recovery; AZ-305 Design business continuity; WAF Reliability)
+  - id: azure-backup-vms
+    name: Azure Backup for VMs and Recovery Services vaults
+    source: AZ-104/Implement backup and recovery; Learn/Azure Backup How-to
+    match: [azure-backup, recovery-services-vault, backup-policy, vm-backup, backup-vault, backup-center]
+    subtopics:
+      - {id: vault-setup, name: Recovery Services vs Backup vault setup, match: [vault-setup, vault-redundancy]}
+      - {id: vm-backup-policy, name: VM backup policies (standard, enhanced), match: [enhanced-policy, vm-backup-policy]}
+      - {id: vm-restore, name: Restore VM, disks and files, match: [vm-restore, file-level-recovery, instant-restore]}
+      - {id: workload-backup, name: SQL/SAP HANA in VM backup, match: [sql-backup, sap-hana-backup]}
+      - {id: paas-backup, name: Files, Blob, Disk, AKS and PostgreSQL backup, match: [blob-backup, disk-backup, aks-backup]}
+      - {id: vault-security, name: Soft delete, immutable vault and MUA, match: [immutable-vault, multi-user-authorization, resource-guard]}
+      - {id: cross-region-restore, name: Cross-region restore, match: [cross-region-restore]}
+      - {id: backup-reporting, name: Backup Center, reports and policy at scale, match: [backup-reports, business-continuity-center, backup-policy-at-scale]}
+      - {id: mars-agent, name: MARS agent and MABS for on-prem, match: [mars-agent, mabs]}
+      - {id: backup-troubleshooting, name: VM backup job failure troubleshooting, match: [backup-errors, usererrorguestagentstatusunavailable]}
+      - {id: backup-soft-delete, name: Backup soft delete and enhanced soft delete, match: [enhanced-soft-delete, backup-soft-delete]}
+  - id: site-recovery
+    name: Azure Site Recovery replication and failover
+    source: AZ-104/Implement backup and recovery; Learn/Site Recovery How-to
+    match: [site-recovery, asr, recovery-plan, test-failover]
+    subtopics:
+      - {id: a2a-replication, name: Azure-to-Azure replication setup, match: [azure-to-azure, a2a-replication]}
+      - {id: zone-to-zone, name: Zone-to-zone replication, match: [zone-to-zone]}
+      - {id: vmware-to-azure, name: VMware/physical to Azure with replication appliance, match: [vmware-to-azure, replication-appliance, physical-to-azure]}
+      - {id: hyper-v-to-azure, name: Hyper-V to Azure, match: [hyper-v-to-azure]}
+      - {id: recovery-plans, name: Recovery plans with scripts and groups, match: [recovery-plans, recovery-plan-scripts]}
+      - {id: failover-failback, name: Failover, re-protect and failback, match: [failback, re-protect]}
+      - {id: asr-network-mapping, name: Network mapping and target IP retention, match: [network-mapping, target-network, ip-retention]}
+      - {id: asr-monitoring, name: RPO monitoring and replication health, match: [rpo-alerts, replication-health]}
+      - {id: asr-test-failover, name: Site Recovery test failover drills, match: [asr-test-failover, test-failover-network]}
+      - {id: asr-troubleshooting, name: Site Recovery replication errors and Mobility service, match: [asr-troubleshooting, mobility-agent-errors]}
+      - {id: asr-deployment-planner, name: Site Recovery deployment planner and capacity, match: [deployment-planner, asr-capacity]}
+  - id: bcdr-design
+    name: RTO/RPO, region pairs and multi-region design
+    source: AZ-305/Design business continuity; WAF Reliability
+    match: [bcdr, rto, rpo, region-pairs, paired-regions, multi-region, composite-sla]
+    subtopics:
+      - {id: rto-rpo-tiers, name: Define RTO/RPO tiers per workload, match: [recovery-tiers, dr-tiers]}
+      - {id: multi-region-patterns, name: Active-active, warm standby and pilot light, match: [active-active, warm-standby, pilot-light]}
+      - {id: composite-sla-maths, name: Composite SLA calculation, match: [sla, availability-targets, sla-calculator]}
+      - {id: zone-vs-region, name: Zone-redundant vs multi-region decision, match: [zone-redundant, cross-region]}
+      - {id: failover-runbooks, name: Failover runbooks and DR drills, match: [failover-runbook, dr-drill]}
+      - {id: data-residency, name: Data residency and region selection, match: [data-residency, region-selection]}
+      - {id: service-geo-features, name: Per-service geo-redundancy features map, match: [geo-replication, geo-redundancy-map]}
+      - {id: ransomware-resilience, name: Backup strategy and ransomware resilience, match: [ransomware-resilience, backup-strategy]}
+      - {id: dns-traffic-failover, name: DNS and traffic failover patterns, match: [dns-failover, traffic-failover]}
+      - {id: non-paired-regions, name: DR for non-paired regions, match: [non-paired-regions]}
+  # --- Data platform (AZ-305 Design data storage; AZ-500 Secure databases)
+  - id: azure-sql
+    name: Azure SQL Database and Managed Instance tiers and pools
+    source: AZ-305/Design relational data; Learn/Azure SQL How-to
+    match: [azure-sql, sql-database, sql-managed-instance, hyperscale, elastic-pools, vcore]
+    subtopics:
+      - {id: sql-deployment-choice, name: SQL DB vs MI vs SQL on VM, match: [sql-server-on-vm, deployment-option]}
+      - {id: sql-tiers, name: vCore tiers (GP/BC/Hyperscale) and serverless, match: [general-purpose, business-critical, serverless]}
+      - {id: sql-elastic-pools, name: Elastic pools and instance pools, match: [instance-pools, pool-sizing]}
+      - {id: sql-zone-maintenance, name: Zone redundancy and maintenance windows, match: [zone-redundant, maintenance-window]}
+      - {id: sql-backup-restore, name: PITR, LTR and geo-restore, match: [point-in-time-restore, ltr, geo-restore]}
+      - {id: sql-mi-networking, name: Managed Instance networking and subnet, match: [mi-subnet, mi-networking]}
+      - {id: sql-performance, name: Query Store, Query Performance Insight and tuning, match: [query-store, query-performance-insight, automatic-tuning]}
+      - {id: sql-import-export, name: Import/export BACPAC and database copy, match: [bacpac, database-copy]}
+      - {id: sql-hyperscale, name: SQL Database Hyperscale, match: [hyperscale]}
+      - {id: sql-connectivity, name: SQL connection policy redirect vs proxy and retry logic, match: [connection-policy, redirect-mode, transient-fault-handling]}
+      - {id: sql-elastic-jobs, name: Elastic jobs, match: [elastic-jobs]}
+  - id: sql-high-availability
+    name: SQL failover groups and geo-replication
+    source: AZ-305/Design business continuity; Learn/Azure SQL HA
+    match: [failover-groups, auto-failover-groups, active-geo-replication, sql-ha]
+    subtopics:
+      - {id: geo-replication-setup, name: Active geo-replication setup, match: [geo-replication-setup, geo-secondary]}
+      - {id: failover-group-setup, name: Auto-failover groups and listener endpoints, match: [listener-endpoint, read-write-listener, read-only-listener]}
+      - {id: failover-types, name: Planned vs forced failover and grace period, match: [planned-failover, forced-failover, grace-period]}
+      - {id: read-scale-out, name: Read scale-out and named replicas, match: [read-scale-out, named-replicas]}
+      - {id: mi-link, name: Managed Instance link, match: [managed-instance-link, distributed-availability-group]}
+      - {id: sql-dr-drill, name: DR drills proving RTO/RPO, match: [dr-drill, sql-dr-test]}
+      - {id: mi-failover-group, name: Managed Instance failover groups, match: [mi-failover-group]}
+      - {id: replication-lag, name: Geo-replication lag monitoring, match: [replication-lag, dm-geo-replication-link-status]}
+      - {id: sql-vm-availability-group, name: SQL Server on VM Always On availability groups, match: [sql-vm-availability-group, always-on-ag]}
+  - id: sql-security
+    name: SQL TDE, Always Encrypted, masking, auditing, Defender for SQL
+    source: AZ-500/Secure databases; Learn/Azure SQL security
+    match: [sql-security, tde, always-encrypted, dynamic-data-masking, sql-auditing, defender-for-sql]
+    subtopics:
+      - {id: entra-only-auth, name: Entra-only authentication and managed identities, match: [entra-only-auth, managed-identity-sql, entra-authentication]}
+      - {id: tde-setup, name: TDE with service or customer keys, match: [transparent-data-encryption, tde-cmk]}
+      - {id: always-encrypted-setup, name: Always Encrypted and secure enclaves, match: [secure-enclaves, always-encrypted-setup]}
+      - {id: masking-rls, name: Dynamic data masking and row-level security, match: [row-level-security, masking-rules]}
+      - {id: sql-auditing-setup, name: Auditing to Log Analytics/Storage, match: [sql-auditing-setup, audit-logs-sql]}
+      - {id: defender-sql, name: Defender for SQL and vulnerability assessment, match: [vulnerability-assessment, advanced-threat-protection]}
+      - {id: sql-network-security, name: Firewall rules, private endpoint and public access, match: [sql-firewall, sql-private-endpoint]}
+      - {id: sql-ledger, name: Ledger tables, match: [ledger, sql-ledger]}
+      - {id: data-classification, name: Data discovery and classification, match: [data-discovery-classification, sensitivity-labels]}
+      - {id: sql-database-roles, name: Database roles and least privilege in Azure SQL, match: [database-roles, least-privilege-sql]}
+  - id: cosmos-db
+    name: Cosmos DB partitioning, RUs and consistency
+    source: AZ-305/Design non-relational data; Learn/Cosmos DB How-to
+    match: [cosmos-db, cosmosdb, partition-key, request-units, consistency-levels]
+    subtopics:
+      - {id: partition-design, name: Partition key and hierarchical keys, match: [hierarchical-partition-keys, partition-design, hot-partition]}
+      - {id: throughput-modes, name: Provisioned, autoscale and serverless throughput, match: [provisioned-throughput, autoscale-ru, serverless-cosmos]}
+      - {id: consistency-choice, name: Consistency level selection, match: [session-consistency, bounded-staleness]}
+      - {id: multi-region-writes, name: Multi-region writes and failover, match: [multi-region-writes, automatic-failover, service-managed-failover]}
+      - {id: change-feed, name: Change feed processing, match: [change-feed-processor, change-feed]}
+      - {id: indexing-policy, name: Indexing policy tuning, match: [indexing-policy, composite-indexes]}
+      - {id: cosmos-backup, name: Continuous backup and PITR, match: [continuous-backup, cosmos-pitr]}
+      - {id: cosmos-security, name: Cosmos RBAC, private endpoint and keys, match: [cosmos-rbac, cosmos-private-endpoint]}
+      - {id: cosmos-429, name: Diagnose 429 throttling and RU cost, match: [429-throttling, ru-charge, cosmos-metrics]}
+      - {id: cosmos-sdk, name: Cosmos DB SDK best practices, match: [cosmos-sdk, direct-mode, preferred-regions]}
+      - {id: cosmos-api-choice, name: Cosmos DB API choice and MongoDB vCore, match: [mongodb-vcore, cosmos-api-choice]}
+      - {id: cosmos-ttl, name: Cosmos DB time to live, match: [ttl, time-to-live]}
+  - id: open-source-databases
+    name: Azure Database for PostgreSQL/MySQL flexible server
+    source: AZ-305/Design relational data; Learn/Flexible server How-to
+    match: [postgresql-flexible-server, mysql-flexible-server, flexible-server, azure-database-for-postgresql]
+    subtopics:
+      - {id: flexible-server-provisioning, name: Compute, storage, autogrow and IOPS, match: [storage-autogrow, burstable, flexible-server-sizing]}
+      - {id: flexible-server-ha, name: Zone-redundant and same-zone HA, match: [zone-redundant-ha, same-zone-ha]}
+      - {id: read-replicas, name: Read replicas and promotion, match: [read-replicas, replica-promotion]}
+      - {id: flexible-server-networking, name: Private access vs private endpoint, match: [private-access, flexible-server-private-endpoint]}
+      - {id: flexible-server-auth, name: Entra authentication, match: [entra-authentication-postgres, entra-auth-mysql]}
+      - {id: server-parameters, name: Server parameters and extensions, match: [server-parameters, pg-extensions]}
+      - {id: pgbouncer, name: PgBouncer connection pooling, match: [pgbouncer, connection-pooling]}
+      - {id: flexible-server-backup, name: PITR and geo-redundant backup, match: [pitr, geo-redundant-backup]}
+      - {id: major-version-upgrade, name: Major version upgrades, match: [major-version-upgrade]}
+      - {id: single-to-flexible, name: Migrate Single Server to Flexible, match: [single-server-migration, single-to-flexible]}
+      - {id: flexible-server-monitoring, name: Flexible server monitoring query store and slow query logs, match: [slow-query-log, query-store-postgres, flexible-server-monitoring]}
+  - id: redis-cache
+    name: Azure Cache for Redis / Managed Redis
+    source: AZ-305/Design application architecture; Learn/Redis How-to
+    match: [azure-cache-for-redis, redis, azure-managed-redis, caching]
+    subtopics:
+      - {id: redis-tier-sizing, name: Tier selection and sizing, match: [cache-sizing, redis-enterprise, redis-tiers]}
+      - {id: redis-clustering, name: Clustering and zone redundancy, match: [redis-clustering, redis-zones]}
+      - {id: redis-persistence, name: RDB/AOF persistence, match: [redis-persistence, rdb, aof]}
+      - {id: redis-geo-replication, name: Active geo-replication, match: [active-geo-replication, redis-geo]}
+      - {id: redis-security, name: Private endpoint and Entra auth, match: [entra-authentication-redis, redis-private-endpoint, access-keys]}
+      - {id: redis-eviction, name: maxmemory and eviction policies, match: [maxmemory-policy, eviction]}
+      - {id: redis-clients, name: Resilient clients and multiplexing, match: [stackexchange-redis, connection-multiplexing]}
+      - {id: redis-monitoring, name: Server load metrics and alerts, match: [server-load, redis-metrics]}
+      - {id: redis-scaling, name: Scaling, reboot and maintenance, match: [redis-scaling, redis-reboot, redis-maintenance]}
+      - {id: redis-troubleshooting, name: Redis client timeouts and connection troubleshooting, match: [redis-timeouts, redis-troubleshooting]}
+  - id: data-integration
+    name: Data Factory, Synapse, Stream Analytics pipelines
+    source: AZ-305/Design data integration; Learn/Data Factory How-to
+    match: [data-factory, synapse, stream-analytics, data-pipelines, databricks]
+    subtopics:
+      - {id: adf-linked-services, name: Linked services, datasets and Key Vault, match: [linked-services, datasets, key-vault-linked-service]}
+      - {id: integration-runtime, name: Self-hosted and managed VNet integration runtimes, match: [integration-runtime, self-hosted-integration-runtime, managed-vnet]}
+      - {id: copy-activity, name: Copy activity tuning, match: [copy-activity, dius]}
+      - {id: mapping-data-flows, name: Mapping data flows, match: [mapping-data-flows, data-flow-debug]}
+      - {id: adf-triggers, name: Schedule, tumbling window and event triggers, match: [tumbling-window, event-trigger, schedule-trigger]}
+      - {id: incremental-load, name: Incremental loads with watermarks/CDC, match: [incremental-load, watermark, change-data-capture]}
+      - {id: adf-cicd, name: Git integration and CI/CD, match: [adf-git, adf-cicd]}
+      - {id: adf-monitoring, name: Pipeline monitoring and alerts, match: [pipeline-monitoring, adf-alerts]}
+      - {id: synapse-workspace, name: Synapse SQL pools and Spark, match: [synapse-workspace, dedicated-sql-pool, serverless-sql]}
+      - {id: stream-analytics-jobs, name: Stream Analytics jobs and windowing, match: [stream-analytics-jobs, windowing, streaming-units]}
+      - {id: databricks-setup, name: Databricks workspace and Unity Catalog, match: [databricks-workspace, unity-catalog]}
+      - {id: adf-security, name: Data Factory managed identity and private endpoints, match: [adf-managed-identity, adf-private-endpoint]}
+  - id: migration
+    name: Azure Migrate and Database Migration Service
+    source: AZ-305/Design migrations; Learn/Azure Migrate How-to
+    match: [azure-migrate, database-migration-service, dms, migration-assessment]
+    subtopics:
+      - {id: migrate-discovery, name: Discovery appliance and inventory, match: [discovery-appliance, discovery]}
+      - {id: migrate-assessment, name: Assessments (sizing, cost, readiness), match: [assessment, readiness, sizing-assessment]}
+      - {id: dependency-analysis, name: Dependency analysis, match: [dependency-analysis]}
+      - {id: business-case, name: Business case and TCO, match: [business-case]}
+      - {id: server-migration, name: Agentless/agent-based server migration, match: [server-migration, agentless-migration]}
+      - {id: test-migration-cutover, name: Test migration and cutover, match: [test-migration, cutover]}
+      - {id: dms-sql, name: SQL migration via DMS/extension, match: [sql-migration-extension, azure-sql-migration]}
+      - {id: dms-open-source, name: PostgreSQL/MySQL migration, match: [postgresql-migration, mysql-migration]}
+      - {id: migration-waves, name: Wave planning and runbooks, match: [migration-waves, migration-runbook]}
+      - {id: app-migration, name: Web app and AKS migration tooling, match: [app-service-migration-assistant, web-app-migration]}
+      - {id: post-migration, name: Post-migration optimisation and decommissioning, match: [post-migration, decommission]}
+  # --- Messaging and integration (AZ-305 Design application architecture)
+  - id: service-bus
+    name: Service Bus queues, topics, sessions and dead-lettering
+    source: AZ-305/Design messaging; Learn/Service Bus How-to
+    match: [service-bus, queues, topics, sessions, dead-letter-queue]
+    subtopics:
+      - {id: sb-receive-modes, name: Peek-lock, lock renewal and receive-and-delete, match: [peek-lock, lock-renewal, lock-duration]}
+      - {id: sb-sessions, name: Sessions for ordering, match: [session-state, message-sessions]}
+      - {id: sb-dead-letter, name: Dead-letter handling and resubmission, match: [dlq, dead-letter-handling, resubmit]}
+      - {id: sb-dedup-scheduling, name: Duplicate detection, scheduled and deferred messages, match: [duplicate-detection, scheduled-messages, deferred-messages]}
+      - {id: sb-filters, name: Topic filters and auto-forwarding, match: [sql-filters, correlation-filters, auto-forwarding]}
+      - {id: sb-premium, name: Premium messaging units and partitioning, match: [premium-messaging-units, partitioned-entities]}
+      - {id: sb-geo-dr, name: Geo-DR and geo-replication, match: [geo-dr, sb-geo-replication]}
+      - {id: sb-security, name: Managed identity, RBAC and private endpoint, match: [managed-identity-service-bus, sb-private-endpoint, sb-rbac]}
+      - {id: sb-monitoring, name: Metrics, DLQ alerts and throttling, match: [sb-metrics, active-messages, sb-throttling]}
+      - {id: sb-sdk-patterns, name: Service Bus SDK processor prefetch and batching, match: [servicebusprocessor, prefetch-count, batch-send]}
+  - id: event-hubs
+    name: Event Hubs streaming, Kafka endpoint and Capture
+    source: AZ-305/Design messaging; Learn/Event Hubs How-to
+    match: [event-hubs, event-streaming, kafka, capture, consumer-groups]
+    subtopics:
+      - {id: eh-partitions, name: Partition count and partition key design, match: [partitions, partition-count]}
+      - {id: eh-throughput, name: Throughput units, auto-inflate and processing units, match: [throughput-units, processing-units, auto-inflate]}
+      - {id: eh-processor, name: EventProcessorClient and checkpointing, match: [event-processor-client, checkpointing, blob-checkpoint-store]}
+      - {id: eh-kafka, name: Kafka endpoint and client config, match: [kafka-endpoint, kafka-clients]}
+      - {id: eh-capture, name: Capture to Storage/ADLS, match: [capture-setup, eh-capture]}
+      - {id: eh-schema-registry, name: Schema Registry, match: [schema-registry, avro]}
+      - {id: eh-tiers, name: Premium/Dedicated tiers and retention, match: [dedicated-cluster, premium-tier, retention]}
+      - {id: eh-geo-replication, name: Geo-replication and geo-DR, match: [eh-geo-replication, eh-geo-dr]}
+      - {id: eh-security, name: Managed identity and private endpoint, match: [managed-identity-event-hubs, eh-private-endpoint]}
+      - {id: eh-monitoring, name: Throttling, backlog and consumer lag, match: [consumer-lag, throttled-requests, backpressure]}
+      - {id: eh-consumer-groups, name: Event Hubs consumer groups and epoch receivers, match: [consumer-groups, epoch]}
+  - id: event-grid
+    name: Event Grid topics, subscriptions and system events
+    source: AZ-305/Design messaging; Learn/Event Grid How-to
+    match: [event-subscriptions, event-grid-topics, system-topics, mqtt-broker]
+    subtopics:
+      - {id: system-topic-events, name: System topics for Storage and Resource events, match: [blob-events, resource-events]}
+      - {id: custom-topics, name: Custom topics and domains, match: [custom-topics, event-domains]}
+      - {id: eg-namespaces, name: Namespace topics and pull delivery, match: [event-grid-namespaces, pull-delivery]}
+      - {id: eg-mqtt, name: MQTT broker and clients, match: [mqtt, mqtt-clients]}
+      - {id: eg-filtering, name: Advanced filters and CloudEvents schema, match: [advanced-filters, cloudevents, event-filtering]}
+      - {id: eg-delivery, name: Retry, dead-lettering and webhook validation, match: [dead-lettering, webhook-validation, eg-retry]}
+      - {id: eg-handlers, name: Handlers (Functions, Service Bus, Event Hubs) with managed identity, match: [event-handlers, managed-identity-delivery]}
+      - {id: eg-partner, name: Partner topics, match: [partner-topics]}
+      - {id: eg-network-security, name: Event Grid private endpoints and IP filtering, match: [eg-private-endpoint, eg-ip-filtering]}
+      - {id: eg-monitoring, name: Event Grid delivery metrics and diagnostic logs, match: [delivery-failures, eg-metrics]}
+  - id: logic-apps
+    name: Logic Apps workflows and connectors
+    source: AZ-305/Design automation; Learn/Logic Apps and Automation How-to
+    match: [logic-apps, workflow-automation, connectors, logic-apps-standard, azure-automation, runbooks]
+    subtopics:
+      - {id: logic-apps-hosting, name: Standard vs Consumption and stateful/stateless, match: [logic-apps-consumption, stateful-workflows, stateless-workflows]}
+      - {id: connectors-identity, name: Managed vs built-in connectors with managed identity, match: [managed-connectors, built-in-connectors, managed-identity-connections]}
+      - {id: workflow-error-handling, name: Scopes, run-after and retry policies, match: [run-after, scopes, workflow-retry]}
+      - {id: workflow-monitoring, name: Run history and monitoring, match: [run-history, workflow-monitoring]}
+      - {id: logic-apps-cicd, name: Logic Apps CI/CD, match: [logic-apps-cicd, workflow-deployment]}
+      - {id: automation-runbooks, name: Automation runbooks (PowerShell/Python), match: [powershell-runbooks, python-runbooks, automation-account]}
+      - {id: hybrid-worker, name: Hybrid Runbook Worker, match: [hybrid-runbook-worker]}
+      - {id: automation-schedules, name: Schedules, webhooks and job monitoring, match: [schedules, webhooks, automation-jobs]}
+      - {id: automation-identity, name: Automation managed identity and modules, match: [automation-managed-identity, automation-modules]}
+      - {id: logic-apps-networking, name: Logic Apps Standard VNet integration and private endpoints, match: [logic-apps-vnet, logic-apps-private-endpoint]}
+      - {id: integration-account, name: Integration accounts and B2B EDI, match: [integration-account, edi]}
+  - id: app-configuration
+    name: App Configuration and feature flags
+    source: AZ-400/Instrumentation strategy; Learn/App Configuration How-to
+    match: [app-configuration, feature-flags, feature-management, dynamic-configuration]
+    subtopics:
+      - {id: key-label-design, name: Key/label conventions and Key Vault references, match: [labels, key-vault-references]}
+      - {id: config-refresh, name: Dynamic refresh with sentinel key, match: [configuration-refresh, sentinel-key]}
+      - {id: feature-filters, name: Feature filters (targeting, percentage, time window), match: [feature-filters, targeting-filter, percentage-rollout]}
+      - {id: variants-experimentation, name: Variants and experimentation, match: [variants, experimentation]}
+      - {id: config-snapshots, name: Snapshots, match: [snapshots, configuration-snapshots]}
+      - {id: app-config-security, name: RBAC, managed identity and geo-replication, match: [app-config-rbac, managed-identity-app-config, geo-replication]}
+      - {id: app-config-kubernetes, name: Kubernetes provider, match: [kubernetes-provider]}
+      - {id: app-config-pipeline, name: Import/export and pipeline push, match: [config-import-export, azure-app-configuration-push]}
+      - {id: app-config-providers, name: App Configuration providers in .NET Java and Python, match: [app-config-provider, configuration-provider]}
+  # --- DevOps (AZ-400)
+  - id: azure-pipelines-yaml
+    name: Azure Pipelines YAML, templates and multi-stage
+    source: AZ-400/Build and release pipelines; Learn/Azure Pipelines How-to
+    match: [azure-pipelines, yaml-pipelines, pipeline-templates, multi-stage-pipelines, self-hosted-agents, agent-pools]
+    subtopics:
+      - {id: stages-jobs, name: Stages, jobs, dependsOn and conditions, match: [stages, jobs, dependson]}
+      - {id: templates-extends, name: Templates, extends and template repositories, match: [extends-templates, template-repositories, template-expressions]}
+      - {id: parameters-variables, name: Parameters vs variables and expression timing, match: [runtime-parameters, pipeline-variables, expression-timing]}
+      - {id: pipeline-triggers, name: CI/PR/scheduled triggers and path filters, match: [pipeline-triggers, pr-triggers, path-filters]}
+      - {id: caching-artifacts, name: Caching and pipeline artifacts, match: [caching, pipeline-artifacts]}
+      - {id: matrix-strategy, name: Matrix and parallel strategies, match: [matrix-strategy, parallel-jobs]}
+      - {id: self-hosted-agent-setup, name: Self-hosted agent installation and pools, match: [agent-install, managed-devops-pools, scale-set-agents]}
+      - {id: pipeline-resources, name: Resources (pipelines, repositories, containers), match: [pipeline-resources, container-jobs, repository-resources]}
+      - {id: pipeline-troubleshooting, name: Pipeline failures, diagnostics and retention, match: [pipeline-troubleshooting, pipeline-retention, pipeline-diagnostics]}
+      - {id: pipeline-conditions, name: Pipeline conditions and custom expressions, match: [pipeline-conditions, succeededorfailed]}
+      - {id: test-results-coverage, name: Publishing test results and code coverage, match: [publish-test-results, code-coverage]}
+      - {id: classic-to-yaml, name: Migrating classic pipelines to YAML, match: [classic-to-yaml]}
+  - id: environments-approvals
+    name: Environments, approvals, checks and deployment strategies
+    source: AZ-400/Build and release pipelines; Learn/Pipelines environments
+    match: [environments, approvals, checks, release-gates, deployment-strategies]
+    subtopics:
+      - {id: environment-approvals, name: Environment approvals and timeouts, match: [environment-approvals, approval-timeout]}
+      - {id: branch-control-checks, name: Branch control and required template checks, match: [branch-control, required-template]}
+      - {id: business-hours-locks, name: Business hours and exclusive lock checks, match: [business-hours-check, exclusive-lock]}
+      - {id: gate-checks, name: Invoke Azure Function/REST and Monitor alert checks, match: [invoke-azure-function-check, query-alerts-check, rest-api-check]}
+      - {id: deployment-job-strategies, name: runOnce, rolling and canary deployment jobs, match: [deployment-jobs, runonce, rolling, canary]}
+      - {id: blue-green, name: Blue/green and slot-based releases, match: [blue-green]}
+      - {id: deployment-groups, name: Deployment groups and VM resources, match: [deployment-group, vm-resources]}
+      - {id: kubernetes-environment, name: Kubernetes environment resources, match: [kubernetes-environment-resource]}
+      - {id: release-traceability, name: Traceability and change management, match: [traceability, change-management]}
+      - {id: manual-validation, name: ManualValidation task in agentless jobs, match: [manual-validation]}
+  - id: azure-repos
+    name: Azure Repos branch policies and branching strategy
+    source: AZ-400/Source control strategy; Learn/Azure Repos How-to
+    match: [azure-repos, branch-policies, pull-requests, branch-strategy, trunk-based]
+    subtopics:
+      - {id: branch-policy-setup, name: Required reviewers, build validation and status checks, match: [required-reviewers, build-validation, status-checks]}
+      - {id: branching-model, name: Trunk-based vs release flow vs GitFlow, match: [release-flow, gitflow]}
+      - {id: merge-strategies, name: Merge strategies and auto-complete, match: [merge-strategies, squash-merge, auto-complete]}
+      - {id: branch-permissions, name: Branch permissions and repo security, match: [branch-permissions, repo-security]}
+      - {id: pr-hygiene, name: PR templates, work-item linking and comment resolution, match: [pr-templates, work-item-linking, comment-resolution]}
+      - {id: cross-repo-policies, name: Cross-repo policies and code owners, match: [cross-repo-policies, code-owners, automatic-reviewers]}
+      - {id: git-lfs-monorepo, name: Git LFS and monorepo handling, match: [git-lfs, monorepo]}
+      - {id: repo-import, name: Import and migrate repositories, match: [repo-import, repo-migration]}
+      - {id: repo-size-maintenance, name: Repository size limits and history rewriting, match: [repo-size, git-filter-repo]}
+  - id: azure-artifacts
+    name: Azure Artifacts feeds and upstream sources
+    source: AZ-400/Build and release pipelines; Learn/Azure Artifacts How-to
+    match: [azure-artifacts, package-feeds, upstream-sources, nuget-feeds]
+    subtopics:
+      - {id: feed-setup, name: Create feeds (project vs org scoped), match: [project-scoped-feeds, organization-scoped-feeds, feed-create]}
+      - {id: upstream-config, name: Upstream sources and dependency confusion, match: [upstream-config, dependency-confusion]}
+      - {id: feed-views, name: Views and package promotion, match: [feed-views, release-views, package-promotion]}
+      - {id: feed-retention, name: Retention policies, match: [retention-policies, feed-retention]}
+      - {id: feed-permissions, name: Feed permissions and pipeline auth, match: [feed-permissions, pipeline-authentication, credential-provider]}
+      - {id: nuget-npm-feeds, name: NuGet and npm feed usage, match: [npm-feeds, nuget-config, npmrc]}
+      - {id: python-maven-feeds, name: Python, Maven and Cargo feeds, match: [python-feeds, maven-feeds, cargo-feeds]}
+      - {id: universal-packages, name: Universal Packages, match: [universal-packages]}
+      - {id: artifacts-storage-billing, name: Azure Artifacts storage limits and billing, match: [artifacts-storage, artifacts-billing]}
+  - id: pipeline-secrets
+    name: Variable groups, service connections and pipeline secrets
+    source: AZ-400/Develop a security plan; Learn/Pipelines security
+    match: [variable-groups, pipeline-secrets, service-connections, pipeline-security]
+    subtopics:
+      - {id: service-connection-wif, name: Service connections with workload identity federation, match: [service-connection-security, oidc]}
+      - {id: key-vault-variable-group, name: Key Vault linked variable groups vs AzureKeyVault task, match: [key-vault-variable-group, azurekeyvault-task]}
+      - {id: secure-files, name: Secure files, match: [secure-files]}
+      - {id: secret-variables, name: Secret variables and masking, match: [secret-variables, secret-masking]}
+      - {id: job-token-scope, name: System.AccessToken and job authorization scope, match: [system-accesstoken, job-authorization-scope]}
+      - {id: resource-protection, name: Protect resources (checks on connections, pipeline permissions), match: [approvals-on-service-connections, pipeline-permissions]}
+      - {id: pat-hygiene, name: PAT hygiene and policies, match: [pat-hygiene, pat-policies]}
+      - {id: github-actions-azure, name: GitHub Actions azure/login with OIDC, match: [github-actions-azure-login, azure-login]}
+      - {id: service-connection-governance, name: Service connection auditing and sharing across projects, match: [service-connection-audit, service-connection-sharing]}
+  - id: devsecops
+    name: Defender for DevOps, GHAS for Azure DevOps, dependency and secret scanning
+    source: AZ-400/Develop a security plan; Learn/GHAS for Azure DevOps
+    match: [defender-for-devops, ghas-azure-devops, dependency-scanning, sbom, secret-scanning]
+    subtopics:
+      - {id: ghas-enable, name: Enable GHAS for Azure DevOps, match: [advanced-security, github-advanced-security, ghas-enable]}
+      - {id: push-protection, name: Secret scanning and push protection, match: [push-protection]}
+      - {id: dependency-scanning-task, name: Dependency scanning task and alerts, match: [dependency-alerts, dependency-scanning-task]}
+      - {id: codeql-scanning, name: CodeQL code scanning, match: [codeql, code-scanning]}
+      - {id: msdo-iac, name: MSDO IaC and container scans, match: [microsoft-security-devops, msdo, iac-scanning]}
+      - {id: container-scanning, name: Container image scanning (Trivy, Defender), match: [container-image-scanning, trivy]}
+      - {id: sbom-generation, name: SBOM generation and attestation, match: [sbom-tool, provenance, slsa]}
+      - {id: security-gates, name: SARIF results and build-break gates, match: [sarif, build-break, security-gates]}
+      - {id: defender-devops-posture, name: Defender for DevOps connectors and posture, match: [devops-security, devops-connectors]}
+      - {id: secret-scanning-alerts, name: Secret scanning alert triage, match: [secret-scanning-alerts]}
+  # --- Security operations (AZ-500 Manage security operations)
+  - id: defender-for-cloud
+    name: Defender for Cloud plans, secure score, regulatory compliance
+    source: AZ-500/Manage security operations; Learn/Defender for Cloud How-to
+    match: [defender-for-cloud, secure-score, defender-plans, regulatory-compliance, cspm]
+    subtopics:
+      - {id: enable-defender-plans, name: Enable Defender plans per subscription, match: [defender-plans, enable-defender, defender-pricing]}
+      - {id: secure-score-remediation, name: Secure score and recommendation remediation, match: [security-recommendations, secure-score-remediation, quick-fix]}
+      - {id: regulatory-standards, name: Assign regulatory compliance standards, match: [compliance-standards, nist, cis-benchmark]}
+      - {id: defender-for-servers, name: Defender for Servers and MDE integration, match: [defender-for-servers, mde-integration, agentless-scanning]}
+      - {id: defender-cspm, name: Defender CSPM, attack paths and cloud security explorer, match: [attack-paths, cloud-security-explorer, defender-cspm]}
+      - {id: security-alerts, name: Security alerts and incidents triage, match: [security-alerts, alert-triage, defender-incidents]}
+      - {id: workflow-automation, name: Workflow automation and continuous export, match: [workflow-automation, continuous-export]}
+      - {id: governance-rules, name: Governance rules and owners, match: [governance-rules, remediation-owners]}
+      - {id: multicloud-connectors, name: AWS/GCP connectors, match: [aws-connector, gcp-connector, multicloud]}
+      - {id: defender-paas-plans, name: Defender for Storage, Key Vault, App Service and DNS, match: [defender-for-key-vault, defender-for-app-service, defender-for-dns]}
+      - {id: defender-databases-ai, name: Defender for databases and AI workloads, match: [defender-for-databases, defender-for-ai]}
+  - id: microsoft-sentinel
+    name: Microsoft Sentinel connectors, analytics rules and playbooks
+    source: AZ-500/Manage security operations; Learn/Microsoft Sentinel How-to
+    match: [sentinel, microsoft-sentinel, analytics-rules, data-connectors, playbooks, siem]
+    subtopics:
+      - {id: sentinel-onboarding, name: Onboard workspace and Content Hub solutions, match: [content-hub, sentinel-onboarding]}
+      - {id: sentinel-connectors, name: Data connectors (AMA, CEF, codeless), match: [codeless-connector, cef, syslog-connector]}
+      - {id: scheduled-rules, name: Scheduled analytics rules with entity mapping, match: [scheduled-rules, entity-mapping, mitre-attack]}
+      - {id: nrt-fusion-rules, name: NRT, Fusion and anomaly rules, match: [nrt-rules, fusion, anomaly-rules]}
+      - {id: incident-triage, name: Incident triage and investigation, match: [incidents, investigation-graph, incident-triage]}
+      - {id: automation-rules, name: Automation rules, match: [automation-rules]}
+      - {id: sentinel-playbooks, name: Logic App playbooks, match: [sentinel-playbooks, playbook-templates]}
+      - {id: watchlists-ti, name: Watchlists and threat intelligence, match: [watchlists, threat-intelligence, ti-indicators]}
+      - {id: hunting, name: Hunting queries, bookmarks and notebooks, match: [hunting-queries, bookmarks, notebooks]}
+      - {id: ueba, name: UEBA and entity behavior, match: [ueba, entity-behavior]}
+      - {id: sentinel-cost, name: Sentinel cost and data tiering, match: [sentinel-cost, sentinel-basic-logs]}
+      - {id: unified-secops, name: Unified SecOps with Defender XDR, match: [unified-security-operations, defender-xdr]}
+      - {id: sentinel-content-as-code, name: Repositories and content as code, match: [sentinel-repositories, content-as-code]}
+      - {id: sentinel-workbooks, name: Sentinel workbooks and SOC dashboards, match: [sentinel-workbooks]}

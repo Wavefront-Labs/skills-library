@@ -1,0 +1,298 @@
+# Canonical coverage spec: Lua language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: lua-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [lua]
+sources:
+  - "Lua 5.4 Reference Manual (lua.org/manual/5.4) - language, standard libraries, C API, standalone interpreter"
+  - "Programming in Lua (lua.org/pil) and Lua 5.1, 5.2, 5.3 manuals for version differences"
+  - "LuaJIT documentation (luajit.org) - FFI library, extensions, 5.1 compatibility"
+  - "LuaRocks documentation (luarocks.org), busted, Luacheck, StyLua and LuaLS documentation"
+  - "Lua-users wiki and Lua style guidance for conventions"
+topics:
+  - id: lua-types-values
+    name: "Values and types"
+    source: "Lua 5.4 manual 2.1"
+    match: [lua-types-values]
+    subtopics:
+      - {id: lua-types-values-nil-boolean-truthiness, name: "nil, false and truthiness", match: [nil-boolean-truthiness]}
+      - {id: lua-types-values-numbers-integers-floats, name: "Integer and float subtypes", match: [numbers-integers-floats]}
+      - {id: lua-types-values-tonumber-tostring-coercion, name: "tonumber, tostring and automatic coercion", match: [tonumber-tostring-coercion]}
+      - {id: lua-types-values-userdata-thread-types, name: "userdata, threads and the type function", match: [userdata-thread-types]}
+  - id: lua-strings
+    name: "Strings"
+    source: "Lua 5.4 manual 6.4"
+    match: [lua-strings]
+    subtopics:
+      - {id: lua-strings-string-library, name: "string.format, sub, find, rep and byte semantics", match: [string-library]}
+      - {id: lua-strings-patterns-gsub, name: "Lua patterns, find, match and gsub", match: [patterns-gsub]}
+      - {id: lua-strings-string-format-specifiers, name: "string.format specifiers", match: [string-format-specifiers]}
+      - {id: lua-strings-long-brackets-escapes, name: "String literals, escapes and long brackets", match: [long-brackets-escapes]}
+      - {id: lua-strings-string-comparison-concat, name: "String comparison, concat and the .. operator cost", match: [string-comparison-concat]}
+  - id: lua-tables
+    name: "Tables"
+    source: "Lua 5.4 manual 2.1, 6.6"
+    match: [lua-tables]
+    subtopics:
+      - {id: lua-tables-table-array-hash, name: "Arrays, hash parts and the length operator", match: [table-array-hash]}
+      - {id: lua-tables-table-library-sort, name: "table.sort, concat, move and stable ordering", match: [table-library-sort]}
+      - {id: lua-tables-table-pack-unpack-select, name: "table.pack, table.unpack and select", match: [table-pack-unpack-select]}
+      - {id: lua-tables-raw-access-functions, name: "rawget, rawset, rawequal and rawlen", match: [raw-access-functions]}
+      - {id: lua-tables-pairs-ipairs-next-order, name: "pairs, ipairs, next and iteration order", match: [pairs-ipairs-next-order]}
+  - id: lua-functions
+    name: "Functions and closures"
+    source: "Lua 5.4 manual 3.4.11"
+    match: [lua-functions]
+    subtopics:
+      - {id: lua-functions-closures-varargs, name: "Closures, varargs and multiple returns", match: [closures-varargs]}
+      - {id: lua-functions-tail-calls-recursion, name: "Proper tail calls and recursion depth", match: [tail-calls-recursion]}
+      - {id: lua-functions-default-named-arguments, name: "Default and named arguments idioms", match: [default-named-arguments]}
+  - id: lua-scope
+    name: "Variables and scope"
+    source: "Lua 5.4 manual 3.5"
+    match: [lua-scope]
+    subtopics:
+      - {id: lua-scope-locals-globals, name: "local versus global variables", match: [locals-globals]}
+      - {id: lua-scope-upvalue-loop-capture, name: "Upvalues and closure capture in loops", match: [upvalue-loop-capture]}
+      - {id: lua-scope-env-environment-table, name: "The _ENV environment table", match: [env-environment-table]}
+  - id: lua-metatables
+    name: "Metatables and metamethods"
+    source: "Lua 5.4 manual 2.4"
+    match: [lua-metatables]
+    subtopics:
+      - {id: lua-metatables-metatables-metamethods, name: "__index, __newindex, __call, __eq and operator overloading", match: [metatables-metamethods]}
+      - {id: lua-metatables-index-chains-defaults, name: "__index chains and default values", match: [index-chains-defaults]}
+      - {id: lua-metatables-readonly-proxy-metatable-field, name: "Read-only tables and __metatable", match: [readonly-proxy-metatable-field]}
+      - {id: lua-metatables-comparison-concat-len-metamethods, name: "__lt, __le, __concat, __len and __unm", match: [comparison-concat-len-metamethods]}
+  - id: lua-oop
+    name: "Object orientation"
+    source: "Programming in Lua - Object-Oriented Programming"
+    match: [lua-oop]
+    subtopics:
+      - {id: lua-oop-classes-inheritance, name: "Prototype classes, inheritance and the colon syntax", match: [classes-inheritance]}
+      - {id: lua-oop-multiple-inheritance-mixins, name: "Multiple inheritance and mixins", match: [multiple-inheritance-mixins]}
+      - {id: lua-oop-closure-private-state, name: "Privacy with closures and upvalues", match: [closure-private-state]}
+  - id: lua-control-flow
+    name: "Control flow and iteration"
+    source: "Lua 5.4 manual 3.3"
+    match: [lua-control-flow]
+    subtopics:
+      - {id: lua-control-flow-loops-goto, name: "for loops, generic for, goto and break", match: [loops-goto]}
+      - {id: lua-control-flow-numeric-for-semantics, name: "Numeric for loop semantics", match: [numeric-for-semantics]}
+      - {id: lua-control-flow-repeat-until-scope-continue, name: "repeat-until scope and continue idioms", match: [repeat-until-scope-continue]}
+  - id: lua-errors
+    name: "Error handling"
+    source: "Lua 5.4 manual 2.3, 6.1"
+    match: [lua-errors]
+    subtopics:
+      - {id: lua-errors-pcall-error-handling, name: "error, pcall, xpcall and error objects", match: [pcall-error-handling]}
+      - {id: lua-errors-error-levels-traceback, name: "error levels, assert and tracebacks", match: [error-levels-traceback]}
+      - {id: lua-errors-error-objects-tables, name: "Structured error objects", match: [error-objects-tables]}
+  - id: lua-coroutines
+    name: "Coroutines"
+    source: "Lua 5.4 manual 2.6, 6.2"
+    match: [lua-coroutines]
+    subtopics:
+      - {id: lua-coroutines-coroutines-generators, name: "create, resume, yield, wrap and status", match: [coroutines-generators]}
+      - {id: lua-coroutines-coroutine-close-isyieldable, name: "coroutine.close, isyieldable and status", match: [coroutine-close-isyieldable]}
+      - {id: lua-coroutines-coroutine-wrap-errors, name: "Error propagation in coroutines", match: [coroutine-wrap-errors]}
+  - id: lua-modules
+    name: "Modules and require"
+    source: "Lua 5.4 manual 6.3"
+    match: [lua-modules]
+    subtopics:
+      - {id: lua-modules-require-package-path, name: "require, package.path and module patterns", match: [require-package-path]}
+      - {id: lua-modules-package-loaded-preload, name: "package.loaded, preload and searchers", match: [package-loaded-preload]}
+  - id: lua-io
+    name: "Input and output"
+    source: "Lua 5.4 manual 6.8"
+    match: [lua-io]
+    subtopics:
+      - {id: lua-io-io-library-files, name: "io.open, read formats and file handles", match: [io-library-files]}
+      - {id: lua-io-io-read-formats-lines, name: "io.read formats and io.lines", match: [io-read-formats-lines]}
+      - {id: lua-io-io-seek-buffering-popen, name: "Seeking, buffering and io.popen", match: [io-seek-buffering-popen]}
+  - id: lua-os
+    name: "Operating system facilities"
+    source: "Lua 5.4 manual 6.9"
+    match: [lua-os]
+    subtopics:
+      - {id: lua-os-os-library-time-exec, name: "os.time, os.date, os.getenv, os.execute and os.remove", match: [os-library-time-exec]}
+      - {id: lua-os-os-getenv-exit-tmpname, name: "os.getenv, os.exit, os.remove and tmpname", match: [os-getenv-exit-tmpname]}
+      - {id: lua-os-os-clock-vs-time, name: "os.clock vs os.time and benchmarking", match: [os-clock-vs-time]}
+  - id: lua-integer-bitops
+    name: "Bitwise operations"
+    source: "Lua 5.4 manual 3.4.2"
+    match: [lua-integer-bitops]
+    subtopics:
+      - {id: lua-integer-bitops-bitwise-operators, name: "Bitwise operators and 5.1 compatibility", match: [bitwise-operators]}
+      - {id: lua-integer-bitops-string-pack-binary, name: "string.pack, unpack and binary data", match: [string-pack-binary]}
+  - id: lua-memory-gc
+    name: "Garbage collection and memory"
+    source: "Lua 5.4 manual 2.5, collectgarbage"
+    match: [lua-memory-gc]
+    subtopics:
+      - {id: lua-memory-gc-collectgarbage-weak, name: "collectgarbage, GC modes and weak tables", match: [collectgarbage-weak]}
+  - id: lua-closing
+    name: "To-be-closed variables"
+    source: "Lua 5.4 manual 3.3.8"
+    match: [lua-closing]
+    subtopics:
+      - {id: lua-closing-tbc-variables, name: "local x <close> and <const> attribs", match: [tbc-variables]}
+  - id: lua-versions
+    name: "Lua versions and compatibility"
+    source: "Lua manual \"Incompatibilities\" sections"
+    match: [lua-versions]
+    subtopics:
+      - {id: lua-versions-version-differences, name: "Lua 5.1 through 5.4 and LuaJIT compatibility", match: [version-differences]}
+  - id: lua-load-sandbox
+    name: "Dynamic code and sandboxing"
+    source: "Lua 5.4 manual load, _ENV"
+    match: [lua-load-sandbox]
+    subtopics:
+      - {id: lua-load-sandbox-load-env-sandbox, name: "load, loadfile and restricted environments", match: [load-env-sandbox]}
+  - id: lua-debug
+    name: "Debugging"
+    source: "Lua 5.4 manual 6.10"
+    match: [lua-debug]
+    subtopics:
+      - {id: lua-debug-debug-library-traceback, name: "debug.traceback, debug.getinfo and hooks", match: [debug-library-traceback]}
+  - id: lua-luarocks
+    name: "LuaRocks"
+    source: "LuaRocks documentation"
+    match: [lua-luarocks]
+    subtopics:
+      - {id: lua-luarocks-luarocks-install-rockspec, name: "Installing rocks, rockspecs and trees", match: [luarocks-install-rockspec]}
+  - id: lua-testing
+    name: "Testing"
+    source: "busted documentation"
+    match: [lua-testing]
+    subtopics:
+      - {id: lua-testing-busted-testing, name: "busted specs, assertions, spies and luassert", match: [busted-testing]}
+  - id: lua-linting
+    name: "Linting and formatting"
+    source: "Luacheck, StyLua and LuaLS docs"
+    match: [lua-linting]
+    subtopics:
+      - {id: lua-linting-luacheck-stylua, name: "Luacheck, StyLua and Lua Language Server", match: [luacheck-stylua]}
+  - id: lua-luajit
+    name: "LuaJIT"
+    source: "LuaJIT documentation"
+    match: [lua-luajit]
+    subtopics:
+      - {id: lua-luajit-luajit-ffi, name: "LuaJIT FFI and JIT-friendly code", match: [luajit-ffi]}
+  - id: lua-c-api
+    name: "Embedding and the C API"
+    source: "Lua 5.4 manual 4, 5"
+    match: [lua-c-api]
+    subtopics:
+      - {id: lua-c-api-embed-c-api, name: "lua_State, stack discipline and registering C functions", match: [embed-c-api]}
+  - id: lua-embedding-hosts
+    name: "Lua as an embedded language"
+    source: "Neovim, Redis, OpenResty documentation"
+    match: [lua-embedding-hosts]
+    subtopics:
+      - {id: lua-embedding-hosts-lua-in-hosts, name: "Lua in Neovim, Redis, OpenResty and game engines", match: [lua-in-hosts]}
+  - id: lua-standalone
+    name: "The standalone interpreter"
+    source: "Lua 5.4 manual 7"
+    match: [lua-standalone]
+    subtopics:
+      - {id: lua-standalone-lua-cli-scripts, name: "lua command, arg, shebang and exit codes", match: [lua-cli-scripts]}
+  - id: lua-json-data
+    name: "Data formats"
+    source: "lua-cjson, dkjson, lpeg docs"
+    match: [lua-json-data]
+    subtopics:
+      - {id: lua-json-data-json-serialization, name: "JSON libraries and table serialisation", match: [json-serialization]}
+  - id: lua-lpeg
+    name: "Parsing with LPeg"
+    source: "LPeg documentation"
+    match: [lua-lpeg]
+    subtopics:
+      - {id: lua-lpeg-lpeg-parsing, name: "LPeg patterns, captures and grammars", match: [lpeg-parsing]}
+  - id: lua-networking
+    name: "Networking"
+    source: "LuaSocket and luv docs"
+    match: [lua-networking]
+    subtopics:
+      - {id: lua-networking-luasocket-luv, name: "LuaSocket and libuv (luv) networking", match: [luasocket-luv]}
+  - id: lua-filesystem
+    name: "Filesystem and paths"
+    source: "LuaFileSystem docs"
+    match: [lua-filesystem]
+    subtopics:
+      - {id: lua-filesystem-lfs-paths, name: "LuaFileSystem directory listing, attributes and path handling", match: [lfs-paths]}
+  - id: lua-penlight
+    name: "Utility libraries"
+    source: "Penlight documentation"
+    match: [lua-penlight]
+    subtopics:
+      - {id: lua-penlight-penlight-utilities, name: "Penlight stdlib extensions: List, Map, stringx, pretty and class", match: [penlight-utilities]}
+  - id: lua-performance
+    name: "Performance"
+    source: "Programming in Lua - Optimization"
+    match: [lua-performance]
+    subtopics:
+      - {id: lua-performance-lua-optimization, name: "Profiling and optimising Lua code", match: [lua-optimization]}
+  - id: lua-style
+    name: "Style and project layout"
+    source: "Lua style conventions"
+    match: [lua-style]
+    subtopics:
+      - {id: lua-style-project-layout-conventions, name: "Project layout, rockspec and README conventions", match: [project-layout-conventions]}
+  - id: lua-text-processing
+    name: "Text processing recipes"
+    source: "Programming in Lua"
+    match: [lua-text-processing]
+    subtopics:
+      - {id: lua-text-processing-text-processing-recipes, name: "Splitting, trimming, CSV and template substitution", match: [text-processing-recipes]}
+  - id: lua-math
+    name: "Math library and randomness"
+    source: "Lua 5.4 manual 6.7"
+    match: [lua-math]
+    subtopics:
+      - {id: lua-math-math-random-library, name: "math.random seeding, floor, tointeger and ranges", match: [math-random-library]}
+  - id: lua-utf8
+    name: "Unicode text"
+    source: "Lua 5.4 manual 6.5"
+    match: [lua-utf8]
+    subtopics:
+      - {id: lua-utf8-utf8-library, name: "utf8.len, codepoint, char and iteration", match: [utf8-library]}
+  - id: lua-scheduler
+    name: "Cooperative scheduling"
+    source: "Programming in Lua - Coroutines"
+    match: [lua-scheduler]
+    subtopics:
+      - {id: lua-scheduler-coroutine-scheduler, name: "Task schedulers and async wrappers with coroutines", match: [coroutine-scheduler]}
+  - id: lua-game-scripting
+    name: "Game scripting"
+    source: "LOVE and engine documentation"
+    match: [lua-game-scripting]
+    subtopics:
+      - {id: lua-game-scripting-love2d-game-loop, name: "LOVE callbacks and game loop structure", match: [love2d-game-loop]}
+  - id: lua-config-dsl
+    name: "Configuration and DSLs"
+    source: "Programming in Lua"
+    match: [lua-config-dsl]
+    subtopics:
+      - {id: lua-config-dsl-lua-dsl-config, name: "Table-based DSLs and config loading", match: [lua-dsl-config]}
+  - id: lua-date-time
+    name: "Dates and times"
+    source: "Lua 5.4 manual os.date, os.time"
+    match: [lua-date-time]
+    subtopics:
+      - {id: lua-date-time-os-date-time-formats, name: "os.date formats, time zones and date arithmetic", match: [os-date-time-formats]}
+  - id: lua-bit-strings
+    name: "String building"
+    source: "Programming in Lua - Strings"
+    match: [lua-bit-strings]
+    subtopics:
+      - {id: lua-bit-strings-string-building-buffers, name: "table.concat buffers, string.rep and performance", match: [string-building-buffers]}
+  - id: lua-security
+    name: "Security"
+    source: "Lua sandboxing guidance"
+    match: [lua-security]
+    subtopics:
+      - {id: lua-security-lua-security-practices, name: "Injection, unsafe load and command execution", match: [lua-security-practices]}

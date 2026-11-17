@@ -1,0 +1,1667 @@
+# Canonical coverage spec: Computer graphics engineering (whole field).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (API specification chapter lists, the
+# learnopengl.com / vkguide.dev tables of contents, Microsoft Direct3D 12 programming guide,
+# Real-Time Rendering 4th ed. and PBR 4th ed. chapters, Szeliski's Computer Vision 2nd ed.,
+# the OpenCV module/tutorial ToC, three.js manual and WebGPU spec, vendor optimisation guides),
+# not from what we happened to write, so the check measures the library against the subject.
+# Depth: each topic lists `subtopics` from the source's own sub-structure (spec sections, docs
+# page headings, book chapter sub-sections, guide chapter headings).
+subject: computer-graphics-engineering
+scope:
+  category: computing-software
+  field: computer-graphics-engineering
+  products: [opengl, directx, opencv, webgl-threejs, shader-programming, rendering-techniques, computer-vision, graphics-math, gpu-optimisation]
+sources:
+  - "OpenGL 4.6 Core Profile specification chapters - 2 Fundamentals, 4 Event Model (sync objects, queries), 5 Shared Objects, 6 Buffer Objects, 7 Programs and Shaders, 8 Textures and Samplers, 9 Framebuffers, 10 Vertex Specification and Drawing, 11 Programmable Vertex Processing, 14 Rasterization, 17 Writing Fragments, 19 Compute Shaders, 20 Debug Output"
+  - "Vulkan 1.3 specification chapters - Initialization, Devices and Queues, Command Buffers, Synchronization and Cache Control, Render Pass/Dynamic Rendering, Shaders, Pipelines, Memory Allocation, Resource Creation, Samplers, Resource Descriptors, Queries, Copy Commands, Drawing Commands, Dispatching, Window System Integration, Features/Limits/Formats, Debugging"
+  - "learnopengl.com ToC (Getting started, Lighting, Model loading, Advanced OpenGL, Advanced Lighting, PBR, In Practice/Debugging) and vkguide.dev ToC (Initializing Vulkan, Drawing with compute, Graphics pipelines, Textures and engine architecture, GLTF loading, GPU-driven rendering)"
+  - "Microsoft Direct3D 12 programming guide ToC (learn.microsoft.com) - Pipelines and shaders, Root signatures, Resource binding, Memory management, Resource barriers, Command queues and lists, Swap chains (DXGI), Indirect drawing, DirectX Raytracing, Mesh shaders, Variable rate shading, Sampler feedback, Debug layer/DRED; HLSL reference; Direct3D 11 programming guide; PIX docs"
+  - "Akenine-Moller et al., Real-Time Rendering 4th ed. chapters - 5 Shading Basics, 6 Texturing, 7 Shadows, 8 Light and Color, 9 Physically Based Shading, 10 Local Illumination, 11 Global Illumination, 12 Image-Space Effects, 14 Volumetric and Translucency, 15 Non-Photorealistic Rendering, 16 Polygonal Techniques, 18 Pipeline Optimization, 19 Acceleration Algorithms, 20 Efficient Shading, 21 Virtual and Augmented Reality, 22 Intersection Test Methods"
+  - "Pharr, Jakob, Humphreys, Physically Based Rendering 4th ed. chapters - 2 Monte Carlo Integration, 4 Radiometry/Spectra/Color, 5 Cameras and Film, 7 Primitives and Intersection Acceleration, 8 Sampling and Reconstruction, 9 Reflection Models, 11 Volume Scattering, 13 Light Transport I, 14 Light Transport II, 15 Wavefront Rendering on GPUs"
+  - "three.js manual and docs ToC (threejs.org) - Fundamentals, Responsive design, Scene graph, Materials, Textures, Lights, Cameras, Shadows, Render targets, Custom BufferGeometry, Picking, Post processing, Loading glTF, Animation system, InstancedMesh, WebXR, Color management, WebGPURenderer/TSL; W3C WebGPU and WGSL specifications; MDN WebGL2 API; React Three Fiber docs"
+  - "OpenCV 4.x documentation module/tutorial ToC (docs.opencv.org) - core, imgproc (filtering, geometric transforms, thresholding, histograms, structural analysis), imgcodecs, videoio, highgui, video, calib3d, features2d, objdetect (cascades, ArUco, QR), dnn, photo, stitching, cudaarithm, build/installation guides"
+  - "Szeliski, Computer Vision - Algorithms and Applications 2nd ed. chapters - 2 Image Formation, 4 Model Fitting and Optimization, 5 Deep Learning, 6 Recognition, 7 Feature Detection and Matching, 8 Image Alignment and Stitching, 9 Motion Estimation, 10 Computational Photography, 11 Structure from Motion and SLAM, 12 Depth Estimation, 13 3D Reconstruction, 14 Image-Based Rendering"
+  - "The Book of Shaders ToC (shaping functions, shapes, patterns, random, noise, cellular noise, fBm), GLSL 4.60 / HLSL / WGSL language specifications, Lengyel Mathematics for 3D Game Programming chapters"
+  - "Vendor optimisation guides - Arm Mali GPU Best Practices (CPU overheads, vertex shading, tiling/render passes, fragment shading, textures, compute, system), NVIDIA and AMD RDNA performance guides, Apple Metal best practices"
+topics:
+  # --- OpenGL (OpenGL 4.6 spec, learnopengl.com)
+  - id: gl-context-debug
+    name: OpenGL context creation, loading and debug output
+    source: GL 4.6 ch2/ch20; learnopengl Getting started, In Practice/Debugging
+    match: [opengl-context, gl-debug-output]
+    subtopics:
+      - {id: gl-glfw-context, name: Core-profile context and window with GLFW/SDL, match: [glfw, core-profile]}
+      - {id: gl-loader, name: Function loading with glad/GLEW and extension checks, match: [glad, gl-extensions]}
+      - {id: gl-khr-debug, name: KHR_debug message callback, object labels and debug groups, match: [khr-debug, gl-debug-callback]}
+      - {id: gl-error-checking, name: glGetError discipline and state leak debugging, match: [glgeterror, gl-state-leaks]}
+      - {id: gl-context-sharing, name: Shared contexts and multithreaded resource upload, match: [gl-shared-context, gl-multithreaded-upload]}
+      - {id: gl-egl-headless, name: Headless rendering with EGL and surfaceless contexts, match: [egl-headless, egl-device]}
+      - {id: gl-version-profile-pitfalls, name: Version/profile negotiation and macOS 4.1 core limits, match: [gl-forward-compatible, macos-opengl]}
+      - {id: gl-swap-interval, name: "Swap interval, vsync and adaptive sync control", match: [swap-interval, wgl-swap-control]}
+      - {id: gl-apitrace, name: Recording and replaying GL calls with apitrace, match: [apitrace, gl-call-trace]}
+      - {id: gl-dsa, name: Direct State Access style and migrating bind-to-edit code, match: [direct-state-access, arb-dsa]}
+  - id: gl-buffer-objects
+    name: OpenGL buffer objects
+    source: GL 4.6 ch6 Buffer Objects; learnopengl Advanced Data
+    match: [gl-buffer-objects, opengl-buffers]
+    subtopics:
+      - {id: gl-buffer-storage, name: Immutable storage with glBufferStorage, match: [glbufferstorage, immutable-buffers]}
+      - {id: gl-persistent-mapping, name: Persistent mapped buffers and ring-buffer streaming, match: [persistent-mapping, buffer-streaming]}
+      - {id: gl-ubo-std140, name: Uniform buffer objects and std140 layout, match: [uniform-buffer-objects, std140]}
+      - {id: gl-ssbo, name: Shader storage buffer objects and std430, match: [ssbo, std430]}
+      - {id: gl-buffer-orphaning, name: Buffer orphaning and glInvalidateBufferData for streaming, match: [buffer-orphaning, glinvalidatebufferdata]}
+      - {id: gl-map-buffer-range, name: "glMapBufferRange flags (unsynchronized, invalidate, flush explicit)", match: [glmapbufferrange, map-unsynchronized]}
+      - {id: gl-copy-buffer, name: Copying and clearing buffers on the GPU, match: [glcopybuffersubdata, glclearbufferdata]}
+      - {id: gl-atomic-counters, name: Atomic counter buffers, match: [atomic-counter-buffer]}
+      - {id: gl-texture-buffer, name: Buffer textures (TBO) for large read-only arrays, match: [texture-buffer-object, samplerbuffer]}
+      - {id: gl-transform-feedback, name: Transform feedback capture of vertex output, match: [transform-feedback]}
+  - id: gl-vertex-specification
+    name: OpenGL vertex specification and drawing
+    source: GL 4.6 ch10 Vertex Specification and Drawing Commands
+    match: [vertex-specification, gl-drawing]
+    subtopics:
+      - {id: gl-vao-format, name: VAOs with separate attribute format and binding (DSA), match: [vao, vertex-attrib-binding]}
+      - {id: gl-instanced-draw, name: Instanced drawing with attribute divisors, match: [gl-instancing, attribute-divisor]}
+      - {id: gl-multidraw-indirect, name: glMultiDrawElementsIndirect and draw parameters, match: [multidraw-indirect, gl-draw-indirect]}
+      - {id: gl-primitive-restart, name: Index buffers, base vertex and primitive restart, match: [primitive-restart, base-vertex]}
+      - {id: gl-draw-commands, name: "Choosing draw commands (arrays, elements, range, base instance)", match: [gldrawelementsbasevertex, gldrawrangeelements]}
+      - {id: gl-vertex-formats, name: "Packed and normalized vertex attribute formats (2_10_10_10, half)", match: [packed-vertex-formats, int-2-10-10-10]}
+      - {id: gl-vertex-pulling, name: Programmable vertex pulling from SSBOs, match: [vertex-pulling]}
+      - {id: gl-provoking-vertex, name: Provoking vertex convention and flat attributes, match: [provoking-vertex]}
+      - {id: gl-primitive-types, name: "Primitive topologies, adjacency and patches", match: [primitive-topology, lines-adjacency]}
+      - {id: gl-tessellation, name: Tessellation control/evaluation shaders and patch setup, match: [tessellation-shaders, gl-patches]}
+      - {id: gl-geometry-shader, name: Geometry shaders and layered rendering, match: [geometry-shader, layered-rendering]}
+  - id: gl-shader-programs
+    name: OpenGL programs and shaders
+    source: GL 4.6 ch7 Programs and Shaders; learnopengl Shaders
+    match: [gl-shader-programs, glsl-programs]
+    subtopics:
+      - {id: gl-compile-link, name: Compiling, linking and reading info logs, match: [shader-compilation, program-linking]}
+      - {id: gl-separable-programs, name: Separable programs and program pipelines, match: [separable-programs, program-pipelines]}
+      - {id: gl-spirv, name: Loading SPIR-V shaders in OpenGL (ARB_gl_spirv), match: [gl-spirv, arb-gl-spirv]}
+      - {id: gl-program-binary, name: Program binary caching, match: [program-binary, shader-cache]}
+      - {id: gl-uniforms, name: "Uniform locations, explicit layout locations and glProgramUniform", match: [uniform-locations, explicit-uniform-location]}
+      - {id: gl-subroutines, name: Shader subroutines, match: [shader-subroutines]}
+      - {id: gl-program-introspection, name: Program interface queries for reflection, match: [program-interface-query, glgetprograminterface]}
+      - {id: gl-include-preprocessor, name: "GLSL #include, shader preprocessing and #line mapping", match: [glsl-include, arb-shading-language-include]}
+      - {id: gl-shader-validation, name: Offline validation with glslangValidator before runtime, match: [glslangvalidator]}
+      - {id: gl-parallel-compile, name: Parallel shader compile (KHR_parallel_shader_compile), match: [khr-parallel-shader-compile]}
+  - id: gl-textures
+    name: OpenGL textures and samplers
+    source: GL 4.6 ch8 Textures and Samplers; learnopengl Textures, Cubemaps
+    match: [gl-textures, opengl-textures]
+    subtopics:
+      - {id: gl-texture-storage, name: Immutable texture storage, uploads and pixel alignment, match: [gltexstorage, unpack-alignment]}
+      - {id: gl-sampler-objects, name: Sampler objects, mipmapping and anisotropic filtering, match: [sampler-objects, anisotropic-filtering]}
+      - {id: gl-cubemaps-arrays, name: Cube maps and texture arrays, match: [cubemaps, texture-arrays]}
+      - {id: gl-bindless-textures, name: Bindless textures (ARB_bindless_texture), match: [bindless-textures, arb-bindless-texture]}
+      - {id: gl-texture-views, name: Texture views and format reinterpretation, match: [texture-views, gltextureview]}
+      - {id: gl-compressed-upload, name: Uploading compressed textures and KTX loading in GL, match: [glcompressedtexsubimage, ktx-loading]}
+      - {id: gl-srgb-textures, name: sRGB textures and GL_FRAMEBUFFER_SRGB, match: [srgb-textures, framebuffer-srgb]}
+      - {id: gl-texture-swizzle, name: Texture swizzle and single-channel formats, match: [texture-swizzle]}
+      - {id: gl-pbo-transfers, name: Pixel buffer objects for async upload and readback, match: [pixel-buffer-objects, async-readback]}
+      - {id: gl-depth-stencil-textures, name: Depth/stencil textures and shadow comparison samplers, match: [depth-texture, sampler2dshadow]}
+      - {id: gl-image-units, name: "Image load/store units, formats and access qualifiers", match: [glbindimagetexture, image-units]}
+  - id: gl-framebuffers
+    name: OpenGL framebuffer objects
+    source: GL 4.6 ch9 Framebuffers; learnopengl Framebuffers, Anti Aliasing, Deferred Shading
+    match: [fbo, framebuffer]
+    subtopics:
+      - {id: gl-fbo-completeness, name: Attachments and completeness checks, match: [framebuffer-completeness]}
+      - {id: gl-mrt, name: Multiple render targets with glDrawBuffers, match: [mrt, multiple-render-targets]}
+      - {id: gl-msaa-resolve, name: Multisampled FBOs and blit resolve, match: [msaa-resolve, glblitframebuffer]}
+      - {id: gl-render-to-texture, name: Render to texture and post-processing chains, match: [render-to-texture]}
+      - {id: gl-depth-stencil-attachments, name: Depth/stencil attachment formats and stencil operations, match: [stencil-buffer, depth-stencil-attachment]}
+      - {id: gl-invalidate-framebuffer, name: glInvalidateFramebuffer and clear strategies, match: [glinvalidateframebuffer, glclearbuffer]}
+      - {id: gl-layered-fbo, name: Layered framebuffers for cubemap/array rendering, match: [layered-framebuffer, gl-layer]}
+      - {id: gl-readpixels, name: Reading back pixels and screenshots, match: [glreadpixels, screenshot-capture]}
+      - {id: gl-default-framebuffer, name: "Default framebuffer, sRGB and pixel format selection", match: [default-framebuffer, pixel-format]}
+      - {id: gl-blend-modes, name: "Blend equations, separate and per-attachment blending", match: [glblendfunc, independent-blending]}
+      - {id: gl-clip-control, name: glClipControl for zero-to-one depth and origin, match: [glclipcontrol]}
+  - id: gl-sync-compute
+    name: OpenGL synchronisation, queries and compute
+    source: GL 4.6 ch4 Event Model, ch19 Compute Shaders, 7.13 memory barriers
+    match: [gl-sync, gl-compute]
+    subtopics:
+      - {id: gl-fence-sync, name: Fence sync objects and client waits, match: [glfencesync, gl-fences]}
+      - {id: gl-memory-barrier, name: glMemoryBarrier for image load/store and SSBO writes, match: [glmemorybarrier, image-load-store]}
+      - {id: gl-timer-queries, name: Timer and occlusion queries, conditional rendering, match: [timer-queries, conditional-rendering]}
+      - {id: gl-compute-dispatch, name: Compute shader dispatch in OpenGL, match: [gldispatchcompute]}
+      - {id: gl-shared-memory-compute, name: "Shared variables, barriers and work-group sizing in GL compute", match: [gl-shared-variables, local-size]}
+      - {id: gl-dispatch-indirect, name: glDispatchComputeIndirect and GPU-generated work, match: [gldispatchcomputeindirect]}
+      - {id: gl-query-buffer, name: Query buffer objects for non-stalling query results, match: [query-buffer-object]}
+      - {id: gl-pipeline-statistics, name: Pipeline statistics queries (ARB_pipeline_statistics_query), match: [arb-pipeline-statistics-query]}
+      - {id: gl-atomics-ordering, name: "Atomic operations and memory qualifiers (coherent, volatile)", match: [glsl-atomics, coherent-qualifier]}
+      - {id: gl-gpu-cpu-overlap, name: "Avoiding implicit sync stalls (glFinish, readbacks)", match: [implicit-sync, glfinish]}
+  # --- Vulkan (Vulkan 1.3 spec, vkguide.dev)
+  - id: vk-instance-device
+    name: Vulkan instance, physical and logical device
+    source: Vulkan 1.3 Initialization, Devices and Queues, Debugging; vkguide Initializing Vulkan
+    match: [vulkan-instance, vulkan-device]
+    subtopics:
+      - {id: vk-validation-layers, name: Validation layers and debug utils messenger, match: [validation-layers, debug-utils-messenger]}
+      - {id: vk-physical-device, name: Physical device selection and queue families, match: [physical-device-selection, queue-families]}
+      - {id: vk-feature-chains, name: Feature and extension enabling via pNext chains, match: [vulkan-features, pnext-chain]}
+      - {id: vk-bootstrap, name: Bootstrapping with vk-bootstrap and volk, match: [vk-bootstrap, volk]}
+      - {id: vk-loader-layers, name: "Vulkan loader, layer and ICD discovery (VK_LOADER_DEBUG)", match: [vulkan-loader, vk-loader-debug]}
+      - {id: vk-device-limits, name: Querying device properties and limits, match: [vk-device-limits, physicaldeviceproperties]}
+      - {id: vk-api-versioning, name: API version negotiation and promoted extensions, match: [vk-api-version, promoted-extensions]}
+      - {id: vk-portability, name: MoltenVK and the portability subset on Apple platforms, match: [moltenvk, portability-subset]}
+      - {id: vk-device-lost, name: "Handling VK_ERROR_DEVICE_LOST and crash diagnostics (Aftermath, device fault)", match: [vk-device-lost, device-fault]}
+      - {id: vk-vkconfig, name: Configuring layers with vkconfig and layer settings, match: [vkconfig, vulkan-configurator]}
+      - {id: vk-profiles, name: Vulkan profiles and roadmap capability targeting, match: [vulkan-profiles, vulkan-roadmap]}
+  - id: vk-swapchain
+    name: Vulkan window system integration and swapchain
+    source: Vulkan 1.3 Window System Integration (WSI)
+    match: [vulkan-swapchain, wsi]
+    subtopics:
+      - {id: vk-present-modes, name: Surface formats and present modes, match: [present-modes, surface-format]}
+      - {id: vk-swapchain-recreate, name: Swapchain recreation on resize and out-of-date, match: [swapchain-recreation, vk-error-out-of-date]}
+      - {id: vk-acquire-present, name: Acquire/present semaphores per image, match: [vkacquirenextimagekhr, vkqueuepresentkhr]}
+      - {id: vk-hdr-swapchain, name: HDR swapchain colour spaces, match: [hdr-swapchain, vk-color-space]}
+      - {id: vk-surface-creation, name: "Platform surface creation (Win32, Xlib/Wayland, Android)", match: [vk-surface, vkcreatewin32surfacekhr]}
+      - {id: vk-swapchain-image-count, name: "minImageCount, image count and latency trade-offs", match: [swapchain-image-count]}
+      - {id: vk-swapchain-maintenance, name: VK_EXT_swapchain_maintenance1 present fences and mode switching, match: [swapchain-maintenance1]}
+      - {id: vk-present-wait, name: Present wait/present id for frame pacing, match: [present-wait, present-id]}
+      - {id: vk-pre-rotation, name: Android pre-rotation and surface transform, match: [pre-rotation, surface-transform]}
+      - {id: vk-fullscreen-exclusive, name: Fullscreen exclusive and display timing, match: [fullscreen-exclusive]}
+  - id: vk-command-buffers
+    name: Vulkan command buffers and submission
+    source: Vulkan 1.3 Command Buffers; vkguide Initializing Vulkan
+    match: [vulkan-command-buffers, command-buffers]
+    subtopics:
+      - {id: vk-command-pools, name: Command pools per frame and per thread, match: [command-pools, multithreaded-recording]}
+      - {id: vk-secondary-cmd, name: Secondary command buffers, match: [secondary-command-buffers]}
+      - {id: vk-submit2, name: vkQueueSubmit2 and submission batching, match: [vkqueuesubmit2, queue-submission]}
+      - {id: vk-immediate-submit, name: One-time immediate submits for uploads, match: [immediate-submit, one-time-submit]}
+      - {id: vk-cmd-lifecycle, name: Command buffer lifecycle states and reset strategies, match: [command-buffer-lifecycle, vkresetcommandpool]}
+      - {id: vk-cmd-inheritance, name: Secondary buffer inheritance with dynamic rendering, match: [command-buffer-inheritance]}
+      - {id: vk-device-groups, name: Multi-queue submission and queue priorities, match: [queue-priorities]}
+      - {id: vk-indirect-cmd, name: Draw/dispatch indirect count commands, match: [vkcmddrawindexedindirectcount, draw-indirect-count]}
+      - {id: vk-device-generated-commands, name: Device generated commands (VK_EXT_device_generated_commands), match: [device-generated-commands]}
+      - {id: vk-cmd-recording-perf, name: Command recording cost and reuse, match: [command-buffer-reuse]}
+  - id: vk-synchronization
+    name: Vulkan synchronisation and cache control
+    source: Vulkan 1.3 Synchronization and Cache Control
+    match: [vulkan-synchronization, pipeline-barriers]
+    subtopics:
+      - {id: vk-image-layouts, name: Image layout transitions, match: [image-layout-transitions]}
+      - {id: vk-timeline-semaphores, name: Timeline semaphores, match: [timeline-semaphores]}
+      - {id: vk-frames-in-flight, name: Frames in flight with fences, match: [frames-in-flight]}
+      - {id: vk-sync-validation, name: Synchronisation validation and hazard debugging, match: [synchronization-validation, sync-hazards]}
+      - {id: vk-queue-ownership, name: Queue family ownership transfers, match: [queue-ownership-transfer]}
+      - {id: vk-sync2, name: synchronization2 stage and access masks, match: [synchronization2, vkcmdpipelinebarrier2]}
+      - {id: vk-binary-semaphores, name: Binary semaphores for queue-to-queue and present, match: [binary-semaphores]}
+      - {id: vk-events, name: Events (vkCmdSetEvent2/WaitEvents2) and split barriers, match: [vk-events, vkcmdwaitevents2]}
+      - {id: vk-execution-memory-deps, name: Execution vs memory dependencies and availability/visibility, match: [memory-dependency, availability-visibility]}
+      - {id: vk-host-sync, name: Host access synchronisation and coherent memory flushes, match: [vkflushmappedmemoryranges, host-coherent]}
+      - {id: vk-render-pass-deps, name: Subpass dependencies and external dependencies, match: [subpass-dependencies]}
+      - {id: vk-compute-graphics-sync, name: Compute-to-graphics barriers for buffers and indirect args, match: [compute-to-graphics-barrier]}
+  - id: vk-memory
+    name: Vulkan memory allocation and resources
+    source: Vulkan 1.3 Memory Allocation, Resource Creation; vkguide Textures
+    match: [vulkan-memory, vk-memory-allocation]
+    subtopics:
+      - {id: vk-memory-types, name: Memory heaps and type selection, match: [memory-types, memory-heaps]}
+      - {id: vk-vma, name: Vulkan Memory Allocator usage, match: [vma, vulkan-memory-allocator]}
+      - {id: vk-staging-uploads, name: Staging buffer uploads, match: [staging-buffer, gpu-upload]}
+      - {id: vk-buffer-device-address, name: Buffer device address, match: [buffer-device-address]}
+      - {id: vk-sparse-aliasing, name: Memory aliasing and sparse resources, match: [memory-aliasing, sparse-resources]}
+      - {id: vk-dedicated-allocations, name: Dedicated allocations and memory requirements, match: [dedicated-allocation, vkgetbuffermemoryrequirements]}
+      - {id: vk-memory-budget, name: Memory budget and priority extensions, match: [memory-budget, vk-ext-memory-budget]}
+      - {id: vk-rebar, name: Resizable BAR / device-local host-visible memory, match: [resizable-bar, device-local-host-visible]}
+      - {id: vk-defragmentation, name: Defragmenting with VMA, match: [vma-defragmentation]}
+      - {id: vk-external-memory, name: "External memory and interop (CUDA, D3D, dma-buf)", match: [external-memory, vulkan-interop]}
+      - {id: vk-buffer-suballocation, name: Buffer suballocation and alignment rules, match: [buffer-suballocation, min-uniform-buffer-offset-alignment]}
+      - {id: vk-host-image-copy, name: Host image copy (VK_EXT_host_image_copy), match: [host-image-copy]}
+  - id: vk-pipelines
+    name: Vulkan pipelines and render passes
+    source: Vulkan 1.3 Pipelines, Render Pass, Shaders; vkguide Graphics pipelines
+    match: [vulkan-pipelines, graphics-pipeline]
+    subtopics:
+      - {id: vk-dynamic-rendering, name: Dynamic rendering without render pass objects, match: [dynamic-rendering]}
+      - {id: vk-pipeline-cache, name: Pipeline caches and compile stutter, match: [pipeline-cache]}
+      - {id: vk-dynamic-state, name: Dynamic and extended dynamic state, match: [dynamic-state, extended-dynamic-state]}
+      - {id: vk-specialization-constants, name: Specialization constants, match: [specialization-constants]}
+      - {id: vk-shader-objects, name: Shader objects (VK_EXT_shader_object), match: [shader-objects]}
+      - {id: vk-pipeline-layout, name: Pipeline layouts and compatibility rules, match: [pipeline-layout, pipeline-layout-compatibility]}
+      - {id: vk-graphics-pipeline-libraries, name: Graphics pipeline libraries for fast linking, match: [graphics-pipeline-library]}
+      - {id: vk-compute-pipelines, name: Compute pipelines and dispatch, match: [vulkan-compute-pipeline, vkcmddispatch]}
+      - {id: vk-render-passes, name: "Render pass objects, subpasses and attachments", match: [vulkan-render-pass, subpasses]}
+      - {id: vk-shader-modules, name: "Shader modules, SPIR-V loading and entry points", match: [shader-module, vkcreateshadermodule]}
+      - {id: vk-pipeline-derivatives, name: Pipeline creation feedback and binary/derivative pipelines, match: [pipeline-creation-feedback]}
+      - {id: vk-multiview-pipelines, name: Multiview rendering in Vulkan, match: [vk-multiview]}
+      - {id: vk-mesh-shading, name: Mesh and task shaders (VK_EXT_mesh_shader), match: [vk-ext-mesh-shader, task-shader]}
+  - id: vk-descriptors
+    name: Vulkan resource descriptors
+    source: Vulkan 1.3 Resource Descriptors
+    match: [descriptor-sets, vulkan-descriptors]
+    subtopics:
+      - {id: vk-descriptor-pools, name: Descriptor pool allocation strategies, match: [descriptor-pool]}
+      - {id: vk-descriptor-indexing, name: Descriptor indexing and bindless, match: [descriptor-indexing]}
+      - {id: vk-push-constants, name: Push constants, match: [push-constants]}
+      - {id: vk-descriptor-buffer, name: Descriptor buffers (VK_EXT_descriptor_buffer), match: [descriptor-buffer]}
+      - {id: vk-descriptor-set-layouts, name: Descriptor set layouts and binding frequency, match: [descriptor-set-layout, binding-frequency]}
+      - {id: vk-dynamic-offsets, name: Dynamic uniform buffer offsets, match: [dynamic-uniform-buffer, dynamic-offsets]}
+      - {id: vk-update-templates, name: Descriptor update templates, match: [descriptor-update-template]}
+      - {id: vk-push-descriptors, name: Push descriptors (VK_KHR_push_descriptor), match: [push-descriptors]}
+      - {id: vk-descriptor-types, name: "Descriptor types (storage image, texel buffer, input attachment)", match: [storage-image, texel-buffer]}
+      - {id: vk-nonuniform-indexing, name: nonuniformEXT and update-after-bind, match: [nonuniformext, update-after-bind]}
+  - id: vk-images
+    name: Vulkan images, samplers and copies
+    source: Vulkan 1.3 Resource Creation (images, views), Samplers, Copy Commands, Formats
+    match: [vulkan-images, vulkan-textures]
+    subtopics:
+      - {id: vk-image-views, name: Image creation, usage flags and image views, match: [image-views]}
+      - {id: vk-mipmap-blit, name: Mipmap generation with vkCmdBlitImage, match: [mipmap-generation, vkcmdblitimage]}
+      - {id: vk-format-support, name: Format feature queries, match: [format-properties, format-support]}
+      - {id: vk-samplers, name: Sampler creation and immutable samplers, match: [vulkan-samplers, immutable-samplers]}
+      - {id: vk-image-tiling, name: Optimal vs linear tiling and image creation flags, match: [image-tiling, linear-tiling]}
+      - {id: vk-image-copies, name: Buffer-image copies and vkCmdCopyImage, match: [vkcmdcopybuffertoimage, image-copy]}
+      - {id: vk-msaa-resolve, name: MSAA images and resolve attachments, match: [vk-msaa, resolve-attachment]}
+      - {id: vk-depth-formats, name: Depth/stencil formats and aspect masks, match: [depth-stencil-format, image-aspect]}
+      - {id: vk-ycbcr, name: Sampler YCbCr conversion for video frames, match: [ycbcr-conversion]}
+      - {id: vk-cube-array-images, name: Cube and array image views, match: [cube-image-view, array-layers]}
+      - {id: vk-clear-images, name: Clearing images and attachments, match: [vkcmdclearcolorimage, clear-attachments]}
+  - id: vk-queries-debug
+    name: Vulkan queries and debugging tools
+    source: Vulkan 1.3 Queries, Debugging; RenderDoc docs
+    match: [vulkan-queries, vulkan-debugging]
+    subtopics:
+      - {id: vk-timestamp-queries, name: Timestamp queries for GPU timing, match: [timestamp-queries]}
+      - {id: vk-pipeline-statistics, name: Pipeline statistics and occlusion queries, match: [pipeline-statistics, occlusion-queries]}
+      - {id: vk-debug-labels, name: Debug labels and object names, match: [debug-labels, object-names]}
+      - {id: vk-renderdoc, name: RenderDoc capture and inspection, match: [renderdoc]}
+      - {id: vk-gpu-assisted-validation, name: GPU-assisted validation and debugPrintf layer settings, match: [gpu-assisted-validation]}
+      - {id: vk-best-practices-layer, name: Best practices validation layer, match: [best-practices-validation]}
+      - {id: vk-crash-dumps, name: "GPU crash dumps (Nsight Aftermath, Radeon GPU Detective)", match: [nsight-aftermath, radeon-gpu-detective]}
+      - {id: vk-query-pools, name: "Query pool lifecycle, resets and results flags", match: [query-pool, vkgetquerypoolresults]}
+      - {id: vk-performance-queries, name: Performance counters (VK_KHR_performance_query), match: [performance-query]}
+      - {id: vk-gfxreconstruct, name: Capture/replay with GFXReconstruct, match: [gfxreconstruct]}
+      - {id: vk-validation-errors, name: Reading validation VUIDs and fixing common errors, match: [vuid, validation-errors]}
+  # --- DirectX (Direct3D 12 / 11 programming guides, HLSL, PIX)
+  - id: d3d12-device-debug
+    name: Direct3D 12 device creation and debugging
+    source: D3D12 guide - Creating a device, Debug layer, DRED, Agility SDK; PIX docs
+    match: [d3d12-device, d3d12-debugging]
+    subtopics:
+      - {id: d3d12-adapter-features, name: DXGI adapter enumeration and CheckFeatureSupport, match: [checkfeaturesupport, adapter-enumeration]}
+      - {id: d3d12-agility-sdk, name: Agility SDK deployment, match: [agility-sdk]}
+      - {id: d3d12-debug-layer, name: Debug layer and GPU-based validation, match: [debug-layer, gpu-based-validation]}
+      - {id: d3d12-dred, name: DRED for device-removed crashes, match: [dred, device-removed]}
+      - {id: d3d12-pix, name: PIX GPU and timing captures, match: [pix, gpu-capture]}
+      - {id: d3d12-info-queue, name: "Info queue filtering, break-on-error and message callbacks", match: [id3d12infoqueue, break-on-error]}
+      - {id: d3d12-debug-names, name: Object names and PIX event markers, match: [setname, pix-events]}
+      - {id: d3d12-feature-levels, name: "Feature levels, shader model and options tiers", match: [feature-level, shader-model-check]}
+      - {id: d3d12-warp, name: WARP software adapter for testing and CI, match: [warp-adapter]}
+      - {id: d3d12-aftermath, name: Nsight Aftermath and breadcrumbs for TDRs, match: [tdr, gpu-breadcrumbs]}
+      - {id: d3d12-device-removed-recovery, name: Device removed recovery and TDR timeout policy, match: [device-removed-recovery]}
+      - {id: d3d12-dxgi-debug, name: "DXGI debug, live object reporting and leak hunting", match: [reportliveobjects, dxgi-debug]}
+  - id: dxgi-swap-chains
+    name: DXGI swap chains and presentation
+    source: DXGI docs - flip model, variable refresh rate, waitable swap chains, HDR
+    match: [dxgi, swap-chain]
+    subtopics:
+      - {id: dxgi-flip-model, name: Flip-model swap chains and ResizeBuffers, match: [flip-model, resizebuffers]}
+      - {id: dxgi-tearing, name: Tearing/VRR support, match: [allow-tearing, variable-refresh-rate]}
+      - {id: dxgi-waitable, name: Frame latency waitable object, match: [frame-latency-waitable]}
+      - {id: dxgi-hdr, name: HDR output colour space, match: [dxgi-hdr, setcolorspace1]}
+      - {id: dxgi-fullscreen, name: "Fullscreen modes (borderless vs exclusive, Alt+Enter)", match: [borderless-fullscreen, alt-enter]}
+      - {id: dxgi-present-stats, name: Present statistics and frame timing, match: [frame-statistics, getframestatistics]}
+      - {id: dxgi-swapchain-formats, name: Back buffer formats and sRGB render target views, match: [back-buffer-format, srgb-rtv]}
+      - {id: dxgi-multi-monitor, name: "Multi-monitor, output enumeration and DPI awareness", match: [dxgi-output, dpi-awareness]}
+      - {id: dxgi-composition, name: "Composition swap chains (DirectComposition, transparent windows)", match: [directcomposition, composition-swapchain]}
+      - {id: dxgi-present1-dirty-rects, name: Present1 dirty rects and scroll, match: [dirty-rects]}
+  - id: d3d12-command-submission
+    name: Direct3D 12 command queues and lists
+    source: D3D12 guide - Work submission, Command queues and lists, Multi-engine, Indirect drawing
+    match: [command-list, command-queue]
+    subtopics:
+      - {id: d3d12-allocators, name: Command allocators per frame and fences, match: [command-allocator, d3d12-fence]}
+      - {id: d3d12-bundles, name: Bundles, match: [d3d12-bundles]}
+      - {id: d3d12-copy-queue, name: Copy and compute queues (multi-engine), match: [copy-queue, multi-engine]}
+      - {id: d3d12-execute-indirect, name: ExecuteIndirect and command signatures, match: [executeindirect, command-signature]}
+      - {id: d3d12-command-list-recording, name: "Command list reset, close and multi-threaded recording", match: [command-list-recording, d3d12-multithreading]}
+      - {id: d3d12-fence-sync, name: "Fence signalling, SetEventOnCompletion and CPU waits", match: [seteventoncompletion]}
+      - {id: d3d12-cross-queue-sync, name: Cross-queue synchronisation and timestamp calibration, match: [cross-queue-sync, gettimestampfrequency]}
+      - {id: d3d12-render-passes, name: Render pass API (BeginRenderPass), match: [beginrenderpass, d3d12-render-passes]}
+      - {id: d3d12-queries, name: "Query heaps, timestamps and ResolveQueryData", match: [query-heap, resolvequerydata]}
+      - {id: d3d12-predication, name: Predication and conditional rendering, match: [predication]}
+  - id: d3d12-resource-binding
+    name: Direct3D 12 resource binding
+    source: D3D12 guide - Resource binding, Root signatures, Descriptor heaps
+    match: [root-signature, resource-binding]
+    subtopics:
+      - {id: d3d12-descriptor-heaps, name: Descriptor heaps and tables, match: [descriptor-heap, descriptor-table]}
+      - {id: d3d12-bindless-sm66, name: SM 6.6 dynamic resources (ResourceDescriptorHeap), match: [resourcedescriptorheap, sm66-bindless]}
+      - {id: d3d12-root-constants, name: Root constants and root descriptors, match: [root-constants]}
+      - {id: d3d12-static-samplers, name: Static samplers, match: [static-samplers]}
+      - {id: d3d12-root-signature-versions, name: Root signature 1.1 flags and serialization, match: [root-signature-1-1, serializeversionedrootsignature]}
+      - {id: d3d12-hlsl-root-signature, name: Defining root signatures in HLSL, match: [hlsl-root-signature]}
+      - {id: d3d12-descriptor-ring, name: Shader-visible descriptor ring allocation per frame, match: [descriptor-ring, shader-visible-heap]}
+      - {id: d3d12-copy-descriptors, name: CopyDescriptors and non-shader-visible staging heaps, match: [copydescriptors]}
+      - {id: d3d12-views, name: CBV/SRV/UAV/RTV/DSV view creation details, match: [createshaderresourceview, cbv-srv-uav-views]}
+      - {id: d3d12-resource-binding-tiers, name: Resource binding tiers and limits, match: [resource-binding-tier]}
+  - id: d3d12-memory
+    name: Direct3D 12 memory management
+    source: D3D12 guide - Memory management (heaps, residency, uploading, reserved resources)
+    match: [d3d12-memory, d3d12-heaps]
+    subtopics:
+      - {id: d3d12-upload-ring, name: Upload heap ring buffers, match: [upload-heap, upload-ring-buffer]}
+      - {id: d3d12-texture-upload, name: Texture upload footprints and CopyTextureRegion, match: [copytextureregion, getcopyablefootprints]}
+      - {id: d3d12-placed-aliasing, name: Placed resources and aliasing, match: [placed-resources, aliasing-barrier]}
+      - {id: d3d12-residency, name: Residency and budget management (D3D12MA), match: [residency, d3d12ma]}
+      - {id: d3d12-reserved, name: Reserved (tiled) resources, match: [reserved-resources, tiled-resources]}
+      - {id: d3d12-committed-resources, name: Committed resources and heap types, match: [createcommittedresource, heap-type]}
+      - {id: d3d12-readback, name: Readback heaps and GPU-to-CPU copies, match: [readback-heap]}
+      - {id: d3d12-gpu-upload-heap, name: GPU upload heaps and ReBAR in D3D12, match: [gpu-upload-heap]}
+      - {id: d3d12-memory-budget, name: Video memory budget queries (QueryVideoMemoryInfo), match: [queryvideomemoryinfo]}
+      - {id: d3d12-resource-alignment, name: Resource alignment and small resource placement, match: [resource-alignment, small-msaa-alignment]}
+      - {id: d3d12-buffer-suballocation, name: Buffer suballocation and constant buffer alignment, match: [constant-buffer-alignment]}
+  - id: d3d12-barriers
+    name: Direct3D 12 resource barriers
+    source: D3D12 guide - Using resource barriers; Enhanced barriers spec
+    match: [resource-barriers, resource-states]
+    subtopics:
+      - {id: d3d12-enhanced-barriers, name: Enhanced barriers, match: [enhanced-barriers]}
+      - {id: d3d12-split-barriers, name: Split barriers, match: [split-barriers]}
+      - {id: d3d12-uav-barriers, name: UAV barriers, match: [uav-barrier]}
+      - {id: d3d12-state-promotion, name: Implicit state promotion and decay, match: [state-promotion, state-decay]}
+      - {id: d3d12-legacy-states, name: Legacy resource states and common transitions, match: [resource-state-transition]}
+      - {id: d3d12-subresource-barriers, name: Subresource-level barriers for mips and array slices, match: [subresource-barrier]}
+      - {id: d3d12-barrier-batching, name: Batching barriers and avoiding redundant transitions, match: [barrier-batching]}
+      - {id: d3d12-render-graph, name: Automatic barrier placement with a render graph, match: [render-graph, frame-graph]}
+      - {id: d3d12-barrier-debug, name: Debugging barrier errors with debug layer and PIX, match: [barrier-validation]}
+      - {id: d3d12-texture-layouts, name: Enhanced barrier texture layouts and discard, match: [barrier-layout, texture-discard]}
+  - id: hlsl
+    name: HLSL shader language and compilation
+    source: HLSL reference; DXC docs; Shader Model 6.x feature list
+    match: [hlsl]
+    subtopics:
+      - {id: hlsl-dxc, name: Compiling with DXC (DXIL and SPIR-V targets), match: [dxc, dxil]}
+      - {id: hlsl-cbuffer-packing, name: Constant buffer packing rules, match: [cbuffer-packing, packoffset]}
+      - {id: hlsl-wave-intrinsics, name: Wave intrinsics, match: [wave-intrinsics, waveactivesum]}
+      - {id: hlsl-16bit, name: 16-bit types and min precision, match: [hlsl-16-bit, min16float]}
+      - {id: hlsl-semantics, name: "Semantics and system values (SV_Position, SV_Target)", match: [hlsl-semantics, system-value-semantics]}
+      - {id: hlsl-resource-types, name: "Resource types (Texture2D, RWStructuredBuffer, ByteAddressBuffer)", match: [structuredbuffer, byteaddressbuffer]}
+      - {id: hlsl-intrinsics, name: Core intrinsics and math functions, match: [hlsl-intrinsics]}
+      - {id: hlsl-compute, name: "numthreads, groupshared and GroupMemoryBarrierWithGroupSync", match: [numthreads, groupshared]}
+      - {id: hlsl-2021, name: "HLSL 2021 templates, operator overloading and bitfields", match: [hlsl-2021]}
+      - {id: hlsl-fxc-migration, name: Migrating from FXC to DXC, match: [fxc-to-dxc]}
+      - {id: hlsl-shader-reflection, name: Shader reflection and PDBs, match: [dxc-reflection, shader-pdb]}
+      - {id: hlsl-matrix-order, name: Matrix layout and mul() order in HLSL, match: [row-major-matrices, hlsl-mul]}
+  - id: d3d12-advanced-features
+    name: Direct3D 12 advanced features
+    source: D3D12 guide - Mesh shaders, Variable rate shading, Sampler feedback, DirectStorage, Work graphs
+    match: [d3d12-advanced, directx-12-ultimate]
+    subtopics:
+      - {id: d3d12-mesh-shaders, name: Mesh and amplification shaders, match: [mesh-shader, amplification-shader]}
+      - {id: d3d12-vrs, name: Variable rate shading, match: [variable-rate-shading, vrs]}
+      - {id: d3d12-sampler-feedback, name: Sampler feedback streaming, match: [sampler-feedback]}
+      - {id: d3d12-directstorage, name: DirectStorage asset loading, match: [directstorage]}
+      - {id: d3d12-work-graphs, name: Work graphs, match: [work-graphs]}
+      - {id: d3d12-mesh-shader-culling, name: Meshlet culling in amplification shaders, match: [amplification-culling]}
+      - {id: d3d12-vrs-image, name: VRS tier 2 shading rate images, match: [shading-rate-image]}
+      - {id: d3d12-enhanced-gpu-upload, name: Shader model 6.x feature adoption checks, match: [shader-model-6]}
+      - {id: d3d12-gpu-decompression, name: GPU decompression with GDeflate, match: [gdeflate]}
+      - {id: d3d12-auto-stereo, name: Pipeline state streams and PSO subobjects, match: [pipeline-state-stream]}
+      - {id: d3d12-video, name: D3D12 video decode/encode, match: [d3d12-video]}
+  - id: dxr
+    name: DirectX Raytracing
+    source: DXR functional spec
+    match: [dxr, directx-raytracing]
+    subtopics:
+      - {id: dxr-acceleration-structures, name: BLAS/TLAS build, compaction and update, match: [blas, tlas, as-compaction]}
+      - {id: dxr-shader-table, name: State objects and shader tables, match: [shader-table, hit-group]}
+      - {id: dxr-inline, name: Inline raytracing with RayQuery, match: [inline-raytracing, rayquery]}
+      - {id: dxr-denoising, name: Denoising ray-traced effects, match: [rt-denoising, nrd]}
+      - {id: dxr-tlas-instances, name: "TLAS instance descs, masks and instance flags", match: [instance-mask, tlas-instance]}
+      - {id: dxr-payload, name: "Ray payloads, attributes and recursion depth", match: [ray-payload, recursion-depth]}
+      - {id: dxr-any-hit, name: Any-hit shaders and alpha-tested geometry, match: [any-hit-shader, alpha-tested-rt]}
+      - {id: dxr-raytraced-shadows, name: Ray-traced shadows, match: [raytraced-shadows]}
+      - {id: dxr-raytraced-reflections, name: Ray-traced reflections, match: [raytraced-reflections]}
+      - {id: dxr-ser, name: Shader execution reordering and opacity micromaps, match: [shader-execution-reordering, opacity-micromaps]}
+      - {id: dxr-vulkan-rt, name: Vulkan ray tracing pipeline (VK_KHR_ray_tracing_pipeline), match: [vk-khr-ray-tracing, vulkan-ray-query]}
+      - {id: dxr-as-memory, name: Acceleration structure memory and rebuild/refit policy, match: [as-refit, scratch-buffer]}
+  - id: d3d11
+    name: Direct3D 11
+    source: Direct3D 11 programming guide ToC
+    match: [d3d11, direct3d-11]
+    subtopics:
+      - {id: d3d11-device-context, name: Device, immediate context and state objects, match: [d3d11-device-context, immediate-context]}
+      - {id: d3d11-map-discard, name: Dynamic resources with Map WRITE_DISCARD/NO_OVERWRITE, match: [map-discard, map-no-overwrite]}
+      - {id: d3d11-constant-buffers, name: Constant buffer update strategies, match: [d3d11-constant-buffers]}
+      - {id: d3d11-deferred-contexts, name: Deferred contexts and D3D11On12 interop, match: [deferred-contexts, d3d11on12]}
+      - {id: d3d11-shaders-input-layout, name: Shaders and input layouts in D3D11, match: [input-layout, d3d11-shaders]}
+      - {id: d3d11-srv-uav, name: Shader resource and unordered access views in D3D11, match: [d3d11-uav, d3d11-srv]}
+      - {id: d3d11-staging-readback, name: Staging resources and CPU readback, match: [staging-resource]}
+      - {id: d3d11-debug, name: D3D11 debug layer and graphics diagnostics, match: [d3d11-debug-layer]}
+      - {id: d3d11-state-objects, name: "Rasterizer, blend and depth-stencil state objects", match: [rasterizer-state, depth-stencil-state]}
+      - {id: d3d11-compute, name: Compute shaders in D3D11, match: [d3d11-compute]}
+  # --- OpenCV (docs.opencv.org module and tutorial ToC)
+  - id: cv-core
+    name: OpenCV core module and Mat
+    source: OpenCV core module - Mat, operations on arrays, XML/YAML persistence, parallel processing
+    match: [opencv-core, cv-mat]
+    subtopics:
+      - {id: cv-mat-memory, name: Mat memory model, ROIs, clone and copyTo, match: [mat-roi, mat-memory-model]}
+      - {id: cv-numpy-interop, name: NumPy interop and dtype/channel gotchas, match: [numpy-interop, cv-dtypes]}
+      - {id: cv-filestorage, name: FileStorage YAML/JSON persistence, match: [filestorage]}
+      - {id: cv-parallel-for, name: parallel_for_ and threading control, match: [parallel-for, setnumthreads]}
+      - {id: cv-mat-types, name: "Mat types, depth conversion and convertTo scaling", match: [convertto, mat-type]}
+      - {id: cv-array-ops, name: "Per-element array operations, saturate_cast and LUT", match: [saturate-cast, cv-lut]}
+      - {id: cv-split-merge, name: Channel split/merge and mixChannels, match: [split-merge-channels, mixchannels]}
+      - {id: cv-random-drawing, name: Drawing functions and text rendering, match: [drawing-functions, puttext]}
+      - {id: cv-reductions, name: "Reductions and statistics (mean, minMaxLoc, reduce)", match: [minmaxloc, meanstddev]}
+      - {id: cv-dft, name: DFT and frequency-domain filtering, match: [dft, frequency-domain]}
+      - {id: cv-pca-svd, name: "PCA, SVD and solve for linear algebra", match: [cv-pca, cv-svd]}
+      - {id: cv-error-handling, name: "cv::Exception, assertions and error logging", match: [cv-exception, opencv-logging]}
+  - id: cv-io-highgui
+    name: OpenCV image I/O and HighGUI
+    source: OpenCV imgcodecs, highgui modules
+    match: [imgcodecs, highgui]
+    subtopics:
+      - {id: cv-imread-flags, name: imread flags, bit depth and BGR order, match: [imread, imread-unchanged]}
+      - {id: cv-imwrite-params, name: imwrite encoding parameters, match: [imwrite, jpeg-quality]}
+      - {id: cv-imdecode, name: imdecode/imencode from memory buffers, match: [imdecode, imencode]}
+      - {id: cv-imshow, name: imshow, waitKey, trackbars and mouse callbacks, match: [imshow, waitkey, trackbar]}
+      - {id: cv-imread-multi, name: "Multi-page images (imreadmulti, TIFF, animated)", match: [imreadmulti, multi-page-tiff]}
+      - {id: cv-exif-orientation, name: EXIF orientation handling, match: [exif-orientation]}
+      - {id: cv-16bit-float-io, name: "16-bit, float and HDR image I/O (EXR, PFM)", match: [openexr, 16-bit-images]}
+      - {id: cv-highgui-backends, name: "HighGUI backends (Qt, GTK) and headless servers", match: [highgui-qt, headless-display]}
+      - {id: cv-selectroi, name: selectROI and interactive annotation helpers, match: [selectroi]}
+      - {id: cv-unicode-paths, name: Non-ASCII file paths on Windows, match: [unicode-paths]}
+  - id: cv-color-threshold
+    name: OpenCV colour spaces, thresholding and histograms
+    source: OpenCV imgproc tutorials - Changing colorspaces, Thresholding, Histograms
+    match: [colour-segmentation, thresholding]
+    subtopics:
+      - {id: cv-cvtcolor-inrange, name: cvtColor and inRange HSV segmentation, match: [cvtcolor, inrange, hsv]}
+      - {id: cv-otsu-adaptive, name: Otsu and adaptive thresholding, match: [otsu, adaptive-threshold]}
+      - {id: cv-histogram-equalization, name: Histogram equalisation and CLAHE, match: [clahe, histogram-equalization]}
+      - {id: cv-back-projection, name: Histogram calculation, comparison and back projection, match: [calchist, back-projection]}
+      - {id: cv-lab-ycrcb, name: Lab and YCrCb colour spaces for segmentation, match: [lab-color-space, ycrcb]}
+      - {id: cv-skin-detection, name: Skin detection and illumination-robust colour rules, match: [skin-detection]}
+      - {id: cv-color-balance, name: White balance and colour constancy (xphoto), match: [white-balance, gray-world]}
+      - {id: cv-grabcut, name: GrabCut foreground extraction, match: [grabcut]}
+      - {id: cv-watershed, name: Watershed segmentation with markers, match: [watershed]}
+      - {id: cv-kmeans-quantize, name: k-means colour quantisation, match: [kmeans-quantization]}
+      - {id: cv-floodfill, name: floodFill region growing, match: [floodfill]}
+  - id: cv-filtering
+    name: OpenCV image filtering and morphology
+    source: OpenCV imgproc - Image Filtering; tutorials Smoothing, Morphological transformations, Pyramids
+    match: [image-filtering, convolution]
+    subtopics:
+      - {id: cv-morphology, name: Morphological operations, match: [morphological-operations, morphologyex]}
+      - {id: cv-edge-preserving, name: Median and bilateral filtering, match: [bilateral-filter, median-blur]}
+      - {id: cv-pyramids, name: Image pyramids, match: [image-pyramids, pyrdown]}
+      - {id: cv-edges, name: Gradients and Canny edges, match: [canny-edge, sobel]}
+      - {id: cv-gaussian-blur, name: "Gaussian and box blur, kernel size and sigma", match: [gaussianblur, box-filter]}
+      - {id: cv-filter2d, name: filter2D custom kernels and border modes, match: [filter2d, border-types]}
+      - {id: cv-sharpening, name: Unsharp masking and sharpening, match: [unsharp-mask]}
+      - {id: cv-laplacian, name: Laplacian and scharr derivatives, match: [laplacian, scharr]}
+      - {id: cv-separable, name: sepFilter2D separable kernels, match: [sepfilter2d]}
+      - {id: cv-distance-transform, name: Distance transform, match: [distance-transform]}
+      - {id: cv-guided-filter, name: Guided and domain transform filters (ximgproc), match: [guided-filter, ximgproc]}
+  - id: cv-geometric-transforms
+    name: OpenCV geometric image transformations
+    source: OpenCV imgproc - Geometric Image Transformations
+    match: [geometric-transforms, image-warping]
+    subtopics:
+      - {id: cv-resize, name: Resize and interpolation choice, match: [cv-resize, inter-area]}
+      - {id: cv-warp-affine, name: warpAffine and rotation, match: [warpaffine]}
+      - {id: cv-warp-perspective, name: warpPerspective document rectification, match: [warpperspective, perspective-transform]}
+      - {id: cv-remap, name: remap with custom maps, match: [remap]}
+      - {id: cv-get-affine, name: getAffineTransform and estimateAffine2D, match: [estimateaffine2d, getaffinetransform]}
+      - {id: cv-polar-transforms, name: warpPolar and log-polar transforms, match: [warppolar, log-polar]}
+      - {id: cv-flip-rotate, name: "flip, rotate and transpose", match: [cv-rotate, cv-flip]}
+      - {id: cv-letterbox, name: Letterboxing and aspect-preserving resize, match: [letterbox]}
+      - {id: cv-border-padding, name: copyMakeBorder padding, match: [copymakeborder]}
+      - {id: cv-coordinate-mapping, name: "Mapping points through transforms (perspectiveTransform, transform)", match: [cv-perspectivetransform-points]}
+  - id: cv-contours
+    name: OpenCV structural analysis and shape descriptors
+    source: OpenCV imgproc - Structural Analysis and Shape Descriptors; Contours tutorials
+    match: [contours, shape-analysis]
+    subtopics:
+      - {id: cv-findcontours, name: findContours modes and hierarchy, match: [findcontours, contour-hierarchy]}
+      - {id: cv-contour-features, name: Moments, area, approxPolyDP and convex hull, match: [image-moments, approxpolydp, convex-hull]}
+      - {id: cv-min-area-rect, name: minAreaRect, fitEllipse and bounding shapes, match: [minarearect, fitellipse]}
+      - {id: cv-connected-components, name: connectedComponentsWithStats, match: [connected-components]}
+      - {id: cv-match-shapes, name: matchShapes and Hu moments, match: [matchshapes, hu-moments]}
+      - {id: cv-point-polygon-test, name: pointPolygonTest and convexity defects, match: [pointpolygontest, convexity-defects]}
+      - {id: cv-contour-drawing, name: "drawContours, filling and masks", match: [drawcontours]}
+      - {id: cv-contour-filtering, name: "Filtering contours by area, aspect and solidity", match: [contour-filtering, solidity]}
+      - {id: cv-rotated-crops, name: Cropping rotated rectangles, match: [rotated-crop]}
+      - {id: cv-skeletonization, name: Skeletonisation and thinning, match: [skeletonization, thinning]}
+  - id: cv-features2d
+    name: OpenCV feature detection, matching and stitching
+    source: OpenCV features2d, stitching modules
+    match: [feature-matching, features2d]
+    subtopics:
+      - {id: cv-keypoints, name: Keypoint detectors (ORB, SIFT, AKAZE), match: [orb, sift, akaze]}
+      - {id: cv-ratio-test, name: BF/FLANN matching with ratio test, match: [flann, ratio-test]}
+      - {id: cv-homography, name: Homography with RANSAC, match: [homography, ransac]}
+      - {id: cv-stitcher, name: Panorama stitching with cv::Stitcher, match: [stitcher, panorama-stitching]}
+      - {id: cv-corner-detection, name: Harris and Shi-Tomasi corners, match: [harris-corner, goodfeaturestotrack]}
+      - {id: cv-fast-brisk, name: FAST and BRISK detectors, match: [fast-detector, brisk]}
+      - {id: cv-descriptor-tuning, name: Detector parameter tuning and keypoint distribution, match: [keypoint-distribution, anms]}
+      - {id: cv-fundamental-matrix, name: Fundamental and essential matrix estimation, match: [fundamental-matrix, essential-matrix]}
+      - {id: cv-draw-matches, name: drawMatches and match visualisation, match: [drawmatches]}
+      - {id: cv-bag-of-words, name: Bag of visual words image retrieval, match: [bag-of-visual-words, image-retrieval]}
+      - {id: cv-subpixel-corners, name: cornerSubPix refinement, match: [cornersubpix]}
+  - id: cv-objdetect
+    name: OpenCV object detection module
+    source: OpenCV objdetect - Cascade classifier, ArUco, QR codes, HOG; template matching tutorial
+    match: [objdetect, marker-detection]
+    subtopics:
+      - {id: cv-aruco, name: ArUco/ChArUco marker detection and pose, match: [aruco, charuco]}
+      - {id: cv-qrcode, name: QR code detection and decoding, match: [qr-code, qrcodedetector]}
+      - {id: cv-template-matching, name: Template matching, match: [template-matching, matchtemplate]}
+      - {id: cv-cascade-hog, name: Haar cascades and HOG people detection, match: [haar-cascade, hog-detector]}
+      - {id: cv-face-detector-yunet, name: FaceDetectorYN and FaceRecognizerSF, match: [facedetectoryn, yunet]}
+      - {id: cv-barcode, name: Barcode detection, match: [barcode-detector]}
+      - {id: cv-cascade-training, name: Training Haar/LBP cascades, match: [cascade-training, opencv-traincascade]}
+      - {id: cv-aruco-boards, name: "ArUco board design, dictionaries and printing", match: [aruco-dictionary, aruco-board]}
+      - {id: cv-multi-scale-template, name: Multi-scale and rotation-invariant template matching, match: [multi-scale-template-matching]}
+      - {id: cv-qr-wechat, name: WeChat QR and robust QR decoding, match: [wechat-qrcode]}
+  - id: cv-dnn
+    name: OpenCV DNN module
+    source: OpenCV dnn module and tutorials
+    match: [opencv-dnn, cv-dnn]
+    subtopics:
+      - {id: cv-dnn-readnet, name: Loading ONNX models with readNet, match: [readnet, onnx]}
+      - {id: cv-blob-from-image, name: blobFromImage preprocessing, match: [blobfromimage]}
+      - {id: cv-dnn-backends, name: DNN backends and targets (CUDA, OpenVINO), match: [dnn-backend, dnn-target]}
+      - {id: cv-nms-boxes, name: Decoding detector outputs with NMSBoxes, match: [nmsboxes, non-maximum-suppression]}
+      - {id: cv-dnn-yolo, name: Running YOLO models in OpenCV DNN, match: [yolo-opencv]}
+      - {id: cv-dnn-segmentation, name: Segmentation models in OpenCV DNN, match: [dnn-segmentation]}
+      - {id: cv-dnn-model-api, name: High-level dnn_DetectionModel/ClassificationModel API, match: [detectionmodel]}
+      - {id: cv-dnn-layers, name: Unsupported layers and custom layer registration, match: [dnn-custom-layers]}
+      - {id: cv-dnn-perf, name: DNN performance profiling and FP16 targets, match: [getperfprofile, dnn-fp16]}
+      - {id: cv-dnn-text, name: "Text detection and recognition models (EAST, DB, CRNN)", match: [east-text-detector, crnn]}
+  - id: cv-video
+    name: OpenCV video I/O and analysis
+    source: OpenCV videoio, video modules; tracking API
+    match: [video-analysis, videoio]
+    subtopics:
+      - {id: cv-videocapture, name: VideoCapture backends and properties, match: [videocapture, gstreamer]}
+      - {id: cv-videowriter, name: VideoWriter codecs and FOURCC, match: [videowriter, fourcc]}
+      - {id: cv-background-subtraction, name: Background subtraction (MOG2/KNN), match: [background-subtraction, mog2]}
+      - {id: cv-trackers, name: Single-object trackers (CSRT, KCF) and meanShift/CamShift, match: [csrt, camshift]}
+      - {id: cv-video-seek, name: "Frame seeking, timestamps and frame counts", match: [cap-prop-pos-frames, video-seeking]}
+      - {id: cv-rtsp, name: RTSP/IP camera streams and latency, match: [rtsp-stream, ip-camera]}
+      - {id: cv-ffmpeg-backend, name: FFmpeg backend options and hardware decode, match: [opencv-ffmpeg, hardware-decode]}
+      - {id: cv-camera-props, name: "Camera properties (exposure, resolution, MJPG)", match: [camera-properties, cap-prop-exposure]}
+      - {id: cv-frame-differencing, name: Frame differencing and motion detection, match: [frame-differencing, motion-detection]}
+      - {id: cv-multi-tracker, name: "Tracking API, MultiTracker and tracker selection", match: [multitracker, tracker-api]}
+      - {id: cv-threaded-capture, name: Threaded capture and frame dropping, match: [threaded-capture]}
+  - id: cv-calib3d
+    name: OpenCV camera calibration and 3D reconstruction
+    source: OpenCV calib3d module
+    match: [calib3d, camera-calibration]
+    subtopics:
+      - {id: cv-undistort, name: Undistortion and rectification maps, match: [undistort, initundistortrectifymap]}
+      - {id: cv-solvepnp, name: solvePnP and solvePnPRansac, match: [solvepnp, pnp]}
+      - {id: cv-hand-eye, name: Hand-eye calibration, match: [hand-eye-calibration, calibratehandeye]}
+      - {id: cv-triangulation, name: Triangulation and recoverPose, match: [triangulatepoints, recoverpose]}
+      - {id: cv-stereo, name: Stereo calibration and disparity, match: [stereo-calibration, sgbm]}
+      - {id: cv-chessboard-calib, name: "Chessboard calibration (findChessboardCorners, calibrateCamera)", match: [findchessboardcorners, calibratecamera]}
+      - {id: cv-reprojection-error, name: Calibration quality and reprojection error, match: [reprojection-error]}
+      - {id: cv-fisheye, name: Fisheye camera model calibration, match: [fisheye-calibration]}
+      - {id: cv-projectpoints, name: projectPoints and drawing axes, match: [projectpoints, drawframeaxes]}
+      - {id: cv-stereo-rectify, name: stereoRectify and rectification, match: [stereorectify]}
+      - {id: cv-reprojectimageto3d, name: Disparity to point cloud (reprojectImageTo3D), match: [reprojectimageto3d]}
+      - {id: cv-circle-grid, name: Circle grid and asymmetric pattern calibration, match: [circle-grid]}
+      - {id: cv-usac, name: USAC robust estimation flags in calib3d, match: [usac-flags]}
+  - id: cv-photo
+    name: OpenCV computational photography
+    source: OpenCV photo module
+    match: [opencv-photo, computational-photography]
+    subtopics:
+      - {id: cv-inpaint, name: Inpainting, match: [inpainting]}
+      - {id: cv-denoise, name: Non-local means denoising, match: [fastnlmeansdenoising, image-denoising]}
+      - {id: cv-hdr-merge, name: HDR merge and exposure fusion, match: [exposure-fusion, mergemertens]}
+      - {id: cv-seamless-clone, name: Seamless cloning, match: [seamlessclone]}
+      - {id: cv-decolor, name: Decolorization and stylization filters, match: [decolor, stylization]}
+      - {id: cv-detail-enhance, name: Edge-preserving and detail enhance filters, match: [detailenhance, edgepreservingfilter]}
+      - {id: cv-tonemap, name: Tonemapping HDR images in OpenCV, match: [tonemapreinhard, cv-tonemap]}
+      - {id: cv-camera-response-calib, name: Camera response calibration (Debevec), match: [calibratedebevec]}
+      - {id: cv-colored-denoise, name: Colour and video denoising variants, match: [fastnlmeansdenoisingcolored, multi-frame-denoising]}
+      - {id: cv-xphoto-inpaint, name: xphoto inpainting and dnn super-resolution, match: [dnn-superres]}
+  - id: cv-build-deploy
+    name: OpenCV build and deployment
+    source: OpenCV installation/build guides; cuda modules
+    match: [opencv-build, opencv-deployment]
+    subtopics:
+      - {id: cv-cmake-build, name: Building from source with CMake and contrib, match: [opencv-cmake, opencv-contrib]}
+      - {id: cv-python-wheels, name: opencv-python wheel variants (headless, contrib), match: [opencv-python-headless]}
+      - {id: cv-cuda-gpumat, name: CUDA modules and GpuMat, match: [gpumat, opencv-cuda]}
+      - {id: cv-gapi-umat, name: Transparent API (UMat/OpenCL), match: [umat, transparent-api]}
+      - {id: cv-opencv-js, name: OpenCV.js build and browser use, match: [opencv-js]}
+      - {id: cv-android-ios, name: OpenCV on Android and iOS, match: [opencv-android, opencv-ios]}
+      - {id: cv-static-build, name: Static linking and minimal module builds, match: [opencv-static, build-list]}
+      - {id: cv-videoio-plugins, name: Video I/O plugin builds and codec licensing, match: [videoio-plugins]}
+      - {id: cv-version-migration, name: Migrating between OpenCV versions (3.x to 4.x API changes), match: [opencv-migration]}
+      - {id: cv-docker, name: OpenCV in Docker images, match: [opencv-docker]}
+      - {id: cv-ipp-optimizations, name: "IPP, SIMD (universal intrinsics) and CPU dispatch", match: [universal-intrinsics, cpu-dispatch]}
+  # --- WebGL / three.js / WebGPU
+  - id: three-fundamentals
+    name: three.js fundamentals
+    source: three.js manual - Fundamentals, Responsive design, Scene graph, Cameras, Lights, Fog
+    match: [threejs-fundamentals, scene-graph]
+    subtopics:
+      - {id: three-responsive, name: Responsive canvas, pixel ratio and resize, match: [responsive-canvas, devicepixelratio]}
+      - {id: three-cameras, name: Cameras and OrbitControls, match: [orbitcontrols, orthographiccamera]}
+      - {id: three-lights, name: Light types and environment lighting, match: [three-lights, hemispherelight]}
+      - {id: three-render-loop, name: Render loop, on-demand rendering and clock, match: [setanimationloop, on-demand-rendering]}
+      - {id: three-fog, name: Fog and scene background, match: [three-fog, scene-background]}
+      - {id: three-helpers, name: "Debug helpers (AxesHelper, light helpers) and lil-gui", match: [axeshelper, lil-gui]}
+      - {id: three-object3d, name: "Object3D transforms, parenting and matrixAutoUpdate", match: [object3d, matrixautoupdate]}
+      - {id: three-renderer-settings, name: "WebGLRenderer settings (antialias, toneMapping, outputColorSpace)", match: [webglrenderer, tonemapping-setting]}
+      - {id: three-layers-visibility, name: "Layers, visibility and frustumCulled", match: [three-layers, frustumculled]}
+      - {id: three-stats, name: Performance monitoring with stats.js and renderer.info, match: [renderer-info, stats-js]}
+      - {id: three-multiple-scenes, name: "Multiple scenes, viewports and scissor", match: [scissor-test, multiple-viewports]}
+  - id: three-geometry
+    name: three.js geometry
+    source: three.js manual - Custom BufferGeometry, Optimizing lots of objects, InstancedMesh, LOD
+    match: [buffergeometry, three-geometry]
+    subtopics:
+      - {id: three-custom-buffergeometry, name: Custom BufferGeometry attributes, match: [bufferattribute, custom-geometry]}
+      - {id: three-instancedmesh, name: InstancedMesh and BatchedMesh, match: [instancedmesh, batchedmesh]}
+      - {id: three-merge-geometries, name: Merging geometries, match: [mergegeometries]}
+      - {id: three-lod, name: LOD objects, match: [three-lod]}
+      - {id: three-builtin-geometries, name: Built-in geometries and parameters, match: [three-primitives, boxgeometry]}
+      - {id: three-indexed-geometry, name: "Indexed geometry, groups and multi-material", match: [geometry-groups, setindex]}
+      - {id: three-normals-tangents, name: computeVertexNormals and computeTangents, match: [computevertexnormals, computetangents]}
+      - {id: three-dynamic-geometry, name: "Updating geometry dynamically (needsUpdate, drawRange)", match: [needsupdate, drawrange]}
+      - {id: three-points-lines, name: "Points, Line and fat lines (Line2)", match: [three-points, line2]}
+      - {id: three-text-geometry, name: "Text rendering (TextGeometry, troika, SDF text)", match: [textgeometry, troika-text]}
+      - {id: three-csg, name: Boolean geometry (three-bvh-csg), match: [three-bvh-csg]}
+  - id: three-materials
+    name: three.js materials and textures
+    source: three.js manual - Materials, Textures, Color management
+    match: [threejs-materials, three-materials]
+    subtopics:
+      - {id: three-color-management, name: Colour management and texture colorSpace, match: [colorspace, colour-management]}
+      - {id: three-env-maps, name: Environment maps and PMREM, match: [pmrem, environment-map]}
+      - {id: three-shadermaterial, name: ShaderMaterial and RawShaderMaterial, match: [shadermaterial]}
+      - {id: three-onbeforecompile, name: Patching built-in materials with onBeforeCompile, match: [onbeforecompile]}
+      - {id: three-standard-material, name: MeshStandardMaterial/MeshPhysicalMaterial parameters, match: [meshstandardmaterial, meshphysicalmaterial]}
+      - {id: three-texture-settings, name: "Texture wrapping, filtering, anisotropy and flipY", match: [texture-wrapping, flipy]}
+      - {id: three-transparency, name: "Transparency, depthWrite and render order", match: [renderorder, depthwrite]}
+      - {id: three-alpha-maps, name: "Alpha maps, alphaTest and alphaHash", match: [alphatest, alphahash]}
+      - {id: three-video-canvas-textures, name: "Video, canvas and data textures", match: [videotexture, datatexture]}
+      - {id: three-material-sharing, name: "Material sharing, cloning and program caching", match: [material-cloning]}
+      - {id: three-uv-transforms, name: UV offset/repeat and texture transforms, match: [texture-repeat]}
+  - id: three-shadows
+    name: three.js shadows
+    source: three.js manual - Shadows
+    match: [three-shadows]
+    subtopics:
+      - {id: three-shadow-camera, name: Shadow camera frustum and map size, match: [shadow-camera]}
+      - {id: three-shadow-types, name: Shadow map types and bias, match: [pcfsoftshadowmap, shadow-bias]}
+      - {id: three-baked-shadows, name: Baked and contact shadows, match: [contact-shadows, baked-shadows]}
+      - {id: three-csm, name: Cascaded shadow maps in three.js, match: [three-csm]}
+      - {id: three-shadow-lights, name: castShadow/receiveShadow and per-light shadow setup, match: [castshadow, receiveshadow]}
+      - {id: three-shadow-acne, name: Fixing shadow acne and peter-panning (normalBias), match: [normalbias, shadow-acne]}
+      - {id: three-point-light-shadows, name: PointLight and SpotLight shadows, match: [spotlight-shadow]}
+      - {id: three-shadow-performance, name: "Shadow performance (autoUpdate, needsUpdate)", match: [shadow-autoupdate]}
+      - {id: three-shadow-material, name: ShadowMaterial and shadow catchers, match: [shadowmaterial, shadow-catcher]}
+  - id: three-picking
+    name: three.js picking and interaction
+    source: three.js manual - Picking; three-mesh-bvh docs
+    match: [picking, raycaster]
+    subtopics:
+      - {id: three-raycaster, name: Raycaster mouse picking, match: [mouse-picking]}
+      - {id: three-gpu-picking, name: GPU picking with ID render target, match: [gpu-picking]}
+      - {id: three-mesh-bvh, name: Accelerated raycasting with three-mesh-bvh, match: [three-mesh-bvh]}
+      - {id: three-transformcontrols, name: TransformControls and drag interaction, match: [transformcontrols, dragcontrols]}
+      - {id: three-pointer-events, name: "Pointer events, normalized device coords and touch", match: [pointer-events, ndc-coordinates]}
+      - {id: three-instanced-picking, name: Picking InstancedMesh instances, match: [instanceid-picking]}
+      - {id: three-hover-highlight, name: Hover highlight and outline selection, match: [hover-highlight, outlinepass]}
+      - {id: three-raycast-layers, name: "Raycaster layers, thresholds and recursive flags", match: [raycaster-layers]}
+      - {id: three-css-labels, name: HTML labels with CSS2DRenderer/CSS3DRenderer, match: [css2drenderer, css3drenderer]}
+      - {id: three-drag-plane, name: Dragging on planes and constrained movement, match: [drag-on-plane]}
+  - id: three-animation
+    name: three.js animation system
+    source: three.js manual - Animation system
+    match: [animationmixer, three-animation]
+    subtopics:
+      - {id: three-clips-actions, name: AnimationClips, actions and crossfades, match: [animationaction, crossfade]}
+      - {id: three-skinned-mesh, name: SkinnedMesh and skeletons, match: [skinnedmesh]}
+      - {id: three-morph-targets, name: Morph targets, match: [morph-targets]}
+      - {id: three-keyframe-tracks, name: Procedural keyframe tracks, match: [keyframetrack]}
+      - {id: three-gltf-animations, name: Playing glTF animations and retargeting, match: [gltf-animation, animation-retargeting]}
+      - {id: three-animation-blending, name: Additive animation and blend weights, match: [additive-animation]}
+      - {id: three-tweening, name: Tweening and procedural motion, match: [tween-js, gsap-three]}
+      - {id: three-animation-events, name: "Animation events, loop modes and timeScale", match: [loopone, timescale]}
+      - {id: three-bone-attachments, name: Attaching objects to bones, match: [bone-attachment]}
+      - {id: three-skinning-perf, name: Skinning performance and skeleton sharing, match: [skeleton-utils]}
+  - id: three-postprocessing
+    name: three.js post-processing
+    source: three.js manual - Post processing, Render targets
+    match: [effectcomposer, three-postprocessing]
+    subtopics:
+      - {id: three-render-targets, name: WebGLRenderTarget usage, match: [webglrendertarget]}
+      - {id: three-unrealbloom, name: Bloom and selective bloom, match: [unrealbloompass, selective-bloom]}
+      - {id: three-custom-pass, name: Custom ShaderPass, match: [shaderpass]}
+      - {id: three-pmndrs-postprocessing, name: pmndrs postprocessing library, match: [pmndrs-postprocessing]}
+      - {id: three-ssao-pass, name: SSAO/GTAO passes in three.js, match: [gtaopass, ssaopass]}
+      - {id: three-fxaa-smaa-pass, name: "AA passes (FXAA, SMAA, TAA) in three.js", match: [smaapass, taarenderpass]}
+      - {id: three-output-pass, name: "OutputPass, tone mapping and colour space in composer", match: [outputpass]}
+      - {id: three-depth-texture, name: Depth textures and reading depth in passes, match: [three-depthtexture]}
+      - {id: three-mrt, name: Multiple render targets in three.js, match: [webglrendertarget-count]}
+      - {id: three-composer-resize, name: "Composer resize, pixel ratio and MSAA targets", match: [composer-resize]}
+  - id: three-loading
+    name: three.js asset loading
+    source: three.js manual - Loading 3D models, glTF; glTF-Transform docs
+    match: [gltfloader, asset-loading]
+    subtopics:
+      - {id: three-gltf, name: glTF loading, match: [gltf]}
+      - {id: three-draco-meshopt, name: Draco and meshopt compressed geometry, match: [draco, meshopt]}
+      - {id: three-ktx2, name: KTX2/Basis textures, match: [ktx2, basis-universal]}
+      - {id: three-gltf-transform, name: Optimising assets with glTF-Transform, match: [gltf-transform]}
+      - {id: three-dispose, name: Disposing GPU resources, match: [dispose, memory-leak]}
+      - {id: three-loading-manager, name: "LoadingManager, progress and caching", match: [loadingmanager, three-cache]}
+      - {id: three-fbx-obj, name: "FBX, OBJ and other loaders", match: [fbxloader, objloader]}
+      - {id: three-hdr-env-loading, name: "Loading HDR/EXR environments (RGBELoader, EXRLoader)", match: [rgbeloader, exrloader]}
+      - {id: three-gltf-export, name: GLTFExporter and USDZ export, match: [gltfexporter, usdzexporter]}
+      - {id: three-lazy-loading, name: "Lazy loading, progressive LOD and streaming", match: [progressive-loading]}
+      - {id: three-texture-loading, name: "TextureLoader, ImageBitmapLoader and texture upload stalls", match: [imagebitmaploader, texture-upload]}
+      - {id: three-gltf-extensions, name: glTF material extensions (KHR_materials_*), match: [khr-materials]}
+  - id: three-webxr
+    name: three.js WebXR
+    source: three.js manual - WebXR; WebXR Device API
+    match: [webxr]
+    subtopics:
+      - {id: three-vr-session, name: VR sessions and VRButton, match: [vrbutton, immersive-vr]}
+      - {id: three-xr-controllers, name: XR controllers and hand input, match: [xr-controllers, hand-tracking]}
+      - {id: three-ar-hit-test, name: AR hit testing, match: [hit-test, immersive-ar]}
+      - {id: three-xr-performance, name: XR performance (foveation, framebuffer scale), match: [xr-foveation, framebuffer-scale]}
+      - {id: three-xr-reference-spaces, name: Reference spaces and floor alignment, match: [reference-space, local-floor]}
+      - {id: three-xr-anchors, name: "AR anchors, planes and depth sensing", match: [xr-anchors, plane-detection]}
+      - {id: three-xr-layers, name: WebXR layers and quad layers, match: [webxr-layers]}
+      - {id: three-xr-teleport, name: Locomotion and teleportation, match: [teleportation, xr-locomotion]}
+      - {id: three-xr-testing, name: Testing WebXR with the emulator, match: [webxr-emulator]}
+      - {id: three-xr-dom-overlay, name: DOM overlay and AR UI, match: [dom-overlay]}
+  - id: three-webgpu-tsl
+    name: three.js WebGPURenderer and TSL
+    source: three.js docs - WebGPURenderer, Three Shading Language
+    match: [webgpurenderer, tsl]
+    subtopics:
+      - {id: three-tsl-node-materials, name: Node materials with TSL, match: [nodematerial, three-shading-language]}
+      - {id: three-tsl-compute, name: TSL compute shaders, match: [tsl-compute]}
+      - {id: three-webgpu-fallback, name: WebGL2 fallback backend, match: [webgl2-fallback]}
+      - {id: three-webgpu-migration, name: Migrating from WebGLRenderer, match: [webgl-to-webgpu]}
+      - {id: three-tsl-functions, name: "TSL Fn, uniforms and attribute nodes", match: [tsl-fn, tsl-uniforms]}
+      - {id: three-tsl-postprocessing, name: Post-processing with TSL nodes, match: [tsl-postprocessing]}
+      - {id: three-tsl-instancing, name: Instancing and storage buffers in TSL, match: [instancedarray, storage-buffer-node]}
+      - {id: three-webgpu-init, name: WebGPURenderer async init and feature detection, match: [renderer-init-async]}
+      - {id: three-tsl-debug, name: Debugging TSL and inspecting generated WGSL, match: [tsl-debug]}
+      - {id: three-tsl-texture-nodes, name: Texture nodes and sampling in TSL, match: [texture-node]}
+  - id: webgl2-raw
+    name: Raw WebGL2 API
+    source: MDN WebGL2 API; WebGL2 Fundamentals
+    match: [webgl2, webgl-api]
+    subtopics:
+      - {id: webgl-context-loss, name: Context loss and restoration, match: [context-loss, webglcontextlost]}
+      - {id: webgl-extensions, name: Extensions and capability checks, match: [webgl-extensions]}
+      - {id: webgl-vao-ubo, name: VAOs and uniform buffers in WebGL2, match: [webgl2-vao, webgl2-ubo]}
+      - {id: webgl-debugging, name: Debugging with Spector.js and error checking, match: [spector-js, webgl-debugging]}
+      - {id: webgl-shader-compile, name: Shader compile errors and KHR_parallel_shader_compile in WebGL, match: [webgl-shader-compile]}
+      - {id: webgl-textures, name: "WebGL2 textures, formats and pixelStorei", match: [webgl-textures, texstorage2d]}
+      - {id: webgl-framebuffers, name: "Framebuffers, MRT and float render targets (EXT_color_buffer_float)", match: [ext-color-buffer-float, webgl-framebuffer]}
+      - {id: webgl-instancing, name: Instanced drawing in WebGL2, match: [drawarraysinstanced]}
+      - {id: webgl-transform-feedback, name: Transform feedback in WebGL2, match: [webgl-transform-feedback]}
+      - {id: webgl-readpixels-sync, name: "readPixels, fences and async readback", match: [webgl-readpixels, fencesync]}
+      - {id: webgl-offscreencanvas, name: OffscreenCanvas and workers, match: [offscreencanvas]}
+      - {id: webgl-precision-mobile, name: "Mobile precision, limits and driver quirks", match: [webgl-limits, webgl-mobile]}
+  - id: webgpu-api
+    name: WebGPU API and WGSL
+    source: W3C WebGPU spec, WGSL spec; MDN WebGPU API
+    match: [webgpu, wgsl]
+    subtopics:
+      - {id: webgpu-device, name: Adapter, device, limits and canvas configuration, match: [requestadapter, gpu-device-limits]}
+      - {id: webgpu-bind-groups, name: Bind groups and layouts, match: [bind-groups, bind-group-layout]}
+      - {id: webgpu-render-pipeline, name: Render pipelines and render passes, match: [webgpu-render-pipeline]}
+      - {id: webgpu-compute, name: Compute pipelines and storage buffers, match: [webgpu-compute]}
+      - {id: webgpu-error-scopes, name: Error scopes and device lost, match: [error-scopes, device-lost]}
+      - {id: webgpu-buffers-mapping, name: "Buffer creation, mapAsync and writeBuffer", match: [mapasync, writebuffer]}
+      - {id: webgpu-textures, name: "Textures, samplers and copyExternalImageToTexture", match: [copyexternalimagetotexture, gpu-texture]}
+      - {id: webgpu-wgsl-syntax, name: "WGSL syntax, address spaces and alignment", match: [wgsl-alignment, address-spaces]}
+      - {id: webgpu-timestamp, name: Timestamp queries in WebGPU, match: [webgpu-timestamp-query]}
+      - {id: webgpu-indirect, name: Indirect drawing and dispatch in WebGPU, match: [webgpu-indirect]}
+      - {id: webgpu-native, name: "Native WebGPU (wgpu, Dawn)", match: [wgpu, dawn]}
+      - {id: webgpu-mipmaps, name: Mipmap generation in WebGPU, match: [webgpu-mipmaps]}
+      - {id: webgpu-render-bundles, name: Render bundles, match: [render-bundles]}
+  - id: r3f
+    name: React Three Fiber
+    source: React Three Fiber and drei docs
+    match: [r3f, react-three-fiber]
+    subtopics:
+      - {id: r3f-canvas, name: Canvas, hooks and useFrame, match: [useframe]}
+      - {id: r3f-drei, name: drei helpers, match: [drei]}
+      - {id: r3f-performance, name: R3F performance (frameloop demand, instancing, regress), match: [r3f-performance, frameloop-demand]}
+      - {id: r3f-state, name: Loading with Suspense and useGLTF, match: [usegltf, suspense]}
+      - {id: r3f-events, name: Pointer events and raycasting in R3F, match: [r3f-events]}
+      - {id: r3f-postprocessing, name: Post-processing in R3F, match: [react-postprocessing]}
+      - {id: r3f-physics, name: Physics with react-three-rapier, match: [react-three-rapier, rapier]}
+      - {id: r3f-controls, name: Camera controls and leva GUI, match: [leva, camera-controls]}
+      - {id: r3f-gltfjsx, name: gltfjsx component generation, match: [gltfjsx]}
+      - {id: r3f-shader-materials, name: shaderMaterial helper and custom materials in R3F, match: [r3f-shadermaterial]}
+      - {id: r3f-xr, name: XR in R3F (@react-three/xr), match: [react-three-xr]}
+      - {id: r3f-testing, name: Testing R3F scenes, match: [react-three-test-renderer]}
+  # --- Shader programming (Book of Shaders, GLSL/HLSL/WGSL specs)
+  - id: shader-toolchain
+    name: Shader toolchains and cross-compilation
+    source: glslang, SPIRV-Cross, DXC, Slang docs
+    match: [shader-toolchain, spir-v]
+    subtopics:
+      - {id: glslang, name: glslang/glslc compilation to SPIR-V, match: [glslang, glslc]}
+      - {id: spirv-cross, name: SPIRV-Cross reflection and transpilation, match: [spirv-cross, shader-reflection]}
+      - {id: shader-permutations, name: Shader variants and permutation management, match: [shader-permutations, shader-variants]}
+      - {id: shader-hot-reload, name: Shader hot reload, match: [shader-hot-reload]}
+      - {id: slang, name: Slang shading language, match: [slang]}
+      - {id: spirv-tools, name: "SPIRV-Tools (spirv-opt, spirv-val, spirv-dis)", match: [spirv-opt, spirv-val]}
+      - {id: naga-tint, name: Naga and Tint for WGSL translation, match: [naga, tint]}
+      - {id: shader-include-systems, name: Shader include and module systems, match: [shader-includes]}
+      - {id: shader-cache-pipeline, name: Offline shader build pipelines and caching, match: [shader-build-pipeline]}
+      - {id: spirv-reflect, name: SPIRV-Reflect for descriptor layout generation, match: [spirv-reflect]}
+      - {id: shader-metal, name: Metal Shading Language and MSL translation, match: [metal-shading-language, msl]}
+      - {id: shader-debug-info, name: Shader debug info (NonSemantic.Shader.DebugInfo), match: [shader-debug-info]}
+  - id: shader-interfaces
+    name: Shader interfaces and data layout
+    source: GLSL 4.60 spec ch4 (storage/layout/interpolation/precision qualifiers)
+    match: [shader-interfaces, interface-blocks]
+    subtopics:
+      - {id: interpolation-qualifiers, name: Interpolation qualifiers (flat, noperspective, centroid), match: [interpolation-qualifiers, flat-shading]}
+      - {id: precision-qualifiers, name: Precision qualifiers and mediump on mobile, match: [precision-qualifiers, mediump]}
+      - {id: buffer-layout-rules, name: Buffer layout rules across APIs, match: [buffer-layout, scalar-block-layout]}
+      - {id: shader-attachment-outputs, name: Fragment outputs and blending, match: [fragment-outputs, blend-state]}
+      - {id: shader-locations, name: Explicit location and binding layout qualifiers, match: [layout-location, layout-binding]}
+      - {id: shader-builtins, name: "Built-in variables (gl_FragCoord, gl_VertexIndex, gl_InstanceIndex)", match: [gl-fragcoord, gl-vertexindex]}
+      - {id: shader-conservative-depth, name: Early fragment tests and conservative depth, match: [early-fragment-tests, conservative-depth]}
+      - {id: shader-push-constant-layout, name: Push constant block layout, match: [push-constant-layout]}
+      - {id: shader-texture-functions, name: "Texture functions (textureLod, textureGrad, texelFetch, gather)", match: [texelfetch, texturegather]}
+      - {id: shader-derivatives, name: "Screen-space derivatives (dFdx, fwidth) and helper invocations", match: [fwidth, helper-invocations]}
+      - {id: shader-image-formats, name: Image format qualifiers and storage image access, match: [image-format-qualifiers]}
+  - id: procedural-patterns
+    name: Procedural patterns and noise
+    source: The Book of Shaders - shaping functions, shapes, patterns, random, noise, cellular noise, fBm
+    match: [procedural-patterns, procedural-texturing]
+    subtopics:
+      - {id: shaping-functions, name: Shaping functions and smoothstep, match: [shaping-functions, smoothstep]}
+      - {id: hash-random, name: GPU hash functions and random numbers, match: [gpu-hash, shader-random]}
+      - {id: gradient-noise, name: Value, Perlin and simplex noise, match: [perlin-noise, simplex-noise]}
+      - {id: fbm, name: fBm and domain warping, match: [fbm, domain-warping]}
+      - {id: cellular-noise, name: Cellular/Voronoi noise, match: [voronoi, worley-noise]}
+      - {id: tiling-patterns, name: "Tiling, repetition and grids", match: [tiling-patterns, fract-repetition]}
+      - {id: polar-patterns, name: Polar coordinates and radial patterns, match: [polar-coordinates]}
+      - {id: procedural-shapes, name: Procedural shapes and SDF-based 2D drawing, match: [procedural-shapes]}
+      - {id: color-palettes, name: Procedural colour palettes (cosine palettes), match: [cosine-palette]}
+      - {id: truchet, name: Truchet tiles and pattern variation, match: [truchet]}
+      - {id: noise-derivatives, name: Analytic noise derivatives and curl noise, match: [curl-noise, noise-derivatives]}
+      - {id: tileable-noise, name: Tileable/periodic noise, match: [tileable-noise, periodic-noise]}
+      - {id: procedural-terrain, name: Procedural terrain heightfields, match: [procedural-terrain, ridged-noise]}
+  - id: sdf-raymarching
+    name: Signed distance fields and ray marching
+    source: Inigo Quilez SDF articles; Book of Shaders shapes
+    match: [sdf, raymarching]
+    subtopics:
+      - {id: sdf-2d, name: 2D SDF shapes and antialiased edges, match: [sdf-2d, sdf-antialiasing]}
+      - {id: sphere-tracing, name: Sphere tracing 3D SDF scenes, match: [sphere-tracing]}
+      - {id: sdf-operations, name: SDF boolean and smooth operations, match: [smooth-min, sdf-operations]}
+      - {id: sdf-lighting, name: SDF normals, soft shadows and AO, match: [sdf-soft-shadows, sdf-normals]}
+      - {id: sdf-3d-primitives, name: 3D SDF primitive library, match: [sdf-primitives]}
+      - {id: sdf-domain-repetition, name: Domain repetition and mirroring, match: [domain-repetition]}
+      - {id: sdf-materials, name: Material IDs and coloring in ray-marched scenes, match: [sdf-materials]}
+      - {id: sdf-ray-marching-perf, name: "Ray marching performance (bounding volumes, relaxation)", match: [raymarch-optimization]}
+      - {id: sdf-volume-textures, name: Baked SDF volume textures, match: [sdf-volume-texture, jump-flooding]}
+      - {id: sdf-text-fonts, name: SDF and MSDF font rendering, match: [msdf, sdf-fonts]}
+      - {id: sdf-camera, name: Camera setup for ray-marched scenes, match: [raymarch-camera]}
+  - id: surface-shading-effects
+    name: Surface shading effects
+    source: GPU Gems / GPU Pro chapter topics; RTR4 ch6 bump mapping, parallax
+    match: [surface-shaders, material-effects]
+    subtopics:
+      - {id: normal-mapping, name: Normal mapping and tangent space, match: [normal-mapping, tangent-space]}
+      - {id: parallax-occlusion, name: Parallax occlusion mapping, match: [parallax-occlusion-mapping]}
+      - {id: triplanar, name: Triplanar mapping, match: [triplanar-mapping]}
+      - {id: dissolve, name: Dissolve and alpha-clip effects, match: [dissolve-effect, alpha-clip]}
+      - {id: vertex-animation, name: Vertex displacement and wind animation, match: [vertex-displacement, wind-animation]}
+      - {id: water-shader, name: Water surface shading, match: [water-shader, gerstner-waves]}
+      - {id: fresnel-rim, name: Fresnel rim lighting, match: [rim-lighting, fresnel-effect]}
+      - {id: hologram, name: "Hologram, scanline and force-field effects", match: [force-field-shader, hologram-shader]}
+      - {id: detail-maps, name: Detail maps and texture blending, match: [detail-maps, height-blend]}
+      - {id: emissive-glow, name: Emissive materials and glow, match: [emissive]}
+      - {id: uv-scrolling, name: UV scrolling and flow maps, match: [flow-map, uv-scrolling]}
+      - {id: foliage, name: Foliage and grass shading, match: [grass-shader, foliage-shading]}
+      - {id: snow-wetness, name: "Snow, wetness and weather layering", match: [wetness-shader, snow-shader]}
+      - {id: screen-space-decal-effects, name: Screen-space refraction and heat haze, match: [heat-haze, screen-space-refraction]}
+  - id: post-processing-shaders
+    name: Post-processing shaders
+    source: RTR4 ch12 Image-Space Effects; GPU Gems post-processing chapters
+    match: [post-processing, fullscreen-pass]
+    subtopics:
+      - {id: pp-bloom, name: Bloom, match: [bloom]}
+      - {id: pp-dof, name: Depth of field, match: [depth-of-field]}
+      - {id: pp-motion-blur, name: Motion blur, match: [motion-blur]}
+      - {id: pp-color-grading, name: Colour grading LUTs, match: [color-grading, luts]}
+      - {id: pp-fxaa, name: FXAA, match: [fxaa]}
+      - {id: pp-outline, name: Edge-detection outlines, match: [edge-detection-outline, outline-shader]}
+      - {id: pp-vignette-grain, name: "Vignette, film grain and chromatic aberration", match: [vignette, film-grain, chromatic-aberration]}
+      - {id: pp-sharpen, name: Sharpening (CAS), match: [contrast-adaptive-sharpening]}
+      - {id: pp-lens-flare, name: Lens flares and god rays, match: [lens-flare, god-rays]}
+      - {id: pp-pixelate, name: "Pixelation, dithering and retro effects", match: [pixelation, ordered-dithering]}
+      - {id: pp-blur-kernels, name: "Fast blur kernels (dual Kawase, separable Gaussian)", match: [kawase-blur, separable-gaussian]}
+      - {id: pp-fog, name: Screen-space fog and height fog, match: [height-fog]}
+      - {id: pp-pipeline-order, name: Ordering a post-processing chain, match: [post-processing-order]}
+  - id: compute-shader-patterns
+    name: Compute shader algorithms
+    source: GPU Gems 3 ch39 (scan), vendor compute guides
+    match: [compute-shader, gpgpu]
+    subtopics:
+      - {id: parallel-reduction, name: Parallel reduction, match: [parallel-reduction]}
+      - {id: prefix-sum, name: Prefix sum (scan), match: [prefix-sum]}
+      - {id: gpu-sorting, name: GPU sorting (radix, bitonic), match: [gpu-radix-sort, bitonic-sort]}
+      - {id: particle-sim, name: GPU particle simulation, match: [particle-simulation]}
+      - {id: subgroup-ops, name: Subgroup/wave operations, match: [subgroup-operations]}
+      - {id: compute-image-processing, name: Compute image filters with shared memory tiles, match: [compute-blur, shared-memory-tiling]}
+      - {id: stream-compaction, name: Stream compaction, match: [stream-compaction]}
+      - {id: histogram-compute, name: GPU histograms with atomics, match: [gpu-histogram]}
+      - {id: gpu-culling-compute, name: Compute-based culling and indirect argument generation, match: [compute-culling]}
+      - {id: fluid-sim, name: "GPU fluid simulation (stable fluids, SPH)", match: [fluid-simulation, sph]}
+      - {id: cloth-sim, name: GPU cloth and mass-spring simulation, match: [cloth-simulation]}
+      - {id: workgroup-sizing, name: Workgroup sizing and occupancy for compute, match: [workgroup-size]}
+      - {id: atomics-patterns, name: Atomic operations and lock-free patterns on GPU, match: [gpu-atomics]}
+      - {id: fft-gpu, name: "GPU FFT (ocean, convolution bloom)", match: [gpu-fft]}
+  - id: shader-optimisation
+    name: Shader optimisation
+    source: Arm Mali Best Practices - shader code; AMD RDNA guide; NVIDIA shader best practices
+    match: [shader-optimisation, shader-optimization]
+    subtopics:
+      - {id: divergence, name: Branch divergence and uniform control flow, match: [divergence, uniform-control-flow]}
+      - {id: half-precision, name: Half precision and packed math, match: [half-precision, fp16]}
+      - {id: shader-isa, name: Reading compiler output (ISA, RGA, Mali offline compiler), match: [shader-isa, radeon-gpu-analyzer]}
+      - {id: alu-vs-texture, name: ALU vs texture-bound balance and LUTs, match: [alu-bound, texture-bound]}
+      - {id: shader-precompute, name: Moving work to vertex shader or precompute, match: [per-vertex-lighting]}
+      - {id: shader-math-tricks, name: "Fast approximations (rsqrt, polynomial fits)", match: [fast-math, polynomial-approximation]}
+      - {id: texture-fetch-opt, name: Reducing texture fetches and dependent reads, match: [dependent-texture-reads]}
+      - {id: loop-unroll, name: Loop unrolling and constant folding, match: [loop-unrolling]}
+      - {id: shader-variant-cost, name: Uber-shader vs specialisation trade-offs, match: [uber-shader]}
+      - {id: mobile-shader-opt, name: Mobile shader optimisation (Mali offline compiler), match: [mali-offline-compiler]}
+      - {id: interpolant-cost, name: Varyings and interpolant cost, match: [varying-count]}
+  - id: shader-debugging
+    name: Shader debugging
+    source: RenderDoc shader debugging docs; VK_KHR_shader_non_semantic_info debugPrintf
+    match: [shader-debugging]
+    subtopics:
+      - {id: shader-printf, name: debugPrintf in shaders, match: [debugprintf, shader-printf]}
+      - {id: shader-step-debugging, name: Stepping shaders in RenderDoc/PIX, match: [shader-step-debugging]}
+      - {id: nan-inf, name: Finding NaN/Inf and black pixels, match: [nan-propagation, black-pixels]}
+      - {id: false-colour, name: False-colour debug visualisation, match: [debug-visualization, false-color]}
+      - {id: shader-validation-errors, name: Shader compile errors across drivers, match: [shader-compile-errors]}
+      - {id: shader-hang, name: GPU hangs and infinite loops in shaders, match: [gpu-hang]}
+      - {id: shader-precision-bugs, name: Precision bugs and mobile artefacts, match: [precision-bugs]}
+      - {id: shader-uninit, name: Uninitialised variables and undefined behaviour, match: [undefined-behavior-shaders]}
+      - {id: shader-unit-tests, name: "Testing shaders (image diff tests, CPU emulation)", match: [shader-testing, image-diff]}
+      - {id: shader-nsight-debug, name: Shader debugging in Nsight Graphics, match: [nsight-shader-debugger]}
+  # --- Rendering techniques (RTR4, PBR 4th ed.)
+  - id: texturing
+    name: Texturing
+    source: RTR4 ch6 Texturing
+    match: [texturing, texture-mapping]
+    subtopics:
+      - {id: texture-filtering, name: Mip selection and texture filtering quality, match: [texture-filtering, mipmapping]}
+      - {id: texture-compression, name: Block compression formats (BC, ASTC, ETC2), match: [texture-compression, bc7, astc]}
+      - {id: virtual-texturing, name: Virtual texturing, match: [virtual-texturing]}
+      - {id: texture-atlases, name: Texture atlases and padding, match: [texture-atlas]}
+      - {id: texture-coordinates, name: UV mapping and wrap/address modes, match: [address-modes, uv-mapping]}
+      - {id: cube-map-sampling, name: Cube map sampling and seamless filtering, match: [seamless-cubemap]}
+      - {id: texture-streaming-mips, name: Mip streaming and mip bias, match: [mip-bias, mip-streaming]}
+      - {id: procedural-textures, name: Procedural vs baked texture trade-offs, match: [baked-textures]}
+      - {id: texture-formats, name: "Texture format choice (R11G11B10, RGB9E5, BC6H)", match: [bc6h, r11g11b10]}
+      - {id: texture-baking, name: Baking normal and AO maps from high-poly meshes, match: [normal-map-baking, texture-baking]}
+      - {id: ktx-tooling, name: "Texture compression tooling (toktx, basisu, texconv)", match: [toktx, texconv]}
+  - id: physically-based-shading
+    name: Physically based shading
+    source: RTR4 ch9 Physically Based Shading; PBR4 ch9 Reflection Models
+    match: [pbr, physically-based-shading]
+    subtopics:
+      - {id: microfacet-brdf, name: Microfacet BRDF (GGX, Smith, Fresnel), match: [ggx, cook-torrance]}
+      - {id: multiscatter, name: Multiple-scattering energy compensation, match: [multiscattering, energy-compensation]}
+      - {id: layered-materials, name: Clearcoat, sheen and layered materials, match: [clearcoat, sheen]}
+      - {id: material-authoring, name: Metal-roughness material authoring rules, match: [metallic-roughness]}
+      - {id: diffuse-brdfs, name: "Diffuse BRDFs (Lambert, Burley, Oren-Nayar)", match: [burley-diffuse, oren-nayar]}
+      - {id: fresnel-schlick, name: Fresnel (Schlick) and F0 values, match: [schlick-fresnel, f0]}
+      - {id: anisotropic-brdf, name: Anisotropic specular, match: [anisotropic-specular]}
+      - {id: transmission, name: Transmission and thin-surface refraction, match: [transmission, refraction]}
+      - {id: brdf-lut, name: BRDF LUT generation, match: [brdf-lut]}
+      - {id: pbr-validation, name: Validating PBR against references, match: [pbr-validation, furnace-test]}
+      - {id: cloth-hair-brdf, name: Cloth and hair shading models, match: [hair-shading, cloth-brdf]}
+  - id: local-illumination
+    name: Local illumination and image-based lighting
+    source: RTR4 ch10 Local Illumination
+    match: [local-illumination, image-based-lighting]
+    subtopics:
+      - {id: ibl-split-sum, name: Split-sum prefiltered IBL, match: [split-sum, prefiltered-environment-map]}
+      - {id: spherical-harmonics, name: Spherical harmonics irradiance, match: [spherical-harmonics]}
+      - {id: area-lights-ltc, name: Area lights with LTCs, match: [area-lights, ltc]}
+      - {id: reflection-probes, name: Reflection probes and parallax correction, match: [reflection-probes]}
+      - {id: punctual-lights, name: Punctual lights and physical light units, match: [punctual-lights, light-falloff]}
+      - {id: irradiance-convolution, name: Irradiance map convolution, match: [irradiance-map]}
+      - {id: specular-occlusion, name: Specular occlusion and horizon fading, match: [specular-occlusion]}
+      - {id: ibl-baking, name: Baking IBL with cmgen/IBLBaker, match: [ibl-baking]}
+      - {id: sky-lighting, name: Sky light and sun as directional light, match: [sun-light]}
+      - {id: light-culling-volumes, name: Light volumes and attenuation windowing, match: [light-attenuation]}
+  - id: global-illumination
+    name: Real-time global illumination
+    source: RTR4 ch11 Global Illumination
+    match: [global-illumination]
+    subtopics:
+      - {id: ssao, name: Screen-space ambient occlusion, match: [ssao, ambient-occlusion]}
+      - {id: ssr, name: Screen-space reflections, match: [ssr, screen-space-reflections]}
+      - {id: lightmaps, name: Lightmap baking, match: [lightmaps, lightmap-baking]}
+      - {id: probe-gi, name: Irradiance probes and DDGI, match: [ddgi, irradiance-probes]}
+      - {id: gtao, name: GTAO and horizon-based AO, match: [gtao, hbao]}
+      - {id: ssgi, name: Screen-space global illumination, match: [ssgi]}
+      - {id: voxel-gi, name: Voxel cone tracing, match: [voxel-cone-tracing]}
+      - {id: lpv, name: Light propagation volumes, match: [light-propagation-volumes]}
+      - {id: rtgi, name: Ray-traced GI and probe updates, match: [rtgi]}
+      - {id: lightmap-uvs, name: Lightmap UV unwrapping and seams, match: [lightmap-uvs, xatlas]}
+      - {id: surfel-gi, name: Surfel and radiance cache GI (Lumen-style), match: [surfel-gi, radiance-cache]}
+  - id: hdr-tonemapping
+    name: HDR, exposure and tone mapping
+    source: RTR4 ch8 Light and Color, ch12; PBR4 ch5 Cameras and Film
+    match: [hdr-rendering, tone-mapping]
+    subtopics:
+      - {id: tonemap-operators, name: Tone mapping operators (ACES, AgX), match: [aces, agx]}
+      - {id: auto-exposure, name: Histogram auto exposure, match: [auto-exposure, eye-adaptation]}
+      - {id: physical-exposure, name: Physical camera exposure (EV100), match: [ev100, physical-camera]}
+      - {id: hdr-display, name: HDR10 display output, match: [hdr10, pq-encoding]}
+      - {id: hdr-formats, name: HDR render target formats and precision, match: [hdr-render-target]}
+      - {id: bloom-hdr, name: Physically based bloom in HDR pipelines, match: [hdr-bloom]}
+      - {id: local-tonemapping, name: Local tone mapping, match: [local-tone-mapping]}
+      - {id: hdr-ui, name: UI compositing in HDR, match: [hdr-ui-compositing]}
+      - {id: display-mapping, name: Display mapping and paper white, match: [paper-white]}
+      - {id: filmic-curves, name: Filmic curve parameterisation, match: [filmic-curve]}
+  - id: shadows
+    name: Shadows
+    source: RTR4 ch7 Shadows
+    match: [shadow-mapping, shadow-techniques]
+    subtopics:
+      - {id: csm, name: Cascaded shadow maps, match: [cascaded-shadow-maps, csm]}
+      - {id: pcf-pcss, name: PCF and PCSS filtering, match: [pcf, pcss]}
+      - {id: shadow-bias, name: Depth bias and normal offset, match: [depth-bias, normal-offset]}
+      - {id: point-light-shadows, name: Point and spot light shadows, match: [point-light-shadows]}
+      - {id: virtual-shadow-maps, name: Virtual shadow maps, match: [virtual-shadow-maps]}
+      - {id: shadow-atlas, name: Shadow atlases and caching, match: [shadow-atlas, shadow-caching]}
+      - {id: evsm-vsm, name: Variance and exponential shadow maps, match: [vsm, evsm]}
+      - {id: contact-shadows-ss, name: Screen-space contact shadows, match: [screen-space-shadows]}
+      - {id: shadow-stabilization, name: Shadow map stabilisation and texel snapping, match: [shadow-stabilization]}
+      - {id: raytraced-shadow-maps, name: Ray-traced and hybrid shadows, match: [hybrid-shadows]}
+      - {id: cascade-splits, name: Cascade split schemes and blending, match: [cascade-splits]}
+      - {id: shadow-culling, name: Shadow caster culling, match: [shadow-caster-culling]}
+  - id: antialiasing
+    name: Antialiasing
+    source: RTR4 ch5.4 Aliasing and Antialiasing
+    match: [antialiasing, anti-aliasing]
+    subtopics:
+      - {id: msaa, name: MSAA, match: [msaa, multisampling]}
+      - {id: taa, name: Temporal antialiasing, match: [taa, temporal-antialiasing]}
+      - {id: smaa, name: SMAA, match: [smaa]}
+      - {id: upscaling, name: Temporal upscalers (DLSS, FSR, XeSS), match: [dlss, fsr]}
+      - {id: specular-aa, name: Specular and geometric antialiasing, match: [specular-aliasing]}
+      - {id: taa-ghosting, name: TAA ghosting and history rejection, match: [taa-ghosting, history-clamping]}
+      - {id: taa-jitter, name: Projection jitter sequences, match: [halton-jitter, projection-jitter]}
+      - {id: motion-vectors, name: Motion vector generation, match: [motion-vectors]}
+      - {id: msaa-deferred, name: MSAA with deferred and custom resolves, match: [custom-resolve]}
+      - {id: upscaler-integration, name: "Integrating DLSS/FSR (inputs, mip bias, reactive masks)", match: [upscaler-integration, reactive-mask]}
+      - {id: aa-text-ui, name: "Antialiasing lines, text and UI", match: [line-antialiasing]}
+  - id: transparency
+    name: Transparency and compositing
+    source: RTR4 ch5.5 Transparency, Alpha, and Compositing
+    match: [transparency, alpha-blending]
+    subtopics:
+      - {id: oit, name: Weighted blended order-independent transparency, match: [order-independent-transparency, oit]}
+      - {id: premultiplied-alpha, name: Premultiplied alpha, match: [premultiplied-alpha]}
+      - {id: alpha-to-coverage, name: Alpha to coverage and hashed alpha, match: [alpha-to-coverage, hashed-alpha]}
+      - {id: depth-peeling, name: Depth peeling, match: [depth-peeling]}
+      - {id: transparent-sorting, name: Sorting transparent objects, match: [transparent-sorting]}
+      - {id: refraction-transparency, name: Refraction and screen-space distortion for glass, match: [glass-shader]}
+      - {id: per-pixel-linked-lists, name: Per-pixel linked list OIT, match: [linked-list-oit]}
+      - {id: moment-oit, name: Moment-based OIT, match: [moment-based-oit]}
+      - {id: particles-blending, name: Particle blending modes and soft particles, match: [soft-particles, additive-blending]}
+      - {id: alpha-compositing-math, name: Porter-Duff compositing math, match: [porter-duff]}
+  - id: volumetrics
+    name: Volumetric and translucency rendering
+    source: RTR4 ch14 Volumetric and Translucency Rendering; PBR4 ch11
+    match: [volumetric-rendering, participating-media]
+    subtopics:
+      - {id: volumetric-fog, name: Froxel volumetric fog, match: [volumetric-fog, froxel]}
+      - {id: sky-atmosphere, name: Atmospheric scattering and sky, match: [atmospheric-scattering, sky-rendering]}
+      - {id: volumetric-clouds, name: Volumetric clouds, match: [volumetric-clouds]}
+      - {id: subsurface, name: Subsurface scattering, match: [subsurface-scattering]}
+      - {id: light-shafts, name: Volumetric light shafts, match: [light-shafts]}
+      - {id: participating-media-math, name: Phase functions and Beer-Lambert extinction, match: [phase-function, beer-lambert]}
+      - {id: volumetric-shadows, name: Volumetric shadowing, match: [volumetric-shadows]}
+      - {id: underwater, name: Underwater fog and caustics, match: [caustics, underwater-rendering]}
+      - {id: particles-lit, name: Lit particles and smoke, match: [lit-particles]}
+      - {id: vdb-volumes, name: Rendering OpenVDB/NanoVDB volumes, match: [nanovdb, openvdb]}
+  - id: ray-tracing
+    name: Ray tracing and path tracing
+    source: PBR4 ch2, ch7, ch8, ch13; RTR4 ch26 Real-Time Ray Tracing
+    match: [ray-tracing, path-tracing]
+    subtopics:
+      - {id: ray-triangle, name: Ray-triangle intersection, match: [ray-triangle-intersection, moller-trumbore]}
+      - {id: bvh-build, name: BVH construction with SAH, match: [bvh-construction, sah]}
+      - {id: importance-sampling, name: Importance sampling and MIS, match: [importance-sampling, multiple-importance-sampling]}
+      - {id: low-discrepancy, name: Low-discrepancy and blue-noise sampling, match: [low-discrepancy-sequences, blue-noise]}
+      - {id: path-tracer-denoise, name: Path tracer denoising (OIDN, SVGF), match: [oidn, svgf]}
+      - {id: restir, name: ReSTIR many-light sampling, match: [restir]}
+      - {id: path-tracer-core, name: Writing a path tracer integrator, match: [path-tracing-integrator]}
+      - {id: camera-models-rt, name: Thin lens camera and film models, match: [thin-lens]}
+      - {id: next-event-estimation, name: Next event estimation and light sampling, match: [next-event-estimation]}
+      - {id: russian-roulette, name: Russian roulette termination, match: [russian-roulette]}
+      - {id: bvh-traversal, name: "BVH traversal on GPU (stackless, wide BVH)", match: [bvh-traversal]}
+      - {id: spectral-rendering, name: Spectral rendering, match: [spectral-rendering]}
+      - {id: bdpt, name: Bidirectional path tracing and photon mapping, match: [bdpt, photon-mapping]}
+      - {id: volumetric-path-tracing, name: Volumetric path tracing (delta tracking), match: [delta-tracking]}
+      - {id: wavefront-pt, name: Wavefront path tracing on GPUs, match: [wavefront-path-tracing]}
+  - id: npr
+    name: Non-photorealistic rendering
+    source: RTR4 ch15 Non-Photorealistic Rendering
+    match: [npr, non-photorealistic-rendering]
+    subtopics:
+      - {id: toon-shading, name: Toon/cel shading, match: [toon-shading, cel-shading]}
+      - {id: silhouette-outlines, name: Silhouette edge rendering (inverted hull), match: [inverted-hull, silhouette-edges]}
+      - {id: hatching, name: Hatching and stroke-based styles, match: [hatching]}
+      - {id: painterly, name: Painterly and Kuwahara filters, match: [kuwahara, painterly-rendering]}
+      - {id: gooch, name: Gooch and technical illustration shading, match: [gooch-shading]}
+      - {id: screen-space-outlines, name: Screen-space outlines from depth and normals, match: [depth-normal-outlines]}
+      - {id: halftone, name: Halftone and screen tones, match: [halftone]}
+      - {id: watercolor, name: Watercolour rendering, match: [watercolor]}
+      - {id: pixel-art-rendering, name: Pixel art and low-res 3D rendering, match: [pixel-art-3d]}
+      - {id: toon-ramps, name: Toon ramps and stylised specular, match: [toon-ramp]}
+  - id: efficient-shading
+    name: Efficient shading architectures
+    source: RTR4 ch20 Efficient Shading
+    match: [efficient-shading, render-architecture]
+    subtopics:
+      - {id: deferred, name: Deferred shading and G-buffers, match: [deferred-rendering, g-buffer]}
+      - {id: forward-plus, name: Forward+ / tiled shading, match: [forward-plus, tiled-lighting]}
+      - {id: clustered, name: Clustered shading, match: [clustered-lighting]}
+      - {id: decals, name: Deferred decals, match: [deferred-decals, decals]}
+      - {id: visibility-buffer, name: Visibility buffer, match: [visibility-buffer]}
+      - {id: gbuffer-packing, name: G-buffer packing layouts, match: [gbuffer-packing]}
+      - {id: light-culling-compute, name: Compute light culling and light lists, match: [light-culling]}
+      - {id: deferred-lighting, name: Light pre-pass and deferred lighting variants, match: [light-prepass]}
+      - {id: many-lights, name: Many lights and stochastic light selection, match: [many-lights]}
+      - {id: material-classification, name: Material classification and tile shading, match: [material-classification]}
+      - {id: render-graph-arch, name: Frame graphs and pass scheduling, match: [pass-scheduling]}
+  - id: acceleration-lod
+    name: Acceleration algorithms and LOD
+    source: RTR4 ch19 Acceleration Algorithms
+    match: [acceleration-algorithms, level-of-detail]
+    subtopics:
+      - {id: lod-selection, name: LOD selection and transitions, match: [lod-selection, lod-crossfade]}
+      - {id: impostors, name: Impostors and billboards, match: [impostors, billboards]}
+      - {id: gpu-occlusion-culling, name: GPU occlusion culling with Hi-Z, match: [occlusion-culling, hierarchical-z]}
+      - {id: meshlet-culling, name: Meshlet/cluster culling, match: [meshlet-culling, cluster-culling]}
+      - {id: frustum-culling-cpu, name: CPU frustum culling and hierarchical culling, match: [hierarchical-culling]}
+      - {id: portal-culling, name: Portals and potentially visible sets, match: [portal-culling, pvs]}
+      - {id: hlod, name: Hierarchical LOD, match: [hlod]}
+      - {id: nanite-style, name: Virtualized geometry (Nanite-style cluster DAG), match: [virtualized-geometry]}
+      - {id: software-rasterization, name: Software occlusion rasterization, match: [software-occlusion]}
+      - {id: instancing-foliage, name: Foliage instancing and GPU scattering, match: [gpu-instancing]}
+      - {id: distance-culling, name: Distance and small-object culling, match: [distance-culling]}
+  - id: geometry-processing
+    name: Polygonal techniques and geometry processing
+    source: RTR4 ch16 Polygonal Techniques
+    match: [polygonal-techniques, geometry-processing]
+    subtopics:
+      - {id: mesh-simplification, name: Mesh simplification, match: [mesh-simplification]}
+      - {id: vertex-cache, name: Vertex cache and overdraw optimisation (meshoptimizer), match: [vertex-cache-optimization, meshoptimizer]}
+      - {id: vertex-compression, name: Vertex attribute quantisation, match: [vertex-compression, quantization]}
+      - {id: terrain, name: Terrain rendering (clipmaps, quadtrees), match: [terrain-rendering, clipmaps]}
+      - {id: normals-generation, name: Smooth vs flat normals and tangent generation (MikkTSpace), match: [mikktspace, tangent-generation]}
+      - {id: meshlets-build, name: Meshlet building, match: [meshlet-building]}
+      - {id: mesh-repair, name: Mesh cleanup and repair, match: [mesh-repair]}
+      - {id: uv-unwrapping, name: UV unwrapping, match: [uv-unwrapping]}
+      - {id: marching-cubes, name: "Isosurface extraction (marching cubes, dual contouring)", match: [marching-cubes, dual-contouring]}
+      - {id: tessellation-displacement, name: Tessellation and displacement mapping, match: [displacement-mapping]}
+      - {id: mesh-formats, name: "Mesh data formats (glTF, OBJ, PLY) and conversion", match: [mesh-formats]}
+  - id: xr-rendering
+    name: VR and AR rendering
+    source: RTR4 ch21 Virtual and Augmented Reality; OpenXR spec
+    match: [vr-rendering, xr-rendering]
+    subtopics:
+      - {id: multiview, name: Single-pass stereo / multiview, match: [multiview, single-pass-stereo]}
+      - {id: foveated, name: Foveated rendering, match: [foveated-rendering]}
+      - {id: reprojection, name: Timewarp and reprojection, match: [timewarp, asynchronous-reprojection]}
+      - {id: openxr, name: OpenXR frame loop, match: [openxr]}
+      - {id: xr-latency, name: Motion-to-photon latency budgets, match: [motion-to-photon]}
+      - {id: xr-lens-distortion, name: Lens distortion and chromatic correction, match: [lens-distortion-correction]}
+      - {id: xr-performance, name: XR frame timing and performance targets, match: [xr-frame-timing]}
+      - {id: xr-passthrough, name: Passthrough and mixed reality compositing, match: [passthrough]}
+      - {id: xr-depth-layers, name: Compositor layers and depth submission, match: [composition-layers]}
+      - {id: xr-stereo-ui, name: UI and text in stereo, match: [stereo-ui]}
+  # --- Computer vision engineering (Szeliski 2nd ed.)
+  - id: image-formation
+    name: Image formation and camera models
+    source: Szeliski ch2 Image Formation
+    match: [image-formation, camera-model]
+    subtopics:
+      - {id: pinhole, name: Pinhole projection and intrinsics, match: [pinhole-camera, intrinsics]}
+      - {id: lens-distortion, name: Lens distortion models, match: [lens-distortion]}
+      - {id: rolling-shutter, name: Rolling shutter and sensor timing, match: [rolling-shutter]}
+      - {id: radiometric, name: Radiometric calibration and camera response, match: [radiometric-calibration, camera-response]}
+      - {id: camera-extrinsics, name: Extrinsics and world-to-camera transforms, match: [extrinsics]}
+      - {id: projection-models, name: "Camera projection models (fisheye, omnidirectional)", match: [omnidirectional-camera]}
+      - {id: sensor-noise, name: Sensor noise models, match: [sensor-noise]}
+      - {id: depth-of-field-optics, name: "Thin lens optics, focus and depth of field", match: [thin-lens-optics]}
+      - {id: vignetting-calib, name: Vignetting and flat-field correction, match: [flat-field-correction]}
+      - {id: color-filter-array, name: Colour filter arrays and Bayer patterns, match: [bayer-pattern]}
+  - id: model-fitting
+    name: Model fitting and robust estimation
+    source: Szeliski ch4 Model Fitting and Optimization; Hartley and Zisserman ch4
+    match: [model-fitting, robust-estimation]
+    subtopics:
+      - {id: ransac-cv, name: RANSAC variants (MAGSAC, PROSAC), match: [magsac, usac]}
+      - {id: nonlinear-ls, name: Nonlinear least squares (Gauss-Newton, Levenberg-Marquardt), match: [levenberg-marquardt, nonlinear-least-squares]}
+      - {id: robust-loss, name: Robust loss functions (Huber, Cauchy), match: [robust-loss, huber-loss]}
+      - {id: hough, name: Hough transforms for lines and circles, match: [hough-transform, houghlines]}
+      - {id: homography-dlt, name: DLT and normalised linear estimation, match: [dlt, direct-linear-transform]}
+      - {id: ceres, name: Optimisation with Ceres Solver, match: [ceres-solver]}
+      - {id: g2o-gtsam, name: "Factor graphs (g2o, GTSAM)", match: [gtsam, factor-graph]}
+      - {id: line-fitting, name: Line and plane fitting (total least squares), match: [line-fitting, plane-fitting]}
+      - {id: sparse-solvers, name: Sparse solvers and Schur complement, match: [schur-complement]}
+      - {id: automatic-differentiation, name: Jacobians and automatic differentiation, match: [automatic-differentiation]}
+  - id: cv-deep-learning
+    name: Deep learning for vision
+    source: Szeliski ch5 Deep Learning
+    match: [vision-deep-learning, cnn]
+    subtopics:
+      - {id: augmentation, name: Data augmentation for vision, match: [data-augmentation, albumentations]}
+      - {id: transfer-learning, name: Transfer learning and fine-tuning backbones, match: [transfer-learning, fine-tuning]}
+      - {id: edge-deploy, name: Edge deployment and INT8 quantisation, match: [int8-quantization, edge-inference]}
+      - {id: vision-transformers, name: Vision transformers and foundation models (ViT, CLIP, DINOv2), match: [vision-transformer, dinov2]}
+      - {id: cnn-architectures, name: "CNN backbones (ResNet, EfficientNet)", match: [resnet, efficientnet]}
+      - {id: training-loops, name: "Training vision models (losses, schedulers)", match: [vision-training]}
+      - {id: onnx-export, name: ONNX export and model conversion, match: [onnx-export]}
+      - {id: tensorrt, name: TensorRT optimisation, match: [tensorrt]}
+      - {id: openvino, name: OpenVINO deployment, match: [openvino]}
+      - {id: self-supervised, name: Self-supervised and contrastive pretraining, match: [self-supervised-learning]}
+      - {id: model-interpretability, name: Interpretability (Grad-CAM), match: [grad-cam]}
+  - id: recognition
+    name: Recognition
+    source: Szeliski ch6 Recognition
+    match: [recognition, visual-recognition]
+    subtopics:
+      - {id: object-detection, name: Object detection, match: [object-detection]}
+      - {id: segmentation, name: Semantic and instance segmentation, match: [semantic-segmentation, instance-segmentation]}
+      - {id: keypoint-pose, name: Human pose/keypoint estimation, match: [human-pose-estimation, keypoint-detection]}
+      - {id: face, name: Face detection and recognition, match: [face-recognition, face-detection]}
+      - {id: ocr, name: OCR and scene text, match: [ocr, scene-text]}
+      - {id: image-classification, name: Image classification, match: [image-classification]}
+      - {id: yolo, name: YOLO detectors (Ultralytics), match: [yolo, ultralytics]}
+      - {id: sam, name: Segment Anything, match: [segment-anything]}
+      - {id: open-vocab, name: Open-vocabulary detection, match: [open-vocabulary-detection]}
+      - {id: anomaly-detection, name: Visual anomaly detection, match: [visual-anomaly-detection]}
+      - {id: re-id, name: Person re-identification, match: [re-identification]}
+      - {id: fine-grained, name: Fine-grained recognition and few-shot, match: [few-shot-recognition]}
+  - id: alignment-stitching
+    name: Image alignment and stitching
+    source: Szeliski ch8 Image Alignment and Stitching
+    match: [image-alignment, image-registration]
+    subtopics:
+      - {id: ecc, name: Direct (ECC) image alignment, match: [ecc-alignment, findtransformecc]}
+      - {id: panoramas, name: Panorama blending and seams, match: [multiband-blending, seam-finding]}
+      - {id: stabilization, name: Video stabilisation, match: [video-stabilization]}
+      - {id: learned-matching, name: Learned features and matchers (SuperPoint, LightGlue), match: [superpoint, lightglue]}
+      - {id: cylindrical-projection, name: Cylindrical and spherical projection, match: [cylindrical-projection, spherical-panorama]}
+      - {id: exposure-compensation, name: Exposure compensation and gain, match: [exposure-compensation]}
+      - {id: image-registration-medical, name: Intensity-based registration (mutual information), match: [mutual-information]}
+      - {id: phase-correlation, name: Phase correlation alignment, match: [phase-correlation]}
+      - {id: burst-alignment, name: Burst image alignment, match: [burst-alignment]}
+      - {id: deep-homography, name: Deep homography estimation, match: [deep-homography]}
+  - id: motion-estimation
+    name: Motion estimation and tracking
+    source: Szeliski ch9 Motion Estimation
+    match: [motion-estimation, visual-tracking]
+    subtopics:
+      - {id: optical-flow, name: Optical flow, match: [optical-flow]}
+      - {id: mot, name: Multi-object tracking, match: [multi-object-tracking]}
+      - {id: kalman, name: Kalman filtering for tracks, match: [kalman-filter]}
+      - {id: layered-motion, name: Motion segmentation, match: [motion-segmentation]}
+      - {id: lucas-kanade, name: Lucas-Kanade feature tracking (calcOpticalFlowPyrLK), match: [lucas-kanade, calcopticalflowpyrlk]}
+      - {id: dense-flow, name: "Dense optical flow (Farneback, DIS)", match: [farneback, dis-optical-flow]}
+      - {id: raft, name: Learned optical flow (RAFT), match: [raft]}
+      - {id: bytetrack, name: ByteTrack / DeepSORT tracking, match: [bytetrack, deepsort]}
+      - {id: hungarian, name: Data association (Hungarian algorithm), match: [hungarian-algorithm, data-association]}
+      - {id: point-tracking, name: Long-term point tracking (CoTracker), match: [point-tracking]}
+  - id: comp-photo-cv
+    name: Computational photography algorithms
+    source: Szeliski ch10 Computational Photography
+    match: [computational-imaging]
+    subtopics:
+      - {id: hdr-imaging, name: HDR imaging pipelines, match: [hdr-imaging]}
+      - {id: super-resolution, name: Super-resolution, match: [super-resolution]}
+      - {id: deblurring, name: Deblurring and deconvolution, match: [deblurring, deconvolution]}
+      - {id: isp, name: Raw image processing (demosaic, white balance), match: [demosaicing, raw-processing]}
+      - {id: denoising-cv, name: "Image denoising (BM3D, learned)", match: [bm3d]}
+      - {id: image-matting, name: Image matting, match: [image-matting]}
+      - {id: style-transfer, name: Neural style transfer, match: [style-transfer]}
+      - {id: low-light, name: Low-light enhancement, match: [low-light-enhancement]}
+      - {id: focus-stacking, name: Focus stacking, match: [focus-stacking]}
+      - {id: colorization, name: Colourisation, match: [image-colorization]}
+  - id: sfm-slam
+    name: Structure from motion and SLAM
+    source: Szeliski ch11 Structure from Motion and SLAM
+    match: [structure-from-motion, slam]
+    subtopics:
+      - {id: colmap, name: SfM with COLMAP, match: [colmap]}
+      - {id: bundle-adjustment, name: Bundle adjustment, match: [bundle-adjustment]}
+      - {id: visual-odometry, name: Visual odometry, match: [visual-odometry]}
+      - {id: vio, name: Visual-inertial odometry, match: [visual-inertial-odometry, vio]}
+      - {id: loop-closure, name: Loop closure and relocalisation, match: [loop-closure]}
+      - {id: orb-slam, name: ORB-SLAM3, match: [orb-slam]}
+      - {id: incremental-global-sfm, name: Incremental vs global SfM (GLOMAP), match: [glomap, global-sfm]}
+      - {id: place-recognition, name: Visual place recognition, match: [place-recognition]}
+      - {id: lidar-slam, name: Lidar SLAM and sensor fusion, match: [lidar-slam]}
+      - {id: camera-imu-calib, name: Camera-IMU calibration (Kalibr), match: [kalibr]}
+      - {id: map-merging, name: "Map scale, georeferencing and alignment", match: [georeferencing]}
+      - {id: sfm-evaluation, name: "Trajectory evaluation (ATE, RPE)", match: [absolute-trajectory-error]}
+  - id: depth-estimation
+    name: Depth estimation
+    source: Szeliski ch12 Depth Estimation
+    match: [depth-estimation]
+    subtopics:
+      - {id: stereo-matching, name: Stereo matching, match: [stereo-matching, disparity]}
+      - {id: monocular-depth, name: Monocular depth estimation, match: [monocular-depth]}
+      - {id: mvs, name: Multi-view stereo, match: [multi-view-stereo]}
+      - {id: rgbd-sensors, name: Active depth sensors (structured light, ToF), match: [rgbd, time-of-flight]}
+      - {id: depth-filtering, name: Depth map filtering and hole filling, match: [depth-filtering]}
+      - {id: stereo-learned, name: Learned stereo (RAFT-Stereo), match: [learned-stereo]}
+      - {id: depth-completion, name: Depth completion, match: [depth-completion]}
+      - {id: depth-to-pointcloud, name: Depth to point cloud conversion, match: [depth-to-point-cloud]}
+      - {id: realsense, name: Intel RealSense SDK, match: [realsense]}
+      - {id: lidar-camera-fusion, name: Lidar-camera projection and fusion, match: [lidar-camera-fusion]}
+  - id: reconstruction-3d
+    name: 3D reconstruction
+    source: Szeliski ch13 3D Reconstruction
+    match: [3d-reconstruction]
+    subtopics:
+      - {id: point-cloud-processing, name: Point cloud processing (Open3D), match: [point-cloud, open3d]}
+      - {id: icp, name: ICP registration, match: [icp]}
+      - {id: tsdf, name: TSDF volumetric fusion, match: [tsdf-fusion]}
+      - {id: surface-reconstruction, name: Poisson surface reconstruction, match: [poisson-reconstruction, surface-reconstruction]}
+      - {id: point-cloud-registration-global, name: "Global registration (FPFH, RANSAC)", match: [fpfh, global-registration]}
+      - {id: normal-estimation, name: Point cloud normal estimation, match: [normal-estimation]}
+      - {id: downsampling, name: Voxel downsampling and outlier removal, match: [voxel-downsampling, outlier-removal]}
+      - {id: mesh-texturing, name: Texturing reconstructed meshes, match: [mesh-texturing]}
+      - {id: pcl, name: Point Cloud Library, match: [pcl]}
+      - {id: segmentation-3d, name: "Point cloud segmentation (plane RANSAC, clustering)", match: [point-cloud-segmentation]}
+  - id: image-based-rendering
+    name: Image-based rendering and neural scenes
+    source: Szeliski ch14 Image-Based Rendering
+    match: [image-based-rendering, novel-view-synthesis]
+    subtopics:
+      - {id: nerf, name: Neural radiance fields, match: [nerf]}
+      - {id: gaussian-splatting, name: 3D Gaussian splatting, match: [gaussian-splatting]}
+      - {id: photogrammetry, name: Photogrammetry capture practice, match: [photogrammetry]}
+      - {id: view-interpolation, name: View interpolation and light fields, match: [light-field, view-interpolation]}
+      - {id: nerfstudio, name: Training with nerfstudio, match: [nerfstudio]}
+      - {id: splat-viewers, name: Gaussian splat viewers and web rendering, match: [splat-rendering]}
+      - {id: instant-ngp, name: Instant-NGP hash encoding, match: [instant-ngp]}
+      - {id: splat-editing, name: Splat cleanup and compression, match: [splat-compression]}
+      - {id: dynamic-scenes, name: Dynamic and 4D scenes, match: [4d-gaussian-splatting]}
+      - {id: mesh-extraction-neural, name: Mesh extraction from neural fields, match: [neural-surface-reconstruction]}
+  - id: cv-data-evaluation
+    name: Vision datasets and evaluation
+    source: Szeliski ch5/6 datasets and metrics; COCO evaluation docs
+    match: [vision-datasets, cv-evaluation]
+    subtopics:
+      - {id: annotation, name: Annotation workflows (CVAT, label QA), match: [cvat, annotation]}
+      - {id: detection-metrics, name: Detection metrics (mAP, IoU), match: [mean-average-precision, iou]}
+      - {id: dataset-splits, name: Dataset splits and leakage, match: [data-leakage, dataset-splits]}
+      - {id: tracking-metrics, name: Tracking metrics (HOTA, IDF1), match: [hota, idf1]}
+      - {id: segmentation-metrics, name: "Segmentation metrics (mIoU, PQ)", match: [miou, panoptic-quality]}
+      - {id: label-formats, name: "Annotation formats (COCO, YOLO, VOC)", match: [coco-format, yolo-format]}
+      - {id: active-learning, name: Active learning and auto-labelling, match: [active-learning, auto-labeling]}
+      - {id: synthetic-data, name: Synthetic data generation, match: [synthetic-data]}
+      - {id: benchmarking, name: Benchmarking inference speed, match: [inference-benchmarking]}
+      - {id: error-analysis, name: Error analysis and failure slicing, match: [error-analysis]}
+  # --- Graphics mathematics (RTR4 ch4/8/22, Lengyel)
+  - id: transforms
+    name: Transforms and matrices
+    source: RTR4 ch4 Transforms; Lengyel ch2-4
+    match: [transforms, matrices]
+    subtopics:
+      - {id: matrix-conventions, name: Row/column-major and handedness conventions, match: [row-major, column-major, handedness]}
+      - {id: normal-matrix, name: Normal transformation (inverse transpose), match: [normal-matrix]}
+      - {id: trs-decompose, name: TRS composition and decomposition, match: [trs-decomposition, matrix-decomposition]}
+      - {id: change-of-basis, name: Change of basis and TBN frames, match: [change-of-basis, tbn-matrix]}
+      - {id: affine-transforms, name: Affine transforms and homogeneous coordinates, match: [homogeneous-coordinates, affine-transform]}
+      - {id: scene-hierarchy-math, name: Hierarchical transforms and world matrices, match: [hierarchical-transforms]}
+      - {id: matrix-inverse, name: Fast inverse for rigid transforms, match: [rigid-transform-inverse]}
+      - {id: shear-reflection, name: Reflection and mirror transforms, match: [reflection-matrix]}
+      - {id: simd-math, name: "SIMD math libraries (GLM, DirectXMath)", match: [glm, directxmath]}
+      - {id: transform-precision, name: Transform composition order and precision, match: [transform-order]}
+  - id: projection
+    name: Projection
+    source: RTR4 ch4.7 Projections
+    match: [projection-matrix, perspective-projection]
+    subtopics:
+      - {id: reversed-z, name: Reversed-Z depth, match: [reversed-z]}
+      - {id: orthographic, name: Orthographic projection, match: [orthographic-projection]}
+      - {id: infinite-far, name: Infinite far plane projection, match: [infinite-far-plane]}
+      - {id: oblique-clipping, name: Oblique near-plane clipping, match: [oblique-near-plane]}
+      - {id: unproject, name: Unprojecting screen points to world rays, match: [unproject, screen-to-world]}
+      - {id: ndc-conventions, name: NDC and depth range conventions across APIs, match: [ndc, depth-range]}
+      - {id: viewport-transform, name: Viewport transform and pixel centres, match: [viewport-transform]}
+      - {id: frustum-extraction, name: Frustum plane extraction from matrices, match: [frustum-planes]}
+      - {id: jittered-projection, name: Off-centre and asymmetric frusta, match: [asymmetric-frustum]}
+      - {id: linear-depth, name: Linearising depth buffer values, match: [linear-depth]}
+      - {id: cubemap-projection, name: Cube map face projections, match: [cubemap-face-projection]}
+  - id: rotations
+    name: Rotations and orientation
+    source: RTR4 ch4.3 Quaternions; Lengyel ch4
+    match: [quaternions, rotations]
+    subtopics:
+      - {id: slerp, name: Slerp and nlerp, match: [slerp, nlerp]}
+      - {id: euler, name: Euler angle conventions and gimbal lock, match: [euler-angles, gimbal-lock]}
+      - {id: axis-angle, name: Axis-angle and Rodrigues, match: [axis-angle, rodrigues]}
+      - {id: look-at, name: Look-at and orientation from vectors, match: [look-at, lookat-matrix]}
+      - {id: dual-quaternions, name: Dual quaternions for skinning, match: [dual-quaternions]}
+      - {id: quaternion-ops, name: Quaternion multiplication and conversion, match: [quaternion-multiplication]}
+      - {id: rotation-between, name: Rotation between two vectors, match: [rotation-between-vectors]}
+      - {id: swing-twist, name: Swing-twist decomposition, match: [swing-twist]}
+      - {id: angular-velocity, name: Angular velocity and quaternion integration, match: [angular-velocity]}
+      - {id: rotation-averaging, name: Averaging rotations, match: [rotation-averaging]}
+      - {id: so3-lie, name: SO(3) Lie algebra and exponential map, match: [lie-algebra, so3]}
+  - id: intersection-tests
+    name: Intersection test methods
+    source: RTR4 ch22 Intersection Test Methods
+    match: [intersection-tests]
+    subtopics:
+      - {id: ray-aabb, name: Ray-AABB slab test, match: [ray-aabb, slab-test]}
+      - {id: ray-sphere, name: Ray-sphere and ray-plane, match: [ray-sphere, ray-plane]}
+      - {id: frustum-tests, name: Frustum-AABB/sphere tests, match: [frustum-culling]}
+      - {id: sat, name: Separating axis theorem, match: [separating-axis-theorem]}
+      - {id: ray-obb, name: Ray-OBB and OBB tests, match: [ray-obb, obb]}
+      - {id: triangle-aabb, name: Triangle-box overlap, match: [triangle-aabb]}
+      - {id: closest-point, name: Closest point queries, match: [closest-point]}
+      - {id: sphere-sweeps, name: Swept sphere and continuous collision, match: [swept-sphere, continuous-collision]}
+      - {id: gjk, name: GJK and EPA, match: [gjk, epa]}
+      - {id: point-in-polygon, name: Point in polygon and winding numbers, match: [point-in-polygon, winding-number]}
+  - id: colour-science
+    name: Colour science for graphics
+    source: RTR4 ch8 Light and Color; PBR4 ch4 Radiometry, Spectra, and Color
+    match: [colour-science, color-science]
+    subtopics:
+      - {id: srgb, name: sRGB transfer function and linear workflow, match: [srgb, linear-workflow]}
+      - {id: gamut-conversion, name: Colour space conversion matrices (Rec.709, Rec.2020, ACEScg), match: [rec2020, acescg, gamut-mapping]}
+      - {id: chromatic-adaptation, name: White point and chromatic adaptation, match: [chromatic-adaptation, white-point]}
+      - {id: luminance, name: Luminance and perceptual spaces (OKLab), match: [oklab, luminance]}
+      - {id: radiometry, name: Radiometry and photometry units, match: [radiometry, photometry]}
+      - {id: color-temperature, name: Colour temperature and blackbody, match: [color-temperature, blackbody]}
+      - {id: color-management-pipeline, name: OCIO colour management pipelines, match: [ocio, opencolorio]}
+      - {id: hdr-transfer, name: "HDR transfer functions (PQ, HLG)", match: [hlg, transfer-functions]}
+      - {id: dithering-banding, name: Banding and dithering, match: [banding, dithering]}
+      - {id: color-difference, name: Colour difference metrics (Delta E), match: [delta-e]}
+      - {id: spectral-upsampling, name: Spectral upsampling, match: [spectral-upsampling]}
+      - {id: icc-profiles, name: ICC profiles and display calibration, match: [icc-profiles]}
+  - id: curves-surfaces
+    name: Curves and curved surfaces
+    source: RTR4 ch17 Curves and Curved Surfaces
+    match: [curves, splines]
+    subtopics:
+      - {id: bezier, name: Bezier curves and de Casteljau, match: [bezier, de-casteljau]}
+      - {id: catmull-rom, name: Catmull-Rom and Hermite splines, match: [catmull-rom, hermite]}
+      - {id: arc-length, name: Arc-length parameterisation, match: [arc-length-parameterization]}
+      - {id: subdivision, name: Subdivision surfaces, match: [subdivision-surfaces, catmull-clark]}
+      - {id: b-splines, name: B-splines and NURBS, match: [b-splines, nurbs]}
+      - {id: curve-tessellation, name: Adaptive curve flattening, match: [curve-flattening]}
+      - {id: bezier-patches, name: Bezier patches, match: [bezier-patches]}
+      - {id: path-rendering, name: GPU vector path rendering, match: [path-rendering, vector-graphics]}
+      - {id: curve-fitting, name: Curve fitting to points, match: [curve-fitting]}
+      - {id: pn-triangles, name: PN triangles and Phong tessellation, match: [pn-triangles]}
+  - id: interpolation-encoding
+    name: Interpolation and geometric encodings
+    source: RTR4 ch16 (vertex compression), ch23 (barycentrics); Cigolle et al. octahedral encoding
+    match: [interpolation-math, geometric-encoding]
+    subtopics:
+      - {id: barycentric, name: Barycentric coordinates, match: [barycentric-coordinates]}
+      - {id: perspective-correct, name: Perspective-correct interpolation, match: [perspective-correct-interpolation]}
+      - {id: octahedral, name: Octahedral normal encoding, match: [octahedral-encoding]}
+      - {id: easing, name: Easing and damping functions, match: [easing-functions, critically-damped-spring]}
+      - {id: quaternion-compression, name: Quaternion compression (smallest three), match: [smallest-three]}
+      - {id: normal-encoding-gbuffer, name: G-buffer normal encodings compared, match: [gbuffer-normal-encoding]}
+      - {id: half-float, name: Half float packing and unpacking, match: [half-float-packing]}
+      - {id: morton-codes, name: Morton codes and space-filling curves, match: [morton-code, space-filling-curve]}
+      - {id: lerp-variants, name: "Lerp, remap and smoothstep variants", match: [inverse-lerp, remap-range]}
+      - {id: bilinear-bicubic, name: Bilinear and bicubic interpolation, match: [bicubic-interpolation]}
+  - id: numerical-robustness
+    name: Numerical robustness
+    source: RTR4 ch22.1; Ericson Real-Time Collision Detection ch11
+    match: [numerical-robustness, floating-point]
+    subtopics:
+      - {id: depth-precision, name: Depth precision and z-fighting, match: [z-fighting, depth-precision]}
+      - {id: large-worlds, name: Large world coordinates and camera-relative rendering, match: [large-world-coordinates, camera-relative-rendering]}
+      - {id: epsilons, name: Epsilons and robust predicates, match: [epsilon, robust-predicates]}
+      - {id: orthonormalization, name: Re-orthonormalising drifting matrices, match: [matrix-orthonormalization, gram-schmidt]}
+      - {id: float-precision, name: IEEE float precision limits, match: [ieee-754]}
+      - {id: catastrophic-cancellation, name: Catastrophic cancellation and stable formulas, match: [catastrophic-cancellation]}
+      - {id: kahan-summation, name: Kahan summation, match: [kahan-summation]}
+      - {id: self-intersection, name: Ray self-intersection offset, match: [ray-offset, self-intersection]}
+      - {id: deterministic-math, name: Deterministic floating point across platforms, match: [deterministic-float]}
+      - {id: fixed-point, name: Fixed-point arithmetic, match: [fixed-point]}
+  - id: spatial-structures
+    name: Spatial data structures
+    source: RTR4 ch19.1 Spatial Data Structures
+    match: [spatial-partitioning, spatial-data-structures]
+    subtopics:
+      - {id: bvh, name: Bounding volume hierarchies, match: [bvh]}
+      - {id: octree, name: Octrees and quadtrees, match: [octree, quadtree]}
+      - {id: kd-tree, name: k-d trees, match: [kd-tree]}
+      - {id: spatial-hash, name: Uniform grids and spatial hashing, match: [spatial-hashing, uniform-grid]}
+      - {id: loose-octree, name: Loose octrees for dynamic objects, match: [loose-octree]}
+      - {id: bvh-refit, name: Dynamic BVH refit and rebuild, match: [bvh-refit]}
+      - {id: sweep-and-prune, name: Sweep and prune broadphase, match: [sweep-and-prune]}
+      - {id: rtree, name: R-trees, match: [r-tree]}
+      - {id: sparse-voxel-octree, name: Sparse voxel octrees, match: [sparse-voxel-octree]}
+      - {id: nearest-neighbor, name: "Nearest-neighbour search (nanoflann, FAISS)", match: [nanoflann, nearest-neighbor-search]}
+  # --- GPU performance optimisation (vendor guides, RTR4 ch18)
+  - id: gpu-profiling
+    name: GPU profiling and bottleneck diagnosis
+    source: RTR4 ch18 Pipeline Optimization; Nsight/RGP/PIX docs
+    match: [gpu-profiling, bottleneck]
+    subtopics:
+      - {id: frame-budget, name: Frame budgets and GPU timestamps, match: [frame-budget]}
+      - {id: nsight, name: Nsight Graphics GPU trace, match: [nsight-graphics]}
+      - {id: rgp, name: Radeon GPU Profiler, match: [radeon-gpu-profiler]}
+      - {id: mobile-profilers, name: Mobile GPU profilers (Arm Mobile Studio, Snapdragon), match: [arm-mobile-studio, snapdragon-profiler]}
+      - {id: pix-timing, name: PIX timing captures, match: [pix-timing-capture]}
+      - {id: gpu-counters, name: Hardware counters and top-down analysis, match: [gpu-counters]}
+      - {id: xcode-gpu, name: Xcode Metal frame debugger, match: [xcode-gpu-debugger]}
+      - {id: browser-profiling, name: WebGL/WebGPU profiling in browsers, match: [webgl-profiling]}
+      - {id: regression-testing, name: Performance regression testing, match: [performance-regression]}
+      - {id: renderdoc-perf, name: RenderDoc performance counters, match: [renderdoc-counters]}
+      - {id: intel-gpa, name: Intel GPA, match: [intel-gpa]}
+  - id: cpu-overhead
+    name: CPU-side rendering overhead
+    source: Arm Mali Best Practices - CPU overheads; RTR4 ch18.4
+    match: [cpu-overhead, cpu-bound]
+    subtopics:
+      - {id: batching, name: Draw call batching and instancing, match: [draw-calls, batching]}
+      - {id: state-sorting, name: State sorting and sort keys, match: [state-sorting]}
+      - {id: shader-compile-stutter, name: PSO pre-warming and shader compile stutter, match: [shader-compile-stutter, pso-caching]}
+      - {id: gpu-driven, name: GPU-driven rendering and indirect draws, match: [gpu-driven-rendering, indirect-draw]}
+      - {id: multithreaded-rendering, name: Multithreaded command recording, match: [multithreaded-rendering]}
+      - {id: render-thread, name: Render thread architecture, match: [render-thread]}
+      - {id: draw-call-cost, name: Measuring draw call cost, match: [draw-call-cost]}
+      - {id: material-batching, name: Material and texture batching, match: [texture-batching]}
+      - {id: upload-overhead, name: Upload and map overhead, match: [upload-overhead]}
+      - {id: driver-overhead, name: Driver overhead and API choice, match: [driver-overhead]}
+  - id: fragment-cost
+    name: Fragment shading and fill rate
+    source: Arm Mali Best Practices - fragment shading; RTR4 ch18.4.5
+    match: [fill-rate, fragment-bound]
+    subtopics:
+      - {id: overdraw, name: Overdraw measurement and reduction, match: [overdraw]}
+      - {id: depth-prepass, name: Depth prepass and early-Z, match: [depth-prepass, early-z]}
+      - {id: dynamic-resolution, name: Dynamic resolution scaling, match: [dynamic-resolution]}
+      - {id: quad-overshading, name: Small triangles and quad overshading, match: [quad-overshading, micro-triangles]}
+      - {id: overdraw-sorting, name: Front-to-back sorting, match: [front-to-back]}
+      - {id: alpha-test-cost, name: Alpha test and discard cost, match: [discard-cost]}
+      - {id: fullscreen-pass-cost, name: Fullscreen pass cost, match: [fullscreen-pass-cost]}
+      - {id: vrs-perf, name: VRS for fill-rate, match: [vrs-performance]}
+      - {id: resolution-scaling, name: Render scale and checkerboard rendering, match: [checkerboard-rendering]}
+  - id: tile-based-gpus
+    name: Tile-based mobile GPUs
+    source: Arm Mali Best Practices - tiling and render passes; Apple Metal best practices
+    match: [tile-based-rendering, mobile-gpu]
+    subtopics:
+      - {id: load-store-ops, name: Render pass load/store operations, match: [load-store-ops]}
+      - {id: transient-attachments, name: Transient/memoryless attachments, match: [transient-attachments, memoryless]}
+      - {id: framebuffer-fetch, name: Framebuffer fetch and subpass inputs, match: [framebuffer-fetch, subpass-input]}
+      - {id: thermal, name: Thermal throttling and sustained performance, match: [thermal-throttling]}
+      - {id: tbdr-architecture, name: TBDR architecture and hidden surface removal, match: [tbdr, hidden-surface-removal]}
+      - {id: pixel-local-storage, name: Pixel local storage, match: [pixel-local-storage]}
+      - {id: afbc, name: AFBC framebuffer compression, match: [afbc]}
+      - {id: mobile-msaa, name: MSAA on tile-based GPUs, match: [mobile-msaa]}
+      - {id: binning-cost, name: Vertex binning and geometry cost on tilers, match: [binning]}
+      - {id: android-gpu-inspector, name: Android GPU Inspector, match: [android-gpu-inspector]}
+  - id: gpu-memory-bandwidth
+    name: GPU memory and bandwidth
+    source: AMD RDNA performance guide; NVIDIA memory best practices; Arm Mali textures/buffers chapters
+    match: [memory-bandwidth, occupancy]
+    subtopics:
+      - {id: vram-budget, name: VRAM budgets and texture streaming, match: [vram-budget, texture-streaming]}
+      - {id: register-pressure, name: Register pressure and occupancy, match: [register-pressure]}
+      - {id: cache-access, name: Coalesced access and cache behaviour, match: [coalesced-access, cache-hit-rate]}
+      - {id: bandwidth-formats, name: Render target format and bandwidth choices, match: [render-target-format, framebuffer-compression]}
+      - {id: texture-cache, name: Texture cache behaviour and mip use, match: [texture-cache]}
+      - {id: memory-compression, name: Delta colour compression (DCC), match: [dcc]}
+      - {id: wave-occupancy, name: Wave occupancy tuning, match: [wave-occupancy]}
+      - {id: lds-bank-conflicts, name: LDS bank conflicts, match: [bank-conflicts]}
+      - {id: memory-aliasing-transient, name: Transient resource aliasing, match: [transient-resources]}
+      - {id: pcie-transfers, name: PCIe transfer optimisation, match: [pcie-bandwidth]}
+  - id: frame-pacing
+    name: Frame pacing and latency
+    source: NVIDIA Reflex/latency docs; Android Frame Pacing (Swappy); DXGI present docs
+    match: [frame-pacing, frame-latency]
+    subtopics:
+      - {id: present-latency, name: Input latency and present queue depth, match: [input-latency, low-latency-mode]}
+      - {id: frame-pacing-mobile, name: Frame pacing on Android (Swappy), match: [swappy]}
+      - {id: async-compute, name: Async compute overlap, match: [async-compute]}
+      - {id: cpu-gpu-parallelism, name: CPU/GPU parallelism and pipelining, match: [cpu-gpu-parallelism]}
+      - {id: reflex, name: NVIDIA Reflex / AMD Anti-Lag integration, match: [nvidia-reflex, anti-lag]}
+      - {id: frame-generation, name: "Frame generation (DLSS FG, FSR FG)", match: [frame-generation]}
+      - {id: vrr, name: VRR/G-Sync/FreeSync, match: [g-sync, freesync]}
+      - {id: frame-time-analysis, name: Frame time analysis (PresentMon), match: [presentmon]}
+      - {id: stutter, name: Diagnosing stutter (hitches), match: [stutter-diagnosis, hitching]}
+      - {id: web-frame-pacing, name: requestAnimationFrame pacing in browsers, match: [requestanimationframe]}

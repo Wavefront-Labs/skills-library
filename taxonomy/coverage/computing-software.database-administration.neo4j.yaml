@@ -1,0 +1,291 @@
+# Coverage spec: Neo4j. Topics and subtopics from the external structures in `sources`.
+subject: neo4j
+scope:
+  category: computing-software
+  field: database-administration
+  products: [neo4j]
+sources:
+  - "Neo4j Cypher Manual ToC (neo4j.com/docs/cypher-manual) - Syntax, Clauses, Patterns, Functions, Indexes, Constraints, Subqueries, Query tuning"
+  - "Neo4j Operations Manual ToC (neo4j.com/docs/operations-manual) - Installation, Configuration, Database administration, Backup and restore, Clustering, Security, Monitoring, Performance, Tools"
+  - "Neo4j Graph Data Science manual and Neo4j Certified Professional exam topic list"
+topics:
+  - id: cypher-match
+    name: Pattern matching
+    source: "Cypher Manual/Patterns and MATCH"
+    match: [match, optional-match, graph-pattern]
+    subtopics:
+      - {id: match-node-relationship-patterns, name: "MATCH patterns for nodes and relationships", match: [match-pattern, relationship-direction, node-labels]}
+      - {id: optional-match-semantics, name: "OPTIONAL MATCH", match: [optional-match-nulls, left-join-cypher, null-patterns]}
+  - id: cypher-varlength
+    name: Variable-length and path patterns
+    source: "Cypher Manual/Patterns"
+    match: [variable-length-paths, shortest-path, quantified-path-patterns]
+    subtopics:
+      - {id: variable-length-relationships, name: "Variable-length relationships", match: [var-length, relationship-bounds, path-explosion]}
+      - {id: shortestpath-and-allshortestpaths, name: "shortestPath and allShortestPaths", match: [shortestpath, allshortestpaths, path-predicates]}
+  - id: cypher-write
+    name: Writing data
+    source: "Cypher Manual/CREATE, MERGE, SET, DELETE"
+    match: [create, merge, set-delete]
+    subtopics:
+      - {id: merge-idempotent-upsert, name: "MERGE for upserts", match: [merge, on-create, on-match]}
+      - {id: set-remove-delete, name: "SET, REMOVE and DELETE", match: [detach-delete, set-map-update, remove-label]}
+  - id: cypher-return
+    name: Projection and aggregation
+    source: "Cypher Manual/WITH, RETURN, ORDER BY"
+    match: [with-clause, aggregation, order-by-limit]
+    subtopics:
+      - {id: with-pipelining-aggregation, name: "WITH and aggregation", match: [with-pipeline, collect, grouping-keys]}
+      - {id: order-skip-limit-paging, name: "ORDER BY, SKIP and LIMIT", match: [skip-limit, keyset-pagination, order-by]}
+  - id: cypher-expr
+    name: Expressions and data types
+    source: "Cypher Manual/Values and types, Expressions"
+    match: [cypher-types, list-comprehension, case-expression]
+    subtopics:
+      - {id: lists-maps-comprehensions, name: "Lists, maps and comprehensions", match: [list-comprehension, pattern-comprehension, unwind]}
+      - {id: temporal-spatial-types, name: "Temporal and spatial types", match: [datetime, duration, point-type]}
+  - id: cypher-subquery
+    name: Subqueries and procedures
+    source: "Cypher Manual/Subqueries"
+    match: [call-subquery, exists-subquery, in-transactions]
+    subtopics:
+      - {id: call-subquery-patterns, name: "CALL subqueries", match: [call-subquery, union, importing-with]}
+      - {id: call-in-transactions, name: "CALL IN TRANSACTIONS", match: [in-transactions, batch-commit, on-error]}
+  - id: cypher-params
+    name: Parameters and safety
+    source: "Cypher Manual/Parameters"
+    match: [query-parameters, cypher-injection, plan-cache]
+    subtopics:
+      - {id: parameterised-queries, name: "Parameterised queries", match: [parameters, query-plan-cache, string-concatenation]}
+      - {id: explain-and-profile, name: "EXPLAIN and PROFILE", match: [explain, profile, db-hits]}
+  - id: idx-range
+    name: Range, text and point indexes
+    source: "Cypher Manual/Indexes"
+    match: [range-index, text-index, point-index]
+    subtopics:
+      - {id: create-range-index, name: "Range indexes", match: [create-index, range-index, composite-index]}
+      - {id: text-and-point-indexes, name: "Text, point and token lookup indexes", match: [text-index-contains, point-index-spatial, lookup-index]}
+  - id: idx-fulltext
+    name: Full-text and vector indexes
+    source: "Cypher Manual/Indexes/Full-text and Vector"
+    match: [fulltext-index, vector-index, lucene]
+    subtopics:
+      - {id: fulltext-index-queries, name: "Full-text indexes", match: [create-fulltext-index, db-index-fulltext, querynodes]}
+      - {id: vector-index-similarity, name: "Vector indexes", match: [vector-index-create, db-index-vector, embedding-search]}
+  - id: constraints
+    name: Constraints
+    source: "Cypher Manual/Constraints"
+    match: [constraints, unique-constraint, node-key]
+    subtopics:
+      - {id: uniqueness-and-existence, name: "Uniqueness and existence constraints", match: [unique-constraint, property-existence, create-constraint]}
+      - {id: node-key-and-type-constraints, name: "Node key and property type constraints", match: [node-key, property-type-constraint, composite-constraint]}
+  - id: modelling
+    name: Graph data modelling
+    source: "Neo4j Graph Data Modeling fundamentals"
+    match: [graph-data-modeling, labels-vs-properties, intermediate-nodes]
+    subtopics:
+      - {id: model-from-questions, name: "Modelling from questions", match: [data-model-arrows, query-driven-model, relationship-types]}
+      - {id: supernodes-and-intermediate-nodes, name: "Supernodes and intermediate nodes", match: [supernode, fan-out, hyperedge-node]}
+  - id: import
+    name: Data import
+    source: "Operations Manual/Import and Cypher Manual/LOAD CSV"
+    match: [load-csv, neo4j-admin-import, import-tools]
+    subtopics:
+      - {id: load-csv-import, name: "LOAD CSV", match: [load-csv, periodic-commit, csv-import]}
+      - {id: admin-import-bulk, name: "neo4j-admin database import", match: [neo4j-admin-import, bulk-import, incremental-import]}
+  - id: install-config
+    name: Installation and configuration
+    source: "Operations Manual/Installation, Configuration"
+    match: [neo4j-install, neo4j-conf, memory-configuration]
+    subtopics:
+      - {id: neo4j-conf-essentials, name: "neo4j.conf essentials", match: [neo4j-conf-settings, server-bolt-listen-address, default-database]}
+      - {id: memory-sizing, name: "Heap and page cache sizing", match: [page-cache-size, heap-initial-size, neo4j-admin-memrec]}
+  - id: docker-k8s
+    name: Containers and Kubernetes
+    source: "Operations Manual/Docker and Kubernetes"
+    match: [neo4j-docker, helm-neo4j, neo4j-kubernetes]
+    subtopics:
+      - {id: neo4j-docker-run, name: "Running Neo4j in Docker", match: [docker-neo4j, neo4j-auth-env, volume-mounts]}
+      - {id: neo4j-helm-charts, name: "Neo4j Helm charts", match: [helm-chart, neo4j-statefulset, persistent-volume]}
+  - id: db-admin
+    name: Database administration
+    source: "Operations Manual/Database administration"
+    match: [create-database, composite-database, database-state]
+    subtopics:
+      - {id: multi-database-management, name: "Multiple databases", match: [create-database, start-stop-database, show-databases]}
+      - {id: composite-databases, name: "Composite databases and fabric", match: [composite-database, fabric, federated-queries]}
+  - id: backup
+    name: Backup and restore
+    source: "Operations Manual/Backup and restore"
+    match: [neo4j-admin-backup, dump-load, restore]
+    subtopics:
+      - {id: online-backup-and-restore, name: "Online backup and restore", match: [neo4j-admin-database-backup, backup-chain, restore-from-backup]}
+      - {id: dump-and-load, name: "Offline dump and load", match: [neo4j-admin-dump, neo4j-admin-load, offline-copy]}
+  - id: clustering
+    name: Clustering
+    source: "Operations Manual/Clustering"
+    match: [neo4j-cluster, primaries-secondaries, raft]
+    subtopics:
+      - {id: cluster-topology-setup, name: "Cluster topology and discovery", match: [cluster-discovery, primary-servers, secondary-servers]}
+      - {id: cluster-routing-and-drivers, name: "Routing and causal consistency", match: [bolt-routing, causal-clustering, bookmarks]}
+  - id: security
+    name: Security
+    source: "Operations Manual/Authentication and authorization, SSL"
+    match: [neo4j-rbac, auth-providers, encryption]
+    subtopics:
+      - {id: rbac-privileges, name: "Role-based access control", match: [create-role, grant-privilege, deny-privilege]}
+      - {id: ssl-and-auth-providers, name: "TLS and external auth providers", match: [ssl-policy, ldap-auth, oidc-sso]}
+  - id: monitoring
+    name: Monitoring
+    source: "Operations Manual/Monitoring"
+    match: [neo4j-metrics, query-log, jmx]
+    subtopics:
+      - {id: metrics-and-prometheus, name: "Metrics and Prometheus", match: [metrics-enable, prometheus-endpoint, page-cache-hits]}
+      - {id: query-logging, name: "Query logging and slow queries", match: [query-log, log-queries-threshold, show-transactions]}
+  - id: performance
+    name: Performance tuning
+    source: "Cypher Manual/Query tuning"
+    match: [query-tuning, eager-operator, cartesian-product]
+    subtopics:
+      - {id: query-tuning-playbook, name: "Query tuning playbook", match: [query-planner-hints, using-index, cardinality-estimates]}
+      - {id: eager-and-memory-pressure, name: "Eager operators and memory", match: [eager-operator-avoidance, transaction-memory-limit, heap-exhaustion]}
+  - id: store-internals
+    name: Storage internals
+    source: "Operations Manual/Database internals"
+    match: [store-format, transaction-logs, checkpoint]
+    subtopics:
+      - {id: store-formats-and-checkpoints, name: "Store formats and checkpointing", match: [record-format, block-format, checkpoint-policy]}
+      - {id: consistency-check-and-recovery, name: "Consistency check and recovery", match: [neo4j-admin-check, store-copy, db-recovery]}
+  - id: upgrade
+    name: Upgrade and migration
+    source: "Operations Manual/Upgrade and migration"
+    match: [neo4j-upgrade, migrate-database, version-compatibility]
+    subtopics:
+      - {id: upgrade-planning, name: "Upgrade planning", match: [upgrade-path, migration-guide, pre-upgrade-checks]}
+      - {id: apoc-plugin-install, name: "APOC and plugin installation", match: [apoc-core, apoc-extended, plugin-allowlist]}
+  - id: apoc
+    name: APOC procedures
+    source: "APOC documentation"
+    match: [apoc, apoc-periodic-iterate, apoc-load-json]
+    subtopics:
+      - {id: apoc-batch-processing, name: "apoc.periodic procedures", match: [apoc-periodic, periodic-commit-apoc, batch-size]}
+      - {id: apoc-import-export, name: "APOC import/export", match: [apoc-import-json, apoc-export-csv, apoc-load-jdbc]}
+  - id: gds-algorithms
+    name: Graph Data Science
+    source: "GDS Manual"
+    match: [gds, graph-projection, pagerank]
+    subtopics:
+      - {id: gds-projections, name: "GDS graph projections", match: [gds-graph-project, native-projection, cypher-projection]}
+      - {id: centrality-community-algorithms, name: "Centrality, community and path algorithms", match: [pagerank, louvain, node-similarity]}
+  - id: gds-ml
+    name: Graph machine learning
+    source: "GDS Manual/Machine learning"
+    match: [node-embeddings, fastrp, link-prediction]
+    subtopics:
+      - {id: node-embeddings-fastrp, name: "Node embeddings", match: [fastrp, node2vec, embedding-dimension]}
+      - {id: link-prediction-pipelines, name: "ML pipelines", match: [link-prediction-pipeline, node-classification-pipeline, gds-pipeline]}
+  - id: drivers
+    name: Drivers and transactions
+    source: "Neo4j Driver Manual"
+    match: [neo4j-driver, bolt-protocol, transaction-functions]
+    subtopics:
+      - {id: driver-sessions-and-transactions, name: "Sessions, transactions and retries", match: [execute-query, transaction-functions, managed-transactions]}
+      - {id: driver-connection-config, name: "Connection pooling and URIs", match: [connection-pool, neo4j-scheme, driver-timeouts]}
+  - id: cypher-shell-tools
+    name: CLI tools
+    source: "Operations Manual/Tools"
+    match: [cypher-shell, neo4j-admin, browser]
+    subtopics:
+      - {id: cypher-shell-usage, name: "cypher-shell", match: [cypher-shell-options, cypher-shell-file, cypher-shell-format]}
+      - {id: neo4j-admin-commands, name: "neo4j-admin overview", match: [neo4j-admin-server, neo4j-admin-database, neo4j-admin-memory]}
+  - id: knowledge-graph
+    name: Knowledge graph and RAG patterns
+    source: "Neo4j GenAI docs"
+    match: [graphrag, knowledge-graph, neo4j-genai]
+    subtopics:
+      - {id: graphrag-retrieval, name: "GraphRAG retrieval", match: [graph-rag, vector-plus-graph, retrieval-cypher]}
+      - {id: entity-extraction-loading, name: "Building a knowledge graph from text", match: [entity-extraction, kg-builder, schema-guided-extraction]}
+  - id: cypher-functions
+    name: Functions
+    source: "Cypher Manual/Functions"
+    match: [scalar-functions, string-functions, aggregating-functions]
+    subtopics:
+      - {id: string-and-list-functions, name: "String and list functions", match: [substring, split-function, reduce-function]}
+      - {id: path-and-graph-functions, name: "Path and graph functions", match: [nodes-function, relationships-function, elementid]}
+  - id: transactions-locking
+    name: Transactions and locking
+    source: "Operations Manual/Transaction management"
+    match: [acid-transactions, lock-contention, deadlock]
+    subtopics:
+      - {id: transaction-isolation-locks, name: "Isolation and locks", match: [read-committed, write-locks, lock-ordering]}
+      - {id: transaction-timeouts-limits, name: "Transaction timeouts and limits", match: [transaction-timeout, max-concurrent-transactions, terminate-transaction]}
+  - id: changes-cdc
+    name: Change data capture
+    source: "Neo4j CDC and Kafka connector docs"
+    match: [neo4j-cdc, change-streams, kafka-connector]
+    subtopics:
+      - {id: cdc-enable-and-consume, name: "Enabling and consuming CDC", match: [cdc-enable, db-cdc-query, change-identifier]}
+      - {id: kafka-connector-sink-source, name: "Neo4j Kafka connector", match: [kafka-connect-neo4j, sink-cypher, source-query]}
+  - id: testing-dev
+    name: Development and testing
+    source: "Developer guides"
+    match: [testcontainers-neo4j, test-data, neo4j-test-harness]
+    subtopics:
+      - {id: testing-with-containers, name: "Testing with Testcontainers", match: [testcontainers, test-isolation, test-fixture-graph]}
+      - {id: seed-data-and-fixtures, name: "Seed data and fixtures", match: [cypher-seed-script, graph-fixtures, dump-fixtures]}
+  - id: schema-evolution
+    name: Schema evolution and migration
+    source: "Operational practice"
+    match: [graph-migrations, relabel-nodes, refactor-model]
+    subtopics:
+      - {id: label-and-property-migrations, name: "Relabelling and property migrations", match: [add-label, rename-property, batch-migrate]}
+      - {id: migration-tooling, name: "Migration tooling", match: [neo4j-migrations, versioned-cypher, schema-as-code]}
+  - id: hardware-os
+    name: Hardware and OS
+    source: "Operations Manual/Performance/Linux tuning"
+    match: [neo4j-hardware, file-descriptors, transparent-huge-pages]
+    subtopics:
+      - {id: linux-tuning-neo4j, name: "Linux tuning", match: [nofile-limit, swappiness, filesystem-choice]}
+      - {id: capacity-planning, name: "Capacity planning", match: [store-size-estimate, ram-for-pagecache, core-count]}
+  - id: procedures-udf
+    name: Procedures and extensions
+    source: "Operations Manual/Extending Neo4j"
+    match: [user-defined-procedures, java-extension, sandboxing]
+    subtopics:
+      - {id: custom-procedures, name: "Custom procedures and functions", match: [procedure-jar, unrestricted-procedures, allowlist]}
+      - {id: built-in-db-procedures, name: "Built-in db.* procedures", match: [db-labels, db-schema-visualization, dbms-components]}
+  - id: aura-cloud
+    name: Neo4j Aura and cloud
+    source: "Neo4j Aura docs"
+    match: [neo4j-aura, aura-instance, aura-import]
+    subtopics:
+      - {id: aura-provisioning, name: "Provisioning Aura instances", match: [aura-professional, aura-free, aura-console]}
+      - {id: aura-limits-and-differences, name: "Aura vs self-managed differences", match: [aura-restrictions, aura-snapshots, aura-api]}
+  - id: bloom-viz
+    name: Visualisation
+    source: "Neo4j tools documentation"
+    match: [neo4j-browser, neo4j-bloom, neodash]
+    subtopics:
+      - {id: browser-and-workspace, name: "Neo4j Browser and Workspace", match: [neo4j-browser-usage, browser-params, query-saved]}
+      - {id: dashboards-neodash, name: "Dashboards", match: [neodash, graph-dashboards, read-only-dashboard]}
+  - id: troubleshooting
+    name: Troubleshooting
+    source: "Operations Manual/Troubleshooting"
+    match: [neo4j-troubleshooting, out-of-memory, bolt-connection-refused]
+    subtopics:
+      - {id: out-of-memory-diagnosis, name: "Out-of-memory diagnosis", match: [heap-dump, gc-log, query-memory-limit]}
+      - {id: connection-and-startup-problems, name: "Connection and startup problems", match: [port-7687, auth-failed, lock-file]}
+  - id: data-quality
+    name: Data quality and deduplication
+    source: "Operational practice"
+    match: [duplicate-nodes, merge-nodes, data-profiling]
+    subtopics:
+      - {id: finding-duplicate-nodes, name: "Finding duplicate nodes", match: [find-duplicates, group-by-key, fuzzy-match]}
+      - {id: merging-nodes-apoc, name: "Merging nodes", match: [apoc-refactor-mergenodes, merge-properties, relationship-rewire]}
+  - id: rolling-ops
+    name: Rolling operations
+    source: "Operations Manual/Clustering/Servers"
+    match: [rolling-upgrade-cluster, server-drain, cordon-server]
+    subtopics:
+      - {id: cluster-server-lifecycle, name: "Server lifecycle in a cluster", match: [enable-server, deallocate-database, drop-server]}
+      - {id: rolling-upgrade-cluster-steps, name: "Rolling restart and upgrade", match: [rolling-restart, leader-switch, cordon]}

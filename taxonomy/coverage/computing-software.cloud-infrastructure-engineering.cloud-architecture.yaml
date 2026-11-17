@@ -1,0 +1,1027 @@
+# Canonical coverage spec: vendor-neutral cloud architecture and cloud cost optimisation (FinOps).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (FinOps Framework domains/capabilities and
+# the FinOps Certified Practitioner outline; the AWS/Azure/Google Well-Architected pillars and
+# their best-practice areas, read for their vendor-neutral content; TOGAF ADM phases; the NIST
+# and Open Group cloud reference models; Cloud Adoption Framework phases and landing-zone design
+# areas; the Azure Architecture Center cloud design pattern catalogue; the Twelve-Factor App),
+# not from what the library already has. Provider-specific how-to lives in the aws/azure/
+# google-cloud products; this subject is the discipline that sits above them.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (FinOps capability
+# pages and their "functional activities", Well-Architected best-practice question areas, TOGAF
+# phase steps, CAF methodology sections, the pattern catalogue's entries, each twelve-factor).
+subject: cloud-architecture
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [cloud-architecture, cloud-cost-optimisation]
+sources:
+  - "FinOps Framework (finops.org/framework) - Principles; Personas (core and allied); Phases (Inform, Optimize, Operate); Maturity (Crawl, Walk, Run); Domains - Understand Usage & Cost (Data Ingestion, Allocation, Reporting & Analytics, Anomaly Management), Quantify Business Value (Planning & Estimating, Forecasting, Budgeting, Benchmarking, Unit Economics), Optimize Usage & Cost (Architecting for Cloud, Workload Optimization, Rate Optimization, Licensing & SaaS, Cloud Sustainability), Manage the FinOps Practice (FinOps Practice Operations, Policy & Governance, FinOps Assessment, FinOps Tools & Services, FinOps Education & Enablement, Invoicing & Chargeback, Onboarding Workloads, Intersecting Disciplines); subtopics from each capability page's functional activities and KPIs"
+  - "FinOps Certified Practitioner exam outline (FinOps Foundation) - FinOps principles, teams and personas, lifecycle, capabilities, cloud billing terminology (on-demand, amortized, blended/unblended, credits), maturity model, FOCUS specification (focus.finops.org columns and datasets)"
+  - "AWS Well-Architected Framework pillars (Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability) and their best-practice areas; Azure Well-Architected Framework pillar checklists; Google Cloud Architecture Framework pillars - read for vendor-neutral design principles and questions"
+  - "TOGAF Standard 10th Edition - ADM: Preliminary, A Architecture Vision, B Business Architecture, C Information Systems Architectures (Data, Application), D Technology Architecture, E Opportunities & Solutions, F Migration Planning, G Implementation Governance, H Architecture Change Management, Requirements Management; Architecture Principles, Architecture Contracts, Architecture Compliance; TOGAF Series Guide - Using TOGAF for cloud ecosystems"
+  - "The Open Group Cloud Ecosystem Reference Model and NIST SP 800-145 / SP 500-292 Cloud Computing Reference Architecture - essential characteristics, service models, deployment models, actors (consumer, provider, broker, auditor, carrier)"
+  - "Cloud Adoption Framework (Microsoft CAF methodologies Strategy, Plan, Ready, Adopt, Govern, Secure, Manage; AWS CAF perspectives; Google Cloud Adoption Framework) - landing-zone design areas (billing/tenant, identity, resource organization, network topology and connectivity, security, management, governance, platform automation)"
+  - "Azure Architecture Center - Cloud design patterns catalogue (ambassador ... valet key) and architecture styles; AWS Prescriptive Guidance - cloud design patterns"
+  - "The Twelve-Factor App (12factor.net) - I Codebase ... XII Admin processes"
+topics:
+  # ===================== Foundations (NIST SP 800-145 / 500-292, Open Group CERM)
+  - id: service-models
+    name: Cloud service models (IaaS / PaaS / SaaS / FaaS)
+    source: NIST SP 800-145 service models; Open Group CERM
+    match: [service-models, iaas-paas-saas]
+    subtopics:
+      - {id: sm-selection, name: Choosing the service model per workload, match: [service-model-selection]}
+      - {id: sm-shared-responsibility, name: Shared responsibility model by service model, match: [shared-responsibility-model]}
+      - {id: sm-serverless, name: Serverless / FaaS suitability assessment, match: [serverless-suitability]}
+      - {id: sm-managed-vs-self, name: Managed service vs self-managed trade-off, match: [managed-vs-self-managed]}
+      - {id: sm-paas-constraints, name: PaaS platform constraints and escape hatches, match: [paas-constraints]}
+      - {id: sm-saas-due-diligence, name: SaaS adoption due diligence and integration, match: [saas-due-diligence]}
+      - {id: sm-caas, name: Container platform choice (serverless containers vs managed Kubernetes), match: [caas-selection]}
+      - {id: sm-nist-characteristics, name: Assessing an offering against NIST essential characteristics, match: [nist-essential-characteristics]}
+      - {id: sm-service-catalogue, name: Internal platform service catalogue mapped to service models, match: [platform-service-catalogue]}
+  - id: deployment-models
+    name: Cloud deployment models
+    source: NIST SP 800-145 deployment models
+    match: [deployment-models]
+    subtopics:
+      - {id: dm-hybrid, name: Hybrid cloud architecture, match: [hybrid-cloud]}
+      - {id: dm-multicloud, name: Multi-cloud strategy and its costs, match: [multi-cloud-strategy]}
+      - {id: dm-private, name: Private cloud / on-premises repatriation decision, match: [cloud-repatriation]}
+      - {id: dm-sovereign, name: Sovereign and regulated cloud, match: [sovereign-cloud]}
+      - {id: dm-edge, name: Edge and distributed cloud placement, match: [edge-computing-placement]}
+      - {id: dm-community, name: Community cloud for consortiums and shared-regulation groups, match: [community-cloud]}
+      - {id: dm-workload-placement, name: Workload placement decision criteria, match: [workload-placement-criteria]}
+      - {id: dm-hybrid-management, name: Hybrid management plane (Arc / Anthos / Outposts), match: [hybrid-management-plane]}
+      - {id: dm-dedicated, name: Dedicated hosts and isolated tenancy, match: [dedicated-tenancy]}
+  - id: ecosystem-roles
+    name: Cloud ecosystem actors and provider relationships
+    source: NIST SP 500-292 actors; Open Group CERM
+    match: [cloud-ecosystem]
+    subtopics:
+      - {id: er-provider-selection, name: Cloud provider evaluation and selection, match: [cloud-provider-selection]}
+      - {id: er-lockin, name: Vendor lock-in assessment and exit strategy, match: [cloud-exit-strategy]}
+      - {id: er-sla, name: Composite SLA calculation and service credits, match: [composite-sla]}
+      - {id: er-broker, name: Cloud broker / MSP engagement model, match: [cloud-broker]}
+      - {id: er-auditor, name: Third-party assurance reports (SOC 2 / ISO 27001 / CSA STAR), match: [cloud-assurance-reports]}
+      - {id: er-contract, name: Cloud contract and data processing agreement review, match: [cloud-contract-review]}
+      - {id: er-concentration, name: Cloud concentration risk for regulated firms (DORA / outsourcing rules), match: [concentration-risk]}
+      - {id: er-carrier, name: Network carrier and colocation selection, match: [cloud-carrier]}
+      - {id: er-provider-health, name: Consuming provider health and service events, match: [provider-health-events]}
+
+  # ===================== TOGAF ADM applied to cloud
+  - id: architecture-principles
+    name: Preliminary phase - architecture principles and governance setup
+    source: TOGAF Preliminary Phase; Architecture Principles chapter
+    match: [architecture-principles, togaf]
+    subtopics:
+      - {id: ap-principles, name: Writing cloud architecture principles (statement/rationale/implications), match: [cloud-architecture-principles]}
+      - {id: ap-adr, name: Architecture decision records, match: [architecture-decision-record]}
+      - {id: ap-repository, name: Architecture repository and reference library, match: [architecture-repository]}
+      - {id: ap-tailoring, name: Tailoring the ADM for agile cloud delivery, match: [adm-tailoring]}
+      - {id: ap-org-model, name: Enterprise architecture organisation model and team, match: [ea-organisation-model]}
+      - {id: ap-governance-framework, name: Architecture governance framework setup, match: [architecture-governance-framework]}
+      - {id: ap-viewpoints, name: Content metamodel with viewpoints and views, match: [architecture-viewpoints]}
+      - {id: ap-tools, name: EA tooling selection, match: [ea-tooling]}
+      - {id: ap-maturity, name: Architecture capability maturity assessment, match: [architecture-maturity-model]}
+  - id: architecture-vision
+    name: Phase A - Architecture vision
+    source: TOGAF Phase A
+    match: [architecture-vision]
+    subtopics:
+      - {id: av-stakeholders, name: Stakeholder map and concerns, match: [stakeholder-map]}
+      - {id: av-drivers, name: Business drivers and cloud business outcomes, match: [cloud-business-outcomes]}
+      - {id: av-sow, name: Statement of architecture work, match: [statement-of-architecture-work]}
+      - {id: av-nfr, name: Eliciting non-functional requirements, match: [non-functional-requirements]}
+      - {id: av-readiness, name: Business transformation readiness assessment, match: [transformation-readiness]}
+      - {id: av-scope, name: Defining architecture scope (breadth / depth / time / domains), match: [architecture-scope-definition]}
+      - {id: av-kpis, name: Value propositions and KPIs for the target architecture, match: [architecture-kpis]}
+      - {id: av-solution-concept, name: Solution concept diagram, match: [solution-concept-diagram]}
+      - {id: av-communication, name: Architecture communications plan, match: [architecture-communication-plan]}
+  - id: business-architecture
+    name: Phase B - Business architecture for cloud
+    source: TOGAF Phase B
+    match: [business-architecture]
+    subtopics:
+      - {id: ba-capability, name: Business capability mapping, match: [capability-mapping]}
+      - {id: ba-value-stream, name: Value stream mapping to workloads, match: [value-stream-mapping]}
+      - {id: ba-business-case, name: Cloud business case and TCO, match: [cloud-business-case]}
+      - {id: ba-bia, name: Business impact analysis and criticality tiers, match: [business-impact-analysis]}
+      - {id: ba-org-map, name: Organisation map and actor / role catalogue, match: [organisation-map]}
+      - {id: ba-scenarios, name: Business scenarios technique, match: [business-scenarios]}
+      - {id: ba-bpmn, name: Business process modelling (BPMN), match: [bpmn]}
+      - {id: ba-information-map, name: Business information map and conceptual data model, match: [information-map]}
+      - {id: ba-heatmap, name: Capability heat-mapping for investment decisions, match: [capability-heatmap]}
+  - id: information-systems-architecture
+    name: Phase C - Data and application architecture
+    source: TOGAF Phase C
+    match: [information-systems-architecture]
+    subtopics:
+      - {id: isa-app-portfolio, name: Application portfolio rationalisation, match: [application-rationalisation]}
+      - {id: isa-dependency, name: Application dependency mapping, match: [dependency-mapping]}
+      - {id: isa-data-classification, name: Data classification scheme, match: [data-classification]}
+      - {id: isa-data-residency, name: Data residency and sovereignty design, match: [data-residency]}
+      - {id: isa-integration, name: Integration architecture (sync vs async), match: [integration-architecture]}
+      - {id: isa-logical-data, name: Logical data model and data entity catalogue, match: [logical-data-model]}
+      - {id: isa-data-lifecycle, name: Data lifecycle and retention design, match: [data-lifecycle]}
+      - {id: isa-api-first, name: API strategy and contract-first design, match: [api-first-design]}
+      - {id: isa-mdm, name: Master data management architecture, match: [master-data-management]}
+      - {id: isa-interface-catalogue, name: Application communication diagram and interface catalogue, match: [interface-catalogue]}
+  - id: technology-architecture
+    name: Phase D - Technology architecture
+    source: TOGAF Phase D
+    match: [technology-architecture]
+    subtopics:
+      - {id: ta-reference-architecture, name: Writing a reference architecture, match: [reference-architecture]}
+      - {id: ta-standards, name: Technology standards and service catalogue, match: [technology-radar]}
+      - {id: ta-building-blocks, name: Architecture and solution building blocks, match: [building-blocks]}
+      - {id: ta-diagrams, name: Architecture diagrams (C4 views), match: [c4-model]}
+      - {id: ta-portfolio, name: Technology portfolio catalogue and platform decomposition, match: [technology-portfolio]}
+      - {id: ta-environments, name: Environments and locations diagram, match: [environments-and-locations]}
+      - {id: ta-approved-patterns, name: Approved patterns and paved roads, match: [approved-patterns]}
+      - {id: ta-idp, name: Internal developer platform architecture, match: [internal-developer-platform]}
+      - {id: ta-iac-modules, name: Infrastructure-as-code standards and module catalogue, match: [iac-module-catalogue]}
+  - id: opportunities-and-solutions
+    name: Phase E and F - Opportunities and migration planning
+    source: TOGAF Phases E and F
+    match: [migration-planning, transition-architecture]
+    subtopics:
+      - {id: os-gap, name: Gap analysis baseline vs target, match: [gap-analysis]}
+      - {id: os-roadmap, name: Architecture roadmap and transition states, match: [architecture-roadmap]}
+      - {id: os-work-packages, name: Work packages and dependency sequencing, match: [work-packages]}
+      - {id: os-risk, name: Architecture risk assessment, match: [architecture-risk-assessment]}
+      - {id: os-build-buy, name: Build vs buy vs reuse decision, match: [build-buy-reuse]}
+      - {id: os-interop, name: Interoperability requirements, match: [interoperability-requirements]}
+      - {id: os-factors, name: Implementation factor assessment and deduction matrix, match: [implementation-factor-matrix]}
+      - {id: os-prioritise, name: Prioritising projects by value and risk, match: [project-prioritisation]}
+      - {id: os-migration-plan, name: Implementation and migration plan, match: [implementation-migration-plan]}
+  - id: implementation-governance
+    name: Phase G - Implementation governance
+    source: TOGAF Phase G; Architecture Compliance; Architecture Contracts
+    match: [implementation-governance]
+    subtopics:
+      - {id: ig-arb, name: Architecture review board operation, match: [architecture-review-board]}
+      - {id: ig-compliance, name: Architecture compliance review, match: [architecture-compliance-review]}
+      - {id: ig-contracts, name: Architecture contracts, match: [architecture-contract]}
+      - {id: ig-dispensation, name: Waivers and dispensations, match: [architecture-waiver]}
+      - {id: ig-gates, name: Design review gates in the delivery lifecycle, match: [design-review-gates]}
+      - {id: ig-escalation, name: Architecture deviation escalation, match: [architecture-escalation]}
+      - {id: ig-conformance, name: Conformance levels and conformance assessment, match: [architecture-conformance]}
+      - {id: ig-pir, name: Post-implementation review, match: [post-implementation-review]}
+      - {id: ig-compliance-as-code, name: Automated architecture compliance-as-code, match: [compliance-as-code]}
+  - id: architecture-change-management
+    name: Phase H and requirements management
+    source: TOGAF Phase H; Requirements Management
+    match: [architecture-change-management]
+    subtopics:
+      - {id: acm-tech-debt, name: Architecture technical-debt register, match: [architecture-debt]}
+      - {id: acm-fitness, name: Architecture fitness functions, match: [fitness-functions]}
+      - {id: acm-lifecycle, name: Technology lifecycle and end-of-support tracking, match: [end-of-life-tracking]}
+      - {id: acm-requirements, name: Requirements traceability, match: [requirements-traceability]}
+      - {id: acm-classify, name: Classifying architecture change (simplification / incremental / re-architecting), match: [architecture-change-classification]}
+      - {id: acm-benefits, name: Benefits realisation tracking, match: [benefits-realisation-tracking]}
+      - {id: acm-tech-watch, name: Technology watch and change drivers monitoring, match: [technology-watch]}
+      - {id: acm-req-impact, name: Requirements impact assessment, match: [requirements-impact-assessment]}
+      - {id: acm-evolutionary, name: Evolutionary architecture and reversible decisions, match: [reversible-decisions]}
+
+  # ===================== Cloud adoption and migration (CAF)
+  - id: cloud-strategy
+    name: Cloud strategy and operating model
+    source: CAF Strategy and Plan methodologies; AWS CAF perspectives
+    match: [cloud-strategy]
+    subtopics:
+      - {id: cs-operating-model, name: Cloud operating model (centralised / federated), match: [cloud-operating-model]}
+      - {id: cs-ccoe, name: Cloud centre of excellence, match: [cloud-center-of-excellence]}
+      - {id: cs-skills, name: Cloud skills readiness plan, match: [cloud-skills-plan]}
+      - {id: cs-adoption-plan, name: Cloud adoption plan and digital estate, match: [cloud-adoption-plan]}
+      - {id: cs-motivations, name: Documenting cloud adoption motivations, match: [cloud-motivations]}
+      - {id: cs-first-project, name: Selecting the first adoption project, match: [first-cloud-project]}
+      - {id: cs-funding, name: Cloud funding and financial model, match: [cloud-funding-model]}
+      - {id: cs-raci, name: Organisational alignment and cloud RACI, match: [cloud-raci]}
+      - {id: cs-change, name: Organisational change management for cloud adoption, match: [cloud-change-management]}
+  - id: migration-assessment
+    name: Migration discovery and assessment
+    source: CAF Plan/Adopt - Migrate; AWS migration readiness assessment
+    match: [migration-assessment]
+    subtopics:
+      - {id: ma-discovery, name: Portfolio discovery and inventory, match: [portfolio-discovery]}
+      - {id: ma-7rs, name: 7 Rs disposition per application, match: [7-rs]}
+      - {id: ma-readiness, name: Migration readiness assessment, match: [migration-readiness-assessment]}
+      - {id: ma-sizing, name: Target sizing from utilisation data, match: [migration-sizing]}
+      - {id: ma-cost, name: Workload cost assessment per application, match: [workload-cost-assessment]}
+      - {id: ma-licence, name: Licence assessment before migration, match: [migration-license-assessment]}
+      - {id: ma-prioritise, name: Application migration prioritisation scoring, match: [migration-prioritisation]}
+      - {id: ma-blockers, name: Technical compatibility and migration blockers, match: [migration-blockers]}
+      - {id: ma-flows, name: Network dependency analysis from traffic flows, match: [network-flow-analysis]}
+  - id: migration-execution
+    name: Migration execution
+    source: CAF Adopt - Migrate; AWS migration lifecycle
+    match: [cloud-migration]
+    subtopics:
+      - {id: me-waves, name: Migration wave planning, match: [migration-waves]}
+      - {id: me-cutover, name: Cutover runbook and go/no-go, match: [cutover]}
+      - {id: me-data, name: Data migration strategy (offline / online / CDC), match: [data-migration-strategy]}
+      - {id: me-rollback, name: Migration rollback plan, match: [migration-rollback]}
+      - {id: me-hypercare, name: Hypercare and decommissioning the source, match: [hypercare]}
+      - {id: me-replication, name: Block-level server replication rehost, match: [server-replication]}
+      - {id: me-testing, name: Migration test plan and UAT, match: [migration-testing]}
+      - {id: me-dns, name: DNS and traffic cutover technique, match: [dns-cutover]}
+      - {id: me-factory, name: Migration factory operating model, match: [migration-factory]}
+      - {id: me-optimise, name: Post-migration optimisation, match: [post-migration-optimisation]}
+  - id: modernisation
+    name: Application modernisation
+    source: CAF Adopt - Innovate/Modernize; Azure Architecture Center modernization guidance
+    match: [modernisation]
+    subtopics:
+      - {id: mo-strangler, name: Strangler fig incremental migration, match: [strangler-fig]}
+      - {id: mo-containers, name: Replatforming to containers, match: [replatform-to-containers]}
+      - {id: mo-database, name: Database modernisation to managed engines, match: [database-modernisation]}
+      - {id: mo-decompose, name: Decomposing a monolith into services, match: [monolith-decomposition]}
+      - {id: mo-mainframe, name: Mainframe and legacy modernisation options, match: [mainframe-modernisation]}
+      - {id: mo-serverless, name: Refactoring to serverless, match: [serverless-refactoring]}
+      - {id: mo-cdc, name: Change data capture to liberate legacy data, match: [legacy-cdc]}
+      - {id: mo-facade, name: API facade over legacy systems, match: [legacy-api-facade]}
+      - {id: mo-batch, name: Modernising batch jobs, match: [batch-modernisation]}
+      - {id: mo-bba, name: Branch by abstraction during modernisation, match: [branch-by-abstraction]}
+
+  # ===================== Landing zone design areas (CAF Ready)
+  - id: landing-zone
+    name: Landing zone design
+    source: CAF Ready - landing zone design areas
+    match: [landing-zone]
+    subtopics:
+      - {id: lz-hierarchy, name: Resource hierarchy (accounts / subscriptions / projects), match: [resource-hierarchy]}
+      - {id: lz-vending, name: Account / subscription vending, match: [account-vending]}
+      - {id: lz-guardrails, name: Preventive and detective guardrails, match: [preventive-guardrails]}
+      - {id: lz-naming, name: Naming convention, match: [naming-convention]}
+      - {id: lz-platform-automation, name: Platform automation and landing-zone as code, match: [landing-zone-as-code]}
+      - {id: lz-environments, name: Environment separation strategy, match: [environment-strategy]}
+      - {id: lz-billing, name: Billing and tenant design area, match: [billing-tenant-design]}
+      - {id: lz-sandbox, name: Sandbox accounts and their guardrails, match: [sandbox-accounts]}
+      - {id: lz-policy-inheritance, name: Policy hierarchy and inheritance, match: [policy-inheritance]}
+      - {id: lz-platform, name: Platform landing zone and shared services, match: [platform-landing-zone]}
+      - {id: lz-decommission, name: Account / subscription decommissioning, match: [account-decommissioning]}
+      - {id: lz-brownfield, name: Brownfield landing-zone transition, match: [brownfield-landing-zone]}
+  - id: identity-architecture
+    name: Identity and access architecture
+    source: CAF Ready identity design area; WAF Security pillar - identity and access management
+    match: [identity-architecture]
+    subtopics:
+      - {id: ia-federation, name: Workforce identity federation and SSO, match: [identity-federation]}
+      - {id: ia-workload, name: Workload identity without static keys, match: [workload-identity]}
+      - {id: ia-least-privilege, name: Least-privilege role design, match: [least-privilege]}
+      - {id: ia-break-glass, name: Break-glass emergency access, match: [break-glass]}
+      - {id: ia-pam, name: Just-in-time privileged access, match: [just-in-time-access]}
+      - {id: ia-abac, name: RBAC vs ABAC authorisation models, match: [abac-policy-design]}
+      - {id: ia-access-reviews, name: Access reviews and recertification, match: [access-reviews]}
+      - {id: ia-ciam, name: Customer identity (CIAM) architecture, match: [ciam]}
+      - {id: ia-cross-account, name: Cross-account and cross-tenant access, match: [cross-account-access]}
+      - {id: ia-conditional, name: MFA and conditional access policy, match: [conditional-access]}
+      - {id: ia-nhi, name: Non-human identity lifecycle, match: [non-human-identity]}
+  - id: network-topology
+    name: Network topology and connectivity
+    source: CAF Ready network design area; WAF Reliability foundations - network topology
+    match: [network-topology]
+    subtopics:
+      - {id: nt-ip-plan, name: IP address planning for cloud, match: [ip-address-planning]}
+      - {id: nt-hub-spoke, name: Hub-and-spoke vs transit mesh, match: [hub-and-spoke]}
+      - {id: nt-hybrid, name: Hybrid connectivity (VPN / dedicated interconnect), match: [hybrid-connectivity]}
+      - {id: nt-dns, name: Hybrid and private DNS architecture, match: [dns-architecture]}
+      - {id: nt-egress, name: Centralised egress and inspection, match: [egress-control]}
+      - {id: nt-private-endpoints, name: Private access to PaaS services, match: [private-endpoints]}
+      - {id: nt-nva, name: Firewall placement (NVA vs native firewall), match: [network-virtual-appliance]}
+      - {id: nt-lb, name: Load balancer selection and ingress architecture, match: [load-balancer-selection]}
+      - {id: nt-ipv6, name: IPv6 adoption in cloud networks, match: [ipv6-adoption]}
+      - {id: nt-inter-region, name: Inter-region connectivity, match: [inter-region-connectivity]}
+      - {id: nt-flow-logs, name: Network observability with flow logs, match: [flow-logs]}
+      - {id: nt-sdwan, name: SD-WAN and branch connectivity to cloud, match: [sd-wan]}
+  - id: management-and-monitoring
+    name: Management design area - logging and monitoring baseline
+    source: CAF Ready management design area; WAF Operational Excellence
+    match: [management-baseline]
+    subtopics:
+      - {id: mm-central-logging, name: Centralised log architecture and retention, match: [centralised-logging]}
+      - {id: mm-patching, name: Patch and image management strategy, match: [patch-management]}
+      - {id: mm-inventory, name: Asset inventory and CMDB from cloud APIs, match: [cloud-asset-inventory]}
+      - {id: mm-backup-policy, name: Backup policy baseline, match: [backup-policy]}
+      - {id: mm-alerting, name: Alerting strategy and actionable alerts, match: [alerting-strategy]}
+      - {id: mm-observability, name: Observability architecture (metrics / logs / traces), match: [observability-architecture]}
+      - {id: mm-drift, name: Configuration drift detection, match: [drift-detection]}
+      - {id: mm-config-mgmt, name: OS configuration management at scale, match: [configuration-management]}
+      - {id: mm-health-model, name: Workload health model, match: [health-model]}
+      - {id: mm-error-budgets, name: SLO alerting with error budgets, match: [error-budgets]}
+
+  # ===================== Well-Architected - Reliability
+  - id: reliability-foundations
+    name: Reliability foundations
+    source: WAF Reliability - foundations (quotas, network topology)
+    match: [reliability-foundations]
+    subtopics:
+      - {id: rf-quotas, name: Service quotas and limits management, match: [service-quotas]}
+      - {id: rf-availability-targets, name: Setting availability targets and SLOs per workload, match: [availability-targets]}
+      - {id: rf-failure-mode, name: Failure mode analysis (FMEA), match: [failure-mode-analysis]}
+      - {id: rf-dependencies, name: Dependency criticality and hard vs soft dependencies, match: [dependency-criticality]}
+      - {id: rf-redundancy, name: Redundancy design at every layer, match: [redundancy-design]}
+      - {id: rf-spof, name: Single point of failure analysis, match: [single-point-of-failure]}
+      - {id: rf-critical-flows, name: Identifying critical flows, match: [critical-flows]}
+      - {id: rf-self-healing, name: Self-healing and self-preservation, match: [self-healing]}
+  - id: distributed-systems-design
+    name: Workload architecture for distributed systems
+    source: WAF Reliability - workload architecture; distributed system interactions
+    match: [distributed-systems-design]
+    subtopics:
+      - {id: ds-timeouts-retries, name: Timeouts / retries with backoff and jitter, match: [retries-with-backoff]}
+      - {id: ds-idempotency, name: Idempotent operations, match: [idempotency]}
+      - {id: ds-loose-coupling, name: Loose coupling with queues and events, match: [loose-coupling]}
+      - {id: ds-graceful-degradation, name: Graceful degradation and load shedding, match: [graceful-degradation]}
+      - {id: ds-static-stability, name: Static stability, match: [static-stability]}
+      - {id: ds-consistency, name: Consistency model choice, match: [consistency-models]}
+      - {id: ds-backpressure, name: Backpressure and client-side throttling, match: [backpressure-design]}
+      - {id: ds-ordering, name: Clocks and ordering in distributed systems, match: [distributed-ordering]}
+      - {id: ds-delivery, name: Message delivery semantics (at-least-once / exactly-once), match: [delivery-semantics]}
+      - {id: ds-locks, name: Distributed locking and fencing tokens, match: [distributed-locks]}
+      - {id: ds-constant-work, name: Constant work and avoiding bimodal behaviour, match: [constant-work]}
+  - id: scalability
+    name: Adapting to demand
+    source: WAF Reliability - change management; Performance Efficiency
+    match: [scalability]
+    subtopics:
+      - {id: sc-autoscaling, name: Autoscaling policy design, match: [autoscaling-design]}
+      - {id: sc-capacity, name: Capacity planning, match: [capacity-planning]}
+      - {id: sc-load-test, name: Load and stress testing, match: [load-testing]}
+      - {id: sc-stateless, name: Stateless tier design and session externalisation, match: [stateless-design]}
+      - {id: sc-warmup, name: Scaling lag / pre-warming for events, match: [pre-scaling]}
+      - {id: sc-data-tier, name: Scaling the data tier, match: [data-tier-scaling]}
+      - {id: sc-queue, name: Queue-depth based scaling, match: [queue-based-scaling]}
+      - {id: sc-predictive, name: Scheduled and predictive scaling, match: [scheduled-scaling]}
+      - {id: sc-scale-units, name: Scale units and capacity ceilings, match: [scale-units]}
+      - {id: sc-cold-start, name: Cold-start mitigation, match: [cold-start]}
+  - id: fault-isolation
+    name: Fault isolation and blast-radius control
+    source: WAF Reliability - failure management (fault isolation)
+    match: [fault-isolation]
+    subtopics:
+      - {id: fi-az, name: Multi-AZ deployment design, match: [multi-az]}
+      - {id: fi-cells, name: Cell-based architecture, match: [cell-based-architecture]}
+      - {id: fi-shuffle, name: Shuffle sharding, match: [shuffle-sharding]}
+      - {id: fi-multi-region, name: Multi-region active-active / active-passive, match: [multi-region]}
+      - {id: fi-zonal-shift, name: Zonal shift and AZ evacuation, match: [zonal-shift]}
+      - {id: fi-planes, name: Control plane vs data plane separation, match: [control-plane-data-plane]}
+      - {id: fi-regional, name: Regional independence and avoiding global dependencies, match: [regional-independence]}
+      - {id: fi-noisy, name: Noisy neighbour isolation, match: [noisy-neighbour-isolation]}
+      - {id: fi-waves, name: Deployment waves to limit blast radius, match: [deployment-waves]}
+  - id: resilience-testing
+    name: Testing reliability
+    source: WAF Reliability - test reliability
+    match: [resilience-testing]
+    subtopics:
+      - {id: rt-chaos, name: Chaos engineering experiments, match: [chaos-engineering]}
+      - {id: rt-gameday, name: Game days, match: [game-day]}
+      - {id: rt-dr-test, name: DR failover test, match: [dr-drill]}
+      - {id: rt-backup-restore-test, name: Backup restore verification, match: [restore-testing]}
+      - {id: rt-tools, name: Fault injection tooling (FIS / Chaos Studio / Chaos Mesh), match: [fault-injection]}
+      - {id: rt-hypothesis, name: Steady-state hypothesis and stop conditions, match: [steady-state-hypothesis]}
+      - {id: rt-dependency, name: Dependency failure testing, match: [dependency-failure-testing]}
+      - {id: rt-continuous, name: Continuous resilience testing in CI/CD, match: [continuous-resilience]}
+      - {id: rt-az, name: Availability-zone failure simulation, match: [az-failure-simulation]}
+  - id: disaster-recovery
+    name: Disaster recovery strategy
+    source: WAF Reliability - plan for DR; AWS DR whitepaper
+    match: [disaster-recovery]
+    subtopics:
+      - {id: dr-rto-rpo, name: Setting RTO and RPO, match: [rto-rpo]}
+      - {id: dr-backup-restore, name: Backup and restore strategy, match: [backup-and-restore]}
+      - {id: dr-pilot-light, name: Pilot light, match: [pilot-light]}
+      - {id: dr-warm-standby, name: Warm standby, match: [warm-standby]}
+      - {id: dr-ransomware, name: Ransomware-resilient backups, match: [immutable-backups]}
+      - {id: dr-active-active, name: Multi-site active-active DR, match: [multi-site-active-active]}
+      - {id: dr-failback, name: DR runbook and failback, match: [failback]}
+      - {id: dr-replication, name: Cross-region data replication choices, match: [cross-region-replication]}
+      - {id: dr-dependencies, name: DR for shared dependencies (DNS / identity / CI/CD), match: [dr-dependencies]}
+      - {id: dr-tiering, name: DR tiering and cost trade-off, match: [dr-tiering]}
+      - {id: dr-ire, name: Isolated recovery environment for cyber recovery, match: [isolated-recovery-environment]}
+
+  # ===================== Well-Architected - Security
+  - id: security-foundations
+    name: Security foundations and governance
+    source: WAF Security - security foundations
+    match: [cloud-security-architecture]
+    subtopics:
+      - {id: sf-threat-model, name: Threat modelling a cloud workload, match: [threat-modelling]}
+      - {id: sf-zero-trust, name: Zero trust architecture, match: [zero-trust]}
+      - {id: sf-compliance-mapping, name: Mapping controls to compliance frameworks, match: [compliance-mapping]}
+      - {id: sf-cspm, name: Cloud security posture management, match: [cspm]}
+      - {id: sf-security-baseline, name: Security baseline benchmarks (CIS), match: [cis-benchmarks]}
+      - {id: sf-governance, name: Security governance and accountability, match: [security-governance]}
+      - {id: sf-did, name: Defence in depth layering, match: [defense-in-depth]}
+      - {id: sf-design-review, name: Security design review for workloads, match: [security-design-review]}
+      - {id: sf-asm, name: Attack surface management, match: [attack-surface-management]}
+      - {id: sf-secure-default, name: Secure-by-default guardrails for developers, match: [secure-by-default]}
+  - id: data-protection
+    name: Data protection
+    source: WAF Security - data protection
+    match: [data-protection]
+    subtopics:
+      - {id: dp-key-mgmt, name: Key management and BYOK / HYOK, match: [key-management]}
+      - {id: dp-in-transit, name: Encryption in transit and certificate management, match: [encryption-in-transit]}
+      - {id: dp-secrets, name: Secrets management architecture, match: [secrets-management]}
+      - {id: dp-dlp, name: Data loss prevention and data perimeter, match: [data-perimeter]}
+      - {id: dp-at-rest, name: Encryption at rest design, match: [encryption-at-rest]}
+      - {id: dp-masking, name: Tokenisation and data masking, match: [data-masking]}
+      - {id: dp-confidential, name: Confidential computing, match: [confidential-computing]}
+      - {id: dp-discovery, name: Sensitive data discovery, match: [sensitive-data-discovery]}
+      - {id: dp-shred, name: Key rotation and crypto-shredding, match: [crypto-shredding]}
+      - {id: dp-pqc, name: Post-quantum cryptography readiness, match: [post-quantum-readiness]}
+  - id: infrastructure-protection
+    name: Infrastructure and application protection
+    source: WAF Security - infrastructure protection; application security
+    match: [infrastructure-protection]
+    subtopics:
+      - {id: ip-segmentation, name: Network segmentation and micro-segmentation, match: [network-segmentation]}
+      - {id: ip-waf-ddos, name: Edge protection with WAF and DDoS mitigation, match: [ddos-protection]}
+      - {id: ip-supply-chain, name: Image and software supply chain hardening, match: [image-hardening]}
+      - {id: ip-vuln-mgmt, name: Vulnerability management in cloud, match: [vulnerability-management]}
+      - {id: ip-runtime, name: Container and Kubernetes runtime security, match: [runtime-security]}
+      - {id: ip-cwpp, name: Cloud workload protection platform, match: [cwpp]}
+      - {id: ip-api, name: API security (OWASP API Top 10), match: [api-security]}
+      - {id: ip-bastionless, name: Admin access without bastion hosts, match: [bastionless-access]}
+      - {id: ip-signing, name: SBOM and artefact signing, match: [artifact-signing]}
+      - {id: ip-iac-scan, name: IaC security scanning, match: [iac-scanning]}
+  - id: detection-and-response
+    name: Detection and incident response
+    source: WAF Security - detection; incident response
+    match: [detection-and-response]
+    subtopics:
+      - {id: dr-threat-detection, name: Threat detection and SIEM integration, match: [threat-detection]}
+      - {id: dr-ir-playbook, name: Cloud incident response playbook, match: [cloud-incident-response]}
+      - {id: dr-forensics, name: Cloud forensics and evidence capture, match: [cloud-forensics]}
+      - {id: dr-audit-trail, name: Tamper-evident audit trail, match: [audit-logging]}
+      - {id: dr-cred-compromise, name: Leaked credential response, match: [credential-compromise-response]}
+      - {id: dr-soar, name: Automated security response (SOAR), match: [soar]}
+      - {id: dr-tabletop, name: Incident response tabletop exercises, match: [tabletop-exercise]}
+      - {id: dr-log-coverage, name: Security log source coverage, match: [security-log-coverage]}
+      - {id: dr-detection-as-code, name: Detection rules as code, match: [detection-as-code]}
+
+  # ===================== Well-Architected - Performance efficiency
+  - id: compute-selection
+    name: Compute architecture selection
+    source: WAF Performance Efficiency - compute and hardware
+    match: [compute-selection]
+    subtopics:
+      - {id: cse-vm-container-serverless, name: VM vs container vs serverless decision, match: [vm-vs-container-vs-serverless]}
+      - {id: cse-instance-family, name: Instance family and processor architecture choice, match: [instance-family-selection]}
+      - {id: cse-gpu, name: Accelerator / GPU capacity planning, match: [gpu-capacity]}
+      - {id: cse-batch, name: Batch and HPC architecture, match: [batch-architecture]}
+      - {id: cse-burstable, name: Burstable instances and CPU credits, match: [cpu-credits]}
+      - {id: cse-arm, name: Migrating workloads to ARM processors, match: [arm64-migration]}
+      - {id: cse-serverless-containers, name: Serverless container platforms, match: [serverless-containers]}
+      - {id: cse-placement, name: Placement groups and HPC interconnect, match: [placement-groups]}
+      - {id: cse-instance-storage, name: Instance (ephemeral) storage vs network storage, match: [instance-storage]}
+  - id: storage-selection
+    name: Storage architecture selection
+    source: WAF Performance Efficiency - data management
+    match: [storage-selection]
+    subtopics:
+      - {id: ss-block-file-object, name: Block vs file vs object storage, match: [block-file-object]}
+      - {id: ss-tiers, name: Storage classes and access tiers, match: [storage-tiers]}
+      - {id: ss-iops, name: IOPS and throughput sizing, match: [iops-sizing]}
+      - {id: ss-data-lake, name: Data lake storage layout, match: [data-lake-layout]}
+      - {id: ss-file-shares, name: Managed file share selection (NFS / SMB), match: [managed-file-shares]}
+      - {id: ss-redundancy, name: Storage redundancy options (zonal / regional / geo), match: [storage-redundancy]}
+      - {id: ss-object-keys, name: Object storage key design and request rates, match: [object-key-design]}
+      - {id: ss-archive, name: Archive storage and retrieval planning, match: [archive-storage]}
+      - {id: ss-bulk, name: Bulk data transfer (appliances / online transfer), match: [bulk-data-transfer]}
+  - id: database-selection
+    name: Database architecture selection
+    source: WAF Performance Efficiency - data management; Azure Architecture Center data store guide
+    match: [database-selection]
+    subtopics:
+      - {id: dbs-relational-nosql, name: Relational vs NoSQL data store choice, match: [relational-vs-nosql]}
+      - {id: dbs-read-replicas, name: Read replicas and read scaling, match: [read-replicas]}
+      - {id: dbs-sharding, name: Sharding / partitioning strategy, match: [sharding]}
+      - {id: dbs-polyglot, name: Polyglot persistence, match: [polyglot-persistence]}
+      - {id: dbs-ha, name: Database high availability configuration, match: [database-high-availability]}
+      - {id: dbs-global, name: Globally distributed databases, match: [globally-distributed-database]}
+      - {id: dbs-serverless, name: Serverless databases, match: [serverless-database]}
+      - {id: dbs-pooling, name: Connection pooling and database proxies, match: [connection-pooling]}
+      - {id: dbs-search, name: Search and analytics store selection, match: [search-store-selection]}
+      - {id: dbs-tsdb, name: Time-series and specialised data stores, match: [time-series-database]}
+  - id: caching-and-delivery
+    name: Caching and content delivery
+    source: WAF Performance Efficiency - networking and content delivery
+    match: [caching-strategy]
+    subtopics:
+      - {id: cd-cdn, name: CDN architecture, match: [cdn-architecture]}
+      - {id: cd-cache-invalidation, name: Cache invalidation and TTL design, match: [cache-invalidation]}
+      - {id: cd-global-routing, name: Global traffic routing (latency / geo), match: [global-traffic-routing]}
+      - {id: cd-edge-compute, name: Edge functions, match: [edge-functions]}
+      - {id: cd-distributed-cache, name: In-memory distributed cache design, match: [distributed-cache]}
+      - {id: cd-hit-ratio, name: CDN cache keys and hit ratio, match: [cache-hit-ratio]}
+      - {id: cd-origin-shield, name: Origin shielding and origin protection, match: [origin-protection]}
+      - {id: cd-stampede, name: Cache stampede prevention, match: [stampede-protection]}
+      - {id: cd-http, name: HTTP caching headers, match: [http-caching]}
+  - id: performance-engineering
+    name: Performance process and culture
+    source: WAF Performance Efficiency - process and culture
+    match: [performance-engineering]
+    subtopics:
+      - {id: pe-budgets, name: Latency budgets per tier, match: [latency-budget]}
+      - {id: pe-benchmark, name: Benchmarking cloud services, match: [performance-benchmarking]}
+      - {id: pe-regression, name: Performance regression detection in CI, match: [performance-regression]}
+      - {id: pe-profiling, name: Continuous profiling, match: [continuous-profiling]}
+      - {id: pe-tracing, name: Distributed tracing for latency analysis, match: [distributed-tracing]}
+      - {id: pe-tail, name: Tail latency and percentile analysis, match: [tail-latency-analysis]}
+      - {id: pe-targets, name: Performance targets and SLIs, match: [performance-targets]}
+      - {id: pe-network, name: Network latency optimisation, match: [network-latency-optimisation]}
+      - {id: pe-query, name: Database query performance review, match: [query-performance]}
+
+  # ===================== Well-Architected - Operational excellence
+  - id: operational-excellence
+    name: Operational excellence
+    source: WAF Operational Excellence - organization, prepare, operate, evolve
+    match: [operational-excellence]
+    subtopics:
+      - {id: oe-orr, name: Operational readiness review, match: [operational-readiness-review]}
+      - {id: oe-runbooks, name: Runbooks and playbooks, match: [runbooks]}
+      - {id: oe-deploy-safety, name: Safe deployment practices (progressive exposure), match: [safe-deployment]}
+      - {id: oe-ownership, name: Workload ownership and service catalogue, match: [service-ownership]}
+      - {id: oe-review, name: Well-Architected review process, match: [well-architected-review]}
+      - {id: oe-pir, name: Blameless post-incident reviews, match: [post-incident-review]}
+      - {id: oe-incident, name: Incident management process, match: [incident-management]}
+      - {id: oe-iac, name: Infrastructure as code practice, match: [infrastructure-as-code-practice]}
+      - {id: oe-change, name: Change management and change freezes, match: [change-management]}
+      - {id: oe-toil, name: Toil measurement and reduction, match: [toil-reduction]}
+      - {id: oe-dora, name: Delivery performance metrics (DORA), match: [dora-metrics]}
+
+  # ===================== Well-Architected - Sustainability
+  - id: sustainability
+    name: Sustainability pillar
+    source: WAF Sustainability pillar; FinOps Cloud Sustainability capability
+    match: [cloud-sustainability]
+    subtopics:
+      - {id: su-region, name: Low-carbon region selection, match: [carbon-aware-region-selection]}
+      - {id: su-footprint, name: Carbon footprint reporting from provider tools, match: [carbon-footprint-reporting]}
+      - {id: su-demand-shaping, name: Carbon-aware scheduling / demand shaping, match: [carbon-aware-scheduling]}
+      - {id: su-data, name: Data minimisation and retention for sustainability, match: [data-minimisation]}
+      - {id: su-utilisation, name: Maximising utilisation for sustainability, match: [utilisation-efficiency]}
+      - {id: su-hardware, name: Energy-efficient hardware choice, match: [energy-efficient-hardware]}
+      - {id: su-sci, name: Software Carbon Intensity measurement, match: [software-carbon-intensity]}
+      - {id: su-scope3, name: Scope 3 cloud emissions reporting, match: [scope-3-emissions]}
+      - {id: su-kpis, name: Sustainability KPIs and targets, match: [sustainability-kpis]}
+
+  # ===================== Cloud design patterns (Azure Architecture Center catalogue)
+  - id: resiliency-patterns
+    name: Resiliency design patterns
+    source: Azure Architecture Center patterns - reliability
+    match: [resiliency-patterns]
+    subtopics:
+      - {id: rp-circuit-breaker, name: Circuit breaker, match: [circuit-breaker]}
+      - {id: rp-bulkhead, name: Bulkhead, match: [bulkhead]}
+      - {id: rp-retry, name: Retry pattern, match: [retry-pattern]}
+      - {id: rp-health-endpoint, name: Health endpoint monitoring, match: [health-endpoint-monitoring]}
+      - {id: rp-compensating, name: Compensating transaction, match: [compensating-transaction]}
+      - {id: rp-leader, name: Leader election, match: [leader-election]}
+      - {id: rp-sas, name: Scheduler agent supervisor, match: [scheduler-agent-supervisor]}
+      - {id: rp-geode, name: Geode, match: [geode-pattern]}
+      - {id: rp-timeout, name: Timeout pattern, match: [timeout-pattern]}
+      - {id: rp-fallback, name: Fallback pattern, match: [fallback-pattern]}
+      - {id: rp-throttling, name: Throttling pattern, match: [throttling-pattern]}
+  - id: messaging-patterns
+    name: Messaging and integration patterns
+    source: Azure Architecture Center patterns - messaging
+    match: [messaging-patterns]
+    subtopics:
+      - {id: mp-queue-leveling, name: Queue-based load leveling, match: [queue-based-load-leveling]}
+      - {id: mp-competing-consumers, name: Competing consumers, match: [competing-consumers]}
+      - {id: mp-pubsub, name: Publisher-subscriber, match: [publisher-subscriber]}
+      - {id: mp-claim-check, name: Claim check, match: [claim-check]}
+      - {id: mp-saga, name: Saga distributed transactions, match: [saga-pattern]}
+      - {id: mp-async-request-reply, name: Asynchronous request-reply, match: [async-request-reply]}
+      - {id: mp-outbox, name: Transactional outbox, match: [transactional-outbox]}
+      - {id: mp-priority-queue, name: Priority queue, match: [priority-queue]}
+      - {id: mp-choreography, name: Choreography, match: [choreography]}
+      - {id: mp-pipes, name: Pipes and filters, match: [pipes-and-filters]}
+      - {id: mp-convoy, name: Sequential convoy, match: [sequential-convoy]}
+      - {id: mp-bridge, name: Messaging bridge, match: [messaging-bridge]}
+      - {id: mp-dlq, name: Dead-letter queue handling, match: [dlq-redrive]}
+      - {id: mp-inbox, name: Idempotent consumer (inbox), match: [idempotent-consumer]}
+  - id: data-patterns
+    name: Data management patterns
+    source: Azure Architecture Center patterns - data management
+    match: [data-patterns]
+    subtopics:
+      - {id: dpat-cqrs, name: CQRS, match: [cqrs]}
+      - {id: dpat-event-sourcing, name: Event sourcing, match: [event-sourcing]}
+      - {id: dpat-cache-aside, name: Cache-aside, match: [cache-aside]}
+      - {id: dpat-materialized-view, name: Materialized view, match: [materialized-view]}
+      - {id: dpat-valet-key, name: Valet key (pre-signed access), match: [valet-key]}
+      - {id: dpat-static-content, name: Static content hosting, match: [static-content-hosting]}
+      - {id: dpat-index-table, name: Index table, match: [index-table]}
+      - {id: dpat-partition-key, name: Partition key design, match: [partition-key-design]}
+      - {id: dpat-quarantine, name: Quarantine, match: [quarantine-pattern]}
+      - {id: dpat-write-behind, name: Write-through and write-behind caching, match: [write-behind-cache]}
+  - id: design-implementation-patterns
+    name: Design and implementation patterns
+    source: Azure Architecture Center patterns - design and implementation
+    match: [design-patterns-cloud]
+    subtopics:
+      - {id: dip-sidecar, name: Sidecar, match: [sidecar-pattern]}
+      - {id: dip-ambassador, name: Ambassador, match: [ambassador-pattern]}
+      - {id: dip-acl, name: Anti-corruption layer, match: [anti-corruption-layer]}
+      - {id: dip-bff, name: Backends for frontends, match: [backends-for-frontends]}
+      - {id: dip-external-config, name: External configuration store, match: [external-configuration-store]}
+      - {id: dip-deployment-stamps, name: Deployment stamps, match: [deployment-stamps]}
+      - {id: dip-consolidation, name: Compute resource consolidation, match: [compute-resource-consolidation]}
+      - {id: dip-gatekeeper, name: Gatekeeper, match: [gatekeeper-pattern]}
+      - {id: dip-federated-identity, name: Federated identity, match: [federated-identity-pattern]}
+      - {id: dip-antipatterns, name: Cloud performance antipatterns, match: [performance-antipatterns]}
+      - {id: dip-chatty-io, name: Chatty I/O antipattern, match: [chatty-io]}
+      - {id: dip-retry-storm, name: Retry storm antipattern, match: [retry-storm-antipattern]}
+  - id: gateway-patterns
+    name: Gateway and edge patterns
+    source: Azure Architecture Center patterns - gateway routing/aggregation/offloading; throttling; rate limiting
+    match: [api-gateway-patterns]
+    subtopics:
+      - {id: gp-routing, name: Gateway routing, match: [gateway-routing]}
+      - {id: gp-aggregation, name: Gateway aggregation, match: [gateway-aggregation]}
+      - {id: gp-offloading, name: Gateway offloading, match: [gateway-offloading]}
+      - {id: gp-throttling, name: Throttling and rate limiting, match: [rate-limiting]}
+      - {id: gp-versioning, name: API versioning, match: [api-versioning]}
+      - {id: gp-selection, name: API gateway product selection, match: [api-gateway-selection]}
+      - {id: gp-auth, name: Authentication at the gateway, match: [gateway-authentication]}
+      - {id: gp-ha, name: Gateway high availability, match: [gateway-high-availability]}
+      - {id: gp-transform, name: Request and response transformation, match: [gateway-transformation]}
+  - id: architecture-styles
+    name: Architecture styles
+    source: Azure Architecture Center - architecture styles
+    match: [architecture-styles]
+    subtopics:
+      - {id: as-microservices, name: Microservices, match: [microservices-architecture]}
+      - {id: as-event-driven, name: Event-driven architecture, match: [event-driven-architecture]}
+      - {id: as-n-tier, name: N-tier, match: [n-tier]}
+      - {id: as-web-queue-worker, name: Web-queue-worker, match: [web-queue-worker]}
+      - {id: as-multitenant, name: Multitenant SaaS architecture, match: [multitenancy]}
+      - {id: as-big-compute, name: Big compute, match: [big-compute]}
+      - {id: as-big-data, name: Big data architecture, match: [big-data-architecture]}
+      - {id: as-serverless, name: Serverless architecture style, match: [serverless-architecture]}
+      - {id: as-modular-monolith, name: Modular monolith, match: [modular-monolith-design]}
+      - {id: as-hexagonal, name: Hexagonal / ports and adapters, match: [hexagonal-architecture]}
+      - {id: as-data-mesh, name: Data mesh, match: [data-mesh]}
+
+  # ===================== Twelve-Factor App
+  - id: twelve-factor-build
+    name: Twelve-factor I-VI (codebase to processes)
+    source: 12factor.net factors I-VI
+    match: [twelve-factor]
+    subtopics:
+      - {id: tf-codebase, name: I Codebase, match: [twelve-factor-codebase]}
+      - {id: tf-dependencies, name: II Dependencies, match: [twelve-factor-dependencies]}
+      - {id: tf-config, name: III Config in the environment, match: [twelve-factor-config]}
+      - {id: tf-backing, name: IV Backing services as attached resources, match: [backing-services]}
+      - {id: tf-build-release-run, name: V Build / release / run, match: [build-release-run]}
+      - {id: tf-processes, name: VI Stateless processes, match: [twelve-factor-processes]}
+      - {id: tf-assessment, name: Twelve-factor assessment of an existing app, match: [twelve-factor-assessment]}
+      - {id: tf-kubernetes, name: Twelve-factor on Kubernetes, match: [twelve-factor-kubernetes]}
+      - {id: tf-beyond, name: Beyond twelve-factor (API first / telemetry / security), match: [beyond-twelve-factor]}
+  - id: twelve-factor-run
+    name: Twelve-factor VII-XII (port binding to admin processes)
+    source: 12factor.net factors VII-XII
+    match: [12-factor-app]
+    subtopics:
+      - {id: tf-port, name: VII Port binding, match: [port-binding]}
+      - {id: tf-concurrency, name: VIII Concurrency via the process model, match: [process-model-concurrency]}
+      - {id: tf-disposability, name: IX Disposability, match: [disposability]}
+      - {id: tf-parity, name: X Dev/prod parity, match: [dev-prod-parity]}
+      - {id: tf-logs, name: XI Logs as event streams, match: [logs-as-event-streams]}
+      - {id: tf-admin, name: XII Admin processes, match: [admin-processes]}
+      - {id: tf-graceful-shutdown, name: Graceful shutdown on SIGTERM, match: [graceful-shutdown]}
+      - {id: tf-probes, name: Liveness / readiness / startup probes, match: [readiness-probes]}
+      - {id: tf-migrations, name: Database migrations as release-phase admin processes, match: [database-migrations-at-deploy]}
+      - {id: tf-structured-logs, name: Structured logging, match: [structured-logging]}
+
+  # ===================== FinOps framework fundamentals (FinOps Certified Practitioner)
+  - id: finops-principles
+    name: FinOps principles phases and personas
+    source: FinOps Framework - principles; phases; personas
+    match: [finops-principles]
+    subtopics:
+      - {id: fp-phases, name: Inform / Optimize / Operate lifecycle, match: [finops-lifecycle]}
+      - {id: fp-personas, name: Personas and RACI, match: [finops-personas]}
+      - {id: fp-maturity, name: Crawl / walk / run maturity, match: [finops-maturity]}
+      - {id: fp-variable-cost, name: Variable cost model and decentralised decisions, match: [variable-cost-model]}
+      - {id: fp-collaboration, name: Cross-functional collaboration model, match: [finops-collaboration]}
+      - {id: fp-value, name: Business-value decisions over cost cutting, match: [business-value-decisions]}
+      - {id: fp-freshness, name: Timely accurate cost data (freshness targets), match: [cost-data-freshness]}
+      - {id: fp-central, name: Centrally enabled FinOps, match: [centrally-enabled-finops]}
+      - {id: fp-scopes, name: FinOps scopes (cloud / SaaS / data center / AI), match: [finops-scopes]}
+  - id: billing-concepts
+    name: Cloud billing terminology
+    source: FinOps Certified Practitioner - cloud billing; FOCUS spec columns
+    match: [cloud-billing]
+    subtopics:
+      - {id: bc-cost-types, name: List / billed / effective / amortised cost, match: [amortised-cost]}
+      - {id: bc-credits, name: Credits / refunds / support and tax lines, match: [billing-credits]}
+      - {id: bc-pricing-models, name: Pricing models and pricing units, match: [pricing-models]}
+      - {id: bc-invoice-reconciliation, name: Invoice reconciliation, match: [invoice-reconciliation]}
+      - {id: bc-blended, name: Blended vs unblended rates, match: [blended-rates]}
+      - {id: bc-hierarchy, name: Billing account and payer hierarchy, match: [billing-hierarchy]}
+      - {id: bc-charge-category, name: Charge categories and correction charges, match: [correction-charges]}
+      - {id: bc-currency, name: Billing currency and exchange rates, match: [billing-currency]}
+      - {id: bc-commit-columns, name: Commitment discount columns in billing data, match: [commitment-discount-status]}
+      - {id: bc-period, name: Billing period vs charge period and late charges, match: [late-arriving-charges]}
+  - id: data-ingestion
+    name: Data ingestion (cost and usage data)
+    source: FinOps Framework - Data Ingestion capability
+    match: [cost-data-ingestion]
+    subtopics:
+      - {id: di-exports, name: Setting up billing exports per provider, match: [billing-export]}
+      - {id: di-focus, name: Normalising to FOCUS, match: [focus-specification]}
+      - {id: di-multi-cloud, name: Multi-cloud and SaaS cost data aggregation, match: [multi-cloud-cost-data]}
+      - {id: di-quality, name: Cost data quality checks, match: [cost-data-quality]}
+      - {id: di-enrichment, name: Enriching cost data with business metadata, match: [cost-data-enrichment]}
+      - {id: di-cur2, name: AWS Data Exports (CUR 2.0 / FOCUS), match: [cur-2]}
+      - {id: di-azure, name: Azure Cost Management exports, match: [azure-cost-export]}
+      - {id: di-gcp, name: Google Cloud billing export to BigQuery, match: [gcp-billing-export]}
+      - {id: di-opencost, name: Kubernetes cost data with OpenCost, match: [opencost-ingestion]}
+      - {id: di-backfill, name: Historical backfill and restatements, match: [cost-data-backfill]}
+  - id: allocation
+    name: Allocation
+    source: FinOps Framework - Allocation capability
+    match: [cost-allocation]
+    subtopics:
+      - {id: al-tagging, name: Tagging / labelling strategy, match: [tagging-strategy]}
+      - {id: al-tag-enforcement, name: Tag enforcement and untagged spend remediation, match: [tag-enforcement]}
+      - {id: al-shared, name: Shared cost allocation methods, match: [shared-cost-allocation]}
+      - {id: al-k8s, name: Container / Kubernetes cost allocation, match: [kubernetes-cost-allocation]}
+      - {id: al-hierarchy, name: Account-hierarchy and cost-category allocation, match: [cost-categories]}
+      - {id: al-virtual-tags, name: Retroactive tag correction and virtual tagging, match: [virtual-tagging]}
+      - {id: al-unallocated, name: Handling unallocatable costs, match: [unallocated-costs]}
+      - {id: al-commitment, name: Allocating commitment discount benefits, match: [commitment-discount-allocation]}
+      - {id: al-data-platform, name: Allocating shared data platform costs, match: [data-platform-cost-allocation]}
+      - {id: al-network, name: Allocating network and egress costs, match: [network-cost-allocation]}
+      - {id: al-coverage, name: Allocation coverage KPI, match: [allocation-coverage]}
+  - id: reporting-and-analytics
+    name: Reporting and analytics
+    source: FinOps Framework - Reporting & Analytics capability
+    match: [finops-reporting]
+    subtopics:
+      - {id: ra-persona-dashboards, name: Persona-specific cost dashboards, match: [cost-dashboards]}
+      - {id: ra-kpis, name: FinOps KPIs, match: [finops-kpis]}
+      - {id: ra-sql, name: Cost analysis queries over billing data, match: [cost-analysis-sql]}
+      - {id: ra-trend, name: Cost trend and variance explanation, match: [cost-variance-analysis]}
+      - {id: ra-exec, name: Executive cost reporting, match: [executive-cost-report]}
+      - {id: ra-engineer, name: Engineer-facing cost visibility, match: [engineer-cost-visibility]}
+      - {id: ra-month-end, name: Month-end cost close report, match: [month-end-cost-report]}
+      - {id: ra-bi, name: BI dashboards over FOCUS data, match: [finops-bi]}
+      - {id: ra-granularity, name: Cost data granularity and history retention, match: [cost-data-granularity]}
+  - id: anomaly-management
+    name: Anomaly management
+    source: FinOps Framework - Anomaly Management capability
+    match: [cost-anomaly-detection]
+    subtopics:
+      - {id: am-thresholds, name: Anomaly thresholds and routing, match: [anomaly-thresholds]}
+      - {id: am-triage, name: Anomaly triage and root cause, match: [anomaly-triage]}
+      - {id: am-usage-alerts, name: Leading usage alerts for fast-moving spend, match: [usage-alerts]}
+      - {id: am-post-incident, name: Cost incident review, match: [cost-incident-review]}
+      - {id: am-native, name: Configuring native anomaly detection, match: [native-anomaly-detection]}
+      - {id: am-custom, name: Custom anomaly detection over billing data, match: [custom-anomaly-detection]}
+      - {id: am-kpis, name: Anomaly management KPIs, match: [anomaly-kpis]}
+      - {id: am-security, name: Cost anomalies as security signals (cryptomining / key leak), match: [cryptomining-detection]}
+      - {id: am-runaway, name: Automated protection against runaway spend, match: [runaway-spend-protection]}
+  - id: planning-and-estimating
+    name: Planning and estimating
+    source: FinOps Framework - Planning & Estimating capability
+    match: [cost-estimation]
+    subtopics:
+      - {id: pe-calculator, name: Pricing-calculator estimate for a new architecture, match: [pricing-calculator]}
+      - {id: pe-migration-tco, name: Migration TCO comparison, match: [tco-analysis]}
+      - {id: pe-iac-cost, name: Cost estimation in pull requests from IaC, match: [infracost]}
+      - {id: pe-ai-cost, name: Estimating AI / LLM workload cost, match: [ai-cost-estimation]}
+      - {id: pe-load, name: Estimating cost from a load model, match: [load-based-estimation]}
+      - {id: pe-compare, name: Cost comparison of architecture options, match: [architecture-cost-comparison]}
+      - {id: pe-accuracy, name: Estimate vs actual review, match: [estimate-accuracy]}
+      - {id: pe-data-platform, name: Estimating data / analytics platform cost, match: [data-platform-cost-estimation]}
+      - {id: pe-k8s, name: Estimating Kubernetes cluster cost, match: [kubernetes-cost-estimation]}
+  - id: forecasting
+    name: Forecasting
+    source: FinOps Framework - Forecasting capability
+    match: [cost-forecasting]
+    subtopics:
+      - {id: fc-trend, name: Trend-based forecasting, match: [trend-forecasting]}
+      - {id: fc-driver, name: Driver-based forecasting, match: [driver-based-forecasting]}
+      - {id: fc-accuracy, name: Forecast accuracy tracking, match: [forecast-accuracy]}
+      - {id: fc-commit-impact, name: Forecasting commitment and price changes, match: [forecast-scenarios]}
+      - {id: fc-ml, name: Statistical and ML forecasting models, match: [ml-cost-forecasting]}
+      - {id: fc-native, name: Native forecast features and their limits, match: [native-cost-forecast]}
+      - {id: fc-rolling, name: Rolling forecast cadence with finance, match: [rolling-forecast]}
+      - {id: fc-new, name: Forecasting new workloads without history, match: [new-workload-forecast]}
+      - {id: fc-ai, name: Forecasting AI token and GPU spend, match: [ai-spend-forecasting]}
+  - id: budgeting
+    name: Budgeting
+    source: FinOps Framework - Budgeting capability
+    match: [cloud-budgeting]
+    subtopics:
+      - {id: bu-setting, name: Setting team budgets, match: [budget-setting]}
+      - {id: bu-alerts, name: Budget alerts and automated actions, match: [budget-alerts]}
+      - {id: bu-variance, name: Budget variance management, match: [budget-variance]}
+      - {id: bu-capex-opex, name: Capex / opex treatment of cloud spend, match: [capex-opex]}
+      - {id: bu-hierarchy, name: Budget hierarchy matching the organisation, match: [budget-hierarchy]}
+      - {id: bu-as-code, name: Budgets as code, match: [budgets-as-code]}
+      - {id: bu-annual, name: Annual cloud budget planning, match: [annual-budget-planning]}
+      - {id: bu-reforecast, name: Mid-year reforecast and reallocation, match: [budget-reforecast]}
+      - {id: bu-caps, name: Hard spending caps, match: [spending-caps]}
+  - id: benchmarking
+    name: Benchmarking
+    source: FinOps Framework - Benchmarking capability
+    match: [cost-benchmarking]
+    subtopics:
+      - {id: bm-internal, name: Internal team benchmarking, match: [internal-benchmarking]}
+      - {id: bm-external, name: External / peer benchmarking, match: [peer-benchmarking]}
+      - {id: bm-scorecards, name: Cost efficiency scorecards, match: [efficiency-scorecard]}
+      - {id: bm-normalisation, name: Normalising benchmarks across clouds, match: [benchmark-normalisation]}
+      - {id: bm-kpi-library, name: Selecting KPIs from the FinOps KPI library, match: [kpi-library-selection]}
+      - {id: bm-esr, name: Effective savings rate benchmark, match: [esr-benchmark]}
+      - {id: bm-waste, name: Waste percentage benchmark, match: [waste-benchmark]}
+      - {id: bm-unit, name: Unit cost benchmarking across teams, match: [unit-cost-benchmark]}
+  - id: unit-economics
+    name: Unit economics
+    source: FinOps Framework - Unit Economics capability
+    match: [unit-economics]
+    subtopics:
+      - {id: ue-metric, name: Choosing unit metrics, match: [unit-metric-selection]}
+      - {id: ue-cost-per-customer, name: Cost per customer / tenant, match: [cost-per-tenant]}
+      - {id: ue-gross-margin, name: Cloud cost in gross margin / COGS, match: [cloud-cogs]}
+      - {id: ue-marginal, name: Marginal cost of growth, match: [marginal-cost]}
+      - {id: ue-join, name: Joining cost with business metrics, match: [business-metrics-join]}
+      - {id: ue-transaction, name: Cost per transaction / request, match: [cost-per-transaction]}
+      - {id: ue-dashboard, name: Unit cost dashboard and targets, match: [unit-cost-dashboard]}
+      - {id: ue-pricing, name: Cost-informed pricing decisions, match: [cost-informed-pricing]}
+      - {id: ue-inference, name: Cost per AI inference / token, match: [cost-per-inference]}
+  - id: architecting-for-cost
+    name: Architecting for cloud cost
+    source: FinOps Framework - Architecting for Cloud capability; WAF Cost Optimization pillar
+    match: [cost-aware-architecture]
+    subtopics:
+      - {id: ac-data-transfer, name: Data transfer and egress cost design, match: [data-transfer-costs]}
+      - {id: ac-serverless-cost, name: Serverless vs provisioned cost crossover, match: [serverless-cost-model]}
+      - {id: ac-observability-cost, name: Observability / logging cost control, match: [logging-cost-control]}
+      - {id: ac-storage-cost, name: Storage cost architecture, match: [storage-cost-optimisation]}
+      - {id: ac-db-cost, name: Database cost optimisation, match: [database-cost-optimisation]}
+      - {id: ac-k8s-cost, name: Kubernetes cluster cost efficiency, match: [kubernetes-cost-optimisation]}
+      - {id: ac-nat, name: NAT gateway cost reduction, match: [nat-gateway-cost-reduction]}
+      - {id: ac-cdn, name: CDN offload to cut egress, match: [cdn-cost-optimisation]}
+      - {id: ac-llm, name: LLM cost architecture (caching / model routing / batching), match: [llm-cost-optimisation]}
+      - {id: ac-dwh, name: Data warehouse and analytics cost control, match: [data-warehouse-cost]}
+      - {id: ac-tradeoffs, name: Cost vs resilience trade-offs, match: [cost-vs-resilience-tradeoffs]}
+      - {id: ac-ephemeral, name: Ephemeral environments, match: [preview-environments]}
+      - {id: ac-streaming, name: Messaging and streaming cost, match: [streaming-cost-optimisation]}
+  - id: rate-optimization
+    name: Rate optimization
+    source: FinOps Framework - Rate Optimization capability
+    match: [rate-optimisation]
+    subtopics:
+      - {id: ro-commitments, name: Commitment purchase analysis, match: [commitment-purchase]}
+      - {id: ro-coverage, name: Commitment coverage and utilisation management, match: [commitment-utilisation]}
+      - {id: ro-portfolio, name: Commitment portfolio laddering, match: [commitment-laddering]}
+      - {id: ro-spot, name: Spot / preemptible capacity, match: [spot-instances]}
+      - {id: ro-negotiation, name: Enterprise discount negotiation, match: [enterprise-discount-program]}
+      - {id: ro-centralised, name: Centralised vs decentralised commitment management, match: [commitment-sharing]}
+      - {id: ro-savings-plans, name: Savings plans vs reserved instances, match: [savings-plan-vs-reserved]}
+      - {id: ro-exchange, name: Commitment exchange / resale / return, match: [commitment-exchange]}
+      - {id: ro-db, name: Non-compute commitments (database / cache / search), match: [database-reservations]}
+      - {id: ro-cud, name: Google committed use discounts, match: [gcp-committed-use-discounts]}
+      - {id: ro-azure, name: Azure reservations and savings plan, match: [azure-reservation-management]}
+      - {id: ro-renewal, name: Commitment expiry and renewal management, match: [commitment-renewal]}
+      - {id: ro-private-pricing, name: Private pricing agreements, match: [private-pricing]}
+  - id: workload-optimization
+    name: Workload optimization
+    source: FinOps Framework - Workload Optimization capability
+    match: [workload-optimisation]
+    subtopics:
+      - {id: wo-rightsizing, name: Rightsizing, match: [rightsizing]}
+      - {id: wo-scheduling, name: Non-production scheduling, match: [off-hours-shutdown]}
+      - {id: wo-idle, name: Idle and orphaned resource cleanup, match: [idle-resource-cleanup]}
+      - {id: wo-lifecycle, name: Storage lifecycle policies, match: [storage-lifecycle-policies]}
+      - {id: wo-modernise, name: Modernising for cost (ARM / newer generations / managed), match: [generation-upgrades]}
+      - {id: wo-recommendations, name: Operationalising optimisation recommendations, match: [optimisation-recommendations]}
+      - {id: wo-autoscale, name: Autoscaling tuning for cost, match: [autoscaling-cost-tuning]}
+      - {id: wo-containers, name: Container request rightsizing, match: [container-rightsizing]}
+      - {id: wo-db, name: Database rightsizing, match: [database-rightsizing]}
+      - {id: wo-snapshots, name: Snapshot and backup cleanup, match: [snapshot-cleanup]}
+      - {id: wo-ipv4, name: Public IPv4 address cost reduction, match: [public-ipv4-costs]}
+      - {id: wo-functions, name: Function memory / power tuning, match: [lambda-power-tuning]}
+      - {id: wo-gpu, name: GPU utilisation optimisation, match: [gpu-utilisation]}
+  - id: licensing-and-saas
+    name: Licensing and SaaS
+    source: FinOps Framework - Licensing & SaaS capability
+    match: [licensing-and-saas]
+    subtopics:
+      - {id: ls-byol, name: BYOL and licence mobility, match: [byol]}
+      - {id: ls-saas-spend, name: SaaS spend management, match: [saas-spend-management]}
+      - {id: ls-marketplace, name: Marketplace purchases and commitment burn-down, match: [cloud-marketplace]}
+      - {id: ls-db-licensing, name: Commercial database / OS licensing in cloud, match: [database-licensing]}
+      - {id: ls-ahb, name: Windows Server and SQL Server licensing in cloud, match: [windows-sql-licensing]}
+      - {id: ls-oracle, name: Oracle licensing in cloud, match: [oracle-cloud-licensing]}
+      - {id: ls-reclaim, name: SaaS licence reclaim and rightsizing, match: [saas-licence-reclaim]}
+      - {id: ls-renewals, name: SaaS renewal negotiation, match: [saas-renewals]}
+      - {id: ls-dedicated-host, name: Dedicated hosts for licence compliance, match: [dedicated-host-licensing]}
+      - {id: ls-sam, name: Software asset management integration, match: [software-asset-management]}
+
+  # ===================== FinOps - Manage the practice
+  - id: finops-practice-operations
+    name: FinOps practice operations
+    source: FinOps Framework - FinOps Practice Operations; Intersecting Disciplines
+    match: [finops-practice]
+    subtopics:
+      - {id: fpo-team, name: Building the FinOps team, match: [finops-team]}
+      - {id: fpo-cadence, name: Operating cadence and cost reviews, match: [cost-review-cadence]}
+      - {id: fpo-engineering, name: Engaging engineers in cost ownership, match: [engineering-cost-ownership]}
+      - {id: fpo-intersecting, name: Working with procurement / finance / ITAM, match: [finops-procurement]}
+      - {id: fpo-charter, name: FinOps charter and mission, match: [finops-charter]}
+      - {id: fpo-sponsor, name: Executive sponsorship, match: [finops-executive-sponsor]}
+      - {id: fpo-tbm, name: ITFM / TBM intersection, match: [technology-business-management]}
+      - {id: fpo-itsm, name: FinOps with ITSM and change processes, match: [finops-itsm]}
+      - {id: fpo-metrics, name: FinOps practice health metrics, match: [finops-practice-metrics]}
+  - id: finops-policy-governance
+    name: Policy and governance
+    source: FinOps Framework - Policy & Governance capability
+    match: [finops-governance]
+    subtopics:
+      - {id: fpg-policy, name: Cloud cost policies, match: [cost-policy]}
+      - {id: fpg-guardrails, name: Cost guardrails as policy-as-code, match: [cost-guardrails]}
+      - {id: fpg-approvals, name: Spend approval thresholds, match: [spend-approval]}
+      - {id: fpg-exceptions, name: Policy exceptions and waivers, match: [cost-policy-exceptions]}
+      - {id: fpg-skus, name: Allowed SKU and region policies, match: [allowed-skus-policy]}
+      - {id: fpg-commitment, name: Commitment purchase policy, match: [commitment-policy]}
+      - {id: fpg-retention, name: Data retention cost policy, match: [retention-policy]}
+      - {id: fpg-steering, name: FinOps steering committee, match: [finops-steering-committee]}
+      - {id: fpg-compliance, name: Policy compliance reporting, match: [policy-compliance-reporting]}
+  - id: finops-assessment
+    name: FinOps assessment
+    source: FinOps Framework - FinOps Assessment capability
+    match: [finops-assessment]
+    subtopics:
+      - {id: fa-maturity, name: Capability maturity scoring, match: [maturity-assessment]}
+      - {id: fa-roadmap, name: FinOps improvement roadmap, match: [finops-roadmap]}
+      - {id: fa-waste, name: Waste / savings potential baseline, match: [savings-baseline]}
+      - {id: fa-realised, name: Tracking realised savings, match: [realised-savings]}
+      - {id: fa-lenses, name: Assessment lenses (knowledge / process / metrics / adoption / automation), match: [finops-assessment-lenses]}
+      - {id: fa-interviews, name: Assessment interviews and evidence, match: [assessment-interviews]}
+      - {id: fa-targets, name: Target maturity per capability, match: [target-maturity]}
+      - {id: fa-cadence, name: Reassessment cadence and trend, match: [assessment-cadence]}
+  - id: finops-tools
+    name: FinOps tools and services
+    source: FinOps Framework - FinOps Tools & Services capability
+    match: [finops-tools]
+    subtopics:
+      - {id: ft-selection, name: Selecting a FinOps platform, match: [finops-tool-selection]}
+      - {id: ft-native, name: Native provider cost tools, match: [native-cost-tools]}
+      - {id: ft-build, name: Building an in-house cost data pipeline, match: [cost-data-pipeline]}
+      - {id: ft-automation, name: Automated remediation tooling, match: [cost-automation]}
+      - {id: ft-custodian, name: Cloud Custodian cost policies, match: [cloud-custodian-policies]}
+      - {id: ft-integrations, name: Integrating FinOps tools with ticketing and chat, match: [finops-integrations]}
+      - {id: ft-adoption, name: FinOps tool rollout and adoption, match: [finops-tool-adoption]}
+      - {id: ft-focus, name: FOCUS conformance in tools, match: [focus-conformance]}
+      - {id: ft-oss, name: Open-source FinOps tooling, match: [open-source-finops-tools]}
+  - id: finops-education
+    name: FinOps education and enablement
+    source: FinOps Framework - FinOps Education & Enablement
+    match: [finops-education]
+    subtopics:
+      - {id: fe-training, name: Role-based FinOps training plan, match: [finops-training]}
+      - {id: fe-gamification, name: Cost awareness campaigns and gamification, match: [cost-awareness]}
+      - {id: fe-docs, name: Cost playbooks for engineers, match: [cost-playbook]}
+      - {id: fe-champions, name: FinOps champions network, match: [finops-champions]}
+      - {id: fe-cert, name: FinOps certification paths, match: [finops-certification-paths]}
+      - {id: fe-onboarding, name: Cost onboarding for new engineers, match: [cost-onboarding]}
+      - {id: fe-office-hours, name: FinOps office hours and community of practice, match: [finops-office-hours]}
+      - {id: fe-newsletter, name: Cost newsletter and communications, match: [finops-newsletter]}
+  - id: invoicing-and-chargeback
+    name: Invoicing and chargeback
+    source: FinOps Framework - Invoicing & Chargeback capability
+    match: [chargeback]
+    subtopics:
+      - {id: ic-showback, name: Showback reports, match: [showback]}
+      - {id: ic-model, name: Chargeback model design, match: [chargeback-model]}
+      - {id: ic-amortisation, name: Commitment amortisation in chargeback, match: [commitment-amortisation]}
+      - {id: ic-invoice-processing, name: Invoice processing and accruals, match: [cloud-accruals]}
+      - {id: ic-rates, name: Internal rates and markups, match: [internal-rates]}
+      - {id: ic-journal, name: Posting chargeback to the general ledger, match: [chargeback-journal]}
+      - {id: ic-disputes, name: Chargeback disputes, match: [chargeback-disputes]}
+      - {id: ic-reseller, name: Reseller / partner billing validation, match: [reseller-billing]}
+      - {id: ic-cost-centres, name: Cost centre mapping, match: [cost-centre-hierarchy]}
+  - id: onboarding-workloads
+    name: Onboarding workloads
+    source: FinOps Framework - Onboarding Workloads capability
+    match: [workload-onboarding]
+    subtopics:
+      - {id: ow-checklist, name: Cost-readiness checklist for new workloads, match: [cost-readiness-checklist]}
+      - {id: ow-migration-cost, name: Migration cost tracking and double-running, match: [migration-cost-tracking]}
+      - {id: ow-acquisition, name: Onboarding acquired company cloud estates, match: [acquisition-onboarding]}
+      - {id: ow-ai, name: Onboarding AI workloads into FinOps, match: [finops-for-ai]}
+      - {id: ow-intake, name: Workload intake process, match: [workload-intake]}
+      - {id: ow-baseline, name: Pre-migration cost baseline, match: [pre-migration-baseline]}
+      - {id: ow-day-one, name: Day-one cost controls for new accounts, match: [day-one-cost-controls]}
+      - {id: ow-review, name: First 90-day cost review, match: [post-onboarding-review]}
+      - {id: ow-scopes, name: Onboarding SaaS and data center scopes, match: [finops-scope-onboarding]}

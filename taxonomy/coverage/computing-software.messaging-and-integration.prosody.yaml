@@ -1,0 +1,237 @@
+# Coverage spec for Prosody IM (computing-software / messaging-and-integration).
+subject: Prosody IM
+scope:
+  category: computing-software
+  field: messaging-and-integration
+  products: [prosody]
+sources:
+  - "Prosody IM documentation (https://prosody.im/doc/)"
+topics:
+  - id: config-file-structure
+    name: "Configuration file structure"
+    source: https://prosody.im/doc/configure
+    match: ["prosody-cfg-lua", "virtualhost", "modules-enabled", "include"]
+  - id: mod-carbons
+    name: "mod_carbons message carbons"
+    source: https://prosody.im/doc/modules/mod_carbons
+    match: ["carbons", "xep-0280", "multi-device"]
+  - id: mod-mam-options
+    name: "mod_mam archive options"
+    source: https://prosody.im/doc/modules/mod_mam
+    match: ["mam", "archive-expires-after", "default-archive-policy", "xep-0313"]
+  - id: mod-mam-storage
+    name: "mod_mam storage backends"
+    source: https://prosody.im/doc/modules/mod_mam
+    match: ["archive-store", "archive2", "memory-archive", "sql-archive"]
+  - id: mod-smacks
+    name: "mod_smacks stream management"
+    source: https://prosody.im/doc/modules/mod_smacks
+    match: ["smacks", "xep-0198", "hibernation", "resumption"]
+  - id: mod-cloud-notify
+    name: "mod_cloud_notify push notifications"
+    source: https://prosody.im/doc/modules/mod_cloud_notify
+    match: ["push", "xep-0357", "push-max-devices"]
+  - id: mod-http-file-share
+    name: "mod_http_file_share uploads"
+    source: https://prosody.im/doc/modules/mod_http_file_share
+    match: ["file-upload", "xep-0363", "size-limit", "quota"]
+  - id: prosodyctl-commands
+    name: "prosodyctl command reference"
+    source: https://prosody.im/doc/prosodyctl
+    match: ["prosodyctl", "adduser", "reload", "shell"]
+  - id: prosodyctl-check
+    name: "prosodyctl check subcommands"
+    source: https://prosody.im/doc/prosodyctl
+    match: ["check-config", "check-dns", "check-certs", "check-connectivity"]
+  - id: certificate-locations
+    name: "Certificate locations and permissions"
+    source: https://prosody.im/doc/certificates
+    match: ["certificates", "fullchain", "privkey", "ssl-option"]
+  - id: prosodyctl-cert-commands
+    name: "prosodyctl cert commands"
+    source: https://prosody.im/doc/certificates
+    match: ["cert-request", "cert-generate", "cert-import", "renewal"]
+  - id: components-internal-external
+    name: "Internal and external components"
+    source: https://prosody.im/doc/components
+    match: ["component", "xep-0114", "component-secret", "disco-items"]
+  - id: external-component-network
+    name: "External component networking"
+    source: https://prosody.im/doc/components
+    match: ["component-ports", "component-interfaces", "5347", "tunnel"]
+  - id: mod-muc-setup
+    name: "mod_muc setup"
+    source: https://prosody.im/doc/modules/mod_muc
+    match: ["muc", "restrict-room-creation", "room-locking", "chatrooms"]
+  - id: mod-muc-room-defaults
+    name: "MUC room defaults and tombstones"
+    source: https://prosody.im/doc/modules/mod_muc
+    match: ["muc-room-default", "muc-tombstones", "persistent-rooms"]
+  - id: mod-websocket
+    name: "mod_websocket"
+    source: https://prosody.im/doc/modules/mod_websocket
+    match: ["websocket", "xmpp-websocket", "consider-websocket-secure"]
+  - id: mod-bosh
+    name: "mod_bosh"
+    source: https://prosody.im/doc/modules/mod_bosh
+    match: ["bosh", "xep-0124", "bosh-max-inactivity"]
+  - id: http-ports-interfaces
+    name: "HTTP ports and interfaces"
+    source: https://prosody.im/doc/http
+    match: ["http-ports", "https-ports", "5280", "5281", "http-paths"]
+  - id: http-host-mapping-proxy
+    name: "HTTP host mapping and reverse proxies"
+    source: https://prosody.im/doc/http
+    match: ["http-host", "http-external-url", "trusted-proxies", "reverse-proxy"]
+  - id: http-cors-settings
+    name: "HTTP CORS settings"
+    source: https://prosody.im/doc/http
+    match: ["cors", "access-control-allow-origins", "http-cors-override"]
+  - id: storage-backends
+    name: "Storage backends"
+    source: https://prosody.im/doc/storage
+    match: ["storage", "internal", "sql", "memory"]
+  - id: storage-per-store-config
+    name: "Per-store storage configuration"
+    source: https://prosody.im/doc/storage
+    match: ["default-storage", "storage-table", "store-names"]
+  - id: authentication-providers
+    name: "Authentication providers"
+    source: https://prosody.im/doc/authentication
+    match: ["authentication", "internal-hashed", "ldap", "anonymous"]
+  - id: s2s-secure-auth
+    name: "s2s secure authentication"
+    source: https://prosody.im/doc/s2s
+    match: ["s2s-secure-auth", "s2s-secure-domains", "s2s-insecure-domains"]
+  - id: s2s-dns-blocking-limits
+    name: "s2s DNS, blocking and limits"
+    source: https://prosody.im/doc/s2s
+    match: ["srv", "allow-anonymous-s2s", "s2s-stanza-size-limit"]
+  - id: default-ports
+    name: "Default ports"
+    source: https://prosody.im/doc/ports
+    match: ["5222", "5269", "5582", "firewall"]
+  - id: changing-ports-interfaces
+    name: "Changing ports and interfaces"
+    source: https://prosody.im/doc/ports
+    match: ["c2s-ports", "local-interfaces", "network-settings"]
+  - id: logging-configuration
+    name: "Logging configuration"
+    source: https://prosody.im/doc/logging
+    match: ["log", "syslog", "log-levels", "logrotate"]
+  - id: mod-register
+    name: "mod_register"
+    source: https://prosody.im/doc/modules/mod_register
+    match: ["allow-registration", "in-band-registration", "spam"]
+  - id: mod-limits
+    name: "mod_limits rate limiting"
+    source: https://prosody.im/doc/modules/mod_limits
+    match: ["limits", "rate", "burst", "unlimited-jids"]
+  - id: mod-admin-telnet
+    name: "mod_admin_telnet console"
+    source: https://prosody.im/doc/modules/mod_admin_telnet
+    match: ["console", "telnet", "console-ports"]
+  - id: mod-proxy65-setup
+    name: "mod_proxy65 file transfer proxy"
+    source: https://prosody.im/doc/modules/mod_proxy65
+    match: ["proxy65", "xep-0065", "proxy65-acl"]
+  - id: mod-pep
+    name: "mod_pep"
+    source: https://prosody.im/doc/modules/mod_pep
+    match: ["pep", "pep-max-items", "pep-cache"]
+  - id: mod-blocklist
+    name: "mod_blocklist"
+    source: https://prosody.im/doc/modules/mod_blocklist
+    match: ["blocklist", "xep-0191", "bounce-blocked-messages"]
+  - id: mod-offline
+    name: "mod_offline"
+    source: https://prosody.im/doc/modules/mod_offline
+    match: ["offline-messages", "xep-0160"]
+  - id: mod-motd
+    name: "mod_motd"
+    source: https://prosody.im/doc/modules/mod_motd
+    match: ["motd", "motd-text", "motd-jid"]
+  - id: mod-welcome
+    name: "mod_welcome"
+    source: https://prosody.im/doc/modules/mod_welcome
+    match: ["welcome-message", "new-users"]
+  - id: mod-announce
+    name: "mod_announce"
+    source: https://prosody.im/doc/modules/mod_announce
+    match: ["announce", "broadcast", "maintenance"]
+  - id: mod-csi-simple
+    name: "mod_csi_simple"
+    source: https://prosody.im/doc/modules/mod_csi_simple
+    match: ["csi", "client-state-indication", "csi-queue-size"]
+  - id: mod-vcard
+    name: "mod_vcard"
+    source: https://prosody.im/doc/modules/mod_vcard
+    match: ["vcard", "xep-0054", "avatars"]
+  - id: mod-muc-mam
+    name: "mod_muc_mam room archives"
+    source: https://prosody.im/doc/modules/mod_muc_mam
+    match: ["muc-mam", "muc-log-by-default", "log-all-rooms"]
+  - id: mod-turn-external
+    name: "mod_turn_external"
+    source: https://prosody.im/doc/modules/mod_turn_external
+    match: ["turn", "stun", "turn-external-secret"]
+  - id: mod-tombstones
+    name: "mod_tombstones"
+    source: https://prosody.im/doc/modules/mod_tombstones
+    match: ["tombstones", "user-tombstone-expiry", "deleted-accounts"]
+  - id: mod-pubsub-setup
+    name: "mod_pubsub setup"
+    source: https://prosody.im/doc/modules/mod_pubsub
+    match: ["pubsub", "autocreate-on-publish", "pubsub-max-items"]
+  - id: mod-pubsub-permissions
+    name: "mod_pubsub permissions"
+    source: https://prosody.im/doc/modules/mod_pubsub
+    match: ["pubsub-create-node", "add-permissions", "server-user-role"]
+  - id: mod-admin-adhoc
+    name: "mod_admin_adhoc"
+    source: https://prosody.im/doc/modules/mod_admin_adhoc
+    match: ["ad-hoc-commands", "execute-command"]
+  - id: mod-ping
+    name: "mod_ping"
+    source: https://prosody.im/doc/modules/mod_ping
+    match: ["ping", "xep-0199"]
+  - id: mod-tls-require-encryption
+    name: "mod_tls and require_encryption"
+    source: https://prosody.im/doc/modules/mod_tls
+    match: ["c2s-require-encryption", "s2s-require-encryption", "starttls"]
+  - id: mod-server-contact-info
+    name: "mod_server_contact_info"
+    source: https://prosody.im/doc/modules/mod_server_contact_info
+    match: ["contact-info", "xep-0157", "abuse-contact"]
+  - id: sql-storage-config
+    name: "SQL storage configuration"
+    source: https://prosody.im/doc/modules/mod_storage_sql
+    match: ["sql-driver", "postgresql", "sqlite3", "sql-manage-tables"]
+  - id: mod-invites
+    name: "mod_invites"
+    source: https://prosody.im/doc/modules/mod_invites
+    match: ["invites", "invite-expiry", "invites-register"]
+  - id: mod-dialback
+    name: "mod_dialback"
+    source: https://prosody.im/doc/modules/mod_dialback
+    match: ["dialback", "xep-0220", "dialback-secret"]
+  - id: mod-posix
+    name: "mod_posix"
+    source: https://prosody.im/doc/modules/mod_posix
+    match: ["posix", "daemonize", "pidfile", "umask"]
+  - id: mod-groups
+    name: "mod_groups shared rosters"
+    source: https://prosody.im/doc/modules/mod_groups
+    match: ["groups-file", "shared-roster"]
+  - id: mod-watchregistrations
+    name: "mod_watchregistrations"
+    source: https://prosody.im/doc/modules/mod_watchregistrations
+    match: ["registration-watchers", "registration-notification"]
+  - id: mod-http-files
+    name: "mod_http_files"
+    source: https://prosody.im/doc/modules/mod_http_files
+    match: ["http-files-dir", "static-files", "http-dir-listing"]
+  - id: mod-register-limits
+    name: "mod_register_limits"
+    source: https://prosody.im/doc/modules/mod_register_limits
+    match: ["registration-whitelist", "registration-blacklist", "min-seconds-between-registrations"]

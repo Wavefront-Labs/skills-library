@@ -1,0 +1,389 @@
+# Canonical coverage spec: Search and information retrieval (Elasticsearch and OpenSearch).
+subject: search-and-information-retrieval
+scope:
+  category: computing-software
+  field: search-and-information-retrieval
+  products: [elasticsearch-opensearch]
+sources:
+  - "Elastic Certified Engineer exam objectives (elastic.co/training) - mappings, analysis, queries, aggregations, cluster operations"
+  - "Elasticsearch reference table of contents (elastic.co/guide/en/elasticsearch/reference/current/index.html)"
+  - "OpenSearch documentation table of contents (opensearch.org/docs/latest)"
+  - "Apache Lucene documentation (lucene.apache.org/core/documentation.html) - analysis, scoring, similarity"
+topics:
+  - id: es-mappings
+    name: "Mappings and field types"
+    source: "Elasticsearch reference: Mapping; OpenSearch docs: Mappings and field types"
+    match: [es-mappings]
+    subtopics:
+      - {id: es-mappings-explicit-mapping-creation, name: "Create an index with an explicit mapping", match: [explicit-mapping-creation]}
+      - {id: es-mappings-dynamic-mapping-control, name: "Control dynamic mapping behaviour", match: [dynamic-mapping-control]}
+      - {id: es-mappings-multi-fields-and-copy-to, name: "Multi-fields and copy_to", match: [multi-fields-and-copy-to]}
+      - {id: es-mappings-text-vs-keyword-fields, name: "Choose text versus keyword", match: [text-vs-keyword-fields]}
+      - {id: es-mappings-numeric-and-date-types, name: "Numeric, date and range field types", match: [numeric-and-date-types]}
+      - {id: es-mappings-object-vs-nested-fields, name: "Object, nested and flattened fields", match: [object-vs-nested-fields]}
+  - id: es-analysis
+    name: "Text analysis: analyzers, tokenizers, filters"
+    source: "Elasticsearch reference: Text analysis; OpenSearch docs: Analyzers; Apache Lucene analysis package docs"
+    match: [es-analysis]
+    subtopics:
+      - {id: es-analysis-custom-analyzer-definition, name: "Define a custom analyzer", match: [custom-analyzer-definition]}
+      - {id: es-analysis-analyze-api-testing, name: "Test analysis with the _analyze API", match: [analyze-api-testing]}
+      - {id: es-analysis-search-time-analyzer-and-quote-analyzer, name: "Index-time versus search-time analyzers", match: [search-time-analyzer-and-quote-analyzer]}
+  - id: es-tokenizers-filters
+    name: "Tokenizers and token filters"
+    source: "Elasticsearch reference: Tokenizer reference and Token filter reference; OpenSearch docs: Tokenizers, Token filters"
+    match: [es-tokenizers-filters]
+    subtopics:
+      - {id: es-tokenizers-filters-edge-ngram-autocomplete, name: "Edge n-gram autocomplete", match: [edge-ngram-autocomplete]}
+      - {id: es-tokenizers-filters-lowercase-asciifolding-filters, name: "Case and accent folding filters", match: [lowercase-asciifolding-filters]}
+      - {id: es-tokenizers-filters-stemming-and-stopwords, name: "Stemming and stop words", match: [stemming-and-stopwords]}
+  - id: es-normalizers
+    name: "Normalizers for keyword fields"
+    source: "Elasticsearch reference: Normalizers; OpenSearch docs: Normalizers"
+    match: [es-normalizers]
+    subtopics:
+      - {id: es-normalizers-keyword-normalizer, name: "Keyword normalizer for case-insensitive exact match", match: [keyword-normalizer]}
+      - {id: es-normalizers-normalizer-vs-analyzer-choice, name: "Choose a normalizer or an analyzer", match: [normalizer-vs-analyzer-choice]}
+  - id: es-synonyms
+    name: "Synonyms"
+    source: "Elasticsearch reference: synonym token filters and Synonyms APIs; OpenSearch docs: Token filters (synonym, synonym_graph)"
+    match: [es-synonyms]
+    subtopics:
+      - {id: es-synonyms-synonym-graph-filter, name: "Synonym graph filter at search time", match: [synonym-graph-filter]}
+      - {id: es-synonyms-reload-search-analyzers-and-synonym-sets, name: "Update synonyms without downtime", match: [reload-search-analyzers-and-synonym-sets]}
+  - id: es-index-templates
+    name: "Index templates"
+    source: "Elasticsearch reference: Index templates; OpenSearch docs: Index templates"
+    match: [es-index-templates]
+    subtopics:
+      - {id: es-index-templates-composable-index-templates, name: "Composable index templates", match: [composable-index-templates]}
+      - {id: es-index-templates-component-templates, name: "Component templates", match: [component-templates]}
+      - {id: es-index-templates-legacy-template-migration, name: "Migrate legacy templates to composable", match: [legacy-template-migration]}
+  - id: es-data-streams
+    name: "Data streams"
+    source: "Elasticsearch reference: Data streams; OpenSearch docs: Data streams"
+    match: [es-data-streams]
+    subtopics:
+      - {id: es-data-streams-data-stream-create-and-rollover, name: "Create a data stream and roll it over", match: [data-stream-create-and-rollover]}
+      - {id: es-data-streams-data-stream-backing-indices, name: "Work with backing indices", match: [data-stream-backing-indices]}
+      - {id: es-data-streams-time-series-data-streams, name: "Time series data streams (TSDS)", match: [time-series-data-streams]}
+  - id: es-ingest-pipelines
+    name: "Ingest pipelines"
+    source: "Elasticsearch reference: Ingest pipelines; OpenSearch docs: Ingest pipelines"
+    match: [es-ingest-pipelines]
+    subtopics:
+      - {id: es-ingest-pipelines-ingest-pipeline-create, name: "Create and apply an ingest pipeline", match: [ingest-pipeline-create]}
+      - {id: es-ingest-pipelines-simulate-pipeline, name: "Simulate and debug a pipeline", match: [simulate-pipeline]}
+      - {id: es-ingest-pipelines-grok-dissect-processors, name: "Parse text with grok and dissect", match: [grok-dissect-processors]}
+      - {id: es-ingest-pipelines-ingest-failure-handling, name: "Ingest failure handling", match: [ingest-failure-handling]}
+  - id: es-document-apis
+    name: "Document APIs and bulk"
+    source: "Elasticsearch reference: Document APIs; OpenSearch docs: Document APIs"
+    match: [es-document-apis]
+    subtopics:
+      - {id: es-document-apis-bulk-api-usage, name: "Use the bulk API correctly", match: [bulk-api-usage]}
+      - {id: es-document-apis-optimistic-concurrency-control, name: "Optimistic concurrency control", match: [optimistic-concurrency-control]}
+      - {id: es-document-apis-update-and-upsert-documents, name: "Partial update, scripted update and upsert", match: [update-and-upsert-documents]}
+  - id: es-full-text-queries
+    name: "Full-text queries"
+    source: "Elasticsearch reference: Full text queries; OpenSearch docs: Full-text queries"
+    match: [es-full-text-queries]
+    subtopics:
+      - {id: es-full-text-queries-match-query-operators, name: "Match query: operator, fuzziness, minimum_should_match", match: [match-query-operators]}
+      - {id: es-full-text-queries-multi-match-query, name: "Multi-match across fields", match: [multi-match-query]}
+      - {id: es-full-text-queries-match-phrase-and-slop, name: "Phrase matching and slop", match: [match-phrase-and-slop]}
+  - id: es-bool-query
+    name: "Compound bool queries"
+    source: "Elasticsearch reference: Boolean query and Query and filter context; OpenSearch docs: Boolean queries"
+    match: [es-bool-query]
+    subtopics:
+      - {id: es-bool-query-bool-query-clauses, name: "Bool query: must, filter, should, must_not", match: [bool-query-clauses]}
+      - {id: es-bool-query-filter-context-and-caching, name: "Filter context and query caching", match: [filter-context-and-caching]}
+      - {id: es-bool-query-minimum-should-match-tuning, name: "minimum_should_match in bool queries", match: [minimum-should-match-tuning]}
+  - id: es-term-level-queries
+    name: "Term-level queries"
+    source: "Elasticsearch reference: Term-level queries; OpenSearch docs: Term-level queries"
+    match: [es-term-level-queries]
+    subtopics:
+      - {id: es-term-level-queries-term-vs-match-pitfall, name: "term versus match on text fields", match: [term-vs-match-pitfall]}
+      - {id: es-term-level-queries-range-query-dates, name: "Range queries and date math", match: [range-query-dates]}
+      - {id: es-term-level-queries-wildcard-prefix-fuzzy-regexp, name: "Wildcard, prefix, fuzzy and regexp queries", match: [wildcard-prefix-fuzzy-regexp]}
+  - id: es-nested-and-join
+    name: "Nested and join queries"
+    source: "Elasticsearch reference: Joining queries; OpenSearch docs: Joining queries"
+    match: [es-nested-and-join]
+    subtopics:
+      - {id: es-nested-and-join-nested-query, name: "Nested query", match: [nested-query]}
+      - {id: es-nested-and-join-nested-inner-hits, name: "inner_hits for nested and join", match: [nested-inner-hits]}
+      - {id: es-nested-and-join-parent-child-join-queries, name: "Parent-child join field", match: [parent-child-join-queries]}
+  - id: es-function-score
+    name: "Function score and script score"
+    source: "Elasticsearch reference: Function score query, Script score query, Rank feature query; OpenSearch docs: Compound queries"
+    match: [es-function-score]
+    subtopics:
+      - {id: es-function-score-function-score-decay, name: "function_score with decay and field_value_factor", match: [function-score-decay]}
+      - {id: es-function-score-script-score-query, name: "script_score query", match: [script-score-query]}
+      - {id: es-function-score-rank-feature-query, name: "rank_feature field and query", match: [rank-feature-query]}
+  - id: es-relevance-bm25
+    name: "Relevance and BM25 scoring"
+    source: "Elasticsearch reference: Similarity module; Lucene BM25Similarity docs; OpenSearch docs: Query and filter context, relevance"
+    match: [es-relevance-bm25]
+    subtopics:
+      - {id: es-relevance-bm25-bm25-parameters-k1-b, name: "Tune BM25 parameters k1 and b", match: [bm25-parameters-k1-b]}
+      - {id: es-relevance-bm25-similarity-dfs-query-then-fetch, name: "Shard-level statistics and dfs_query_then_fetch", match: [similarity-dfs-query-then-fetch]}
+      - {id: es-relevance-bm25-index-options-and-norms, name: "index_options, norms and scoring storage", match: [index-options-and-norms]}
+  - id: es-boosting
+    name: "Boosting and rescoring"
+    source: "Elasticsearch reference: Boosting query, Rescore search results; OpenSearch docs: Boosting queries, Rescore"
+    match: [es-boosting]
+    subtopics:
+      - {id: es-boosting-field-boosting-and-query-boost, name: "Field and query boosts", match: [field-boosting-and-query-boost]}
+      - {id: es-boosting-boosting-query-demotion, name: "boosting query to demote results", match: [boosting-query-demotion]}
+      - {id: es-boosting-rescore-top-window, name: "Rescore the top N hits", match: [rescore-top-window]}
+  - id: es-explain-profile
+    name: "Explain, profile and validate"
+    source: "Elasticsearch reference: Explain API, Profile API, Validate API; OpenSearch docs: Explain, Profile"
+    match: [es-explain-profile]
+    subtopics:
+      - {id: es-explain-profile-explain-api-score-debugging, name: "Explain why a document did or did not match", match: [explain-api-score-debugging]}
+      - {id: es-explain-profile-profile-api-slow-queries, name: "Profile a slow query", match: [profile-api-slow-queries]}
+      - {id: es-explain-profile-validate-query-api, name: "Validate query API", match: [validate-query-api]}
+  - id: es-painless-scripting
+    name: "Painless scripting"
+    source: "Elasticsearch reference: Scripting and Painless; OpenSearch docs: Painless"
+    match: [es-painless-scripting]
+    subtopics:
+      - {id: es-painless-scripting-painless-script-basics, name: "Painless script basics and safety", match: [painless-script-basics]}
+      - {id: es-painless-scripting-stored-scripts-and-search-templates, name: "Stored scripts and search templates", match: [stored-scripts-and-search-templates]}
+  - id: es-vector-search
+    name: "Vector and kNN search in Elasticsearch"
+    source: "Elasticsearch reference: kNN search, dense_vector field type, semantic search; OpenSearch docs: Vector search"
+    match: [es-vector-search]
+    subtopics:
+      - {id: es-vector-search-dense-vector-knn-search, name: "Elasticsearch dense_vector and knn search", match: [dense-vector-knn-search]}
+      - {id: es-vector-search-knn-hnsw-index-options, name: "HNSW parameters and quantization", match: [knn-hnsw-index-options]}
+      - {id: es-vector-search-hybrid-search-rrf, name: "Hybrid search with reciprocal rank fusion", match: [hybrid-search-rrf]}
+  - id: es-aggs-metrics
+    name: "Metric and cardinality aggregations"
+    source: "Elasticsearch reference: Metrics aggregations; OpenSearch docs: Metric aggregations"
+    match: [es-aggs-metrics]
+    subtopics:
+      - {id: es-aggs-metrics-stats-and-percentiles-aggs, name: "Stats, percentiles and extended stats", match: [stats-and-percentiles-aggs]}
+      - {id: es-aggs-metrics-cardinality-aggregation-approximation, name: "Cardinality (distinct count) aggregation", match: [cardinality-aggregation-approximation]}
+  - id: es-aggs-bucket
+    name: "Bucket aggregations"
+    source: "Elasticsearch reference: Bucket aggregations; OpenSearch docs: Bucket aggregations"
+    match: [es-aggs-bucket]
+    subtopics:
+      - {id: es-aggs-bucket-terms-aggregation-size-accuracy, name: "Terms aggregation size and accuracy", match: [terms-aggregation-size-accuracy]}
+      - {id: es-aggs-bucket-date-histogram-aggregation, name: "Date histogram aggregation", match: [date-histogram-aggregation]}
+      - {id: es-aggs-bucket-composite-aggregation-pagination, name: "Composite aggregation paging", match: [composite-aggregation-pagination]}
+  - id: es-aggs-pipeline
+    name: "Pipeline and sub-aggregations"
+    source: "Elasticsearch reference: Pipeline aggregations; OpenSearch docs: Pipeline aggregations"
+    match: [es-aggs-pipeline]
+    subtopics:
+      - {id: es-aggs-pipeline-bucket-script-derivative-aggs, name: "Pipeline aggregations", match: [bucket-script-derivative-aggs]}
+  - id: es-pagination
+    name: "Pagination and result retrieval"
+    source: "Elasticsearch reference: Paginate search results; OpenSearch docs: Paginate results"
+    match: [es-pagination]
+    subtopics:
+      - {id: es-pagination-from-size-and-max-result-window, name: "from/size paging and the result window", match: [from-size-and-max-result-window]}
+      - {id: es-pagination-search-after-deep-paging, name: "search_after deep pagination", match: [search-after-deep-paging]}
+      - {id: es-pagination-scroll-api-and-slicing, name: "Scroll API and sliced scroll", match: [scroll-api-and-slicing]}
+  - id: es-point-in-time
+    name: "Point in time"
+    source: "Elasticsearch reference: Point in time API; OpenSearch docs: Point in time"
+    match: [es-point-in-time]
+    subtopics:
+      - {id: es-point-in-time-point-in-time-search, name: "Point in time (PIT) searches", match: [point-in-time-search]}
+  - id: es-highlighting
+    name: "Highlighting"
+    source: "Elasticsearch reference: Highlighting; OpenSearch docs: Highlight"
+    match: [es-highlighting]
+    subtopics:
+      - {id: es-highlighting-highlight-unified-fragments, name: "Highlighting with the unified highlighter", match: [highlight-unified-fragments]}
+  - id: es-suggesters
+    name: "Suggesters and autocomplete"
+    source: "Elasticsearch reference: Suggesters; OpenSearch docs: Did-you-mean, Autocomplete"
+    match: [es-suggesters]
+    subtopics:
+      - {id: es-suggesters-completion-suggester, name: "Completion suggester", match: [completion-suggester]}
+      - {id: es-suggesters-term-and-phrase-suggesters, name: "Did-you-mean with term and phrase suggesters", match: [term-and-phrase-suggesters]}
+  - id: es-runtime-fields
+    name: "Runtime fields"
+    source: "Elasticsearch reference: Runtime fields; OpenSearch docs: derived fields (check availability)"
+    match: [es-runtime-fields]
+    subtopics:
+      - {id: es-runtime-fields-runtime-fields-mapping, name: "Runtime fields in the mapping", match: [runtime-fields-mapping]}
+      - {id: es-runtime-fields-runtime-fields-search-request, name: "Runtime fields in a search request", match: [runtime-fields-search-request]}
+  - id: es-reindex
+    name: "Reindex and by-query operations"
+    source: "Elasticsearch reference: Reindex API, Update by query, Delete by query; OpenSearch docs: Reindex data"
+    match: [es-reindex]
+    subtopics:
+      - {id: es-reindex-reindex-api-mapping-change, name: "Reindex into a new index", match: [reindex-api-mapping-change]}
+      - {id: es-reindex-reindex-from-remote, name: "Reindex from a remote cluster", match: [reindex-from-remote]}
+      - {id: es-reindex-update-delete-by-query, name: "Update by query and delete by query", match: [update-delete-by-query]}
+  - id: es-aliases
+    name: "Index aliases"
+    source: "Elasticsearch reference: Aliases; OpenSearch docs: Index aliases"
+    match: [es-aliases]
+    subtopics:
+      - {id: es-aliases-alias-zero-downtime-switch, name: "Zero-downtime reindex with an alias", match: [alias-zero-downtime-switch]}
+      - {id: es-aliases-filtered-and-routing-aliases, name: "Filtered and routing aliases", match: [filtered-and-routing-aliases]}
+      - {id: es-aliases-write-alias-rollover, name: "Write alias and rollover", match: [write-alias-rollover]}
+  - id: es-shards-replicas
+    name: "Shards and replicas"
+    source: "Elasticsearch reference: Size your shards, Index settings; OpenSearch docs: Index settings"
+    match: [es-shards-replicas]
+    subtopics:
+      - {id: es-shards-replicas-primary-shard-sizing, name: "Choose primary shard count and size", match: [primary-shard-sizing]}
+      - {id: es-shards-replicas-replica-count-and-availability, name: "Replica count and availability", match: [replica-count-and-availability]}
+      - {id: es-shards-replicas-shrink-split-clone-index, name: "Shrink, split and clone indices", match: [shrink-split-clone-index]}
+  - id: es-allocation
+    name: "Shard allocation and routing"
+    source: "Elasticsearch reference: Cluster-level shard allocation and routing settings; OpenSearch docs: Cluster settings, shard allocation"
+    match: [es-allocation]
+    subtopics:
+      - {id: es-allocation-allocation-awareness-zones, name: "Allocation awareness and forced awareness", match: [allocation-awareness-zones]}
+      - {id: es-allocation-allocation-filtering-and-tiers, name: "Allocation filtering and data tiers", match: [allocation-filtering-and-tiers]}
+      - {id: es-allocation-disk-watermarks, name: "Disk watermarks and read-only indices", match: [disk-watermarks]}
+  - id: es-cluster-health
+    name: "Cluster health and shard triage"
+    source: "Elasticsearch reference: Cluster health API, Cluster allocation explain API, Troubleshooting; OpenSearch docs: Cluster health, Cluster allocation explain"
+    match: [es-cluster-health]
+    subtopics:
+      - {id: es-cluster-health-cluster-health-api-status, name: "Read cluster health and cat APIs", match: [cluster-health-api-status]}
+      - {id: es-cluster-health-allocation-explain-unassigned, name: "Explain unassigned shards", match: [allocation-explain-unassigned]}
+      - {id: es-cluster-health-red-yellow-triage-runbook, name: "Red and yellow cluster triage", match: [red-yellow-triage-runbook]}
+  - id: es-troubleshooting
+    name: "Troubleshooting nodes and queries"
+    source: "Elasticsearch reference: Troubleshooting, Circuit breaker settings, Slow log; OpenSearch docs: Slow logs, Circuit breaker"
+    match: [es-troubleshooting]
+    subtopics:
+      - {id: es-troubleshooting-circuit-breaker-and-heap-errors, name: "Circuit breaker and heap pressure", match: [circuit-breaker-and-heap-errors]}
+      - {id: es-troubleshooting-hot-threads-and-tasks, name: "Hot threads and task management", match: [hot-threads-and-tasks]}
+      - {id: es-troubleshooting-slow-log-configuration, name: "Search and indexing slow logs", match: [slow-log-configuration]}
+  - id: es-ilm
+    name: "Index lifecycle management (Elasticsearch)"
+    source: "Elasticsearch reference: Index lifecycle management; Elastic Certified Engineer objectives on ILM"
+    match: [es-ilm]
+    subtopics:
+      - {id: es-ilm-ilm-policy-phases, name: "Write an ILM policy with phases", match: [ilm-policy-phases]}
+      - {id: es-ilm-ilm-explain-and-troubleshooting, name: "Troubleshoot stuck ILM", match: [ilm-explain-and-troubleshooting]}
+      - {id: es-ilm-ilm-data-tiers-and-searchable-snapshots, name: "ILM with data tiers and searchable snapshots", match: [ilm-data-tiers-and-searchable-snapshots]}
+  - id: es-snapshots
+    name: "Snapshots and restore"
+    source: "Elasticsearch reference: Snapshot and restore; OpenSearch docs: Snapshots"
+    match: [es-snapshots]
+    subtopics:
+      - {id: es-snapshots-snapshot-repository-register, name: "Register a snapshot repository", match: [snapshot-repository-register]}
+      - {id: es-snapshots-snapshot-create-restore, name: "Create and restore snapshots", match: [snapshot-create-restore]}
+      - {id: es-snapshots-slm-snapshot-lifecycle, name: "Snapshot lifecycle management", match: [slm-snapshot-lifecycle]}
+  - id: es-security-rbac
+    name: "Security: users, roles and RBAC"
+    source: "Elasticsearch reference: Secure the Elastic Stack and Security privileges; OpenSearch docs: Security plugin access control"
+    match: [es-security-rbac]
+    subtopics:
+      - {id: es-security-rbac-roles-and-users-rbac, name: "Roles and users (RBAC)", match: [roles-and-users-rbac]}
+      - {id: es-security-rbac-api-keys-service-accounts, name: "API keys with restricted privileges", match: [api-keys-service-accounts]}
+      - {id: es-security-rbac-document-and-field-level-security, name: "Document-level and field-level security", match: [document-and-field-level-security]}
+  - id: es-tls
+    name: "TLS, certificates and node security"
+    source: "Elasticsearch reference: Set up minimal security, Configure TLS; OpenSearch docs: Configure TLS certificates"
+    match: [es-tls]
+    subtopics:
+      - {id: es-tls-transport-http-tls-setup, name: "Enable TLS for transport and HTTP", match: [transport-http-tls-setup]}
+      - {id: es-tls-certificate-rotation, name: "Rotate certificates", match: [certificate-rotation]}
+  - id: es-monitoring
+    name: "Monitoring the cluster"
+    source: "Elasticsearch reference: Monitor a cluster, Node stats; OpenSearch docs: Performance analyzer, Cluster stats"
+    match: [es-monitoring]
+    subtopics:
+      - {id: es-monitoring-cluster-and-node-stats, name: "Cluster and node stats", match: [cluster-and-node-stats]}
+      - {id: es-monitoring-thread-pool-rejections, name: "Thread pool queues and rejections", match: [thread-pool-rejections]}
+  - id: es-perf-indexing
+    name: "Indexing performance"
+    source: "Elasticsearch reference: Tune for indexing speed; OpenSearch docs: Tuning for indexing speed"
+    match: [es-perf-indexing]
+    subtopics:
+      - {id: es-perf-indexing-bulk-indexing-tuning, name: "Tune bulk indexing throughput", match: [bulk-indexing-tuning]}
+      - {id: es-perf-indexing-refresh-interval-and-translog, name: "Refresh interval and translog durability", match: [refresh-interval-and-translog]}
+  - id: es-perf-search
+    name: "Search performance"
+    source: "Elasticsearch reference: Tune for search speed, Force merge; OpenSearch docs: Tuning for search speed"
+    match: [es-perf-search]
+    subtopics:
+      - {id: es-perf-search-search-speed-tuning, name: "Tune search speed", match: [search-speed-tuning]}
+      - {id: es-perf-search-force-merge-read-only-indices, name: "Force merge read-only indices", match: [force-merge-read-only-indices]}
+      - {id: es-perf-search-routing-and-preference, name: "Custom routing and search preference", match: [routing-and-preference]}
+  - id: es-upgrades
+    name: "Upgrades and migration"
+    source: "Elasticsearch reference: Upgrade Elasticsearch; OpenSearch docs: Upgrading OpenSearch"
+    match: [es-upgrades]
+    subtopics:
+      - {id: es-upgrades-rolling-upgrade-procedure, name: "Rolling upgrade", match: [rolling-upgrade-procedure]}
+      - {id: es-upgrades-deprecation-checks-and-compatibility, name: "Deprecation checks before a major upgrade", match: [deprecation-checks-and-compatibility]}
+  - id: es-sizing
+    name: "Capacity planning and sizing"
+    source: "Elasticsearch reference: Size your shards, Node roles; OpenSearch docs: Sizing OpenSearch Service domains"
+    match: [es-sizing]
+    subtopics:
+      - {id: es-sizing-cluster-capacity-planning, name: "Capacity planning for a cluster", match: [cluster-capacity-planning]}
+      - {id: es-sizing-node-roles-and-hot-warm-architecture, name: "Node roles and hot-warm-cold architecture", match: [node-roles-and-hot-warm-architecture]}
+  - id: es-cross-cluster
+    name: "Cross-cluster search and replication"
+    source: "Elasticsearch reference: Cross-cluster search, Cross-cluster replication; OpenSearch docs: Cross-cluster search and replication"
+    match: [es-cross-cluster]
+    subtopics:
+      - {id: es-cross-cluster-cross-cluster-search-setup, name: "Cross-cluster search", match: [cross-cluster-search-setup]}
+      - {id: es-cross-cluster-cross-cluster-replication, name: "Cross-cluster replication", match: [cross-cluster-replication]}
+  - id: os-ism
+    name: "OpenSearch Index State Management (ISM)"
+    source: "OpenSearch docs: Index management, Index State Management"
+    match: [os-ism]
+    subtopics:
+      - {id: os-ism-ism-policy-states-transitions, name: "Write an ISM policy", match: [ism-policy-states-transitions]}
+      - {id: os-ism-ism-explain-retry-failed, name: "Debug and retry failed ISM actions", match: [ism-explain-retry-failed]}
+      - {id: os-ism-ism-snapshot-and-rollup-actions, name: "ISM snapshot, rollup and transform", match: [ism-snapshot-and-rollup-actions]}
+  - id: os-security-plugin
+    name: "OpenSearch security plugin"
+    source: "OpenSearch docs: Security, Access control, Configuring the Security backend"
+    match: [os-security-plugin]
+    subtopics:
+      - {id: os-security-plugin-securityadmin-config-update, name: "Update security config with securityadmin", match: [securityadmin-config-update]}
+      - {id: os-security-plugin-opensearch-roles-tenants-mapping, name: "Roles, role mappings and tenants", match: [opensearch-roles-tenants-mapping]}
+      - {id: os-security-plugin-opensearch-audit-logging, name: "Security audit logging", match: [opensearch-audit-logging]}
+  - id: os-knn
+    name: "OpenSearch k-NN vector search"
+    source: "OpenSearch docs: k-NN, Vector search, Approximate k-NN search"
+    match: [os-knn]
+    subtopics:
+      - {id: os-knn-opensearch-knn-index-and-query, name: "OpenSearch k-NN index and query", match: [opensearch-knn-index-and-query]}
+      - {id: os-knn-knn-engines-spaces-and-methods, name: "Choose k-NN engine, space and method", match: [knn-engines-spaces-and-methods]}
+      - {id: os-knn-knn-warmup-and-memory, name: "k-NN memory, warmup and circuit breaker", match: [knn-warmup-and-memory]}
+  - id: os-search-pipelines
+    name: "OpenSearch search pipelines and neural search"
+    source: "OpenSearch docs: Search pipelines, Neural search, Hybrid search"
+    match: [os-search-pipelines]
+    subtopics:
+      - {id: os-search-pipelines-search-pipeline-processors, name: "Search pipelines", match: [search-pipeline-processors]}
+      - {id: os-search-pipelines-hybrid-query-normalization, name: "Hybrid query with score normalization", match: [hybrid-query-normalization]}
+      - {id: os-search-pipelines-neural-search-ingest-models, name: "Neural search with ML Commons models", match: [neural-search-ingest-models]}
+  - id: os-ppl-sql
+    name: "OpenSearch PPL and SQL"
+    source: "OpenSearch docs: SQL and PPL, Piped Processing Language"
+    match: [os-ppl-sql]
+    subtopics:
+      - {id: os-ppl-sql-ppl-queries, name: "Piped Processing Language (PPL) queries", match: [ppl-queries]}
+      - {id: os-ppl-sql-sql-plugin-queries, name: "OpenSearch SQL queries", match: [sql-plugin-queries]}
+  - id: os-alerting
+    name: "OpenSearch alerting and observability"
+    source: "OpenSearch docs: Alerting, Observability, Anomaly detection"
+    match: [os-alerting]
+    subtopics:
+      - {id: os-alerting-alerting-monitors-triggers, name: "Alerting monitors, triggers and destinations", match: [alerting-monitors-triggers]}
+      - {id: os-alerting-anomaly-detection-detectors, name: "Anomaly detection detectors", match: [anomaly-detection-detectors]}
+      - {id: os-alerting-dashboards-query-and-saved-objects, name: "Dashboards queries and saved object backup", match: [dashboards-query-and-saved-objects]}

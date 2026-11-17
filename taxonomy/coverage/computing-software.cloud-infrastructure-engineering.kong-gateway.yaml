@@ -1,0 +1,275 @@
+# Coverage spec for Kong Gateway (computing-software / cloud-infrastructure-engineering).
+subject: Kong Gateway
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [kong-gateway]
+sources:
+  - "Kong Gateway documentation (https://developer.konghq.com/gateway/)"
+  - "kong.conf.default (https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default)"
+  - "Kong plugin schemas (https://github.com/Kong/kong/tree/master/kong/plugins)"
+topics:
+  - id: database-postgres-settings
+    name: "PostgreSQL connection settings"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["pg-host", "pg-user", "postgres"]
+  - id: dbless-mode-enable
+    name: "Enabling DB-less mode"
+    source: https://developer.konghq.com/gateway/db-less-mode/
+    match: ["database-off", "declarative-config", "lmdb"]
+  - id: proxy-listen
+    name: "proxy_listen"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["proxy-listen", "reuseport", "http2"]
+  - id: admin-listen
+    name: "admin_listen"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["admin-listen", "admin-api", "8001"]
+  - id: status-listen
+    name: "status_listen"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["status-listen", "8007", "status-api"]
+  - id: stream-listen
+    name: "stream_listen"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["stream-listen", "tcp-proxy", "tls-stream"]
+  - id: nginx-directive-injection
+    name: "Injecting Nginx directives"
+    source: https://developer.konghq.com/gateway/nginx-directives/
+    match: ["nginx-directives", "nginx-http", "nginx-proxy"]
+  - id: nginx-custom-template
+    name: "Custom Nginx include and template"
+    source: https://developer.konghq.com/gateway/nginx-directives/
+    match: ["nginx-conf", "nginx-http-include", "custom-template"]
+  - id: ssl-protocols-ciphers
+    name: "TLS protocols and cipher suite"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["ssl-cipher-suite", "tls-protocols", "ssl-session"]
+  - id: proxy-tls-certificate
+    name: "Proxy and Admin API TLS certificates"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["ssl-cert", "admin-ssl-cert", "client-ssl"]
+  - id: lua-ssl-trusted-certificate
+    name: "lua_ssl_trusted_certificate"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["lua-ssl-trusted-certificate", "lua-ssl-verify-depth", "cosocket"]
+  - id: plugins-loading
+    name: "Loading plugins and vaults"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["bundled", "plugins-setting", "vaults"]
+  - id: log-level-setting
+    name: "log_level"
+    source: https://developer.konghq.com/gateway/logs/
+    match: ["log-level", "notice", "error-log"]
+  - id: dynamic-log-level
+    name: "Changing log level at runtime"
+    source: https://developer.konghq.com/gateway/logs/
+    match: ["dynamic-log-level", "debug-node", "log-level-api"]
+  - id: access-error-logs
+    name: "Access and error log settings"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["proxy-access-log", "admin-access-log", "proxy-error-log"]
+  - id: response-headers-setting
+    name: "headers and headers_upstream"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["headers", "headers-upstream", "latency-tokens"]
+  - id: real-ip-trusted-ips
+    name: "real_ip_header and trusted_ips"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["real-ip-header", "trusted-ips", "real-ip-recursive"]
+  - id: upstream-keepalive
+    name: "Upstream keepalive pool"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["upstream-keepalive-pool-size", "keepalive-idle-timeout", "keepalive-max-requests"]
+  - id: entity-cache-settings
+    name: "Entity cache settings"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["db-cache-ttl", "db-update-frequency", "mem-cache-size"]
+  - id: router-flavor-setting
+    name: "router_flavor"
+    source: https://developer.konghq.com/gateway/entities/route/
+    match: ["router-flavor", "expressions", "traditional-compatible"]
+  - id: hybrid-roles-listeners
+    name: "Hybrid mode roles and listeners"
+    source: https://developer.konghq.com/gateway/hybrid-mode/
+    match: ["control-plane", "data-plane", "cluster-listen"]
+  - id: hybrid-mtls-modes
+    name: "Hybrid cluster_mtls modes"
+    source: https://developer.konghq.com/gateway/hybrid-mode/
+    match: ["cluster-mtls", "pki", "cluster-cert"]
+  - id: hybrid-sync-behavior
+    name: "Hybrid configuration sync and cache"
+    source: https://developer.konghq.com/gateway/hybrid-mode/
+    match: ["hybrid-sync", "config-cache", "incremental-sync"]
+  - id: hybrid-version-compat
+    name: "Hybrid version compatibility"
+    source: https://developer.konghq.com/gateway/hybrid-mode/
+    match: ["version-compatibility", "data-plane-version", "clustering-data-planes"]
+  - id: pg-read-replica
+    name: "PostgreSQL read-only replica"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong.conf.default
+    match: ["pg-ro-host", "read-replica", "read-splitting"]
+  - id: kong-conf-env-vars
+    name: "kong.conf location and environment variables"
+    source: https://developer.konghq.com/gateway/manage-kong-conf/
+    match: ["kong-conf", "kong-env-prefix", "kong-restart"]
+  - id: kong-check-prepare
+    name: "kong check and kong prepare"
+    source: https://developer.konghq.com/gateway/manage-kong-conf/
+    match: ["kong-check", "kong-prepare", "effective-config"]
+  - id: kong-migrations-commands
+    name: "kong migrations commands"
+    source: https://developer.konghq.com/gateway/cli/reference/
+    match: ["kong-migrations", "bootstrap", "migrations-finish"]
+  - id: service-fields-defaults
+    name: "Service fields and defaults"
+    source: https://developer.konghq.com/gateway/entities/service/
+    match: ["service-entity", "service-url", "service-protocol"]
+  - id: service-timeouts-retries
+    name: "Service timeouts and retries"
+    source: https://developer.konghq.com/gateway/entities/service/
+    match: ["connect-timeout", "read-timeout", "retries"]
+  - id: service-upstream-tls
+    name: "Service upstream TLS verification"
+    source: https://developer.konghq.com/gateway/entities/service/
+    match: ["tls-verify", "client-certificate", "tls-sans"]
+  - id: route-fields-defaults
+    name: "Route fields and defaults"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/db/schema/entities/routes.lua
+    match: ["route-entity", "https-redirect-status-code", "request-buffering"]
+  - id: route-matching-priority
+    name: "Route matching priority"
+    source: https://developer.konghq.com/gateway/entities/route/
+    match: ["route-priority", "route-matching", "hosts-headers"]
+  - id: route-regex-paths
+    name: "Regex paths in Routes"
+    source: https://developer.konghq.com/gateway/entities/route/
+    match: ["regex-paths", "strip-path-regex", "regex-priority"]
+  - id: route-path-handling
+    name: "strip_path, preserve_host and path_handling"
+    source: https://developer.konghq.com/gateway/entities/route/
+    match: ["path-handling", "strip-path", "preserve-host"]
+  - id: upstream-algorithms
+    name: "Upstream load-balancing algorithms"
+    source: https://developer.konghq.com/gateway/entities/upstream/
+    match: ["load-balancing", "round-robin", "consistent-hashing"]
+  - id: upstream-hash-on
+    name: "Upstream hash_on options"
+    source: https://developer.konghq.com/gateway/entities/upstream/
+    match: ["hash-on", "hash-fallback", "sticky-sessions"]
+  - id: target-weight-failover
+    name: "Target weight and failover"
+    source: https://developer.konghq.com/gateway/entities/target/
+    match: ["target", "weight", "failover"]
+  - id: healthchecks-active
+    name: "Active health checks"
+    source: https://developer.konghq.com/gateway/traffic-control/health-checks-circuit-breakers/
+    match: ["active-health-checks", "http-path", "healthy-interval"]
+  - id: healthchecks-passive
+    name: "Passive health checks"
+    source: https://developer.konghq.com/gateway/traffic-control/health-checks-circuit-breakers/
+    match: ["passive-health-checks", "circuit-breaker", "unhealthy-statuses"]
+  - id: healthchecks-threshold
+    name: "Upstream threshold and manual healthy"
+    source: https://developer.konghq.com/gateway/traffic-control/health-checks-circuit-breakers/
+    match: ["healthchecks-threshold", "manual-healthy", "upstream-503"]
+  - id: consumer-entity
+    name: "Consumer entity"
+    source: https://developer.konghq.com/gateway/entities/consumer/
+    match: ["consumer", "custom-id", "credentials"]
+  - id: consumer-groups
+    name: "Consumer groups"
+    source: https://developer.konghq.com/gateway/entities/consumer-group/
+    match: ["consumer-groups", "group-precedence", "consumer-group-scoping"]
+  - id: plugin-scoping-precedence
+    name: "Plugin scoping and precedence"
+    source: https://developer.konghq.com/gateway/entities/plugin/
+    match: ["plugin-scope", "plugin-precedence", "global-plugin"]
+  - id: plugin-execution-phases
+    name: "Plugin execution phases"
+    source: https://developer.konghq.com/gateway/entities/plugin/
+    match: ["plugin-phases", "access-phase", "log-phase"]
+  - id: certificate-sni
+    name: "Certificates and SNIs"
+    source: https://developer.konghq.com/gateway/entities/sni/
+    match: ["certificate-entity", "sni-entity", "wildcard-sni"]
+  - id: ca-certificate
+    name: "CA certificates"
+    source: https://developer.konghq.com/gateway/entities/ca-certificate/
+    match: ["ca-certificates", "cert-digest", "trust-store"]
+  - id: deck-sync-diff-dump
+    name: "decK sync, diff and dump"
+    source: https://developer.konghq.com/deck/
+    match: ["deck", "deck-sync", "deck-diff"]
+  - id: rate-limiting-limits
+    name: "rate-limiting limits"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/rate-limiting/schema.lua
+    match: ["rate-limiting", "limit-by", "error-code"]
+  - id: rate-limiting-policy
+    name: "rate-limiting policy and sync"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/rate-limiting/schema.lua
+    match: ["rate-limiting-policy", "redis-policy", "sync-rate"]
+  - id: key-auth
+    name: "key-auth plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/key-auth/schema.lua
+    match: ["key-auth", "apikey", "key-names"]
+  - id: jwt
+    name: "jwt plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/jwt/schema.lua
+    match: ["jwt", "key-claim-name", "claims-to-verify"]
+  - id: basic-auth
+    name: "basic-auth plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/basic-auth/schema.lua
+    match: ["basic-auth", "hide-credentials", "realm"]
+  - id: cors
+    name: "cors plugin"
+    source: https://developer.konghq.com/plugins/cors/reference/
+    match: ["cors", "preflight", "access-control-allow-origin"]
+  - id: request-transformer
+    name: "request-transformer plugin"
+    source: https://developer.konghq.com/plugins/request-transformer/
+    match: ["request-transformer", "templates", "uri-captures"]
+  - id: response-transformer
+    name: "response-transformer plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/response-transformer/schema.lua
+    match: ["response-transformer", "json-types", "remove-rename"]
+  - id: ip-restriction
+    name: "ip-restriction plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/ip-restriction/schema.lua
+    match: ["ip-restriction", "cidr", "allow-deny"]
+  - id: acl
+    name: "acl plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/acl/schema.lua
+    match: ["acl", "consumer-groups-header", "hide-groups-header"]
+  - id: prometheus
+    name: "prometheus plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/prometheus/schema.lua
+    match: ["prometheus", "status-code-metrics", "per-consumer"]
+  - id: file-log
+    name: "file-log plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/file-log/schema.lua
+    match: ["file-log", "log-file", "reopen"]
+  - id: http-log
+    name: "http-log plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/http-log/schema.lua
+    match: ["http-log", "http-endpoint", "log-queue"]
+  - id: request-termination
+    name: "request-termination plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/request-termination/schema.lua
+    match: ["request-termination", "status-code", "echo"]
+  - id: proxy-cache
+    name: "proxy-cache plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/proxy-cache/schema.lua
+    match: ["proxy-cache", "cache-ttl", "x-cache-status"]
+  - id: bot-detection
+    name: "bot-detection plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/bot-detection/schema.lua
+    match: ["bot-detection", "user-agent", "bot-allow-deny"]
+  - id: correlation-id
+    name: "correlation-id plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/correlation-id/schema.lua
+    match: ["correlation-id", "kong-request-id", "generator"]
+  - id: request-size-limiting
+    name: "request-size-limiting plugin"
+    source: https://raw.githubusercontent.com/Kong/kong/master/kong/plugins/request-size-limiting/schema.lua
+    match: ["request-size-limiting", "payload-size", "require-content-length"]

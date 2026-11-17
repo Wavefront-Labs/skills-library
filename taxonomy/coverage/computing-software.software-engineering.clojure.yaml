@@ -1,0 +1,311 @@
+# Canonical coverage spec: Clojure language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: clojure-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [clojure]
+sources:
+  - "clojure.org Reference (reader, evaluation, special forms, macros, namespaces, protocols, datatypes, multimethods, transients, transducers, atoms/refs/agents, java interop, deps_and_cli, tools.deps)"
+  - "clojure.org Guides (REPL, learn syntax, spec) and the clojure.spec guide"
+  - "clojure.core API (clojure.github.io/clojure) and core.async docs, clojure.test"
+  - "Clojure Style Guide (github.com/bbatsov/clojure-style-guide)"
+  - "clj-kondo, cljfmt and zprint docs, Leiningen docs, ClojureScript basics (clojurescript.org)"
+topics:
+  - id: clojure-reader
+    name: "Reader and syntax"
+    source: "clojure.org reference reader"
+    match: [clojure-reader]
+    subtopics:
+      - {id: clojure-reader-literals-collections, name: "Literals and collection syntax", match: [literals-collections]}
+      - {id: clojure-reader-reader-macros-tagged, name: "Reader macros and tagged literals", match: [reader-macros-tagged-literals]}
+      - {id: clojure-reader-reader-conditionals, name: "Reader conditionals and cljc", match: [reader-conditionals]}
+  - id: clojure-evaluation
+    name: "Evaluation and special forms"
+    source: "clojure.org reference special_forms evaluation"
+    match: [clojure-evaluation]
+    subtopics:
+      - {id: clojure-evaluation-special-forms, name: "Special forms", match: [special-forms]}
+      - {id: clojure-evaluation-evaluation-vars-symbols, name: "Evaluation model, symbols and vars", match: [evaluation-vars-symbols]}
+  - id: clojure-data-structures
+    name: "Persistent data structures"
+    source: "clojure.org reference data_structures"
+    match: [clojure-data-structures]
+    subtopics:
+      - {id: clojure-data-structures-persistent-collections, name: "Persistent collections and complexity", match: [persistent-collections]}
+      - {id: clojure-data-structures-seq-abstraction-lazy, name: "Sequences and laziness", match: [seq-abstraction-lazy]}
+  - id: clojure-destructuring
+    name: "Destructuring"
+    source: "clojure.org guides destructuring"
+    match: [clojure-destructuring]
+    subtopics:
+      - {id: clojure-destructuring-destructuring-sequential-assoc, name: "Sequential and associative destructuring", match: [destructuring-sequential-assoc]}
+      - {id: clojure-destructuring-destructuring-kwargs, name: "Keyword arguments and destructuring in fn args", match: [destructuring-kwargs]}
+  - id: clojure-functions
+    name: "Functions and higher-order programming"
+    source: "clojure.org reference special_forms fn"
+    match: [clojure-functions]
+    subtopics:
+      - {id: clojure-functions-fn-arity-closures, name: "Arity, variadics and closures", match: [fn-arity-closures]}
+      - {id: clojure-functions-higher-order-comp-partial, name: "Higher-order functions and threading", match: [higher-order-comp-partial]}
+  - id: clojure-macros
+    name: "Macros"
+    source: "clojure.org reference macros"
+    match: [clojure-macros]
+    subtopics:
+      - {id: clojure-macros-defmacro-syntax-quote, name: "defmacro and syntax-quote", match: [defmacro-syntax-quote]}
+      - {id: clojure-macros-macro-hygiene-gensym, name: "Macro hygiene and debugging", match: [macro-hygiene-gensym]}
+  - id: clojure-namespaces
+    name: "Namespaces and vars"
+    source: "clojure.org reference namespaces"
+    match: [clojure-namespaces]
+    subtopics:
+      - {id: clojure-namespaces-ns-require-refer, name: "ns, require, use and import", match: [ns-require-refer]}
+      - {id: clojure-namespaces-ns-dynamic-binding-meta, name: "Dynamic vars, binding and metadata", match: [ns-dynamic-binding-meta]}
+  - id: clojure-protocols-datatypes
+    name: "Protocols, records and types"
+    source: "clojure.org reference protocols datatypes"
+    match: [clojure-protocols-datatypes]
+    subtopics:
+      - {id: clojure-protocols-datatypes-protocols-extend, name: "defprotocol and extend", match: [protocols-extend]}
+      - {id: clojure-protocols-datatypes-deftype-defrecord-reify, name: "deftype, defrecord and reify", match: [deftype-defrecord-reify]}
+  - id: clojure-multimethods
+    name: "Multimethods and hierarchies"
+    source: "clojure.org reference multimethods"
+    match: [clojure-multimethods]
+    subtopics:
+      - {id: clojure-multimethods-multimethods-dispatch, name: "defmulti and defmethod", match: [multimethods-dispatch]}
+      - {id: clojure-multimethods-hierarchies-derive-isa, name: "derive, isa? and hierarchies", match: [hierarchies-derive-isa]}
+  - id: clojure-transients-transducers
+    name: "Transients and transducers"
+    source: "clojure.org reference transients transducers"
+    match: [clojure-transients-transducers]
+    subtopics:
+      - {id: clojure-transients-transducers-transients, name: "Transients", match: [transients]}
+      - {id: clojure-transients-transducers-transducers, name: "Transducers", match: [transducers]}
+  - id: clojure-state
+    name: "State, concurrency and parallelism"
+    source: "clojure.org reference atoms refs agents"
+    match: [clojure-state]
+    subtopics:
+      - {id: clojure-state-atoms-swap, name: "Atoms", match: [atoms-swap]}
+      - {id: clojure-state-refs-stm-dosync, name: "Refs and the STM", match: [refs-stm-dosync]}
+      - {id: clojure-state-agents-futures-promises, name: "Agents, futures, promises and delays", match: [agents-futures-promises]}
+  - id: clojure-core-async
+    name: "core.async"
+    source: "clojure.github.io core.async"
+    match: [clojure-core-async]
+    subtopics:
+      - {id: clojure-core-async-core-async-channels-go, name: "Channels and go blocks", match: [core-async-channels-go]}
+      - {id: clojure-core-async-core-async-alts-pipelines, name: "alts!, pub/sub, mult and pipelines", match: [core-async-alts-pipelines]}
+  - id: clojure-java-interop
+    name: "Java interop"
+    source: "clojure.org reference java_interop"
+    match: [clojure-java-interop]
+    subtopics:
+      - {id: clojure-java-interop-interop-calls-members, name: "Calling Java: methods, fields and constructors", match: [interop-calls-members]}
+      - {id: clojure-java-interop-type-hints-reflection, name: "Type hints and reflection warnings", match: [type-hints-reflection]}
+      - {id: clojure-java-interop-proxy-genclass-aot, name: "proxy, gen-class and AOT", match: [proxy-genclass-aot]}
+  - id: clojure-errors
+    name: "Error handling"
+    source: "clojure.org reference"
+    match: [clojure-errors]
+    subtopics:
+      - {id: clojure-errors-ex-info-try-catch, name: "try, catch, throw and ex-info", match: [ex-info-try-catch]}
+      - {id: clojure-errors-uncaught-handlers-stacktraces, name: "Uncaught exceptions and stack traces", match: [uncaught-handlers-stacktraces]}
+  - id: clojure-spec
+    name: "clojure.spec"
+    source: "clojure.org guides spec"
+    match: [clojure-spec]
+    subtopics:
+      - {id: clojure-spec-spec-basics-predicates, name: "spec basics: def, valid?, conform", match: [spec-basics-predicates]}
+      - {id: clojure-spec-spec-fdef-instrument, name: "fdef, instrument and check", match: [spec-fdef-instrument]}
+      - {id: clojure-spec-spec-generators, name: "Generators and test.check", match: [spec-generators]}
+  - id: clojure-repl
+    name: "REPL-driven development"
+    source: "clojure.org guides repl"
+    match: [clojure-repl]
+    subtopics:
+      - {id: clojure-repl-repl-workflow, name: "REPL-driven workflow", match: [repl-workflow]}
+      - {id: clojure-repl-repl-nrepl-editors, name: "nREPL and editor integration", match: [repl-nrepl-editors]}
+  - id: clojure-deps-cli
+    name: "Clojure CLI and deps.edn"
+    source: "clojure.org reference deps_and_cli"
+    match: [clojure-deps-cli]
+    subtopics:
+      - {id: clojure-deps-cli-deps-edn-basics, name: "deps.edn basics", match: [deps-edn-basics]}
+      - {id: clojure-deps-cli-tools-deps-git-local-aliases, name: "Git and local deps, aliases, overrides", match: [tools-deps-git-local-aliases]}
+      - {id: clojure-deps-cli-tools-build-uberjar, name: "tools.build and uberjars", match: [tools-build-uberjar]}
+  - id: clojure-leiningen
+    name: "Leiningen"
+    source: "leiningen.org tutorial"
+    match: [clojure-leiningen]
+    subtopics:
+      - {id: clojure-leiningen-lein-project-clj, name: "project.clj essentials", match: [lein-project-clj]}
+      - {id: clojure-leiningen-lein-profiles-plugins, name: "Profiles, plugins and releases", match: [lein-profiles-plugins]}
+  - id: clojure-testing
+    name: "Testing"
+    source: "clojure.github.io clojure.test"
+    match: [clojure-testing]
+    subtopics:
+      - {id: clojure-testing-clojure-test-deftest, name: "clojure.test: deftest, is, testing", match: [clojure-test-deftest]}
+      - {id: clojure-testing-clojure-test-fixtures-runners, name: "Fixtures and test runners", match: [clojure-test-fixtures-runners]}
+      - {id: clojure-testing-clojure-test-mocking-stubs, name: "Stubbing and test doubles", match: [clojure-test-mocking-stubs]}
+  - id: clojure-style-lint
+    name: "Style, linting and formatting"
+    source: "github.com/bbatsov/clojure-style-guide clj-kondo cljfmt zprint"
+    match: [clojure-style-lint]
+    subtopics:
+      - {id: clojure-style-lint-style-guide-naming-layout, name: "Style guide: naming and layout", match: [style-guide-naming-layout]}
+      - {id: clojure-style-lint-clj-kondo-lint, name: "clj-kondo", match: [clj-kondo-lint]}
+      - {id: clojure-style-lint-cljfmt-zprint-format, name: "cljfmt and zprint formatting", match: [cljfmt-zprint-format]}
+  - id: clojure-debugging-profiling
+    name: "Debugging and profiling"
+    source: "clojure.org guides repl"
+    match: [clojure-debugging-profiling]
+    subtopics:
+      - {id: clojure-debugging-profiling-debugging-tap-repl-tools, name: "Debugging with tap>, spy and clojure.repl", match: [debugging-tap-repl-tools]}
+      - {id: clojure-debugging-profiling-profiling-benchmarks, name: "Profiling and benchmarking", match: [profiling-benchmarks]}
+  - id: clojure-clojurescript
+    name: "ClojureScript"
+    source: "clojurescript.org"
+    match: [clojure-clojurescript]
+    subtopics:
+      - {id: clojure-clojurescript-cljs-basics-build, name: "ClojureScript compilation and tools", match: [cljs-basics-build]}
+      - {id: clojure-clojurescript-cljs-differences-js-interop, name: "ClojureScript vs Clojure and JS interop", match: [cljs-differences-js-interop]}
+  - id: clojure-control-flow
+    name: "Control flow and iteration"
+    source: "clojure.org guides learn flow_control"
+    match: [clojure-control-flow]
+    subtopics:
+      - {id: clojure-control-flow-cond-case-condp, name: "cond, case and condp", match: [cond-case-condp]}
+      - {id: clojure-control-flow-loops-recur-doseq-for, name: "loop, recur, doseq, for and reduce", match: [loops-recur-doseq-for]}
+  - id: clojure-strings-regex
+    name: "Strings and regular expressions"
+    source: "clojure.github.io clojure.string"
+    match: [clojure-strings-regex]
+    subtopics:
+      - {id: clojure-strings-regex-clojure-string-api, name: "clojure.string functions", match: [clojure-string-api]}
+      - {id: clojure-strings-regex-regex-re-find-groups, name: "Regular expressions", match: [regex-re-find-groups]}
+  - id: clojure-numbers
+    name: "Numbers and math"
+    source: "clojure.org reference data_structures numbers"
+    match: [clojure-numbers]
+    subtopics:
+      - {id: clojure-numbers-numeric-tower-overflow, name: "Integers, ratios, decimals and overflow", match: [numeric-tower-overflow]}
+      - {id: clojure-numbers-random-math-sorting, name: "Random numbers, sorting and comparators", match: [random-math-sorting]}
+  - id: clojure-core-library
+    name: "Core library: sets, walk, zip, data"
+    source: "clojure.github.io clojure.set clojure.walk clojure.zip"
+    match: [clojure-core-library]
+    subtopics:
+      - {id: clojure-core-library-clojure-set-relational, name: "clojure.set and relational algebra", match: [clojure-set-relational]}
+      - {id: clojure-core-library-walk-zip-data-diff, name: "clojure.walk, clojure.zip and clojure.data", match: [walk-zip-data-diff]}
+  - id: clojure-io
+    name: "I/O and files"
+    source: "clojure.github.io clojure.java.io"
+    match: [clojure-io]
+    subtopics:
+      - {id: clojure-io-java-io-slurp-spit, name: "slurp, spit and clojure.java.io", match: [java-io-slurp-spit]}
+      - {id: clojure-io-shell-processes-env, name: "Shell, processes and environment", match: [shell-processes-env]}
+  - id: clojure-data-formats
+    name: "EDN, JSON, CSV and serialization"
+    source: "edn-format data.json data.csv"
+    match: [clojure-data-formats]
+    subtopics:
+      - {id: clojure-data-formats-edn-read-print, name: "EDN reading and printing", match: [edn-read-print]}
+      - {id: clojure-data-formats-json-csv-libs, name: "JSON and CSV libraries", match: [json-csv-libs]}
+  - id: clojure-time
+    name: "Dates and times"
+    source: "java.time"
+    match: [clojure-time]
+    subtopics:
+      - {id: clojure-time-java-time-interop, name: "java.time from Clojure", match: [java-time-interop]}
+  - id: clojure-web
+    name: "Web development"
+    source: "github.com/ring-clojure/ring metosin/reitit"
+    match: [clojure-web]
+    subtopics:
+      - {id: clojure-web-ring-handlers-middleware, name: "Ring handlers and middleware", match: [ring-handlers-middleware]}
+      - {id: clojure-web-routing-reitit-compojure, name: "Routing with reitit and Compojure", match: [routing-reitit-compojure]}
+      - {id: clojure-web-http-client-requests, name: "HTTP clients", match: [http-client-requests]}
+  - id: clojure-database
+    name: "Databases"
+    source: "github.com/seancorfield/next-jdbc honeysql"
+    match: [clojure-database]
+    subtopics:
+      - {id: clojure-database-next-jdbc-queries, name: "next.jdbc queries and transactions", match: [next-jdbc-queries]}
+      - {id: clojure-database-honeysql-sql-dsl, name: "HoneySQL query building", match: [honeysql-sql-dsl]}
+      - {id: clojure-database-db-migrations, name: "Migrations with Migratus and Flyway", match: [db-migrations]}
+  - id: clojure-system-design
+    name: "State management and configuration"
+    source: "integrant aero component"
+    match: [clojure-system-design]
+    subtopics:
+      - {id: clojure-system-design-system-lifecycle-integrant, name: "Component lifecycle: Integrant and Component", match: [system-lifecycle-integrant]}
+      - {id: clojure-system-design-config-aero-env, name: "Configuration with Aero and environment variables", match: [config-aero-env]}
+  - id: clojure-validation
+    name: "Data validation and schemas"
+    source: "metosin/malli"
+    match: [clojure-validation]
+    subtopics:
+      - {id: clojure-validation-malli-schemas, name: "Malli schemas", match: [malli-schemas]}
+      - {id: clojure-validation-spec-vs-malli-choice, name: "Choosing spec, malli and plain predicates", match: [spec-vs-malli-choice]}
+  - id: clojure-logging
+    name: "Logging"
+    source: "clojure.tools.logging timbre"
+    match: [clojure-logging]
+    subtopics:
+      - {id: clojure-logging-logging-tools-logging, name: "clojure.tools.logging and backends", match: [logging-tools-logging]}
+  - id: clojure-deployment
+    name: "Packaging and deployment"
+    source: "clojure.org guides tools_build graalvm"
+    match: [clojure-deployment]
+    subtopics:
+      - {id: clojure-deployment-deploy-docker-jvm, name: "Docker images and JVM flags", match: [deploy-docker-jvm]}
+      - {id: clojure-deployment-deploy-graalvm-native, name: "GraalVM native-image", match: [deploy-graalvm-native]}
+      - {id: clojure-deployment-deploy-uberjar-checks, name: "Release builds and artifacts", match: [deploy-uberjar-checks]}
+  - id: clojure-security
+    name: "Security"
+    source: "owasp clojure"
+    match: [clojure-security]
+    subtopics:
+      - {id: clojure-security-security-eval-read-injection, name: "Code injection: eval, read-string, load", match: [security-eval-read-injection]}
+      - {id: clojure-security-security-sql-web, name: "SQL injection and web hardening", match: [security-sql-web]}
+      - {id: clojure-security-security-dependencies, name: "Dependency and supply-chain security", match: [security-dependencies]}
+  - id: clojure-performance
+    name: "Performance"
+    source: "clojure.org reference performance"
+    match: [clojure-performance]
+    subtopics:
+      - {id: clojure-performance-performance-primitives-loops, name: "Primitives and tight loops", match: [performance-primitives-loops]}
+      - {id: clojure-performance-performance-laziness-startup, name: "Laziness, allocation and startup time", match: [performance-laziness-startup]}
+      - {id: clojure-performance-performance-concurrency-reducers, name: "Parallel processing with reducers", match: [performance-concurrency-reducers]}
+  - id: clojure-embedding
+    name: "Embedding and scripting"
+    source: "clojure.org reference"
+    match: [clojure-embedding]
+    subtopics:
+      - {id: clojure-embedding-embedding-from-java, name: "Calling Clojure from Java", match: [embedding-from-java]}
+      - {id: clojure-embedding-scripting-babashka, name: "Scripting with Babashka and clojure -M", match: [scripting-babashka]}
+  - id: clojure-versions
+    name: "Clojure versions and compatibility"
+    source: "clojure.org news releases"
+    match: [clojure-versions]
+    subtopics:
+      - {id: clojure-versions-version-features-1-11-1-12, name: "Features added in 1.9 to 1.12", match: [version-features-1-11-1-12]}
+      - {id: clojure-versions-version-compat-libraries, name: "Targeting multiple versions and migrating", match: [version-compat-libraries]}
+  - id: clojure-concurrency-jvm
+    name: "JVM concurrency interop"
+    source: "java.util.concurrent"
+    match: [clojure-concurrency-jvm]
+    subtopics:
+      - {id: clojure-concurrency-jvm-executors-locking-volatile, name: "Executors, locking and volatiles", match: [executors-locking-volatile]}
+      - {id: clojure-concurrency-jvm-timeouts-retry-backpressure, name: "Timeouts, retries and backpressure", match: [timeouts-retry-backpressure]}
+  - id: clojure-code-organization
+    name: "Project structure and idioms"
+    source: "clojure.org guides"
+    match: [clojure-code-organization]
+    subtopics:
+      - {id: clojure-code-organization-project-layout-namespaces, name: "Project layout and namespace design", match: [project-layout-namespaces]}
+      - {id: clojure-code-organization-idioms-data-oriented, name: "Data-oriented idioms", match: [idioms-data-oriented]}

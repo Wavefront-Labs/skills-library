@@ -1,0 +1,233 @@
+# Coverage spec: Rundeck. Topics from the Rundeck docs (rundeck/docs, docs/*).
+subject: rundeck
+scope:
+  category: computing-software
+  field: devops-ci-cd
+  products: [rundeck]
+sources:
+  - "Rundeck docs (github.com/rundeck/docs/tree/4.0.x/docs)"
+topics:
+  - id: system-requirements
+    name: "System requirements"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/install/system-requirements.md"
+    match: [system-requirements, java-17, h2-database, network-ports]
+  - id: install-debian-ubuntu
+    name: "Install on Debian or Ubuntu"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/install/linux-deb.md"
+    match: [apt-install, deb-package, rundeckd, port-4440]
+  - id: install-rpm-linux
+    name: "Install on RPM based Linux"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/install/linux-rpm.md"
+    match: [yum-install, rpm-package, rundeck-group]
+  - id: install-executable-war
+    name: "Install the executable WAR"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/install/jar.md"
+    match: [executable-war, rdeck-base, installonly, launcher]
+  - id: run-docker-image
+    name: "Run the Docker image"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/install/docker.md"
+    match: [docker-image, docker-run, persistent-data, docker-zoo]
+  - id: start-stop-rundeckd
+    name: "Start and stop rundeckd"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/maintenance/startup.md"
+    match: [rundeckd, java-home, init-script, service-control]
+  - id: postgres-database-backend
+    name: "PostgreSQL database backend"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/configuration/database/postgres.md"
+    match: [postgres, datasource, database-backend]
+  - id: mysql-database-backend
+    name: "MySQL database backend"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/configuration/database/mysql.md"
+    match: [mysql, mariadb-driver, autoreconnect]
+  - id: ssl-https-keystore
+    name: "SSL and HTTPS with a keystore"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/security/ssl.md"
+    match: [ssl-https, keystore, ssl-properties, port-4443]
+  - id: tune-file-descriptors-and-heap
+    name: "Tune file descriptors and JVM heap"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/maintenance/tuning-rundeck.md"
+    match: [file-descriptors, jvm-heap, xmx, oom-killer]
+  - id: tune-quartz-and-node-threads
+    name: "Tune Quartz and node thread counts"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/maintenance/tuning-rundeck.md"
+    match: [quartz-threadcount, node-thread-count, job-timeout, concurrent-jobs]
+  - id: log-files-and-rotation
+    name: "Log files and rotation"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/maintenance/logs.md"
+    match: [service-log, logrotate, log-files, copytruncate]
+  - id: backup-and-recovery
+    name: "Backup and recovery"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/maintenance/backup.md"
+    match: [backup-restore, rd-jobs-list, data-directory, execution-logs]
+  - id: project-archive-export-import
+    name: "Project archive export and import"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/maintenance/backup.md"
+    match: [project-archive, rdproject-jar, export-archive, import-archive]
+  - id: prometheus-monitoring-endpoints
+    name: "Prometheus and monitoring endpoints"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/monitoring/monitoring.md"
+    match: [prometheus, monitoring-endpoints, metrics, jmx-export]
+  - id: execution-history-cleaner
+    name: "Execution history cleaner"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/execution-history-cleaner.md"
+    match: [execution-history-cleaner, retention-days, history-cleanup]
+  - id: s3-log-storage
+    name: "S3 execution log storage"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/cluster/logstore/s3.md"
+    match: [s3-log-storage, execution-file-storage, aws-credentials, logstore]
+  - id: cluster-requirements
+    name: "Cluster mode requirements"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/cluster/index.md"
+    match: [cluster-mode, shared-database, sticky-session, grails-serverurl]
+  - id: load-balancer-health-check
+    name: "Load balancer health check"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/cluster/loadbalancer/health-check.md"
+    match: [health-endpoint, load-balancer, cluster-health, least-privilege]
+  - id: default-users-and-roles
+    name: "Default users and roles"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/security/default-users.md"
+    match: [default-users, realm-properties, ops-admin, app-admin]
+  - id: password-complexity-settings
+    name: "Password complexity settings"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/security/password-security.md"
+    match: [password-strength, password-minlength, user-manager, zxcvbn]
+  - id: failed-login-rate-limiting
+    name: "Failed login rate limiting"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/security/ratelimiting.md"
+    match: [login-rate-limiting, brute-force, auth-rate-limiting, refill-window]
+  - id: api-rate-limiting
+    name: "API rate limiting"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/security/ratelimiting.md"
+    match: [api-rate-limiting, auth-token-limiter, client-ip-limiter, cache-size]
+  - id: audit-trail-log
+    name: "Audit trail log"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/administration/security/audit-trail.md"
+    match: [audit-trail, audit-events-log, siem, login-failed]
+  - id: api-run-job-with-options
+    name: "Run a job through the API with options"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/api/api_basics.md"
+    match: [api-run-job, auth-token, x-rundeck-auth-token, job-options-json]
+  - id: create-project-cli-api
+    name: "Create a project with the CLI or API"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/project-create.md"
+    match: [create-project, rd-projects, project-config, directory-source]
+  - id: node-filter-syntax
+    name: "Node filter syntax"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/11-node-filters.md"
+    match: [node-filter, tag-filter, regex-match, exclude-nodes]
+  - id: ssh-node-authentication-precedence
+    name: "SSH node execution and authentication precedence"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/node-execution/ssh.md"
+    match: [ssh-node-execution, ssh-authentication, ssh-key-storage-path, sftp-file-copier]
+  - id: bastion-host-node-executor
+    name: "Bastion host node executor"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/node-execution/bastionssh.md"
+    match: [bastion-host, openssh-bastion, proxycommand, dry-run]
+  - id: winrm-node-execution
+    name: "WinRM node execution"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/node-execution/powershell.md"
+    match: [winrm, windows-nodes, password-storage-path, powershell-remoting]
+  - id: key-storage-paths-and-acls
+    name: "Key Storage paths and ACLs"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/key-storage/index.md"
+    match: [key-storage, storage-acl, project-key-storage]
+  - id: vault-key-storage-plugin
+    name: "HashiCorp Vault key storage plugin"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/key-storage/storage-plugins/vault.md"
+    match: [hashicorp-vault, vault-storage, key-storage-backend, approle]
+  - id: job-options-definition
+    name: "Job options"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-options.md"
+    match: [job-options, option-validation, required-option, multivalued-option]
+  - id: job-context-variables
+    name: "Job context variables"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-variables.md"
+    match: [context-variables, rd-environment-variables, inline-script-expansion, job-variables]
+  - id: pass-data-between-steps
+    name: "Pass data between steps"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/learning/howto/passing-variables.md"
+    match: [step-data-variables, node-vs-workflow-steps, log-data-step]
+  - id: conditional-logic-steps
+    name: "Conditional logic steps"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/conditional-logic.md"
+    match: [conditional-logic, node-conditional, workflow-conditional, feature-flag]
+  - id: ruleset-workflow-strategy
+    name: "Ruleset workflow strategy"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/workflow-strategies/ruleset.md"
+    match: [ruleset-strategy, workflow-strategy, run-after, step-conditions]
+  - id: enable-job-queue
+    name: "Enable the job queue"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-queue.md"
+    match: [job-queue, queue-size, poll-delay, multiple-executions]
+  - id: retry-failed-nodes
+    name: "Retry failed nodes"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-retry-failed-nodes.md"
+    match: [retry-failed-nodes, execution-plugin, job-retry]
+  - id: job-resume-plugin
+    name: "Job resume plugin"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-resume.md"
+    match: [job-resume, resumable-plugin, workflow-state, resume-on-retry]
+  - id: http-request-workflow-step
+    name: "HTTP request workflow step"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-plugins/workflow-steps/http-request.md"
+    match: [http-request, workflow-step, oauth2, response-code-check]
+  - id: mask-passwords-log-filter
+    name: "Mask Passwords log filter"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/log-filters/mask-passwords.md"
+    match: [mask-passwords, secure-option, replacement-text]
+  - id: json-jq-log-filter
+    name: "JSON jq log filter"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/log-filters/json-jq.md"
+    match: [jq-filter, data-context, step-output]
+  - id: key-value-data-log-filter
+    name: "Key Value Data log filter"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/log-filters/key-value-data.md"
+    match: [key-value-data, data-variables, capture-group]
+  - id: job-notification-events
+    name: "Job notification events"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/jobs/job-notifications.md"
+    match: [job-notifications, avg-duration, notification-events, option-reference]
+  - id: email-notification
+    name: "Email notification"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/notifications/email.md"
+    match: [email-notification, include-log-output, job-user-email, custom-template]
+  - id: slack-notification
+    name: "Slack notification"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/notifications/slack.md"
+    match: [slack-notification, incoming-webhook, freemarker-template, job-events]
+  - id: webhook-notification-plugin
+    name: "Webhook notification plugin"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/notifications/webhooks.md"
+    match: [webhook-notification, sha256-digest, url-token-expansion, notification-headers]
+  - id: webhook-run-job-plugin
+    name: "Webhook Run Job plugin"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/webhooks/run-job.md"
+    match: [run-job-webhook, post-url, webhook-payload, json-payload]
+  - id: webhook-authorization-string
+    name: "Webhook authorization string"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/webhooks.md"
+    match: [webhooks, authorization-header, webhook-user]
+  - id: disable-and-debug-webhooks
+    name: "Disable and debug webhooks"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/webhooks.md"
+    match: [webhook-debugging, webhooks-enabled, webhook-log, log4j]
+  - id: git-scm-export-import
+    name: "Git SCM export and import"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/scm/git.md"
+    match: [scm-git, git-export, git-import, uuid-behavior]
+  - id: git-scm-shared-repository
+    name: "Git SCM shared repository"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/projects/scm/git.md"
+    match: [shared-repository, file-path-template, import-regex]
+  - id: project-schedules
+    name: "Project schedules"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/schedules/project-schedules.md"
+    match: [project-schedules, retain-schedules, crontab-schedule, schedule-yaml]
+  - id: project-calendars
+    name: "Project calendars"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/calendars/project-calendars.md"
+    match: [project-calendars, job-schedule, add-calendar, calendar-jobs]
+  - id: missed-job-fires
+    name: "Missed job fires"
+    source: "https://raw.githubusercontent.com/rundeck/docs/4.0.x/docs/manual/schedules/missedjobfires.md"
+    match: [misfire-detection, missed-execution, misfire-threshold, scheduler]

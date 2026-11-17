@@ -1,0 +1,371 @@
+# Canonical coverage spec: Perl language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: perl-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [perl]
+sources:
+  - "perldoc.perl.org core documentation - perlintro, perldata, perlop, perlsyn, perlsub, perlre, perlref, perlreftut, perlobj, perlootut, perlmod, perlfunc, perlvar, perlrun, perlipc, perlport, perlsec, perlunicode, perlunitut, perlperf, perldebug, perlstyle, perltrap, perlpacktut, perlfaq"
+  - "perlpod and Pod::Usage documentation for POD markup and tooling"
+  - "Test::More, Test::Harness (prove) and Test2 documentation on metacpan.org"
+  - "CPAN, cpanm, Carton, local::lib and MetaCPAN documentation"
+  - "Moo, Moose and Type::Tiny manuals on metacpan.org"
+  - "Perl::Critic (perlcritic) and Perl::Tidy (perltidy) documentation"
+  - "Dist::Zilla, ExtUtils::MakeMaker and Module::Build documentation"
+topics:
+  - id: perl-scalars
+    name: "Scalars and context"
+    source: "perldata, perlop"
+    match: [perl-scalars]
+    subtopics:
+      - {id: perl-scalars-context-list-scalar, name: "List versus scalar context and wantarray", match: [context-list-scalar]}
+      - {id: perl-scalars-undef-defined-truthiness, name: "undef, defined and truthiness", match: [undef-defined-truthiness]}
+      - {id: perl-scalars-string-number-conversion, name: "String and number conversion", match: [string-number-conversion]}
+  - id: perl-arrays
+    name: "Arrays and lists"
+    source: "perldata, perlfunc"
+    match: [perl-arrays]
+    subtopics:
+      - {id: perl-arrays-array-functions-splice, name: "push, pop, shift, unshift, splice and reverse", match: [array-functions-splice]}
+      - {id: perl-arrays-list-slices, name: "Array and list slices", match: [list-slices]}
+      - {id: perl-arrays-array-iteration-aliasing, name: "Iterating arrays and aliasing", match: [array-iteration-aliasing]}
+  - id: perl-hashes
+    name: "Hashes"
+    source: "perldata, perlfunc"
+    match: [perl-hashes]
+    subtopics:
+      - {id: perl-hashes-hash-exists-delete-each, name: "exists, delete, each and keys on hashes", match: [hash-exists-delete-each]}
+      - {id: perl-hashes-hash-slices-kv, name: "Hash slices and key/value slices", match: [hash-slices-kv]}
+      - {id: perl-hashes-hash-ordering-locking, name: "Hash ordering, randomisation and Hash::Util", match: [hash-ordering-locking]}
+  - id: perl-operators
+    name: "Operators"
+    source: "perlop"
+    match: [perl-operators]
+    subtopics:
+      - {id: perl-operators-operator-precedence, name: "Operator precedence and low-precedence logic", match: [operator-precedence]}
+      - {id: perl-operators-string-repetition-ranges, name: "String, repetition, range and increment operators", match: [string-repetition-ranges]}
+      - {id: perl-operators-defined-or-short-circuit, name: "Defined-or, short-circuit and assignment operators", match: [defined-or-short-circuit]}
+  - id: perl-control-flow
+    name: "Control flow"
+    source: "perlsyn"
+    match: [perl-control-flow]
+    subtopics:
+      - {id: perl-control-flow-loop-control-labels, name: "last, next, redo, continue blocks and labels", match: [loop-control-labels]}
+      - {id: perl-control-flow-statement-modifiers-unless, name: "Statement modifiers, unless and conditional forms", match: [statement-modifiers-unless]}
+  - id: perl-subroutines
+    name: "Subroutines"
+    source: "perlsub"
+    match: [perl-subroutines]
+    subtopics:
+      - {id: perl-subroutines-sub-args-aliasing, name: "Sub arguments, @_ aliasing and named parameters", match: [sub-args-aliasing]}
+      - {id: perl-subroutines-sub-signatures, name: "Subroutine signatures", match: [sub-signatures]}
+      - {id: perl-subroutines-closures-state-vars, name: "Closures, state variables and lexical subs", match: [closures-state-vars]}
+      - {id: perl-subroutines-sub-prototypes, name: "Prototypes and block-taking subs", match: [sub-prototypes]}
+  - id: perl-scoping
+    name: "Variable scope"
+    source: "perlsub, perlmod"
+    match: [perl-scoping]
+    subtopics:
+      - {id: perl-scoping-my-our-local-scope, name: "my, our and local", match: [my-our-local-scope]}
+      - {id: perl-scoping-package-variables-globals, name: "Package variables, special globals and sort's $a and $b", match: [package-variables-globals]}
+  - id: perl-regex-basics
+    name: "Regular expressions"
+    source: "perlre, perlretut, perlop"
+    match: [perl-regex-basics]
+    subtopics:
+      - {id: perl-regex-basics-regex-match-subst-operators, name: "m//, s/// and match variables", match: [regex-match-subst-operators]}
+      - {id: perl-regex-basics-regex-named-captures, name: "Named captures and match arrays", match: [regex-named-captures]}
+      - {id: perl-regex-basics-regex-x-modifier-readable, name: "Readable patterns with /x, /xx and qr//", match: [regex-x-modifier-readable]}
+      - {id: perl-regex-basics-transliteration-tr, name: "Transliteration with tr///", match: [transliteration-tr]}
+  - id: perl-regex-advanced
+    name: "Advanced regular expressions"
+    source: "perlre, perlrecharclass, perlretut"
+    match: [perl-regex-advanced]
+    subtopics:
+      - {id: perl-regex-advanced-regex-lookaround-anchors, name: "Lookahead, lookbehind and anchors", match: [regex-lookaround-anchors]}
+      - {id: perl-regex-advanced-regex-backtracking-performance, name: "Backtracking, possessive quantifiers and performance", match: [regex-backtracking-performance]}
+      - {id: perl-regex-advanced-regex-recursion-lexers, name: "Recursive patterns and G lexers", match: [regex-recursion-lexers]}
+      - {id: perl-regex-advanced-regex-qr-objects-split-join, name: "qr// objects, split and join with regexes", match: [regex-qr-objects-split-join]}
+  - id: perl-references
+    name: "References"
+    source: "perlref, perlreftut, perldsc, perllol"
+    match: [perl-references]
+    subtopics:
+      - {id: perl-references-ref-creation-dereference, name: "Creating and dereferencing references", match: [ref-creation-dereference]}
+      - {id: perl-references-ref-type-checks-weaken, name: "Reference types, blessed, and weak references", match: [ref-type-checks-weaken]}
+      - {id: perl-references-nested-data-autovivification, name: "Nested data structures and autovivification", match: [nested-data-autovivification]}
+  - id: perl-data-utils
+    name: "Data utilities"
+    source: "perlfunc, Data::Dumper, Storable, perlfaq4"
+    match: [perl-data-utils]
+    subtopics:
+      - {id: perl-data-utils-data-dumper-inspection, name: "Data::Dumper and structure inspection", match: [data-dumper-inspection]}
+      - {id: perl-data-utils-deep-copy-storable, name: "Deep copy, freezing and Storable", match: [deep-copy-storable]}
+      - {id: perl-data-utils-sorting-complex-schwartzian, name: "Sorting complex data", match: [sorting-complex-schwartzian]}
+  - id: perl-oop-core
+    name: "Object orientation"
+    source: "perlobj, perlootut, perlmod, perlmro"
+    match: [perl-oop-core]
+    subtopics:
+      - {id: perl-oop-core-bless-constructors-methods, name: "Packages, bless, constructors and methods", match: [bless-constructors-methods]}
+      - {id: perl-oop-core-inheritance-mro-c3, name: "Inheritance, @ISA, SUPER and C3 method resolution", match: [inheritance-mro-c3]}
+      - {id: perl-oop-core-autoload-destroy-can, name: "AUTOLOAD, DESTROY, can and UNIVERSAL methods", match: [autoload-destroy-can]}
+      - {id: perl-oop-core-accessors-encapsulation-roles, name: "Accessors, encapsulation and Role::Tiny", match: [accessors-encapsulation-roles]}
+  - id: perl-moo-moose
+    name: "Moo and Moose"
+    source: "Moo, Moose and Type::Tiny manuals on metacpan.org"
+    match: [perl-moo-moose]
+    subtopics:
+      - {id: perl-moo-moose-moo-attributes-has, name: "Moo classes and has attributes", match: [moo-attributes-has]}
+      - {id: perl-moo-moose-moo-moose-roles-modifiers, name: "Roles and method modifiers", match: [moo-moose-roles-modifiers]}
+      - {id: perl-moo-moose-moose-meta-object-protocol, name: "Moose, immutability and the metaobject protocol", match: [moose-meta-object-protocol]}
+  - id: perl-class-feature
+    name: "Core class feature"
+    source: "perlclass, perldelta (5.38 and later)"
+    match: [perl-class-feature]
+    subtopics:
+      - {id: perl-class-feature-class-feature-field-method, name: "The class, field and method keywords", match: [class-feature-field-method]}
+      - {id: perl-class-feature-class-feature-adjust-attributes, name: "ADJUST blocks, field initialisation order and Object::Pad", match: [class-feature-adjust-attributes]}
+  - id: perl-modules
+    name: "Modules and packages"
+    source: "perlmod, perlnewmod, Exporter"
+    match: [perl-modules]
+    subtopics:
+      - {id: perl-modules-package-namespaces-stash, name: "Packages, namespaces and symbol tables", match: [package-namespaces-stash]}
+      - {id: perl-modules-use-require-import-begin, name: "use, require, import and BEGIN", match: [use-require-import-begin]}
+      - {id: perl-modules-exporter-import-conventions, name: "Exporter, @EXPORT_OK and import conventions", match: [exporter-import-conventions]}
+      - {id: perl-modules-inc-lib-findbin-path, name: "@INC, use lib, FindBin and PERL5LIB", match: [inc-lib-findbin-path]}
+      - {id: perl-modules-module-versioning-version-pm, name: "Module versions and version objects", match: [module-versioning-version-pm]}
+  - id: perl-pragmas
+    name: "Pragmas and feature bundles"
+    source: "strict, warnings, feature, constant"
+    match: [perl-pragmas]
+    subtopics:
+      - {id: perl-pragmas-strict-warnings-diagnostics, name: "strict, warnings and diagnostics", match: [strict-warnings-diagnostics]}
+      - {id: perl-pragmas-feature-bundles-use-version, name: "use VERSION and feature bundles", match: [feature-bundles-use-version]}
+      - {id: perl-pragmas-constant-readonly-values, name: "constant pragma and read-only values", match: [constant-readonly-values]}
+  - id: perl-file-io
+    name: "File and directory I/O"
+    source: "perlfunc, perlopentut, perlio, File::* modules"
+    match: [perl-file-io]
+    subtopics:
+      - {id: perl-file-io-open-modes-lexical-handles, name: "open modes, lexical filehandles and error checks", match: [open-modes-lexical-handles]}
+      - {id: perl-file-io-line-reading-slurp-chomp, name: "Reading lines, slurping and record separators", match: [line-reading-slurp-chomp]}
+      - {id: perl-file-io-file-tests-stat-dirs, name: "File tests, stat, directory reading and globbing", match: [file-tests-stat-dirs]}
+      - {id: perl-file-io-path-handling-temp-files, name: "Portable paths, temp files and copies", match: [path-handling-temp-files]}
+      - {id: perl-file-io-file-locking-binary-io, name: "File locking, binary I/O and buffering", match: [file-locking-binary-io]}
+  - id: perl-text-processing
+    name: "Text processing and one-liners"
+    source: "perlrun, perlfunc, perlpacktut"
+    match: [perl-text-processing]
+    subtopics:
+      - {id: perl-text-processing-one-liner-switches, name: "Command-line switches and one-liners", match: [one-liner-switches]}
+      - {id: perl-text-processing-printf-heredoc-formats, name: "sprintf, printf, here-documents and formats", match: [printf-heredoc-formats]}
+      - {id: perl-text-processing-pack-unpack-binary-formats, name: "pack and unpack", match: [pack-unpack-binary-formats]}
+  - id: perl-unicode
+    name: "Unicode and encodings"
+    source: "perlunicode, perluniintro, perlunitut, perlunifaq"
+    match: [perl-unicode]
+    subtopics:
+      - {id: perl-unicode-utf8-source-encoding-io, name: "Source encoding and Unicode I/O", match: [utf8-source-encoding-io]}
+      - {id: perl-unicode-unicode-properties-normalization, name: "Unicode properties, normalization and case folding", match: [unicode-properties-normalization]}
+  - id: perl-errors
+    name: "Error handling"
+    source: "perlfunc (die, eval), perlvar, Carp, autodie"
+    match: [perl-errors]
+    subtopics:
+      - {id: perl-errors-die-eval-block, name: "die, eval BLOCK and $@", match: [die-eval-block]}
+      - {id: perl-errors-exception-objects-carp, name: "Exception classes and Carp", match: [exception-objects-carp]}
+      - {id: perl-errors-try-catch-feature-try-tiny, name: "try/catch feature and Try::Tiny", match: [try-catch-feature-try-tiny]}
+      - {id: perl-errors-warn-die-handlers-sig, name: "Signal handlers for die and warn, autodie", match: [warn-die-handlers-sig]}
+  - id: perl-special-variables
+    name: "Special variables"
+    source: "perlvar, perlrun"
+    match: [perl-special-variables]
+    subtopics:
+      - {id: perl-special-variables-default-topic-variable, name: "$_ and @_ defaults", match: [default-topic-variable]}
+      - {id: perl-special-variables-system-error-variables, name: "$!, $@, $?, $0 and process variables", match: [system-error-variables]}
+      - {id: perl-special-variables-env-argv-stdin-inc, name: "%ENV, @ARGV, STDIN, %INC and invocation data", match: [env-argv-stdin-inc]}
+  - id: perl-processes-ipc
+    name: "Processes and IPC"
+    source: "perlipc, perlfunc, perlport"
+    match: [perl-processes-ipc]
+    subtopics:
+      - {id: perl-processes-ipc-system-exec-backticks, name: "system, exec and capturing command output", match: [system-exec-backticks]}
+      - {id: perl-processes-ipc-pipe-open-ipc-open3, name: "Piped opens, IPC::Open3 and IPC::Run3", match: [pipe-open-ipc-open3]}
+      - {id: perl-processes-ipc-signals-alarm-timeouts, name: "Signals, %SIG and alarm timeouts", match: [signals-alarm-timeouts]}
+      - {id: perl-processes-ipc-fork-wait-sockets, name: "fork, wait and IO::Socket", match: [fork-wait-sockets]}
+  - id: perl-concurrency
+    name: "Concurrency and asynchronous programming"
+    source: "perlthrtut, perlipc, CPAN event-loop docs"
+    match: [perl-concurrency]
+    subtopics:
+      - {id: perl-concurrency-threads-ithreads, name: "Interpreter threads", match: [threads-ithreads]}
+      - {id: perl-concurrency-event-loops-anyevent-ioasync, name: "Event loops: AnyEvent, IO::Async, Mojo::IOLoop", match: [event-loops-anyevent-ioasync]}
+      - {id: perl-concurrency-promises-futures-async-await, name: "Futures, promises and async/await", match: [promises-futures-async-await]}
+      - {id: perl-concurrency-parallel-forkmanager-pool, name: "Process pools with Parallel::ForkManager", match: [parallel-forkmanager-pool]}
+  - id: perl-data-formats
+    name: "Data formats and dates"
+    source: "JSON::PP, Text::CSV, XML::LibXML, YAML::PP, Time::Piece, DateTime docs"
+    match: [perl-data-formats]
+    subtopics:
+      - {id: perl-data-formats-json-encode-decode, name: "JSON with JSON::PP, JSON::MaybeXS and Cpanel::JSON::XS", match: [json-encode-decode]}
+      - {id: perl-data-formats-yaml-xml-csv-parsing, name: "YAML, XML and CSV parsing", match: [yaml-xml-csv-parsing]}
+      - {id: perl-data-formats-dates-times-time-piece, name: "Dates and times with Time::Piece, DateTime and POSIX", match: [dates-times-time-piece]}
+  - id: perl-database
+    name: "Databases with DBI"
+    source: "DBI documentation, DBIx::Class manual"
+    match: [perl-database]
+    subtopics:
+      - {id: perl-database-dbi-connect-prepare-fetch, name: "DBI connect, prepare, placeholders and fetching", match: [dbi-connect-prepare-fetch]}
+      - {id: perl-database-dbi-transactions-error-handling, name: "Transactions, error handling and connection reuse", match: [dbi-transactions-error-handling]}
+      - {id: perl-database-dbix-class-orm, name: "DBIx::Class ORM basics", match: [dbix-class-orm]}
+  - id: perl-web-frameworks
+    name: "Web frameworks and PSGI"
+    source: "PSGI/Plack, Mojolicious, Dancer2, Catalyst manuals"
+    match: [perl-web-frameworks]
+    subtopics:
+      - {id: perl-web-frameworks-mojolicious-routes-templates, name: "Mojolicious routes, controllers and server", match: [mojolicious-routes-templates]}
+      - {id: perl-web-frameworks-plack-psgi-middleware, name: "PSGI, Plack and middleware", match: [plack-psgi-middleware]}
+      - {id: perl-web-frameworks-dancer2-catalyst-other-frameworks, name: "Dancer2, Catalyst and choosing a framework", match: [dancer2-catalyst-other-frameworks]}
+  - id: perl-http-clients
+    name: "HTTP clients"
+    source: "HTTP::Tiny, LWP::UserAgent, Mojo::UserAgent docs"
+    match: [perl-http-clients]
+    subtopics:
+      - {id: perl-http-clients-http-tiny-lwp-useragent, name: "HTTP::Tiny and LWP::UserAgent", match: [http-tiny-lwp-useragent]}
+      - {id: perl-http-clients-mojo-useragent-nonblocking, name: "Mojo::UserAgent blocking and non-blocking requests", match: [mojo-useragent-nonblocking]}
+  - id: perl-cli-apps
+    name: "Command-line applications"
+    source: "Getopt::Long, Pod::Usage, Log::Any, Config modules"
+    match: [perl-cli-apps]
+    subtopics:
+      - {id: perl-cli-apps-getopt-long-pod-usage, name: "Getopt::Long and Pod::Usage", match: [getopt-long-pod-usage]}
+      - {id: perl-cli-apps-config-files-logging, name: "Configuration files and logging", match: [config-files-logging]}
+  - id: perl-templating
+    name: "Templating"
+    source: "Template Toolkit and Mojo::Template documentation"
+    match: [perl-templating]
+    subtopics:
+      - {id: perl-templating-template-toolkit-mojo-template, name: "Template Toolkit and Mojo::Template", match: [template-toolkit-mojo-template]}
+      - {id: perl-templating-html-escaping-xss-templates, name: "Escaping output and avoiding XSS in generated HTML", match: [html-escaping-xss-templates]}
+  - id: perl-cpan-ecosystem
+    name: "CPAN and package ecosystem"
+    source: "CPAN, cpanm, Carton, local::lib, perlbrew and MetaCPAN docs"
+    match: [perl-cpan-ecosystem]
+    subtopics:
+      - {id: perl-cpan-ecosystem-cpan-cpanm-install, name: "Installing modules with cpan and cpanm", match: [cpan-cpanm-install]}
+      - {id: perl-cpan-ecosystem-cpanfile-carton-snapshots, name: "cpanfile, Carton and reproducible dependencies", match: [cpanfile-carton-snapshots]}
+      - {id: perl-cpan-ecosystem-local-lib-perlbrew-plenv, name: "local::lib, perlbrew and plenv", match: [local-lib-perlbrew-plenv]}
+      - {id: perl-cpan-ecosystem-metacpan-module-evaluation, name: "Finding and evaluating CPAN modules", match: [metacpan-module-evaluation]}
+  - id: perl-distribution-build
+    name: "Distributions, build tools and releases"
+    source: "ExtUtils::MakeMaker, Module::Build, Dist::Zilla, perlnewmod, perlmodstyle docs"
+    match: [perl-distribution-build]
+    subtopics:
+      - {id: perl-distribution-build-makefile-pl-makemaker, name: "ExtUtils::MakeMaker and Makefile.PL", match: [makefile-pl-makemaker]}
+      - {id: perl-distribution-build-module-build-tiny-build-pl, name: "Module::Build and Module::Build::Tiny", match: [module-build-tiny-build-pl]}
+      - {id: perl-distribution-build-dist-zilla-dist-ini, name: "Dist::Zilla and dist.ini", match: [dist-zilla-dist-ini]}
+      - {id: perl-distribution-build-pause-release-process, name: "Releasing to CPAN via PAUSE", match: [pause-release-process]}
+  - id: perl-testing-core
+    name: "Testing with Test::More and prove"
+    source: "Test::More, Test::Harness, prove and Test2 documentation"
+    match: [perl-testing-core]
+    subtopics:
+      - {id: perl-testing-core-test-more-assertions, name: "Test::More assertions and plans", match: [test-more-assertions]}
+      - {id: perl-testing-core-prove-test-harness, name: "prove, TAP and running test suites", match: [prove-test-harness]}
+      - {id: perl-testing-core-skip-todo-subtests, name: "SKIP, TODO, BAIL_OUT and subtests", match: [skip-todo-subtests]}
+  - id: perl-testing-tools
+    name: "Test tools, mocking and coverage"
+    source: "Test::Deep, Test::Fatal, Test2::V0, Test::MockModule, Devel::Cover documentation"
+    match: [perl-testing-tools]
+    subtopics:
+      - {id: perl-testing-tools-test-deep-fatal-warnings, name: "Test::Deep, Test::Fatal and warnings tests", match: [test-deep-fatal-warnings]}
+      - {id: perl-testing-tools-mocking-test2-v0, name: "Mocking and Test2::V0", match: [mocking-test2-v0]}
+      - {id: perl-testing-tools-devel-cover-coverage, name: "Code coverage with Devel::Cover", match: [devel-cover-coverage]}
+  - id: perl-pod-docs
+    name: "Documentation with POD"
+    source: "perlpod, perlpodspec, Pod::Usage, perldoc"
+    match: [perl-pod-docs]
+    subtopics:
+      - {id: perl-pod-docs-pod-syntax-markup, name: "POD syntax and markup", match: [pod-syntax-markup]}
+      - {id: perl-pod-docs-pod-tools-perldoc-pod-usage, name: "perldoc, podchecker and POD tests", match: [pod-tools-perldoc-pod-usage]}
+  - id: perl-style-lint
+    name: "Formatting, linting and style"
+    source: "perlstyle, Perl::Critic and Perl::Tidy documentation"
+    match: [perl-style-lint]
+    subtopics:
+      - {id: perl-style-lint-perlstyle-conventions, name: "perlstyle conventions and idioms", match: [perlstyle-conventions]}
+      - {id: perl-style-lint-perltidy-configuration, name: "perltidy configuration and editor integration", match: [perltidy-configuration]}
+      - {id: perl-style-lint-perlcritic-policies, name: "Perl::Critic policies and profiles", match: [perlcritic-policies]}
+  - id: perl-debugging
+    name: "Debugging"
+    source: "perldebug, perldebtut, perltrap, perlrun"
+    match: [perl-debugging]
+    subtopics:
+      - {id: perl-debugging-perl-debugger-commands, name: "The perl debugger (perl -d)", match: [perl-debugger-commands]}
+      - {id: perl-debugging-print-debugging-modules, name: "Print debugging, Data::Dumper, Devel::Peek and stack traces", match: [print-debugging-modules]}
+      - {id: perl-debugging-common-traps-perltrap, name: "Common traps (perltrap)", match: [common-traps-perltrap]}
+  - id: perl-profiling-performance
+    name: "Profiling and performance"
+    source: "perlperf, Devel::NYTProf and Benchmark documentation"
+    match: [perl-profiling-performance]
+    subtopics:
+      - {id: perl-profiling-performance-devel-nytprof-profiling, name: "Profiling with Devel::NYTProf", match: [devel-nytprof-profiling]}
+      - {id: perl-profiling-performance-benchmark-cmpthese, name: "Benchmark and timing comparisons", match: [benchmark-cmpthese]}
+      - {id: perl-profiling-performance-performance-idioms-memory, name: "Performance idioms and memory use", match: [performance-idioms-memory]}
+  - id: perl-interop-ffi
+    name: "Interoperability and extension"
+    source: "perlxs, perlxstut, perlembed, FFI::Platypus, Inline::C docs"
+    match: [perl-interop-ffi]
+    subtopics:
+      - {id: perl-interop-ffi-ffi-platypus-native-libs, name: "Calling C libraries with FFI::Platypus", match: [ffi-platypus-native-libs]}
+      - {id: perl-interop-ffi-inline-c-xs-basics, name: "Inline::C and XS basics", match: [inline-c-xs-basics]}
+      - {id: perl-interop-ffi-embedding-perl-in-c, name: "Embedding Perl and calling out to Perl from other languages", match: [embedding-perl-in-c]}
+  - id: perl-deployment
+    name: "Deployment and packaging"
+    source: "PAR::Packer, App::FatPacker, Docker official perl image, perlpolicy"
+    match: [perl-deployment]
+    subtopics:
+      - {id: perl-deployment-par-packer-fatpack-bundling, name: "Bundling scripts with PAR::Packer and App::FatPacker", match: [par-packer-fatpack-bundling]}
+      - {id: perl-deployment-docker-perl-images, name: "Docker images for Perl applications", match: [docker-perl-images]}
+      - {id: perl-deployment-psgi-servers-systemd-deploy, name: "Running Perl services: systemd, reverse proxies and PSGI servers", match: [psgi-servers-systemd-deploy]}
+  - id: perl-security
+    name: "Security"
+    source: "perlsec, perlrun (-T), OWASP guidance for Perl"
+    match: [perl-security]
+    subtopics:
+      - {id: perl-security-taint-mode-untainting, name: "Taint mode and untainting", match: [taint-mode-untainting]}
+      - {id: perl-security-safe-process-sql-injection, name: "Safe command execution, SQL placeholders and input validation", match: [safe-process-sql-injection]}
+      - {id: perl-security-string-eval-safe-compartments, name: "String eval, do FILE and the Safe module", match: [string-eval-safe-compartments]}
+  - id: perl-portability
+    name: "Portability and platform support"
+    source: "perlport, perlwin32, perlpolicy, perldelta"
+    match: [perl-portability]
+    subtopics:
+      - {id: perl-portability-os-differences-win32-portability, name: "Writing portable Perl and Windows specifics", match: [os-differences-win32-portability]}
+      - {id: perl-portability-perl-version-support-policy, name: "Perl release cycle, support policy and deprecations", match: [perl-version-support-policy]}
+  - id: perl-list-scalar-utils
+    name: "List::Util and Scalar::Util"
+    source: "List::Util, Scalar::Util, List::MoreUtils and Hash::Util documentation"
+    match: [perl-list-scalar-utils]
+    subtopics:
+      - {id: perl-list-scalar-utils-list-util-reduce-first-any, name: "List::Util functions", match: [list-util-reduce-first-any]}
+      - {id: perl-list-scalar-utils-scalar-util-blessed-dualvar, name: "Scalar::Util helpers", match: [scalar-util-blessed-dualvar]}
+  - id: perl-core-functions
+    name: "Core functions and the builtin namespace"
+    source: "perlfunc, builtin, perlnumber, Math::BigInt documentation"
+    match: [perl-core-functions]
+    subtopics:
+      - {id: perl-core-functions-string-functions-index-substr, name: "String functions: index, substr, sprintf, lc, uc, reverse", match: [string-functions-index-substr]}
+      - {id: perl-core-functions-numeric-functions-bigint, name: "Numeric functions, rounding and big numbers", match: [numeric-functions-bigint]}
+      - {id: perl-core-functions-builtin-namespace-functions, name: "The builtin:: namespace", match: [builtin-namespace-functions]}
+  - id: perl-advanced-language
+    name: "Advanced language features"
+    source: "perltie, overload, perlsub, perlmod, perlfunc"
+    match: [perl-advanced-language]
+    subtopics:
+      - {id: perl-advanced-language-tie-variables-perltie, name: "Tied variables", match: [tie-variables-perltie]}
+      - {id: perl-advanced-language-operator-overloading-overload, name: "Operator overloading with overload", match: [operator-overloading-overload]}
+      - {id: perl-advanced-language-typeglobs-symbol-table-manipulation, name: "Typeglobs and installing subs at run time", match: [typeglobs-symbol-table-manipulation]}

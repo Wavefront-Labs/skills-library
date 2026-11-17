@@ -1,0 +1,367 @@
+# Canonical coverage spec: Erlang/OTP language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: erlang-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [erlang]
+sources:
+  - "Erlang/OTP Reference Manual (erlang.org/doc/system/reference_manual.html)"
+  - "Erlang/OTP standard library, kernel and application docs (erlang.org/doc)"
+  - "OTP Design Principles (erlang.org/doc/system/design_principles.html)"
+  - "rebar3 documentation (rebar3.org/docs)"
+  - "EUnit, Common Test, Dialyzer, Xref, Mnesia user guides (erlang.org/doc)"
+  - "Hex, PropEr, Cowboy, erlfmt, Elvis and recon project documentation"
+topics:
+  - id: erl-lexical
+    name: "Lexical structure and preprocessor"
+    source: "Erlang Reference Manual: Character Set, Data Types, Preprocessor"
+    match: [erl-lexical]
+    subtopics:
+      - {id: erl-lexical-atoms-and-variables, name: "Atoms and variables", match: [atoms-and-variables]}
+      - {id: erl-lexical-number-literals, name: "Comments, numbers, strings and characters", match: [number-literals]}
+      - {id: erl-lexical-macros-preprocessor, name: "Macros, includes and conditional compilation", match: [macros-preprocessor]}
+  - id: erl-types
+    name: "Data types and term ordering"
+    source: "Erlang Reference Manual: Data Types"
+    match: [erl-types]
+    subtopics:
+      - {id: erl-types-basic-terms, name: "Numbers, atoms, bit strings and references", match: [basic-terms]}
+      - {id: erl-types-compound-terms, name: "Tuples, lists, maps and funs", match: [compound-terms]}
+  - id: erl-pattern
+    name: "Pattern matching and guards"
+    source: "Erlang Reference Manual: Patterns, Guard Sequences"
+    match: [erl-pattern]
+    subtopics:
+      - {id: erl-pattern-match-operator, name: "Pattern matching and the match operator", match: [match-operator]}
+      - {id: erl-pattern-guard-expressions, name: "Guard sequences and allowed guard BIFs", match: [guard-expressions]}
+  - id: erl-functions
+    name: "Functions and funs"
+    source: "Erlang Reference Manual: Functions, Fun Expressions"
+    match: [erl-functions]
+    subtopics:
+      - {id: erl-functions-function-clauses, name: "Function clauses, arity and recursion", match: [function-clauses]}
+      - {id: erl-functions-funs, name: "Funs, closures and named funs", match: [funs]}
+      - {id: erl-functions-function-attributes-spec, name: "Function specs and arity conventions", match: [function-attributes-spec]}
+  - id: erl-expressions
+    name: "Expressions and control flow"
+    source: "Erlang Reference Manual: Expressions"
+    match: [erl-expressions]
+    subtopics:
+      - {id: erl-expressions-case-if-expressions, name: "case, if and receive expressions", match: [case-if-expressions]}
+      - {id: erl-expressions-list-comprehensions, name: "List and map comprehensions", match: [list-comprehensions]}
+      - {id: erl-expressions-maybe-expression, name: "maybe expression with ?=", match: [maybe-expression]}
+  - id: erl-binaries
+    name: "Bit syntax and binaries"
+    source: "Erlang Reference Manual: Bit Syntax Expressions; stdlib binary module"
+    match: [erl-binaries]
+    subtopics:
+      - {id: erl-binaries-bit-syntax, name: "Bit syntax construction and matching", match: [bit-syntax]}
+      - {id: erl-binaries-binary-module, name: "The binary module and iolists", match: [binary-module]}
+  - id: erl-maps-records
+    name: "Maps and records"
+    source: "Erlang Reference Manual: Map Expressions, Record Expressions"
+    match: [erl-maps-records]
+    subtopics:
+      - {id: erl-maps-records-map-operations, name: "Map syntax and the maps module", match: [map-operations]}
+      - {id: erl-maps-records-records, name: "Records and record_info", match: [records]}
+  - id: erl-modules
+    name: "Modules and module attributes"
+    source: "Erlang Reference Manual: Modules; Module Attributes"
+    match: [erl-modules]
+    subtopics:
+      - {id: erl-modules-module-attributes, name: "Module attributes and exports", match: [module-attributes]}
+      - {id: erl-modules-custom-behaviours, name: "Defining behaviours with -callback", match: [custom-behaviours]}
+  - id: erl-errors
+    name: "Errors, exceptions and let it crash"
+    source: "Erlang Reference Manual: Errors and Error Handling; Programming Examples"
+    match: [erl-errors]
+    subtopics:
+      - {id: erl-errors-try-catch, name: "try, catch, throw, error and exit", match: [try-catch]}
+      - {id: erl-errors-let-it-crash, name: "Let it crash and error kernel design", match: [let-it-crash]}
+  - id: erl-processes
+    name: "Processes and message passing"
+    source: "Erlang Reference Manual: Processes; Concurrent Programming"
+    match: [erl-processes]
+    subtopics:
+      - {id: erl-processes-spawn-and-send, name: "spawn, send and receive", match: [spawn-and-send]}
+      - {id: erl-processes-selective-receive, name: "Selective receive and mailbox management", match: [selective-receive]}
+  - id: erl-links
+    name: "Links, monitors and exit signals"
+    source: "Erlang Reference Manual: Processes (Process Links, Monitors, Exit Signals)"
+    match: [erl-links]
+    subtopics:
+      - {id: erl-links-links-and-exit-signals, name: "Links, exit signals and trap_exit", match: [links-and-exit-signals]}
+      - {id: erl-links-monitors, name: "Monitors and DOWN messages", match: [monitors]}
+  - id: erl-gen-server
+    name: "gen_server behaviour"
+    source: "OTP Design Principles: gen_server; stdlib gen_server"
+    match: [erl-gen-server]
+    subtopics:
+      - {id: erl-gen-server-gen-server-callbacks, name: "gen_server callbacks and structure", match: [gen-server-callbacks]}
+      - {id: erl-gen-server-call-cast-info, name: "call vs cast vs info and timeouts", match: [call-cast-info]}
+  - id: erl-gen-statem
+    name: "gen_statem behaviour"
+    source: "OTP Design Principles: gen_statem; stdlib gen_statem"
+    match: [erl-gen-statem]
+    subtopics:
+      - {id: erl-gen-statem-gen-statem-callback-modes, name: "gen_statem callback modes and state transitions", match: [gen-statem-callback-modes]}
+      - {id: erl-gen-statem-state-timeouts, name: "State, event and generic timeouts", match: [state-timeouts]}
+  - id: erl-supervisor
+    name: "supervisor behaviour"
+    source: "OTP Design Principles: Supervisor Behaviour; stdlib supervisor"
+    match: [erl-supervisor]
+    subtopics:
+      - {id: erl-supervisor-supervisor-strategies, name: "Restart strategies and intensity", match: [supervisor-strategies]}
+      - {id: erl-supervisor-child-specs, name: "Child specifications", match: [child-specs]}
+      - {id: erl-supervisor-dynamic-children, name: "Dynamic children and simple_one_for_one", match: [dynamic-children]}
+  - id: erl-otp-more
+    name: "Other OTP behaviours and special processes"
+    source: "OTP Design Principles: gen_event, proc_lib, Application"
+    match: [erl-otp-more]
+    subtopics:
+      - {id: erl-otp-more-gen-event, name: "gen_event managers and handlers", match: [gen-event]}
+      - {id: erl-otp-more-application-callback, name: "Application callback module", match: [application-callback]}
+      - {id: erl-otp-more-proc-lib-special-processes, name: "proc_lib and special processes", match: [proc-lib-special-processes]}
+  - id: erl-application
+    name: "Applications and the .app resource file"
+    source: "OTP Design Principles: Applications; kernel app(4)"
+    match: [erl-application]
+    subtopics:
+      - {id: erl-application-app-src-file, name: "The .app.src resource file", match: [app-src-file]}
+      - {id: erl-application-application-env, name: "Application environment and set_env", match: [application-env]}
+  - id: erl-config
+    name: "Configuration files and runtime configuration"
+    source: "OTP Design Principles: Applications; relx and rebar3 docs"
+    match: [erl-config]
+    subtopics:
+      - {id: erl-config-sys-config, name: "sys.config and vm.args", match: [sys-config]}
+      - {id: erl-config-runtime-env-vars, name: "Environment variables and config providers", match: [runtime-env-vars]}
+  - id: erl-rebar3
+    name: "rebar3 build tool"
+    source: "rebar3 documentation (rebar3.org/docs)"
+    match: [erl-rebar3]
+    subtopics:
+      - {id: erl-rebar3-rebar-config, name: "rebar.config structure and commands", match: [rebar-config]}
+      - {id: erl-rebar3-rebar3-deps-hex, name: "Dependencies from Hex and Git", match: [rebar3-deps-hex]}
+      - {id: erl-rebar3-rebar3-plugins-profiles, name: "Plugins and profiles", match: [rebar3-plugins-profiles]}
+  - id: erl-releases
+    name: "Releases and upgrades"
+    source: "OTP Design Principles: Releases; relx docs; Release Handling"
+    match: [erl-releases]
+    subtopics:
+      - {id: erl-releases-relx-releases, name: "Building releases with relx", match: [relx-releases]}
+      - {id: erl-releases-hot-code-upgrades, name: "Appup, relup and release_handler", match: [hot-code-upgrades]}
+  - id: erl-eunit
+    name: "EUnit unit testing"
+    source: "EUnit User's Guide (erlang.org/doc/apps/eunit)"
+    match: [erl-eunit]
+    subtopics:
+      - {id: erl-eunit-eunit-basics, name: "EUnit assertions and test discovery", match: [eunit-basics]}
+      - {id: erl-eunit-eunit-fixtures, name: "Fixtures, setup and test control", match: [eunit-fixtures]}
+  - id: erl-common-test
+    name: "Common Test"
+    source: "Common Test User's Guide (erlang.org/doc/apps/common_test)"
+    match: [erl-common-test]
+    subtopics:
+      - {id: erl-common-test-ct-suites, name: "Suites, test cases and run options", match: [ct-suites]}
+      - {id: erl-common-test-ct-groups, name: "Groups, properties and parallel cases", match: [ct-groups]}
+      - {id: erl-common-test-ct-config-hooks, name: "Config files, hooks and cover", match: [ct-config-hooks]}
+  - id: erl-proper
+    name: "Property-based testing with PropEr"
+    source: "PropEr documentation (github.com/proper-testing/proper)"
+    match: [erl-proper]
+    subtopics:
+      - {id: erl-proper-proper-properties, name: "Properties and generators", match: [proper-properties]}
+      - {id: erl-proper-proper-statem, name: "Stateful testing with proper_statem", match: [proper-statem]}
+  - id: erl-dialyzer
+    name: "Dialyzer and type specifications"
+    source: "Dialyzer User's Guide; Reference Manual: Types and Function Specifications"
+    match: [erl-dialyzer]
+    subtopics:
+      - {id: erl-dialyzer-typespecs, name: "Type specifications and -type/-opaque", match: [typespecs]}
+      - {id: erl-dialyzer-dialyzer-usage, name: "Running Dialyzer, PLTs and warnings", match: [dialyzer-usage]}
+  - id: erl-static-analysis
+    name: "xref, linting and style"
+    source: "Xref User's Guide; Elvis docs"
+    match: [erl-static-analysis]
+    subtopics:
+      - {id: erl-static-analysis-xref-analysis, name: "xref cross-reference checks", match: [xref-analysis]}
+      - {id: erl-static-analysis-elvis-linting, name: "Linting with elvis", match: [elvis-linting]}
+  - id: erl-style
+    name: "Style conventions and formatting"
+    source: "Erlang Programming Rules and Conventions; erlfmt docs"
+    match: [erl-style]
+    subtopics:
+      - {id: erl-style-naming-conventions, name: "Naming and layout conventions", match: [naming-conventions]}
+      - {id: erl-style-erlfmt, name: "Formatting with erlfmt", match: [erlfmt]}
+  - id: erl-hex
+    name: "Hex packaging and versioning"
+    source: "Hex documentation (hex.pm, hexdocs.pm/hex); rebar3_hex docs"
+    match: [erl-hex]
+    subtopics:
+      - {id: erl-hex-hex-publishing, name: "Publishing packages to Hex", match: [hex-publishing]}
+      - {id: erl-hex-semver-dependencies, name: "Semantic versioning and constraints", match: [semver-dependencies]}
+  - id: erl-ets
+    name: "ETS and in-memory storage"
+    source: "stdlib ets, persistent_term, counters, atomics"
+    match: [erl-ets]
+    subtopics:
+      - {id: erl-ets-ets-tables, name: "ETS table types, access and ownership", match: [ets-tables]}
+      - {id: erl-ets-ets-match-specs, name: "Match specifications and select", match: [ets-match-specs]}
+      - {id: erl-ets-persistent-term, name: "persistent_term, counters and atomics", match: [persistent-term]}
+  - id: erl-mnesia
+    name: "Mnesia database"
+    source: "Mnesia User's Guide (erlang.org/doc/apps/mnesia)"
+    match: [erl-mnesia]
+    subtopics:
+      - {id: erl-mnesia-mnesia-schema-tables, name: "Schema, tables and storage types", match: [mnesia-schema-tables]}
+      - {id: erl-mnesia-mnesia-transactions, name: "Transactions, dirty operations and queries", match: [mnesia-transactions]}
+  - id: erl-distribution
+    name: "Distributed Erlang"
+    source: "Erlang Reference Manual: Distributed Erlang; kernel net_kernel, epmd"
+    match: [erl-distribution]
+    subtopics:
+      - {id: erl-distribution-node-connections, name: "Nodes, connections and remote calls", match: [node-connections]}
+      - {id: erl-distribution-epmd-cookies, name: "epmd, cookies and ports", match: [epmd-cookies]}
+      - {id: erl-distribution-pg-groups, name: "Process groups with pg and global names", match: [pg-groups]}
+  - id: erl-stdlib-collections
+    name: "Standard library: lists, queues, sets, trees"
+    source: "stdlib lists, queue, sets, gb_trees, array, orddict"
+    match: [erl-stdlib-collections]
+    subtopics:
+      - {id: erl-stdlib-collections-lists-module, name: "The lists module", match: [lists-module]}
+      - {id: erl-stdlib-collections-queue-module, name: "queue, sets, gb_trees and array", match: [queue-module]}
+  - id: erl-text
+    name: "Strings, Unicode and formatting"
+    source: "stdlib string, unicode, io, io_lib"
+    match: [erl-text]
+    subtopics:
+      - {id: erl-text-string-module, name: "The string module", match: [string-module]}
+      - {id: erl-text-unicode-handling, name: "Unicode, encodings and binaries", match: [unicode-handling]}
+      - {id: erl-text-io-format, name: "io:format directives and iolists", match: [io-format]}
+  - id: erl-files
+    name: "Files and filesystem"
+    source: "kernel file, stdlib filelib, filename"
+    match: [erl-files]
+    subtopics:
+      - {id: erl-files-file-module, name: "The file module", match: [file-module]}
+      - {id: erl-files-filelib-filename, name: "filelib and filename", match: [filelib-filename]}
+  - id: erl-time
+    name: "Time, timers and calendars"
+    source: "erts erlang time API; stdlib timer, calendar"
+    match: [erl-time]
+    subtopics:
+      - {id: erl-time-time-api, name: "Time API: system, monotonic and unique", match: [time-api]}
+      - {id: erl-time-timer-bifs, name: "send_after, start_timer and the timer module", match: [timer-bifs]}
+      - {id: erl-time-calendar-module, name: "calendar and RFC 3339 timestamps", match: [calendar-module]}
+  - id: erl-networking
+    name: "Sockets and TLS"
+    source: "kernel gen_tcp, gen_udp, inet; ssl"
+    match: [erl-networking]
+    subtopics:
+      - {id: erl-networking-gen-tcp, name: "gen_tcp and active modes", match: [gen-tcp]}
+      - {id: erl-networking-gen-udp, name: "gen_udp datagrams", match: [gen-udp]}
+      - {id: erl-networking-ssl-tls, name: "ssl client and server", match: [ssl-tls]}
+  - id: erl-native
+    name: "Ports, NIFs and C nodes"
+    source: "Erlang Reference: Ports; NIF tutorial; erl_nif; erl_interface"
+    match: [erl-native]
+    subtopics:
+      - {id: erl-native-ports, name: "Ports and external programs", match: [ports]}
+      - {id: erl-native-nifs, name: "NIFs and dirty schedulers", match: [nifs]}
+      - {id: erl-native-erl-interface-ei, name: "C nodes with erl_interface and ei", match: [erl-interface-ei]}
+  - id: erl-web
+    name: "HTTP, WebSockets and JSON"
+    source: "cowboy docs; inets httpc; stdlib json"
+    match: [erl-web]
+    subtopics:
+      - {id: erl-web-cowboy-http, name: "Cowboy HTTP server", match: [cowboy-http]}
+      - {id: erl-web-cowboy-websocket, name: "Cowboy WebSocket handlers", match: [cowboy-websocket]}
+      - {id: erl-web-json-module, name: "JSON with the stdlib json module", match: [json-module]}
+      - {id: erl-web-httpc-client, name: "httpc in inets", match: [httpc-client]}
+  - id: erl-security
+    name: "Cryptography and security hardening"
+    source: "crypto, public_key, ssl, Erlang Security guidance"
+    match: [erl-security]
+    subtopics:
+      - {id: erl-security-crypto-module, name: "The crypto module", match: [crypto-module]}
+      - {id: erl-security-tls-hardening, name: "TLS server and distribution hardening", match: [tls-hardening]}
+      - {id: erl-security-untrusted-input, name: "Safe handling of untrusted terms", match: [untrusted-input]}
+  - id: erl-logging
+    name: "Logging and observability"
+    source: "kernel logger; telemetry"
+    match: [erl-logging]
+    subtopics:
+      - {id: erl-logging-logger-api, name: "Logger API, levels and metadata", match: [logger-api]}
+      - {id: erl-logging-logger-handlers, name: "Handlers, formatters and files", match: [logger-handlers]}
+      - {id: erl-logging-telemetry-events, name: "Telemetry events and metrics", match: [telemetry-events]}
+  - id: erl-debugging
+    name: "Tracing and debugging"
+    source: "dbg, recon, observer, debugger, crash dumps"
+    match: [erl-debugging]
+    subtopics:
+      - {id: erl-debugging-dbg-tracing, name: "dbg and erlang:trace", match: [dbg-tracing]}
+      - {id: erl-debugging-recon-diagnostics, name: "recon for production diagnostics", match: [recon-diagnostics]}
+      - {id: erl-debugging-observer-debugger, name: "observer, debugger and etop", match: [observer-debugger]}
+      - {id: erl-debugging-crash-dumps, name: "erl_crash.dump analysis", match: [crash-dumps]}
+  - id: erl-profiling
+    name: "Profiling and benchmarking"
+    source: "eprof, fprof, tprof, erlperf"
+    match: [erl-profiling]
+    subtopics:
+      - {id: erl-profiling-eprof-fprof, name: "eprof and fprof", match: [eprof-fprof]}
+      - {id: erl-profiling-tprof-erlperf, name: "tprof and erlperf benchmarking", match: [tprof-erlperf]}
+  - id: erl-vm
+    name: "BEAM runtime and tuning"
+    source: "erts, erl(1) flags, Erlang Efficiency Guide"
+    match: [erl-vm]
+    subtopics:
+      - {id: erl-vm-schedulers-reductions, name: "Schedulers, reductions and fairness", match: [schedulers-reductions]}
+      - {id: erl-vm-vm-flags, name: "erl command line and emulator flags", match: [vm-flags]}
+      - {id: erl-vm-memory-garbage-collection, name: "Memory, garbage collection and binaries", match: [memory-garbage-collection]}
+  - id: erl-shell
+    name: "Shell and scripting"
+    source: "erl shell docs; escript"
+    match: [erl-shell]
+    subtopics:
+      - {id: erl-shell-shell-basics, name: "The Erlang shell", match: [shell-basics]}
+      - {id: erl-shell-escript, name: "escript and command-line scripts", match: [escript]}
+  - id: erl-code
+    name: "Code loading and hot reloading"
+    source: "kernel code, init, Erlang Reference Manual: Compilation and Code Loading"
+    match: [erl-code]
+    subtopics:
+      - {id: erl-code-code-paths-loading, name: "Code paths, loading modes and priv_dir", match: [code-paths-loading]}
+      - {id: erl-code-hot-code-loading, name: "Reloading modules at runtime", match: [hot-code-loading]}
+  - id: erl-compiler
+    name: "Compiler, parse transforms and abstract format"
+    source: "compile, erlc, erl_syntax, erl_parse"
+    match: [erl-compiler]
+    subtopics:
+      - {id: erl-compiler-erlc-compile, name: "erlc and compiler options", match: [erlc-compile]}
+      - {id: erl-compiler-parse-transforms, name: "Parse transforms and erl_syntax", match: [parse-transforms]}
+      - {id: erl-compiler-abstract-format, name: "Abstract code, scanning and parsing", match: [abstract-format]}
+  - id: erl-docs
+    name: "Documentation tooling"
+    source: "edoc, native documentation attributes, ExDoc"
+    match: [erl-docs]
+    subtopics:
+      - {id: erl-docs-edoc, name: "EDoc comments and rebar3 edoc", match: [edoc]}
+      - {id: erl-docs-native-doc-attributes, name: "-moduledoc and -doc attributes", match: [native-doc-attributes]}
+      - {id: erl-docs-ex-doc-rebar3, name: "ExDoc via rebar3_ex_doc", match: [ex-doc-rebar3]}
+  - id: erl-containers-ci
+    name: "Containers and CI"
+    source: "Docker official erlang image; erlef/setup-beam; GitHub Actions"
+    match: [erl-containers-ci]
+    subtopics:
+      - {id: erl-containers-ci-docker-release-image, name: "Multi-stage Docker images for releases", match: [docker-release-image]}
+      - {id: erl-containers-ci-github-actions-ci, name: "GitHub Actions CI for rebar3 projects", match: [github-actions-ci]}
+      - {id: erl-containers-ci-container-cpu-memory, name: "Running the BEAM under CPU and memory limits", match: [container-cpu-memory]}
+  - id: erl-patterns
+    name: "Concurrency patterns"
+    source: "OTP Design Principles; community practice"
+    match: [erl-patterns]
+    subtopics:
+      - {id: erl-patterns-worker-pools, name: "Worker pools", match: [worker-pools]}
+      - {id: erl-patterns-backpressure-overload, name: "Backpressure and overload protection", match: [backpressure-overload]}

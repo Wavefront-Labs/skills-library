@@ -1,0 +1,247 @@
+# Coverage spec: unbound. Topics from the external structures named in `sources`.
+subject: unbound
+scope:
+  category: computing-software
+  field: networking-hardware-and-wireless
+  products: [unbound]
+sources:
+  - "Unbound docs manpages (unbound, unbound-checkconf, unbound.conf, unbound-host, unbound-control, unbound-anchor)"
+  - "Unbound docs topics (core, privacy, filtering)"
+  - "Unbound docs getting-started and use-cases"
+topics:
+  - id: config-file-format-and-sections
+    name: config file format and sections
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#file-format"
+    match: [unbound.conf, file-format, section-clauses, server, comments]
+  - id: including-config-files
+    name: including config files
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#including-files"
+    match: [include, include-toplevel, glob, wildcards]
+  - id: checking-config-with-unbound-checkconf
+    name: checking config with unbound-checkconf
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-checkconf.html"
+    match: [unbound-checkconf, config-check, exit-code, "-o"]
+  - id: running-the-unbound-daemon
+    name: running the unbound daemon
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.html"
+    match: [unbound, daemon, debug-mode, pidfile, "-d", "-v"]
+  - id: chroot-and-username-privileges
+    name: chroot and username privileges
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/getting-started/configuration.html#chroot-configuration"
+    match: [chroot, username, directory, pidfile, privileges]
+  - id: listening-interfaces-and-ports
+    name: listening interfaces and ports
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [interface, port, interface-automatic, outgoing-interface, ip-transparent, ip-freebind]
+  - id: access-control-actions
+    name: access control actions
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [access-control, refuse, allow, allow_snoop, allow_cookie, deny_non_local]
+  - id: ip-version-and-transport-selection
+    name: ip version and transport selection
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [do-ip4, do-ip6, do-udp, do-tcp, prefer-ip6, tcp-upstream, tcp-mss]
+  - id: tcp-connection-tuning
+    name: tcp connection tuning
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [incoming-num-tcp, outgoing-num-tcp, tcp-idle-timeout, edns-tcp-keepalive, tcp-connection-limit, tcp-reuse-timeout]
+  - id: dns-over-tls-server
+    name: dns over tls server
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [tls-service-key, tls-service-pem, tls-port, tls-additional-port, tls-protocols, tls-session-ticket-keys]
+  - id: dns-over-https-server
+    name: dns over https server
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/privacy/dns-over-https.html"
+    match: [doh, https-port, http-endpoint, nghttp2, http-max-streams, dohclient]
+  - id: dns-over-quic-server
+    name: dns over quic server
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/privacy/dns-over-quic.html"
+    match: [doq, quic-port, quic-size, ngtcp2, doqclient]
+  - id: tls-upstream-and-padding
+    name: tls upstream and padding
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [tls-upstream, tls-cert-bundle, tls-use-sni, pad-responses, pad-queries, forward-tls-upstream]
+  - id: proxy-protocol-v2
+    name: proxy protocol v2
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/core/proxy.html"
+    match: [proxy-protocol-port, proxyv2, proxy-protocol]
+  - id: forward-zones
+    name: forward zones
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#forward-zone-options"
+    match: [forward-zone, forward-addr, forward-host, forward-first, forward-no-cache]
+  - id: stub-zones
+    name: stub zones
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#stub-zone-options"
+    match: [stub-zone, stub-addr, stub-host, stub-prime, stub-first]
+  - id: root-hints-and-target-fetch-policy
+    name: root hints and target fetch policy
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [root-hints, target-fetch-policy, iterator]
+  - id: auth-zones
+    name: auth zones
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#authority-zone-options"
+    match: [auth-zone, primary, zonefile, for-downstream, for-upstream, zonemd-check, fallback-enabled]
+  - id: local-zone-types
+    name: local zone types
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [local-zone, static, transparent, redirect, always_nxdomain, block_a, inform, nodefault]
+  - id: local-data-records
+    name: local data records
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [local-data, local-data-ptr, split-horizon]
+  - id: default-local-zones-and-private-reverse
+    name: default local zones and private reverse
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [default-local-zones, nodefault, unblock-lan-zones, insecure-lan-zones, home.arpa]
+  - id: response-ip-actions
+    name: response ip actions
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [response-ip, response-ip-data, response-ip-tag, respip]
+  - id: rpz-triggers-and-actions
+    name: rpz triggers and actions
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/filtering/rpz.html"
+    match: [rpz, rpz-ip, rpz-nsdname, rpz-passthru, rpz-drop, triggers]
+  - id: rpz-zone-configuration
+    name: rpz zone configuration
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#response-policy-zone-options"
+    match: [rpz-action-override, rpz-cname-override, rpz-log, rpz_enable, rpz_disable, module-config]
+  - id: client-tags-and-tag-actions
+    name: client tags and tag actions
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/filtering/tags-views.html#tags"
+    match: [define-tag, access-control-tag, interface-tag, local-zone-tag, local-zone-override]
+  - id: views-per-client-zones
+    name: views per client zones
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/filtering/tags-views.html#views"
+    match: [view, access-control-view, interface-view, view-first, view_local_zone]
+  - id: dnssec-trust-anchor-setup
+    name: dnssec trust anchor setup
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/getting-started/configuration.html#set-up-trust-anchor-enable-dnssec"
+    match: [auto-trust-anchor-file, trust-anchor-file, trust-anchor, trusted-keys-file, trust-anchor-signaling]
+  - id: unbound-anchor-tool
+    name: unbound-anchor tool
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-anchor.html"
+    match: [unbound-anchor, root.key, rfc5011, icannbundle, root-anchors]
+  - id: dnssec-validator-tuning
+    name: dnssec validator tuning
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [val-sig-skew-min, val-bogus-ttl, val-nsec3-keysize-iterations, val-max-restart, val-clean-additional]
+  - id: domain-insecure-exceptions
+    name: domain insecure exceptions
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [domain-insecure, insecure_add, insecure_remove, list_insecure]
+  - id: dnssec-failure-diagnosis-and-permissive-mode
+    name: dnssec failure diagnosis and permissive mode
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [val-log-level, val-permissive-mode, ignore-cd-flag, flush_bogus, unbound-host, bogus]
+  - id: aggressive-nsec-caching
+    name: aggressive nsec caching
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/privacy/aggressive-nsec.html"
+    match: [aggressive-nsec, rfc8198, nsec, nodata, nxdomain, wildcard]
+  - id: cache-sizes-and-slabs
+    name: cache sizes and slabs
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [msg-cache-size, rrset-cache-size, key-cache-size, neg-cache-size, msg-cache-slabs, rrset-cache-slabs]
+  - id: cache-ttl-limits
+    name: cache ttl limits
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [cache-max-ttl, cache-min-ttl, cache-max-negative-ttl, cache-min-negative-ttl, serve-original-ttl]
+  - id: prefetching-popular-records
+    name: prefetching popular records
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [prefetch, prefetch-key, num.prefetch]
+  - id: serve-stale-modes
+    name: serve stale modes
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/core/serve-stale.html"
+    match: [serve-expired, serve-expired-ttl, serve-expired-reply-ttl, serve-expired-client-timeout, rfc8767]
+  - id: infra-host-cache
+    name: infra host cache
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [infra-host-ttl, infra-cache-numhosts, infra-cache-min-rtt, infra-keep-probing, dump_infra, flush_infra]
+  - id: threads-and-socket-buffers
+    name: threads and socket buffers
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/core/performance.html#configuration"
+    match: [num-threads, so-reuseport, outgoing-range, num-queries-per-thread, so-rcvbuf, so-sndbuf]
+  - id: libevent-and-forked-operation
+    name: libevent and forked operation
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/core/performance.html#using-libevent"
+    match: [libevent, forked-operation, without-pthreads, slabs]
+  - id: qname-minimisation
+    name: qname minimisation
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [qname-minimisation, qname-minimisation-strict, privacy]
+  - id: hardening-options
+    name: hardening options
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [harden-glue, harden-short-bufsize, harden-large-queries, harden-below-nxdomain, harden-referral-path, harden-algo-downgrade]
+  - id: spoofing-defences-and-unwanted-replies
+    name: spoofing defences and unwanted replies
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [use-caps-for-id, caps-exempt, unwanted-reply-threshold, udp-connect, delay-close, outgoing-port-permit]
+  - id: dns-rebinding-private-address
+    name: dns rebinding and private address
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [private-address, private-domain, do-not-query-address, do-not-query-localhost]
+  - id: identity-and-version-hiding
+    name: identity and version hiding
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [hide-identity, hide-version, hide-trustanchor, identity, version, nsid]
+  - id: rate-limiting
+    name: rate limiting
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [ratelimit, ip-ratelimit, ratelimit-for-domain, ratelimit_list, ip_ratelimit_list]
+  - id: overload-wait-limits
+    name: overload and wait limits
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [wait-limit, jostle-timeout, discard-timeout, sock-queue-timeout, requestlist]
+  - id: logging-options
+    name: logging options
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#server-options"
+    match: [verbosity, logfile, use-syslog, log-queries, log-replies, log-servfail, log_reopen]
+  - id: statistics-collection
+    name: statistics collection
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/core/monitoring.html#configuration"
+    match: [statistics-interval, statistics-cumulative, extended-statistics, stats, stats_noreset]
+  - id: extended-statistics-counters
+    name: extended statistics counters
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-control.html#extended-statistics"
+    match: [extended-statistics, histogram, mem.cache, num.query.type, unwanted.replies, num.answer.bogus]
+  - id: munin-and-cacti-graphs
+    name: munin and cacti graphs
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/topics/core/monitoring.html#statistics-with-munin"
+    match: [munin, cacti, unbound_munin_, graphs]
+  - id: remote-control-setup
+    name: remote control setup
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-control.html#set-up"
+    match: [control-enable, control-interface, control-port, unbound-control-setup, control-use-cert]
+  - id: unbound-control-reload-modes
+    name: unbound-control reload modes
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-control.html#commands"
+    match: [reload, reload_keep_cache, fast_reload, start, stop, status]
+  - id: unbound-control-cache-inspection-and-flushing
+    name: unbound-control cache inspection and flushing
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-control.html#commands"
+    match: [flush, flush_zone, flush_type, dump_cache, load_cache, cache_lookup, flush_negative]
+  - id: unbound-control-runtime-changes
+    name: unbound-control runtime changes
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-control.html#commands"
+    match: [set_option, get_option, forward_add, stub_add, local_zone, local_data, list_forwards]
+  - id: dns-cookies
+    name: dns cookies
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-control.html#commands"
+    match: [add_cookie_secret, activate_cookie_secret, cookie-secret-file, allow_cookie, wait-limit-cookie]
+  - id: edns-client-subnet
+    name: edns client subnet
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#edns-client-subnet-module-options"
+    match: [subnetcache, send-client-subnet, client-subnet-zone, max-client-subnet-ipv4, ecs]
+  - id: home-resolver-setup
+    name: home resolver setup
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/use-cases/home-resolver.html"
+    match: [home-network, dhcp, resolver, access-control, dig]
+  - id: local-stub-resolver-setup
+    name: local stub resolver setup
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/use-cases/local-stub.html"
+    match: [local-stub, systemd-resolved, resolv.conf, macos, launchd]
+  - id: unbound-host-lookup-tool
+    name: unbound-host lookup tool
+    source: "https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound-host.html"
+    match: [unbound-host, dnssec-lookup, trust-anchor, "-v", "-y"]

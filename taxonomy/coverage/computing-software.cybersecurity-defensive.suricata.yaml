@@ -1,0 +1,285 @@
+# Coverage spec for Suricata (cybersecurity-defensive).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: suricata
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [suricata]
+sources:
+  - https://docs.suricata.io/en/latest/install.html
+  - https://docs.suricata.io/en/latest/command-line-options.html
+  - https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+  - https://docs.suricata.io/en/latest/rules/intro.html
+  - https://docs.suricata.io/en/latest/rules/meta.html
+  - https://docs.suricata.io/en/latest/rules/payload-keywords.html
+  - https://docs.suricata.io/en/latest/rules/http-keywords.html
+  - https://docs.suricata.io/en/latest/rules/flow-keywords.html
+  - https://docs.suricata.io/en/latest/rules/xbits.html
+  - https://docs.suricata.io/en/latest/rules/thresholding.html
+  - https://docs.suricata.io/en/latest/rules/tag.html
+  - https://docs.suricata.io/en/latest/rules/app-layer.html
+  - https://docs.suricata.io/en/latest/rules/header-keywords.html
+  - https://docs.suricata.io/en/latest/rules/transforms.html
+  - https://docs.suricata.io/en/latest/rules/datasets.html
+  - https://docs.suricata.io/en/latest/rules/lua-detection.html
+  - https://docs.suricata.io/en/latest/rules/tls-keywords.html
+  - https://docs.suricata.io/en/latest/rules/dns-keywords.html
+  - https://docs.suricata.io/en/latest/rules/ssh-keywords.html
+  - https://docs.suricata.io/en/latest/rules/differences-from-snort.html
+  - https://docs.suricata.io/en/latest/rule-management/suricata-update.html
+  - https://docs.suricata.io/en/latest/rule-management/rule-reload.html
+  - https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
+  - https://docs.suricata.io/en/latest/file-extraction/file-extraction.html
+  - https://docs.suricata.io/en/latest/performance/runmodes.html
+  - https://docs.suricata.io/en/latest/performance/tuning-considerations.html
+  - https://docs.suricata.io/en/latest/capture-hardware/af-packet.html
+  - https://docs.suricata.io/en/latest/performance/packet-capture.html
+  - https://docs.suricata.io/en/latest/ips/setting-up-ipsinline-for-linux.html
+  - https://docs.suricata.io/en/latest/configuration/exception-policies.html
+  - https://docs.suricata.io/en/latest/unix-socket.html
+  - https://docs.suricata.io/en/latest/reputation/ipreputation/ip-reputation.html
+topics:
+  - id: install-methods-and-build
+    name: Install methods and build
+    source: https://docs.suricata.io/en/latest/install.html
+    match: [install, packages]
+  - id: command-line-run-and-test
+    name: Command line run and test
+    source: https://docs.suricata.io/en/latest/command-line-options.html
+    match: [command-line, config-test]
+  - id: capture-input-selection
+    name: Capture input selection
+    source: https://docs.suricata.io/en/latest/command-line-options.html
+    match: [capture-modes, interface]
+  - id: pcap-file-replay
+    name: Pcap file replay
+    source: https://docs.suricata.io/en/latest/command-line-options.html
+    match: [pcap-replay, offline-mode]
+  - id: diagnostics-and-overrides
+    name: Diagnostics and overrides
+    source: https://docs.suricata.io/en/latest/command-line-options.html
+    match: [set-option, dump-config]
+  - id: yaml-structure-and-includes
+    name: Yaml structure and includes
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [suricata-yaml, include]
+  - id: rule-variables-and-host-os-policy
+    name: Rule variables and host os policy
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [address-groups, port-groups]
+  - id: rule-files-and-classification
+    name: Rule files and classification
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [rule-files, default-rule-path]
+  - id: rule-anatomy-and-actions
+    name: Rule anatomy and actions
+    source: https://docs.suricata.io/en/latest/rules/intro.html
+    match: [rule-structure, rule-actions]
+  - id: rule-protocols-and-hooks
+    name: Rule protocols and hooks
+    source: https://docs.suricata.io/en/latest/rules/intro.html
+    match: [rule-protocol, tcp-pkt]
+  - id: rule-addresses-ports-direction
+    name: Rule addresses ports direction
+    source: https://docs.suricata.io/en/latest/rules/intro.html
+    match: [source-destination, ports]
+  - id: rule-option-syntax-and-buffers
+    name: Rule option syntax and buffers
+    source: https://docs.suricata.io/en/latest/rules/intro.html
+    match: [rule-options, sticky-buffers]
+  - id: meta-keywords-msg-sid-rev
+    name: Meta keywords msg sid rev
+    source: https://docs.suricata.io/en/latest/rules/meta.html
+    match: [msg, sid]
+  - id: reference-metadata-target-requires
+    name: Reference metadata target requires
+    source: https://docs.suricata.io/en/latest/rules/meta.html
+    match: [reference, metadata]
+  - id: content-matching-basics
+    name: Content matching basics
+    source: https://docs.suricata.io/en/latest/rules/payload-keywords.html
+    match: [content, nocase]
+  - id: content-position-modifiers
+    name: Content position modifiers
+    source: https://docs.suricata.io/en/latest/rules/payload-keywords.html
+    match: [depth, offset]
+  - id: pcre-in-rules
+    name: Pcre in rules
+    source: https://docs.suricata.io/en/latest/rules/payload-keywords.html
+    match: [pcre, regex]
+  - id: byte-test-jump-extract
+    name: Byte test jump extract
+    source: https://docs.suricata.io/en/latest/rules/payload-keywords.html
+    match: [byte-test, byte-jump]
+  - id: buffer-size-keywords
+    name: Buffer size keywords
+    source: https://docs.suricata.io/en/latest/rules/payload-keywords.html
+    match: [isdataat, bsize]
+  - id: http-sticky-buffers
+    name: Http sticky buffers
+    source: https://docs.suricata.io/en/latest/rules/http-keywords.html
+    match: [http-keywords, http-uri]
+  - id: http-normalized-versus-raw
+    name: Http normalized versus raw
+    source: https://docs.suricata.io/en/latest/rules/http-keywords.html
+    match: [http-normalization, http-raw]
+  - id: http-bodies-and-file-data
+    name: Http bodies and file data
+    source: https://docs.suricata.io/en/latest/rules/http-keywords.html
+    match: [http-request-body, http-response-body]
+  - id: flow-keyword-direction-state
+    name: Flow keyword direction state
+    source: https://docs.suricata.io/en/latest/rules/flow-keywords.html
+    match: [flow-keyword, to-server]
+  - id: flowbits
+    name: Flowbits
+    source: https://docs.suricata.io/en/latest/rules/flow-keywords.html
+    match: [flowbits, flow-state]
+  - id: flowint-stream-size-flow-counters
+    name: Flowint stream size flow counters
+    source: https://docs.suricata.io/en/latest/rules/flow-keywords.html
+    match: [flowint, stream-size]
+  - id: xbits-and-hostbits
+    name: Xbits and hostbits
+    source: https://docs.suricata.io/en/latest/rules/xbits.html
+    match: [xbits, hostbits]
+  - id: thresholding-keyword
+    name: Thresholding keyword
+    source: https://docs.suricata.io/en/latest/rules/thresholding.html
+    match: [threshold, rate-limiting]
+  - id: detection-filter
+    name: Detection filter
+    source: https://docs.suricata.io/en/latest/rules/thresholding.html
+    match: [detection-filter, unique-on]
+  - id: tag-keyword
+    name: Tag keyword
+    source: https://docs.suricata.io/en/latest/rules/tag.html
+    match: [tag, tagged-packets]
+  - id: app-layer-protocol-keywords
+    name: App layer protocol keywords
+    source: https://docs.suricata.io/en/latest/rules/app-layer.html
+    match: [app-layer-protocol, app-layer-event]
+  - id: ip-tcp-icmp-header-keywords
+    name: Ip tcp icmp header keywords
+    source: https://docs.suricata.io/en/latest/rules/header-keywords.html
+    match: [ttl, tcp-flags]
+  - id: sticky-buffer-transforms
+    name: Sticky buffer transforms
+    source: https://docs.suricata.io/en/latest/rules/transforms.html
+    match: [transforms, to-lowercase]
+  - id: datasets-keyword
+    name: Datasets keyword
+    source: https://docs.suricata.io/en/latest/rules/datasets.html
+    match: [datasets, datarep]
+  - id: datasets-management-and-security
+    name: Datasets management and security
+    source: https://docs.suricata.io/en/latest/rules/datasets.html
+    match: [dataset-add, dataset-reload]
+  - id: lua-rule-scripting
+    name: Lua rule scripting
+    source: https://docs.suricata.io/en/latest/rules/lua-detection.html
+    match: [lua, lua-sandbox]
+  - id: tls-certificate-and-version-keywords
+    name: Tls certificate and version keywords
+    source: https://docs.suricata.io/en/latest/rules/tls-keywords.html
+    match: [tls-sni, tls-cert-subject]
+  - id: dns-keywords
+    name: Dns keywords
+    source: https://docs.suricata.io/en/latest/rules/dns-keywords.html
+    match: [dns-query, dns-opcode]
+  - id: ssh-and-smtp-keywords
+    name: Ssh and smtp keywords
+    source: https://docs.suricata.io/en/latest/rules/ssh-keywords.html
+    match: [ssh-keywords, hassh]
+  - id: migrating-snort-rules
+    name: Migrating snort rules
+    source: https://docs.suricata.io/en/latest/rules/differences-from-snort.html
+    match: [snort-migration, snort-differences]
+  - id: suricata-update-basics
+    name: Suricata update basics
+    source: https://docs.suricata.io/en/latest/rule-management/suricata-update.html
+    match: [suricata-update, emerging-threats]
+  - id: suricata-update-enable-disable
+    name: Suricata update enable disable
+    source: https://docs.suricata.io/en/latest/rule-management/suricata-update.html
+    match: [enable-conf, disable-conf]
+  - id: live-rule-reload
+    name: Live rule reload
+    source: https://docs.suricata.io/en/latest/rule-management/rule-reload.html
+    match: [rule-reload, sigusr2]
+  - id: eve-json-basics
+    name: Eve json basics
+    source: https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
+    match: [eve-json, eve-log]
+  - id: eve-event-types-and-alert-options
+    name: Eve event types and alert options
+    source: https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
+    match: [eve-types, eve-alert]
+  - id: eve-community-id-xff-multitenancy
+    name: Eve community id xff multitenancy
+    source: https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
+    match: [community-id, xff]
+  - id: other-log-outputs
+    name: Other log outputs
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [fast-log, pcap-log]
+  - id: file-extraction-and-file-keywords
+    name: File extraction and file keywords
+    source: https://docs.suricata.io/en/latest/file-extraction/file-extraction.html
+    match: [filestore, file-extraction]
+  - id: runmodes
+    name: Runmodes
+    source: https://docs.suricata.io/en/latest/performance/runmodes.html
+    match: [runmode, workers]
+  - id: detection-engine-tuning
+    name: Detection engine tuning
+    source: https://docs.suricata.io/en/latest/performance/tuning-considerations.html
+    match: [mpm-algo, hyperscan]
+  - id: stream-reassembly-and-memcaps
+    name: Stream reassembly and memcaps
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [stream-memcap, reassembly]
+  - id: af-packet-capture-tuning
+    name: Af packet capture tuning
+    source: https://docs.suricata.io/en/latest/capture-hardware/af-packet.html
+    match: [af-packet, ring-size]
+  - id: rss-offloading-and-capture-performance
+    name: Rss offloading and capture performance
+    source: https://docs.suricata.io/en/latest/performance/packet-capture.html
+    match: [rss, nic-offloading]
+  - id: threading-and-cpu-affinity
+    name: Threading and cpu affinity
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [threading, cpu-affinity]
+  - id: dpdk-pfring-nfq-config
+    name: Dpdk pfring nfq config
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [dpdk, pf-ring]
+  - id: ips-inline-on-linux
+    name: Ips inline on linux
+    source: https://docs.suricata.io/en/latest/ips/setting-up-ipsinline-for-linux.html
+    match: [ips, nfqueue]
+  - id: exception-policies
+    name: Exception policies
+    source: https://docs.suricata.io/en/latest/configuration/exception-policies.html
+    match: [exception-policy, memcap-policy]
+  - id: unix-socket-and-suricatasc
+    name: Unix socket and suricatasc
+    source: https://docs.suricata.io/en/latest/unix-socket.html
+    match: [unix-socket, suricatasc]
+  - id: app-layer-parser-settings
+    name: App layer parser settings
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [app-layer, libhtp]
+  - id: profiling-and-engine-analysis
+    name: Profiling and engine analysis
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [rule-profiling, packet-profiling]
+  - id: decoder-and-tunnel-settings
+    name: Decoder and tunnel settings
+    source: https://docs.suricata.io/en/latest/configuration/suricata-yaml.html
+    match: [teredo, vxlan]
+  - id: ip-reputation-concepts
+    name: Ip reputation concepts
+    source: https://docs.suricata.io/en/latest/reputation/ipreputation/ip-reputation.html
+    match: [ip-reputation, iprep]

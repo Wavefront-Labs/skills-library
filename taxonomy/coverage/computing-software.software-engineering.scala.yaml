@@ -1,0 +1,295 @@
+# Canonical coverage spec: Scala language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: scala-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [scala]
+sources:
+  - "Scala 3 Book and Scala 3 Reference (docs.scala-lang.org/scala3) - language features, contextual abstractions, metaprogramming, changed and dropped features"
+  - "Scala Standard Library API and Scala 2.13 collections guide (scala-lang.org/api, docs.scala-lang.org/overviews/collections-2.13)"
+  - "Scala 3 Migration Guide and Scala Style Guide (docs.scala-lang.org/scala3/guides/migration, docs.scala-lang.org/style)"
+  - "sbt reference manual (scala-sbt.org), Scala CLI docs (scala-cli.virtuslab.org), Scalafmt, Scalafix, MUnit and ScalaTest docs"
+  - "Scala.js, Scala Native, Cats Effect and ZIO documentation roots for the ecosystem topics"
+topics:
+  - id: sc-basics
+    name: "Values, types and expressions"
+    source: "Scala 3 Book - Scala Features, First Look"
+    match: [sc-basics]
+    subtopics:
+      - {id: sc-basics-val-var-expressions, name: "val, var, lazy val and everything-is-an-expression", match: [val-var-expressions]}
+      - {id: sc-basics-numeric-string-types, name: "Numeric types, strings and interpolation", match: [numeric-string-types]}
+      - {id: sc-basics-literals-string-interpolation, name: "String interpolation: s, f and raw", match: [literals-string-interpolation]}
+      - {id: sc-basics-type-inference-ascription, name: "Type inference, ascription and Nothing/Any/Null", match: [type-inference-ascription]}
+      - {id: sc-basics-union-intersection-opaque-types, name: "Union, intersection and opaque types", match: [union-intersection-opaque-types]}
+  - id: sc-classes
+    name: "Classes, objects and traits"
+    source: "Scala 3 Book - Domain Modeling"
+    match: [sc-classes]
+    subtopics:
+      - {id: sc-classes-classes-companions, name: "Classes, objects and companion objects", match: [classes-companions]}
+      - {id: sc-classes-traits-mixins, name: "Traits, linearisation and abstract classes", match: [traits-mixins]}
+      - {id: sc-classes-enums-adt, name: "Enums and algebraic data types", match: [enums-adt]}
+      - {id: sc-classes-extension-methods-export, name: "Extension methods and export clauses", match: [extension-methods-export]}
+      - {id: sc-classes-apply-unapply-objects, name: "apply, unapply and singleton objects", match: [apply-unapply-objects]}
+  - id: sc-case-classes
+    name: "Case classes and pattern matching"
+    source: "Scala 3 Book - Pattern Matching; Scala 3 Reference"
+    match: [sc-case-classes]
+    subtopics:
+      - {id: sc-case-classes-case-class-features, name: "Case class generated members and copy", match: [case-class-features]}
+      - {id: sc-case-classes-pattern-matching, name: "match expressions, guards and extractors", match: [pattern-matching]}
+  - id: sc-collections
+    name: "Collections"
+    source: "Scala 2.13 collections guide; Scala Standard Library API"
+    match: [sc-collections]
+    subtopics:
+      - {id: sc-collections-immutable-collections, name: "List, Vector, Map, Set and choosing between them", match: [immutable-collections]}
+      - {id: sc-collections-collection-operations, name: "map, flatMap, fold, groupBy and views", match: [collection-operations]}
+      - {id: sc-collections-java-collection-conversion, name: "Java collection interop", match: [java-collection-conversion]}
+      - {id: sc-collections-lazylist-view-iterator, name: "LazyList, views and iterators", match: [lazylist-view-iterator]}
+      - {id: sc-collections-mutable-collections-builders, name: "Mutable collections and builders", match: [mutable-collections-builders]}
+  - id: sc-options-errors
+    name: "Option, Either, Try and error handling"
+    source: "Scala 3 Book - Functional Programming; Standard Library API"
+    match: [sc-options-errors]
+    subtopics:
+      - {id: sc-options-errors-option-either-try, name: "Option, Either and Try", match: [option-either-try]}
+      - {id: sc-options-errors-exceptions-resources, name: "Exceptions and resource management", match: [exceptions-resources]}
+      - {id: sc-options-errors-validated-error-accumulation, name: "Accumulating errors with Either and Validated", match: [validated-error-accumulation]}
+  - id: sc-for-comprehensions
+    name: "For comprehensions"
+    source: "Scala 3 Book - Control Structures"
+    match: [sc-for-comprehensions]
+    subtopics:
+      - {id: sc-for-comprehensions-for-comprehensions, name: "for/yield desugaring and monadic composition", match: [for-comprehensions]}
+  - id: sc-functions
+    name: "Functions and methods"
+    source: "Scala 3 Book - Functions; Reference - Eta expansion"
+    match: [sc-functions]
+    subtopics:
+      - {id: sc-functions-functions-methods, name: "Methods versus function values, currying and by-name parameters", match: [functions-methods]}
+      - {id: sc-functions-partial-functions-currying, name: "Currying, partial functions and eta-expansion", match: [partial-functions-currying]}
+  - id: sc-generics
+    name: "Generics and variance"
+    source: "Scala 3 Book; Reference - Variance"
+    match: [sc-generics]
+    subtopics:
+      - {id: sc-generics-variance-bounds, name: "Variance, bounds and opaque types", match: [variance-bounds]}
+      - {id: sc-generics-type-classes-bounds-context, name: "Context bounds and type lambdas", match: [type-classes-bounds-context]}
+  - id: sc-implicits
+    name: "Givens and contextual abstractions"
+    source: "Scala 3 Reference - Contextual Abstractions"
+    match: [sc-implicits]
+    subtopics:
+      - {id: sc-implicits-givens-using, name: "given, using, extension and type classes", match: [givens-using]}
+      - {id: sc-implicits-implicit-conversions-scala2, name: "Implicits in Scala 2 and conversions", match: [implicit-conversions-scala2]}
+  - id: sc-concurrency-futures
+    name: "Futures and concurrency"
+    source: "Scala Futures guide; Scala Standard Library API"
+    match: [sc-concurrency-futures]
+    subtopics:
+      - {id: sc-concurrency-futures-futures-execution-context, name: "Future, ExecutionContext and Await", match: [futures-execution-context]}
+      - {id: sc-concurrency-futures-promise-await-timeout, name: "Promise, Await and timeouts", match: [promise-await-timeout]}
+  - id: sc-effects
+    name: "Effect systems"
+    source: "Cats Effect and ZIO documentation"
+    match: [sc-effects]
+    subtopics:
+      - {id: sc-effects-cats-effect-zio, name: "IO and ZIO effects, resources and fibres", match: [cats-effect-zio]}
+      - {id: sc-effects-resource-safety-bracket, name: "Resource safety with Resource and bracket", match: [resource-safety-bracket]}
+  - id: sc-akka-pekko
+    name: "Actors and streams"
+    source: "Apache Pekko and Akka docs"
+    match: [sc-akka-pekko]
+    subtopics:
+      - {id: sc-akka-pekko-pekko-actors-streams, name: "Typed actors and streams", match: [pekko-actors-streams]}
+  - id: sc-build-sbt
+    name: "sbt build tool"
+    source: "sbt reference manual"
+    match: [sc-build-sbt]
+    subtopics:
+      - {id: sc-build-sbt-sbt-build-definition, name: "build.sbt, settings, tasks and multi-project builds", match: [sbt-build-definition]}
+      - {id: sc-build-sbt-sbt-assembly-publish, name: "Packaging, assembly and publishing", match: [sbt-assembly-publish]}
+      - {id: sc-build-sbt-sbt-multi-project-cross, name: "sbt multi-project builds and cross-building", match: [sbt-multi-project-cross]}
+  - id: sc-scala-cli
+    name: "Scala CLI"
+    source: "Scala CLI documentation"
+    match: [sc-scala-cli]
+    subtopics:
+      - {id: sc-scala-cli-scala-cli-scripts, name: "Scala CLI scripts and directives", match: [scala-cli-scripts]}
+  - id: sc-testing
+    name: "Testing"
+    source: "MUnit, ScalaTest and ScalaCheck docs"
+    match: [sc-testing]
+    subtopics:
+      - {id: sc-testing-munit-scalatest, name: "MUnit, ScalaTest and property-based testing", match: [munit-scalatest]}
+      - {id: sc-testing-property-based-testing, name: "Property-based testing with ScalaCheck", match: [property-based-testing]}
+  - id: sc-migration
+    name: "Scala 2 to 3 migration"
+    source: "Scala 3 Migration Guide"
+    match: [sc-migration]
+    subtopics:
+      - {id: sc-migration-scala3-migration, name: "Cross-building and Scala 3 migration steps", match: [scala3-migration]}
+      - {id: sc-migration-scala3-rewrite-flags, name: "Migrating with -rewrite and source flags", match: [scala3-rewrite-flags]}
+  - id: sc-java-interop
+    name: "Java interop"
+    source: "Scala 3 Book - Interacting with Java"
+    match: [sc-java-interop]
+    subtopics:
+      - {id: sc-java-interop-java-interop, name: "Calling Java from Scala and Scala from Java", match: [java-interop]}
+      - {id: sc-java-interop-javaconverters-nulls-checked, name: "Java collections, nulls and checked exceptions", match: [javaconverters-nulls-checked]}
+  - id: sc-metaprogramming
+    name: "Metaprogramming"
+    source: "Scala 3 Reference - Metaprogramming"
+    match: [sc-metaprogramming]
+    subtopics:
+      - {id: sc-metaprogramming-inline-macros, name: "inline, quotes and splices", match: [inline-macros]}
+      - {id: sc-metaprogramming-inline-macros-quotes, name: "Scala 3 macros: quotes and splices", match: [inline-macros-quotes]}
+  - id: sc-derivation
+    name: "Type class derivation"
+    source: "Scala 3 Reference - Type Class Derivation"
+    match: [sc-derivation]
+    subtopics:
+      - {id: sc-derivation-derives-mirror, name: "derives clauses and Mirror", match: [derives-mirror]}
+      - {id: sc-derivation-derives-clause-mirror, name: "derives and deriving type class instances", match: [derives-clause-mirror]}
+  - id: sc-json-serialization
+    name: "JSON and serialization"
+    source: "circe, upickle, jsoniter docs"
+    match: [sc-json-serialization]
+    subtopics:
+      - {id: sc-json-serialization-json-codecs, name: "circe, upickle and jsoniter-scala", match: [json-codecs]}
+  - id: sc-http-db
+    name: "HTTP and database access"
+    source: "sttp, http4s, Slick, Doobie docs"
+    match: [sc-http-db]
+    subtopics:
+      - {id: sc-http-db-http-clients-servers, name: "sttp, http4s and Tapir", match: [http-clients-servers]}
+      - {id: sc-http-db-database-access, name: "Slick, Doobie and JDBC", match: [database-access]}
+      - {id: sc-http-db-http-clients-sttp-http4s, name: "HTTP with sttp, http4s and the JDK client", match: [http-clients-sttp-http4s]}
+  - id: sc-formatting-linting
+    name: "Formatting, linting and style"
+    source: "Scalafmt, Scalafix, Scala style guide"
+    match: [sc-formatting-linting]
+    subtopics:
+      - {id: sc-formatting-linting-scalafmt-scalafix, name: "Scalafmt, Scalafix and compiler lint flags", match: [scalafmt-scalafix]}
+  - id: sc-scalajs-native
+    name: "Scala.js and Scala Native"
+    source: "Scala.js and Scala Native docs"
+    match: [sc-scalajs-native]
+    subtopics:
+      - {id: sc-scalajs-native-scalajs-native, name: "Scala.js and Scala Native targets", match: [scalajs-native]}
+  - id: sc-spark
+    name: "Data processing with Spark"
+    source: "Apache Spark documentation"
+    match: [sc-spark]
+    subtopics:
+      - {id: sc-spark-spark-scala, name: "Spark with Scala Datasets", match: [spark-scala]}
+  - id: sc-immutability
+    name: "Immutability and functional design"
+    source: "Scala 3 Book - Functional Programming"
+    match: [sc-immutability]
+    subtopics:
+      - {id: sc-immutability-functional-design, name: "Pure functions, immutability and referential transparency", match: [functional-design]}
+  - id: sc-strings-regex
+    name: "Strings and regular expressions"
+    source: "Scala Standard Library API"
+    match: [sc-strings-regex]
+    subtopics:
+      - {id: sc-strings-regex-scala-regex, name: "Regex, pattern extraction and text processing", match: [scala-regex]}
+  - id: sc-text-io
+    name: "File IO and processes"
+    source: "Scala Standard Library API; os-lib docs"
+    match: [sc-text-io]
+    subtopics:
+      - {id: sc-text-io-files-os-lib, name: "scala.io.Source, java.nio.file and os-lib", match: [files-os-lib]}
+  - id: sc-dates-time
+    name: "Dates and times"
+    source: "java.time with Scala"
+    match: [sc-dates-time]
+    subtopics:
+      - {id: sc-dates-time-java-time, name: "java.time usage in Scala", match: [java-time]}
+  - id: sc-logging-config
+    name: "Logging and configuration"
+    source: "SLF4J, Typesafe Config docs"
+    match: [sc-logging-config]
+    subtopics:
+      - {id: sc-logging-config-logging-config, name: "SLF4J logging and Typesafe Config", match: [logging-config]}
+  - id: sc-debugging-profiling
+    name: "Debugging and profiling"
+    source: "Metals, JVM tooling"
+    match: [sc-debugging-profiling]
+    subtopics:
+      - {id: sc-debugging-profiling-metals-jvm-tools, name: "Metals debugger, REPL and JVM profiling", match: [metals-jvm-tools]}
+  - id: sc-mill
+    name: "Mill build tool"
+    source: "Mill documentation"
+    match: [sc-mill]
+    subtopics:
+      - {id: sc-mill-mill-builds, name: "Mill build.mill modules", match: [mill-builds]}
+  - id: sc-packages
+    name: "Packages, imports and visibility"
+    source: "Scala 3 Book - Packaging and Imports"
+    match: [sc-packages]
+    subtopics:
+      - {id: sc-packages-imports-visibility, name: "Packages, wildcard imports and access modifiers", match: [imports-visibility]}
+  - id: sc-cats
+    name: "Functional type classes with Cats"
+    source: "Cats documentation (typelevel.org/cats)"
+    match: [sc-cats]
+    subtopics:
+      - {id: sc-cats-cats-typeclasses, name: "Functor, Monad, Semigroup and Monoid with Cats", match: [cats-typeclasses]}
+  - id: sc-fs2
+    name: "Streaming with fs2"
+    source: "fs2 documentation (fs2.io)"
+    match: [sc-fs2]
+    subtopics:
+      - {id: sc-fs2-fs2-streams, name: "fs2 Stream, pull-based streaming and resource safety", match: [fs2-streams]}
+  - id: sc-scaladoc
+    name: "Scaladoc"
+    source: "Scaladoc documentation"
+    match: [sc-scaladoc]
+    subtopics:
+      - {id: sc-scaladoc-scaladoc-docs, name: "Writing Scaladoc and publishing API docs", match: [scaladoc-docs]}
+  - id: sc-containers
+    name: "Containers and deployment"
+    source: "sbt-native-packager and JVM container docs"
+    match: [sc-containers]
+    subtopics:
+      - {id: sc-containers-docker-jvm, name: "Containerising Scala applications", match: [docker-jvm]}
+  - id: sc-jvm-performance
+    name: "JVM performance"
+    source: "JVM and Scala performance docs"
+    match: [sc-jvm-performance]
+    subtopics:
+      - {id: sc-jvm-performance-jvm-gc-benchmarking, name: "JMH benchmarking and GC tuning for Scala", match: [jvm-gc-benchmarking]}
+  - id: sc-reflection-types
+    name: "Type tags and runtime types"
+    source: "Scala Standard Library API"
+    match: [sc-reflection-types]
+    subtopics:
+      - {id: sc-reflection-types-classtag-typetag, name: "ClassTag, type erasure and reflection", match: [classtag-typetag]}
+  - id: sc-numeric-math
+    name: "Numeric computing"
+    source: "Scala Standard Library API; Breeze docs"
+    match: [sc-numeric-math]
+    subtopics:
+      - {id: sc-numeric-math-numeric-math, name: "BigDecimal, math functions and numeric libraries", match: [numeric-math]}
+  - id: sc-web-frontends
+    name: "Web front ends"
+    source: "Scala.js, Laminar and Play docs"
+    match: [sc-web-frontends]
+    subtopics:
+      - {id: sc-web-frontends-scala-web-frontends, name: "Laminar, Play and full-stack Scala", match: [scala-web-frontends]}
+  - id: sc-security
+    name: "Security"
+    source: "OWASP and Scala library docs"
+    match: [sc-security]
+    subtopics:
+      - {id: sc-security-scala-security, name: "Input handling, deserialization and dependency auditing in Scala", match: [scala-security]}
+  - id: sc-repl-worksheets
+    name: "REPL, worksheets and notebooks"
+    source: "Scala CLI and Metals docs"
+    match: [sc-repl-worksheets]
+    subtopics:
+      - {id: sc-repl-worksheets-repl-worksheets, name: "REPL, Metals worksheets and Almond", match: [repl-worksheets]}

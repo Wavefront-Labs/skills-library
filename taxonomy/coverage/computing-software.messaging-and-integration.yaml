@@ -1,0 +1,327 @@
+# Coverage spec: Messaging and integration (RabbitMQ product).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: messaging-and-integration
+scope:
+  category: computing-software
+  field: messaging-and-integration
+  products: [rabbitmq]
+sources:
+  - "RabbitMQ documentation table of contents (rabbitmq.com/docs) - queues, streams, publishers, consumers, reliability, clustering, plugins, security, monitoring, CLI, upgrades, Kubernetes operator, production checklist"
+  - "AMQP 0-9-1 specification and RabbitMQ AMQP 0-9-1 model explained (rabbitmq.com/resources/specs/amqp0-9-1.pdf)"
+  - "Enterprise Integration Patterns (Hohpe and Woolf, enterpriseintegrationpatterns.com) - messaging systems, routing, transformation, reliability"
+topics:
+  - id: rmq-amqp-model
+    name: "AMQP 0-9-1 model"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-amqp-model]
+    subtopics:
+      - {id: rmq-amqp-model-amqp-0-9-1-model, name: "AMQP 0-9-1 model", match: [amqp-0-9-1-model]}
+      - {id: rmq-amqp-model-channels-and-connections, name: "Channels and connections", match: [channels-and-connections]}
+  - id: rmq-exchanges
+    name: "Exchanges"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-exchanges]
+    subtopics:
+      - {id: rmq-exchanges-exchange-types, name: "Exchange types", match: [exchange-types]}
+      - {id: rmq-exchanges-default-exchange, name: "Default exchange", match: [default-exchange]}
+      - {id: rmq-exchanges-alternate-exchange, name: "Alternate exchange", match: [alternate-exchange]}
+  - id: rmq-bindings
+    name: "Bindings and routing"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-bindings]
+    subtopics:
+      - {id: rmq-bindings-topic-exchange-wildcards, name: "Topic exchange wildcards", match: [topic-exchange-wildcards]}
+      - {id: rmq-bindings-headers-exchange, name: "Headers exchange", match: [headers-exchange]}
+  - id: rmq-queues
+    name: "Queue properties"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-queues]
+    subtopics:
+      - {id: rmq-queues-queue-properties, name: "Queue properties", match: [queue-properties]}
+      - {id: rmq-queues-queue-declare-arguments, name: "Queue declare arguments", match: [queue-declare-arguments]}
+  - id: rmq-classic-queues
+    name: "Classic queues"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-classic-queues]
+    subtopics:
+      - {id: rmq-classic-queues-classic-queues, name: "Classic queues", match: [classic-queues]}
+      - {id: rmq-classic-queues-classic-queue-lazy-mode, name: "Lazy queue mode", match: [classic-queue-lazy-mode]}
+  - id: rmq-quorum-queues
+    name: "Quorum queues"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-quorum-queues]
+    subtopics:
+      - {id: rmq-quorum-queues-quorum-queue-basics, name: "Quorum queue basics", match: [quorum-queue-basics]}
+      - {id: rmq-quorum-queues-quorum-delivery-limit, name: "Quorum delivery limit", match: [quorum-delivery-limit]}
+      - {id: rmq-quorum-queues-quorum-queue-migration, name: "Quorum queue migration", match: [quorum-queue-migration]}
+  - id: rmq-streams
+    name: "Streams"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-streams]
+    subtopics:
+      - {id: rmq-streams-stream-basics, name: "Stream basics", match: [stream-basics]}
+      - {id: rmq-streams-stream-offsets, name: "Stream consumer offsets", match: [stream-offsets]}
+      - {id: rmq-streams-stream-retention, name: "Stream retention", match: [stream-retention]}
+  - id: rmq-publishers
+    name: "Publishers"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-publishers]
+    subtopics:
+      - {id: rmq-publishers-publisher-confirms, name: "Publisher confirms", match: [publisher-confirms]}
+      - {id: rmq-publishers-mandatory-and-returns, name: "Mandatory flag and returns", match: [mandatory-and-returns]}
+  - id: rmq-consumers
+    name: "Consumers"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-consumers]
+    subtopics:
+      - {id: rmq-consumers-consumer-acknowledgements, name: "Consumer acknowledgements", match: [consumer-acknowledgements]}
+      - {id: rmq-consumers-prefetch-qos, name: "Consumer prefetch", match: [prefetch-qos]}
+  - id: rmq-reliability
+    name: "Reliability patterns"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-reliability]
+    subtopics:
+      - {id: rmq-reliability-at-least-once-delivery, name: "At-least-once delivery", match: [at-least-once-delivery]}
+      - {id: rmq-reliability-connection-recovery, name: "Connection recovery", match: [connection-recovery]}
+  - id: rmq-dlx
+    name: "Dead lettering"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-dlx]
+    subtopics:
+      - {id: rmq-dlx-dead-letter-exchange, name: "Dead letter exchange", match: [dead-letter-exchange]}
+      - {id: rmq-dlx-dead-letter-reasons, name: "Dead letter reasons", match: [dead-letter-reasons]}
+  - id: rmq-ttl
+    name: "TTL and expiry"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-ttl]
+    subtopics:
+      - {id: rmq-ttl-message-ttl, name: "Message TTL", match: [message-ttl]}
+      - {id: rmq-ttl-queue-ttl, name: "Queue TTL (x-expires)", match: [queue-ttl]}
+  - id: rmq-priority-length
+    name: "Priority and length limits"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-priority-length]
+    subtopics:
+      - {id: rmq-priority-length-queue-priority, name: "Priority queues", match: [queue-priority]}
+      - {id: rmq-priority-length-queue-max-length, name: "Queue length limits", match: [queue-max-length]}
+  - id: rmq-clustering
+    name: "Clustering"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-clustering]
+    subtopics:
+      - {id: rmq-clustering-cluster-formation, name: "Cluster formation", match: [cluster-formation]}
+      - {id: rmq-clustering-partition-handling, name: "Network partition handling", match: [partition-handling]}
+  - id: rmq-federation
+    name: "Federation"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-federation]
+    subtopics:
+      - {id: rmq-federation-exchange-federation, name: "Exchange federation", match: [exchange-federation]}
+      - {id: rmq-federation-queue-federation, name: "Queue federation", match: [queue-federation]}
+  - id: rmq-shovel
+    name: "Shovel"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-shovel]
+    subtopics:
+      - {id: rmq-shovel-dynamic-shovel, name: "Dynamic shovel", match: [dynamic-shovel]}
+      - {id: rmq-shovel-static-shovel, name: "Static shovel", match: [static-shovel]}
+  - id: rmq-mqtt
+    name: "MQTT plugin"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-mqtt]
+    subtopics:
+      - {id: rmq-mqtt-mqtt-plugin, name: "MQTT plugin", match: [mqtt-plugin]}
+      - {id: rmq-mqtt-mqtt-authentication, name: "MQTT authentication", match: [mqtt-authentication]}
+  - id: rmq-stomp
+    name: "STOMP plugin"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-stomp]
+    subtopics:
+      - {id: rmq-stomp-stomp-plugin, name: "STOMP plugin", match: [stomp-plugin]}
+      - {id: rmq-stomp-web-stomp, name: "Web STOMP", match: [web-stomp]}
+  - id: rmq-amqp10
+    name: "AMQP 1.0"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-amqp10]
+    subtopics:
+      - {id: rmq-amqp10-amqp-1-0-support, name: "AMQP 1.0 support", match: [amqp-1-0-support]}
+      - {id: rmq-amqp10-amqp-1-0-addressing, name: "AMQP 1.0 addressing", match: [amqp-1-0-addressing]}
+  - id: rmq-access-control
+    name: "Access control"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-access-control]
+    subtopics:
+      - {id: rmq-access-control-users-and-vhosts, name: "Users and virtual hosts", match: [users-and-vhosts]}
+      - {id: rmq-access-control-topic-permissions, name: "Topic authorization", match: [topic-permissions]}
+  - id: rmq-tls
+    name: "TLS"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-tls]
+    subtopics:
+      - {id: rmq-tls-tls-listeners, name: "TLS listeners", match: [tls-listeners]}
+      - {id: rmq-tls-tls-peer-verification, name: "TLS peer verification", match: [tls-peer-verification]}
+  - id: rmq-auth-backends
+    name: "Authentication backends"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-auth-backends]
+    subtopics:
+      - {id: rmq-auth-backends-ldap-authentication, name: "LDAP authentication", match: [ldap-authentication]}
+      - {id: rmq-auth-backends-oauth2-authentication, name: "OAuth 2.0 authentication", match: [oauth2-authentication]}
+  - id: rmq-monitoring
+    name: "Monitoring"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-monitoring]
+    subtopics:
+      - {id: rmq-monitoring-prometheus-plugin, name: "Prometheus plugin", match: [prometheus-plugin]}
+      - {id: rmq-monitoring-key-metrics-and-alerts, name: "Key metrics and alerts", match: [key-metrics-and-alerts]}
+  - id: rmq-management
+    name: "Management plugin"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-management]
+    subtopics:
+      - {id: rmq-management-management-ui, name: "Management UI", match: [management-ui]}
+      - {id: rmq-management-management-http-api, name: "Management HTTP API", match: [management-http-api]}
+  - id: rmq-cli
+    name: "Command line tools"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-cli]
+    subtopics:
+      - {id: rmq-cli-rabbitmqctl, name: "rabbitmqctl", match: [rabbitmqctl]}
+      - {id: rmq-cli-rabbitmq-diagnostics, name: "rabbitmq-diagnostics", match: [rabbitmq-diagnostics]}
+      - {id: rmq-cli-rabbitmq-queues, name: "rabbitmq-queues", match: [rabbitmq-queues]}
+      - {id: rmq-cli-rabbitmq-plugins, name: "rabbitmq-plugins", match: [rabbitmq-plugins]}
+  - id: rmq-upgrades
+    name: "Upgrades"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-upgrades]
+    subtopics:
+      - {id: rmq-upgrades-rolling-upgrade, name: "Rolling upgrade", match: [rolling-upgrade]}
+      - {id: rmq-upgrades-feature-flags, name: "Feature flags", match: [feature-flags]}
+  - id: rmq-kubernetes
+    name: "Kubernetes"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-kubernetes]
+    subtopics:
+      - {id: rmq-kubernetes-cluster-operator, name: "RabbitMQ Cluster Operator", match: [cluster-operator]}
+      - {id: rmq-kubernetes-topology-operator, name: "Messaging Topology Operator", match: [topology-operator]}
+  - id: rmq-production
+    name: "Production checklist"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-production]
+    subtopics:
+      - {id: rmq-production-production-checklist, name: "Production checklist", match: [production-checklist]}
+      - {id: rmq-production-file-descriptor-limits, name: "File descriptor limits", match: [file-descriptor-limits]}
+  - id: rmq-alarms
+    name: "Resource alarms"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-alarms]
+    subtopics:
+      - {id: rmq-alarms-memory-alarm, name: "Memory alarm", match: [memory-alarm]}
+      - {id: rmq-alarms-disk-alarm, name: "Disk alarm", match: [disk-alarm]}
+  - id: rmq-flow-control
+    name: "Flow control"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-flow-control]
+    subtopics:
+      - {id: rmq-flow-control-credit-flow, name: "Credit flow", match: [credit-flow]}
+      - {id: rmq-flow-control-connection-blocked, name: "Blocked connections", match: [connection-blocked]}
+  - id: rmq-definitions
+    name: "Definitions"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-definitions]
+    subtopics:
+      - {id: rmq-definitions-export-definitions, name: "Export and import definitions", match: [export-definitions]}
+  - id: rmq-policies
+    name: "Policies"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-policies]
+    subtopics:
+      - {id: rmq-policies-policies-and-operator-policies, name: "Policies and operator policies", match: [policies-and-operator-policies]}
+  - id: rmq-config
+    name: "Configuration and logging"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-config]
+    subtopics:
+      - {id: rmq-config-rabbitmq-conf, name: "rabbitmq.conf", match: [rabbitmq-conf]}
+      - {id: rmq-config-logging-configuration, name: "Logging configuration", match: [logging-configuration]}
+  - id: rmq-networking
+    name: "Networking"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-networking]
+    subtopics:
+      - {id: rmq-networking-ports-and-firewalls, name: "Ports and firewalls", match: [ports-and-firewalls]}
+      - {id: rmq-networking-heartbeats-and-timeouts, name: "Heartbeats and timeouts", match: [heartbeats-and-timeouts]}
+  - id: rmq-clients
+    name: "Client libraries"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-clients]
+    subtopics:
+      - {id: rmq-clients-client-libraries, name: "Client libraries", match: [client-libraries]}
+      - {id: rmq-clients-connection-naming, name: "Connection naming", match: [connection-naming]}
+  - id: rmq-amqp-spec
+    name: "AMQP 0-9-1 specification"
+    source: "https://www.rabbitmq.com/resources/specs/amqp0-9-1.pdf"
+    match: [rmq-amqp-spec]
+    subtopics:
+      - {id: rmq-amqp-spec-amqp-frame-format, name: "AMQP frame format", match: [amqp-frame-format]}
+      - {id: rmq-amqp-spec-amqp-classes-and-methods, name: "AMQP classes and methods", match: [amqp-classes-and-methods]}
+  - id: rmq-eip-channels
+    name: "EIP messaging systems"
+    source: "https://www.enterpriseintegrationpatterns.com/patterns/messaging/"
+    match: [rmq-eip-channels]
+    subtopics:
+      - {id: rmq-eip-channels-point-to-point-vs-pubsub, name: "Point-to-point versus publish-subscribe", match: [point-to-point-vs-pubsub]}
+      - {id: rmq-eip-channels-competing-consumers, name: "Competing consumers", match: [competing-consumers]}
+  - id: rmq-eip-routing
+    name: "EIP routing patterns"
+    source: "https://www.enterpriseintegrationpatterns.com/patterns/messaging/"
+    match: [rmq-eip-routing]
+    subtopics:
+      - {id: rmq-eip-routing-content-based-router, name: "Content-based router", match: [content-based-router]}
+      - {id: rmq-eip-routing-message-filter, name: "Message filter", match: [message-filter]}
+      - {id: rmq-eip-routing-splitter-and-aggregator, name: "Splitter and aggregator", match: [splitter-and-aggregator]}
+      - {id: rmq-eip-routing-scatter-gather, name: "Scatter-gather", match: [scatter-gather]}
+      - {id: rmq-eip-routing-routing-slip-and-process-manager, name: "Routing slip", match: [routing-slip-and-process-manager]}
+  - id: rmq-eip-transformation
+    name: "EIP transformation patterns"
+    source: "https://www.enterpriseintegrationpatterns.com/patterns/messaging/"
+    match: [rmq-eip-transformation]
+    subtopics:
+      - {id: rmq-eip-transformation-message-translator, name: "Message translator", match: [message-translator]}
+      - {id: rmq-eip-transformation-claim-check, name: "Claim check", match: [claim-check]}
+      - {id: rmq-eip-transformation-envelope-wrapper-and-enricher, name: "Envelope wrapper and content enricher", match: [envelope-wrapper-and-enricher]}
+  - id: rmq-eip-reliability
+    name: "EIP reliability patterns"
+    source: "https://www.enterpriseintegrationpatterns.com/patterns/messaging/"
+    match: [rmq-eip-reliability]
+    subtopics:
+      - {id: rmq-eip-reliability-idempotent-receiver, name: "Idempotent receiver", match: [idempotent-receiver]}
+      - {id: rmq-eip-reliability-dead-letter-channel, name: "Dead letter channel", match: [dead-letter-channel]}
+      - {id: rmq-eip-reliability-delayed-retry, name: "Delayed retry", match: [delayed-retry]}
+  - id: rmq-rpc
+    name: "Request-reply"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-rpc]
+    subtopics:
+      - {id: rmq-rpc-request-reply-rpc, name: "Request-reply RPC", match: [request-reply-rpc]}
+  - id: rmq-consistency
+    name: "Ordering and routing extensions"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-consistency]
+    subtopics:
+      - {id: rmq-consistency-single-active-consumer, name: "Single active consumer", match: [single-active-consumer]}
+      - {id: rmq-consistency-consistent-hash-exchange, name: "Consistent hash exchange", match: [consistent-hash-exchange]}
+  - id: rmq-maintenance
+    name: "Operations and maintenance"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-maintenance]
+    subtopics:
+      - {id: rmq-maintenance-maintenance-mode, name: "Maintenance mode", match: [maintenance-mode]}
+      - {id: rmq-maintenance-queue-leader-rebalancing, name: "Queue leader rebalancing", match: [queue-leader-rebalancing]}
+  - id: rmq-security
+    name: "Security hardening"
+    source: "https://www.rabbitmq.com/docs"
+    match: [rmq-security]
+    subtopics:
+      - {id: rmq-security-default-credentials-hardening, name: "Credential hardening", match: [default-credentials-hardening]}
+      - {id: rmq-security-message-and-resource-limits, name: "Resource limits for tenants", match: [message-and-resource-limits]}

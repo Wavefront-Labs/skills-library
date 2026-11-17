@@ -1,0 +1,371 @@
+# Canonical coverage spec: Java language, JDK tooling and the mainstream Java ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: java-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [java]
+sources:
+  - "dev.java Learn (dev.java/learn table of contents)"
+  - "Java Language Specification SE 21 and JDK 21 API documentation"
+  - "JDK tool reference (javac, jcmd, jfr, jlink, jpackage, jshell, jdeps, keytool)"
+  - "Apache Maven and Gradle user guides"
+  - "Spring Framework and Spring Boot reference documentation"
+  - "JUnit 5 user guide, Mockito, Testcontainers and JMH documentation"
+topics:
+  - id: jt-type-system
+    name: "Types, variables and numbers"
+    source: "dev.java Learn: Language Basics; JLS chapters 4 and 5"
+    match: [java-type-system]
+    subtopics:
+      - {id: jt-var, name: "Local variable type inference with var", match: [local-variable-type-inference]}
+      - {id: jt-boxing, name: "Autoboxing, Integer cache and wrapper pitfalls", match: [autoboxing-pitfalls]}
+      - {id: jt-overflow, name: "Integer overflow and Math exact methods", match: [math-exact-overflow]}
+      - {id: jt-bigdecimal, name: "BigDecimal for money and rounding", match: [bigdecimal-rounding]}
+  - id: jt-strings
+    name: "Strings, text and regular expressions"
+    source: "dev.java Learn: Numbers and Strings; java.util.regex"
+    match: [java-strings-text]
+    subtopics:
+      - {id: jt-textblocks, name: "Text blocks and formatted", match: [text-blocks]}
+      - {id: jt-regex, name: "Pattern and Matcher with named groups", match: [regex-named-groups]}
+      - {id: jt-charset, name: "Charsets and UTF-8 handling", match: [charset-utf8-encoding]}
+      - {id: jt-stringbuilder, name: "String concatenation cost and StringBuilder", match: [stringbuilder]}
+  - id: jt-control
+    name: "Control flow and pattern matching"
+    source: "dev.java Learn: Language Basics; JLS chapter 14; JEP 440, 441, 456"
+    match: [java-control-flow]
+    subtopics:
+      - {id: jt-switchexpr, name: "Switch expressions and yield", match: [switch-expressions-yield]}
+      - {id: jt-instanceof, name: "Pattern matching for instanceof", match: [instanceof-pattern]}
+      - {id: jt-patternswitch, name: "Pattern matching switch with guards", match: [pattern-matching-switch]}
+      - {id: jt-unnamed, name: "Unnamed variables and patterns", match: [unnamed-variables]}
+  - id: jt-oop
+    name: "Classes, objects and inheritance"
+    source: "dev.java Learn: Classes and Objects, Inheritance; JLS chapter 8"
+    match: [java-oop]
+    subtopics:
+      - {id: jt-nested, name: "Nested, inner, local and anonymous classes", match: [inner-classes]}
+      - {id: jt-composition, name: "Composition over inheritance and the Liskov rule", match: [composition-over-inheritance]}
+      - {id: jt-builder, name: "Builder pattern and static factory methods", match: [builder-pattern]}
+      - {id: jt-initorder, name: "Initialization order of fields, blocks and constructors", match: [initialization-order]}
+  - id: jt-interfaces
+    name: "Interfaces and functional programming"
+    source: "dev.java Learn: Interfaces and Lambdas; JLS chapter 9"
+    match: [java-interfaces]
+    subtopics:
+      - {id: jt-defaultmethods, name: "Default, static and private interface methods", match: [default-methods]}
+      - {id: jt-funcif, name: "Functional interfaces and method references", match: [functional-interfaces]}
+      - {id: jt-composition2, name: "Function composition and currying", match: [function-composition]}
+  - id: jt-data
+    name: "Data modelling with records, enums and sealed types"
+    source: "dev.java Learn: Records, Enums; JEP 395, 409"
+    match: [java-data-modeling]
+    subtopics:
+      - {id: jt-records, name: "Records and compact constructors", match: [java-records]}
+      - {id: jt-enums, name: "Enums with behaviour", match: [java-enums]}
+      - {id: jt-sealed, name: "Sealed classes and exhaustive switch", match: [sealed-classes]}
+      - {id: jt-recpat, name: "Record patterns and nested deconstruction", match: [record-patterns]}
+  - id: jt-generics
+    name: "Generics"
+    source: "dev.java Learn: Generics; JLS chapter 4.5"
+    match: [java-generics]
+    subtopics:
+      - {id: jt-pecs, name: "Wildcards and PECS", match: [pecs]}
+      - {id: jt-erasure, name: "Type erasure consequences", match: [type-erasure]}
+      - {id: jt-typetoken, name: "Type tokens and TypeReference for runtime generics", match: [type-tokens]}
+      - {id: jt-genmethods, name: "Generic methods and recursive bounds", match: [recursive-generic-bounds]}
+  - id: jt-exceptions
+    name: "Exceptions"
+    source: "dev.java Learn: Exceptions"
+    match: [java-exceptions]
+    subtopics:
+      - {id: jt-twr, name: "try-with-resources and suppressed exceptions", match: [try-with-resources]}
+      - {id: jt-excdesign, name: "Designing custom exception hierarchies", match: [custom-exception-design]}
+      - {id: jt-stacktrace, name: "Reading stack traces and causes", match: [stack-trace-reading]}
+  - id: jt-collections
+    name: "Collections framework"
+    source: "dev.java Learn: Collections; java.util API"
+    match: [java-collections]
+    subtopics:
+      - {id: jt-immut, name: "Immutable collection factories", match: [immutable-collections]}
+      - {id: jt-seqcoll, name: "Sequenced collections", match: [sequenced-collections]}
+      - {id: jt-hashmap, name: "HashMap internals and key design", match: [hashmap-internals]}
+      - {id: jt-treemap, name: "TreeMap and NavigableMap range queries", match: [navigablemap-range-queries]}
+      - {id: jt-pq, name: "PriorityQueue and ArrayDeque usage", match: [priorityqueue-arraydeque]}
+  - id: jt-streams
+    name: "Streams"
+    source: "dev.java Learn: Streams; java.util.stream API"
+    match: [java-streams]
+    subtopics:
+      - {id: jt-collectors, name: "Collectors and groupingBy", match: [collectors]}
+      - {id: jt-primstreams, name: "Primitive streams and summary statistics", match: [primitive-streams]}
+      - {id: jt-flatmap, name: "flatMap, mapMulti and takeWhile", match: [flatmap-mapmulti]}
+      - {id: jt-parstream, name: "Parallel streams hazards", match: [parallel-streams]}
+  - id: jt-time
+    name: "Date and time API"
+    source: "dev.java Learn: Date Time; java.time API"
+    match: [java-time-api]
+    subtopics:
+      - {id: jt-zoned, name: "ZonedDateTime and daylight saving transitions", match: [zoneddatetime-dst]}
+      - {id: jt-duration, name: "Duration versus Period", match: [duration-vs-period]}
+      - {id: jt-dtf, name: "DateTimeFormatter parsing and formatting", match: [datetimeformatter]}
+      - {id: jt-clock, name: "Injectable Clock for testable time", match: [injectable-clock]}
+  - id: jt-io
+    name: "I/O and NIO.2"
+    source: "dev.java Learn: Basic I/O; java.nio.file API"
+    match: [java-io-nio]
+    subtopics:
+      - {id: jt-files, name: "Files read, write, walk and list", match: [nio-files-walk]}
+      - {id: jt-mmap, name: "Memory-mapped files and FileChannel", match: [memory-mapped-files]}
+      - {id: jt-watch, name: "WatchService directory events", match: [watchservice]}
+      - {id: jt-deser, name: "Java serialization risks and ObjectInputFilter", match: [deserialization-filter]}
+  - id: jt-httpclient
+    name: "Networking and the HTTP client"
+    source: "dev.java Learn: Networking; java.net.http API"
+    match: [java-networking]
+    subtopics:
+      - {id: jt-httpc, name: "java.net.http HttpClient sync and async", match: [java-httpclient]}
+      - {id: jt-ws, name: "WebSocket client in java.net.http", match: [java-websocket-client]}
+      - {id: jt-uri, name: "URI versus URL pitfalls and encoding", match: [uri-encoding]}
+  - id: jt-conc-core
+    name: "Concurrency fundamentals"
+    source: "dev.java Learn: Concurrency; JLS chapter 17; JEP 444, 453, 462"
+    match: [java-concurrency-core]
+    subtopics:
+      - {id: jt-vthreads, name: "Virtual threads and executors", match: [virtual-threads]}
+      - {id: jt-structured, name: "Structured concurrency scopes", match: [structured-concurrency]}
+      - {id: jt-fj, name: "Fork/Join and RecursiveTask", match: [forkjoinpool]}
+      - {id: jt-jmm, name: "Java Memory Model and happens-before", match: [happens-before]}
+      - {id: jt-interrupt, name: "Thread interruption", match: [thread-interruption]}
+  - id: jt-conc-utils
+    name: "java.util.concurrent utilities"
+    source: "java.util.concurrent API documentation"
+    match: [java-concurrent-utils]
+    subtopics:
+      - {id: jt-cf, name: "CompletableFuture composition", match: [completablefuture]}
+      - {id: jt-sync, name: "CountDownLatch, Semaphore and Phaser", match: [synchronizers]}
+      - {id: jt-chm, name: "ConcurrentHashMap and atomics", match: [concurrenthashmap]}
+      - {id: jt-bq, name: "BlockingQueue pipelines", match: [blockingqueue]}
+      - {id: jt-sched, name: "ScheduledExecutorService and DelayQueue", match: [scheduledexecutorservice]}
+  - id: jt-reflection
+    name: "Reflection, annotations and method handles"
+    source: "dev.java Learn: Annotations, Reflection; java.lang.invoke API"
+    match: [java-reflection]
+    subtopics:
+      - {id: jt-customann, name: "Defining custom annotations with retention", match: [custom-annotations]}
+      - {id: jt-apt, name: "Annotation processors", match: [annotation-processor]}
+      - {id: jt-mh, name: "MethodHandles and VarHandles", match: [methodhandles-varhandle]}
+      - {id: jt-proxy, name: "Dynamic proxies", match: [dynamic-proxy]}
+  - id: jt-jvm
+    name: "JVM internals"
+    source: "JVM Specification SE 21; HotSpot documentation"
+    match: [java-jvm-internals]
+    subtopics:
+      - {id: jt-classloader, name: "Class loaders and delegation", match: [classloader-delegation]}
+      - {id: jt-javap, name: "Inspecting bytecode with javap", match: [javap-bytecode]}
+      - {id: jt-jit, name: "JIT compilation and warmup", match: [jit-compilation]}
+      - {id: jt-escape, name: "Escape analysis and allocation", match: [escape-analysis]}
+  - id: jt-gc
+    name: "Garbage collection"
+    source: "JDK 21 HotSpot Virtual Machine Garbage Collection Tuning Guide"
+    match: [java-garbage-collection]
+    subtopics:
+      - {id: jt-g1, name: "G1 tuning", match: [g1gc]}
+      - {id: jt-zgc, name: "ZGC and generational ZGC", match: [zgc]}
+      - {id: jt-gclog, name: "Unified GC logging", match: [gc-logging]}
+      - {id: jt-oom, name: "OutOfMemoryError variants", match: [outofmemoryerror]}
+  - id: jt-diag
+    name: "JDK diagnostic tools"
+    source: "JDK 21 tools reference (jcmd, jstack, jfr, jstat, jhsdb)"
+    match: [jdk-diagnostics]
+    subtopics:
+      - {id: jt-jcmd, name: "jcmd command catalogue", match: [jcmd]}
+      - {id: jt-threaddump, name: "Thread dump analysis", match: [thread-dump-analysis]}
+      - {id: jt-jfr, name: "JDK Flight Recorder recordings", match: [jfr-recording]}
+      - {id: jt-jstat, name: "jstat GC statistics", match: [jstat]}
+      - {id: jt-heapdump, name: "Heap dump and leak analysis", match: [heap-dump]}
+  - id: jt-devtools
+    name: "JDK developer tools"
+    source: "JDK 21 tools reference (javac, java, jshell, jar, javadoc)"
+    match: [jdk-dev-tools]
+    subtopics:
+      - {id: jt-javac, name: "javac lint flags and release option", match: [javac-flags]}
+      - {id: jt-jshell, name: "jshell for exploration", match: [jshell]}
+      - {id: jt-sourcemode, name: "Single-file source launch mode", match: [source-file-mode]}
+      - {id: jt-javadoc, name: "Javadoc authoring", match: [javadoc-authoring]}
+  - id: jt-modules
+    name: "Modules and packaging"
+    source: "dev.java Learn: Modules; jlink and jpackage references"
+    match: [java-modules-packaging]
+    subtopics:
+      - {id: jt-jpms, name: "module-info and JPMS", match: [jpms]}
+      - {id: jt-jlink, name: "jlink custom runtimes", match: [jlink]}
+      - {id: jt-jpackage, name: "jpackage native installers", match: [jpackage]}
+      - {id: jt-multirelease, name: "Multi-release JARs", match: [multi-release-jar]}
+  - id: jt-security
+    name: "Java security"
+    source: "Java Security Developer Guide; keytool and JSSE reference"
+    match: [java-security]
+    subtopics:
+      - {id: jt-keytool, name: "keytool and keystores", match: [keytool-keystore]}
+      - {id: jt-tls, name: "SSLContext and TLS configuration", match: [sslcontext-tls]}
+      - {id: jt-random, name: "SecureRandom and password hashing", match: [securerandom]}
+      - {id: jt-crypto, name: "AES-GCM encryption with JCA", match: [aes-gcm-jca]}
+  - id: jt-jdbc
+    name: "JDBC and connection pooling"
+    source: "dev.java Learn: JDBC; HikariCP documentation"
+    match: [java-jdbc]
+    subtopics:
+      - {id: jt-prepared, name: "PreparedStatement and parameter binding", match: [preparedstatement]}
+      - {id: jt-hikari, name: "HikariCP pool sizing", match: [hikaricp]}
+      - {id: jt-batch, name: "JDBC batching and fetch size", match: [jdbc-batch-fetchsize]}
+  - id: jt-maven
+    name: "Maven"
+    source: "Apache Maven guides and POM reference"
+    match: [java-maven]
+    subtopics:
+      - {id: jt-mvnlife, name: "Lifecycle and POM", match: [maven-lifecycle]}
+      - {id: jt-mvnbom, name: "BOM and dependency management", match: [maven-bom]}
+      - {id: jt-mvnprof, name: "Profiles and properties", match: [maven-profiles]}
+      - {id: jt-mvnshade, name: "Shade and assembly plugins for fat JARs", match: [maven-shade-plugin]}
+      - {id: jt-mvnrelease, name: "Release process and versions plugin", match: [versions-maven-plugin]}
+      - {id: jt-mvnenforcer, name: "Enforcer rules", match: [maven-enforcer]}
+  - id: jt-gradle
+    name: "Gradle"
+    source: "Gradle User Manual"
+    match: [java-gradle]
+    subtopics:
+      - {id: jt-gradlekts, name: "Kotlin DSL builds and tasks", match: [gradle-kotlin-dsl]}
+      - {id: jt-catalog, name: "Version catalogs", match: [version-catalogs]}
+      - {id: jt-toolchain, name: "Java toolchains", match: [gradle-toolchains]}
+      - {id: jt-customtask, name: "Custom tasks and inputs/outputs", match: [gradle-custom-tasks]}
+      - {id: jt-gradlecache, name: "Build cache", match: [build-cache]}
+  - id: jt-junit
+    name: "JUnit 5"
+    source: "JUnit 5 User Guide"
+    match: [junit5]
+    subtopics:
+      - {id: jt-param, name: "Parameterized tests", match: [parameterized-tests]}
+      - {id: jt-ext, name: "Extensions and lifecycle", match: [junit5-extensions]}
+      - {id: jt-dynamic, name: "Dynamic tests and test factories", match: [dynamic-tests]}
+      - {id: jt-parallel, name: "Parallel test execution", match: [junit-parallel-execution]}
+  - id: jt-testlibs
+    name: "Test libraries"
+    source: "Mockito, AssertJ, WireMock, Testcontainers, ArchUnit docs"
+    match: [java-test-libraries]
+    subtopics:
+      - {id: jt-mockito, name: "Mockito", match: [mockito]}
+      - {id: jt-assertj, name: "AssertJ", match: [assertj]}
+      - {id: jt-tc, name: "Testcontainers for integration tests", match: [testcontainers-java]}
+      - {id: jt-archunit, name: "ArchUnit architecture rules", match: [archunit]}
+      - {id: jt-wiremock, name: "WireMock", match: [wiremock]}
+  - id: jt-quality
+    name: "Code quality tooling"
+    source: "JaCoCo, SpotBugs, Error Prone, Checkstyle, Spotless, PIT docs"
+    match: [java-code-quality]
+    subtopics:
+      - {id: jt-jacoco, name: "JaCoCo coverage", match: [jacoco]}
+      - {id: jt-spotbugs, name: "SpotBugs and Error Prone", match: [errorprone-spotbugs]}
+      - {id: jt-spotless, name: "Spotless formatting and Checkstyle", match: [spotless-checkstyle]}
+      - {id: jt-pit, name: "PIT mutation testing", match: [pitest-mutation-testing]}
+  - id: jt-springcore
+    name: "Spring Framework core"
+    source: "Spring Framework Reference: Core Technologies"
+    match: [spring-framework-core]
+    subtopics:
+      - {id: jt-beans, name: "Beans and constructor injection", match: [spring-beans]}
+      - {id: jt-aop, name: "AOP proxies and aspects", match: [spring-aop-proxies]}
+      - {id: jt-events, name: "Application events", match: [spring-application-events]}
+      - {id: jt-conditional, name: "Conditional and profile-specific beans", match: [conditional-beans]}
+  - id: jt-bootconfig
+    name: "Spring Boot configuration and extension"
+    source: "Spring Boot Reference: Core Features"
+    match: [spring-boot-core]
+    subtopics:
+      - {id: jt-cfgprops, name: "ConfigurationProperties and profiles", match: [configurationproperties]}
+      - {id: jt-autoconf, name: "Auto-configuration", match: [auto-configuration]}
+      - {id: jt-starter, name: "Writing a custom starter", match: [custom-starter]}
+      - {id: jt-actuatorext, name: "Custom actuator endpoints and info", match: [custom-actuator-endpoint]}
+  - id: jt-springweb
+    name: "Spring web"
+    source: "Spring Framework Reference: Web Servlet and Web Reactive"
+    match: [spring-web]
+    subtopics:
+      - {id: jt-mvc, name: "MVC controllers and validation", match: [spring-mvc]}
+      - {id: jt-webflux, name: "WebFlux and Reactor basics", match: [spring-webflux]}
+      - {id: jt-sse, name: "Server-sent events and WebSocket", match: [spring-sse-websocket]}
+      - {id: jt-upload, name: "Multipart uploads and streaming downloads", match: [spring-file-upload]}
+      - {id: jt-restclient, name: "RestClient and WebClient", match: [restclient]}
+  - id: jt-springdata
+    name: "Spring Data and JPA"
+    source: "Spring Data JPA Reference; Jakarta Persistence spec"
+    match: [spring-data]
+    subtopics:
+      - {id: jt-jparepo, name: "Repositories and N+1", match: [spring-data-jpa]}
+      - {id: jt-jpalock, name: "JPA optimistic and pessimistic locking", match: [jpa-locking]}
+      - {id: jt-specs, name: "Specifications and dynamic queries", match: [jpa-specifications]}
+      - {id: jt-hibbatch, name: "Hibernate batch inserts and ID generation", match: [hibernate-batching]}
+      - {id: jt-audit, name: "JPA auditing", match: [jpa-auditing]}
+  - id: jt-springsec
+    name: "Spring transactions and security"
+    source: "Spring Framework Reference: Data Access; Spring Security Reference"
+    match: [spring-tx-security]
+    subtopics:
+      - {id: jt-tx, name: "Transactional boundaries and propagation", match: [transactional]}
+      - {id: jt-secchain, name: "Security filter chain and JWT", match: [securityfilterchain]}
+      - {id: jt-oauthlogin, name: "OAuth2 login and client", match: [oauth2-login]}
+      - {id: jt-csrf, name: "CSRF and CORS in Spring Security", match: [spring-csrf-cors]}
+  - id: jt-messaging
+    name: "Messaging and resilience in Spring"
+    source: "Spring for Apache Kafka, Spring AMQP, Spring Batch, Spring Retry references"
+    match: [spring-messaging]
+    subtopics:
+      - {id: jt-kafka, name: "Spring Kafka consumers and producers", match: [spring-kafka]}
+      - {id: jt-rabbit, name: "Spring AMQP and RabbitMQ", match: [spring-amqp]}
+      - {id: jt-retry, name: "Retry and circuit breakers", match: [resilience4j]}
+      - {id: jt-batch2, name: "Spring Batch jobs and chunks", match: [spring-batch]}
+  - id: jt-observe
+    name: "Observability for Java services"
+    source: "Micrometer documentation; Spring Boot Reference: Actuator"
+    match: [java-observability]
+    subtopics:
+      - {id: jt-micrometer, name: "Micrometer metrics", match: [micrometer-metrics]}
+      - {id: jt-tracing, name: "Micrometer Tracing and OpenTelemetry", match: [micrometer-tracing]}
+      - {id: jt-mdc, name: "MDC and structured logging", match: [logging-mdc]}
+      - {id: jt-probes, name: "Health probes", match: [health-probes]}
+  - id: jt-deploy
+    name: "Packaging and deploying Java apps"
+    source: "Spring Boot Reference: Packaging, Container Images; Jib and GraalVM docs"
+    match: [java-deployment]
+    subtopics:
+      - {id: jt-bootimage, name: "Layered JARs and buildpack images", match: [boot-buildpacks]}
+      - {id: jt-jib, name: "Jib container builds", match: [jib]}
+      - {id: jt-native, name: "GraalVM native image", match: [graalvm-native-image]}
+      - {id: jt-cds, name: "AppCDS", match: [appcds]}
+  - id: jt-perf
+    name: "Performance engineering"
+    source: "OpenJDK JMH, async-profiler and HotSpot flag documentation"
+    match: [java-performance]
+    subtopics:
+      - {id: jt-jmh, name: "JMH microbenchmarks", match: [jmh]}
+      - {id: jt-asyncprof, name: "async-profiler flame graphs", match: [async-profiler]}
+      - {id: jt-flags, name: "JVM flags and ergonomics", match: [jvm-ergonomics]}
+      - {id: jt-containers, name: "JVM in containers", match: [jvm-containers]}
+  - id: jt-deps
+    name: "Dependency and supply-chain hygiene"
+    source: "OWASP Dependency-Check, Maven versions plugin, Gradle dependency docs"
+    match: [java-dependency-hygiene]
+    subtopics:
+      - {id: jt-deptree, name: "Dependency trees", match: [dependency-tree]}
+      - {id: jt-owasp, name: "OWASP Dependency-Check scanning", match: [owasp-dependency-check]}
+      - {id: jt-sbom, name: "CycloneDX SBOM generation", match: [cyclonedx-sbom]}
+      - {id: jt-signing, name: "Dependency verification and checksums", match: [dependency-verification]}
+  - id: jt-json
+    name: "JSON and data binding"
+    source: "Jackson databind documentation"
+    match: [java-json]
+    subtopics:
+      - {id: jt-jackson, name: "Jackson ObjectMapper configuration", match: [jackson-objectmapper]}
+      - {id: jt-polymorph, name: "Polymorphic types with JsonTypeInfo", match: [jackson-polymorphism]}
+      - {id: jt-jacksonrec, name: "Jackson with records", match: [jackson-records]}

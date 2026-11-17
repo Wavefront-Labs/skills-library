@@ -1,0 +1,350 @@
+# Canonical coverage spec: COBOL language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: cobol-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [cobol]
+sources:
+  - "ISO/IEC 1989:2014 and 2002 COBOL standard (table of contents)"
+  - "IBM Enterprise COBOL for z/OS Language Reference and Programmer's Guide"
+  - "GnuCOBOL Programmer's Guide and FAQ (gnucobol.sourceforge.io)"
+  - "IBM z/OS MVS JCL Reference and JCL User's Guide"
+  - "IBM CICS TS application programming and DB2 for z/OS application programming and SQL"
+  - "Zowe documentation (docs.zowe.org)"
+topics:
+  - id: cobol-structure
+    name: "Program structure and divisions"
+    source: "ISO COBOL: Language elements, program structure; IBM Language Reference: Structure of COBOL programs"
+    match: [cobol-structure]
+    subtopics:
+      - {id: cobol-structure-four-divisions, name: "Identification, Environment, Data and Procedure divisions", match: [four-divisions]}
+      - {id: cobol-structure-reference-format, name: "Fixed, free and variable reference formats", match: [reference-format]}
+      - {id: cobol-structure-program-id-clauses, name: "PROGRAM-ID, INITIAL, COMMON, RECURSIVE and nested programs", match: [program-id-clauses]}
+  - id: cobol-lexical
+    name: "Character set, words and literals"
+    source: "ISO COBOL: Language fundamentals; IBM Language Reference: Characters, words, literals"
+    match: [cobol-lexical]
+    subtopics:
+      - {id: cobol-lexical-reserved-words, name: "Reserved words and context-sensitive words", match: [reserved-words]}
+      - {id: cobol-lexical-literals-figurative, name: "Nonnumeric, numeric and hexadecimal literals and figurative constants", match: [literals-figurative]}
+      - {id: cobol-lexical-user-defined-names, name: "Rules for user-defined names and qualification", match: [user-defined-names]}
+  - id: cobol-environment
+    name: "Environment division"
+    source: "ISO COBOL: Environment division; IBM Language Reference: Environment division"
+    match: [cobol-environment]
+    subtopics:
+      - {id: cobol-environment-configuration-section, name: "CONFIGURATION SECTION and SPECIAL-NAMES", match: [configuration-section]}
+      - {id: cobol-environment-file-control-select, name: "SELECT, ASSIGN, ORGANIZATION, ACCESS MODE and FILE STATUS", match: [file-control-select]}
+      - {id: cobol-environment-class-condition-names, name: "CLASS, ALPHABET and SYMBOLIC CHARACTERS", match: [class-condition-names]}
+  - id: cobol-data-description
+    name: "Data description entries"
+    source: "ISO COBOL: Data description entry; IBM Language Reference: Data division"
+    match: [cobol-data-description]
+    subtopics:
+      - {id: cobol-data-description-level-numbers, name: "Level numbers 01-49, 66, 77 and 88", match: [level-numbers]}
+      - {id: cobol-data-description-picture-clause, name: "PICTURE symbols 9, X, A, S, V, P", match: [picture-clause]}
+      - {id: cobol-data-description-redefines-renames, name: "REDEFINES and RENAMES", match: [redefines-renames]}
+      - {id: cobol-data-description-occurs-clause, name: "OCCURS, DEPENDING ON, INDEXED BY and KEY", match: [occurs-clause]}
+  - id: cobol-usage
+    name: "USAGE and numeric representations"
+    source: "IBM Language Reference: USAGE clause; ISO COBOL: USAGE clause"
+    match: [cobol-usage]
+    subtopics:
+      - {id: cobol-usage-usage-display-comp, name: "USAGE DISPLAY, BINARY, COMP, COMP-3, COMP-5, COMP-1 and COMP-2", match: [usage-display-comp]}
+      - {id: cobol-usage-sign-clause-sync, name: "SIGN, SYNCHRONIZED, JUSTIFIED and BLANK WHEN ZERO", match: [sign-clause-sync]}
+      - {id: cobol-usage-packed-decimal-layout, name: "Packed-decimal byte layout and invalid-data (S0C7) causes", match: [packed-decimal-layout]}
+  - id: cobol-storage-sections
+    name: "Data division sections"
+    source: "IBM Language Reference: Data division sections; ISO COBOL: Data division"
+    match: [cobol-storage-sections]
+    subtopics:
+      - {id: cobol-storage-sections-working-storage, name: "WORKING-STORAGE SECTION and initial values", match: [working-storage]}
+      - {id: cobol-storage-sections-local-storage-linkage, name: "LOCAL-STORAGE and LINKAGE SECTION", match: [local-storage-linkage]}
+      - {id: cobol-storage-sections-file-section-fd, name: "FILE SECTION, FD, RECORD CONTAINS and BLOCK CONTAINS", match: [file-section-fd]}
+      - {id: cobol-storage-sections-copybooks-copy, name: "COPY statement and REPLACING", match: [copybooks-copy]}
+      - {id: cobol-storage-sections-value-clause-init, name: "VALUE clause and INITIALIZE statement", match: [value-clause-init]}
+  - id: cobol-conditions
+    name: "Conditions and conditional statements"
+    source: "ISO COBOL: Conditional expressions; IBM Language Reference: Conditional expressions"
+    match: [cobol-conditions]
+    subtopics:
+      - {id: cobol-conditions-level-88-conditions, name: "Level-88 condition names and SET TO TRUE", match: [level-88-conditions]}
+      - {id: cobol-conditions-relation-class-sign-conditions, name: "Relation, class and sign conditions", match: [relation-class-sign-conditions]}
+      - {id: cobol-conditions-compound-conditions-abbreviated, name: "AND, OR, NOT and abbreviated combined conditions", match: [compound-conditions-abbreviated]}
+      - {id: cobol-conditions-evaluate-statement, name: "EVALUATE (multi-way branch)", match: [evaluate-statement]}
+  - id: cobol-data-movement
+    name: "Data movement and reference modification"
+    source: "IBM Language Reference: MOVE, INITIALIZE, reference modification; ISO COBOL: MOVE"
+    match: [cobol-data-movement]
+    subtopics:
+      - {id: cobol-data-movement-move-rules, name: "MOVE rules, truncation and MOVE CORRESPONDING", match: [move-rules]}
+      - {id: cobol-data-movement-reference-modification, name: "Reference modification and substrings", match: [reference-modification]}
+      - {id: cobol-data-movement-initialize-vs-move, name: "Choosing MOVE, INITIALIZE or SET for resetting data", match: [initialize-vs-move]}
+  - id: cobol-arithmetic
+    name: "Arithmetic"
+    source: "IBM Language Reference: Arithmetic statements; ISO COBOL: Arithmetic statements"
+    match: [cobol-arithmetic]
+    subtopics:
+      - {id: cobol-arithmetic-arithmetic-verbs, name: "ADD, SUBTRACT, MULTIPLY, DIVIDE and COMPUTE", match: [arithmetic-verbs]}
+      - {id: cobol-arithmetic-size-error-rounded, name: "ON SIZE ERROR and ROUNDED", match: [size-error-rounded]}
+      - {id: cobol-arithmetic-decimal-precision-intermediate, name: "Intermediate results, TRUNC and ARITH options", match: [decimal-precision-intermediate]}
+  - id: cobol-control-flow
+    name: "Procedure division control flow"
+    source: "ISO COBOL: Procedure division; IBM Language Reference: Procedure division statements"
+    match: [cobol-control-flow]
+    subtopics:
+      - {id: cobol-control-flow-perform-forms, name: "PERFORM: paragraph, THRU, TIMES, UNTIL, VARYING and inline", match: [perform-forms]}
+      - {id: cobol-control-flow-if-else-continue, name: "IF/ELSE, CONTINUE, NEXT SENTENCE and scope terminators", match: [if-else-continue]}
+      - {id: cobol-control-flow-go-to-alter, name: "GO TO, GO TO DEPENDING ON and ALTER", match: [go-to-alter]}
+      - {id: cobol-control-flow-paragraph-section-structure, name: "Paragraphs, sections, fall-through and EXIT", match: [paragraph-section-structure]}
+      - {id: cobol-control-flow-stop-goback-exit, name: "STOP RUN, GOBACK, EXIT PROGRAM and RETURN-CODE", match: [stop-goback-exit]}
+  - id: cobol-tables
+    name: "Tables"
+    source: "IBM Language Reference: Table handling; ISO COBOL: OCCURS, SEARCH, SET"
+    match: [cobol-tables]
+    subtopics:
+      - {id: cobol-tables-table-subscripts-indexes, name: "Subscripts versus indexes", match: [table-subscripts-indexes]}
+      - {id: cobol-tables-search-linear, name: "SEARCH (linear) with WHEN and AT END", match: [search-linear]}
+      - {id: cobol-tables-search-all-binary, name: "SEARCH ALL (binary search) and key order", match: [search-all-binary]}
+      - {id: cobol-tables-set-index-statement, name: "SET for indexes, conditions and pointers", match: [set-index-statement]}
+  - id: cobol-strings
+    name: "String handling"
+    source: "IBM Language Reference: STRING, UNSTRING, INSPECT; ISO COBOL: Character-string handling"
+    match: [cobol-strings]
+    subtopics:
+      - {id: cobol-strings-string-statement, name: "STRING (concatenation) with DELIMITED BY and POINTER", match: [string-statement]}
+      - {id: cobol-strings-unstring-statement, name: "UNSTRING (parsing) with DELIMITER, COUNT and TALLYING", match: [unstring-statement]}
+      - {id: cobol-strings-inspect-tally-replace, name: "INSPECT TALLYING, REPLACING and CONVERTING", match: [inspect-tally-replace]}
+  - id: cobol-sequential-files
+    name: "Sequential file I/O"
+    source: "IBM Language Reference: Sequential I/O; ISO COBOL: Input-output"
+    match: [cobol-sequential-files]
+    subtopics:
+      - {id: cobol-sequential-files-open-close-modes, name: "OPEN INPUT, OUTPUT, I-O, EXTEND and CLOSE", match: [open-close-modes]}
+      - {id: cobol-sequential-files-read-write-sequential, name: "READ INTO, AT END, WRITE FROM and priming read", match: [read-write-sequential]}
+      - {id: cobol-sequential-files-file-status-codes, name: "FILE STATUS codes and what they mean", match: [file-status-codes]}
+      - {id: cobol-sequential-files-line-sequential, name: "LINE SEQUENTIAL text files", match: [line-sequential]}
+  - id: cobol-indexed-relative
+    name: "Indexed and relative files"
+    source: "IBM Language Reference: Indexed and relative file I/O; ISO COBOL: Indexed/relative organization"
+    match: [cobol-indexed-relative]
+    subtopics:
+      - {id: cobol-indexed-relative-indexed-vsam-ksds, name: "INDEXED files with RECORD KEY and ALTERNATE KEY (VSAM KSDS)", match: [indexed-vsam-ksds]}
+      - {id: cobol-indexed-relative-random-dynamic-access, name: "START, READ NEXT, REWRITE, DELETE and random reads", match: [random-dynamic-access]}
+      - {id: cobol-indexed-relative-relative-files, name: "RELATIVE files and RELATIVE KEY", match: [relative-files]}
+  - id: cobol-sort-merge
+    name: "SORT and MERGE"
+    source: "IBM Language Reference: SORT, MERGE, RELEASE, RETURN; ISO COBOL: Sort-merge"
+    match: [cobol-sort-merge]
+    subtopics:
+      - {id: cobol-sort-merge-sort-statement, name: "SORT with USING and GIVING", match: [sort-statement]}
+      - {id: cobol-sort-merge-sort-input-output-procedures, name: "SORT INPUT PROCEDURE, OUTPUT PROCEDURE, RELEASE and RETURN", match: [sort-input-output-procedures]}
+      - {id: cobol-sort-merge-merge-statement, name: "MERGE of pre-sorted files", match: [merge-statement]}
+  - id: cobol-report
+    name: "Report writing and print control"
+    source: "IBM Language Reference: Report Writer, WRITE ADVANCING; ISO COBOL: Report writer module"
+    match: [cobol-report]
+    subtopics:
+      - {id: cobol-report-report-writer, name: "Report Writer module (RD, TYPE IS, GENERATE)", match: [report-writer]}
+      - {id: cobol-report-print-control, name: "WRITE AFTER/BEFORE ADVANCING, page headings and carriage control", match: [print-control]}
+  - id: cobol-subprograms
+    name: "CALL and subprograms"
+    source: "IBM Language Reference: CALL, USING, ENTRY, CANCEL; ISO COBOL: Inter-program communication"
+    match: [cobol-subprograms]
+    subtopics:
+      - {id: cobol-subprograms-call-by-reference-content-value, name: "CALL BY REFERENCE, BY CONTENT and BY VALUE", match: [call-by-reference-content-value]}
+      - {id: cobol-subprograms-linkage-section-parameters, name: "PROCEDURE DIVISION USING, RETURNING, ENTRY and OMITTED", match: [linkage-section-parameters]}
+      - {id: cobol-subprograms-dynamic-vs-static-call, name: "Static and dynamic CALL", match: [dynamic-vs-static-call]}
+      - {id: cobol-subprograms-cancel-initial-state, name: "CANCEL, INITIAL and subprogram state", match: [cancel-initial-state]}
+      - {id: cobol-subprograms-return-code-special-register, name: "RETURN-CODE and condition codes between programs", match: [return-code-special-register]}
+  - id: cobol-exceptions
+    name: "Exceptions and error handling"
+    source: "IBM Language Reference: Declaratives, ON EXCEPTION, INVALID KEY; ISO COBOL: Exception handling"
+    match: [cobol-exceptions]
+    subtopics:
+      - {id: cobol-exceptions-on-exception-handlers, name: "AT END, INVALID KEY, ON EXCEPTION, ON OVERFLOW", match: [on-exception-handlers]}
+      - {id: cobol-exceptions-declaratives-use, name: "DECLARATIVES with USE AFTER ERROR PROCEDURE", match: [declaratives-use]}
+      - {id: cobol-exceptions-abend-return-codes, name: "Controlled abends and return code policy", match: [abend-return-codes]}
+  - id: cobol-intrinsic
+    name: "Intrinsic functions"
+    source: "IBM Language Reference: Intrinsic functions; ISO COBOL: Intrinsic functions"
+    match: [cobol-intrinsic]
+    subtopics:
+      - {id: cobol-intrinsic-intrinsic-numeric-math, name: "Numeric and mathematical intrinsic functions", match: [intrinsic-numeric-math]}
+      - {id: cobol-intrinsic-intrinsic-string, name: "String intrinsic functions (UPPER-CASE, TRIM, REVERSE, LENGTH)", match: [intrinsic-string]}
+      - {id: cobol-intrinsic-intrinsic-date-time, name: "Date and time intrinsic functions", match: [intrinsic-date-time]}
+      - {id: cobol-intrinsic-numval-conversion, name: "NUMVAL, NUMVAL-C and TEST-NUMVAL", match: [numval-conversion]}
+  - id: cobol-dates
+    name: "Date handling and Y2K"
+    source: "IBM Language Reference: Date and time facilities; ISO COBOL: ACCEPT FROM DATE"
+    match: [cobol-dates]
+    subtopics:
+      - {id: cobol-dates-accept-from-date, name: "ACCEPT FROM DATE, DAY, TIME and century windowing", match: [accept-from-date]}
+      - {id: cobol-dates-date-validation, name: "Validating dates and leap years", match: [date-validation]}
+  - id: cobol-oo
+    name: "Object-oriented COBOL"
+    source: "IBM Enterprise COBOL Language Reference: Object-oriented; ISO COBOL: Object orientation"
+    match: [cobol-oo]
+    subtopics:
+      - {id: cobol-oo-class-definition-methods, name: "CLASS-ID, METHOD-ID and OBJECT sections", match: [class-definition-methods]}
+      - {id: cobol-oo-invoke-statement, name: "INVOKE and method calls", match: [invoke-statement]}
+  - id: cobol-modern-features
+    name: "Modern COBOL language features"
+    source: "ISO COBOL 2002/2014: new features; IBM Enterprise COBOL 6.x Language Reference"
+    match: [cobol-modern-features]
+    subtopics:
+      - {id: cobol-modern-features-user-defined-functions, name: "FUNCTION-ID and user-defined functions", match: [user-defined-functions]}
+      - {id: cobol-modern-features-typedef-strong-types, name: "TYPEDEF, strongly typed data and CONSTANT", match: [typedef-strong-types]}
+      - {id: cobol-modern-features-free-format-modern-syntax, name: "Newer syntax: inline comments, EXIT PERFORM, CONTINUE, END- terminators", match: [free-format-modern-syntax]}
+  - id: cobol-json-xml
+    name: "JSON and XML processing"
+    source: "IBM Enterprise COBOL: JSON PARSE/GENERATE, XML PARSE/GENERATE; GnuCOBOL: XML/JSON extensions"
+    match: [cobol-json-xml]
+    subtopics:
+      - {id: cobol-json-xml-json-parse-generate, name: "JSON PARSE and JSON GENERATE", match: [json-parse-generate]}
+      - {id: cobol-json-xml-xml-parse-generate, name: "XML PARSE and XML GENERATE", match: [xml-parse-generate]}
+  - id: cobol-unicode
+    name: "National data and code pages"
+    source: "IBM Language Reference: National data, DISPLAY-1; ISO COBOL: National character support"
+    match: [cobol-unicode]
+    subtopics:
+      - {id: cobol-unicode-national-data-pic-n, name: "PIC N national and UTF-16 data", match: [national-data-pic-n]}
+      - {id: cobol-unicode-codepages-ebcdic-ascii, name: "EBCDIC versus ASCII, collating sequence and conversion", match: [codepages-ebcdic-ascii]}
+  - id: cobol-edited-pictures
+    name: "Edited pictures and display formatting"
+    source: "IBM Language Reference: Editing symbols; ISO COBOL: PICTURE editing"
+    match: [cobol-edited-pictures]
+    subtopics:
+      - {id: cobol-edited-pictures-edited-pictures, name: "Editing symbols Z, *, $, comma, period, CR, DB, +, -, B, 0, /", match: [edited-pictures]}
+      - {id: cobol-edited-pictures-accept-display-statements, name: "ACCEPT and DISPLAY", match: [accept-display-statements]}
+  - id: cobol-compiler-ibm
+    name: "IBM Enterprise COBOL for z/OS toolchain"
+    source: "IBM Enterprise COBOL Programming Guide: Compiler options, compiling, Language Environment"
+    match: [cobol-compiler-ibm]
+    subtopics:
+      - {id: cobol-compiler-ibm-ibm-compiler-options, name: "Enterprise COBOL compiler options (ARITH, TRUNC, SSRANGE, OPT, RENT, LIST, XREF)", match: [ibm-compiler-options]}
+      - {id: cobol-compiler-ibm-ibm-compile-jcl, name: "Compile-link-go JCL and cataloged procedures", match: [ibm-compile-jcl]}
+      - {id: cobol-compiler-ibm-ibm-language-environment, name: "Language Environment runtime options and diagnostics (CEEOPTS, CEEDUMP)", match: [ibm-language-environment]}
+  - id: cobol-compiler-gnucobol
+    name: "GnuCOBOL toolchain"
+    source: "GnuCOBOL Programmer's Guide: cobc, runtime configuration"
+    match: [cobol-compiler-gnucobol]
+    subtopics:
+      - {id: cobol-compiler-gnucobol-cobc-compile-flags, name: "cobc command line (-x, -m, -free, -std, -debug, -O)", match: [cobc-compile-flags]}
+      - {id: cobol-compiler-gnucobol-gnucobol-runtime-env, name: "GnuCOBOL runtime environment variables (COB_*)", match: [gnucobol-runtime-env]}
+      - {id: cobol-compiler-gnucobol-gnucobol-files-isam, name: "GnuCOBOL indexed file backends and file handling", match: [gnucobol-files-isam]}
+  - id: cobol-jcl
+    name: "JCL for COBOL batch"
+    source: "IBM z/OS MVS JCL Reference and User's Guide"
+    match: [cobol-jcl]
+    subtopics:
+      - {id: cobol-jcl-jcl-job-exec-dd, name: "JOB, EXEC and DD statements", match: [jcl-job-exec-dd]}
+      - {id: cobol-jcl-jcl-dataset-allocation, name: "DISP, SPACE, DCB and dataset allocation", match: [jcl-dataset-allocation]}
+      - {id: cobol-jcl-jcl-conditional-steps, name: "COND, IF/THEN/ELSE and return-code handling", match: [jcl-conditional-steps]}
+  - id: cobol-vsam
+    name: "VSAM and IDCAMS"
+    source: "IBM DFSMS Access Method Services (IDCAMS) Commands; VSAM Administration"
+    match: [cobol-vsam]
+    subtopics:
+      - {id: cobol-vsam-idcams-define-cluster, name: "IDCAMS DEFINE CLUSTER, REPRO and LISTCAT", match: [idcams-define-cluster]}
+  - id: cobol-cics
+    name: "CICS transaction programming"
+    source: "IBM CICS TS Application Programming Guide and Reference"
+    match: [cobol-cics]
+    subtopics:
+      - {id: cobol-cics-cics-command-level, name: "EXEC CICS command-level COBOL programs and the translator", match: [cics-command-level]}
+      - {id: cobol-cics-cics-pseudo-conversational, name: "Pseudo-conversational design and BMS screen interaction", match: [cics-pseudo-conversational]}
+      - {id: cobol-cics-cics-file-control, name: "File control commands (READ, WRITE, REWRITE, STARTBR) and RESP handling", match: [cics-file-control]}
+      - {id: cobol-cics-cics-queues-link, name: "Temporary storage, transient data, LINK and XCTL", match: [cics-queues-link]}
+  - id: cobol-db2
+    name: "Embedded SQL with DB2"
+    source: "IBM DB2 for z/OS Application Programming and SQL Guide; COBOL SQL coprocessor"
+    match: [cobol-db2]
+    subtopics:
+      - {id: cobol-db2-exec-sql-basics, name: "EXEC SQL, host variables, SQLCA and INCLUDE", match: [exec-sql-basics]}
+      - {id: cobol-db2-sql-cursors, name: "Cursors: DECLARE, OPEN, FETCH, CLOSE and WITH HOLD", match: [sql-cursors]}
+      - {id: cobol-db2-sqlcode-handling, name: "SQLCODE, SQLSTATE, null indicators and VARCHAR host variables", match: [sqlcode-handling]}
+      - {id: cobol-db2-db2-precompile-bind, name: "Precompile or coprocessor, DBRM, BIND PACKAGE and PLAN", match: [db2-precompile-bind]}
+  - id: cobol-testing
+    name: "Testing COBOL"
+    source: "GnuCOBOL test suite practice; IBM Developer for z/OS unit testing; community frameworks"
+    match: [cobol-testing]
+    subtopics:
+      - {id: cobol-testing-cobol-unit-testing, name: "Unit testing COBOL paragraphs and programs", match: [cobol-unit-testing]}
+  - id: cobol-debugging
+    name: "Debugging COBOL"
+    source: "IBM Enterprise COBOL Programming Guide: Debugging; GnuCOBOL Programmer's Guide: Debugging"
+    match: [cobol-debugging]
+    subtopics:
+      - {id: cobol-debugging-abend-dump-reading, name: "Reading abends and dumps (S0C7, S0C4, S0CB, S806, S322)", match: [abend-dump-reading]}
+      - {id: cobol-debugging-gnucobol-debug, name: "Debugging GnuCOBOL with -debug, tracing and gdb", match: [gnucobol-debug]}
+  - id: cobol-style
+    name: "Style and maintainability"
+    source: "COBOL coding standards from vendor and community guides; IBM Programming Guide"
+    match: [cobol-style]
+    subtopics:
+      - {id: cobol-style-structured-cobol-style, name: "Structured COBOL style and naming conventions", match: [structured-cobol-style]}
+  - id: cobol-performance
+    name: "Performance tuning"
+    source: "IBM Enterprise COBOL Programming Guide: Performance tuning"
+    match: [cobol-performance]
+    subtopics:
+      - {id: cobol-performance-cobol-performance-tuning, name: "Numeric USAGE, I/O blocking and table search performance", match: [cobol-performance-tuning]}
+  - id: cobol-modernization
+    name: "Legacy analysis and modernization"
+    source: "IBM Application Discovery and Delivery Intelligence; refactoring practice"
+    match: [cobol-modernization]
+    subtopics:
+      - {id: cobol-modernization-legacy-cobol-refactoring, name: "Reading and refactoring legacy COBOL safely", match: [legacy-cobol-refactoring]}
+  - id: cobol-interop
+    name: "Interoperability with other languages"
+    source: "IBM Language Environment interlanguage communication; GnuCOBOL: calling C"
+    match: [cobol-interop]
+    subtopics:
+      - {id: cobol-interop-cobol-call-c, name: "Calling C and being called from C", match: [cobol-call-c]}
+  - id: cobol-devops
+    name: "CI/CD, tooling and containers for COBOL"
+    source: "Zowe CLI documentation; GnuCOBOL FAQ; IBM Dependency Based Build documentation"
+    match: [cobol-devops]
+    subtopics:
+      - {id: cobol-devops-zowe-cli-workflow, name: "Zowe CLI for datasets, jobs and CI pipelines", match: [zowe-cli-workflow]}
+      - {id: cobol-devops-gnucobol-docker-image, name: "GnuCOBOL in containers and CI", match: [gnucobol-docker-image]}
+  - id: cobol-security
+    name: "Security hardening"
+    source: "OWASP secure coding practice; IBM z/OS security (RACF) overview"
+    match: [cobol-security]
+    subtopics:
+      - {id: cobol-security-cobol-input-validation, name: "Input validation, bounds checking and numeric safety", match: [cobol-input-validation]}
+      - {id: cobol-security-secure-sql-and-access, name: "Dynamic SQL injection prevention and access control", match: [secure-sql-and-access]}
+  - id: cobol-batch-patterns
+    name: "Batch processing patterns"
+    source: "Classic batch design: control break, master-file update, checkpoint/restart"
+    match: [cobol-batch-patterns]
+    subtopics:
+      - {id: cobol-batch-patterns-control-break-processing, name: "Control-break (group totals) processing", match: [control-break-processing]}
+      - {id: cobol-batch-patterns-master-transaction-update, name: "Master file / transaction file update (match-merge)", match: [master-transaction-update]}
+  - id: cobol-pointers-memory
+    name: "Pointers and dynamic memory"
+    source: "IBM Language Reference: POINTER, ALLOCATE; ISO COBOL: dynamic storage"
+    match: [cobol-pointers-memory]
+    subtopics:
+      - {id: cobol-pointers-memory-pointer-based-storage, name: "USAGE POINTER, BASED items, SET ADDRESS OF and ALLOCATE", match: [pointer-based-storage]}
+  - id: cobol-directives
+    name: "Compiler directing statements"
+    source: "ISO COBOL: COPY, REPLACE, compiler directives; IBM Language Reference: Compiler-directing statements"
+    match: [cobol-directives]
+    subtopics:
+      - {id: cobol-directives-replace-and-conditional-compilation, name: "REPLACE, >>DEFINE and >>IF conditional compilation", match: [replace-and-conditional-compilation]}
+  - id: cobol-standards
+    name: "Standards and dialects"
+    source: "ISO/IEC 1989:2014 and 2002 COBOL; GnuCOBOL dialect configurations"
+    match: [cobol-standards]
+    subtopics:
+      - {id: cobol-standards-dialect-compatibility, name: "COBOL 85, 2002, 2014 and vendor dialect differences", match: [dialect-compatibility]}
+  - id: cobol-record-layouts
+    name: "Record formats and layouts"
+    source: "IBM Language Reference: RECORD clause, RECORDING MODE; z/OS DFSMS data set formats"
+    match: [cobol-record-layouts]
+    subtopics:
+      - {id: cobol-record-layouts-fixed-variable-records, name: "Fixed, variable and multi-format records (RECFM F, FB, V, VB)", match: [fixed-variable-records]}

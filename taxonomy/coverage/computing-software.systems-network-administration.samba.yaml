@@ -1,0 +1,274 @@
+# Coverage spec for Samba (computing-software / systems-network-administration).
+subject: Samba
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [samba]
+sources:
+  - "Samba man pages (https://www.samba.org/samba/docs/current/man-html/)"
+  - "Samba wiki, Setting up Samba as an AD DC (https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)"
+  - "Samba wiki, Setting up Samba as a Domain Member (https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member)"
+  - "Samba wiki, Setting up a Share Using Windows ACLs (https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs)"
+  - "Samba wiki, Setting up a Share Using POSIX ACLs (https://wiki.samba.org/index.php/Setting_up_a_Share_Using_POSIX_ACLs)"
+  - "Samba wiki, Setting up Samba as a Standalone Server (https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Standalone_Server)"
+topics:
+  - id: provision-ad-dc
+    name: "provision ad dc"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller
+    match: ["provision ad dc", "provision-ad-dc", "provision", "domain-provision"]
+  - id: ad-dc-network-prereqs
+    name: "ad dc network prereqs"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller
+    match: ["ad dc network prereqs", "ad-dc-network-prereqs", "hosts-file", "resolv-conf"]
+  - id: ad-dc-kerberos-and-verify
+    name: "ad dc kerberos and verify"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller
+    match: ["ad dc kerberos and verify", "ad-dc-kerberos-and-verify", "kinit", "srv-records"]
+  - id: join-additional-dc
+    name: "join additional dc"
+    source: https://wiki.samba.org/index.php/Joining_a_Samba_DC_to_an_Existing_Active_Directory
+    match: ["join additional dc", "join-additional-dc", "domain-join", "second-dc"]
+  - id: ad-dc-time-sync
+    name: "ad dc time sync"
+    source: https://wiki.samba.org/index.php/Time_Synchronisation
+    match: ["ad dc time sync", "ad-dc-time-sync", "ntp-signd", "chrony"]
+  - id: ad-dc-ports
+    name: "ad dc ports"
+    source: https://wiki.samba.org/index.php/Samba_AD_DC_Port_Usage
+    match: ["ad dc ports", "ad-dc-ports", "firewall", "port-usage"]
+  - id: internal-dns-backend
+    name: "internal dns backend"
+    source: https://wiki.samba.org/index.php/Samba_Internal_DNS_Back_End
+    match: ["internal dns backend", "internal-dns-backend", "samba-internal", "dns-forwarder"]
+  - id: bind9-dlz-backend
+    name: "bind9 dlz backend"
+    source: https://wiki.samba.org/index.php/BIND9_DLZ_DNS_Back_End
+    match: ["bind9 dlz backend", "bind9-dlz-backend", "bind9-dlz", "samba-upgradedns"]
+  - id: samba-tool-dns
+    name: "samba tool dns"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["samba tool dns", "samba-tool-dns", "zonecreate", "dns-records"]
+  - id: samba-tool-users
+    name: "samba tool users"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["samba tool users", "samba-tool-users", "user-add", "user-management"]
+  - id: samba-tool-groups
+    name: "samba tool groups"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["samba tool groups", "samba-tool-groups", "group-add", "group-management"]
+  - id: samba-tool-computers-ous
+    name: "samba tool computers and ous"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["samba tool computers and ous", "samba-tool-computers-ous", "computer-add", "organizational-unit"]
+  - id: password-policy
+    name: "password policy"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["password policy", "password-policy", "passwordsettings", "lockout"]
+  - id: drs-replication
+    name: "drs replication"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["drs replication", "drs-replication", "showrepl", "kcc"]
+  - id: sysvol-acls
+    name: "sysvol acls"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["sysvol acls", "sysvol-acls", "sysvolreset", "ntacl"]
+  - id: domain-backup
+    name: "domain backup"
+    source: https://wiki.samba.org/index.php/Back_up_and_Restoring_a_Samba_AD_DC
+    match: ["domain backup", "domain-backup", "backup-online", "backup-offline"]
+  - id: domain-restore
+    name: "domain restore"
+    source: https://wiki.samba.org/index.php/Back_up_and_Restoring_a_Samba_AD_DC
+    match: ["domain restore", "domain-restore", "backup-restore", "newservername"]
+  - id: ad-dc-troubleshooting
+    name: "ad dc troubleshooting"
+    source: https://wiki.samba.org/index.php/Samba_AD_DC_Troubleshooting
+    match: ["ad dc troubleshooting", "ad-dc-troubleshooting", "dbcheck", "join-errors"]
+  - id: group-policy-gpo
+    name: "group policy gpo"
+    source: https://wiki.samba.org/index.php/Group_Policy
+    match: ["group policy gpo", "group-policy-gpo", "admx", "gpo"]
+  - id: samba-gpupdate
+    name: "samba gpupdate"
+    source: https://wiki.samba.org/index.php/Group_Policy
+    match: ["samba gpupdate", "samba-gpupdate", "apply-group-policies", "gpupdate"]
+  - id: rfc2307-attributes
+    name: "rfc2307 attributes"
+    source: https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html
+    match: ["rfc2307 attributes", "rfc2307-attributes", "rfc2307", "addunixattrs"]
+  - id: winbind-on-ad-dc
+    name: "winbind on ad dc"
+    source: https://wiki.samba.org/index.php/Configuring_Winbindd_on_a_Samba_AD_DC
+    match: ["winbind on ad dc", "winbind-on-ad-dc", "libnss-winbind", "dc-winbind"]
+  - id: member-dns-kerberos
+    name: "member dns kerberos"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member
+    match: ["member dns kerberos", "member-dns-kerberos", "krb5-conf", "member-preparation"]
+  - id: member-join-domain
+    name: "member join domain"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member
+    match: ["member join domain", "member-join-domain", "net-ads-join", "domain-member"]
+  - id: member-nsswitch-services
+    name: "member nsswitch services"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member
+    match: ["member nsswitch services", "member-nsswitch-services", "nsswitch", "winbindd-service"]
+  - id: member-verify-winbind
+    name: "member verify winbind"
+    source: https://wiki.samba.org/index.php/Troubleshooting_Samba_Domain_Members
+    match: ["member verify winbind", "member-verify-winbind", "getent", "member-troubleshooting"]
+  - id: idmap-backend-choice
+    name: "idmap backend choice"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Domain_Member
+    match: ["idmap backend choice", "idmap-backend-choice", "idmap", "id-mapping"]
+  - id: idmap-rid
+    name: "idmap rid"
+    source: https://www.samba.org/samba/docs/current/man-html/idmap_rid.8.html
+    match: ["idmap rid", "idmap-rid", "base-rid", "rid-backend"]
+  - id: idmap-ad
+    name: "idmap ad"
+    source: https://www.samba.org/samba/docs/current/man-html/idmap_ad.8.html
+    match: ["idmap ad", "idmap-ad", "schema-mode", "ad-backend"]
+  - id: idmap-autorid
+    name: "idmap autorid"
+    source: https://www.samba.org/samba/docs/current/man-html/idmap_autorid.8.html
+    match: ["idmap autorid", "idmap-autorid", "rangesize", "autorid"]
+  - id: idmap-tdb-nss
+    name: "idmap tdb and nss"
+    source: https://www.samba.org/samba/docs/current/man-html/idmap_tdb.8.html
+    match: ["idmap tdb and nss", "idmap-tdb-nss", "idmap-tdb", "idmap-nss"]
+  - id: idmap-ldap
+    name: "idmap ldap"
+    source: https://www.samba.org/samba/docs/current/man-html/idmap_ldap.8.html
+    match: ["idmap ldap", "idmap-ldap", "ldap-base-dn", "ldap-backend"]
+  - id: net-idmap
+    name: "net idmap"
+    source: https://www.samba.org/samba/docs/current/man-html/net.8.html
+    match: ["net idmap", "net-idmap", "idmap-dump", "idmap-restore"]
+  - id: pam-winbind
+    name: "pam winbind"
+    source: https://www.samba.org/samba/docs/current/man-html/pam_winbind.8.html
+    match: ["pam winbind", "pam-winbind", "pam", "mkhomedir"]
+  - id: winbind-parameters
+    name: "winbind parameters"
+    source: https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html
+    match: ["winbind parameters", "winbind-parameters", "winbind-enum", "winbindd"]
+  - id: wbinfo
+    name: "wbinfo"
+    source: https://www.samba.org/samba/docs/current/man-html/wbinfo.1.html
+    match: ["wbinfo", "ping-dc", "sid-lookup", "winbind-queries"]
+  - id: net-ads-commands
+    name: "net ads commands"
+    source: https://www.samba.org/samba/docs/current/man-html/net.8.html
+    match: ["net ads commands", "net-ads-commands", "net-ads", "ads-keytab"]
+  - id: net-rpc-commands
+    name: "net rpc commands"
+    source: https://www.samba.org/samba/docs/current/man-html/net.8.html
+    match: ["net rpc commands", "net-rpc-commands", "net-rpc", "rpc-rights"]
+  - id: net-conf-registry
+    name: "net conf registry"
+    source: https://www.samba.org/samba/docs/current/man-html/net.8.html
+    match: ["net conf registry", "net-conf-registry", "net-conf", "registry-config"]
+  - id: net-usershare
+    name: "net usershare"
+    source: https://www.samba.org/samba/docs/current/man-html/net.8.html
+    match: ["net usershare", "net-usershare", "usershare", "user-shares"]
+  - id: net-groupmap-sam
+    name: "net groupmap and sam"
+    source: https://www.samba.org/samba/docs/current/man-html/net.8.html
+    match: ["net groupmap and sam", "net-groupmap-sam", "groupmap", "net-sam"]
+  - id: standalone-file-server
+    name: "standalone file server"
+    source: https://wiki.samba.org/index.php/Setting_up_Samba_as_a_Standalone_Server
+    match: ["standalone file server", "standalone-file-server", "standalone", "guest-share"]
+  - id: posix-acl-share
+    name: "posix acl share"
+    source: https://wiki.samba.org/index.php/Setting_up_a_Share_Using_POSIX_ACLs
+    match: ["posix acl share", "posix-acl-share", "posix-acls", "setfacl"]
+  - id: windows-acl-share
+    name: "windows acl share"
+    source: https://wiki.samba.org/index.php/Setting_up_a_Share_Using_Windows_ACLs
+    match: ["windows acl share", "windows-acl-share", "windows-acls", "sediskoperatorprivilege"]
+  - id: smbcacls
+    name: "smbcacls"
+    source: https://www.samba.org/samba/docs/current/man-html/smbcacls.1.html
+    match: ["smbcacls", "nt-acl", "acl-editing", "propagate-inheritance"]
+  - id: user-home-folders
+    name: "user home folders"
+    source: https://wiki.samba.org/index.php/User_Home_Folders
+    match: ["user home folders", "user-home-folders", "home-folders", "homedirectory"]
+  - id: roaming-profiles
+    name: "roaming profiles"
+    source: https://wiki.samba.org/index.php/Roaming_Windows_User_Profiles
+    match: ["roaming profiles", "roaming-profiles", "profilepath", "profiles-share"]
+  - id: share-access-control
+    name: "share access control"
+    source: https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html
+    match: ["share access control", "share-access-control", "valid-users", "hosts-allow"]
+  - id: file-create-modes
+    name: "file create modes"
+    source: https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html
+    match: ["file create modes", "file-create-modes", "force-user", "create-mask"]
+  - id: smb-protocol-security
+    name: "smb protocol security"
+    source: https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html
+    match: ["smb protocol security", "smb-protocol-security", "server-signing", "smb-encryption"]
+  - id: log-levels
+    name: "log levels"
+    source: https://wiki.samba.org/index.php/Setting_the_Samba_Log_Level
+    match: ["log levels", "log-levels", "log-level", "debug-classes"]
+  - id: smbcontrol-reload
+    name: "smbcontrol reload"
+    source: https://www.samba.org/samba/docs/current/man-html/smbcontrol.1.html
+    match: ["smbcontrol reload", "smbcontrol-reload", "smbcontrol", "reload-config"]
+  - id: testparm
+    name: "testparm"
+    source: https://www.samba.org/samba/docs/current/man-html/testparm.1.html
+    match: ["testparm", "config-check", "smb-conf-check", "parameter-name"]
+  - id: smbclient
+    name: "smbclient"
+    source: https://www.samba.org/samba/docs/current/man-html/smbclient.1.html
+    match: ["smbclient", "smb-client", "list-shares", "smb-transfer"]
+  - id: smbstatus
+    name: "smbstatus"
+    source: https://www.samba.org/samba/docs/current/man-html/smbstatus.1.html
+    match: ["smbstatus", "open-files", "connections", "locks"]
+  - id: nmblookup
+    name: "nmblookup"
+    source: https://www.samba.org/samba/docs/current/man-html/nmblookup.1.html
+    match: ["nmblookup", "netbios", "node-status", "master-browser"]
+  - id: smbpasswd
+    name: "smbpasswd"
+    source: https://www.samba.org/samba/docs/current/man-html/smbpasswd.8.html
+    match: ["smbpasswd", "samba-password", "smb-password", "local-account"]
+  - id: pdbedit
+    name: "pdbedit"
+    source: https://www.samba.org/samba/docs/current/man-html/pdbedit.8.html
+    match: ["pdbedit", "passdb", "account-policy", "sam-database"]
+  - id: vfs-fruit-time-machine
+    name: "vfs fruit time machine"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_fruit.8.html
+    match: ["vfs fruit time machine", "vfs-fruit-time-machine", "fruit", "time-machine"]
+  - id: vfs-recycle
+    name: "vfs recycle"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_recycle.8.html
+    match: ["vfs recycle", "vfs-recycle", "recycle-bin", "recycle"]
+  - id: vfs-full-audit
+    name: "vfs full audit"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_full_audit.8.html
+    match: ["vfs full audit", "vfs-full-audit", "full-audit", "audit-log"]
+  - id: vfs-shadow-copy2
+    name: "vfs shadow copy2"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_shadow_copy2.8.html
+    match: ["vfs shadow copy2", "vfs-shadow-copy2", "shadow-copy", "previous-versions"]
+  - id: vfs-catia-streams
+    name: "vfs catia and streams xattr"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_catia.8.html
+    match: ["vfs catia and streams xattr", "vfs-catia-streams", "catia", "streams-xattr"]
+  - id: vfs-acl-xattr
+    name: "vfs acl xattr"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_acl_xattr.8.html
+    match: ["vfs acl xattr", "vfs-acl-xattr", "acl-xattr", "ignore-system-acls"]
+  - id: vfs-zfsacl-btrfs
+    name: "vfs zfsacl and btrfs"
+    source: https://www.samba.org/samba/docs/current/man-html/vfs_zfsacl.8.html
+    match: ["vfs zfsacl and btrfs", "vfs-zfsacl-btrfs", "zfsacl", "btrfs"]

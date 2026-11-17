@@ -1,0 +1,108 @@
+# Coverage spec for Keepalived (computing-software / systems-network-administration).
+subject: Keepalived
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [keepalived]
+sources:
+  - "Keepalived User Guide (https://keepalived.readthedocs.io/en/latest/)"
+topics:
+  - id: introduction
+    name: "Introduction"
+    source: https://keepalived.readthedocs.io/en/latest/introduction.html
+    match: ["overview", "high-availability", "load-balancing"]
+  - id: software-design
+    name: "Software design: processes and watchdog"
+    source: https://keepalived.readthedocs.io/en/latest/software_design.html
+    match: ["architecture", "watchdog", "process-model", "scheduler"]
+    subtopics:
+      - {id: design-checker, name: "Checker process", match: ["checker", "fsm"]}
+      - {id: design-vrrp, name: "VRRP process", match: ["rfc-2338", "multicast", "ipsec-ah"]}
+      - {id: design-vmac, name: "Virtual MAC", match: ["use-vmac", "macvlan", "vmac-xmit-base"]}
+  - id: load-balancing-techniques
+    name: "Load balancing techniques (NAT, DR, TUN)"
+    source: https://keepalived.readthedocs.io/en/latest/load_balancing_techniques.html
+    match: ["nat", "direct-routing", "tunneling", "forwarding"]
+  - id: installing
+    name: "Installing Keepalived"
+    source: https://keepalived.readthedocs.io/en/latest/installing_keepalived.html
+    match: ["installing", "packages", "yum", "apt-get"]
+    subtopics:
+      - {id: install-source, name: "Building from source", match: ["building", "source-build", "configure", "dependencies"]}
+      - {id: install-prefix, name: "Per-version prefix", match: ["prefix", "symlink", "multiple-versions"]}
+  - id: configuration-synopsis
+    name: "Configuration synopsis: global_defs"
+    source: https://keepalived.readthedocs.io/en/latest/configuration_synopsis.html
+    match: ["global-defs", "lvs-id", "email-alerts", "notification-email"]
+    subtopics:
+      - {id: smtp-settings, name: "SMTP settings", match: ["smtp", "smtp-server"]}
+  - id: synopsis-vrrp-instance
+    name: "Configuration synopsis: vrrp_instance"
+    source: https://keepalived.readthedocs.io/en/latest/configuration_synopsis.html
+    match: ["vrrp-instance", "priority", "virtual-router-id", "advert-int"]
+    subtopics:
+      - {id: vrrp-auth, name: "Authentication", match: ["authentication", "auth-type", "auth-pass"]}
+      - {id: vrrp-vips, name: "Virtual IP addresses", match: ["virtual-ipaddress", "vip", "virtual-ipaddress-excluded"]}
+      - {id: vrrp-notify, name: "Notify scripts", match: ["notify-master", "notify-backup", "notify-fault", "state-transition"]}
+  - id: synopsis-sync-group
+    name: "Configuration synopsis: vrrp_sync_group"
+    source: https://keepalived.readthedocs.io/en/latest/configuration_synopsis.html
+    match: ["vrrp-sync-group", "synchronization"]
+  - id: synopsis-virtual-server
+    name: "Configuration synopsis: virtual_server"
+    source: https://keepalived.readthedocs.io/en/latest/configuration_synopsis.html
+    match: ["virtual-server", "delay-loop", "lb-algo", "lb-kind", "fwmark"]
+    subtopics:
+      - {id: vs-persistence, name: "Persistence", match: ["persistence", "persistence-timeout"]}
+      - {id: vs-sorry, name: "Sorry server", match: ["sorry-server", "fallback"]}
+  - id: synopsis-real-server
+    name: "Configuration synopsis: real_server and checkers"
+    source: https://keepalived.readthedocs.io/en/latest/configuration_synopsis.html
+    match: ["real-server", "weight", "health-checking"]
+    subtopics:
+      - {id: chk-tcp, name: "TCP_CHECK", match: ["tcp-check", "connect-timeout"]}
+      - {id: chk-http, name: "HTTP_GET / SSL_GET", match: ["http-get", "ssl-get", "digest", "delay-before-retry"]}
+      - {id: chk-misc, name: "MISC_CHECK", match: ["misc-check", "misc-path"]}
+  - id: programs-keepalived
+    name: "Programs synopsis: keepalived daemon"
+    source: https://keepalived.readthedocs.io/en/latest/programs_synopsis.html
+    match: ["command-line", "config-file", "vrrp-only", "check-only", "dump-conf"]
+    subtopics:
+      - {id: programs-logging, name: "Logging options", match: ["logging", "syslog", "log-facility", "log-detail"]}
+      - {id: programs-stop, name: "Stop and respawn", match: ["dont-release-vrrp", "dont-release-ipvs", "dont-respawn"]}
+      - {id: programs-pid, name: "Pidfiles", match: ["pidfile", "vrrp-pid", "checkers-pid"]}
+  - id: programs-genhash
+    name: "Programs synopsis: genhash"
+    source: https://keepalived.readthedocs.io/en/latest/programs_synopsis.html
+    match: ["genhash", "digest", "md5"]
+  - id: scheduling-algorithms
+    name: "IPVS scheduling algorithms"
+    source: https://keepalived.readthedocs.io/en/latest/scheduling_algorithms.html
+    match: ["scheduler", "round-robin", "least-connection", "hashing"]
+  - id: protocol-support
+    name: "IPVS protocol support"
+    source: https://keepalived.readthedocs.io/en/latest/protocol_support.html
+    match: ["protocol-support", "esp", "sip-persistence-engine", "tcp", "udp"]
+  - id: snmp-support
+    name: "Configuring SNMP support"
+    source: https://keepalived.readthedocs.io/en/latest/snmp_support.html
+    match: ["snmp", "enable-snmp", "net-snmp"]
+    subtopics:
+      - {id: snmp-agentx, name: "snmpd AgentX", match: ["agentx", "snmpd"]}
+      - {id: snmp-mib, name: "MIB and OIDs", match: ["mib", "oid", "snmpwalk", "keepalived-mib"]}
+  - id: case-healthcheck
+    name: "Case study: Healthcheck"
+    source: https://keepalived.readthedocs.io/en/latest/case_study_healthcheck.html
+    match: ["healthcheck", "case-study", "lvs"]
+  - id: case-failover
+    name: "Case study: Failover using VRRP"
+    source: https://keepalived.readthedocs.io/en/latest/case_study_failover.html
+    match: ["active-active", "failover", "vrrpv2"]
+  - id: case-mixing
+    name: "Case study: Mixing healthcheck and failover"
+    source: https://keepalived.readthedocs.io/en/latest/case_study_mixing.html
+    match: ["vip", "high-availability", "sync-groups"]
+  - id: terminology
+    name: "Terminology"
+    source: https://keepalived.readthedocs.io/en/latest/terminology.html
+    match: ["terminology", "master", "backup", "advertisement", "ip-address-owner", "server-pool", "virtual-service"]

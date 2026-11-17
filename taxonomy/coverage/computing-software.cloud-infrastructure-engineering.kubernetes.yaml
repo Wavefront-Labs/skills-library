@@ -1,0 +1,1409 @@
+# Canonical coverage spec: Kubernetes.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (not from what we happened to write), so
+# the check measures the library against the subject, not against itself.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (kubernetes.io
+# docs page headings and task pages, kubectl/kubeadm reference sub-commands, CKA/CKAD/CKS
+# objective bullets). coverage_check reports the percentage of subtopics with a matching skill.
+subject: kubernetes
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [kubernetes]
+sources:
+  - "CKA curriculum (CNCF): Cluster Architecture/Installation/Configuration 25%, Workloads & Scheduling 15%, Services & Networking 20%, Storage 10%, Troubleshooting 30%"
+  - "CKAD curriculum (CNCF): Application Design & Build, Deployment, Observability & Maintenance, Environment/Configuration/Security, Services & Networking"
+  - "CKS curriculum (CNCF): Cluster Setup, Cluster Hardening, System Hardening, Minimize Microservice Vulnerabilities, Supply Chain Security, Monitoring/Logging/Runtime Security"
+  - "kubernetes.io/docs/concepts table of contents (Workloads, Services/Networking, Storage, Configuration, Security, Policies, Scheduling/Eviction, Cluster Administration, Windows, Extending Kubernetes)"
+  - "kubernetes.io/docs/tasks and /docs/reference (kubectl sub-commands, kubeadm sub-commands, kubelet/kube-proxy/kube-apiserver configuration references) for subtopics"
+  - "Depth round 2: kubernetes.io task pages and concept sub-headings, kubectl command reference (kubectl.docs.kubernetes.io), API resource field groups (kubernetes.io/docs/reference/kubernetes-api), CKA/CKAD/CKS objective bullets"
+  - "Kubernetes SIGs: apps, network, storage, security/auth, scheduling, node, autoscaling, cli, cluster-lifecycle, multicluster, api-machinery, instrumentation, windows"
+topics:
+  # --- Cluster architecture, installation, configuration (CKA 25%; sig-cluster-lifecycle, sig-node)
+  - id: kubeadm-bootstrap
+    name: Cluster bootstrap with kubeadm
+    source: CKA/Cluster Architecture; kubeadm reference (init, join, token, reset, config)
+    match: [kubeadm, cluster-bootstrap]
+    subtopics:
+      - {id: kubeadm-init-config, name: kubeadm init with InitConfiguration/ClusterConfiguration files, match: [kubeadm-init, clusterconfiguration]}
+      - {id: kubeadm-join-nodes, name: kubeadm join for workers with tokens and CA hash, match: [kubeadm-join, bootstrap-token]}
+      - {id: kubeadm-reset-rejoin, name: kubeadm reset and cleanly re-joining a node, match: [kubeadm-reset, node-rejoin]}
+      - {id: kubeadm-init-phases, name: Running and skipping individual kubeadm init/join phases, match: [kubeadm-phases, skip-phases]}
+      - {id: kubeadm-token-management, name: kubeadm token create/list/delete and certificate-key for control-plane joins, match: [kubeadm-token, certificate-key]}
+      - {id: kubeadm-component-customisation, name: extraArgs/extraVolumes and kubeadm patches for control-plane components, match: [kubeadm-extraargs, kubeadm-patches]}
+      - {id: kubeadm-preflight, name: kubeadm preflight checks and --ignore-preflight-errors, match: [kubeadm-preflight, ignore-preflight-errors]}
+      - {id: kubelet-tls-bootstrap, name: kubelet TLS bootstrapping and the bootstrap-kubelet.conf kubeconfig, match: [kubelet-tls-bootstrapping, bootstrap-kubeconfig]}
+      - {id: kubeadm-config-print-migrate, name: kubeadm config print defaults and config migrate between API versions, match: [kubeadm-config-migrate, kubeadm-config-print]}
+      - {id: kubeadm-dry-run, name: kubeadm init --dry-run and inspecting generated manifests, match: [kubeadm-dry-run]}
+      - {id: kubeadm-kubeconfig-user, name: kubeadm kubeconfig user for generating admin and user kubeconfigs, match: [kubeadm-kubeconfig-user]}
+  - id: control-plane-ha
+    name: HA control plane (stacked vs external etcd)
+    source: CKA/Cluster Architecture; docs/Setup/Creating Highly Available Clusters with kubeadm
+    match: [control-plane-ha, high-availability, stacked-etcd, external-etcd]
+    subtopics:
+      - {id: apiserver-load-balancer, name: Load-balanced controlPlaneEndpoint (kube-vip, haproxy, keepalived), match: [kube-vip, haproxy, controlplaneendpoint]}
+      - {id: control-plane-join, name: Adding control-plane nodes with --control-plane and uploaded certs, match: [control-plane-join, upload-certs]}
+      - {id: external-etcd-setup, name: Building an external etcd cluster and pointing kubeadm at it, match: [external-etcd-setup, etcd-endpoints]}
+      - {id: control-plane-node-replacement, name: Replacing a failed control-plane node and its stale etcd member, match: [control-plane-node-replacement, failed-control-plane-node]}
+      - {id: managed-control-plane-ha, name: Regional/zonal control planes in managed offerings, match: [regional-cluster, control-plane-sla]}
+      - {id: apiserver-lb-health-checks, name: Load balancer health checks against /livez and /readyz on 6443, match: [apiserver-health-checks, readyz-endpoint]}
+      - {id: control-plane-sizing, name: Control-plane node count and zone spread for etcd quorum, match: [control-plane-sizing, etcd-quorum-sizing]}
+      - {id: apiserver-cert-sans, name: Adding SANs or changing controlPlaneEndpoint on a live cluster, match: [apiserver-cert-sans, controlplaneendpoint-change]}
+      - {id: control-plane-failover-test, name: Testing control-plane failover (stop a node and verify API and etcd), match: [control-plane-failover-test]}
+  - id: etcd-backup-restore
+    name: etcd backup and restore
+    source: CKA/Cluster Architecture; docs/Tasks/Operating etcd clusters for Kubernetes
+    match: [etcd-backup, etcd-restore, etcd-snapshot]
+    subtopics:
+      - {id: etcd-snapshot-save, name: etcdctl snapshot save with TLS flags, match: [snapshot-save, etcdctl-snapshot-save]}
+      - {id: etcd-snapshot-restore, name: etcdctl/etcdutl snapshot restore into a new data dir and manifest swap, match: [snapshot-restore, etcdctl-snapshot-restore]}
+      - {id: etcd-backup-automation, name: Scheduled snapshots to object storage (CronJob/systemd timer), match: [etcd-backup-automation, scheduled-etcd-snapshot]}
+      - {id: etcd-snapshot-verification, name: Verifying snapshots (etcdutl snapshot status) and restore drills, match: [etcdutl, snapshot-status, restore-drill]}
+      - {id: application-level-backup, name: Application-level backup when etcd is not reachable (managed clusters), match: [velero]}
+      - {id: etcd-multi-member-restore, name: Restoring a multi-member etcd cluster from one snapshot (initial-cluster flags), match: [multi-member-restore, initial-cluster-token]}
+      - {id: etcd-post-restore-steps, name: Post-restore steps (restart control plane and kubelets and stale controllers), match: [post-restore-checks]}
+      - {id: etcd-snapshot-offsite, name: Encrypting snapshots and copying them off-site with retention, match: [snapshot-encryption, snapshot-retention]}
+      - {id: etcd-cert-paths, name: Finding etcd endpoints and cert paths from the static pod manifest, match: [etcd-cert-paths]}
+      - {id: k3s-rke2-etcd-snapshots, name: k3s and rke2 etcd-snapshot commands and S3 targets, match: [k3s-etcd-snapshot, rke2-etcd-snapshot]}
+  - id: etcd-operations
+    name: etcd defrag/compaction/membership
+    source: sig-etcd; etcd docs/Operations guide (maintenance, runtime reconfiguration, monitoring, upgrading)
+    match: [etcd-defrag, etcd-defragmentation, etcd-compaction, etcd-membership]
+    subtopics:
+      - {id: etcd-defrag-rolling, name: Rolling defragmentation one member at a time, match: [defrag, defragmentation]}
+      - {id: etcd-compaction-tuning, name: Auto-compaction mode and retention, match: [compaction, auto-compaction]}
+      - {id: etcd-member-add-remove, name: Adding and removing members (runtime reconfiguration), match: [member-add, member-remove]}
+      - {id: etcd-nospace-alarm, name: Handling the NOSPACE alarm and quota-backend-bytes, match: [no-space-alarm, quota-backend-bytes]}
+      - {id: etcd-monitoring, name: Monitoring etcd health and key metrics (fsync, leader changes, proposals), match: [etcd-metrics, endpoint-health, etcd-alerting]}
+      - {id: etcd-version-upgrade, name: Upgrading etcd minor versions in a static-pod cluster, match: [etcd-upgrade, etcd-version-upgrade]}
+      - {id: etcd-learner-members, name: Learner members for safe membership changes, match: [etcd-learner, learner-member]}
+      - {id: etcd-force-new-cluster, name: Recovering from quorum loss with --force-new-cluster, match: [force-new-cluster]}
+      - {id: etcd-performance-tuning, name: heartbeat-interval and election-timeout tuning and fio disk benchmarks, match: [election-timeout, heartbeat-interval, etcd-fio]}
+      - {id: etcd-key-inspection, name: Inspecting keys and object counts with etcdctl get --prefix --keys-only, match: [etcdctl-get-prefix, etcd-object-count]}
+      - {id: etcd-corruption-check, name: Corruption detection (initial and periodic corrupt check and hashkv), match: [etcd-corruption-check, hashkv]}
+  - id: cluster-upgrade
+    name: Cluster version upgrade sequencing
+    source: CKA/Cluster Architecture; docs/Tasks/Upgrading kubeadm clusters; EKS/GKE/AKS upgrade docs
+    match: [cluster-upgrade, kubeadm-upgrade, upgrade-strategy, upgrade-sequencing]
+    subtopics:
+      - {id: kubeadm-upgrade-plan-apply, name: kubeadm upgrade plan and apply on the first control plane, match: [kubeadm-upgrade-plan, kubeadm-upgrade-apply]}
+      - {id: worker-node-upgrade, name: kubeadm upgrade node, kubelet package upgrade, drain/uncordon, match: [kubeadm-upgrade-node, worker-upgrade]}
+      - {id: managed-cluster-upgrade, name: Managed control-plane and node-pool upgrades (surge, blue/green pools), match: [managed-cluster-upgrade, node-pool-upgrade, surge-upgrade]}
+      - {id: pre-upgrade-checks, name: Pre-upgrade checklist (deprecated API scan, addon compatibility, PDBs, backups), match: [pre-upgrade-checklist, kubent, pluto]}
+      - {id: upgrade-rollback, name: Rolling back a failed upgrade, match: [upgrade-rollback]}
+      - {id: addon-upgrade, name: Upgrading CoreDNS, kube-proxy and CNI alongside the cluster, match: [addon-upgrade, coredns-upgrade, cni-upgrade]}
+      - {id: additional-control-plane-upgrade, name: kubeadm upgrade node on additional control-plane nodes, match: [additional-control-plane-upgrade]}
+      - {id: package-repo-pinning, name: pkgs.k8s.io per-minor repositories and apt-mark hold pinning, match: [pkgs-k8s-io, apt-mark-hold]}
+      - {id: post-upgrade-verification, name: Post-upgrade verification (component and node versions and smoke tests), match: [post-upgrade-verification]}
+      - {id: upgrade-certificate-renewal, name: Automatic certificate renewal during kubeadm upgrade, match: [certificate-renewal-flag]}
+      - {id: immutable-node-replacement, name: In-place node upgrades vs immutable node replacement, match: [immutable-node-replacement]}
+  - id: version-skew
+    name: Version skew policy
+    source: CKA/Cluster Architecture; kubernetes.io/releases/version-skew-policy
+    match: [version-skew]
+    subtopics:
+      - {id: kubelet-skew, name: Supported kubelet vs kube-apiserver skew, match: [kubelet-skew]}
+      - {id: component-upgrade-order, name: Upgrade order implied by skew (apiserver first, kubelet/kube-proxy after), match: [upgrade-order]}
+      - {id: client-library-skew, name: client-go/kubectl compatibility with older and newer servers, match: [client-library-skew, client-go-compatibility, kubectl-skew]}
+      - {id: feature-gate-lifecycle, name: Feature gates across versions (alpha/beta/GA, removal), match: [feature-gates, feature-gate-lifecycle]}
+      - {id: kube-proxy-skew, name: kube-proxy vs kubelet and kube-apiserver skew, match: [kube-proxy-skew]}
+      - {id: apiserver-instance-skew, name: kube-apiserver instance skew during HA upgrades, match: [apiserver-instance-skew]}
+      - {id: controller-manager-skew, name: controller-manager and scheduler and cloud-controller-manager skew, match: [controller-manager-skew]}
+      - {id: emulation-version, name: --emulated-version and compatibility versions for safer rollbacks, match: [emulation-version, compatibility-version]}
+      - {id: component-version-audit, name: Auditing component versions across the cluster, match: [component-version-audit]}
+  - id: certificates-pki
+    name: Cluster PKI and certificate rotation
+    source: CKA/Cluster Architecture; docs/Tasks/Certificate Management with kubeadm; docs/Reference/Certificates and CSRs
+    match: [certificate-rotation, certificates, pki, kubeadm-certs]
+    subtopics:
+      - {id: kubeadm-certs-renewal, name: kubeadm certs check-expiration and renew, match: [kubeadm-certs-renew, check-expiration]}
+      - {id: kubelet-cert-rotation, name: Kubelet client/serving certificate rotation, match: [kubelet-serving-cert, rotatecertificates]}
+      - {id: csr-api, name: CertificateSigningRequest API, signers and approval, match: [certificate-signing-request, csr-approval]}
+      - {id: ca-rotation, name: Rotating the cluster CA, match: [ca-rotation]}
+      - {id: cert-manager-issuers, name: cert-manager Issuers/ClusterIssuers and ACME, match: [clusterissuer, acme, cert-manager-issuer]}
+      - {id: user-client-certificates, name: Issuing user client certificates and kubeconfigs via CSR, match: [user-certificate, kubeconfig-generation, x509-client-cert]}
+      - {id: kubernetes-pki-layout, name: kubeadm PKI layout and which certificate each component uses, match: [pki-layout, kubernetes-pki-files]}
+      - {id: openssl-cert-inspection, name: Inspecting certificates with openssl x509 (SANs and expiry and issuer), match: [openssl-x509]}
+      - {id: kubeadm-external-ca, name: kubeadm with an external CA and kubeadm certs generate-csr, match: [external-ca, generate-csr]}
+      - {id: kubeconfig-cert-renewal, name: Renewing client certs embedded in admin.conf and kubelet.conf, match: [admin-conf-renewal, kubelet-conf-renewal]}
+      - {id: cert-expiry-monitoring, name: Monitoring certificate expiry with metrics and x509-certificate-exporter, match: [x509-certificate-exporter, cert-expiry-monitoring]}
+  - id: rbac
+    name: RBAC roles and bindings
+    source: CKA/CKS Cluster Hardening; docs/Reference/Access Authn Authz/Using RBAC Authorization
+    match: [rbac, clusterrole, rolebinding]
+    subtopics:
+      - {id: role-vs-clusterrole, name: Role/ClusterRole and RoleBinding/ClusterRoleBinding scoping, match: [clusterrolebinding]}
+      - {id: aggregated-clusterroles, name: Aggregated ClusterRoles with aggregationRule, match: [aggregated-clusterrole, aggregationrule]}
+      - {id: rbac-verification, name: kubectl auth can-i and whoami checks, match: [kubectl-auth-can-i, kubectl-auth-whoami]}
+      - {id: default-roles-design, name: Default user-facing roles (admin/edit/view) and group bindings, match: [default-clusterroles, user-facing-roles, group-binding]}
+      - {id: rbac-escalation-audit, name: Escalation paths (escalate, bind, impersonate) and RBAC audit tools, match: [rbac-escalation, impersonate, kubectl-who-can, rbac-audit-tools]}
+      - {id: rbac-fine-grained, name: resourceNames, subresources and nonResourceURLs rules, match: [resourcenames, nonresourceurls, subresource-rbac]}
+      - {id: serviceaccount-rbac, name: Granting ServiceAccounts permissions via ServiceAccount subjects, match: [serviceaccount-rolebinding]}
+      - {id: kubectl-create-role, name: kubectl create role and clusterrole and rolebinding imperatively, match: [kubectl-create-role, kubectl-create-rolebinding]}
+      - {id: rbac-least-privilege, name: Least-privilege review (wildcards and secrets list/watch and pods/exec), match: [rbac-least-privilege, rbac-wildcards]}
+      - {id: rbac-forbidden-debugging, name: Debugging Forbidden errors from the API server, match: [forbidden-error, rbac-forbidden]}
+  - id: authentication
+    name: Authentication (certs, OIDC, SA tokens)
+    source: CKS/Cluster Hardening; docs/Reference/Access Authn Authz/Authenticating
+    match: [authentication, oidc, service-account-token]
+    subtopics:
+      - {id: x509-client-certs, name: X.509 client certificate authentication (CN/O to user/group), match: [x509-client-cert, client-certificate-authentication]}
+      - {id: oidc-integration, name: OIDC with an external IdP (Dex, Keycloak, Okta) and kubelogin, match: [oidc-issuer, dex, keycloak, kubelogin]}
+      - {id: webhook-token-auth, name: Webhook token authentication and structured AuthenticationConfiguration, match: [webhook-token-authentication, authenticationconfiguration, aws-iam-authenticator]}
+      - {id: sa-token-apis, name: TokenRequest and TokenReview APIs, match: [tokenrequest, tokenreview]}
+      - {id: kubeconfig-management, name: kubeconfig contexts, merging and exec credential plugins, match: [kubeconfig-contexts, kubectl-config, exec-credential-plugin]}
+      - {id: anonymous-requests, name: Anonymous requests and the anonymous and authenticated system groups, match: [system-anonymous, anonymous-requests]}
+      - {id: user-impersonation, name: User impersonation with --as and --as-group for testing access, match: [kubectl-as, impersonation-headers]}
+      - {id: authenticating-proxy, name: Authenticating proxy front ends with requestheader authentication, match: [authenticating-proxy, requestheader-auth]}
+      - {id: bootstrap-token-auth, name: Bootstrap tokens and static token files, match: [bootstrap-token-auth, token-auth-file]}
+      - {id: managed-cluster-auth, name: EKS access entries and aws-auth and AKS Entra ID authentication, match: [eks-access-entries, aws-auth-configmap, aks-entra-id]}
+  - id: kubelet-node-config
+    name: kubelet configuration and node registration
+    source: sig-node; docs/Reference/Kubelet config (v1beta1); docs/Tasks/Administer Cluster/Reserve Compute Resources
+    match: [kubelet, kubelet-config, node-registration]
+    subtopics:
+      - {id: kubelet-configuration-file, name: KubeletConfiguration file, kubeadm kubelet-config ConfigMap and drop-in dir, match: [kubeletconfiguration, kubelet-config-file, kubelet-drop-in]}
+      - {id: node-allocatable-reservations, name: kube-reserved, system-reserved and Node Allocatable, match: [kube-reserved, system-reserved, node-allocatable]}
+      - {id: kubelet-eviction-thresholds, name: Hard/soft eviction thresholds and eviction signals, match: [kubelet-eviction, eviction-hard, eviction-soft]}
+      - {id: node-registration-flags, name: --node-labels, --register-with-taints, --cloud-provider and node naming, match: [node-labels, register-with-taints, node-registration-flags]}
+      - {id: cgroup-driver, name: cgroup driver (systemd vs cgroupfs) and cgroup v2, match: [cgroup-driver, systemd-cgroup]}
+      - {id: kubelet-image-management, name: Image GC thresholds, parallel pulls and credential providers, match: [image-gc, imagegchighthreshold, serialize-image-pulls]}
+      - {id: cpu-topology-managers, name: CPU Manager, Topology Manager and Memory Manager policies, match: [cpu-manager, topology-manager, static-cpu-policy]}
+      - {id: kubelet-pod-limits, name: maxPods and podPidsLimit and per-node pod CIDR sizing, match: [maxpods, podpidslimit]}
+      - {id: kubelet-swap, name: Node swap support and memorySwap behaviour, match: [node-swap, limitedswap]}
+      - {id: kubelet-configz, name: Inspecting the live kubelet config through /configz, match: [kubelet-configz]}
+      - {id: kubelet-systemd-unit, name: kubelet systemd unit and 10-kubeadm.conf and KUBELET_EXTRA_ARGS, match: [kubelet-extra-args, 10-kubeadm-conf]}
+  - id: container-runtime-cri
+    name: Container runtime and CRI (containerd)
+    source: sig-node; docs/Setup/Container Runtimes; containerd docs
+    match: [containerd, cri, container-runtime, dockershim]
+    subtopics:
+      - {id: containerd-configuration, name: containerd config.toml, sandbox image, registry hosts.d mirrors, match: [containerd-config, hosts-toml, registry-mirror]}
+      - {id: crictl-debugging, name: Inspecting containers on a node with crictl, match: [crictl]}
+      - {id: runtimeclass-sandboxes, name: RuntimeClass with gVisor/Kata sandboxes, match: [runtimeclass, gvisor, kata-containers]}
+      - {id: private-registry-auth, name: imagePullSecrets and kubelet credential providers for private registries, match: [imagepullsecrets, credential-provider, private-registry-auth]}
+      - {id: containerd-disk-usage, name: Snapshotters and /var/lib/containerd disk usage and pruning, match: [containerd-snapshotter, overlayfs, containerd-disk-usage]}
+      - {id: containerd-systemdcgroup, name: SystemdCgroup in containerd runc options, match: [systemdcgroup]}
+      - {id: cri-o-runtime, name: CRI-O as the container runtime, match: [cri-o]}
+      - {id: ctr-nerdctl, name: ctr and nerdctl and containerd namespaces (k8s.io), match: [nerdctl, containerd-namespaces]}
+      - {id: image-preload, name: Pre-pulling and importing images on nodes, match: [image-preload, ctr-import]}
+      - {id: containerd-2-migration, name: Upgrading containerd 1.x to 2.x and config version 3, match: [containerd-2, containerd-config-migration]}
+  - id: static-pods
+    name: Static pods
+    source: CKA/Cluster Architecture; docs/Tasks/Configure Pods/Create static Pods
+    match: [static-pod, static-pods]
+    subtopics:
+      - {id: static-pod-manifest-path, name: staticPodPath and manifest discovery, match: [manifest-path, staticpodpath]}
+      - {id: mirror-pods, name: Mirror pods on the API server, match: [mirror-pod]}
+      - {id: control-plane-manifest-edits, name: Safely editing control-plane static pod manifests, match: [control-plane-manifest-edit, apiserver-manifest-edit]}
+      - {id: static-pod-troubleshooting, name: Static pod not starting (kubelet journal, manifest errors), match: [static-pod-troubleshooting, kubelet-journal]}
+      - {id: create-static-pod, name: Creating a static pod on a worker node, match: [create-static-pod]}
+      - {id: delete-static-pod, name: Deleting static pods by removing the manifest, match: [delete-static-pod]}
+      - {id: static-pod-url, name: staticPodURL HTTP manifest source, match: [staticpodurl]}
+      - {id: static-pod-limitations, name: Static pod limitations (no ServiceAccount or ConfigMap refs or ephemeral containers), match: [static-pod-limitations]}
+  - id: cluster-provisioning
+    name: Cluster API and managed vs self-managed clusters
+    source: sig-cluster-lifecycle; Cluster API book; EKS/GKE/AKS create docs
+    match: [cluster-api, capi, managed-kubernetes, eks, gke, aks]
+    subtopics:
+      - {id: capi-providers, name: Cluster API infrastructure/bootstrap/control-plane providers, match: [infrastructure-provider, clusterctl]}
+      - {id: capi-clusterclass, name: ClusterClass managed topologies, match: [clusterclass]}
+      - {id: eks-cluster-creation, name: Creating EKS clusters (eksctl, node groups, addons), match: [eksctl, eks-node-group, eks-addons]}
+      - {id: gke-cluster-creation, name: Creating GKE clusters (Autopilot vs Standard, release channels), match: [gke-autopilot, release-channel]}
+      - {id: aks-cluster-creation, name: Creating AKS clusters (system/user node pools, upgrade channels), match: [aks-node-pool, aks-cluster-creation]}
+      - {id: terraform-provisioning, name: Provisioning clusters with Terraform modules, match: [terraform-kubernetes, terraform-eks]}
+      - {id: capi-machinehealthcheck, name: Cluster API MachineHealthCheck remediation, match: [machinehealthcheck]}
+      - {id: capi-machinedeployment, name: MachineDeployment and KubeadmControlPlane rollouts, match: [machinedeployment, kubeadmcontrolplane]}
+      - {id: clusterctl-move, name: clusterctl move and management cluster pivot, match: [clusterctl-move, pivot]}
+      - {id: kubespray-provisioning, name: Provisioning clusters with Kubespray, match: [kubespray]}
+      - {id: rke2-provisioning, name: RKE2 install and configuration, match: [rke2]}
+  - id: air-gapped
+    name: Air-gapped clusters
+    source: docs/Cluster Administration; kubeadm docs/Running kubeadm without an internet connection
+    match: [air-gapped, airgap, offline-registry]
+    subtopics:
+      - {id: image-mirroring, name: Mirroring images with skopeo/crane into a private registry, match: [image-mirroring, skopeo]}
+      - {id: kubeadm-config-images, name: kubeadm config images list/pull, match: [kubeadm-config-images]}
+      - {id: harbor-registry, name: Running Harbor as the internal registry (proxy cache, replication), match: [harbor-registry, proxy-cache]}
+      - {id: offline-helm-charts, name: Vendoring Helm charts and OCI artifacts offline, match: [offline-helm, chart-vendoring]}
+      - {id: offline-os-packages, name: Mirroring kubelet/containerd OS packages (apt/yum), match: [package-mirror, offline-packages]}
+      - {id: airgap-image-inventory, name: Building the complete image inventory (kubeadm and CNI and addons and charts), match: [airgap-image-list, image-inventory]}
+      - {id: airgap-imagerepository, name: Pointing kubeadm imageRepository and containerd at the private registry, match: [kubeadm-imagerepository]}
+      - {id: registry-ca-trust, name: Private registry TLS and CA trust on nodes, match: [registry-ca-trust, insecure-registry]}
+      - {id: zarf-hauler, name: Zarf and Hauler packages for air-gapped delivery, match: [zarf, hauler]}
+      - {id: k3s-airgap, name: k3s and rke2 air-gap image tarballs, match: [k3s-airgap]}
+  - id: conformance
+    name: Conformance testing
+    source: sig-testing; cncf/k8s-conformance; sonobuoy docs
+    match: [conformance, sonobuoy]
+    subtopics:
+      - {id: sonobuoy-run, name: Running sonobuoy conformance and retrieving results, match: [sonobuoy]}
+      - {id: e2e-focus-skip, name: Running kubernetes e2e with --focus/--skip, match: [e2e-focus, kubetest, ginkgo-focus]}
+      - {id: cncf-conformance-submission, name: Submitting results to cncf/k8s-conformance, match: [k8s-conformance-submission, certified-kubernetes-submission]}
+      - {id: sonobuoy-plugins, name: Sonobuoy plugins (kube-bench, custom) and air-gapped runs, match: [sonobuoy-plugins, sonobuoy-airgap]}
+      - {id: sonobuoy-results-triage, name: sonobuoy retrieve and results triage of failed tests, match: [sonobuoy-results]}
+      - {id: conformance-image-version, name: Conformance image and --kubernetes-version alignment, match: [conformance-image]}
+      - {id: hydrophone, name: Running conformance with hydrophone, match: [hydrophone]}
+      - {id: sonobuoy-modes, name: sonobuoy modes (quick and certified-conformance and non-disruptive), match: [certified-conformance-mode, non-disruptive-conformance]}
+  # --- Workloads & scheduling (CKA 15%, CKAD; sig-apps, sig-scheduling, sig-autoscaling)
+  - id: pod-lifecycle
+    name: Pod lifecycle, restartPolicy, backoff
+    source: docs/Workloads/Pods/Pod Lifecycle
+    match: [pod-lifecycle, restartpolicy, restart-policy, restart-backoff]
+    subtopics:
+      - {id: pod-conditions-readiness-gates, name: Pod phase, conditions and readinessGates, match: [pod-conditions, readiness-gates, readinessgates]}
+      - {id: container-restart-counting, name: Container states, restart count and backoff reset, match: [restart-count, backoff-reset]}
+      - {id: pod-termination-sequence, name: Termination sequence and terminationGracePeriodSeconds, match: [terminationgraceperiodseconds]}
+      - {id: container-lifecycle-hooks, name: postStart and preStop lifecycle hooks, match: [poststart, lifecycle-hooks]}
+      - {id: image-pull-policy, name: imagePullPolicy and tag strategy, match: [imagepullpolicy, always-pull]}
+      - {id: pod-phase-unknown, name: Unknown and Failed phases after node loss, match: [pod-phase-unknown]}
+      - {id: container-restart-rules, name: Per-container restartPolicy and restartPolicyRules, match: [container-restart-rules]}
+      - {id: activedeadlineseconds, name: activeDeadlineSeconds on pods, match: [activedeadlineseconds]}
+      - {id: termination-message, name: terminationMessagePath and terminationMessagePolicy, match: [terminationmessagepolicy]}
+      - {id: pod-overhead, name: Pod overhead from RuntimeClass, match: [pod-overhead]}
+  - id: deployments-rollouts
+    name: Deployments, rollouts and rollbacks
+    source: CKA/Workloads; docs/Workloads/Deployment; kubectl rollout reference
+    match: [deployment, rollout, rolling-update, rollback]
+    subtopics:
+      - {id: rollout-history-undo, name: kubectl rollout history/undo and revisionHistoryLimit, match: [rollout-undo, revisionhistorylimit]}
+      - {id: rolling-update-parameters, name: maxSurge/maxUnavailable tuning, match: [maxsurge, maxunavailable]}
+      - {id: rollout-pause-resume, name: rollout pause/resume and progressDeadlineSeconds, match: [rollout-pause, progressdeadlineseconds]}
+      - {id: recreate-strategy, name: Recreate strategy and when to use it, match: [recreate-strategy]}
+      - {id: deployment-scaling-commands, name: kubectl scale and kubectl autoscale, match: [kubectl-scale, kubectl-autoscale]}
+      - {id: rollout-status-minreadyseconds, name: minReadySeconds and kubectl rollout status in pipelines, match: [minreadyseconds, rollout-status]}
+      - {id: kubectl-set-image, name: kubectl set image and set env and set resources to trigger rollouts, match: [kubectl-set-image, kubectl-set-env]}
+      - {id: rollout-restart, name: kubectl rollout restart and the restartedAt annotation, match: [rollout-restart]}
+      - {id: progress-deadline-exceeded, name: Diagnosing ProgressDeadlineExceeded and stuck rollouts, match: [progressdeadlineexceeded, stuck-rollout]}
+      - {id: proportional-scaling, name: Proportional scaling during an in-flight rollout, match: [proportional-scaling]}
+      - {id: change-cause, name: Recording change-cause annotations for rollout history, match: [change-cause]}
+  - id: replicasets-controllers
+    name: ReplicaSets and controller reconciliation
+    source: docs/Workloads/ReplicaSet; kube-controller-manager reference
+    match: [replicaset, ownerreference, reconciliation]
+    subtopics:
+      - {id: pod-template-hash, name: pod-template-hash labels and ReplicaSet revisions, match: [pod-template-hash]}
+      - {id: adoption-orphaning, name: Pod adoption and orphaning via ownerReferences, match: [adoption, orphaning]}
+      - {id: set-based-selectors, name: matchLabels vs matchExpressions selectors, match: [matchexpressions, replicaset-selector]}
+      - {id: controller-manager-tuning, name: kube-controller-manager concurrency and client QPS flags, match: [kube-controller-manager-flags, concurrent-syncs, controller-qps]}
+      - {id: replicationcontroller-migration, name: Migrating legacy ReplicationControllers, match: [replicationcontroller]}
+      - {id: replicaset-direct-scaling, name: Why scaling a ReplicaSet directly is reverted by its Deployment, match: [replicaset-scaling]}
+      - {id: pod-deletion-cost, name: pod-deletion-cost annotation and scale-down victim selection, match: [pod-deletion-cost]}
+      - {id: overlapping-selectors, name: Overlapping selectors and label collisions between controllers, match: [overlapping-controller-selectors]}
+      - {id: controllers-flag, name: Enabling and disabling individual controllers with --controllers, match: [controllers-flag]}
+  - id: statefulsets
+    name: StatefulSets
+    source: CKA/Workloads; docs/Workloads/StatefulSet
+    match: [statefulset, statefulsets]
+    subtopics:
+      - {id: statefulset-identity, name: Stable ordinals, network identity and headless Service, match: [ordinal, headless-service]}
+      - {id: statefulset-update-strategy, name: RollingUpdate partition and OnDelete strategies, match: [partition, ondelete]}
+      - {id: statefulset-scaling, name: Safe scale up/down and podManagementPolicy, match: [podmanagementpolicy]}
+      - {id: pvc-retention-policy, name: persistentVolumeClaimRetentionPolicy, match: [persistentvolumeclaimretentionpolicy]}
+      - {id: start-ordinal, name: spec.ordinals.start for slice migration, match: [startordinal, start-ordinal]}
+      - {id: statefulset-troubleshooting, name: Stuck StatefulSet pods and failed PVC binding, match: [statefulset-stuck-pod, statefulset-troubleshooting]}
+      - {id: volumeclaimtemplates, name: volumeClaimTemplates and per-pod PVC naming, match: [volumeclaimtemplates]}
+      - {id: statefulset-maxunavailable, name: RollingUpdate maxUnavailable for StatefulSets, match: [statefulset-maxunavailable]}
+      - {id: statefulset-forced-rollback, name: Forced rollback when a broken revision is stuck, match: [statefulset-forced-rollback]}
+      - {id: statefulset-deletion, name: Deleting a StatefulSet safely (scale to zero and orphan pods and PVCs), match: [statefulset-deletion]}
+  - id: daemonsets
+    name: DaemonSets
+    source: CKA/Workloads; docs/Workloads/DaemonSet
+    match: [daemonset]
+    subtopics:
+      - {id: daemonset-update-strategy, name: RollingUpdate/OnDelete with maxUnavailable/maxSurge, match: [rollingupdate]}
+      - {id: daemonset-control-plane-tolerations, name: Running on control-plane and tainted nodes, match: [control-plane-taint]}
+      - {id: daemonset-priority, name: system-node-critical priority for node agents, match: [daemonset-priority, system-node-critical]}
+      - {id: privileged-node-agents, name: hostPID/hostNetwork/privileged node agents done safely, match: [hostpid, privileged-daemonset]}
+      - {id: daemonset-troubleshooting, name: DaemonSet pod missing on a node (desired vs current), match: [daemonset-troubleshooting, pods-desired-vs-current]}
+      - {id: daemonset-node-selector, name: Limiting DaemonSets to node subsets with nodeSelector and affinity, match: [daemonset-node-selector]}
+      - {id: daemonset-rollback, name: kubectl rollout status and history and undo for DaemonSets, match: [daemonset-rollback]}
+      - {id: daemonset-maxsurge, name: maxSurge for zero-downtime node agent updates, match: [daemonset-maxsurge]}
+      - {id: daemonset-overhead, name: Sizing DaemonSet resources as per-node overhead, match: [daemonset-overhead]}
+      - {id: hostport, name: hostPort usage and port conflicts, match: [hostport]}
+  - id: jobs-cronjobs
+    name: Jobs and CronJobs
+    source: CKAD/Application Design; docs/Workloads/Job and CronJob
+    match: [job, cronjob, indexed-job]
+    subtopics:
+      - {id: job-completions-parallelism, name: completions, parallelism and completionMode, match: [completions, parallelism]}
+      - {id: pod-failure-policy, name: podFailurePolicy and backoffLimit, match: [podfailurepolicy, backofflimit]}
+      - {id: cronjob-schedule-concurrency, name: schedule, timeZone, concurrencyPolicy and startingDeadlineSeconds, match: [concurrencypolicy, startingdeadlineseconds]}
+      - {id: job-ttl-cleanup, name: ttlSecondsAfterFinished and history limits, match: [ttlsecondsafterfinished]}
+      - {id: job-success-policy-per-index, name: successPolicy, backoffLimitPerIndex and elastic Indexed Jobs, match: [successpolicy, backofflimitperindex, elastic-indexed-job]}
+      - {id: cronjob-troubleshooting, name: Missed schedules, too many missed start times and clock skew, match: [too-many-missed-start-times, cronjob-troubleshooting]}
+      - {id: create-job-from-cronjob, name: Manually triggering and suspending CronJobs, match: [create-job-from-cronjob, cronjob-suspend]}
+      - {id: job-suspend-kueue, name: Suspending Jobs and queueing them with Kueue, match: [job-suspend, kueue-queues]}
+      - {id: job-name-label, name: Finding Job pods and logs by job-name labels, match: [job-name-label]}
+      - {id: job-deadline, name: activeDeadlineSeconds on Jobs and DeadlineExceeded, match: [deadlineexceeded]}
+  - id: init-sidecar-containers
+    name: Init and sidecar containers
+    source: CKAD/Application Design; docs/Workloads/Pods/Init Containers and Sidecar Containers
+    match: [init-container, init-containers, sidecar, sidecar-container]
+    subtopics:
+      - {id: native-sidecars, name: Native sidecars via initContainers with restartPolicy Always, match: [native-sidecars, restartpolicy-always]}
+      - {id: container-startup-order, name: Startup and shutdown ordering between init, sidecar and app containers, match: [container-startup-order, shutdown-order]}
+      - {id: init-container-patterns, name: Init container patterns (wait-for-dependency, config templating, migrations), match: [init-container-patterns, db-migration-init]}
+      - {id: init-container-debugging, name: Debugging Init:CrashLoopBackOff and Init:Error, match: [init-crashloopbackoff, init-error]}
+      - {id: effective-pod-requests, name: Effective pod requests with init and sidecar resources, match: [effective-requests, init-container-resources]}
+      - {id: sidecar-job-completion, name: Sidecars in Jobs that let the Job complete, match: [sidecar-job-completion]}
+      - {id: ambassador-adapter, name: Ambassador and adapter multi-container patterns, match: [ambassador-pattern, adapter-pattern]}
+      - {id: shared-emptydir, name: Sharing files between containers with an emptyDir, match: [shared-emptydir]}
+      - {id: sidecar-startup-probe, name: Startup probes on native sidecars to gate app start, match: [sidecar-startup-probe]}
+  - id: probes
+    name: Liveness/readiness/startup probes
+    source: CKAD/Observability; docs/Tasks/Configure Liveness, Readiness and Startup Probes
+    match: [liveness-probe, readiness-probe, startup-probe, probes]
+    subtopics:
+      - {id: probe-types-semantics, name: Liveness vs readiness vs startup semantics, match: [liveness-probe-restart]}
+      - {id: probe-timing-tuning, name: initialDelaySeconds, periodSeconds, timeoutSeconds, failureThreshold tuning, match: [failurethreshold, initialdelayseconds, probe-tuning]}
+      - {id: probe-handler-types, name: httpGet, tcpSocket, exec and grpc handlers, match: [grpc-probe, exec-probe, tcp-probe]}
+      - {id: probe-anti-patterns, name: Probe anti-patterns (dependency checks in liveness, cascading restarts), match: [probe-anti-patterns, cascading-restarts]}
+      - {id: httpget-probe-options, name: httpGet path and port and scheme and httpHeaders, match: [httpheaders-probe]}
+      - {id: slow-start-application, name: Startup probes for slow-starting applications, match: [slow-start-application]}
+      - {id: probe-failure-debugging, name: Debugging Unhealthy events and probe failures, match: [unhealthy-event, probe-failure]}
+      - {id: probe-termination-grace, name: Probe-level terminationGracePeriodSeconds, match: [probe-terminationgraceperiodseconds]}
+      - {id: readiness-shutdown, name: Readiness during shutdown and endpoint removal, match: [readiness-shutdown]}
+  - id: configmaps-secrets
+    name: ConfigMaps and Secrets
+    source: CKAD/Environment & Configuration; docs/Configuration/ConfigMaps and Secrets
+    match: [configmap, configmaps, secret, secrets]
+    subtopics:
+      - {id: env-vs-volume-consumption, name: Consuming via env/envFrom vs volume mounts and subPath, match: [env-from, volume-mount, subpath]}
+      - {id: immutable-config-rollout, name: Immutable ConfigMaps/Secrets and triggering rollouts on change, match: [immutable-configmap, checksum-config]}
+      - {id: secret-types-creation, name: kubectl create secret types (generic, docker-registry, tls), match: [kubectl-create-secret, secret-types, docker-registry-secret]}
+      - {id: configmap-creation-limits, name: kubectl create configmap from files/literals, binaryData and size limits, match: [kubectl-create-configmap, binarydata, configmap-size-limit]}
+      - {id: downward-api-projected, name: Downward API and projected volumes, match: [downward-api, downwardapi]}
+      - {id: external-secret-sync, name: Syncing from external secret managers, match: [external-secrets-operator]}
+      - {id: configmap-propagation-delay, name: Mounted ConfigMap update delay and subPath not updating, match: [configmap-propagation-delay]}
+      - {id: secret-stringdata, name: data vs stringData and base64 decoding of Secrets, match: [stringdata, base64-decode]}
+      - {id: secret-exposure, name: Who can read Secrets and reducing Secret exposure, match: [secret-exposure]}
+      - {id: configmap-key-projection, name: items key-to-path projection and defaultMode permissions, match: [defaultmode, key-to-path]}
+  - id: resources-requests-limits
+    name: Resource requests, limits and QoS
+    source: CKAD/Environment & Configuration; docs/Tasks/Configure Pods/Assign CPU and Memory Resources
+    match: [resource-requests, resource-limits, qos-class]
+    subtopics:
+      - {id: qos-classes, name: Guaranteed/Burstable/BestEffort and eviction order, match: [qos-class]}
+      - {id: cpu-throttling, name: CPU CFS quota throttling and limits, match: [cpu-throttling, cfs-quota]}
+      - {id: in-place-pod-resize, name: In-place pod resource resize, match: [in-place-resize, inplacepodverticalscaling]}
+      - {id: rightsizing-workflow, name: Right-sizing from usage data (VPA recommendations, Goldilocks), match: [goldilocks, rightsizing-workflow]}
+      - {id: cpu-limits-policy, name: Requests-only vs limits policy for CPU, match: [cpu-limits-debate, requests-only]}
+      - {id: device-plugins-gpus, name: Extended resources and device plugins (GPU operator), match: [device-plugin, nvidia-gpu-operator]}
+      - {id: memory-limit-enforcement, name: Memory limit enforcement and cgroup OOM kill vs kubelet eviction, match: [memory-limit-enforcement]}
+      - {id: pod-level-resources, name: Pod-level resource requests and limits, match: [pod-level-resources]}
+      - {id: resource-units, name: Resource quantity units (millicores and Mi vs M), match: [resource-units, millicores]}
+      - {id: hugepages, name: Hugepages resources, match: [hugepages]}
+  - id: limitrange-resourcequota
+    name: LimitRange and ResourceQuota
+    source: CKAD/Environment & Configuration; docs/Policies/Limit Ranges and Resource Quotas
+    match: [limitrange, resourcequota, quota]
+    subtopics:
+      - {id: limitrange-defaults, name: LimitRange default requests/limits, min/max and ratios, match: [limitrange-defaults, default-request]}
+      - {id: quota-scopes-object-counts, name: Object-count quotas and scopeSelector (priority class, BestEffort), match: [quota-scopes, scopeselector, object-count-quota]}
+      - {id: storage-quota, name: Storage quotas per StorageClass, match: [storage-quota]}
+      - {id: quota-troubleshooting, name: Diagnosing exceeded quota and silently uncreated pods, match: [exceeded-quota, quota-troubleshooting]}
+      - {id: quota-requires-limits, name: Quota forcing requests and limits on every pod, match: [quota-requires-limits]}
+      - {id: limitrange-pvc, name: LimitRange for PersistentVolumeClaim sizes, match: [limitrange-pvc]}
+      - {id: kubectl-create-quota, name: kubectl create quota and reading quota usage, match: [kubectl-create-quota]}
+      - {id: gpu-quota, name: Quotas on GPUs and extended resources, match: [gpu-quota]}
+      - {id: crossnamespacepodaffinity, name: CrossNamespacePodAffinity quota scope, match: [crossnamespacepodaffinity]}
+  - id: scheduling-controls
+    name: Affinity, taints/tolerations, topology spread
+    source: CKA/Workloads & Scheduling; docs/Scheduling, Preemption and Eviction
+    match: [affinity, anti-affinity, taints, tolerations, nodeselector, topology-spread]
+    subtopics:
+      - {id: node-affinity, name: nodeSelector and required/preferred nodeAffinity, match: [node-affinity]}
+      - {id: pod-affinity-anti-affinity, name: Pod affinity and anti-affinity with topologyKey, match: [pod-anti-affinity, pod-affinity]}
+      - {id: topology-spread-constraints, name: topologySpreadConstraints and skew, match: [topology-spread-constraints]}
+      - {id: scheduler-configuration, name: KubeSchedulerConfiguration profiles, plugins and scoring strategy, match: [scheduler-profiles, kubeschedulerconfiguration, scoring-strategy]}
+      - {id: descheduler, name: Descheduler for rebalancing, match: [descheduler]}
+      - {id: scheduling-gates-nodename, name: schedulingGates and nodeName manual placement, match: [schedulinggates, scheduling-gates, nodename]}
+      - {id: taint-based-eviction, name: Taint-based eviction and tolerationSeconds, match: [taint-based-eviction, tolerationseconds]}
+      - {id: kubectl-taint, name: kubectl taint and NoSchedule and PreferNoSchedule and NoExecute effects, match: [kubectl-taint, noexecute]}
+      - {id: well-known-node-labels, name: Labelling nodes and well-known topology labels, match: [topology-kubernetes-io, well-known-node-labels]}
+      - {id: multiple-schedulers, name: Running a second scheduler and schedulerName, match: [schedulername, multiple-schedulers]}
+      - {id: matchlabelkeys, name: matchLabelKeys in pod affinity and topology spread, match: [matchlabelkeys]}
+  - id: priority-preemption
+    name: Priority classes and preemption
+    source: docs/Scheduling/Pod Priority and Preemption
+    match: [priorityclass, preemption]
+    subtopics:
+      - {id: priorityclass-design, name: PriorityClass tiers, globalDefault and system-cluster-critical, match: [system-cluster-critical, globaldefault]}
+      - {id: non-preempting-priority, name: preemptionPolicy Never (non-preempting), match: [preemptionpolicy, non-preempting]}
+      - {id: preemption-diagnosis, name: Diagnosing preemption (nominatedNodeName, Preempted events), match: [nominatednodename, preempted]}
+      - {id: pause-pod-overprovisioning, name: Low-priority pause pods for overprovisioning, match: [pause-pods, overprovisioning]}
+      - {id: priority-admission, name: Priority admission and default priority resolution, match: [priority-admission]}
+      - {id: preemption-pdb, name: Preemption interaction with PDBs and graceful termination, match: [preemption-pdb]}
+      - {id: priorityclass-quota, name: Limiting high-priority usage with ResourceQuota scopes, match: [priorityclass-quota]}
+      - {id: critical-addons, name: Critical add-on pods and system priority classes outside kube-system, match: [critical-addons]}
+  - id: hpa
+    name: Horizontal Pod Autoscaler
+    source: docs/Workloads/Autoscaling/HorizontalPodAutoscaler; docs/Tasks/Run Applications/Horizontal Pod Autoscaling
+    match: [hpa, horizontal-pod-autoscaler, horizontal-pod-autoscaling]
+    subtopics:
+      - {id: hpa-resource-utilisation, name: Resource metrics with averageUtilization targets, match: [target-utilization, averageutilization]}
+      - {id: hpa-custom-external-metrics, name: Scaling on custom and external metrics, match: [custom-metrics, external-metrics, prometheus-adapter]}
+      - {id: hpa-behavior, name: Scale-up/scale-down behavior and stabilization windows, match: [stabilizationwindowseconds, scaling-policies]}
+      - {id: hpa-multiple-metrics, name: Multiple metrics and ContainerResource metrics, match: [containerresource, container-resource-metric, multiple-metrics]}
+      - {id: hpa-troubleshooting, name: FailedGetResourceMetric and unknown metric values, match: [failedgetresourcemetric]}
+      - {id: event-driven-autoscaling, name: KEDA ScaledObjects for event-driven scaling, match: [keda, scaledobject]}
+      - {id: autoscaling-v2, name: Writing autoscaling/v2 HPA manifests and migrating from v1, match: [autoscaling-v2]}
+      - {id: hpa-algorithm, name: Replica calculation algorithm and tolerance and missing metrics, match: [hpa-algorithm, hpa-tolerance]}
+      - {id: hpa-load-test, name: Load-testing HPA behaviour, match: [hpa-load-test]}
+      - {id: object-metric, name: Object metrics (Ingress requests per second), match: [object-metric]}
+  - id: vpa
+    name: Vertical Pod Autoscaler
+    source: sig-autoscaling; kubernetes/autoscaler VPA docs
+    match: [vpa, vertical-pod-autoscaler]
+    subtopics:
+      - {id: vpa-components-modes, name: Recommender/updater/admission-controller and update modes, match: [recommender, updater]}
+      - {id: vpa-recommendations-off-mode, name: Reading recommendations in Off mode, match: [vpa-off-mode, vpa-recommendation]}
+      - {id: vpa-resource-policy, name: minAllowed/maxAllowed/controlledResources in resourcePolicy, match: [minallowed, maxallowed, resourcepolicy]}
+      - {id: vpa-with-hpa, name: Combining VPA and HPA without conflict, match: [vpa-hpa-conflict]}
+      - {id: vpa-install, name: Installing the VPA components, match: [vpa-install]}
+      - {id: inplaceorrecreate, name: InPlaceOrRecreate update mode, match: [inplaceorrecreate]}
+      - {id: vpa-eviction-tuning, name: Updater eviction tolerance and min replicas, match: [min-replicas-vpa, eviction-tolerance]}
+      - {id: vpa-recommender-tuning, name: Recommender history and percentiles and Prometheus history, match: [vpa-recommender-tuning]}
+      - {id: controlledvalues, name: controlledValues RequestsOnly vs RequestsAndLimits, match: [controlledvalues]}
+  - id: node-autoscaling
+    name: Cluster Autoscaler / Karpenter
+    source: sig-autoscaling; cluster-autoscaler FAQ; Karpenter docs
+    match: [cluster-autoscaler, karpenter, node-autoscaling]
+    subtopics:
+      - {id: ca-expanders-node-groups, name: Cluster Autoscaler expanders and node groups, match: [expander, node-groups]}
+      - {id: karpenter-nodepools, name: Karpenter NodePools and EC2NodeClass, match: [nodepool, ec2nodeclass]}
+      - {id: node-consolidation, name: Consolidation and disruption budgets, match: [consolidation, disruption-budget]}
+      - {id: scale-down-blockers, name: Scale-down blockers (safe-to-evict, local storage, PDBs), match: [safe-to-evict, scale-down-blockers]}
+      - {id: cloud-autoscaling-variants, name: GKE node auto-provisioning and EKS ASG tag discovery, match: [node-auto-provisioning, asg-tags]}
+      - {id: spot-interruption-handling, name: Spot interruption handling and node termination handlers, match: [spot-interruption, node-termination-handler]}
+      - {id: nottriggerscaleup, name: Why Cluster Autoscaler did not scale up (NotTriggerScaleUp), match: [nottriggerscaleup]}
+      - {id: cluster-autoscaler-status, name: cluster-autoscaler-status ConfigMap and events, match: [cluster-autoscaler-status]}
+      - {id: karpenter-drift, name: Karpenter drift and expiry and per-reason disruption budgets, match: [karpenter-drift]}
+      - {id: karpenter-nodeclaim, name: Karpenter NodeClaim debugging and controller logs, match: [nodeclaim]}
+      - {id: scale-from-zero, name: Node groups scaling from zero, match: [scale-from-zero]}
+  - id: pdb
+    name: PodDisruptionBudgets
+    source: docs/Workloads/Pods/Disruptions; docs/Tasks/Run Applications/Specifying a Disruption Budget
+    match: [pdb, poddisruptionbudget, pod-disruption-budget]
+    subtopics:
+      - {id: pdb-minavailable-maxunavailable, name: minAvailable vs maxUnavailable and rounding, match: [minavailable]}
+      - {id: unhealthy-pod-eviction-policy, name: unhealthyPodEvictionPolicy, match: [unhealthypodevictionpolicy]}
+      - {id: eviction-api, name: Eviction API and kubectl drain interaction, match: [eviction-api]}
+      - {id: pdb-anti-patterns, name: PDBs that block drains forever (single replica, 0 disruptions), match: [pdb-anti-patterns, blocked-drain]}
+      - {id: kubectl-create-pdb, name: kubectl create pdb and percentage values, match: [kubectl-create-pdb]}
+      - {id: disruptionsallowed, name: Reading PDB status (disruptionsAllowed and currentHealthy), match: [disruptionsallowed]}
+      - {id: quorum-pdb, name: PDBs for quorum-based systems, match: [quorum-pdb]}
+      - {id: multiple-pdbs, name: Overlapping PDBs and eviction errors, match: [multiple-pdbs]}
+  - id: graceful-termination-drain
+    name: Graceful termination, cordon and drain
+    source: CKA/Cluster Architecture; docs/Tasks/Safely Drain a Node; docs/Concepts/Node Shutdowns
+    match: [graceful-shutdown, graceful-termination, drain, cordon, prestop]
+    subtopics:
+      - {id: sigterm-prestop-handling, name: SIGTERM handling and preStop hooks, match: [sigterm]}
+      - {id: drain-flags, name: kubectl drain flags (ignore-daemonsets, delete-emptydir-data, force, timeout), match: [drain-flags, delete-emptydir-data, ignore-daemonsets]}
+      - {id: graceful-node-shutdown, name: Kubelet graceful node shutdown and shutdownGracePeriod, match: [graceful-node-shutdown, shutdowngraceperiod]}
+      - {id: load-balancer-connection-draining, name: Load balancer deregistration delay and connection draining, match: [connection-draining, deregistration-delay]}
+      - {id: force-delete-stuck-pods, name: Force-deleting stuck Terminating pods safely, match: [force-delete, stuck-terminating]}
+      - {id: non-graceful-node-shutdown, name: Non-graceful node shutdown and the out-of-service taint, match: [out-of-service-taint, non-graceful-shutdown]}
+      - {id: uncordon, name: Cordon and uncordon workflow for node maintenance, match: [uncordon]}
+      - {id: disable-eviction, name: drain --dry-run and --pod-selector and --disable-eviction, match: [disable-eviction]}
+      - {id: prestop-sleep, name: preStop sleep action to cover the endpoint removal race, match: [prestop-sleep, sleep-action]}
+  - id: garbage-collection-finalizers
+    name: Garbage collection and finalizers
+    source: docs/Overview/Working with objects/Finalizers and Owners; docs/Cluster Administration/Garbage Collection
+    match: [finalizer, finalizers, garbage-collection, ownerreferences]
+    subtopics:
+      - {id: cascading-deletion, name: Foreground/background/orphan cascading deletion, match: [cascade-foreground, cascade-background, cascade-orphan]}
+      - {id: stuck-namespace-finalizers, name: Namespaces stuck Terminating and finalizer removal, match: [namespace-stuck-terminating]}
+      - {id: owner-reference-rules, name: Cross-namespace and cluster-scoped owner reference rules, match: [cross-namespace-owner, invalid-ownerreference]}
+      - {id: node-image-container-gc, name: Kubelet image and container GC, match: [image-gc]}
+      - {id: terminated-pod-gc, name: Terminated pod GC threshold and completed Job cleanup, match: [terminated-pod-gc-threshold, pod-gc]}
+      - {id: orphaned-resources, name: Finding orphaned objects after cascade orphan, match: [orphaned-resources]}
+      - {id: remove-finalizer, name: Removing finalizers with kubectl patch and the risks, match: [remove-finalizer]}
+      - {id: blockownerdeletion, name: blockOwnerDeletion and foreground deletion blocking, match: [blockownerdeletion]}
+      - {id: unused-resources, name: Finding unused ConfigMaps and Secrets and PVCs, match: [kor, unused-resources]}
+  - id: labels-selectors-annotations
+    name: Labels, selectors, annotations
+    source: docs/Overview/Working with objects/Labels and Selectors, Annotations, Recommended Labels
+    match: [labels, selectors, annotations, label-selector]
+    subtopics:
+      - {id: recommended-labels, name: app.kubernetes.io recommended labels, match: [recommended-labels, app-kubernetes-io]}
+      - {id: kubectl-label-field-selectors, name: kubectl label/annotate and field selectors, match: [kubectl-label, field-selector]}
+      - {id: set-based-selectors-labels, name: Equality vs set-based selectors, match: [matchexpressions]}
+      - {id: well-known-annotations, name: Well-known annotations (last-applied-configuration, restartedAt), match: [last-applied-configuration, well-known-annotations]}
+      - {id: label-syntax, name: Label key and value syntax limits and prefixes, match: [label-syntax]}
+      - {id: show-labels, name: kubectl get --show-labels and -L label columns, match: [show-labels]}
+      - {id: node-restriction-labels, name: Kubelet-restricted node label prefixes, match: [node-restriction-labels]}
+      - {id: immutable-selector, name: Immutable workload selectors and relabelling migrations, match: [immutable-selector]}
+      - {id: delete-by-label, name: Bulk operations by label (delete and scale -l), match: [delete-by-label]}
+  - id: namespaces
+    name: Namespaces
+    source: docs/Overview/Working with objects/Namespaces; docs/Tasks/Administer Cluster/Namespaces Walkthrough
+    match: [namespace, namespaces]
+    subtopics:
+      - {id: system-namespaces, name: kube-system, kube-public, kube-node-lease roles, match: [kube-node-lease, kube-public, system-namespaces]}
+      - {id: namespaced-vs-cluster-scoped, name: kubectl api-resources --namespaced and scoping, match: [api-resources, namespaced-resources]}
+      - {id: namespace-provisioning-defaults, name: Namespace provisioning with default quota/RBAC/NetworkPolicy, match: [namespace-provisioning, namespace-template]}
+      - {id: namespace-deletion, name: Namespace deletion and stuck finalizers, match: [namespace-stuck-terminating]}
+      - {id: set-context-namespace, name: Default namespace in the current context and kubens, match: [set-context-namespace, kubens]}
+      - {id: metadata-name-label, name: kubernetes.io/metadata.name label in namespaceSelectors, match: [metadata-name-label]}
+      - {id: cross-namespace-dns, name: Cross-namespace Service access through DNS, match: [cross-namespace-dns]}
+      - {id: namespacelifecycle, name: NamespaceLifecycle admission and protected namespaces, match: [namespacelifecycle]}
+      - {id: namespace-inventory, name: Listing every object in a namespace, match: [namespace-inventory]}
+  # --- Services & networking (CKA 20%; sig-network)
+  - id: services
+    name: Service types (ClusterIP/NodePort/LB/headless)
+    source: CKA/Services & Networking; docs/Services, Load Balancing and Networking/Service
+    match: [service, clusterip, nodeport, loadbalancer, headless]
+    subtopics:
+      - {id: external-traffic-policy, name: externalTrafficPolicy and client IP preservation, match: [externaltrafficpolicy]}
+      - {id: headless-services, name: Headless Services and per-pod DNS, match: [headless-service]}
+      - {id: externalname-selectorless, name: ExternalName and selector-less Services with manual EndpointSlices, match: [externalname, service-without-selector]}
+      - {id: session-affinity-internal-policy, name: sessionAffinity, internalTrafficPolicy and topology-aware routing, match: [sessionaffinity, internaltrafficpolicy, topology-aware-routing]}
+      - {id: cloud-loadbalancer-annotations, name: Cloud LoadBalancer annotations (NLB/internal LB, loadBalancerSourceRanges), match: [loadbalancersourceranges, internal-load-balancer, nlb]}
+      - {id: service-troubleshooting, name: Service with no endpoints and port/targetPort mismatches, match: [no-endpoints, service-troubleshooting]}
+      - {id: bare-metal-loadbalancer, name: MetalLB for bare-metal LoadBalancer Services, match: [metallb]}
+      - {id: kubectl-create-service, name: kubectl create service and expose with ports, match: [kubectl-create-service]}
+      - {id: service-node-port-range, name: NodePort range and static allocation, match: [service-node-port-range]}
+      - {id: servicecidr, name: Service CIDR sizing and ServiceCIDR multi-CIDR expansion, match: [servicecidr]}
+      - {id: externalips, name: externalIPs and loadBalancerClass, match: [externalips]}
+      - {id: named-ports, name: Multi-port Services and named ports and appProtocol, match: [service-named-ports, appprotocol]}
+  - id: ingress
+    name: Ingress and ingress controllers
+    source: CKA/Services & Networking; docs/Services/Ingress and Ingress Controllers; ingress-nginx docs
+    match: [ingress, ingress-controller, ingress-nginx]
+    subtopics:
+      - {id: ingressclass, name: IngressClass and default class, match: [ingressclass]}
+      - {id: ingress-tls-cert-manager, name: Ingress TLS with cert-manager, match: [clusterissuer, acme]}
+      - {id: ingress-nginx-annotations, name: ingress-nginx annotations (rewrite, affinity, rate limit, snippets), match: [nginx-annotations, rewrite-target, ingress-rate-limit]}
+      - {id: ingress-rules-pathtypes, name: Host/path rules, pathType and default backend, match: [pathtype, default-backend]}
+      - {id: ingress-nginx-tuning, name: ingress-nginx ConfigMap tuning (body size, timeouts, keepalive), match: [proxy-body-size, ingress-nginx-tuning, configmap-nginx]}
+      - {id: alternative-ingress-controllers, name: Traefik and AWS Load Balancer Controller, match: [traefik, aws-load-balancer-controller, alb-ingress-controller]}
+      - {id: kubectl-create-ingress, name: kubectl create ingress imperatively, match: [kubectl-create-ingress]}
+      - {id: ingress-auth, name: External auth at the ingress with oauth2-proxy, match: [oauth2-proxy, auth-url]}
+      - {id: ingress-nginx-retirement, name: ingress-nginx retirement and migration options, match: [ingress-nginx-retirement]}
+      - {id: wildcard-host-sni, name: Wildcard hosts and multiple TLS certificates (SNI), match: [wildcard-host, sni]}
+      - {id: ingress-access-logs, name: ingress-nginx metrics and access logs, match: [ingress-access-logs]}
+  - id: gateway-api
+    name: Gateway API
+    source: CKA/Services & Networking (2024+); gateway-api.sigs.k8s.io docs
+    match: [gateway-api, httproute]
+    subtopics:
+      - {id: grpcroute-tlsroute, name: GRPCRoute, TLSRoute and TLS passthrough, match: [grpcroute, tlsroute]}
+      - {id: referencegrant, name: Cross-namespace references with ReferenceGrant, match: [referencegrant]}
+      - {id: gatewayclass-listeners, name: GatewayClass, Gateway listeners and TLS termination, match: [gatewayclass, gateway-listeners]}
+      - {id: ingress-to-gateway-migration, name: Migrating Ingress to Gateway API (ingress2gateway), match: [ingress2gateway, ingress-migration]}
+      - {id: httproute-filters, name: HTTPRoute filters (header modify, redirect, mirror, weights), match: [httproute-filters, requestredirect, requestheadermodifier]}
+      - {id: gateway-implementations, name: Choosing an implementation (Envoy Gateway, NGINX Gateway Fabric, Cilium), match: [envoy-gateway, nginx-gateway-fabric]}
+      - {id: gateway-api-crds, name: Installing Gateway API CRDs (standard vs experimental channel), match: [gateway-api-crds, experimental-channel]}
+      - {id: route-status, name: Route status conditions (Accepted and ResolvedRefs) debugging, match: [resolvedrefs, route-status]}
+      - {id: backendtlspolicy, name: BackendTLSPolicy for TLS to backends, match: [backendtlspolicy]}
+      - {id: tcproute-udproute, name: TCPRoute and UDPRoute L4 routing, match: [tcproute, udproute]}
+  - id: network-policy
+    name: NetworkPolicy
+    source: CKA/CKS; docs/Services/Network Policies
+    match: [networkpolicy, network-policy, network-policies]
+    subtopics:
+      - {id: default-deny, name: Default-deny ingress/egress baselines, match: [default-deny]}
+      - {id: policy-selectors, name: podSelector, namespaceSelector and ipBlock, match: [podselector, ipblock]}
+      - {id: fqdn-l7-policies, name: FQDN and L7 policies in Cilium/Calico, match: [fqdn, l7-policy]}
+      - {id: netpol-troubleshooting, name: Debugging dropped traffic, match: [netshoot]}
+      - {id: port-ranges-endport, name: Port ranges with endPort, match: [endport, port-ranges]}
+      - {id: policy-audit-visualisation, name: Policy audit mode and visualisers, match: [policy-audit-mode, netpol-visualiser]}
+      - {id: admin-network-policy, name: AdminNetworkPolicy and BaselineAdminNetworkPolicy, match: [adminnetworkpolicy, baselineadminnetworkpolicy]}
+      - {id: allow-dns-egress, name: Allowing DNS egress under default-deny, match: [allow-dns-egress]}
+      - {id: netpol-and-or, name: AND vs OR semantics of from and to selectors, match: [netpol-and-or]}
+      - {id: cyclonus, name: Testing policies with cyclonus and connectivity matrices, match: [cyclonus]}
+  - id: dns-coredns
+    name: Cluster DNS / CoreDNS
+    source: CKA/Services & Networking; docs/Tasks/Administer Cluster/Customizing DNS Service; docs/Concepts/DNS for Services and Pods
+    match: [coredns, cluster-dns, nodelocaldns]
+    subtopics:
+      - {id: corefile-customisation, name: Corefile plugins (forward, cache, rewrite, hosts), match: [corefile]}
+      - {id: stub-domains-upstreams, name: Stub domains and upstream forwarding, match: [stub-domain]}
+      - {id: nodelocal-dnscache, name: NodeLocal DNSCache deployment, match: [nodelocal-dnscache]}
+      - {id: ndots-search-path, name: ndots and search-path latency, match: [ndots]}
+      - {id: pod-dns-policy, name: dnsPolicy and dnsConfig per pod, match: [dnspolicy, dnsconfig, clusterfirstwithhostnet]}
+      - {id: coredns-scaling, name: CoreDNS replicas and the dns-autoscaler, match: [dns-autoscaler, coredns-replicas]}
+      - {id: dns-resolution-debugging, name: Debugging SERVFAIL/NXDOMAIN with nslookup and dig, match: [nslookup-debug, servfail]}
+      - {id: dns-record-formats, name: Service and pod DNS record formats (A and SRV and pod records), match: [srv-records, pod-dns-records]}
+      - {id: hostaliases, name: Custom host entries with hostAliases and the CoreDNS hosts plugin, match: [hostaliases]}
+      - {id: coredns-metrics, name: CoreDNS metrics and log and health plugins, match: [coredns-metrics]}
+      - {id: external-dns, name: ExternalDNS for publishing Service and Ingress records, match: [external-dns]}
+  - id: cni
+    name: CNI plugins
+    source: CKA/Services & Networking; docs/Cluster Administration/Network Plugins; Calico/Cilium/Flannel docs
+    match: [cni, calico, cilium, flannel]
+    subtopics:
+      - {id: overlay-vs-underlay, name: VXLAN/IPIP overlays vs BGP underlay, match: [vxlan, bgp, overlay]}
+      - {id: cni-ipam, name: IPAM modes and IP exhaustion, match: [ipam, ip-exhaustion]}
+      - {id: cni-installation, name: Installing a CNI and aligning pod CIDRs, match: [cni-installation, cni-config-dir]}
+      - {id: cni-migration, name: Migrating between CNIs (Flannel to Cilium), match: [cni-migration]}
+      - {id: calico-bgp-peering, name: Calico BGP peering and route reflectors, match: [bgp-peering, route-reflector]}
+      - {id: kube-proxy-replacement, name: Cilium kube-proxy replacement, match: [kube-proxy-replacement]}
+      - {id: flannel-backend, name: Flannel backends and net-conf.json, match: [flannel-backend, net-conf-json]}
+      - {id: cilium-connectivity-test, name: cilium install and status and connectivity test, match: [cilium-connectivity-test]}
+      - {id: calico-ippool, name: Calico IPPools and IPAM blocks, match: [ippool, calico-ipam]}
+      - {id: aws-vpc-cni, name: AWS VPC CNI prefix delegation and custom networking, match: [aws-vpc-cni, prefix-delegation]}
+  - id: kube-proxy
+    name: kube-proxy modes
+    source: docs/Reference/Networking/Virtual IPs and Service Proxies; kube-proxy config reference
+    match: [kube-proxy, ipvs, kube-proxy-modes]
+    subtopics:
+      - {id: iptables-vs-ipvs, name: iptables vs IPVS modes and sync performance, match: [iptables, sync-latency]}
+      - {id: nftables-mode, name: nftables mode, match: [nftables]}
+      - {id: kube-proxy-configuration, name: KubeProxyConfiguration (clusterCIDR, masquerade, conntrack), match: [kube-proxy-config, kubeproxyconfiguration, masquerade-all]}
+      - {id: kube-proxy-troubleshooting, name: Stale rules and unreachable Services, match: [stale-iptables, kube-proxy-troubleshooting]}
+      - {id: conntrack-tuning, name: conntrack table sizing and SNAT port exhaustion, match: [conntrack, port-exhaustion]}
+      - {id: kube-proxy-metrics, name: kube-proxy metrics and healthz sync health, match: [kube-proxy-metrics]}
+      - {id: iptables-save, name: Reading KUBE-SERVICES and KUBE-SVC chains with iptables-save, match: [kube-services-chain, iptables-save]}
+      - {id: ipvsadm, name: ipvsadm inspection and IPVS schedulers, match: [ipvsadm]}
+      - {id: kube-proxy-configmap, name: Editing the kube-proxy ConfigMap and rolling the DaemonSet, match: [kube-proxy-configmap]}
+  - id: endpointslices-discovery
+    name: EndpointSlices and service discovery
+    source: docs/Services/EndpointSlices; docs/Services/Service (discovery)
+    match: [endpointslice, endpointslices, service-discovery]
+    subtopics:
+      - {id: endpointslice-controller, name: EndpointSlice controller and maxEndpointsPerSlice, match: [max-endpoints-per-slice, endpointslice-controller]}
+      - {id: service-env-vars-vs-dns, name: Service environment variables vs DNS discovery (enableServiceLinks), match: [service-env-vars, enableservicelinks]}
+      - {id: topology-aware-hints, name: Topology-aware routing hints, match: [topology-aware-routing]}
+      - {id: terminating-endpoint-conditions, name: serving/terminating endpoint conditions during rollouts, match: [terminating-endpoints, serving-condition]}
+      - {id: endpointslice-inspection, name: Listing EndpointSlices for a Service by label, match: [kubernetes-io-service-name]}
+      - {id: endpoints-deprecation, name: Endpoints API deprecation and EndpointSlice mirroring, match: [endpoints-deprecation, endpointslice-mirroring]}
+      - {id: trafficdistribution, name: Service trafficDistribution PreferClose, match: [trafficdistribution, preferclose]}
+      - {id: endpointslice-managed-by, name: Managing custom EndpointSlices with managed-by, match: [endpointslice-managed-by]}
+      - {id: publishnotreadyaddresses, name: publishNotReadyAddresses for peer discovery, match: [publishnotreadyaddresses]}
+  - id: dual-stack
+    name: Dual-stack IPv4/IPv6
+    source: docs/Services/IPv4-IPv6 dual-stack; docs/Tasks/Validate IPv4-IPv6 dual-stack
+    match: [dual-stack, ipv6]
+    subtopics:
+      - {id: ipfamilypolicy, name: ipFamilyPolicy and ipFamilies on Services, match: [ipfamilypolicy]}
+      - {id: ipv6-only-clusters, name: Single-stack IPv6 clusters, match: [ipv6-only, single-stack-ipv6]}
+      - {id: dual-stack-ingress-nat64, name: Dual-stack ingress/LBs and NAT64/DNS64, match: [nat64, dual-stack-ingress]}
+      - {id: dual-stack-validation, name: Validating pod/service/node dual-stack addressing, match: [dual-stack-validation]}
+      - {id: dual-stack-kubeadm, name: kubeadm dual-stack podSubnet and serviceSubnet, match: [dual-stack-kubeadm]}
+      - {id: dual-stack-cni, name: CNI dual-stack configuration (Calico and Cilium), match: [dual-stack-cni]}
+      - {id: node-ip, name: kubelet --node-ip with two address families, match: [node-ip]}
+      - {id: ipfamilies-change, name: Converting existing Services between single and dual stack, match: [ipfamilies-change]}
+  - id: service-mesh
+    name: Service mesh
+    source: sig-network (ecosystem); Istio and Linkerd docs
+    match: [service-mesh, istio, linkerd, mtls]
+    subtopics:
+      - {id: istio-traffic-management, name: VirtualService/DestinationRule routing, match: [virtualservice, destinationrule]}
+      - {id: strict-mtls, name: PeerAuthentication and strict mTLS, match: [peerauthentication, strict-mtls]}
+      - {id: ambient-mode, name: Istio ambient mode (ztunnel, waypoint), match: [ztunnel, waypoint]}
+      - {id: istio-authorization, name: AuthorizationPolicy and RequestAuthentication, match: [authorizationpolicy, requestauthentication]}
+      - {id: istio-installation, name: Installing Istio (istioctl profiles, Helm, revisions), match: [istioctl-install, istio-helm-install, istiooperator]}
+      - {id: linkerd-install-trust, name: Installing Linkerd and rotating trust anchors, match: [linkerd-install, trust-anchor-rotation]}
+      - {id: mesh-troubleshooting, name: istioctl analyze and proxy-config debugging, match: [istioctl-analyze, proxy-config]}
+      - {id: istio-sidecar-resource, name: Istio Sidecar resource to scope proxy config, match: [sidecar-resource]}
+      - {id: istio-resilience, name: Retries and timeouts and outlier detection and circuit breaking, match: [outlier-detection, circuit-breaking]}
+      - {id: istio-telemetry-api, name: Istio Telemetry API for metrics and access logs and tracing, match: [telemetry-api]}
+      - {id: fault-injection, name: Fault injection testing with the mesh, match: [fault-injection]}
+  - id: egress-control
+    name: Egress control
+    source: docs/Services; Cilium/Calico egress gateway docs; Istio egress docs
+    match: [egress, egress-gateway, egress-control]
+    subtopics:
+      - {id: static-egress-ip, name: Static egress IPs and NAT gateways, match: [static-ip, nat-gateway]}
+      - {id: egress-network-policy, name: Egress NetworkPolicy to CIDRs and FQDNs, match: [fqdn]}
+      - {id: istio-egress-serviceentry, name: Istio egress gateway and ServiceEntry, match: [serviceentry, istio-egress-gateway]}
+      - {id: http-egress-proxy, name: HTTP egress proxies and proxy env vars, match: [egress-proxy, http-proxy-env]}
+      - {id: metadata-endpoint-block, name: Blocking the cloud metadata endpoint from pods, match: [metadata-endpoint-block, imds]}
+      - {id: cilium-egress-gateway, name: Cilium egress gateway policies, match: [ciliumegressgatewaypolicy]}
+      - {id: egress-allowlist, name: Cloud firewall allowlists for cluster egress, match: [egress-allowlist]}
+      - {id: egress-flow-logs, name: Observing egress flows (Hubble and VPC flow logs), match: [egress-flow-logs]}
+  # --- Storage (CKA 10%; sig-storage)
+  - id: pv-pvc
+    name: PersistentVolumes and claims
+    source: CKA/Storage; docs/Storage/Persistent Volumes
+    match: [persistentvolume, persistentvolumeclaim, pv-pvc-binding, pvc]
+    subtopics:
+      - {id: static-provisioning-binding, name: Static provisioning and claimRef pre-binding, match: [static-provisioning, claimref]}
+      - {id: pvc-pending, name: PVC stuck Pending diagnosis, match: [pvc-pending]}
+      - {id: nfs-volumes, name: NFS volumes and the NFS CSI driver, match: [nfs, nfs-csi, nfs-subdir]}
+      - {id: pvc-migration, name: Migrating data between PVCs and storage classes (pv-migrate), match: [pv-migrate, pvc-migration, storage-class-migration]}
+      - {id: pv-protection-finalizers, name: pv/pvc-protection finalizers, match: [pvc-protection]}
+      - {id: pvc-selector, name: PVC selector and storageClassName empty string binding, match: [pvc-selector, empty-storageclassname]}
+      - {id: hostpath, name: hostPath volumes and their risks, match: [hostpath]}
+      - {id: pv-status-phases, name: PV and PVC status phases and transitions, match: [pv-status-phases]}
+      - {id: volumeattributesclass, name: VolumeAttributesClass to modify IOPS and throughput, match: [volumeattributesclass]}
+      - {id: kubelet-volume-stats, name: Volume usage metrics and full-volume alerts, match: [kubelet-volume-stats]}
+  - id: storageclass-dynamic-provisioning
+    name: StorageClasses and dynamic provisioning
+    source: CKA/Storage; docs/Storage/Storage Classes and Dynamic Volume Provisioning
+    match: [storageclass, dynamic-provisioning]
+    subtopics:
+      - {id: storageclass-parameters, name: Provisioner parameters and allowedTopologies, match: [allowedtopologies, parameters]}
+      - {id: volume-binding-mode, name: WaitForFirstConsumer vs Immediate binding, match: [waitforfirstconsumer, volumebindingmode]}
+      - {id: default-storageclass, name: Default StorageClass selection and changing it, match: [default-storageclass, is-default-class]}
+      - {id: provisioning-failures, name: ProvisioningFailed diagnosis, match: [provisioningfailed]}
+      - {id: mountoptions, name: mountOptions in StorageClasses and PVs, match: [mountoptions]}
+      - {id: volume-encryption, name: Encrypted volumes and KMS keys in StorageClass parameters, match: [volume-encryption]}
+      - {id: storageclass-immutable, name: StorageClass immutability and replacing a class, match: [storageclass-immutable]}
+      - {id: storage-tiers, name: Designing StorageClass tiers (performance and regional), match: [storage-tiers, regional-pd]}
+  - id: csi
+    name: CSI drivers
+    source: CKA/Storage; kubernetes-csi.github.io docs
+    match: [csi, csi-driver]
+    subtopics:
+      - {id: csi-sidecars, name: CSI controller/node sidecars (provisioner, attacher, resizer, registrar), match: [external-provisioner, node-driver-registrar]}
+      - {id: csi-driver-installation, name: Installing a cloud CSI driver (EBS/PD/Disk) with workload identity, match: [ebs-csi-install, csi-driver-install]}
+      - {id: csi-troubleshooting, name: FailedMount/FailedAttach and registrar failures, match: [csi-troubleshooting, mount-failure, failedmount]}
+      - {id: csi-migration, name: In-tree to CSI migration, match: [csimigration]}
+      - {id: secrets-store-csi, name: Secrets Store CSI Driver, match: [secrets-store-csi, secrets-store-csi-driver]}
+      - {id: fsgroup-permissions, name: fsGroup and fsGroupChangePolicy volume permissions, match: [fsgroup, fsgroupchangepolicy]}
+      - {id: csidriver-object, name: CSIDriver object fields (attachRequired and podInfoOnMount and fsGroupPolicy), match: [csidriver-object, attachrequired]}
+      - {id: csinode-attach-limits, name: CSINode and per-node volume attach limits, match: [csinode, attach-limits]}
+      - {id: csi-topology, name: CSI topology keys and zonal provisioning, match: [csi-topology]}
+      - {id: csi-sanity, name: csi-sanity testing for driver developers, match: [csi-sanity]}
+  - id: volume-snapshots
+    name: Volume snapshots and cloning
+    source: docs/Storage/Volume Snapshots and CSI Volume Cloning
+    match: [volumesnapshot, volume-snapshot, snapshots]
+    subtopics:
+      - {id: snapshot-crds-classes, name: VolumeSnapshotClass/Content and the snapshot controller, match: [volumesnapshotclass, snapshot-controller]}
+      - {id: pvc-cloning, name: PVC cloning via dataSource, match: [pvc-clone, datasource]}
+      - {id: scheduled-snapshots, name: Scheduled snapshots and retention, match: [snapshot-schedule, snapscheduler]}
+      - {id: application-consistent-snapshots, name: Application-consistent snapshots with freeze hooks, match: [freeze-hooks, pre-snapshot-hook]}
+      - {id: cross-namespace-restore, name: Restoring snapshots across namespaces, match: [cross-namespace-snapshot]}
+      - {id: snapshot-deletionpolicy, name: VolumeSnapshot deletionPolicy Delete vs Retain, match: [snapshot-deletionpolicy]}
+      - {id: pre-provisioned-snapshot, name: Importing pre-provisioned snapshots, match: [pre-provisioned-snapshot]}
+      - {id: volumegroupsnapshot, name: VolumeGroupSnapshot for multi-volume consistency, match: [volumegroupsnapshot]}
+      - {id: volume-populators, name: Volume populators and dataSourceRef, match: [volume-populator, datasourceref]}
+  - id: volume-expansion
+    name: Volume expansion
+    source: docs/Storage/Persistent Volumes/Expanding PVCs
+    match: [volume-expansion, pvc-expansion, resize]
+    subtopics:
+      - {id: online-offline-resize, name: Online vs offline filesystem resize, match: [online-resize, offline-resize]}
+      - {id: expansion-failure-recovery, name: Recovering from failed expansion (RecoverVolumeExpansionFailure), match: [expansion-failure-recovery, recovervolumeexpansionfailure]}
+      - {id: statefulset-pvc-expansion, name: Expanding StatefulSet volumeClaimTemplates, match: [statefulset-pvc-expansion]}
+      - {id: allowvolumeexpansion, name: allowVolumeExpansion on StorageClasses, match: [allowvolumeexpansion]}
+      - {id: filesystemresizepending, name: Resizing a PVC and watching FileSystemResizePending, match: [filesystemresizepending]}
+      - {id: ebs-modify-cooldown, name: Cloud disk resize cooldowns and limits, match: [ebs-modify-cooldown]}
+      - {id: pvc-shrink, name: Shrinking a PVC is unsupported and the migration path, match: [pvc-shrink]}
+      - {id: external-resizer, name: external-resizer sidecar behaviour, match: [external-resizer]}
+  - id: access-modes-reclaim
+    name: Access modes and reclaim policy
+    source: CKA/Storage; docs/Storage/Persistent Volumes (Access Modes, Reclaiming)
+    match: [access-modes, accessmodes, reclaim-policy, reclaimpolicy]
+    subtopics:
+      - {id: rwo-rwx-rwop, name: ReadWriteOnce/Many/OncePod semantics, match: [readwriteonce, readwriteoncepod, readwritemany]}
+      - {id: reclaim-retain-reuse, name: Retain policy and reusing Released volumes, match: [released, claimref]}
+      - {id: rwx-storage-options, name: ReadWriteMany backends (EFS, CephFS, Azure Files), match: [readwritemany-options, efs-csi, cephfs]}
+      - {id: change-reclaim-policy, name: Changing reclaim policy on existing PVs, match: [patch-reclaim-policy]}
+      - {id: delete-reclaim-policy, name: Delete reclaim policy data-loss risks, match: [delete-reclaim-policy]}
+      - {id: recycle-reclaim-policy, name: Recycle reclaim policy deprecation, match: [recycle-reclaim-policy]}
+      - {id: rwo-multi-pod, name: ReadWriteOnce is per node not per pod, match: [rwo-multi-pod]}
+      - {id: orphaned-disks, name: Cleaning up Released PVs and orphaned cloud disks, match: [orphaned-disks]}
+  - id: ephemeral-volumes
+    name: emptyDir and ephemeral volumes
+    source: docs/Storage/Ephemeral Volumes
+    match: [emptydir, ephemeral-volume, ephemeral-volumes, generic-ephemeral]
+    subtopics:
+      - {id: emptydir-memory-sizelimit, name: emptyDir medium Memory and sizeLimit, match: [tmpfs, sizelimit]}
+      - {id: generic-ephemeral-volumes, name: Generic ephemeral volumes from StorageClasses, match: [generic-ephemeral-volume]}
+      - {id: csi-ephemeral-volumes, name: CSI ephemeral (inline) volumes, match: [csi-ephemeral-volume]}
+      - {id: ephemeral-storage-eviction, name: ephemeral-storage limits and DiskPressure eviction, match: [ephemeral-storage-eviction, disk-pressure]}
+      - {id: emptydir-usage, name: emptyDir disk usage accounting, match: [emptydir-usage]}
+      - {id: image-volume, name: Image volumes mounting OCI artifacts, match: [image-volume]}
+      - {id: ephemeral-storage-requests, name: ephemeral-storage requests and limits in scheduling, match: [ephemeral-storage-requests]}
+      - {id: scratch-space, name: Scratch space patterns for batch jobs, match: [scratch-space]}
+  - id: local-raw-block-volumes
+    name: Local volumes and raw block
+    source: docs/Storage/Volumes (local), Persistent Volumes (Raw Block)
+    match: [local-persistent-volume, local-volume, raw-block, volumemode]
+    subtopics:
+      - {id: local-pv-node-affinity, name: Local PVs with nodeAffinity, match: [local-pv]}
+      - {id: local-provisioners, name: local-path-provisioner vs local static provisioner, match: [local-path-provisioner, local-static-provisioner]}
+      - {id: raw-block-devices, name: volumeMode Block and devicePath, match: [raw-block-volume, devicepath]}
+      - {id: local-disk-preparation, name: Preparing local disks (format, mount, discovery), match: [disk-prep, local-disk-setup]}
+      - {id: local-pv-node-loss, name: Handling node loss with local PVs, match: [local-pv-node-loss]}
+      - {id: topolvm, name: Dynamic local provisioning with TopoLVM and OpenEBS LVM, match: [topolvm, openebs-lvm]}
+      - {id: local-pv-scheduling, name: WaitForFirstConsumer scheduling with local PVs, match: [local-pv-scheduling]}
+      - {id: block-volume-database, name: Raw block volumes for databases, match: [block-volume-database]}
+      - {id: local-pv-cleanup, name: Cleaning and recycling local PVs, match: [local-pv-cleanup]}
+  # --- Troubleshooting (CKA 30%)
+  - id: troubleshoot-pods
+    name: CrashLoopBackOff, OOMKilled, ImagePullBackOff
+    source: CKA/Troubleshooting; docs/Tasks/Debug/Debug Pods
+    match: [crashloopbackoff, crashloop, oomkilled, oom, imagepullbackoff]
+    subtopics:
+      - {id: exit-codes, name: Reading container exit codes (137, 139, 143), match: [exit-code-137, exit-code-143]}
+      - {id: oom-diagnosis, name: OOMKilled diagnosis (working set, cgroup v2, JVM/Go limits), match: [memory-working-set, gomemlimit]}
+      - {id: createcontainerconfigerror, name: CreateContainerConfigError and missing ConfigMaps/Secrets, match: [createcontainerconfigerror]}
+      - {id: stuck-containercreating, name: Pods stuck ContainerCreating (volumes, CNI, sandbox), match: [containercreating, stuck-containercreating]}
+      - {id: errimagepull-diagnosis, name: ErrImagePull causes (auth, tag, rate limits, arch), match: [errimagepull, registry-rate-limit]}
+      - {id: runcontainererror, name: RunContainerError and exec format error, match: [runcontainererror, exec-format-error]}
+      - {id: invalidimagename, name: InvalidImageName and image reference syntax, match: [invalidimagename]}
+      - {id: evicted-pods, name: Evicted pods and cleanup, match: [evicted-pods]}
+      - {id: containercannotrun, name: ContainerCannotRun and command not found, match: [containercannotrun]}
+      - {id: describe-pod-triage, name: kubectl describe pod triage workflow, match: [describe-pod-triage]}
+  - id: troubleshoot-scheduling
+    name: Pending pods and FailedScheduling
+    source: CKA/Troubleshooting; docs/Tasks/Debug/Debug Pods (Pending)
+    match: [pending, failedscheduling, unschedulable]
+    subtopics:
+      - {id: insufficient-resources, name: Insufficient cpu/memory messages and allocatable math, match: [insufficient-resources, allocatable]}
+      - {id: affinity-taint-mismatch, name: Node affinity and untolerated taint messages, match: [didnt-match-node-affinity, untolerated-taint]}
+      - {id: volume-node-affinity-conflict, name: Volume node affinity conflicts and zone mismatches, match: [volume-node-affinity-conflict]}
+      - {id: scheduler-event-analysis, name: Reading scheduler events and logs, match: [scheduler-logs, pending-pods]}
+      - {id: spread-constraint-unschedulable, name: Topology spread constraints blocking scheduling, match: [spread-constraint-unschedulable]}
+      - {id: too-many-pods, name: Too many pods and maxPods exhaustion, match: [too-many-pods]}
+      - {id: didnt-have-free-ports, name: node(s) didn't have free ports for hostPort, match: [didnt-have-free-ports]}
+      - {id: unbound-immediate-pvc, name: pod has unbound immediate PersistentVolumeClaims, match: [unbound-immediate-pvc]}
+      - {id: scheduler-down-pending, name: All new pods Pending because the scheduler is down, match: [scheduler-down-pending]}
+  - id: troubleshoot-nodes
+    name: NotReady nodes and node pressure
+    source: CKA/Troubleshooting; docs/Tasks/Debug/Debug Cluster
+    match: [notready, node-not-ready, node-pressure, node-conditions, node-problem-detector]
+    subtopics:
+      - {id: kubelet-service-debugging, name: journalctl -u kubelet and restarting the kubelet, match: [journalctl-kubelet, kubelet-restart]}
+      - {id: pleg-runtime-issues, name: PLEG is not healthy and runtime failures, match: [pleg, pleg-not-healthy]}
+      - {id: node-heartbeats-leases, name: Node leases, heartbeats and node-monitor-grace-period, match: [node-lease, node-monitor-grace-period]}
+      - {id: disk-memory-pressure, name: DiskPressure/MemoryPressure cleanup, match: [disk-pressure, memorypressure]}
+      - {id: node-problem-detector-remediation, name: node-problem-detector and automated remediation, match: [npd, remediation]}
+      - {id: pidpressure, name: PIDPressure node condition, match: [pidpressure]}
+      - {id: networkunavailable, name: NetworkUnavailable node condition, match: [networkunavailable]}
+      - {id: clock-skew, name: Clock skew and certificate validity errors on nodes, match: [node-clock-skew, chrony]}
+      - {id: dmesg, name: Kernel-level node issues (dmesg and OOM killer and hung tasks), match: [node-kernel-issues, hung-task]}
+  - id: troubleshoot-networking
+    name: Cluster networking troubleshooting
+    source: CKA/Troubleshooting; docs/Tasks/Debug/Debug Services, Debugging DNS Resolution
+    match: [network-troubleshooting, dns-troubleshooting, connectivity, packet-capture]
+    subtopics:
+      - {id: dns-resolution-failures, name: DNS resolution failures from pods, match: [nslookup-debug, servfail]}
+      - {id: packet-capture-netshoot, name: tcpdump/netshoot captures in pods and nodes, match: [tcpdump, netshoot]}
+      - {id: cross-node-pod-connectivity, name: Pod-to-pod across nodes (routes, overlay, firewall ports), match: [cross-node-connectivity, node-firewall-ports]}
+      - {id: service-datapath-debugging, name: Service VIP to pod datapath (kube-proxy rules), match: [kube-proxy-troubleshooting]}
+      - {id: ingress-502-504, name: Ingress 502/504 diagnosis, match: [502-bad-gateway, ingress-troubleshooting]}
+      - {id: mtu-fragmentation, name: MTU and fragmentation issues, match: [mtu, pmtud]}
+      - {id: curl-pod, name: Testing Services from a throwaway curl pod, match: [curl-pod]}
+      - {id: conntrack-cli, name: Inspecting and flushing conntrack entries, match: [conntrack-cli]}
+      - {id: hubble-observe, name: Finding drops with hubble observe, match: [hubble-observe]}
+      - {id: loadbalancer-pending, name: LoadBalancer Service stuck with pending external IP, match: [loadbalancer-pending]}
+  - id: troubleshoot-control-plane
+    name: Control plane component troubleshooting
+    source: CKA/Troubleshooting; docs/Tasks/Debug/Debug Cluster
+    match: [control-plane-troubleshooting, apiserver-troubleshooting, kube-apiserver, kube-scheduler, controller-manager]
+    subtopics:
+      - {id: apiserver-down, name: kube-apiserver down (manifest, certs, etcd connectivity), match: [apiserver-down, apiserver-crashloop, connection-refused-6443]}
+      - {id: scheduler-controller-manager-down, name: Scheduler or controller-manager not running (leader election, manifests), match: [scheduler-not-running, controller-manager-down]}
+      - {id: etcd-quorum-symptoms, name: etcd quorum loss symptoms, match: [quorum-loss]}
+      - {id: apiserver-overload-apf, name: API server latency and Priority and Fairness, match: [apf, priority-and-fairness]}
+      - {id: crictl-logs, name: Reading control-plane logs with crictl when the API is down, match: [crictl-logs]}
+      - {id: no-pods-created, name: Symptoms of a dead controller-manager (no pods created), match: [no-pods-created]}
+      - {id: x509-certificate-expired, name: Expired control-plane certificates and x509 errors, match: [x509-certificate-expired]}
+      - {id: kubectl-connection-errors, name: kubectl connection refused and Unauthorized triage, match: [kubectl-connection-refused, unauthorized-401]}
+      - {id: cloud-controller-manager, name: cloud-controller-manager failures, match: [cloud-controller-manager]}
+  - id: kubectl-debug
+    name: kubectl debug and ephemeral containers
+    source: CKA/Troubleshooting; kubectl debug reference; docs/Tasks/Debug/Debugging with an Ephemeral Container
+    match: [kubectl-debug, ephemeral-containers, ephemeral-container]
+    subtopics:
+      - {id: distroless-debugging, name: Ephemeral containers into distroless pods with --target, match: [distroless, shareprocessnamespace]}
+      - {id: node-debug-session, name: kubectl debug node/ host sessions, match: [node-debug]}
+      - {id: debug-copy-pod, name: Debugging by pod copy (--copy-to, --set-image, --share-processes), match: [copy-to, debug-copy]}
+      - {id: debug-profiles, name: Debug profiles (general, netadmin, sysadmin), match: [debug-profile, netadmin]}
+      - {id: exec-port-forward, name: kubectl exec and port-forward for live inspection, match: [port-forward, kubectl-exec]}
+      - {id: debug-custom-profile, name: kubectl debug --custom profile JSON, match: [debug-custom-profile]}
+      - {id: chroot-host, name: chroot /host in node debug sessions and cleanup, match: [chroot-host]}
+      - {id: kubectl-cp, name: kubectl cp for copying files in and out of pods, match: [kubectl-cp]}
+      - {id: kubectl-attach, name: kubectl attach and run -it --rm throwaway pods, match: [kubectl-attach]}
+  - id: logs-events
+    name: Logs and events for debugging
+    source: CKA/Troubleshooting; kubectl logs/events reference; docs/Cluster Administration/Logging Architecture
+    match: [events, kubectl-logs, event-based-debugging]
+    subtopics:
+      - {id: kubectl-logs-flags, name: kubectl logs flags (--previous, --since, --tail, --all-containers, -l), match: [kubectl-logs-flags, all-containers, kubectl-logs-previous]}
+      - {id: kubectl-events, name: kubectl events and event reason codes, match: [kubectl-get-events, reason-codes]}
+      - {id: event-export-retention, name: Event TTL and exporters, match: [event-ttl, event-exporter]}
+      - {id: multi-pod-log-tailing, name: Tailing logs across pods with stern/kubetail, match: [stern, kubetail]}
+      - {id: container-log-rotation, name: Container log rotation (containerLogMaxSize/Files), match: [containerlogmaxsize, log-rotation]}
+      - {id: control-plane-logs, name: Control-plane component logs (static pods and journal), match: [control-plane-logs]}
+      - {id: node-log-query, name: Node log query API through the kubelet proxy, match: [node-log-query]}
+      - {id: klog-verbosity, name: klog verbosity and JSON structured logging for components, match: [klog-verbosity, json-logging]}
+      - {id: warning-events, name: kubectl events --for and --types=Warning filtering, match: [events-for, warning-events]}
+  # --- Security (CKS; sig-security, sig-auth)
+  - id: pod-security-standards
+    name: Pod Security Standards/Admission and securityContext
+    source: CKS/Minimize Microservice Vulnerabilities; docs/Security/Pod Security Standards and Admission
+    match: [pod-security-standards, pod-security-admission, pss, securitycontext, security-context]
+    subtopics:
+      - {id: pss-levels, name: privileged/baseline/restricted profiles, match: [restricted, baseline]}
+      - {id: psa-namespace-labels, name: PSA enforce/audit/warn namespace labels and cluster defaults, match: [pod-security-labels, enforce-audit-warn, admissionconfiguration-podsecurity]}
+      - {id: securitycontext-fields, name: runAsNonRoot, capabilities, allowPrivilegeEscalation, readOnlyRootFilesystem, match: [runasnonroot, readonlyrootfilesystem, capabilities]}
+      - {id: psp-to-psa-migration, name: Migrating from PodSecurityPolicy to PSA, match: [podsecuritypolicy, psp-migration]}
+      - {id: psa-exemptions-dry-run, name: PSA exemptions and server dry-run of label changes, match: [psa-exemptions, psa-dry-run]}
+      - {id: runasuser, name: runAsUser and runAsGroup and supplementalGroups, match: [runasuser, supplementalgroups]}
+      - {id: securitycontext-precedence, name: Pod vs container securityContext precedence, match: [securitycontext-precedence]}
+      - {id: user-namespaces, name: User namespaces with hostUsers false, match: [hostusers, user-namespaces]}
+      - {id: sysctls, name: Safe and unsafe sysctls in pods, match: [sysctls, unsafe-sysctls]}
+  - id: admission-control
+    name: Admission controllers and webhooks
+    source: CKS/Cluster Hardening; docs/Reference/Access Authn Authz/Admission Controllers, Dynamic Admission Control, Validating Admission Policy
+    match: [admission-controller, admission-controllers, admission-webhook, validating-webhook, mutating-webhook, validatingadmissionpolicy]
+    subtopics:
+      - {id: builtin-admission-plugins, name: Built-in plugins and enable/disable flags, match: [enable-admission-plugins, noderestriction]}
+      - {id: webhook-configuration, name: Webhook failurePolicy, timeouts, matchPolicy and namespaceSelector, match: [failurepolicy, timeoutseconds, matchpolicy]}
+      - {id: validating-admission-policy-cel, name: ValidatingAdmissionPolicy bindings, paramKind and CEL, match: [validatingadmissionpolicybinding, paramkind, cel-expressions]}
+      - {id: mutating-admission-policy, name: MutatingAdmissionPolicy with CEL, match: [mutatingadmissionpolicy, cel-mutation]}
+      - {id: webhook-troubleshooting, name: Webhook outages, timeouts and TLS errors, match: [webhook-troubleshooting, webhook-timeout, webhook-outage]}
+      - {id: imagepolicywebhook, name: ImagePolicyWebhook admission configuration, match: [imagepolicywebhook]}
+      - {id: reinvocationpolicy, name: Admission ordering and reinvocationPolicy, match: [reinvocationpolicy]}
+      - {id: cabundle-injection, name: Webhook TLS with cert-manager caBundle injection, match: [cabundle-injection]}
+      - {id: admission-warnings, name: Admission warnings and audit annotations, match: [admission-warnings]}
+  - id: policy-engines
+    name: Policy engines (Gatekeeper, Kyverno)
+    source: CKS/Minimize Microservice Vulnerabilities; Gatekeeper and Kyverno docs
+    match: [gatekeeper, opa, kyverno, policy-as-code]
+    subtopics:
+      - {id: gatekeeper-constraints, name: ConstraintTemplates and Constraints in Rego, match: [constrainttemplate, rego]}
+      - {id: kyverno-rules, name: Kyverno validate/mutate/generate rules, match: [clusterpolicy, validate]}
+      - {id: policy-testing, name: Testing policies (gator, kyverno test, chainsaw), match: [gator, kyverno-test, chainsaw]}
+      - {id: policy-reports, name: PolicyReports and audit mode, match: [policyreport, audit-mode]}
+      - {id: baseline-policy-library, name: Baseline policy set (require labels, disallow latest, limits), match: [require-labels, disallow-latest-tag, baseline-policies]}
+      - {id: policy-exceptions, name: PolicyExceptions and exemption workflows, match: [policyexception, exception-process]}
+      - {id: cleanuppolicy, name: Kyverno CleanupPolicy for TTL-style deletion, match: [cleanuppolicy]}
+      - {id: generate-rule, name: Kyverno generate rules for per-namespace defaults, match: [generate-rule]}
+      - {id: assignmetadata, name: Gatekeeper mutation (Assign and AssignMetadata), match: [assignmetadata]}
+      - {id: referential-constraints, name: Gatekeeper sync config and referential constraints, match: [referential-constraints]}
+      - {id: conftest, name: Shift-left policy checks with conftest and kyverno CLI, match: [conftest, kyverno-cli]}
+  - id: image-security
+    name: Image signing, scanning and admission gates
+    source: CKS/Supply Chain Security; sigstore/cosign and Trivy docs
+    match: [image-signing, cosign, sigstore, image-scanning, trivy, admission-gate]
+    subtopics:
+      - {id: keyless-signing, name: Keyless signing with Fulcio/Rekor, match: [keyless, fulcio, rekor]}
+      - {id: signature-verification-admission, name: Verifying signatures at admission (Kyverno verifyImages, policy-controller), match: [verifyimages, policy-controller]}
+      - {id: ci-image-scanning, name: CI scanning with severity gating and VEX, match: [vulnerability-scanning, severity-gating, vex]}
+      - {id: in-cluster-scanning, name: In-cluster scanning with Trivy Operator, match: [trivy-operator, vulnerabilityreport]}
+      - {id: registry-allowlists, name: Restricting image registries at admission, match: [registry-allowlist, allowed-registries]}
+      - {id: image-digest, name: Pinning images by digest, match: [image-digest]}
+      - {id: trivy-k8s, name: trivy image and config and k8s scans, match: [trivy-k8s]}
+      - {id: cosign-kms, name: cosign keys in a KMS, match: [cosign-kms]}
+      - {id: notation, name: Signing with Notation (Notary Project), match: [notation]}
+      - {id: kubesec, name: Static manifest analysis with kubesec and kube-linter, match: [kubesec, kube-linter]}
+  - id: secrets-encryption-at-rest
+    name: Secrets encryption at rest / KMS
+    source: CKS/Cluster Hardening; docs/Tasks/Administer Cluster/Encrypting Confidential Data at Rest, Using a KMS provider
+    match: [encryption-at-rest, encryptionconfiguration, kms]
+    subtopics:
+      - {id: encryption-providers, name: aescbc/aesgcm/secretbox providers and ordering, match: [aescbc, aesgcm]}
+      - {id: kms-v2-envelope, name: KMS v2 envelope encryption, match: [kms-v2, envelope-encryption]}
+      - {id: encryption-key-rotation, name: Rotating encryption keys, match: [key-rotation]}
+      - {id: re-encrypt-existing-secrets, name: Re-writing all Secrets after enabling encryption, match: [re-encrypt-secrets, rewrite-secrets]}
+      - {id: verify-encryption-etcd, name: Verifying encryption by reading etcd directly, match: [verify-encryption, etcdctl-get-secret]}
+      - {id: encryption-provider-config, name: Wiring --encryption-provider-config into the apiserver manifest, match: [encryption-provider-config]}
+      - {id: disable-encryption, name: identity provider and decrypting back to plaintext, match: [identity-provider, disable-encryption]}
+      - {id: encrypt-configmaps, name: Encrypting other resources (ConfigMaps and custom resources and wildcards), match: [encrypt-configmaps]}
+      - {id: kms-plugin, name: Deploying a KMS plugin (Vault and cloud KMS), match: [kms-plugin]}
+      - {id: encryption-config-reload, name: Automatic encryption config reload and health checks, match: [encryption-config-reload]}
+  - id: service-account-security
+    name: ServiceAccount token security
+    source: CKS/Cluster Hardening; docs/Tasks/Configure Pods/Configure Service Accounts, Managing Service Accounts
+    match: [service-account, serviceaccount, bound-service-account-token, automountserviceaccounttoken]
+    subtopics:
+      - {id: bound-token-projection, name: Bound tokens, audiences and projected volumes, match: [tokenrequest, audience]}
+      - {id: automount-disable, name: Disabling automount and per-workload ServiceAccounts, match: [per-workload-serviceaccount]}
+      - {id: workload-identity, name: Cloud workload identity (IRSA, GKE WI, Azure WI), match: [workload-identity, irsa]}
+      - {id: legacy-tokens, name: Legacy long-lived tokens and their deprecation, match: [legacy-token]}
+      - {id: kubectl-create-token, name: kubectl create token and ServiceAccounts for external clients, match: [kubectl-create-token, sa-cross-cluster-auth]}
+      - {id: serviceaccount-imagepullsecrets, name: imagePullSecrets attached to ServiceAccounts, match: [serviceaccount-imagepullsecrets]}
+      - {id: token-expiration, name: Projected token expiry and rotation behaviour, match: [token-expiration]}
+      - {id: service-account-issuer-discovery, name: ServiceAccount issuer discovery for external federation, match: [service-account-issuer-discovery]}
+      - {id: default-serviceaccount, name: Locking down the default ServiceAccount, match: [default-serviceaccount]}
+  - id: audit-logging
+    name: API audit logging
+    source: CKS/Monitoring & Logging; docs/Tasks/Debug/Auditing
+    match: [audit-logging, audit-policy, audit-log]
+    subtopics:
+      - {id: audit-stages, name: Audit stages (RequestReceived, ResponseStarted, ResponseComplete, Panic), match: [requestreceived, responsecomplete]}
+      - {id: audit-policy-levels, name: Policy rules with None/Metadata/Request/RequestResponse and omitStages, match: [audit-levels, omitstages, audit-policy-rules]}
+      - {id: audit-log-backend, name: Log backend flags (path, maxage, maxbackup, maxsize) and hostPath mounts, match: [audit-log-maxage, audit-log-path]}
+      - {id: audit-webhook-backend, name: Webhook backend to SIEM, match: [webhook-backend, siem]}
+      - {id: audit-log-analysis, name: Querying audit logs (jq, Falco k8saudit), match: [audit-log-analysis, jq-audit]}
+      - {id: audit-policy-file, name: Enabling audit logging in the kube-apiserver manifest, match: [audit-policy-file]}
+      - {id: managed-audit-logs, name: Audit logs in EKS and GKE and AKS, match: [eks-audit-logs, gke-audit-logs]}
+      - {id: audit-batch, name: Audit volume control with batching and truncation, match: [audit-batch]}
+      - {id: audit-secret-access, name: Detecting Secret reads and exec in audit logs, match: [audit-secret-access]}
+  - id: cis-benchmark
+    name: CIS Kubernetes Benchmark / kube-bench
+    source: CKS/Cluster Setup; CIS Kubernetes Benchmark; kube-bench docs
+    match: [cis-benchmark, kube-bench]
+    subtopics:
+      - {id: kube-bench-run, name: Running kube-bench as a Job and reading results, match: [kube-bench]}
+      - {id: cis-remediation, name: Remediating common findings (apiserver, kubelet, file permissions), match: [cis-remediation]}
+      - {id: managed-cluster-benchmarks, name: CIS benchmarks for EKS/GKE/AKS, match: [cis-eks-benchmark]}
+      - {id: kubescape-scanning, name: Kubescape framework scans, match: [kubescape]}
+      - {id: kube-bench-targets, name: kube-bench --targets and benchmark version selection, match: [kube-bench-targets]}
+      - {id: cis-apiserver-flags, name: CIS kube-apiserver flag remediation, match: [profiling-disabled, authorization-mode]}
+      - {id: cis-kubelet, name: CIS kubelet remediation, match: [cis-kubelet]}
+      - {id: cis-file-permissions, name: CIS file permission and ownership checks, match: [cis-file-permissions]}
+      - {id: compliance-report, name: Continuous compliance reporting with Trivy compliance, match: [compliance-report]}
+  - id: supply-chain
+    name: SBOM, provenance, SLSA
+    source: CKS/Supply Chain Security; SLSA and in-toto specs; syft/cosign docs
+    match: [sbom, provenance, slsa, supply-chain, supply-chain-security]
+    subtopics:
+      - {id: sbom-generation, name: Generating SBOMs (syft, SPDX, CycloneDX), match: [syft, spdx, cyclonedx]}
+      - {id: slsa-provenance-attestations, name: SLSA provenance and in-toto attestations, match: [in-toto, attestation, slsa-levels]}
+      - {id: attestation-verification, name: Verifying attestations at admission, match: [verify-attestations, attestation-verification]}
+      - {id: dockerfile-hardening, name: Hardened multi-stage Dockerfiles and minimal bases, match: [dockerfile-hardening, multi-stage-build]}
+      - {id: dependency-updates, name: Automated dependency and base image updates, match: [dependabot, renovate]}
+      - {id: sbom-attestation, name: Attaching SBOMs to images with cosign attest and oras, match: [oras, sbom-attestation]}
+      - {id: grype, name: Scanning SBOMs with grype, match: [grype]}
+      - {id: distroless-base, name: Minimal base images (distroless and Chainguard), match: [distroless-base, chainguard]}
+      - {id: ko-buildkit, name: Reproducible container builds with ko and BuildKit, match: [ko-build, buildkit]}
+  - id: runtime-security
+    name: Runtime security (Falco, seccomp, AppArmor)
+    source: CKS/Runtime Security; docs/Tutorials/Security/Restrict a Container's Syscalls with seccomp, AppArmor; Falco docs
+    match: [falco, seccomp, apparmor, runtime-security, runtime-threat-detection]
+    subtopics:
+      - {id: seccomp-profiles, name: RuntimeDefault and Localhost seccomp profiles, match: [seccompprofile, runtimedefault, localhostprofile]}
+      - {id: falco-rules, name: Falco rules and detection, match: [falco-rules, syscall-monitoring]}
+      - {id: seccomp-profile-generation, name: Generating seccomp profiles (Inspektor Gadget, security-profiles-operator), match: [seccomp-profile-generation, inspektor-gadget, security-profiles-operator]}
+      - {id: falco-tuning-alerting, name: Falco rule tuning and Falcosidekick outputs, match: [falcosidekick, falco-rule-tuning]}
+      - {id: tetragon-enforcement, name: Tetragon eBPF enforcement, match: [tetragon]}
+      - {id: apparmor-profile, name: Loading AppArmor profiles and the appArmorProfile field, match: [apparmor-profile, apparmor-parser]}
+      - {id: falco-install, name: Installing Falco with the modern eBPF driver, match: [falco-install, modern-ebpf]}
+      - {id: container-immutability, name: Immutable containers at runtime, match: [container-immutability]}
+      - {id: incident-response, name: Responding to a runtime alert (isolate and capture and remove), match: [runtime-incident-response, pod-isolation]}
+      - {id: selinux, name: SELinux options for pods, match: [selinux]}
+  - id: node-kubelet-hardening
+    name: Node and kubelet hardening
+    source: CKS/System Hardening; docs/Reference/Kubelet authentication/authorization
+    match: [kubelet-hardening, node-hardening, anonymous-auth]
+    subtopics:
+      - {id: kubelet-authn-authz, name: Disabling anonymous auth and enabling webhook authorization, match: [webhook-authorization, read-only-port]}
+      - {id: node-authorizer, name: Node authorizer and NodeRestriction, match: [node-authorizer]}
+      - {id: host-os-hardening, name: Host OS hardening (SSH, services, kernel params), match: [os-hardening, host-hardening]}
+      - {id: kubelet-file-permissions, name: Kubelet config/cert file permissions and ownership, match: [kubelet-file-permissions]}
+      - {id: sandboxed-runtimes, name: gVisor/Kata sandboxing for untrusted workloads, match: [sandboxing]}
+      - {id: protectkerneldefaults, name: protectKernelDefaults and kernel sysctls for the kubelet, match: [protectkerneldefaults]}
+      - {id: node-metadata-concealment, name: Protecting node metadata and credentials from pods, match: [node-metadata-concealment]}
+      - {id: attack-surface, name: Reducing node attack surface (packages and services and open ports), match: [attack-surface]}
+      - {id: tls-cipher-suites, name: Kubelet and apiserver TLS minimum version and cipher suites, match: [tlsminversion, tls-cipher-suites]}
+      - {id: kured, name: Node OS patching and reboots with kured, match: [kured]}
+  - id: etcd-security
+    name: etcd security
+    source: CKS/Cluster Setup; etcd docs/Security
+    match: [etcd-security, etcd-tls, etcd-encryption]
+    subtopics:
+      - {id: etcd-peer-client-tls, name: Peer and client TLS, match: [peer-tls, client-tls]}
+      - {id: etcd-network-restriction, name: Restricting 2379/2380 access, match: [etcd-firewall, etcd-port-restriction]}
+      - {id: etcd-auth-roles, name: etcd authentication and roles, match: [etcd-auth, etcd-role]}
+      - {id: etcd-data-at-rest, name: etcd data dir permissions and Secrets encryption linkage, match: [cluster-admin-equivalent]}
+      - {id: etcd-ca, name: etcd CA and certificate generation, match: [etcd-ca]}
+      - {id: client-cert-auth, name: client-cert-auth and trusted-ca-file enforcement, match: [client-cert-auth]}
+      - {id: snapshot-security, name: Securing etcd snapshots that contain every Secret, match: [snapshot-security]}
+      - {id: etcd-cipher-suites, name: etcd TLS cipher suites and minimum version, match: [etcd-cipher-suites]}
+  - id: multi-tenancy-isolation
+    name: Multi-tenancy isolation
+    source: docs/Security/Multi-tenancy
+    match: [multi-tenancy, multitenancy, tenant-isolation, vcluster, hierarchical-namespaces]
+    subtopics:
+      - {id: namespace-tenancy-bundle, name: Namespace-per-tenant with quota, RBAC and NetworkPolicy, match: [soft-multi-tenancy]}
+      - {id: virtual-clusters, name: vcluster virtual clusters, match: [virtual-cluster]}
+      - {id: hierarchical-namespaces, name: Hierarchical Namespace Controller, match: [hnc]}
+      - {id: tenant-operators, name: Capsule and tenant operators, match: [capsule, tenant-operator]}
+      - {id: tenant-showback, name: Tenant showback and chargeback, match: [showback, chargeback]}
+      - {id: tenant-node-pools, name: Dedicated node pools per tenant with taints and admission, match: [tenant-node-pools]}
+      - {id: self-service-namespaces, name: Tenant self-service namespace creation, match: [self-service-namespaces]}
+      - {id: tenant-network-isolation, name: Tenant network isolation patterns, match: [tenant-network-isolation]}
+      - {id: fair-sharing, name: Fair sharing across tenants (Kueue cohorts and APF), match: [fair-sharing]}
+  # --- Observability (CKAD; sig-instrumentation)
+  - id: metrics-pipeline
+    name: metrics-server and the resource metrics API
+    source: CKAD/Observability; docs/Tasks/Debug/Resource metrics pipeline
+    match: [metrics-server, metrics-api, resource-metrics]
+    subtopics:
+      - {id: kubectl-top, name: kubectl top pods/nodes, match: [kubectl-top]}
+      - {id: metrics-server-troubleshooting, name: metrics-server failures (kubelet TLS, --kubelet-insecure-tls), match: [kubelet-insecure-tls, metrics-server-troubleshooting]}
+      - {id: custom-metrics-adapters, name: prometheus-adapter and custom/external metrics APIs, match: [custom-metrics-api, external-metrics-api]}
+      - {id: kubelet-metrics-endpoints, name: Kubelet /metrics, /metrics/cadvisor and /metrics/resource endpoints, match: [kubelet-metrics-endpoints, metrics-resource-endpoint]}
+      - {id: metrics-server-install, name: Installing metrics-server with HA and the right args, match: [metrics-server-install]}
+      - {id: top-sort-by, name: kubectl top --containers and --sort-by, match: [top-sort-by]}
+      - {id: metrics-k8s-io, name: Querying the metrics.k8s.io API directly, match: [metrics-k8s-io]}
+      - {id: metrics-server-scaling, name: Sizing metrics-server for large clusters, match: [metrics-server-scaling]}
+  - id: kube-state-metrics
+    name: kube-state-metrics
+    source: sig-instrumentation; kube-state-metrics docs
+    match: [kube-state-metrics, ksm]
+    subtopics:
+      - {id: ksm-cardinality, name: Label cardinality and metric allowlists, match: [label-cardinality, metric-allowlist]}
+      - {id: ksm-sharding, name: Sharding kube-state-metrics, match: [sharding]}
+      - {id: custom-resource-state-metrics, name: CustomResourceState metrics for CRDs, match: [customresourcestate, custom-resource-metrics]}
+      - {id: ksm-alerts, name: Key KSM alerts (replicas mismatch, job failed, pod not ready), match: [ksm-alerts, kubedeploymentreplicasmismatch]}
+      - {id: ksm-install, name: Installing kube-state-metrics and its RBAC, match: [ksm-install]}
+      - {id: metric-labels-allowlist, name: Exposing labels and annotations with metric-labels-allowlist, match: [metric-labels-allowlist]}
+      - {id: ksm-promql, name: Common PromQL over kube-state-metrics, match: [ksm-promql]}
+  - id: prometheus-operator
+    name: Prometheus Operator CRDs
+    source: ecosystem (CNCF); prometheus-operator.dev docs
+    match: [prometheus-operator, servicemonitor, podmonitor, prometheusrule]
+    subtopics:
+      - {id: servicemonitor-podmonitor, name: ServiceMonitor/PodMonitor selectors and relabeling, match: [relabeling, scrape-config]}
+      - {id: prometheusrule-alertmanagerconfig, name: PrometheusRule and AlertmanagerConfig, match: [alertmanagerconfig]}
+      - {id: prometheus-cr-tuning, name: Prometheus CR retention, storage, sharding and resources, match: [prometheus-cr, prometheus-retention, prometheus-sharding]}
+      - {id: scrapeconfig-crd, name: ScrapeConfig CRD and additionalScrapeConfigs, match: [scrapeconfig-crd, additionalscrapeconfigs]}
+      - {id: long-term-storage, name: Thanos/Mimir remote write, match: [thanos, remote-write]}
+      - {id: kube-prometheus-stack, name: Installing kube-prometheus-stack, match: [kube-prometheus-stack]}
+      - {id: target-discovery, name: Debugging ServiceMonitors whose targets never appear, match: [target-discovery]}
+      - {id: blackbox-exporter, name: Probe CRD with blackbox exporter, match: [blackbox-exporter]}
+      - {id: control-plane-scraping, name: Scraping control-plane components (bind addresses and certs), match: [control-plane-scraping]}
+  - id: logging-architecture
+    name: Cluster logging architecture
+    source: docs/Cluster Administration/Logging Architecture
+    match: [logging, fluent-bit, fluentd, loki, log-aggregation]
+    subtopics:
+      - {id: node-agent-logging, name: Node-level agents (Fluent Bit/Fluentd DaemonSets), match: [tail-input, multiline-parsing]}
+      - {id: loki-stack, name: Loki with Promtail/Alloy, match: [promtail, logql]}
+      - {id: sidecar-stdout-logging, name: Sidecar log streaming and logging to stdout, match: [logging-sidecar, stdout-logging]}
+      - {id: elasticsearch-opensearch-logging, name: EFK/OpenSearch logging stacks, match: [efk, opensearch, elasticsearch-logging]}
+      - {id: cloud-log-shipping, name: Shipping logs to cloud services (CloudWatch, Cloud Logging), match: [cloudwatch-logs, fluent-bit-cloudwatch]}
+      - {id: otel-vector-logs, name: Vector and OpenTelemetry Collector log pipelines, match: [vector, otel-logs]}
+      - {id: kubernetes-filter, name: Fluent Bit kubernetes filter metadata enrichment, match: [kubernetes-filter]}
+      - {id: cri-log-format, name: CRI log format and node log file layout, match: [cri-log-format]}
+      - {id: log-backpressure, name: Buffering and backpressure in log agents, match: [log-backpressure]}
+  - id: tracing
+    name: Distributed tracing
+    source: docs/Cluster Administration/Traces for Kubernetes System Components; OpenTelemetry docs
+    match: [tracing, opentelemetry, otel, distributed-tracing]
+    subtopics:
+      - {id: otel-operator-instrumentation, name: OpenTelemetry Operator auto-instrumentation, match: [otel-operator, auto-instrumentation]}
+      - {id: tracing-backends, name: Deploying Tempo/Jaeger backends, match: [tempo, grafana-tempo]}
+      - {id: component-tracing, name: kube-apiserver and kubelet tracing (TracingConfiguration), match: [apiserver-tracing, tracingconfiguration]}
+      - {id: otel-collector-pipelines, name: Collector pipelines and tail-based sampling, match: [tail-sampling, otel-collector-pipeline]}
+      - {id: trace-context-propagation, name: W3C trace context propagation through ingress and services, match: [trace-context-propagation, w3c-traceparent]}
+      - {id: otel-agent-gateway, name: Collector agent vs gateway deployment modes, match: [otel-agent-gateway]}
+      - {id: k8sattributesprocessor, name: k8sattributes processor for pod metadata, match: [k8sattributesprocessor]}
+      - {id: jaeger, name: Jaeger as a tracing backend, match: [jaeger]}
+      - {id: exemplars, name: Exemplars and trace-log correlation, match: [exemplars]}
+  - id: slo-dashboards
+    name: SLO dashboards for workloads
+    source: sig-instrumentation (practice); kubernetes-mixin; Grafana docs
+    match: [slo, dashboards, grafana-dashboard]
+    subtopics:
+      - {id: burn-rate-alerts, name: Multi-window multi-burn-rate alerts, match: [burn-rate, error-budget]}
+      - {id: dashboard-provisioning, name: Grafana dashboards as code (ConfigMap sidecar, Grafana Operator), match: [dashboard-provisioning, grafana-operator, dashboard-configmap]}
+      - {id: kubernetes-mixin, name: kubernetes-mixin standard dashboards and rules, match: [kubernetes-mixin, mixins]}
+      - {id: saturation-alerts, name: Saturation alerts (throttling, memory near limit, disk), match: [saturation-alerts]}
+      - {id: slo-generators, name: Sloth/Pyrra SLO generators, match: [sloth, pyrra]}
+      - {id: sli-definition, name: Defining SLIs from ingress and mesh metrics, match: [sli-definition]}
+      - {id: golden-signals, name: Golden-signals dashboards per workload, match: [golden-signals-dashboard]}
+      - {id: capacity-dashboards, name: Cluster capacity dashboards (requests vs allocatable), match: [capacity-dashboards]}
+      - {id: runbook-url, name: Alert hygiene and runbook links, match: [runbook-url]}
+  # --- Extending Kubernetes (docs; sig-api-machinery)
+  - id: crds
+    name: CustomResourceDefinitions
+    source: docs/Extending Kubernetes/Custom Resources; docs/Tasks/Extend Kubernetes/CRDs
+    match: [crd, crds, customresourcedefinition, custom-resource]
+    subtopics:
+      - {id: structural-schema-validation, name: Structural schemas, pruning, defaulting, CEL validation, match: [structural-schema, cel-validation]}
+      - {id: crd-subresources, name: status and scale subresources, match: [status-subresource, scale-subresource]}
+      - {id: crd-multi-version, name: Multiple versions and conversion webhooks, match: [conversion-webhook, storage-version]}
+      - {id: crd-printer-columns, name: Printer columns, shortNames and categories, match: [printer-columns, shortnames]}
+      - {id: crd-lifecycle-helm, name: Installing/upgrading CRDs via Helm and deletion risk, match: [helm-crds, crd-upgrade, crd-deletion]}
+      - {id: api-group-design, name: API group naming and resource design, match: [api-group-design, crd-naming]}
+      - {id: kubectl-explain-crds, name: kubectl explain and OpenAPI for CRDs, match: [kubectl-explain]}
+      - {id: validation-ratcheting, name: CRD validation ratcheting, match: [validation-ratcheting]}
+      - {id: x-kubernetes-extensions, name: x-kubernetes-preserve-unknown-fields and int-or-string and list-type, match: [preserve-unknown-fields, x-kubernetes-list-type]}
+      - {id: selectablefields, name: selectableFields for field selectors on custom resources, match: [selectablefields]}
+      - {id: annotations-too-long, name: CRD apply errors (annotations too long and unknown fields), match: [annotations-too-long]}
+  - id: operators-controllers
+    name: Operators and custom controllers
+    source: docs/Extending Kubernetes/Operator pattern; kubebuilder book; controller-runtime docs
+    match: [operator, operators, controller, kubebuilder, controller-runtime, reconcile-loop, reconciliation-loop]
+    subtopics:
+      - {id: kubebuilder-scaffolding, name: Kubebuilder project scaffolding, match: [controller-gen, markers]}
+      - {id: reconcile-design, name: Idempotent reconcile and requeue strategies, match: [requeue, idempotency]}
+      - {id: operator-finalizers, name: Finalizers in controllers, match: [controllerutil-addfinalizer, deletiontimestamp]}
+      - {id: operator-leader-election, name: Leader election and HA, match: [leader-election]}
+      - {id: operator-status-conditions, name: Status conditions and observedGeneration, match: [status-conditions, observedgeneration]}
+      - {id: operator-metrics, name: controller-runtime metrics and kube-rbac-proxy, match: [controller-runtime-metrics, kube-rbac-proxy]}
+      - {id: operator-upgrades, name: Operator upgrade strategies and backward compatibility, match: [operator-upgrade]}
+      - {id: owns-watches-mapping, name: Owns/Watches and EnqueueRequestsFromMapFunc, match: [owns-watches, enqueuerequestsfrommapfunc]}
+      - {id: kubebuilder-webhooks, name: Defaulting and validating webhooks in kubebuilder, match: [kubebuilder-webhooks]}
+      - {id: predicates, name: Event filtering with predicates (GenerationChangedPredicate), match: [predicates]}
+      - {id: event-recorder, name: Recording Kubernetes Events from controllers, match: [event-recorder]}
+  - id: api-versioning-deprecation
+    name: API versioning and deprecation
+    source: docs/Reference/Using API/Deprecation Guide and Policy; kubectl convert reference
+    match: [api-deprecation, api-versioning, kubectl-convert, deprecated-apis, crd-versioning]
+    subtopics:
+      - {id: kubectl-convert-manifests, name: kubectl convert for manifest migration, match: [kubectl-convert]}
+      - {id: deprecated-api-detection, name: Detecting deprecated API usage (pluto, kubent, apiserver metrics), match: [pluto, kubent]}
+      - {id: api-groups-stability, name: API groups and alpha/beta/stable lifecycle rules, match: [api-groups, beta-api-policy]}
+      - {id: crd-version-migration, name: CRD version migration and storage version, match: [storage-migration, multi-version-crd]}
+      - {id: removed-apis, name: Removed APIs by release and their replacements, match: [removed-apis]}
+      - {id: apiserver-requested-deprecated-apis, name: Deprecation warnings and the apiserver_requested_deprecated_apis metric, match: [apiserver-requested-deprecated-apis]}
+      - {id: storageversionmigration, name: Storage version migration of existing objects, match: [storageversionmigration]}
+      - {id: api-versions, name: API discovery with kubectl api-versions and api-resources, match: [api-versions]}
+      - {id: mapkubeapis, name: helm mapkubeapis for releases stuck on removed APIs, match: [mapkubeapis]}
+  - id: kubectl-object-management
+    name: kubectl, imperative vs declarative, server-side apply
+    source: CKAD/Application Deployment; kubectl reference; docs/Tasks/Manage Kubernetes Objects
+    match: [kubectl, server-side-apply, declarative, imperative, kubectl-apply]
+    subtopics:
+      - {id: kubectl-output-formatting, name: jsonpath, custom-columns and go-template output, match: [jsonpath, custom-columns, go-template]}
+      - {id: kubectl-patch-types, name: kubectl patch (strategic, merge, JSON patch), match: [json-patch, merge-patch, strategic-merge]}
+      - {id: kubectl-plugins-krew, name: kubectl plugins and krew, match: [krew, kubectl-plugins]}
+      - {id: kubectl-diff-dry-run, name: kubectl diff and server-side dry-run, match: [kubectl-diff, dry-run-server]}
+      - {id: ssa-field-managers, name: Server-side apply field managers and conflicts, match: [field-manager, managedfields, ssa-conflict]}
+      - {id: imperative-generators, name: kubectl run/create/expose generators, match: [kubectl-run, kubectl-expose, kubectl-create]}
+      - {id: applyset, name: kubectl apply --prune with ApplySets, match: [applyset, kubectl-prune]}
+      - {id: kubectl-replace-edit, name: kubectl edit and replace --force, match: [kubectl-replace, kubectl-edit]}
+      - {id: kubectl-wait, name: kubectl wait --for condition and jsonpath, match: [kubectl-wait]}
+      - {id: dry-run-client, name: Generating YAML with --dry-run=client -o yaml, match: [dry-run-client]}
+      - {id: kubectl-completion, name: kubectl completion and aliases for speed, match: [kubectl-completion]}
+  - id: aggregation-layer
+    name: Aggregation layer and extension API servers
+    source: docs/Extending Kubernetes/API Extension/Aggregation Layer; docs/Tasks/Extend Kubernetes/Configure the Aggregation Layer
+    match: [aggregation-layer, apiservice, extension-apiserver, custom-metrics-api, external-metrics]
+    subtopics:
+      - {id: apiservice-registration, name: APIService objects and aggregated discovery, match: [aggregated-api]}
+      - {id: apiservice-troubleshooting, name: FailedDiscoveryCheck and aggregation certificates, match: [faileddiscoverycheck, apiservice-unavailable, requestheader-client-ca]}
+      - {id: custom-metrics-apiservice, name: Custom/external metrics APIServices, match: [prometheus-adapter]}
+      - {id: extension-apiserver-build, name: Building an extension API server (sample-apiserver), match: [sample-apiserver, extension-api-server-build]}
+      - {id: front-proxy, name: front-proxy and requestheader flags on kube-apiserver, match: [front-proxy, proxy-client-cert]}
+      - {id: enable-aggregator-routing, name: --enable-aggregator-routing without kube-proxy on control planes, match: [enable-aggregator-routing]}
+      - {id: grouppriorityminimum, name: APIService groupPriorityMinimum and versionPriority, match: [grouppriorityminimum]}
+      - {id: stale-apiservice, name: Removing stale APIServices that break discovery and namespace deletion, match: [stale-apiservice]}
+  # --- Packaging & delivery (docs/Manage objects; CKAD/Deployment)
+  - id: helm
+    name: Helm
+    source: CKAD/Application Deployment; helm.sh docs (commands, chart guide, best practices)
+    match: [helm, helm-chart, helm-charts]
+    subtopics:
+      - {id: chart-templates, name: Chart templates, helpers and values schema, match: [go-templates, values-schema-json]}
+      - {id: helm-hooks, name: Helm hooks and test hooks, match: [helm-hooks, helm-test]}
+      - {id: oci-charts, name: OCI registries for charts, match: [helm-push, oci-registry]}
+      - {id: helm-release-operations, name: install/upgrade --atomic, rollback, history and stuck pending-upgrade, match: [helm-rollback, pending-upgrade, helm-atomic, helm-history]}
+      - {id: helm-values-precedence, name: Values precedence (-f, --set, --set-file) and layering, match: [helm-values-precedence, set-vs-values]}
+      - {id: helm-release-storage, name: Release storage (Secrets driver) and size limits, match: [helm-release-secrets, helm-storage-driver]}
+      - {id: chart-dependencies, name: Chart dependencies and umbrella charts, match: [chart-dependencies, umbrella-chart]}
+      - {id: helmfile, name: Helmfile for multi-release environments, match: [helmfile]}
+      - {id: helm-diff, name: helm diff and helm template for previewing changes, match: [helm-diff, helm-template]}
+      - {id: helm-lint, name: helm lint and --debug rendering errors, match: [helm-lint]}
+  - id: kustomize
+    name: Kustomize
+    source: CKAD/Application Deployment; kubectl.docs.kubernetes.io/references/kustomize
+    match: [kustomize, overlays]
+    subtopics:
+      - {id: bases-overlays, name: Bases and environment overlays, match: [bases-and-overlays, environment-overlays]}
+      - {id: kustomize-patches, name: Strategic merge and JSON6902 patches, match: [strategic-merge-patch, json6902]}
+      - {id: kustomize-generators, name: configMapGenerator/secretGenerator and hash suffixes, match: [configmapgenerator, secretgenerator]}
+      - {id: kustomize-components-replacements, name: Components and replacements, match: [components, replacements]}
+      - {id: kustomize-transformers, name: images, namePrefix/nameSuffix and label transformers, match: [images-transformer, nameprefix, commonlabels]}
+      - {id: kustomize-remote-bases, name: Remote bases pinned to refs, match: [remote-base, kustomize-remote]}
+      - {id: apply-k, name: kubectl kustomize and apply -k vs standalone kustomize, match: [apply-k, kubectl-kustomize]}
+      - {id: namespace-transformer, name: Namespace transformer behaviour and pitfalls, match: [namespace-transformer]}
+      - {id: patch-target, name: Patches with target selectors across many resources, match: [patch-target]}
+      - {id: kustomize-edit, name: kustomize edit set image in CI pipelines, match: [kustomize-edit]}
+  - id: gitops
+    name: GitOps (Argo CD, Flux)
+    source: ecosystem (CNCF); argo-cd.readthedocs.io; fluxcd.io docs
+    match: [gitops, argo-cd, argocd, flux, fluxcd]
+    subtopics:
+      - {id: applicationsets, name: ApplicationSet generators, match: [applicationset, cluster-generator]}
+      - {id: flux-controllers, name: Flux source/kustomize/helm controllers, match: [kustomization-cr, helmrelease]}
+      - {id: gitops-secrets, name: Secrets in GitOps (SOPS, Sealed Secrets, ESO), match: [sops, sealed-secrets]}
+      - {id: drift-self-heal, name: Drift detection and self-heal, match: [drift-detection, self-heal]}
+      - {id: argocd-sync-waves-hooks, name: Sync waves, phases and resource hooks, match: [sync-waves, sync-hooks, argocd-hooks]}
+      - {id: argocd-projects-rbac-sso, name: AppProjects, RBAC and SSO, match: [appproject, argocd-rbac, argocd-sso]}
+      - {id: argocd-ha-scaling, name: Argo CD HA install and scaling (repo-server, controller sharding), match: [argocd-ha, argocd-scaling]}
+      - {id: argocd-notifications-health, name: Notifications and custom health checks, match: [argocd-notifications, custom-health-check]}
+      - {id: argocd-cli, name: argocd app sync and diff and rollback CLI operations, match: [argocd-cli]}
+      - {id: app-of-apps, name: App of apps pattern, match: [app-of-apps]}
+  - id: deployment-strategies
+    name: Canary, blue/green, progressive delivery
+    source: CKAD/Application Deployment; Argo Rollouts and Flagger docs
+    match: [canary, blue-green, progressive-delivery, argo-rollouts]
+    subtopics:
+      - {id: argo-rollouts-strategies, name: Argo Rollouts canary/blue-green specs, match: [flagger, analysis]}
+      - {id: analysis-templates, name: AnalysisTemplates and metric providers, match: [analysistemplate, analysis-template]}
+      - {id: canary-traffic-routing, name: Canary traffic routing with ingress-nginx/Istio, match: [canary-traffic-routing, nginx-canary-annotations]}
+      - {id: rollout-operations, name: kubectl argo rollouts promote/abort/undo, match: [kubectl-argo-rollouts, rollout-promote]}
+      - {id: blue-green-selector-swap, name: Blue/green via Service selector swap, match: [selector-swap]}
+      - {id: header-based-canary, name: Header and cookie-based canary routing, match: [header-based-canary]}
+      - {id: traffic-mirroring, name: Traffic mirroring and shadow deployments, match: [traffic-mirroring]}
+      - {id: openfeature, name: Feature flags with OpenFeature vs deployment strategies, match: [openfeature]}
+      - {id: rollout-experiment, name: Argo Rollouts Experiments, match: [rollout-experiment]}
+  # --- Multi-cluster, cost, platform (sig-multicluster)
+  - id: multi-cluster
+    name: Multi-cluster management
+    source: sig-multicluster; MCS API; Karmada/OCM docs
+    match: [multi-cluster, multicluster, fleet, submariner, federation]
+    subtopics:
+      - {id: multi-cluster-services, name: MCS API ServiceExport/ServiceImport, match: [serviceexport, serviceimport, mcs-api]}
+      - {id: cluster-mesh-networking, name: Cilium ClusterMesh and Submariner, match: [clustermesh]}
+      - {id: fleet-gitops, name: Fleet GitOps (ApplicationSets, Rancher Fleet), match: [fleet-management, rancher]}
+      - {id: multi-cluster-scheduling, name: Karmada/OCM/Liqo workload scheduling, match: [karmada, open-cluster-management, liqo]}
+      - {id: cluster-registration, name: Cluster registration and fleet kubeconfig management, match: [cluster-registration, fleet-kubeconfig]}
+      - {id: cluster-failover, name: Multi-cluster DR failover runbooks, match: [cluster-failover, dr-failover]}
+      - {id: clusterset-local, name: Cross-cluster DNS with clusterset.local, match: [clusterset-local]}
+      - {id: fleet-observability, name: Fleet-wide observability across clusters, match: [fleet-observability]}
+      - {id: fleet-policy, name: Distributing policy across a fleet, match: [fleet-policy]}
+  - id: cost-optimisation
+    name: Cost optimisation and FinOps
+    source: practice (CNCF FinOps); OpenCost/Kubecost docs
+    match: [cost, finops, kubecost, rightsizing, bin-packing, spot]
+    subtopics:
+      - {id: cost-allocation-tools, name: Kubecost/OpenCost installation and allocation, match: [opencost, kubecost-install]}
+      - {id: spot-bin-packing, name: Spot instances and bin-packing, match: [spot-instances, consolidation]}
+      - {id: request-rightsizing, name: Right-sizing requests, match: [right-sizing, goldilocks]}
+      - {id: commitment-discounts, name: Reserved/committed capacity for baseline nodes, match: [savings-plans, reserved-capacity]}
+      - {id: cost-allocation-labels, name: Cost allocation labels and namespace budgets, match: [cost-allocation-labels]}
+      - {id: idle-workloads, name: Finding idle and abandoned workloads, match: [idle-workloads]}
+      - {id: graviton, name: ARM64 and Graviton node pools for cost, match: [graviton, arm64-nodes]}
+      - {id: cross-zone-traffic, name: Cross-zone traffic cost reduction, match: [cross-zone-traffic]}
+      - {id: off-hours-scaling, name: Scaling non-production down off-hours, match: [off-hours-scaling, kube-downscaler]}
+  - id: platform-engineering
+    name: Internal developer platforms on Kubernetes
+    source: practice (CNCF platforms WG); Backstage, Crossplane, Argo Workflows, Tekton docs
+    match: [backstage, crossplane, internal-developer-platform, idp, golden-path]
+    subtopics:
+      - {id: backstage-catalog, name: Backstage catalog and TechDocs, match: [software-catalog, techdocs]}
+      - {id: scaffolder-templates, name: Scaffolder golden-path templates, match: [scaffolder]}
+      - {id: crossplane-compositions, name: Crossplane XRDs and Compositions, match: [composition, xrd]}
+      - {id: kubernetes-native-ci, name: Argo Workflows and Tekton pipelines, match: [argo-workflows, tekton]}
+      - {id: platform-orchestrators, name: Kratix and Port-style platform orchestrators, match: [kratix, port-io]}
+      - {id: workload-specifications, name: Score and workload specifications, match: [score-spec, humanitec]}
+      - {id: providerconfig, name: Crossplane providers and ProviderConfig credentials, match: [providerconfig]}
+      - {id: backstage-kubernetes-plugin, name: Backstage Kubernetes plugin, match: [backstage-kubernetes-plugin]}
+      - {id: argo-events, name: Argo Events sensors and event sources, match: [argo-events]}
+  # --- Windows and edge (sig-windows; docs)
+  - id: windows-nodes
+    name: Windows nodes and containers
+    source: docs/Windows in Kubernetes; sig-windows
+    match: [windows, windows-nodes, windows-containers]
+    subtopics:
+      - {id: gmsa, name: gMSA for Windows pods, match: [gmsa]}
+      - {id: hostprocess-containers, name: HostProcess containers, match: [hostprocess]}
+      - {id: windows-node-join, name: Joining Windows nodes (containerd install, kubeadm join), match: [windows-node-join, windows-containerd]}
+      - {id: windows-image-compat, name: Windows image OS version compatibility and scheduling, match: [windows-image-compat, os-version-match]}
+      - {id: windows-storage, name: Windows storage (SMB CSI, Azure Files), match: [smb-csi, windows-storage]}
+      - {id: windows-node-selector, name: Scheduling onto Windows nodes with kubernetes.io/os and taints, match: [windows-node-selector]}
+      - {id: hns, name: Windows container networking (HNS and Calico and Flannel), match: [hns]}
+      - {id: runasusername, name: windowsOptions runAsUserName, match: [runasusername]}
+      - {id: windows-node-troubleshooting, name: Windows node troubleshooting, match: [windows-node-troubleshooting]}
+  - id: edge-lightweight-distros
+    name: Edge and lightweight distributions
+    source: ecosystem (CNCF); k3s, kind, minikube, MicroK8s, KubeEdge, Talos docs
+    match: [k3s, k0s, microk8s, kind, minikube, edge]
+    subtopics:
+      - {id: k3s-install-ha, name: k3s install with embedded etcd HA, match: [k3s-install, k3s-ha]}
+      - {id: kind-for-ci, name: kind clusters for CI (config, multi-node, image loading), match: [kind-config, kind-load]}
+      - {id: minikube-local, name: minikube drivers and addons, match: [minikube-addons, minikube-driver]}
+      - {id: microk8s-addons, name: MicroK8s addons and HA, match: [microk8s-addons]}
+      - {id: kubeedge, name: KubeEdge and offline edge operation, match: [kubeedge, edge-offline-operation]}
+      - {id: talos-linux, name: Talos Linux immutable nodes, match: [talos]}
+      - {id: k0sctl, name: k0s clusters with k0sctl, match: [k0sctl]}
+      - {id: k3d, name: k3d clusters in Docker, match: [k3d]}
+      - {id: k3s-config, name: k3s config.yaml and disabling bundled components, match: [k3s-config]}

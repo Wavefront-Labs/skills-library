@@ -1,0 +1,752 @@
+# Canonical coverage spec: Game Design (whole field, all eight craft products).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (book tables of contents and chapter
+# sub-sections, the GDC design-track topic taxonomy, published playtesting / user-research method
+# lists, the TTRPG Safety Toolkit, the larp design literature), not from what we happened to write.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure.
+# Distinct from computing-software game programming (engine code): this spec is design craft.
+subject: game-design
+scope:
+  category: creative-arts
+  field: game-design
+  products: [systems-and-mechanics, level-design, narrative-design, tabletop-game-design, puzzle-design, playtesting-and-balance, game-mastering, larp-facilitation]
+sources:
+  - "Schell, The Art of Game Design - A Book of Lenses (3rd ed.) chapters - 2 Experience, 4 Game, 5 Elemental tetrad, 6 Theme, 7 Idea, 8 Iteration, 9 Player, 10 Mind, 11 Motivation, 12 Mechanics (space, time, objects, actions, rules, skill, chance), 13 Balance (twelve types, methodologies), 14 Puzzles (principles), 15 Interface, 16 Interest curves, 17-18 Story and indirect control, 19-21 Worlds characters spaces, 23-24 Other players and communities, 26 Documents, 27 Playtesting, 30 Pitch, 31 Profit, 32-33 Transformation and responsibility"
+  - "Salen and Zimmerman, Rules of Play - Unit 2 Rules (constituative, operational, implicit rules; emergent systems; uncertainty; information; feedback loops; game theory; conflict; breaking the rules), Unit 3 Play (meaningful play, pleasure, narrative play, simulation, social play)"
+  - "Koster, A Theory of Fun for Game Design - fun as learning patterns, chunking, boredom, the ingredients of a game (preparation, sense of space, core mechanic, range of challenges, abilities required, skill in use)"
+  - "Hunicke, LeBlanc and Zubek, MDA - A Formal Approach to Game Design and Game Research (2004); Fullerton, Game Design Workshop (formal elements, dramatic elements, system dynamics, conceptualisation, prototyping, playtesting, functionality / completeness / balance, fun and accessibility)"
+  - "Rogers, Level Up! The Guide to Great Video Game Design (2nd ed.) - GDD and ten-pager, the 3Cs (character, camera, controls), writing the story, level design (theme, layout, the Metroidvania, beat charts), combat, enemy design, boss design, mechanics and hazards, power-ups and unlockables, multiplayer, pitching"
+  - "Swink, Game Feel - real-time control, simulated space, polish, metaphor, rules; input and response; Jonasson and Purho, Juice it or lose it (GDC Europe 2012)"
+  - "Totten, An Architectural Approach to Level Design - spatial types, molding player behavior, landmarks and wayfinding, pacing and intensity; Smith and Worch, What Happened Here? Environmental Storytelling (GDC 2010)"
+  - "Heussner, Finley, Hepler and Lemay, The Game Narrative Toolbox; Short and Adams, Procedural Storytelling in Game Design; inkle Ink and Twine documentation; Jenkins, Game Design as Narrative Architecture"
+  - "Engelstein and Shalev, Building Blocks of Tabletop Game Design - game structure, turn order, actions, resolution, game end and victory, uncertainty, economics, auctions, worker placement, movement, area control, set collection, card mechanisms; Kobold Guide to Board Game Design (theme, components, playtesting, rulebooks, pitching, publishing); Garfield, Elias and Gutschera, Characteristics of Games"
+  - "Schreiber and Romero, Game Balance (2021) and Schreiber, Game Balance Concepts course - cost curves, transitive and intransitive mechanics, probability, spreadsheets and simulation, progression, economies, competitive balance; Drachen, Mirza-Babaei and Nacke, Games User Research - usability testing, RITE, surveys, heuristics, telemetry, physiological measures"
+  - "Nicholson, Peeking Behind the Locked Door - A Survey of Escape Room Facilities (2015) and Ask Why - escape-room puzzle structures; Ron Gilbert, Why Adventure Games Suck (1989); Scott Kim puzzle design talks"
+  - "Dungeon Master's Guide 5e (2014) parts - Master of Worlds, Master of Adventures, Master of Rules (running the game, combat, encounters, rewards); Shea, Return of the Lazy Dungeon Master; Alexander, So You Want to Be a Game Master (three clue rule, node-based scenario design); Shaw and Bryant, TTRPG Safety Toolkit"
+  - "Koljonen, Stenros et al., Larp Design - Creating Role-Play Experiences (2019) sections - vision, structure, characters, workshops, safety, runtime, logistics, debrief; Nordic Larp; Larpwriter Summer School materials"
+  - "GDC Vault Design track topic taxonomy - systems, level, narrative, UX and accessibility, monetisation and live ops, multiplayer, prototyping, documentation and pitching"
+topics:
+  # --- systems-and-mechanics
+  - id: sm-design-pillars
+    name: Experience goals, design pillars and theme
+    source: Schell ch2 Experience, ch6 Theme; Rogers ten-pager
+    match: [design-pillars, experience-goals]
+    subtopics:
+      - {id: sm-dp-pillars, name: Writing 3-5 design pillars and using them to cut features, match: [pillar-statements]}
+      - {id: sm-dp-essential, name: Defining the essential experience (Lens of the Essential Experience), match: [essential-experience]}
+      - {id: sm-dp-theme, name: Unifying theme and resonance across all elements, match: [unifying-theme]}
+      - {id: sm-dp-high-concept, name: High concept and X-statement, match: [high-concept, x-statement]}
+  - id: sm-frameworks
+    name: Analytical frameworks (MDA, elemental tetrad, formal elements)
+    source: Hunicke/LeBlanc/Zubek MDA; Schell ch5; Fullerton ch3
+    match: [mda-framework, elemental-tetrad]
+    subtopics:
+      - {id: sm-fw-kinds-of-fun, name: Eight kinds of fun as aesthetic targets, match: [eight-kinds-of-fun]}
+      - {id: sm-fw-dynamics, name: Tracing dynamics from mechanics to aesthetics, match: [dynamics-analysis]}
+      - {id: sm-fw-tetrad, name: Tetrad analysis (mechanics / story / aesthetics / technology), match: [tetrad-analysis]}
+      - {id: sm-fw-formal, name: Formal elements (players / objectives / procedures / rules / resources / conflict / boundaries / outcome), match: [formal-elements]}
+  - id: sm-ideation
+    name: Ideation and concept generation
+    source: Schell ch7 The Game Begins with an Idea; Fullerton ch6 Conceptualization
+    match: [game-ideation, brainstorming-games]
+    subtopics:
+      - {id: sm-id-constraints, name: Constraint-based ideation, match: [design-constraints]}
+      - {id: sm-id-jam, name: Game jam scoping and rapid concepting, match: [game-jam]}
+      - {id: sm-id-one-page, name: One-page concept document, match: [one-page-design, one-sheet]}
+      - {id: sm-id-lenses, name: Critiquing a concept with design lenses, match: [design-lenses, lens-review]}
+  - id: sm-prototyping
+    name: Prototyping and iteration loop
+    source: Schell ch8 The Game Improves through Iteration; Fullerton ch7
+    match: [game-prototyping, prototype-iteration]
+    subtopics:
+      - {id: sm-pr-paper-digital, name: Paper prototyping a digital game, match: [digital-paper-prototype]}
+      - {id: sm-pr-vertical-slice, name: Vertical slice scope and acceptance, match: [vertical-slice]}
+      - {id: sm-pr-toy, name: Toy-first prototypes (find the fun before the goal), match: [toy-prototype]}
+      - {id: sm-pr-question, name: Risk-driven prototypes that answer one question, match: [prototype-question, risk-prototype]}
+  - id: sm-core-loop
+    name: Core loops and session structure
+    source: GDC design track (core loop talks); Schell ch16
+    match: [core-loop, gameplay-loop]
+    subtopics:
+      - {id: sm-cl-session, name: Session length and session design, match: [session-design]}
+      - {id: sm-cl-meta, name: Meta loop around the core loop, match: [meta-loop]}
+      - {id: sm-cl-diagram, name: Loop diagramming, match: [loop-diagram]}
+      - {id: sm-cl-appointment, name: Appointment mechanics and return hooks, match: [appointment-mechanics]}
+  - id: sm-mechanics-basics
+    name: Basic mechanics (space, time, objects, actions, goals)
+    source: Schell ch12 Some Elements Are Game Mechanics
+    match: [schell-mechanics, game-mechanics-basics]
+    subtopics:
+      - {id: sm-mb-space, name: Game space (discrete / continuous / nested), match: [game-space]}
+      - {id: sm-mb-time, name: Time mechanics (turns / real time / clocks / races), match: [time-mechanics]}
+      - {id: sm-mb-states, name: Objects / attributes / state diagrams, match: [object-states, state-diagram-design]}
+      - {id: sm-mb-emergence, name: Operative vs resultant actions and emergent verbs, match: [resultant-actions, emergent-gameplay]}
+      - {id: sm-mb-goals, name: Writing concrete achievable rewarding goals, match: [game-goals]}
+  - id: sm-chance
+    name: Chance and probability in design
+    source: Schell ch12 Chance; Schreiber Game Balance ch Probability; Characteristics of Games
+    match: [probability-design, randomness-design]
+    subtopics:
+      - {id: sm-ch-dice, name: Dice probability distributions, match: [dice-probability, anydice]}
+      - {id: sm-ch-input-output, name: Input vs output randomness, match: [input-randomness, output-randomness]}
+      - {id: sm-ch-prd, name: Pseudo-random distribution and bad-luck protection, match: [pseudo-random-distribution, bad-luck-protection]}
+      - {id: sm-ch-ev, name: Expected value calculations, match: [expected-value]}
+      - {id: sm-ch-draw, name: Card draw odds (hypergeometric), match: [hypergeometric, draw-odds]}
+  - id: sm-meaningful-choice
+    name: Decisions and meaningful choice
+    source: Rules of Play ch3 Meaningful Play, ch28 Game Theory; Schell ch13 Meaningful Choices
+    match: [meaningful-choice, interesting-decisions]
+    subtopics:
+      - {id: sm-mc-dominant, name: Detecting and removing dominant strategies, match: [dominant-strategy]}
+      - {id: sm-mc-risk-reward, name: Risk-reward trade-offs, match: [risk-reward]}
+      - {id: sm-mc-triangularity, name: Triangularity (safe low reward vs risky high reward), match: [triangularity]}
+      - {id: sm-mc-information, name: Perfect / imperfect / hidden information, match: [hidden-information, perfect-information]}
+      - {id: sm-mc-game-theory, name: Payoff matrices and yomi, match: [payoff-matrix, yomi]}
+  - id: sm-economy
+    name: Game economies
+    source: Schreiber Game Balance ch Economic Systems; Adams and Dormans Game Mechanics
+    match: [game-economy, resource-economy]
+    subtopics:
+      - {id: sm-ec-sources-sinks, name: Sources and sinks inventory, match: [sources-and-sinks]}
+      - {id: sm-ec-currencies, name: Multiple and premium currency design, match: [currency-design, premium-currency]}
+      - {id: sm-ec-inflation, name: Inflation control, match: [inflation]}
+      - {id: sm-ec-trading, name: Player trading and auction houses, match: [player-trading, auction-house]}
+      - {id: sm-ec-machinations, name: Economy simulation with Machinations, match: [machinations]}
+      - {id: sm-ec-crafting, name: Crafting systems, match: [crafting-system]}
+  - id: sm-progression
+    name: Progression systems
+    source: Schreiber Game Balance ch Progression; Rogers Power-ups and unlockables
+    match: [progression-systems]
+    subtopics:
+      - {id: sm-pg-xp, name: XP and level curves, match: [xp-curve]}
+      - {id: sm-pg-trees, name: Skill trees and tech trees, match: [skill-tree, tech-tree]}
+      - {id: sm-pg-unlock, name: Unlock pacing and content gating, match: [unlock-pacing, content-gating]}
+      - {id: sm-pg-power, name: Power curves and horizontal vs vertical progression, match: [power-curve, horizontal-progression]}
+      - {id: sm-pg-prestige, name: Prestige and reset loops, match: [prestige-system]}
+  - id: sm-rewards
+    name: Rewards and punishment
+    source: Schell ch13 Rewards and Punishment; Hopson Behavioral Game Design
+    match: [reward-design]
+    subtopics:
+      - {id: sm-rw-schedule, name: Reward schedules, match: [reward-schedule]}
+      - {id: sm-rw-loot, name: Loot tables and drop rates, match: [loot-table, drop-rates]}
+      - {id: sm-rw-achievements, name: Achievement design, match: [achievement-design]}
+      - {id: sm-rw-failure, name: Failure states and death penalties, match: [death-penalty, failure-states]}
+  - id: sm-difficulty
+    name: Difficulty, challenge and flow
+    source: Schell ch10 Flow; Chen Flow in Games; Koster Theory of Fun
+    match: [difficulty-design, flow-channel]
+    subtopics:
+      - {id: sm-df-curve, name: Difficulty curves (sawtooth ramp), match: [difficulty-curve]}
+      - {id: sm-df-dda, name: Dynamic difficulty adjustment, match: [dynamic-difficulty]}
+      - {id: sm-df-modes, name: Difficulty settings and assist modes, match: [assist-mode, difficulty-settings]}
+      - {id: sm-df-ceiling, name: Skill floor and skill ceiling, match: [skill-ceiling, skill-floor]}
+  - id: sm-motivation
+    name: Players and motivation
+    source: Schell ch9 and ch11; Bartle 1996; Ryan and Deci SDT; Quantic Foundry
+    match: [player-motivation, player-types]
+    subtopics:
+      - {id: sm-mo-bartle, name: Bartle taxonomy and its limits, match: [bartle-taxonomy]}
+      - {id: sm-mo-sdt, name: Self-determination theory (competence / autonomy / relatedness), match: [self-determination-theory]}
+      - {id: sm-mo-quantic, name: Quantic Foundry motivation model, match: [quantic-foundry]}
+      - {id: sm-mo-personas, name: Target audience and player personas, match: [player-personas]}
+  - id: sm-game-feel
+    name: Game feel and the 3Cs
+    source: Swink Game Feel; Rogers 3Cs; Jonasson and Purho Juice it or lose it
+    match: [game-feel, three-cs]
+    subtopics:
+      - {id: sm-gf-control, name: Control tuning (acceleration / deceleration curves), match: [control-tuning]}
+      - {id: sm-gf-juice, name: Juice (screen shake / hitstop / particles), match: [juice, screen-shake, hitstop]}
+      - {id: sm-gf-jump, name: Jump tuning (coyote time / variable height / gravity), match: [jump-tuning, coyote-time]}
+      - {id: sm-gf-camera, name: Camera design, match: [camera-design]}
+      - {id: sm-gf-buffer, name: Input buffering and responsiveness, match: [input-buffering]}
+  - id: sm-combat
+    name: Combat, enemy and boss design
+    source: Rogers Level Up! combat / enemy / boss chapters
+    match: [combat-design]
+    subtopics:
+      - {id: sm-cb-enemy, name: Enemy design archetypes and attributes, match: [enemy-design]}
+      - {id: sm-cb-boss, name: Boss design and phases, match: [boss-design]}
+      - {id: sm-cb-telegraph, name: Attack telegraphing, match: [telegraphing]}
+      - {id: sm-cb-frame-data, name: Frame data (startup / active / recovery) and hitboxes, match: [frame-data]}
+      - {id: sm-cb-damage, name: Damage and armour formulas, match: [damage-formula]}
+  - id: sm-multiplayer
+    name: Multiplayer and social design
+    source: Schell ch23-24; Rules of Play ch Social Play; Rogers Multiplayer
+    match: [multiplayer-design]
+    subtopics:
+      - {id: sm-mp-matchmaking, name: Matchmaking and skill rating (Elo / Glicko), match: [matchmaking, elo-rating]}
+      - {id: sm-mp-asymmetric, name: Asymmetric multiplayer, match: [asymmetric-design]}
+      - {id: sm-mp-coop, name: Cooperative play design, match: [co-op-design]}
+      - {id: sm-mp-griefing, name: Griefing and toxicity mitigation, match: [anti-griefing]}
+      - {id: sm-mp-community, name: Communities and guilds, match: [community-design]}
+  - id: sm-interface
+    name: Interface, UX and accessibility
+    source: Schell ch15; Hodent The Gamer's Brain; Game Accessibility Guidelines
+    match: [game-ux, game-interface]
+    subtopics:
+      - {id: sm-ui-hud, name: HUD design, match: [hud-design]}
+      - {id: sm-ui-onboarding, name: Onboarding and tutorial design, match: [tutorial-design, onboarding]}
+      - {id: sm-ui-affordances, name: Affordances and signifiers, match: [affordances]}
+      - {id: sm-ui-accessibility, name: Game accessibility guidelines, match: [game-accessibility]}
+      - {id: sm-ui-remap, name: Control schemes and remapping, match: [control-remapping]}
+  - id: sm-monetisation
+    name: Monetisation and live operations
+    source: Schell ch31 Profit; GDC monetisation and live-ops tracks
+    match: [monetization-design, free-to-play]
+    subtopics:
+      - {id: sm-mn-battle-pass, name: Battle pass design, match: [battle-pass]}
+      - {id: sm-mn-loot-box, name: Loot boxes regulation and disclosure, match: [loot-box]}
+      - {id: sm-mn-dlc, name: Premium pricing and DLC / expansion design, match: [dlc-design]}
+      - {id: sm-mn-live-ops, name: Live-ops event calendar, match: [live-ops]}
+  - id: sm-documentation
+    name: Design documents and pitching
+    source: Schell ch26 Documents and ch30 Pitch; Rogers GDD and ten-pager
+    match: [game-design-document, gdd]
+    subtopics:
+      - {id: sm-doc-ten-pager, name: The ten-pager, match: [ten-pager]}
+      - {id: sm-doc-feature-spec, name: Feature spec writing, match: [feature-spec]}
+      - {id: sm-doc-living, name: Living design docs / design wiki, match: [living-design-doc]}
+      - {id: sm-doc-pitch, name: Pitching a game, match: [game-pitch, pitch-deck]}
+  - id: sm-systems
+    name: Emergent systems and feedback
+    source: Rules of Play ch14 Emergent Systems, ch18 Cybernetic Systems, ch12 Defining Rules
+    match: [emergence, game-systems-thinking]
+    subtopics:
+      - {id: sm-sy-feedback, name: Positive and negative feedback loops, match: [positive-feedback, negative-feedback]}
+      - {id: sm-sy-catch-up, name: Catch-up mechanics and rubber banding, match: [catch-up-mechanics, rubber-banding]}
+      - {id: sm-sy-systemic, name: Systemic design (immersive-sim interactions), match: [systemic-design]}
+      - {id: sm-sy-rule-levels, name: Constituative / operational / implicit rules, match: [operational-rules, constitutive-rules]}
+  - id: sm-interest-curve
+    name: Interest curves and pacing
+    source: Schell ch16 Experiences Can Be Judged by Their Interest Curves
+    match: [interest-curve]
+    subtopics:
+      - {id: sm-ic-graph, name: Pacing graphs for a whole game, match: [pacing-graph]}
+      - {id: sm-ic-tension, name: Tension and release, match: [tension-release]}
+      - {id: sm-ic-ftue, name: First-time user experience and the first five minutes, match: [ftue, first-time-user-experience]}
+      - {id: sm-ic-climax, name: Climax and ending design, match: [climax-design]}
+  - id: sm-transformation
+    name: Transformational games and responsibility
+    source: Schell ch32-33; Fullerton serious games
+    match: [serious-games, transformational-games]
+    subtopics:
+      - {id: sm-tr-dark-patterns, name: Avoiding dark patterns, match: [dark-patterns]}
+      - {id: sm-tr-educational, name: Educational game design from learning objectives, match: [educational-games]}
+      - {id: sm-tr-gamification, name: Gamification of non-game activities, match: [gamification]}
+      - {id: sm-tr-wellbeing, name: Player wellbeing and responsible design, match: [player-wellbeing]}
+  # --- level-design
+  - id: ld-blockout
+    name: Blockout and metrics
+    source: Totten ch Tools and Techniques; Rogers Level design
+    match: [blockout, greybox]
+    subtopics:
+      - {id: ld-bo-metrics, name: Player metrics and grid, match: [player-metrics, level-metrics]}
+      - {id: ld-bo-modular, name: Modular kits, match: [modular-kit]}
+      - {id: ld-bo-handoff, name: Blockout-to-art handoff, match: [art-pass-handoff]}
+      - {id: ld-bo-paper-map, name: Paper / top-down level maps, match: [paper-map, level-map]}
+  - id: ld-layout
+    name: Layout and flow
+    source: Totten spatial types; Rogers Layout
+    match: [level-flow, level-layout]
+    subtopics:
+      - {id: ld-ly-critical, name: Critical path and golden path, match: [critical-path, golden-path]}
+      - {id: ld-ly-structures, name: Linear / loop / hub-and-spoke structures, match: [level-loops, hub-structure]}
+      - {id: ld-ly-arenas, name: Arenas and chokepoints, match: [arena-design, chokepoints]}
+      - {id: ld-ly-shortcuts, name: Shortcuts and backtracking, match: [shortcuts, backtracking]}
+      - {id: ld-ly-vertical, name: Verticality, match: [verticality]}
+  - id: ld-guidance
+    name: Player guidance and wayfinding
+    source: Totten Molding player behavior, Landmarks and wayfinding
+    match: [player-guidance, wayfinding]
+    subtopics:
+      - {id: ld-gd-lines, name: Leading lines and composition, match: [leading-lines]}
+      - {id: ld-gd-landmarks, name: Landmarks and weenies, match: [landmarks, weenie]}
+      - {id: ld-gd-lighting, name: Lighting for guidance, match: [lighting-guidance]}
+      - {id: ld-gd-breadcrumbs, name: Breadcrumbing and signposting, match: [breadcrumbing, signposting]}
+      - {id: ld-gd-color, name: Colour coding and visual language, match: [color-coding, visual-language]}
+  - id: ld-pacing
+    name: Level pacing and beat charts
+    source: Rogers beat charts; Totten pacing and intensity
+    match: [level-pacing, beat-chart]
+    subtopics:
+      - {id: ld-pc-intensity, name: Intensity graphs, match: [intensity-graph]}
+      - {id: ld-pc-safe, name: Safe rooms and rest areas, match: [safe-room]}
+      - {id: ld-pc-set-piece, name: Set pieces, match: [set-piece]}
+      - {id: ld-pc-kishotenketsu, name: Kishotenketsu mechanic arcs, match: [kishotenketsu]}
+  - id: ld-encounter
+    name: Encounter design
+    source: Rogers combat and enemy chapters; GDC level design track
+    match: [encounter-design]
+    subtopics:
+      - {id: ld-en-placement, name: Enemy placement and composition, match: [enemy-placement]}
+      - {id: ld-en-cover, name: Cover placement, match: [cover-design]}
+      - {id: ld-en-spawns, name: Spawn and wave design, match: [wave-design, spawn-design]}
+      - {id: ld-en-stealth, name: Stealth level design, match: [stealth-design]}
+  - id: ld-teaching
+    name: Teaching through level design
+    source: Rogers The Metroidvania; GDC level design track (Nintendo four-step)
+    match: [implicit-tutorial, teaching-through-design]
+    subtopics:
+      - {id: ld-tc-safe, name: Introducing a mechanic in a safe space, match: [safe-introduction]}
+      - {id: ld-tc-escalation, name: Mechanic combination and escalation, match: [mechanic-escalation]}
+      - {id: ld-tc-gating, name: Ability gating (Metroidvania lock and key), match: [ability-gating, metroidvania]}
+      - {id: ld-tc-secrets, name: Secrets and optional content, match: [secret-design, optional-content]}
+  - id: ld-multiplayer
+    name: Multiplayer map design
+    source: GDC level design track (multiplayer maps)
+    match: [multiplayer-maps]
+    subtopics:
+      - {id: ld-mp-lanes, name: Lane design, match: [lane-design]}
+      - {id: ld-mp-spawns, name: Spawn point fairness, match: [spawn-points]}
+      - {id: ld-mp-sightlines, name: Sightlines, match: [sightlines]}
+      - {id: ld-mp-symmetry, name: Map symmetry and asymmetry, match: [map-symmetry]}
+  - id: ld-open-world
+    name: Open worlds and spaces
+    source: Schell ch21 Worlds Contain Spaces; GDC open-world talks
+    match: [open-world-design]
+    subtopics:
+      - {id: ld-ow-poi, name: Point-of-interest density, match: [points-of-interest, poi-density]}
+      - {id: ld-ow-architecture, name: Space architecture types (linear / grid / web / points in space / divided), match: [space-architecture]}
+      - {id: ld-ow-traversal, name: Traversal design, match: [traversal-design]}
+      - {id: ld-ow-procgen, name: Procedural level generation design, match: [procedural-generation]}
+  - id: ld-process
+    name: Level design process and documentation
+    source: Rogers Level design document; GDC level design track
+    match: [level-design-document]
+    subtopics:
+      - {id: ld-pr-brief, name: Level brief / one-pager, match: [level-brief]}
+      - {id: ld-pr-critique, name: Level review and critique, match: [level-critique]}
+      - {id: ld-pr-heatmaps, name: Death and path heatmaps, match: [level-heatmap, death-heatmap]}
+      - {id: ld-pr-scripting, name: Level scripting and trigger volumes, match: [level-scripting, trigger-volumes]}
+  # --- narrative-design
+  - id: nd-branching
+    name: Branching narrative structure
+    source: Game Narrative Toolbox; Ink and Twine docs
+    match: [branching-narrative]
+    subtopics:
+      - {id: nd-br-bottleneck, name: Branch and bottleneck, match: [branch-and-bottleneck]}
+      - {id: nd-br-qbn, name: Quality-based narrative and storylets, match: [quality-based-narrative, storylets]}
+      - {id: nd-br-ink, name: Writing in Ink, match: [ink-script]}
+      - {id: nd-br-twine, name: Twine prototyping, match: [twine]}
+      - {id: nd-br-consequence, name: Choice consequence design, match: [choice-consequence]}
+  - id: nd-quest
+    name: Quest design
+    source: Game Narrative Toolbox ch Quest design; Rogers Level Up!
+    match: [quest-design]
+    subtopics:
+      - {id: nd-qs-types, name: Quest types and structures, match: [quest-types]}
+      - {id: nd-qs-chain, name: Quest chains and arcs, match: [quest-chain]}
+      - {id: nd-qs-side, name: Side quests, match: [side-quests]}
+      - {id: nd-qs-log, name: Quest logs and objective markers, match: [quest-log, objective-markers]}
+  - id: nd-environmental
+    name: Environmental storytelling and worldbuilding
+    source: Smith and Worch GDC 2010; Jenkins Narrative Architecture; Schell ch19
+    match: [environmental-storytelling]
+    subtopics:
+      - {id: nd-env-vignettes, name: Environmental vignettes and staging, match: [environmental-vignettes]}
+      - {id: nd-env-logs, name: Audio logs and lore collectibles, match: [audio-logs, lore-collectibles]}
+      - {id: nd-env-embedded, name: Embedded vs emergent narrative, match: [embedded-narrative, emergent-narrative]}
+      - {id: nd-env-bible, name: World bible, match: [world-bible, worldbuilding]}
+  - id: nd-dialogue
+    name: Dialogue and barks
+    source: Game Narrative Toolbox ch Dialogue; Bateman Game Writing
+    match: [game-dialogue]
+    subtopics:
+      - {id: nd-dl-barks, name: Bark writing, match: [barks]}
+      - {id: nd-dl-trees, name: Dialogue trees and hubs, match: [dialogue-tree]}
+      - {id: nd-dl-vo, name: VO scripts and recording sessions, match: [vo-script]}
+      - {id: nd-dl-l10n, name: Localisation-ready writing, match: [localization-writing]}
+  - id: nd-characters
+    name: Game characters
+    source: Schell ch20 Worlds Contain Characters
+    match: [game-characters]
+    subtopics:
+      - {id: nd-ch-player, name: Player character / avatar design, match: [player-character]}
+      - {id: nd-ch-companion, name: Companions, match: [companion-design]}
+      - {id: nd-ch-arc, name: Character arcs in games, match: [character-arc]}
+      - {id: nd-ch-antagonist, name: Antagonists, match: [antagonist-design]}
+  - id: nd-story-structure
+    name: Interactive story structure and indirect control
+    source: Schell ch17-18 Story and Indirect Control
+    match: [interactive-storytelling, game-story-structure]
+    subtopics:
+      - {id: nd-ss-indirect, name: Indirect control methods, match: [indirect-control]}
+      - {id: nd-ss-ludonarrative, name: Ludonarrative harmony, match: [ludonarrative]}
+      - {id: nd-ss-cutscenes, name: Cutscene design, match: [cutscene-design]}
+      - {id: nd-ss-three-act, name: Three-act / hero's journey adapted to play, match: [three-act-structure, heros-journey]}
+      - {id: nd-ss-agency, name: Player agency, match: [player-agency]}
+  - id: nd-pipeline
+    name: Narrative design documentation and pipeline
+    source: Game Narrative Toolbox ch Narrative design documents
+    match: [narrative-pipeline]
+    subtopics:
+      - {id: nd-pl-ndd, name: Narrative design document / story outline, match: [narrative-design-document]}
+      - {id: nd-pl-ui-text, name: Item descriptions and UI text, match: [ui-text, item-descriptions]}
+      - {id: nd-pl-continuity, name: Narrative continuity and testing, match: [narrative-continuity]}
+      - {id: nd-pl-beats, name: Narrative beat sheets shared with level and systems, match: [narrative-beat-sheet]}
+  - id: nd-procedural
+    name: Procedural and systemic narrative
+    source: Short and Adams Procedural Storytelling in Game Design
+    match: [procedural-narrative]
+    subtopics:
+      - {id: nd-pn-tracery, name: Grammar-based text generation (Tracery), match: [tracery]}
+      - {id: nd-pn-director, name: Drama managers and AI directors, match: [drama-manager]}
+      - {id: nd-pn-social-sim, name: Simulation-driven social stories, match: [social-simulation]}
+      - {id: nd-pn-if, name: Parser interactive fiction (Inform 7), match: [inform7]}
+  # --- tabletop-game-design
+  - id: tt-mechanisms
+    name: Tabletop mechanism families
+    source: Engelstein and Shalev Building Blocks of Tabletop Game Design
+    match: [board-game-mechanisms]
+    subtopics:
+      - {id: tt-mc-worker, name: Worker placement, match: [worker-placement]}
+      - {id: tt-mc-deckbuilding, name: Deck building, match: [deck-building]}
+      - {id: tt-mc-auctions, name: Auctions and bidding, match: [auction-mechanics]}
+      - {id: tt-mc-area, name: Area control and majorities, match: [area-control]}
+      - {id: tt-mc-set, name: Set collection and tile placement, match: [set-collection, tile-placement]}
+      - {id: tt-mc-engine, name: Engine building, match: [engine-building]}
+      - {id: tt-mc-roll-write, name: Roll-and-write, match: [roll-and-write]}
+      - {id: tt-mc-drafting, name: Card drafting, match: [card-drafting]}
+  - id: tt-structure
+    name: Game structure, turns and endings
+    source: Building Blocks ch Game Structure, Turn Order, Actions, Game End and Victory
+    match: [turn-order]
+    subtopics:
+      - {id: tt-st-action-points, name: Action point allowance, match: [action-points]}
+      - {id: tt-st-simultaneous, name: Simultaneous action selection, match: [simultaneous-selection]}
+      - {id: tt-st-end, name: End-game triggers and victory points, match: [end-game-trigger, victory-points]}
+      - {id: tt-st-downtime, name: Downtime and analysis paralysis, match: [downtime, analysis-paralysis]}
+      - {id: tt-st-kingmaking, name: Kingmaking and player elimination, match: [kingmaking, player-elimination]}
+  - id: tt-components
+    name: Component design
+    source: Kobold Guide ch Components; Building Blocks
+    match: [component-design]
+    subtopics:
+      - {id: tt-cp-cards, name: Card layout and iconography, match: [card-layout]}
+      - {id: tt-cp-board, name: Board layout, match: [board-layout]}
+      - {id: tt-cp-bom, name: Bill of materials and manufacturing, match: [bill-of-materials, game-manufacturing]}
+      - {id: tt-cp-colorblind, name: Colourblind-safe components, match: [colorblind-components]}
+  - id: tt-rulebook
+    name: Rulebooks and teaching
+    source: Kobold Guide ch Rules writing
+    match: [rulebook]
+    subtopics:
+      - {id: tt-rb-aid, name: Player aids and reference cards, match: [player-aid]}
+      - {id: tt-rb-example, name: Examples of play, match: [example-of-play]}
+      - {id: tt-rb-errata, name: FAQ and errata, match: [errata]}
+      - {id: tt-rb-teach, name: Teaching script for demos, match: [teaching-script, rules-teach]}
+  - id: tt-prototyping
+    name: Tabletop prototyping tools
+    source: Kobold Guide ch Prototyping; nanDeck and Tabletop Simulator docs
+    match: [paper-prototyping]
+    subtopics:
+      - {id: tt-pt-tools, name: nanDeck card generation, match: [nandeck]}
+      - {id: tt-pt-tts, name: Tabletop Simulator prototypes, match: [tabletop-simulator]}
+      - {id: tt-pt-merge, name: Card data merge from spreadsheets, match: [data-merge]}
+      - {id: tt-pt-pnp, name: Print-and-play files, match: [print-and-play]}
+  - id: tt-card-games
+    name: Card game design
+    source: Garfield / Characteristics of Games; Building Blocks card mechanisms
+    match: [card-game-design]
+    subtopics:
+      - {id: tt-cg-set, name: TCG / LCG set design and rarity, match: [set-design, card-rarity]}
+      - {id: tt-cg-advantage, name: Card advantage, match: [card-advantage]}
+      - {id: tt-cg-trick, name: Trick-taking design, match: [trick-taking]}
+      - {id: tt-cg-curve, name: Mana and resource curves, match: [mana-curve]}
+  - id: tt-modes
+    name: Cooperative, solo, legacy and hidden-role design
+    source: Building Blocks; Kobold Guide
+    match: [cooperative-board-games]
+    subtopics:
+      - {id: tt-md-alpha, name: The alpha-player problem, match: [alpha-player]}
+      - {id: tt-md-solo, name: Solo modes and automa, match: [automa, solo-mode]}
+      - {id: tt-md-legacy, name: Legacy and campaign games, match: [legacy-games]}
+      - {id: tt-md-hidden-role, name: Hidden role and social deduction, match: [social-deduction, hidden-role]}
+  - id: tt-publishing
+    name: Pitching and publishing
+    source: Kobold Guide ch Pitching and Publishing
+    match: [board-game-publishing]
+    subtopics:
+      - {id: tt-pb-sell-sheet, name: Sell sheet, match: [sell-sheet]}
+      - {id: tt-pb-pitch, name: Pitching to publishers, match: [publisher-pitch]}
+      - {id: tt-pb-crowdfunding, name: Crowdfunding campaigns, match: [crowdfunding]}
+      - {id: tt-pb-royalties, name: Designer contracts and royalties, match: [design-royalties]}
+  - id: tt-rpg-design
+    name: Tabletop RPG system design
+    source: Building Blocks ch Resolution; PbtA and SRD documents
+    match: [ttrpg-design]
+    subtopics:
+      - {id: tt-rp-resolution, name: Resolution mechanics (d20 / dice pool / 2d6 moves), match: [resolution-mechanic, dice-pool]}
+      - {id: tt-rp-chargen, name: Character creation systems, match: [character-creation]}
+      - {id: tt-rp-adventure, name: Adventure / module writing, match: [adventure-writing]}
+      - {id: tt-rp-pbta, name: Powered by the Apocalypse moves, match: [pbta, powered-by-the-apocalypse]}
+  - id: tt-theme
+    name: Theme and player interaction
+    source: Kobold Guide ch Theme vs Mechanics
+    match: [theme-integration]
+    subtopics:
+      - {id: tt-th-first, name: Theme-first vs mechanics-first, match: [theme-first, mechanics-first]}
+      - {id: tt-th-abstract, name: Abstract strategy design, match: [abstract-strategy]}
+      - {id: tt-th-narrative, name: Narrative and storybook board games, match: [narrative-board-games]}
+      - {id: tt-th-interaction, name: Player interaction levels, match: [player-interaction]}
+  # --- puzzle-design
+  - id: pz-principles
+    name: Puzzle design principles
+    source: Schell ch14 Game Mechanics Support Puzzles
+    match: [puzzle-principles, puzzle-design]
+    subtopics:
+      - {id: pz-pr-schell, name: Schell's ten puzzle principles, match: [schell-puzzle-principles]}
+      - {id: pz-pr-aha, name: Aha moment and perceptual shift, match: [aha-moment]}
+      - {id: pz-pr-fair, name: Fairness and red herrings, match: [red-herring, puzzle-fairness]}
+      - {id: pz-pr-reverse, name: Solution-first reverse design, match: [solution-first, reverse-design]}
+  - id: pz-difficulty
+    name: Puzzle difficulty and sequencing
+    source: Ron Gilbert puzzle dependency charts; Scott Kim
+    match: [puzzle-difficulty]
+    subtopics:
+      - {id: pz-df-chart, name: Puzzle dependency charts, match: [puzzle-dependency-chart]}
+      - {id: pz-df-sequence, name: Puzzle sequencing and teaching ramp, match: [puzzle-sequencing]}
+      - {id: pz-df-parallel, name: Parallel vs serial puzzles, match: [parallel-puzzles]}
+      - {id: pz-df-solver, name: Solver-checked difficulty, match: [puzzle-solver]}
+  - id: pz-hints
+    name: Hint systems
+    source: Schell ch14 Hints Extend Interest; escape-room practice
+    match: [hint-system]
+    subtopics:
+      - {id: pz-ht-tiered, name: Tiered hints, match: [tiered-hints]}
+      - {id: pz-ht-diegetic, name: Diegetic hints, match: [diegetic-hints]}
+      - {id: pz-ht-delivery, name: Live hint delivery by a game master, match: [hint-delivery]}
+      - {id: pz-ht-skip, name: Skip and solve options, match: [puzzle-skip]}
+  - id: pz-escape-room
+    name: Escape rooms and puzzle hunts
+    source: Nicholson 2015 escape-room survey
+    match: [escape-room]
+    subtopics:
+      - {id: pz-er-flow, name: Room flow structures (linear / open / multilinear), match: [room-flow]}
+      - {id: pz-er-props, name: Locks, maglocks and props, match: [maglocks, escape-room-props]}
+      - {id: pz-er-reset, name: Reset procedure and durability, match: [room-reset]}
+      - {id: pz-er-theme, name: Theme and narrative wrapper, match: [escape-room-theme]}
+      - {id: pz-er-hunt, name: Puzzle hunts and metapuzzles, match: [puzzle-hunt, meta-puzzle]}
+  - id: pz-types
+    name: Puzzle types
+    source: Schell ch14; puzzle-genre literature
+    match: [puzzle-types]
+    subtopics:
+      - {id: pz-ty-logic, name: Logic puzzles, match: [logic-puzzles]}
+      - {id: pz-ty-spatial, name: Sokoban and spatial puzzles, match: [sokoban, spatial-puzzles]}
+      - {id: pz-ty-cipher, name: Cipher and word puzzles, match: [cipher-puzzles, wordplay-puzzles]}
+      - {id: pz-ty-physics, name: Physics and environmental puzzles, match: [physics-puzzles, environmental-puzzles]}
+  - id: pz-adventure
+    name: Adventure game puzzles
+    source: Ron Gilbert, Why Adventure Games Suck (1989)
+    match: [adventure-game-puzzles]
+    subtopics:
+      - {id: pz-ad-inventory, name: Inventory puzzles, match: [inventory-puzzles]}
+      - {id: pz-ad-moon-logic, name: Avoiding moon logic, match: [moon-logic]}
+      - {id: pz-ad-lock-key, name: Lock-and-key puzzle structure, match: [lock-and-key]}
+      - {id: pz-ad-dead-ends, name: Avoiding dead ends, match: [dead-ends]}
+  # --- playtesting-and-balance
+  - id: pb-playtest
+    name: Running playtests
+    source: Fullerton ch9 Playtesting; Schell ch27
+    match: [playtesting]
+    subtopics:
+      - {id: pb-pt-recruit, name: Recruiting playtesters, match: [playtester-recruitment]}
+      - {id: pb-pt-think-aloud, name: Think-aloud protocol, match: [think-aloud]}
+      - {id: pb-pt-blind, name: Blind playtesting, match: [blind-playtest]}
+      - {id: pb-pt-script, name: Playtest scripts and tasks, match: [playtest-script]}
+      - {id: pb-pt-remote, name: Remote playtesting, match: [remote-playtest]}
+  - id: pb-data
+    name: Playtest data and analysis
+    source: Games User Research (surveys, telemetry); Fullerton
+    match: [playtest-analysis]
+    subtopics:
+      - {id: pb-dt-survey, name: Surveys and validated questionnaires, match: [playtest-survey, game-experience-questionnaire]}
+      - {id: pb-dt-telemetry, name: Gameplay telemetry and analytics events, match: [game-telemetry, gameplay-analytics]}
+      - {id: pb-dt-funnel, name: Funnel and drop-off analysis, match: [funnel-analysis]}
+      - {id: pb-dt-affinity, name: Affinity mapping and issue severity, match: [affinity-mapping, issue-severity]}
+      - {id: pb-dt-ab, name: A/B tests, match: [ab-testing]}
+  - id: pb-gur
+    name: Games user research methods
+    source: Drachen, Mirza-Babaei and Nacke, Games User Research
+    match: [games-user-research]
+    subtopics:
+      - {id: pb-gr-rite, name: RITE method, match: [rite-method]}
+      - {id: pb-gr-heuristic, name: Heuristic evaluation, match: [heuristic-evaluation]}
+      - {id: pb-gr-usability, name: Usability testing, match: [usability-test]}
+      - {id: pb-gr-biometrics, name: Eye tracking and biometrics, match: [eye-tracking]}
+      - {id: pb-gr-focus, name: Focus groups and their limits, match: [focus-group]}
+  - id: pb-balance
+    name: Balancing methods
+    source: Schreiber and Romero, Game Balance; Schell ch13 methodologies
+    match: [balance-tuning]
+    subtopics:
+      - {id: pb-bl-cost-curve, name: Cost curves, match: [cost-curve]}
+      - {id: pb-bl-intransitive, name: Intransitive (rock-paper-scissors) balance, match: [intransitive-balance, rock-paper-scissors]}
+      - {id: pb-bl-spreadsheet, name: Balance spreadsheets, match: [balance-spreadsheet]}
+      - {id: pb-bl-monte-carlo, name: Monte Carlo simulation, match: [monte-carlo-simulation]}
+      - {id: pb-bl-metagame, name: Metagame and tier lists, match: [metagame]}
+  - id: pb-competitive
+    name: Competitive balance
+    source: Schreiber and Romero, Game Balance ch Competitive balance
+    match: [competitive-balance]
+    subtopics:
+      - {id: pb-cp-first-player, name: First-player advantage, match: [first-player-advantage]}
+      - {id: pb-cp-win-rate, name: Win-rate analysis, match: [win-rate-analysis]}
+      - {id: pb-cp-patches, name: Nerfs, buffs and balance patches, match: [balance-patch, nerfs-and-buffs]}
+      - {id: pb-cp-factions, name: Asymmetric faction balance, match: [faction-balance]}
+  - id: pb-iteration
+    name: Iterating from feedback
+    source: Schell ch8 and ch27; Fullerton ch9
+    match: [design-iteration]
+    subtopics:
+      - {id: pb-it-triage, name: Feedback triage and prioritisation, match: [feedback-triage]}
+      - {id: pb-it-interpret, name: Interpreting player feedback, match: [interpreting-feedback]}
+      - {id: pb-it-cutting, name: Cutting features, match: [feature-cutting]}
+      - {id: pb-it-versioning, name: Rules versioning and change logs, match: [rules-versioning]}
+  - id: pb-facilitation
+    name: Playtest facilitation
+    source: Fullerton ch9 Conducting a playtest; Games User Research
+    match: [playtest-facilitation]
+    subtopics:
+      - {id: pb-fc-neutral, name: Facilitator neutrality, match: [facilitator-neutrality]}
+      - {id: pb-fc-interview, name: Post-session interviews, match: [playtest-interview]}
+      - {id: pb-fc-children, name: Playtesting with children, match: [child-playtesting]}
+      - {id: pb-fc-observation, name: Observation sheets and coding, match: [observation-sheet]}
+  # --- game-mastering
+  - id: gm-prep
+    name: Session preparation
+    source: Shea Return of the Lazy Dungeon Master; Alexander So You Want to Be a GM
+    match: [session-prep]
+    subtopics:
+      - {id: gm-pp-strong-start, name: Strong starts, match: [strong-start]}
+      - {id: gm-pp-secrets, name: Secrets and clues, match: [secrets-and-clues]}
+      - {id: gm-pp-nodes, name: Node-based scenario design, match: [node-based-scenario]}
+      - {id: gm-pp-three-clue, name: Three clue rule, match: [three-clue-rule]}
+      - {id: gm-pp-tables, name: Random tables for improvisation, match: [random-tables]}
+  - id: gm-running
+    name: Running the table
+    source: DMG 5e Part 3 Running the Game
+    match: [running-the-game]
+    subtopics:
+      - {id: gm-rn-spotlight, name: Spotlight management, match: [spotlight-management]}
+      - {id: gm-rn-scene, name: Scene framing and session pacing, match: [scene-framing]}
+      - {id: gm-rn-rulings, name: Rulings and adjudication, match: [rules-adjudication]}
+      - {id: gm-rn-improv, name: GM improvisation, match: [gm-improvisation]}
+      - {id: gm-rn-problems, name: Problem players and table conflict, match: [problem-players]}
+  - id: gm-combat
+    name: Running combat
+    source: DMG 5e ch3 Creating Encounters, ch8 Combat
+    match: [running-combat]
+    subtopics:
+      - {id: gm-cb-budget, name: Encounter budgets (XP / CR), match: [encounter-budget, challenge-rating]}
+      - {id: gm-cb-totm, name: Theatre of the mind vs grid, match: [theater-of-the-mind]}
+      - {id: gm-cb-tactics, name: Monster tactics and morale, match: [monster-tactics, morale-rules]}
+      - {id: gm-cb-initiative, name: Initiative variants, match: [initiative-variants]}
+  - id: gm-npcs
+    name: NPCs, factions and social play
+    source: DMG 5e ch4 Creating NPCs, ch8 Social Interaction; Apocalypse World fronts
+    match: [npc-roleplay]
+    subtopics:
+      - {id: gm-np-voices, name: NPC voices and mannerisms, match: [npc-voices]}
+      - {id: gm-np-social, name: Social encounters and reaction rolls, match: [reaction-rolls, social-encounters]}
+      - {id: gm-np-factions, name: Factions and fronts, match: [faction-design, fronts]}
+      - {id: gm-np-downtime, name: Downtime activities, match: [downtime-activities]}
+  - id: gm-campaign
+    name: Campaign design
+    source: DMG 5e Part 1 Master of Worlds; Alexander (jaquaying, hexcrawls)
+    match: [campaign-design]
+    subtopics:
+      - {id: gm-cp-session-zero, name: Session zero, match: [session-zero]}
+      - {id: gm-cp-sandbox, name: Sandbox and West Marches campaigns, match: [sandbox-campaign, west-marches]}
+      - {id: gm-cp-crawls, name: Hexcrawls and pointcrawls, match: [hexcrawl, pointcrawl]}
+      - {id: gm-cp-dungeon, name: Dungeon design and jaquaying, match: [dungeon-design, jaquaying]}
+      - {id: gm-cp-backstory, name: Integrating character backstories, match: [backstory-hooks]}
+      - {id: gm-cp-rewards, name: Treasure and milestone levelling, match: [milestone-leveling, treasure-distribution]}
+  - id: gm-safety
+    name: Table safety and consent
+    source: Shaw and Bryant TTRPG Safety Toolkit
+    match: [ttrpg-safety-tools]
+    subtopics:
+      - {id: gm-sf-stars, name: Stars and wishes check-out, match: [stars-and-wishes]}
+      - {id: gm-sf-checklist, name: Consent checklist, match: [consent-checklist]}
+      - {id: gm-sf-script-change, name: Script change, match: [script-change]}
+      - {id: gm-sf-lines, name: Lines and veils, match: [lines-and-veils]}
+  - id: gm-tools
+    name: Virtual tabletops and table props
+    source: Foundry VTT and Roll20 documentation; DMG 5e ch8
+    match: [virtual-tabletop]
+    subtopics:
+      - {id: gm-tl-foundry, name: Foundry VTT, match: [foundry-vtt]}
+      - {id: gm-tl-roll20, name: Roll20, match: [roll20]}
+      - {id: gm-tl-handouts, name: Handouts and battle maps, match: [handouts, battle-maps]}
+      - {id: gm-tl-ambience, name: Music and ambience, match: [table-ambience]}
+  # --- larp-facilitation
+  - id: lp-safety
+    name: Larp safety and calibration
+    source: Larp Design (Koljonen et al.) section Safety
+    match: [larp-safety, safety-tools]
+    subtopics:
+      - {id: lp-sf-workshop, name: Calibration workshops, match: [calibration-workshop]}
+      - {id: lp-sf-cut-brake, name: Cut and brake, match: [cut-and-brake]}
+      - {id: lp-sf-open-door, name: Open-door / look-down opt-outs, match: [look-down, open-door-policy]}
+      - {id: lp-sf-officer, name: Safety officers and safety team, match: [safety-officer]}
+      - {id: lp-sf-ok, name: OK check-in, match: [ok-check-in]}
+  - id: lp-scenario
+    name: Larp scenario design
+    source: Larp Design sections Vision and Structure
+    match: [larp-scenario-design]
+    subtopics:
+      - {id: lp-sc-vision, name: Vision document, match: [larp-vision-document]}
+      - {id: lp-sc-meta, name: Meta-techniques (monologue / black box), match: [meta-techniques]}
+      - {id: lp-sc-structure, name: Acts and scene structure, match: [larp-structure]}
+      - {id: lp-sc-chamber, name: Chamber and blackbox larp, match: [chamber-larp]}
+      - {id: lp-sc-bleed, name: Designing for and against bleed, match: [bleed]}
+  - id: lp-characters
+    name: Larp characters and casting
+    source: Larp Design section Characters
+    match: [larp-character-writing]
+    subtopics:
+      - {id: lp-ch-casting, name: Casting, match: [larp-casting]}
+      - {id: lp-ch-relationships, name: Relationship maps, match: [relationship-map]}
+      - {id: lp-ch-player-created, name: Player-created vs pre-written characters, match: [player-created-characters]}
+      - {id: lp-ch-sheet, name: Character sheet formats, match: [character-sheet-format]}
+  - id: lp-workshops
+    name: Pre-larp workshops and debriefs
+    source: Larp Design sections Workshops and Debrief
+    match: [pre-larp-workshop]
+    subtopics:
+      - {id: lp-ws-warmup, name: Warm-up exercises, match: [warm-up-exercises]}
+      - {id: lp-ws-relationship, name: Relationship workshops, match: [relationship-workshop]}
+      - {id: lp-ws-debrief, name: Debrief formats, match: [larp-debrief]}
+      - {id: lp-ws-post-larp, name: Post-larp blues and decompression, match: [post-larp-blues]}
+  - id: lp-runtime
+    name: Runtime facilitation
+    source: Larp Design section Runtime
+    match: [larp-runtime]
+    subtopics:
+      - {id: lp-rt-npc, name: NPC crew briefing, match: [npc-crew]}
+      - {id: lp-rt-plot, name: Plot injection and GM interventions, match: [plot-injection]}
+      - {id: lp-rt-runsheet, name: Runsheets and timelines, match: [runsheet]}
+      - {id: lp-rt-combat, name: Boffer combat and phys-reps, match: [boffer-combat, physrep]}
+  - id: lp-production
+    name: Larp production and logistics
+    source: Larp Design section Logistics
+    match: [larp-production]
+    subtopics:
+      - {id: lp-pd-venue, name: Venue scouting and site plans, match: [venue-scouting]}
+      - {id: lp-pd-budget, name: Budget and ticketing, match: [larp-budget]}
+      - {id: lp-pd-set, name: Set dressing, costume and props, match: [set-dressing]}
+      - {id: lp-pd-access, name: Accessibility and inclusion, match: [larp-accessibility]}
+      - {id: lp-pd-risk, name: Risk assessment and first aid, match: [risk-assessment]}
+  - id: lp-immersive
+    name: Immersive and pervasive experiences
+    source: Larp Design; Montola, Stenros and Waern Pervasive Games
+    match: [immersive-experience]
+    subtopics:
+      - {id: lp-im-arg, name: Alternate reality games, match: [alternate-reality-game]}
+      - {id: lp-im-theatre, name: Immersive theatre audience agency, match: [immersive-theatre]}
+      - {id: lp-im-pervasive, name: Pervasive games, match: [pervasive-games]}
+      - {id: lp-im-edu, name: Edu-larp, match: [edu-larp]}

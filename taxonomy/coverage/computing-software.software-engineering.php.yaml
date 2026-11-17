@@ -1,0 +1,143 @@
+# Canonical coverage spec: PHP language (PHP 8.x, Composer, PSR standards).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: php-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [php]
+sources:
+  - "PHP Manual (php.net/manual/en) - Language Reference, Security, Function Reference, Appendices (migration guides 8.0 to 8.4)"
+  - "PHP-FIG PSR standards (php-fig.org/psr) - PSR-1, PSR-4, PSR-12, PSR-3, PSR-7, PSR-11, PSR-15"
+  - "Composer documentation (getcomposer.org/doc)"
+  - "PHPUnit manual (docs.phpunit.de), PHPStan and Psalm documentation"
+  - "OWASP Cheat Sheet Series for PHP-relevant security topics"
+topics:
+  - id: php-types
+    name: "Types and comparison"
+    source: "PHP Manual - Language Reference: Types, Type Juggling, Comparison Operators"
+    match: [php-types]
+    subtopics:
+      - {id: php-types-strict-types, name: "strict_types and scalar type declarations", match: [strict-types]}
+      - {id: php-types-loose-comparison, name: "Loose vs strict comparison and type juggling", match: [loose-comparison]}
+      - {id: php-types-nullsafe-coalescing, name: "Null-safe operator and null coalescing", match: [nullsafe-coalescing]}
+  - id: php-oop
+    name: "Object-oriented features"
+    source: "PHP Manual - Language Reference: Classes and Objects, Enumerations, Attributes"
+    match: [php-oop]
+    subtopics:
+      - {id: php-oop-readonly-promotion, name: "Constructor promotion and readonly properties", match: [readonly-promotion]}
+      - {id: php-oop-enums, name: "Enums backed and pure", match: [enums]}
+      - {id: php-oop-interfaces-traits, name: "Interfaces abstract classes and traits", match: [interfaces-traits]}
+      - {id: php-oop-magic-methods, name: "Late static binding magic methods and __toString", match: [magic-methods]}
+      - {id: php-oop-attributes, name: "Attributes", match: [attributes]}
+  - id: php-functions
+    name: "Functions and closures"
+    source: "PHP Manual - Language Reference: Functions, Anonymous functions, Arrow functions, Generators"
+    match: [php-functions]
+    subtopics:
+      - {id: php-functions-named-arguments, name: "Named arguments variadics and spread", match: [named-arguments]}
+      - {id: php-functions-closures-arrow-functions, name: "Closures arrow functions and first-class callables", match: [closures-arrow-functions]}
+      - {id: php-functions-generators, name: "Generators and iterators", match: [generators]}
+      - {id: php-functions-match-expression, name: "match expression", match: [match-expression]}
+  - id: php-errors
+    name: "Errors and exceptions"
+    source: "PHP Manual - Language Reference: Errors, Exceptions; Runtime Configuration (error handling)"
+    match: [php-errors]
+    subtopics:
+      - {id: php-errors-exception-hierarchy, name: "Throwable Error and Exception hierarchy", match: [exception-hierarchy]}
+      - {id: php-errors-error-reporting-config, name: "error_reporting display_errors and logging", match: [error-reporting-config]}
+  - id: php-strings
+    name: "Strings and text"
+    source: "PHP Manual - Function Reference: Strings, mbstring, PCRE"
+    match: [php-strings]
+    subtopics:
+      - {id: php-strings-mbstring, name: "Multibyte strings with mbstring", match: [mbstring]}
+      - {id: php-strings-pcre-regex, name: "PCRE regular expressions", match: [pcre-regex]}
+      - {id: php-strings-string-functions, name: "String helpers str_contains sprintf and heredoc", match: [string-functions]}
+  - id: php-arrays
+    name: "Arrays and data structures"
+    source: "PHP Manual - Types: Arrays; Function Reference: Array Functions, SPL data structures"
+    match: [php-arrays]
+    subtopics:
+      - {id: php-arrays-array-functions, name: "Array functions map filter reduce and sorting", match: [array-functions]}
+      - {id: php-arrays-spl-structures, name: "SPL data structures", match: [spl-structures]}
+  - id: php-security
+    name: "Security-sensitive APIs"
+    source: "PHP Manual - Security chapter; OWASP PHP Security Cheat Sheet"
+    match: [php-security]
+    subtopics:
+      - {id: php-security-pdo-prepared-statements, name: "PDO prepared statements", match: [pdo-prepared-statements]}
+      - {id: php-security-password-hash, name: "Password hashing", match: [password-hash]}
+      - {id: php-security-output-escaping, name: "Output escaping and XSS", match: [output-escaping]}
+      - {id: php-security-sessions-csrf, name: "Sessions cookies and CSRF", match: [sessions-csrf]}
+      - {id: php-security-file-uploads, name: "File uploads and path handling", match: [file-uploads]}
+      - {id: php-security-unserialize-safety, name: "Unserialize and dangerous functions", match: [unserialize-safety]}
+  - id: php-composer
+    name: "Composer and autoloading"
+    source: "Composer documentation; PSR-4"
+    match: [php-composer]
+    subtopics:
+      - {id: php-composer-composer-versions, name: "composer.json versions and lock file", match: [composer-versions]}
+      - {id: php-composer-psr4-autoloading, name: "PSR-4 autoloading", match: [psr4-autoloading]}
+      - {id: php-composer-composer-scripts, name: "Composer scripts and platform config", match: [composer-scripts]}
+  - id: php-standards
+    name: "Coding standards and PSR interfaces"
+    source: "PHP-FIG PSRs"
+    match: [php-standards]
+    subtopics:
+      - {id: php-standards-psr12-style, name: "PSR-12 coding style and tooling", match: [psr12-style]}
+      - {id: php-standards-psr-interfaces, name: "PSR-7 PSR-15 PSR-11 and PSR-3 interfaces", match: [psr-interfaces]}
+  - id: php-testing-analysis
+    name: "Testing and static analysis"
+    source: "PHPUnit manual; PHPStan and Psalm documentation"
+    match: [php-testing-analysis]
+    subtopics:
+      - {id: php-testing-analysis-phpunit, name: "PHPUnit tests and data providers", match: [phpunit]}
+      - {id: php-testing-analysis-phpunit-mocks, name: "Test doubles with PHPUnit mocks and Mockery", match: [phpunit-mocks]}
+      - {id: php-testing-analysis-phpstan-psalm, name: "PHPStan and Psalm static analysis levels", match: [phpstan-psalm]}
+  - id: php-runtime
+    name: "Runtime and deployment configuration"
+    source: "PHP Manual - Installation and Configuration (php.ini, OPcache, FPM)"
+    match: [php-runtime]
+    subtopics:
+      - {id: php-runtime-php-ini, name: "php.ini settings and CLI vs FPM", match: [php-ini]}
+      - {id: php-runtime-opcache-fpm, name: "OPcache and PHP-FPM tuning", match: [opcache-fpm]}
+      - {id: php-runtime-datetime-immutable, name: "Date and time with DateTimeImmutable", match: [datetime-immutable]}
+  - {id: php-printf, name: "printf, sprintf and number formatting", source: "PHP Manual - sprintf, number_format, NumberFormatter", match: [printf-formatting]}
+  - {id: php-json, name: "JSON encode and decode", source: "PHP Manual - JSON functions", match: [json-encode-decode]}
+  - {id: php-filter-var, name: "Input validation with filter_var", source: "PHP Manual - Filter extension", match: [filter-var-validation]}
+  - {id: php-curl, name: "HTTP clients with cURL", source: "PHP Manual - cURL", match: [curl-http-client]}
+  - {id: php-files, name: "File streams and SplFileObject", source: "PHP Manual - Filesystem, Streams, SPL", match: [file-streams-splfileobject]}
+  - {id: php-headers, name: "HTTP headers and cookies", source: "PHP Manual - header, setcookie", match: [http-headers-cookies]}
+  - {id: php-sodium, name: "Encryption with libsodium", source: "PHP Manual - Sodium", match: [libsodium-encryption]}
+  - {id: php-random, name: "Secure random numbers", source: "PHP Manual - random_int, Random extension", match: [csprng-random-int]}
+  - {id: php-references, name: "References and by-ref semantics", source: "PHP Manual - Language Reference - References Explained", match: [references-by-ref]}
+  - {id: php-lsb, name: "Late static binding", source: "PHP Manual - Late Static Bindings", match: [late-static-binding]}
+  - {id: php-variadics, name: "Variadics and argument unpacking", source: "PHP Manual - Functions - variadic", match: [variadics-spread]}
+  - {id: php-fcc, name: "First-class callable syntax", source: "PHP Manual - Callables; PHP 8.1 release notes", match: [first-class-callable]}
+  - {id: php-union-types, name: "Union, intersection and never types", source: "PHP Manual - Type declarations", match: [union-intersection-types]}
+  - {id: php-readonly-classes, name: "Readonly properties and classes", source: "PHP Manual - Readonly properties; PHP 8.2 release notes", match: [readonly-classes]}
+  - {id: php-fibers, name: "Fibers", source: "PHP Manual - Fibers", match: [php-fibers]}
+  - {id: php-weakmap, name: "WeakReference and WeakMap", source: "PHP Manual - WeakMap", match: [weakmap-weakreference]}
+  - {id: php-iterators, name: "Iterator and IteratorAggregate", source: "PHP Manual - Predefined Interfaces", match: [iterator-aggregate]}
+  - {id: php-arrayaccess, name: "ArrayAccess, Countable and Stringable", source: "PHP Manual - Predefined Interfaces", match: [arrayaccess-countable]}
+  - {id: php-serialization, name: "Serialization hooks", source: "PHP Manual - Magic Methods, Serializing objects", match: [serialization-hooks]}
+  - {id: php-reflection, name: "Reflection API", source: "PHP Manual - Reflection", match: [reflection-api]}
+  - {id: php-container, name: "Dependency injection containers and autowiring", source: "PSR-11; PHP-DI and Symfony DependencyInjection documentation", match: [container-autowiring]}
+  - {id: php-middleware, name: "PSR-15 middleware pipelines", source: "PHP-FIG PSR-15, PSR-7", match: [psr15-middleware]}
+  - {id: php-monolog, name: "Logging with Monolog", source: "PSR-3; Monolog documentation", match: [monolog-logging]}
+  - {id: php-cache, name: "PSR-6 and PSR-16 caching", source: "PHP-FIG PSR-6 and PSR-16", match: [psr-cache]}
+  - {id: php-composer-audit, name: "Composer audit and security advisories", source: "Composer docs - audit command", match: [composer-audit]}
+  - {id: php-composer-lock, name: "composer.lock and reproducible installs", source: "Composer docs - Basic usage, install, update", match: [composer-lock-install]}
+  - {id: php-cs-fixer, name: "PHP-CS-Fixer and PHP_CodeSniffer", source: "PHP-CS-Fixer and PHPCS documentation", match: [php-cs-fixer]}
+  - {id: php-rector, name: "Automated upgrades with Rector", source: "Rector documentation", match: [rector-upgrades]}
+  - {id: php-pest, name: "Pest testing", source: "Pest documentation", match: [pest-testing]}
+  - {id: php-xdebug, name: "Debugging with Xdebug", source: "Xdebug documentation", match: [xdebug-debugging]}
+  - {id: php-profiling, name: "Profiling PHP", source: "Xdebug profiler, Blackfire and XHProf docs", match: [php-profiling]}
+  - {id: php-cli, name: "CLI scripts and Symfony Console", source: "PHP Manual - Using PHP from the command line; Symfony Console docs", match: [php-cli-scripts]}
+  - {id: php-pdo-tx, name: "PDO transactions and error modes", source: "PHP Manual - PDO", match: [pdo-transactions]}
+  - {id: php-path-traversal, name: "File inclusion and path traversal", source: "OWASP Cheat Sheet Series; PHP Manual - realpath", match: [path-traversal-inclusion]}
+  - {id: php-jit, name: "OPcache JIT and preloading", source: "PHP Manual - OPcache", match: [opcache-jit-preloading]}
+  - {id: php-hardening, name: "php.ini hardening", source: "PHP Manual - Security, Runtime configuration", match: [php-ini-hardening]}
+  - {id: php-intl, name: "Internationalisation with intl", source: "PHP Manual - Intl", match: [intl-extension]}
+  - {id: php-namespaces, name: "Namespaces and use statements", source: "PHP Manual - Namespaces", match: [namespaces-use]}

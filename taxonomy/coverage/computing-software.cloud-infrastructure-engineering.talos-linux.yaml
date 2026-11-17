@@ -1,0 +1,264 @@
+# Coverage spec: talos-linux. Topics from the Talos Linux docs (github.com/siderolabs/docs, public/talos/v1.15 and public/kubernetes-guides).
+subject: talos-linux
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [talos-linux]
+sources:
+  - "Talos Linux docs (github.com/siderolabs/docs, public/talos/v1.15, public/kubernetes-guides)"
+topics:
+  # --- Architecture, getting started and talosctl ---
+  - id: talos-linux-architecture-and-components
+    name: "Architecture and components"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/overview/what-is-talos.mdx"
+    match: [architecture,apid,machined,trustd,containerd,partitions]
+  - id: talos-linux-control-plane-quorum-and-bootstrap
+    name: "Control plane quorum and bootstrap"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/learn-more/control-plane.mdx"
+    match: [control-plane,etcd,quorum,bootstrap,scaling,high-availability]
+  - id: talos-linux-bare-metal-first-cluster-walkthrough
+    name: "Bare metal first cluster walkthrough"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/getting-started/getting-started.mdx"
+    match: [getting-started,bare-metal,gen-config,apply-config,bootstrap,kubeconfig]
+  - id: talos-linux-docker-local-cluster
+    name: "Docker local cluster"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/platform-specific-installations/local-platforms/docker.mdx"
+    match: [docker,talosctl-cluster-create,local-cluster,ci,testing,container-platform]
+  - id: talos-linux-production-cluster-checklist
+    name: "Production cluster checklist"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/getting-started/prodnotes.mdx"
+    match: [production,high-availability,secrets-bundle,load-balancer,system-requirements,gen-secrets]
+  - id: talos-linux-talosctl-install-endpoints-talosconfig
+    name: "Talosctl install endpoints talosconfig"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/learn-more/talosctl.mdx"
+    match: [talosctl,talosconfig,endpoints,nodes,contexts,kubeconfig]
+  # --- Machine configuration ---
+  - id: talos-linux-machine-config-document-model
+    name: "Machine config document model"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/reference/configuration/overview.mdx"
+    match: [machine-config,multi-document,v1alpha1,document-kinds,yaml,configuration-reference]
+  - id: talos-linux-machine-config-acquisition-order
+    name: "Machine config acquisition order"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/acquire.mdx"
+    match: [machine-config,boot,state-partition,kernel-args,embedded-config,platform-config]
+  - id: talos-linux-machine-config-patching
+    name: "Machine config patching"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/patching.mdx"
+    match: [machine-config,patching,strategic-merge,patch-delete,gen-config,multi-document]
+  - id: talos-linux-machine-config-apply-edit-modes
+    name: "Machine config apply edit modes"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/editing-machine-configuration.mdx"
+    match: [machine-config,apply-config,edit,patch,staged,try-mode]
+  - id: talos-linux-reproducible-machine-config-workflow
+    name: "Reproducible machine config workflow"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/reproducible-machine-configuration.mdx"
+    match: [machine-config,reproducibility,secrets-yaml,gen-config,patches,drift]
+  - id: talos-linux-maintenance-mode-insecure-flag
+    name: "Maintenance mode insecure flag"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/insecure.mdx"
+    match: [maintenance-mode,insecure,mtls,cert-fingerprint,apply-config,sidero-link]
+  # --- Cluster services: discovery, API load balancing and time ---
+  - id: talos-linux-discovery-service-registries
+    name: "Discovery service registries"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/discovery.mdx"
+    match: [discovery,cluster-membership,discoveryserviceconfig,affiliates,kubespan,kubeprism]
+  - id: talos-linux-kubeprism-local-apiserver-lb
+    name: "Kubeprism local apiserver lb"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/kubeprism.mdx"
+    match: [kubeprism,high-availability,kube-apiserver,load-balancer,kubeprismconfig,cni]
+  - id: talos-linux-time-sync-ntp-nts-ptp
+    name: "Time sync ntp nts ptp"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/time-sync.mdx"
+    match: [time-sync,ntp,nts,ptp,timesyncconfig,certificates]
+  - id: talos-linux-oom-handler-trigger-and-ranking
+    name: "Oom handler trigger and ranking"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/oom.mdx"
+    match: [oomconfig,oom,cel,psi,cgroups,qos]
+  - id: talos-linux-performance-tuning-kernel-args
+    name: "Performance tuning kernel args"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/system-configuration/performance-tuning.mdx"
+    match: [performance,kernel-args,cpufreq,amd-pstate,intel-idle,mitigations]
+  # --- Upgrades, reset and unattended install ---
+  - id: talos-linux-talos-upgrade-procedure
+    name: "Talos upgrade procedure"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/lifecycle-management/upgrading-talos.mdx"
+    match: [talosctl,upgrade,installer-image,image-factory,rollback,a-b-image]
+  - id: talos-linux-kubernetes-upgrade-k8s-automated
+    name: "Kubernetes upgrade k8s automated"
+    source: "https://github.com/siderolabs/docs/blob/main/public/kubernetes-guides/advanced-guides/upgrading-kubernetes.mdx"
+    match: [talosctl,upgrade-k8s,kubernetes,dry-run,manifests,prune]
+  - id: talos-linux-talos-reset-machine
+    name: "Talos reset machine"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/lifecycle-management/resetting-a-machine.mdx"
+    match: [talosctl,reset,wipe,graceful,etcd,state-partition]
+  - id: talos-linux-unattended-install-config
+    name: "Unattended install config"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/lifecycle-management/unattended-install.mdx"
+    match: [unattendedinstallconfig,install,cel,disk-selector,image-factory,pxe]
+  # --- etcd management, backup and recovery ---
+  - id: talos-linux-etcd-space-quota-and-defrag
+    name: "Etcd space quota and defrag"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/build-and-extend-talos/cluster-operations-and-maintenance/etcd-maintenance.mdx"
+    match: [etcd,quota-backend-bytes,defrag,alarm,nospace,talosctl-etcd]
+  - id: talos-linux-etcd-snapshot-backup
+    name: "Etcd snapshot backup"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/build-and-extend-talos/cluster-operations-and-maintenance/disaster-recovery.mdx"
+    match: [etcd,snapshot,backup,talosctl-etcd-snapshot,machine-config,quorum]
+  - id: talos-linux-etcd-disaster-recovery-restore
+    name: "Etcd disaster recovery restore"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/build-and-extend-talos/cluster-operations-and-maintenance/disaster-recovery.mdx"
+    match: [etcd,disaster-recovery,bootstrap,recover-from,ephemeral,wipe]
+  # --- Disk encryption, secure boot and TPM ---
+  - id: talos-linux-disk-encryption-luks2-keys
+    name: "Disk encryption luks2 keys"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/disk-encryption.mdx"
+    match: [disk-encryption,luks2,volumeconfig,uservolumeconfig,nodeid,kms]
+  - id: talos-linux-tpm-pcr-disk-encryption-binding
+    name: "Tpm pcr disk encryption binding"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/disk-encryption.mdx"
+    match: [tpm,pcr,pcr-7,pcr-11,luks2,secureboot]
+  - id: talos-linux-secureboot-boot-and-install
+    name: "Secureboot boot and install"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/platform-specific-installations/bare-metal-platforms/secureboot.mdx"
+    match: [secureboot,uki,systemd-boot,image-factory,tpm,securitystate]
+  # --- Volumes and storage ---
+  - id: talos-linux-user-volume-config
+    name: "User volume config"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/disk-management/overview.mdx"
+    match: [uservolumeconfig,volumes,hostpath,disk-selector,volumestatus,wipe-disk]
+  - id: talos-linux-system-volumes-ephemeral-and-dedicated
+    name: "System volumes ephemeral and dedicated"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/disk-management/system.mdx"
+    match: [volumeconfig,ephemeral,etcd,kubelet,cri,log]
+  - id: talos-linux-swap-and-zswap-config
+    name: "Swap and zswap config"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/swap.mdx"
+    match: [swapvolumeconfig,zswapconfig,swap,kubelet,limitedswap,sysctl]
+  - id: talos-linux-lvm-volume-groups-logical-volumes
+    name: "Lvm volume groups logical volumes"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/lvm.mdx"
+    match: [lvm,lvmvolumegroupconfig,lvmlogicalvolumeconfig,volume-group,logical-volume,wipe]
+  - id: talos-linux-md-raid1-arrays-raidarrayconfig
+    name: "Md raid1 arrays raidarrayconfig"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/raid.mdx"
+    match: [raid,raidarrayconfig,raid1,md,mdadm,boot]
+  - id: talos-linux-filesystem-trim-and-scrub-schedules
+    name: "Filesystem trim and scrub schedules"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/storage-and-disk-management/filesystem-trim.mdx"
+    match: [filesystemtrimconfig,filesystemscrubconfig,fstrim,xfs-scrub,xfs,volumes]
+  # --- Networking: addressing, VIP and logical interfaces ---
+  - id: talos-linux-static-addresses-and-routes
+    name: "Static addresses and routes"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/configuration/static.mdx"
+    match: [static-ip,routes,linkconfig,gateway,networking,addressspec]
+  - id: talos-linux-layer2-vip-control-plane
+    name: "Layer2 vip control plane"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/advanced/vip.mdx"
+    match: [vip,layer2vipconfig,control-plane,etcd-election,high-availability,kubernetes-api]
+  - id: talos-linux-bond-interface-config
+    name: "Bond interface config"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/logical/bond.mdx"
+    match: [bond,bondconfig,lacp,802-3ad,link-aggregation,networking]
+  - id: talos-linux-vlan-interface-config
+    name: "Vlan interface config"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/logical/vlan.mdx"
+    match: [vlan,vlanconfig,802-1q,networking,logical-link]
+  - id: talos-linux-wireguard-link-config
+    name: "Wireguard link config"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/advanced/wireguard.mdx"
+    match: [wireguard,wireguardconfig,overlay,keys,networking,peers]
+  - id: talos-linux-host-dns-resolver
+    name: "Host dns resolver"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/host-dns.mdx"
+    match: [host-dns,resolverconfig,coredns,kube-dns,caching,networking]
+  - id: talos-linux-ingress-firewall-rules
+    name: "Ingress firewall rules"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/ingress-firewall.mdx"
+    match: [firewall,ingress,networkrule,nftables,networkdefaultaction,security]
+  # --- KubeSpan ---
+  - id: talos-linux-kubespan-mesh-enable
+    name: "Kubespan mesh enable"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/networking/kubespan.mdx"
+    match: [kubespan,kubespanconfig,wireguard,discovery,hybrid-cluster,udp-51820]
+  # --- System extensions, Image Factory and boot assets ---
+  - id: talos-linux-system-extensions-install
+    name: "System extensions install"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/build-and-extend-talos/custom-images-and-development/system-extensions.mdx"
+    match: [system-extensions,installer,boot-assets,extension-tiers,unattendedinstallconfig,immutable-rootfs]
+  - id: talos-linux-extension-service-manifest
+    name: "Extension service manifest"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/build-and-extend-talos/custom-images-and-development/extension-services.mdx"
+    match: [extension-services,system-extensions,container,depends,privileged,talosctl-service]
+  - id: talos-linux-image-factory-schematics
+    name: "Image factory schematics"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/learn-more/image-factory.mdx"
+    match: [image-factory,schematic,installer-image,extensions,kernel-args,meta]
+  - id: talos-linux-imager-custom-boot-assets
+    name: "Imager custom boot assets"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/platform-specific-installations/boot-assets.mdx"
+    match: [imager,boot-assets,iso,installer,extra-kernel-arg,system-extension-image]
+  - id: talos-linux-kernel-command-line-parameters
+    name: "Kernel command line parameters"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/reference/kernel.mdx"
+    match: [kernel-args,talos-platform,ip-parameter,talos-config,dashboard,boot]
+  # --- Logging, registries and image caching ---
+  - id: talos-linux-logging-destinations
+    name: "Logging destinations"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/logging-and-telemetry/logging.mdx"
+    match: [logging,json-lines,kmsglogconfig,dmesg,syslog,observability]
+  - id: talos-linux-image-cache-offline-bundle
+    name: "Image cache offline bundle"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/images-container-runtime/image-cache.mdx"
+    match: [image-cache,imagecacheconfig,air-gapped,volumeconfig,imager,registryd]
+  - id: talos-linux-registry-mirror-pull-through-cache
+    name: "Registry mirror pull through cache"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/configure-your-talos-cluster/images-container-runtime/pull-through-cache.mdx"
+    match: [registry-mirror,pull-through-cache,registrymirrorconfig,harbor,registryauthconfig,containerd]
+  # --- Platforms: bare metal and air-gapped ---
+  - id: talos-linux-pxe-and-iso-bare-metal-boot
+    name: "Pxe and iso bare metal boot"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/platform-specific-installations/bare-metal-platforms/pxe.mdx"
+    match: [pxe,iso,bare-metal,maintenance-mode,ipxe,boot-order]
+  - id: talos-linux-air-gapped-environments
+    name: "Air gapped environments"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/platform-specific-installations/air-gapped.mdx"
+    match: [air-gapped,offline,registry-mirror,discovery-service,ntp,image-factory]
+  # --- Troubleshooting ---
+  - id: talos-linux-talos-troubleshoot-api-etcd-kubelet
+    name: "Talos troubleshoot api etcd kubelet"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/troubleshooting/troubleshooting.mdx"
+    match: [troubleshooting,talosctl,etcd,kubelet,discovery,control-plane]
+  - id: talos-linux-talos-support-bundle
+    name: "Talos support bundle"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/troubleshooting/support-bundle.mdx"
+    match: [support-bundle,talosctl-support,age,encryption,logs,diagnostics]
+  # --- Certificates, PKI, RBAC and hardening ---
+  - id: talos-linux-talos-client-cert-renewal
+    name: "Talos client cert renewal"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/security/cert-management.mdx"
+    match: [pki,talosconfig,kubeconfig,certificates,client-certificate,secrets-bundle]
+  - id: talos-linux-talos-root-ca-rotation
+    name: "Talos root ca rotation"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/security/ca-rotation.mdx"
+    match: [ca-rotation,pki,rotate-ca,accepted-cas,talosconfig,kubeconfig]
+  - id: talos-linux-talos-rbac-roles
+    name: "Talos rbac roles"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/security/rbac.mdx"
+    match: [rbac,os-admin,os-reader,os-operator,talosconfig,client-certificate]
+  - id: talos-linux-talos-kernel-hardening-defaults
+    name: "Talos kernel hardening defaults"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/security/talos-default-hardening-and-cis-compliance.mdx"
+    match: [hardening,kspp,kernel,sysctl,cmdline,cis]
+  - id: talos-linux-talos-image-signature-verification
+    name: "Talos image signature verification"
+    source: "https://github.com/siderolabs/docs/blob/main/public/talos/v1.15/security/verifying-image-signatures.mdx"
+    match: [imageverificationconfig,cosign,keyless,supply-chain,image-signatures,policy]
+  # --- Kubernetes guides ---
+  - id: talos-linux-cilium-cni-on-talos
+    name: "Cilium cni on talos"
+    source: "https://github.com/siderolabs/docs/blob/main/public/kubernetes-guides/cni/deploying-cilium.mdx"
+    match: [cilium,cni,kube-proxy-free,helm,kubeprism,inline-manifest]
+  - id: talos-linux-rook-ceph-on-talos
+    name: "Rook ceph on talos"
+    source: "https://github.com/siderolabs/docs/blob/main/public/kubernetes-guides/csi/ceph-with-rook.mdx"
+    match: [rook,ceph,csi,helm,osd,storage]

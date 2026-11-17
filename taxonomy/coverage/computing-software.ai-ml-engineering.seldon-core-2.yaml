@@ -1,0 +1,178 @@
+# Coverage spec for Seldon Core 2 (ai-ml-engineering).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: seldon-core-2
+scope:
+  category: computing-software
+  field: ai-ml-engineering
+  products: [seldon-core-2]
+sources:
+  - https://github.com/SeldonIO/seldon-core/tree/v2/docs-gb
+topics:
+  - id: architecture-and-scheduler-state
+    name: Architecture, control plane and scheduler state
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/architecture/README.md
+    match: [architecture, control-plane, data-plane, badgerdb, startup-sync, scheduler-ready-timeout]
+  - id: dataflow-kafka-backbone
+    name: Dataflow paradigm and the Kafka backbone
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/architecture/dataflow.md
+    match: [dataflow, kafka-streams]
+  - id: model-resource
+    name: Model custom resource
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/resources/model.md
+    match: [model, storageuri, requirements, mlops-seldon-io]
+  - id: server-resource
+    name: Server custom resource and custom servers
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/resources/server.md
+    match: [server, capabilities, podspec, extracapabilities, custom-server, pvc]
+  - id: serverconfig-and-seldonconfig
+    name: ServerConfig and SeldonConfig resources
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/resources/seldonconfig.md
+    match: [serverconfig, seldonconfig, kafkaconfig, tracingconfig, agentconfig, serviceconfig]
+  - id: seldonruntime-and-overrides
+    name: SeldonRuntime resource and overrides
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/resources/seldonruntime.md
+    match: [seldonruntime, overrides, disableautoupdate, namespace-install]
+  - id: scheduling-and-placement
+    name: Scheduling models onto servers and partial scheduling
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/models/scheduling.md
+    match: [scheduling, schedulefailed, modelavailable, partial-scheduling, minreplicas]
+  - id: multi-model-serving
+    name: Multi-model serving and overcommit
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/models/mms.md
+    match: [multi-model-serving, mms, overcommit, lru, seldon-overcommit-percentage]
+  - id: inference-artifacts
+    name: Inference artifact types and model settings
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/models/inference-artifacts.md
+    match: [inference-artifacts, sklearn, xgboost, tensorflow, pytorch, onnx, model-settings]
+  - id: storage-secrets
+    name: Rclone storage secrets for model artifacts
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/storage-secrets.md
+    match: [rclone, storage-secrets, secretname, s3, minio, gcs, seldon-agent-configmap, preloaded-secrets]
+  - id: parameterized-models
+    name: Parameterized models and PandasQuery
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/models/parameterized-models/pandasquery.md
+    match: [parameterized-models, pandasquery, conditional-routing]
+  - id: endpoint-security-istio-jwt
+    name: Securing inference endpoints with Istio and JWT
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/models/securing-endpoints.md
+    match: [istio, jwt, requestauthentication, authorizationpolicy, oidc, endpoint-security]
+  - id: tls-control-and-data-plane
+    name: TLS for control plane and Envoy data plane
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/getting-started/kubernetes-installation/security/README.md
+    match: [tls, mtls, cert-manager, control-plane-security-protocol, envoy-security-protocol, seldon-core-v2-certs, xds, sds]
+  - id: pipeline-basics
+    name: Pipeline chaining and tensor mapping
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/pipelines.md
+    match: [pipeline, chain, tensormap, step-inputs, output-steps, v2-tensors]
+  - id: pipeline-joins
+    name: Pipeline joins and join types
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/pipelines.md
+    match: [join, inputsjointype, joinwindowms, stepsjoin]
+  - id: pipeline-conditional-and-triggers
+    name: Conditional routing and triggers in pipelines
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/pipelines.md
+    match: [multi-armed-bandit, error-abort, triggers, triggersjointype, externaltriggers, gating]
+  - id: pipeline-composition-and-cycles
+    name: Pipeline-to-pipeline inputs and cyclic pipelines
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/resources/pipeline.md
+    match: [externalinputs, pipeline-to-pipeline, shared-dataflows, cyclic-pipelines, allowcycles, maxsteprevisits]
+  - id: pipeline-kafka-topics
+    name: Pipeline Kafka topics, audit and cleanup
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/managing-kafka-topics.md
+    match: [kafka-topics, audit, replay, cleantopicsondelete, topic-cleanup, topic-naming, kafka-busybox, errors-topic]
+  - id: experiments
+    name: Experiments, A/B tests, mirrors and sticky sessions
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/resources/experiment.md
+    match: [experiment, ab-testing, canary, mirror, traffic-split, candidates, default-model, sticky-sessions, x-seldon-route]
+  - id: explainers
+    name: Explainers with Alibi Explain
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/explainers.md
+    match: [explainer, alibi-explain, anchor-tabular, anchor-text, explainability]
+  - id: drift-and-outlier-detection
+    name: Drift and outlier detection pipelines
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/drift.md
+    match: [drift-detection, outlier-detection, alibi-detect, async-pipeline-branch, kafka-alerts]
+  - id: synchronous-inference
+    name: Synchronous inference over REST and gRPC
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/inference.md
+    match: [inference, rest, grpc, curl, grpcurl, tritonclient, seldon-mesh-service, port-forward, envoy-data-port]
+  - id: inference-routing-and-ingress
+    name: Inference routing headers, paths and ingress options
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/inference.md
+    match: [routing, seldon-model-header, path-routing, pipeline-endpoints, virtual-endpoints, ingress, virtual-hosts, subdomains, authority]
+  - id: asynchronous-inference
+    name: Asynchronous inference via Kafka
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/inference.md
+    match: [async-inference, pipeline-header, protobuf-payload]
+  - id: inference-request-metadata
+    name: Request ids and inference metadata headers
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/inference.md
+    match: [request-id, x-request-id, x-pipeline-version, pipeline-inspect, metadata-headers]
+  - id: open-inference-protocol
+    name: Open Inference Protocol endpoints and payloads
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/user-guide/v2/README.md
+    match: [open-inference-protocol, v2-protocol, health-endpoints, model-metadata, kserve, inference-request, tensor-data, datatypes, tensor-shape]
+  - id: autoscaling-overview
+    name: Autoscaling approaches overview
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/scaling/README.md
+    match: [autoscaling, scaling-strategy]
+  - id: model-autoscaling-inference-lag
+    name: Native model autoscaling on inference lag
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/scaling/core-autoscaling-models.md
+    match: [model-autoscaling, seldon-model-inference-lag-threshold, seldon-model-inactive-seconds-threshold, seldon-scaling-stats-period-seconds]
+  - id: native-server-autoscaling
+    name: Native server autoscaling and packing
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/scaling/core-autoscaling-servers.md
+    match: [server-autoscaling, server-packing, autoscalingserverenabled, enable-server-autoscaling, statefulset]
+  - id: hpa-prometheus-adapter
+    name: HPA with Prometheus adapter and RPS metrics
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/scaling/hpa-setup.md
+    match: [hpa, prometheus-adapter, custom-metrics, infer-rps, seldon-model-infer-total, metrics-relist-interval, horizontalpodautoscaler, object-metric, averagevalue]
+  - id: hpa-single-model-serving-and-tuning
+    name: HPA for single-model serving, policies and cluster capacity
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/scaling/single-model-serving-hpa.md
+    match: [single-model-serving, coordinated-scaling, scaling-policy, stabilization-window, cluster-autoscaler, capacity-planning]
+  - id: scaling-gateways-and-scheduler
+    name: Scaling gateways, dataflow engine and scheduler
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/scaling/scaling-core-services.md
+    match: [scaling, pipeline-gateway, model-gateway, dataflow-engine, kafka-partitions]
+  - id: load-testing-and-k6
+    name: Load testing methodology and k6 tests
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/performance-tuning/models/load-testing.md
+    match: [performance, load-testing, open-loop, closed-loop, coordinated-omission, saturation-point, latency-percentiles, k6, make-targets, k6-sa-key, tests-k6]
+  - id: model-and-infrastructure-tuning
+    name: Model inference and CPU/GPU infrastructure tuning
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/performance-tuning/models/inference.md
+    match: [mlserver, parallel-workers, adaptive-batching, input-size, model-artefact, quantization, cpu, gpu, thread-affinity, omp-num-threads, kmp-affinity, profiling]
+  - id: pipeline-performance-tuning
+    name: Pipeline critical path, gateways and sharding
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/performance-tuning/pipelines/core-2-configuration.md
+    match: [critical-path, bottleneck, linear-pipeline, throughput, modelgateway, modelgateway-num-workers, modelgateway-max-num-consumers, pipelinegateway, maxshardcountmultiplier, scalingconfig, consistent-hashing, cooperative-sticky, rebalancing]
+  - id: helm-installation
+    name: Helm installation and uninstall
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/getting-started/kubernetes-installation/helm.md
+    match: [helm, helm-charts, seldon-core-v2-crds, seldon-core-v2-setup, seldon-core-v2-runtime, seldon-core-v2-servers, clusterwide, uninstall]
+  - id: ansible-installation
+    name: Ansible dev and test installation
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/getting-started/kubernetes-installation/ansible.md
+    match: [ansible, ansible-playbook, kind-cluster, setup-ecosystem, setup-seldon, seldon-all, private-registry, custom-images, dev-test]
+  - id: docker-compose-install
+    name: Docker Compose local install
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/getting-started/docker-installation.md
+    match: [docker-compose, make-deploy-local, local-model-folder, gpu-enabled, custom-image-tag, jaeger, local-install]
+  - id: install-modes-and-dependencies
+    name: Install modes and supported dependency versions
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/installation/README.md
+    match: [installation, dependencies, supported-versions, kubernetes, envoy, prometheus, grafana, prometheus-adapter, opentelemetry-collector, kind]
+  - id: installation-smoke-test
+    name: Testing an installation with the iris model
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/installation/test-installation.md
+    match: [test-installation, smoke-test, iris, host-header, pipeline-suffix, kubectl-wait]
+  - id: kafka-strimzi
+    name: Self-hosted Kafka with Strimzi
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/kubernetes/kafka.md
+    match: [strimzi, strimzi-operator, kraft, kafka-security-protocol, sasl-scram, kafkauser, helm-values, brokervalidationsecret]
+  - id: kafka-managed-services
+    name: Managed Kafka authentication
+    source: https://github.com/SeldonIO/seldon-core/blob/v2/docs-gb/getting-started/kubernetes-installation/security/aws-msk-mtls.md
+    match: [managed-kafka, aws-msk, confluent-cloud, azure-event-hub, sasl-plain, sasl-oauthbearer, kafka-acls, replicationfactor, kafka-debug, min-insync-replicas]

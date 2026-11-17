@@ -1,0 +1,350 @@
+# Canonical coverage spec: F# language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: fsharp-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [fsharp]
+sources:
+  - "F# language reference (learn.microsoft.com/dotnet/fsharp/language-reference)"
+  - "F# language specification (fsharp.org/specs/language-spec)"
+  - "FSharp.Core library reference (fsharp.github.io/fsharp-core-docs)"
+  - "F# style guide and coding conventions (learn.microsoft.com/dotnet/fsharp/style-guide)"
+  - "dotnet CLI, F# compiler options, NuGet, Paket, FAKE, Fantomas, Ionide, FSharp.Analyzers.SDK"
+  - "Expecto, FsCheck, xUnit, BenchmarkDotNet, Giraffe, Fable, FSharp.Data docs"
+topics:
+  - id: fsharp-basics
+    name: "Basic types, literals and strings"
+    source: "F# language reference: Basic Types, Literals, Strings"
+    match: [fsharp-basics]
+    subtopics:
+      - {id: fsharp-basics-numeric-literals, name: "Numeric literals, suffixes and conversions", match: [numeric-literals]}
+      - {id: fsharp-basics-string-literals, name: "String literals, verbatim, triple-quoted and interpolated strings", match: [string-literals]}
+  - id: fsharp-bindings
+    name: "let bindings, mutability and scope"
+    source: "F# language reference: Values, Let Bindings, Mutable, Reference Cells"
+    match: [fsharp-bindings]
+    subtopics:
+      - {id: fsharp-bindings-let-immutability, name: "let bindings, shadowing and immutability by default", match: [let-immutability]}
+      - {id: fsharp-bindings-mutable-ref-cells, name: "mutable locals, ref cells and closure capture", match: [mutable-ref-cells]}
+  - id: fsharp-functions
+    name: "Functions, currying and recursion"
+    source: "F# language reference: Functions, Recursive Functions, Inline Functions, Operator Overloading"
+    match: [fsharp-functions]
+    subtopics:
+      - {id: fsharp-functions-currying-partial, name: "Currying, partial application and higher-order functions", match: [currying-partial]}
+      - {id: fsharp-functions-recursion-tailcalls, name: "Recursion, rec, and, tail calls and accumulators", match: [recursion-tailcalls]}
+      - {id: fsharp-functions-inline-functions, name: "inline functions and static member constraints", match: [inline-functions]}
+      - {id: fsharp-functions-custom-operators, name: "Defining and overloading operators", match: [custom-operators]}
+  - id: fsharp-tuples-records
+    name: "Tuples and records"
+    source: "F# language reference: Tuples, Records, Anonymous Records"
+    match: [fsharp-tuples-records]
+    subtopics:
+      - {id: fsharp-tuples-records-tuples, name: "Tuples and struct tuples", match: [tuples]}
+      - {id: fsharp-tuples-records-records, name: "Records, copy-and-update and structural equality", match: [records]}
+      - {id: fsharp-tuples-records-anonymous-records, name: "Anonymous records", match: [anonymous-records]}
+  - id: fsharp-unions
+    name: "Discriminated unions and enums"
+    source: "F# language reference: Discriminated Unions, Enumerations"
+    match: [fsharp-unions]
+    subtopics:
+      - {id: fsharp-unions-discriminated-unions, name: "Discriminated unions and domain modelling", match: [discriminated-unions]}
+      - {id: fsharp-unions-single-case-unions, name: "Single-case unions, struct unions and RequireQualifiedAccess", match: [single-case-unions]}
+      - {id: fsharp-unions-enums-flags, name: "Enums and flags enums", match: [enums-flags]}
+  - id: fsharp-matching
+    name: "Pattern matching"
+    source: "F# language reference: Pattern Matching, Active Patterns, Match Expressions"
+    match: [fsharp-matching]
+    subtopics:
+      - {id: fsharp-matching-match-expressions, name: "match, guards and pattern forms", match: [match-expressions]}
+      - {id: fsharp-matching-active-patterns, name: "Active patterns (complete, partial, parameterised)", match: [active-patterns]}
+  - id: fsharp-option-result
+    name: "Option, ValueOption and Result"
+    source: "FSharp.Core reference: Option, ValueOption, Result modules"
+    match: [fsharp-option-result]
+    subtopics:
+      - {id: fsharp-option-result-option-type, name: "Option type and the Option module", match: [option-type]}
+      - {id: fsharp-option-result-voption-valueoption, name: "ValueOption and struct options", match: [voption-valueoption]}
+      - {id: fsharp-option-result-result-type, name: "Result type and railway-oriented error handling", match: [result-type]}
+  - id: fsharp-lists-arrays
+    name: "Lists, arrays and slicing"
+    source: "FSharp.Core reference: List, Array modules; F# language reference: Lists, Arrays, Slices"
+    match: [fsharp-lists-arrays]
+    subtopics:
+      - {id: fsharp-lists-arrays-list-module, name: "Immutable lists and the List module", match: [list-module]}
+      - {id: fsharp-lists-arrays-array-module, name: "Arrays, slicing and the Array module", match: [array-module]}
+      - {id: fsharp-lists-arrays-slicing-ranges, name: "Ranges, slicing and indexers", match: [slicing-ranges]}
+  - id: fsharp-sequences-maps
+    name: "Sequences, comprehensions and maps"
+    source: "FSharp.Core reference: Seq, Map, Set modules; F# language reference: Sequences"
+    match: [fsharp-sequences-maps]
+    subtopics:
+      - {id: fsharp-sequences-maps-seq-lazy, name: "Lazy sequences and the Seq module", match: [seq-lazy]}
+      - {id: fsharp-sequences-maps-comprehensions, name: "List, array and sequence comprehensions", match: [comprehensions]}
+      - {id: fsharp-sequences-maps-map-set, name: "Map and Set immutable collections", match: [map-set]}
+      - {id: fsharp-sequences-maps-fold-reduce-scan, name: "Folds, reduce, scan and aggregation", match: [fold-reduce-scan]}
+  - id: fsharp-ce
+    name: "Computation expressions"
+    source: "F# language reference: Computation Expressions, Query Expressions"
+    match: [fsharp-ce]
+    subtopics:
+      - {id: fsharp-ce-ce-builders, name: "Writing custom computation expression builders", match: [ce-builders]}
+      - {id: fsharp-ce-query-expressions, name: "Query expressions and LINQ providers", match: [query-expressions]}
+  - id: fsharp-async
+    name: "Async, tasks and agents"
+    source: "F# language reference: Asynchronous Expressions, Task Expressions, MailboxProcessor"
+    match: [fsharp-async]
+    subtopics:
+      - {id: fsharp-async-async-workflows, name: "async workflows, Async.Parallel and cancellation", match: [async-workflows]}
+      - {id: fsharp-async-task-expressions, name: "task expressions and Task interop", match: [task-expressions]}
+      - {id: fsharp-async-mailbox-processor, name: "MailboxProcessor agents", match: [mailbox-processor]}
+  - id: fsharp-oop
+    name: "Classes, interfaces and inheritance"
+    source: "F# language reference: Classes, Interfaces, Inheritance, Abstract Classes, Object Expressions"
+    match: [fsharp-oop]
+    subtopics:
+      - {id: fsharp-oop-classes-members, name: "Classes, constructors, properties and members", match: [classes-members]}
+      - {id: fsharp-oop-interfaces-object-expressions, name: "Interfaces and object expressions", match: [interfaces-object-expressions]}
+      - {id: fsharp-oop-inheritance-abstract, name: "Inheritance, abstract and override", match: [inheritance-abstract]}
+      - {id: fsharp-oop-type-extensions, name: "Type extensions and extension methods", match: [type-extensions]}
+  - id: fsharp-struct-memory
+    name: "Structs, Span and byrefs"
+    source: "F# language reference: Structures, Byrefs, Span and inref/outref"
+    match: [fsharp-struct-memory]
+    subtopics:
+      - {id: fsharp-struct-memory-struct-types, name: "Struct types, IsByRefLike and defensive copies", match: [struct-types]}
+      - {id: fsharp-struct-memory-span-byref, name: "Span, byref, inref and outref", match: [span-byref]}
+  - id: fsharp-generics
+    name: "Generics, units of measure and equality"
+    source: "F# language reference: Generics, Constraints, Units of Measure, Equality and Comparison"
+    match: [fsharp-generics]
+    subtopics:
+      - {id: fsharp-generics-generic-constraints, name: "Generics, type inference and constraints", match: [generic-constraints]}
+      - {id: fsharp-generics-units-of-measure, name: "Units of measure", match: [units-of-measure]}
+      - {id: fsharp-generics-custom-equality, name: "Equality, comparison and custom Equals", match: [custom-equality]}
+  - id: fsharp-modules
+    name: "Modules, namespaces and accessibility"
+    source: "F# language reference: Modules, Namespaces, Access Control, Import Declarations"
+    match: [fsharp-modules]
+    subtopics:
+      - {id: fsharp-modules-modules-namespaces, name: "Modules, namespaces, open and file order", match: [modules-namespaces]}
+      - {id: fsharp-modules-access-control, name: "Access control and signature files", match: [access-control]}
+  - id: fsharp-exceptions
+    name: "Exceptions and resource management"
+    source: "F# language reference: Exception Handling, use bindings, Resource Management"
+    match: [fsharp-exceptions]
+    subtopics:
+      - {id: fsharp-exceptions-try-with-failwith, name: "try/with, failwith, raise and custom exceptions", match: [try-with-failwith]}
+      - {id: fsharp-exceptions-use-dispose, name: "use, using and IDisposable", match: [use-dispose]}
+  - id: fsharp-metaprogramming
+    name: "Attributes, quotations and type providers"
+    source: "F# language reference: Attributes, Code Quotations, Type Providers, Reflection"
+    match: [fsharp-metaprogramming]
+    subtopics:
+      - {id: fsharp-metaprogramming-attributes-interop, name: "Attributes and interop markers", match: [attributes-interop]}
+      - {id: fsharp-metaprogramming-quotations, name: "Code quotations and reflection", match: [quotations]}
+      - {id: fsharp-metaprogramming-type-providers, name: "Type providers", match: [type-providers]}
+  - id: fsharp-formatting
+    name: "Formatting and strings"
+    source: "FSharp.Core reference: printf formatting, String module"
+    match: [fsharp-formatting]
+    subtopics:
+      - {id: fsharp-formatting-printf-format, name: "printf, sprintf and format specifiers", match: [printf-format]}
+      - {id: fsharp-formatting-string-functions, name: "String module and System.String helpers", match: [string-functions]}
+  - id: fsharp-io
+    name: "Files, JSON and regular expressions"
+    source: ".NET System.IO, System.Text.Json, System.Text.RegularExpressions"
+    match: [fsharp-io]
+    subtopics:
+      - {id: fsharp-io-file-io, name: "Files, directories and streams", match: [file-io]}
+      - {id: fsharp-io-json-serialization, name: "JSON with System.Text.Json and F# types", match: [json-serialization]}
+      - {id: fsharp-io-regex-text, name: "Regular expressions and active-pattern matching", match: [regex-text]}
+  - id: fsharp-interop
+    name: ".NET interop and nullness"
+    source: "F# language reference: Interoperability, Nullable reference types, Platform invoke"
+    match: [fsharp-interop]
+    subtopics:
+      - {id: fsharp-interop-dotnet-interop, name: "Calling .NET libraries: out params, optional args, generics", match: [dotnet-interop]}
+      - {id: fsharp-interop-nullable-references, name: "Null, Nullable and nullness checking", match: [nullable-references]}
+      - {id: fsharp-interop-csharp-consumption, name: "Designing F# libraries for C# callers", match: [csharp-consumption]}
+      - {id: fsharp-interop-native-pinvoke, name: "P/Invoke and native interop", match: [native-pinvoke]}
+  - id: fsharp-concurrency
+    name: "Events, laziness and parallelism"
+    source: "FSharp.Core: Event, Observable, Lazy; .NET Task Parallel Library"
+    match: [fsharp-concurrency]
+    subtopics:
+      - {id: fsharp-concurrency-events-observables, name: "Events, IObservable and the Observable module", match: [events-observables]}
+      - {id: fsharp-concurrency-lazy-values, name: "Lazy values and memoisation", match: [lazy-values]}
+      - {id: fsharp-concurrency-parallel-locking, name: "Threads, Parallel, locks and thread safety", match: [parallel-locking]}
+  - id: fsharp-project
+    name: "Projects, CLI and SDK"
+    source: "dotnet CLI docs, F# project (.fsproj) and MSBuild reference, global.json"
+    match: [fsharp-project]
+    subtopics:
+      - {id: fsharp-project-fsproj-compile-order, name: "fsproj files, Compile Include order and project structure", match: [fsproj-compile-order]}
+      - {id: fsharp-project-dotnet-cli-workflow, name: "dotnet new, build, run, test, watch", match: [dotnet-cli-workflow]}
+      - {id: fsharp-project-global-json-sdk, name: "global.json, target frameworks and SDK pinning", match: [global-json-sdk]}
+      - {id: fsharp-project-central-package-management, name: "Directory.Build.props and central package management", match: [central-package-management]}
+  - id: fsharp-nuget
+    name: "NuGet packaging and FSharp.Core"
+    source: "NuGet docs: creating packages, pack/push; FSharp.Core versioning"
+    match: [fsharp-nuget]
+    subtopics:
+      - {id: fsharp-nuget-nuget-packaging, name: "Packing and publishing NuGet packages with SourceLink", match: [nuget-packaging]}
+      - {id: fsharp-nuget-fscore-versioning, name: "FSharp.Core versioning and library compatibility", match: [fscore-versioning]}
+  - id: fsharp-paket-fake
+    name: "Paket and FAKE"
+    source: "Paket docs, FAKE docs"
+    match: [fsharp-paket-fake]
+    subtopics:
+      - {id: fsharp-paket-fake-paket-deps, name: "Paket dependency manager", match: [paket-deps]}
+      - {id: fsharp-paket-fake-fake-build, name: "FAKE build scripts", match: [fake-build]}
+  - id: fsharp-fsi
+    name: "F# Interactive and scripts"
+    source: "F# Interactive reference, F# scripting"
+    match: [fsharp-fsi]
+    subtopics:
+      - {id: fsharp-fsi-fsi-repl, name: "F# Interactive REPL", match: [fsi-repl]}
+      - {id: fsharp-fsi-fsx-scripts, name: ".fsx scripts with NuGet references", match: [fsx-scripts]}
+  - id: fsharp-compiler
+    name: "Compiler options and diagnostics"
+    source: "F# compiler options reference, MSBuild properties for F#"
+    match: [fsharp-compiler]
+    subtopics:
+      - {id: fsharp-compiler-warning-flags, name: "Warnings: warnon, warnaserror, nowarn", match: [warning-flags]}
+      - {id: fsharp-compiler-release-optimisation-flags, name: "Optimisation, tailcalls and deterministic builds", match: [release-optimisation-flags]}
+      - {id: fsharp-compiler-langversion-features, name: "LangVersion, preview features and feature flags", match: [langversion-features]}
+      - {id: fsharp-compiler-msbuild-binlog, name: "Build diagnostics and MSBuild binary logs", match: [msbuild-binlog]}
+  - id: fsharp-style
+    name: "Style guide and component design"
+    source: "F# style guide, F# coding conventions, F# component design guidelines"
+    match: [fsharp-style]
+    subtopics:
+      - {id: fsharp-style-naming-conventions, name: "Naming conventions", match: [naming-conventions]}
+      - {id: fsharp-style-formatting-conventions, name: "Formatting and layout conventions", match: [formatting-conventions]}
+      - {id: fsharp-style-component-design, name: "Component design guidelines for libraries", match: [component-design]}
+  - id: fsharp-format-tools
+    name: "Fantomas and editor config"
+    source: "Fantomas documentation, EditorConfig"
+    match: [fsharp-format-tools]
+    subtopics:
+      - {id: fsharp-format-tools-fantomas-formatter, name: "Fantomas code formatter", match: [fantomas-formatter]}
+      - {id: fsharp-format-tools-editorconfig-settings, name: ".editorconfig settings for F#", match: [editorconfig-settings]}
+  - id: fsharp-analysis
+    name: "Analyzers and linting"
+    source: "FSharp.Analyzers.SDK, FSharpLint"
+    match: [fsharp-analysis]
+    subtopics:
+      - {id: fsharp-analysis-fsharp-analyzers, name: "F# analyzers", match: [fsharp-analyzers]}
+      - {id: fsharp-analysis-fsharplint, name: "FSharpLint", match: [fsharplint]}
+  - id: fsharp-test-frameworks
+    name: "Test frameworks"
+    source: "Expecto docs, xUnit.net docs, Unquote and FsUnit docs"
+    match: [fsharp-test-frameworks]
+    subtopics:
+      - {id: fsharp-test-frameworks-expecto-tests, name: "Expecto tests", match: [expecto-tests]}
+      - {id: fsharp-test-frameworks-xunit-tests, name: "xUnit tests in F#", match: [xunit-tests]}
+      - {id: fsharp-test-frameworks-unquote-fsunit, name: "Unquote and FsUnit assertions", match: [unquote-fsunit]}
+  - id: fsharp-test-practice
+    name: "Property tests, coverage and test doubles"
+    source: "FsCheck docs, Coverlet docs"
+    match: [fsharp-test-practice]
+    subtopics:
+      - {id: fsharp-test-practice-property-testing, name: "Property-based testing with FsCheck", match: [property-testing]}
+      - {id: fsharp-test-practice-test-coverage, name: "Code coverage with Coverlet", match: [test-coverage]}
+      - {id: fsharp-test-practice-test-doubles, name: "Testing with functions as doubles", match: [test-doubles]}
+  - id: fsharp-debug
+    name: "Debugging and diagnostics"
+    source: "Ionide and .NET debugging docs, dotnet-trace, dotnet-counters, dotnet-dump"
+    match: [fsharp-debug]
+    subtopics:
+      - {id: fsharp-debug-debugger-launch, name: "Debugging F# in VS Code, Rider and Visual Studio", match: [debugger-launch]}
+      - {id: fsharp-debug-dump-diagnostics, name: "dotnet-trace, counters and dumps", match: [dump-diagnostics]}
+  - id: fsharp-perf-measure
+    name: "Benchmarking and runtime tuning"
+    source: "BenchmarkDotNet docs, .NET GC and runtime configuration"
+    match: [fsharp-perf-measure]
+    subtopics:
+      - {id: fsharp-perf-measure-benchmarkdotnet, name: "BenchmarkDotNet micro-benchmarks", match: [benchmarkdotnet]}
+      - {id: fsharp-perf-measure-gc-runtime-settings, name: "GC, tiered compilation and runtime settings", match: [gc-runtime-settings]}
+  - id: fsharp-perf-code
+    name: "Allocation-aware F# code"
+    source: "F# performance guidance, language reference: Inline, Struct, Span"
+    match: [fsharp-perf-code]
+    subtopics:
+      - {id: fsharp-perf-code-allocation-reduction, name: "Reducing allocations: structs, voption, Span, ArrayPool", match: [allocation-reduction]}
+      - {id: fsharp-perf-code-hot-path-pitfalls, name: "Common F# performance pitfalls", match: [hot-path-pitfalls]}
+  - id: fsharp-web-server
+    name: "Giraffe and ASP.NET Core"
+    source: "Giraffe docs, ASP.NET Core docs"
+    match: [fsharp-web-server]
+    subtopics:
+      - {id: fsharp-web-server-giraffe-handlers, name: "Giraffe HttpHandler routing", match: [giraffe-handlers]}
+      - {id: fsharp-web-server-aspnet-minimal-api, name: "ASP.NET Core minimal APIs from F#", match: [aspnet-minimal-api]}
+  - id: fsharp-fable
+    name: "Fable (F# to JavaScript)"
+    source: "Fable documentation"
+    match: [fsharp-fable]
+    subtopics:
+      - {id: fsharp-fable-fable-compile, name: "Fable compiler setup and build", match: [fable-compile]}
+      - {id: fsharp-fable-fable-js-interop, name: "Fable JS interop: Emit, import and bindings", match: [fable-js-interop]}
+  - id: fsharp-data
+    name: "Data access and parsing"
+    source: "FSharp.Data docs, ADO.NET, Dapper, EF Core docs"
+    match: [fsharp-data]
+    subtopics:
+      - {id: fsharp-data-sql-data-access, name: "SQL data access with ADO.NET, Dapper and EF Core", match: [sql-data-access]}
+      - {id: fsharp-data-fsharp-data-parsing, name: "FSharp.Data for CSV, JSON, HTML and HTTP", match: [fsharp-data-parsing]}
+  - id: fsharp-ide
+    name: "Editors and IDEs"
+    source: "Ionide, JetBrains Rider, Visual Studio F# tooling"
+    match: [fsharp-ide]
+    subtopics:
+      - {id: fsharp-ide-ionide-vscode, name: "Ionide for VS Code", match: [ionide-vscode]}
+      - {id: fsharp-ide-rider-visual-studio, name: "Rider and Visual Studio for F#", match: [rider-visual-studio]}
+  - id: fsharp-containers
+    name: "Containers"
+    source: ".NET container docs, dotnet publish container support"
+    match: [fsharp-containers]
+    subtopics:
+      - {id: fsharp-containers-dockerfile-multistage, name: "Multi-stage Dockerfile for F# apps", match: [dockerfile-multistage]}
+      - {id: fsharp-containers-sdk-container-publish, name: "Building images with dotnet publish (SDK containers)", match: [sdk-container-publish]}
+  - id: fsharp-aot
+    name: "Native AOT, trimming and startup"
+    source: ".NET deployment docs: Native AOT, trimming, ReadyToRun, single-file"
+    match: [fsharp-aot]
+    subtopics:
+      - {id: fsharp-aot-native-aot-trimming, name: "Native AOT and trimming with F#", match: [native-aot-trimming]}
+      - {id: fsharp-aot-readytorun-single-file, name: "ReadyToRun, single-file and self-contained publish", match: [readytorun-single-file]}
+  - id: fsharp-ci
+    name: "CI and reproducible builds"
+    source: "GitHub Actions docs, dotnet tool manifests, NuGet lock files"
+    match: [fsharp-ci]
+    subtopics:
+      - {id: fsharp-ci-github-actions-ci, name: "GitHub Actions for F# projects", match: [github-actions-ci]}
+      - {id: fsharp-ci-tool-manifest, name: "Local dotnet tools and manifests", match: [tool-manifest]}
+      - {id: fsharp-ci-locked-restore-reproducible, name: "Lock files and reproducible restores", match: [locked-restore-reproducible]}
+  - id: fsharp-security
+    name: "Security hardening"
+    source: "NuGet auditing, ASP.NET Core security, .NET security guidelines"
+    match: [fsharp-security]
+    subtopics:
+      - {id: fsharp-security-dependency-audit, name: "Dependency vulnerability auditing", match: [dependency-audit]}
+      - {id: fsharp-security-secrets-configuration, name: "Configuration and secrets handling", match: [secrets-configuration]}
+      - {id: fsharp-security-injection-hardening, name: "Injection, deserialisation and input validation", match: [injection-hardening]}
+  - id: fsharp-architecture
+    name: "Application structure"
+    source: "F# for Fun and Profit style guides, F# component design guidelines"
+    match: [fsharp-architecture]
+    subtopics:
+      - {id: fsharp-architecture-domain-modeling, name: "Domain modelling with types", match: [domain-modeling]}
+      - {id: fsharp-architecture-dependency-functions, name: "Dependency injection with functions", match: [dependency-functions]}
+      - {id: fsharp-architecture-logging-config, name: "Logging with Microsoft.Extensions.Logging", match: [logging-config]}
+  - id: fsharp-docs
+    name: "Documentation"
+    source: "F# XML documentation, fsdocs tool"
+    match: [fsharp-docs]
+    subtopics:
+      - {id: fsharp-docs-xml-doc-comments, name: "XML documentation comments", match: [xml-doc-comments]}
+      - {id: fsharp-docs-fsdocs-site, name: "Documentation sites with fsdocs", match: [fsdocs-site]}

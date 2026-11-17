@@ -1,0 +1,838 @@
+# Canonical coverage spec: Animation production (post, delivery and pipeline crafts).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (Producing Animation chapters, the VES
+# Handbook pipeline chapters, the Adobe After Effects / Animate user guide ToCs, the Toon Boom
+# Harmony docs ToC, the Substance 3D Painter docs ToC, FFmpeg docs, Netflix/YouTube delivery
+# specs, ACES/OCIO docs, audio-post curricula and loudness standards, ElevenLabs docs, and the
+# Ayon/OpenPype and ShotGrid developer docs), not from what we happened to write.
+# Subtopics (depth) come from those sources' own sub-sections: manual page headings, spec
+# sections, chapter sub-sections and API module lists.
+subject: animation-production
+scope:
+  category: creative-arts
+  field: animation
+  products: [editorial, editing, color, sound-design, voice-tts, vector-graphics, scripting, encode-delivery, texturing, motion-graphics, pipeline]
+sources:
+  - "Producing Animation, 3rd ed. (Winder, Dowlatabadi, Miller-Zarneke) - chapters on development, budgeting, scheduling, crew planning, pre-production, production (layout, animation, FX, lighting), post-production (editorial, sound, music, colour), outsourcing, delivery and archiving"
+  - "The VES Handbook of Visual Effects, 3rd ed. - pipeline and data management chapters (asset management, versioning, naming, storage, render farm, colour management, review, interchange formats Alembic/USD/OpenEXR, digital intermediate and delivery)"
+  - "Adobe After Effects User Guide ToC (helpx.adobe.com/after-effects/user-guide.html) - Projects and compositions, Layers and properties, Animation and keyframes (graph editor, interpolation), Text, Shape layers, Masks/mattes/keying, Tracking, 3D, Expressions, Scripting, Essential Graphics/mogrt, Rendering and exporting"
+  - "Adobe Animate User Guide ToC (helpx.adobe.com/animate/user-guide.html) - Drawing tools, Symbols and library, Tweening (classic, motion, shape), Asset export, Publishing, JSFL scripting"
+  - "Toon Boom Harmony documentation ToC (docs.toonboom.com) - Drawing, Colour palettes, Ink and paint, Rigging with pegs and deformers, Node view, Drawing substitution, Scripting"
+  - "Adobe Substance 3D Painter docs ToC (helpx.adobe.com/substance-3d-painter) - Project configuration, Texture sets, UDIM, Baking, Layers and masks, Generators, Smart materials and masks, Anchor points, Exporting and export presets, PBR guide"
+  - "FFmpeg documentation (ffmpeg.org/documentation.html) - ffmpeg/ffprobe manuals, filters, codecs (libx264, libx265, prores_ks, dnxhd, libsvtav1), formats (hls, dash, image2), colour tagging; plus x264/x265 rate-control docs and VMAF docs"
+  - "Netflix Partner Help Center delivery specs (IMF, ProRes, audio and loudness, timed text style guide), YouTube recommended upload encoding settings, EBU R128 / ITU-R BS.1770 / ATSC A/85, DPP AS-11, SMPTE ST 2067 IMF, DCI DCP spec"
+  - "ACES documentation (docs.acescentral.com) - ACES2065-1, ACEScg, ACEScct, IDT/RRT/ODT, CTL; OpenColorIO docs (opencolorio.readthedocs.io) - config authoring, looks, display/view; DaVinci Resolve Reference Manual colour page chapters (primaries, secondaries, qualifiers, windows, tracking, scopes, HDR, gallery, LUTs)"
+  - "Audio post-production curricula (Purcell, Dialogue Editing for Motion Pictures; Viers, The Sound Effects Bible; Avid Pro Tools 110/210P post courses) - dialogue edit, ADR, foley, effects, backgrounds, music edit, re-recording mix, stems, M and E, deliverables"
+  - "ElevenLabs docs (elevenlabs.io/docs) - text-to-speech, voice settings, voice cloning (instant/professional), pronunciation dictionaries, speech-to-speech, dubbing; Coqui XTTS and Piper docs; Rhubarb Lip Sync docs; Montreal Forced Aligner docs"
+  - "Ayon/OpenPype developer docs (ayon.ynput.io), Pyblish docs, Rez docs, Autodesk Flow Production Tracking (ShotGrid) Python API and Toolkit docs, Kitsu docs, OpenUSD docs (openusd.org) composition arcs, Alembic docs, OpenRV docs, OpenTimelineIO docs, MPA/TPN content security best practices"
+topics:
+  # --- Editorial and editing (Producing Animation ch. editorial; Avid/Premiere/Resolve edit guides)
+  - id: editorial-department
+    name: Animation editorial department workflow
+    source: Producing Animation/Editorial
+    match: [editorial-department, editorial-workflow]
+    subtopics:
+      - {id: ed-shot-breakdown, name: Breaking the animatic into numbered shots with frame counts, match: [shot-breakdown]}
+      - {id: ed-turnover, name: Turnover packages from editorial to layout and animation, match: [editorial-turnover]}
+      - {id: ed-cut-in-shots, name: Cutting in layout and animation versions over boards, match: [cut-in-shots]}
+      - {id: ed-sweatbox, name: Sweatbox and director review sessions in the cutting room, match: [sweatbox]}
+      - {id: ed-change-list, name: Change lists after a recut sent to departments, match: [change-list]}
+  - id: animatic-production
+    name: Animatic and story reel production
+    source: Producing Animation/Story and editorial
+    match: [animatic, story-reel]
+    subtopics:
+      - {id: an-scratch-vo, name: Recording and cutting scratch dialogue, match: [scratch-vo]}
+      - {id: an-temp-music, name: Temp music and temp-track risk, match: [temp-music]}
+      - {id: an-camera-moves, name: Faking camera moves and pans on boards in the animatic, match: [animatic-camera-moves]}
+      - {id: an-animatic-sfx, name: Temp sound effects in the animatic, match: [animatic-sfx]}
+  - id: nle-project-setup
+    name: NLE project, sequence and media setup
+    source: Premiere Pro/Resolve/Avid user guides - project setup and media management
+    match: [nle-project-setup, nle]
+    subtopics:
+      - {id: nle-sequence-settings, name: Sequence and timeline settings (frame rate, raster, audio), match: [sequence-settings]}
+      - {id: nle-proxy, name: Proxy and offline media workflow, match: [proxy-workflow]}
+      - {id: nle-media-management, name: Media management, relinking and consolidation, match: [media-management, relink-media]}
+      - {id: nle-bins, name: Bin structure and naming for an animation show, match: [bin-structure]}
+  - id: trimming
+    name: Trimming and timeline editing tools
+    source: Avid Media Composer/Premiere Pro user guides - Trimming
+    match: [trimming, trim-tools]
+    subtopics:
+      - {id: tr-ripple-roll, name: Ripple and roll trims, match: [ripple-trim, roll-trim]}
+      - {id: tr-slip-slide, name: Slip and slide edits, match: [slip-slide]}
+      - {id: tr-jkl, name: JKL dynamic trimming, match: [jkl-trimming]}
+      - {id: tr-match-frame, name: Match frame and reverse match frame, match: [match-frame]}
+  - id: timeline-interchange
+    name: Timeline interchange and conform
+    source: OpenTimelineIO docs; Avid/Resolve interchange chapters
+    match: [conform, timeline-interchange]
+    subtopics:
+      - {id: ti-edl, name: CMX3600 EDL export and reading, match: [edl]}
+      - {id: ti-aaf-xml, name: AAF and FCP XML exchange between NLEs, match: [aaf, fcpxml]}
+      - {id: ti-otio, name: OpenTimelineIO scripting and adapters, match: [otio]}
+      - {id: ti-reconform, name: Reconforming after editorial changes, match: [reconform]}
+  - id: edit-effects
+    name: Edit-room effects, retimes and temp comps
+    source: Premiere Pro/Resolve Edit page - effects and speed changes
+    match: [edit-effects]
+    subtopics:
+      - {id: ef-retime, name: Speed changes, time remapping and frame blending, match: [time-remap]}
+      - {id: ef-dissolves, name: Dissolves, dips and transition conventions, match: [dissolves]}
+      - {id: ef-nested, name: Nested sequences and compound clips, match: [nested-sequences]}
+      - {id: ef-temp-comp, name: Temp comps and split screens in the cut, match: [temp-comp]}
+  - id: editorial-sound
+    name: Editorial sound and audio turnover
+    source: Producing Animation/Post-production; Pro Tools post curricula
+    match: [editorial-sound, audio-turnover]
+    subtopics:
+      - {id: es-track-layout, name: Dialogue/SFX/music track layout in the cut, match: [track-layout]}
+      - {id: es-spotting-session, name: Spotting sessions with sound and music, match: [spotting-session]}
+      - {id: es-temp-mix, name: Temp mix for screenings, match: [temp-mix]}
+      - {id: es-omf-aaf, name: AAF/OMF audio turnover with handles, match: [aaf-audio-turnover]}
+  - id: editorial-pacing
+    name: Pacing and rhythm of the cut
+    source: Murch, In the Blink of an Eye; Producing Animation/Editorial
+    match: [editorial-pacing, pacing]
+    subtopics:
+      - {id: pa-cut-on-action, name: Cutting on action, match: [cut-on-action]}
+      - {id: pa-split-edits, name: J-cuts and L-cuts, match: [j-cut, l-cut]}
+      - {id: pa-reaction-shots, name: Reaction shots and cutting for performance, match: [reaction-shots]}
+      - {id: pa-montage, name: Montage sequences, match: [montage]}
+  - id: continuity-editing
+    name: Continuity editing grammar
+    source: Bordwell and Thompson, Film Art - continuity editing
+    match: [continuity, continuity-editing]
+    subtopics:
+      - {id: ce-180, name: 180-degree rule and screen direction, match: [180-rule]}
+      - {id: ce-eyeline, name: Eyeline matches, match: [eyeline-match]}
+      - {id: ce-match-cut, name: Graphic and match cuts, match: [match-cut]}
+      - {id: ce-jump-cut, name: Jump cuts and when they are deliberate, match: [jump-cut]}
+  - id: review-approval
+    name: Cut review and approval
+    source: Producing Animation/Approvals; Frame.io and Resolve collaboration docs
+    match: [review-approval, cut-review]
+    subtopics:
+      - {id: ra-remote-review, name: Remote review links and timecoded notes, match: [remote-review]}
+      - {id: ra-burn-ins, name: Burn-ins for review copies (timecode, shot name, version), match: [burn-ins]}
+      - {id: ra-ab-compare, name: A/B version comparison and wipe review, match: [ab-compare]}
+      - {id: ra-screening, name: Test screenings and audience feedback, match: [test-screening]}
+  - id: picture-lock-deliverables
+    name: Picture lock and editorial deliverables
+    source: Producing Animation/Post-production and delivery
+    match: [picture-lock]
+    subtopics:
+      - {id: pl-reels, name: Reel breaks and reel balancing, match: [reel-breaks]}
+      - {id: pl-textless, name: Textless elements and texted inserts, match: [textless]}
+      - {id: pl-countdown, name: Leaders, countdown and 2-pop, match: [two-pop, leader]}
+      - {id: pl-continuity-script, name: As-broadcast continuity and dialogue lists, match: [dialogue-list]}
+
+  # --- Colour (ACES docs, OCIO docs, DaVinci Resolve Reference Manual colour chapters)
+  - id: colour-management
+    name: Colour management systems
+    source: ACES docs; OpenColorIO docs
+    match: [color-management, colour-management]
+    subtopics:
+      - {id: cm-ocio-config, name: Authoring and editing an OCIO config, match: [ocio-config]}
+      - {id: cm-aces-transforms, name: ACES IDT/RRT/ODT transform chain, match: [aces-transforms]}
+      - {id: cm-acescg, name: ACEScg working space for CG, match: [acescg]}
+      - {id: cm-acescct, name: ACEScct for grading, match: [acescct]}
+      - {id: cm-input-transforms, name: Input transforms for camera and texture sources, match: [input-transform]}
+  - id: scene-linear
+    name: Scene-linear and log image encoding
+    source: VES Handbook/Colour management; OpenEXR docs
+    match: [scene-linear, linear-workflow]
+    subtopics:
+      - {id: sl-transfer, name: Transfer functions (sRGB, gamma 2.4, log, PQ), match: [transfer-function]}
+      - {id: sl-openexr, name: OpenEXR channels, compression and half float, match: [openexr]}
+      - {id: sl-log, name: Log encodings for grading and interchange, match: [log-encoding]}
+      - {id: sl-premult, name: Premultiplied alpha in linear compositing, match: [premultiplied-alpha]}
+  - id: primary-grading
+    name: Primary colour correction
+    source: Resolve Reference Manual/Primaries palette
+    match: [primary-grading, color-grading]
+    subtopics:
+      - {id: pg-lgg, name: Lift, gamma, gain and offset, match: [lift-gamma-gain]}
+      - {id: pg-printer-lights, name: Printer lights and offset grading in log, match: [printer-lights]}
+      - {id: pg-white-balance, name: Neutral balance and white point, match: [white-balance]}
+      - {id: pg-contrast-pivot, name: Contrast, pivot and saturation, match: [contrast-pivot]}
+  - id: secondary-grading
+    name: Secondary colour correction
+    source: Resolve Reference Manual/Qualifiers, Windows, Tracking
+    match: [secondary-grading]
+    subtopics:
+      - {id: sg-qualifiers, name: HSL qualifiers and keys, match: [hsl-qualifier]}
+      - {id: sg-power-windows, name: Power windows and shapes, match: [power-windows]}
+      - {id: sg-window-tracking, name: Tracking windows, match: [window-tracking]}
+      - {id: sg-hue-curves, name: Hue-vs curves, match: [hue-vs-curves]}
+  - id: video-scopes
+    name: Video scopes
+    source: Resolve Reference Manual/Video scopes
+    match: [scopes, video-scopes]
+    subtopics:
+      - {id: vs-waveform, name: Waveform and luma levels, match: [waveform-scope]}
+      - {id: vs-vectorscope, name: Vectorscope and skin-tone line, match: [vectorscope]}
+      - {id: vs-parade, name: RGB parade balancing, match: [rgb-parade]}
+      - {id: vs-false-color, name: False colour and exposure checks, match: [false-color]}
+  - id: look-and-matching
+    name: Look building and shot matching
+    source: Resolve Reference Manual/Gallery, node editor, LUTs
+    match: [shot-matching, look-building]
+    subtopics:
+      - {id: lm-node-tree, name: Node tree structure for a grade, match: [node-tree]}
+      - {id: lm-creative-lut, name: Creative look LUTs, match: [creative-lut]}
+      - {id: lm-gallery, name: Gallery stills and grade reuse across shots, match: [gallery-stills]}
+      - {id: lm-group-grading, name: Group and timeline-level grading, match: [group-grading]}
+  - id: hdr
+    name: HDR mastering
+    source: Netflix HDR spec; Dolby Vision docs; ITU-R BT.2100
+    match: [hdr]
+    subtopics:
+      - {id: hdr-pq-hlg, name: PQ and HLG transfer functions, match: [pq-hlg]}
+      - {id: hdr-dolby-vision, name: Dolby Vision analysis and trims, match: [dolby-vision]}
+      - {id: hdr-tone-mapping, name: Tone mapping HDR to SDR, match: [tone-mapping]}
+      - {id: hdr-metadata, name: HDR10 static metadata (MaxCLL, MaxFALL, mastering display), match: [hdr10-metadata]}
+  - id: display-standards
+    name: Display colour standards
+    source: ITU-R BT.709, BT.1886, BT.2020; SMPTE RP 431-2 (DCI-P3)
+    match: [display-standards]
+    subtopics:
+      - {id: ds-rec709, name: Rec.709 and BT.1886 for SDR video, match: [rec709]}
+      - {id: ds-p3, name: DCI-P3 and Display P3, match: [dci-p3]}
+      - {id: ds-rec2020, name: Rec.2020 wide gamut containers, match: [rec2020]}
+      - {id: ds-srgb-web, name: sRGB web delivery and gamma mismatches, match: [srgb-delivery]}
+  - id: monitor-calibration
+    name: Monitor calibration and viewing environment
+    source: Resolve manual/Monitoring; DisplayCAL docs; SMPTE ST 2080-1
+    match: [monitor-calibration]
+    subtopics:
+      - {id: mc-displaycal, name: Profiling with DisplayCAL and a probe, match: [displaycal]}
+      - {id: mc-cal-lut, name: Calibration LUTs loaded in the monitoring path, match: [calibration-lut]}
+      - {id: mc-environment, name: Viewing environment (surround, ambient light), match: [viewing-environment]}
+      - {id: mc-video-io, name: Clean video output via I/O hardware, match: [video-output-card]}
+  - id: lut-cdl-interchange
+    name: LUT and CDL interchange
+    source: ASC CDL spec; OCIO Looks; Resolve LUT chapter
+    match: [lut, lut-interchange]
+    subtopics:
+      - {id: lc-asc-cdl, name: ASC CDL values and files, match: [asc-cdl]}
+      - {id: lc-cube, name: .cube LUT formats, sizes and shaper, match: [cube-lut]}
+      - {id: lc-baking, name: Baking a show LUT from OCIO, match: [lut-baking]}
+      - {id: lc-ocio-looks, name: OCIO looks for per-shot grades, match: [ocio-looks]}
+
+  # --- Sound design and audio post (audio post curricula, loudness standards, Netflix sound specs)
+  - id: dialogue-editing
+    name: Dialogue editing
+    source: Purcell, Dialogue Editing for Motion Pictures
+    match: [dialogue-editing]
+    subtopics:
+      - {id: de-denoise, name: Broadband noise reduction, match: [denoise]}
+      - {id: de-declick, name: De-click, de-plosive and mouth noise repair, match: [de-click]}
+      - {id: de-clip-gain, name: Clip gain levelling before compression, match: [clip-gain]}
+      - {id: de-phase, name: Phase and polarity between mics, match: [phase-alignment]}
+  - id: vo-recording
+    name: Voice-over and ADR recording
+    source: Pro Tools post curricula/ADR; Producing Animation/Voice recording
+    match: [vo-recording, adr]
+    subtopics:
+      - {id: vr-session, name: Running a voice recording session, match: [recording-session]}
+      - {id: vr-mic, name: Microphone choice and placement for VO, match: [mic-technique]}
+      - {id: vr-booth, name: Booth and room treatment, match: [vocal-booth]}
+      - {id: vr-take-log, name: Take logging and circle takes, match: [take-logging]}
+  - id: foley
+    name: Foley
+    source: Viers, The Sound Effects Bible/Foley; audio post curricula
+    match: [foley]
+    subtopics:
+      - {id: fo-footsteps, name: Footsteps pass, match: [foley-footsteps]}
+      - {id: fo-cloth, name: Cloth and movement pass, match: [foley-cloth]}
+      - {id: fo-props, name: Props pass, match: [foley-props]}
+      - {id: fo-editing, name: Foley editing and sync to picture, match: [foley-editing]}
+  - id: sound-effects
+    name: Sound effects editing and design
+    source: Viers, The Sound Effects Bible
+    match: [sfx, sound-effects]
+    subtopics:
+      - {id: sx-spotting, name: Spotting effects to picture, match: [spotting]}
+      - {id: sx-library, name: Sound library management and metadata search, match: [sound-library]}
+      - {id: sx-hard-effects, name: Hard effects cutting, match: [hard-effects]}
+      - {id: sx-whoosh, name: Designed whooshes, impacts and transitions, match: [whoosh-impact]}
+      - {id: sx-cartoon, name: Cartoon sound effects vocabulary, match: [cartoon-sfx]}
+  - id: backgrounds
+    name: Backgrounds and ambience
+    source: Audio post curricula/Backgrounds
+    match: [backgrounds, ambience]
+    subtopics:
+      - {id: bg-room-tone, name: Room tone fill, match: [room-tone]}
+      - {id: bg-walla, name: Walla and crowd group loop, match: [walla]}
+      - {id: bg-cutting, name: Cutting and crossfading background tracks, match: [background-cutting]}
+      - {id: bg-surround, name: Surround and stereo ambience width, match: [surround-ambience]}
+  - id: music-post
+    name: Music editing and administration
+    source: Producing Animation/Music; audio post curricula/Music edit
+    match: [music-editing, scoring]
+    subtopics:
+      - {id: mu-edit, name: Editing music to picture, match: [music-edit]}
+      - {id: mu-licensing, name: Music licensing (sync and master rights), match: [music-licensing]}
+      - {id: mu-cue-sheet, name: Music cue sheets, match: [cue-sheet]}
+      - {id: mu-stinger, name: Stingers and transitions, match: [stinger]}
+  - id: re-recording-mix
+    name: Re-recording mix
+    source: Audio post curricula/Mixing; Netflix sound mix specs
+    match: [final-mix, re-recording]
+    subtopics:
+      - {id: rm-stems, name: Dialogue, music and effects stems, match: [stems]}
+      - {id: rm-m-and-e, name: M and E mix for international, match: [m-and-e]}
+      - {id: rm-surround, name: 5.1 mixing and fold-down, match: [surround-mix]}
+      - {id: rm-automation, name: Mix automation, match: [mix-automation]}
+      - {id: rm-dialogue-eq, name: Dialogue EQ and compression chain, match: [dialogue-eq]}
+  - id: loudness
+    name: Loudness standards and metering
+    source: ITU-R BS.1770; EBU R128; ATSC A/85; Netflix audio specs
+    match: [loudness]
+    subtopics:
+      - {id: lo-r128, name: EBU R128 measurement, match: [ebur128]}
+      - {id: lo-a85, name: ATSC A/85 broadcast loudness, match: [atsc-a85]}
+      - {id: lo-dialogue-gated, name: Dialogue-gated loudness for streaming, match: [dialogue-gated]}
+      - {id: lo-true-peak, name: True peak limiting, match: [true-peak]}
+  - id: audio-formats-sync
+    name: Audio formats, timecode and sync
+    source: Pro Tools post curricula; SMPTE 12M; EBU Tech 3285 (BWF)
+    match: [audio-sync, timecode]
+    subtopics:
+      - {id: af-src, name: Sample rate and bit depth conversion, match: [sample-rate-conversion]}
+      - {id: af-pull, name: Pull-up and pull-down for frame rate changes, match: [pull-down]}
+      - {id: af-bwf, name: BWF metadata and iXML, match: [bwf]}
+      - {id: af-tc, name: Timecode, drop-frame and offsets, match: [drop-frame]}
+  - id: daw-session
+    name: DAW session management
+    source: Pro Tools 110/210P; REAPER user guide
+    match: [daw, daw-session]
+    subtopics:
+      - {id: dw-template, name: Post session templates, match: [session-template]}
+      - {id: dw-busses, name: Bus routing and aux sends, match: [bus-routing]}
+      - {id: dw-video-sync, name: Video track sync in the DAW, match: [video-in-daw]}
+      - {id: dw-archive, name: Session archiving and consolidation, match: [session-archive]}
+
+  # --- Voice and TTS (ElevenLabs docs, Coqui/Piper docs, Rhubarb, MFA)
+  - id: tts-engines
+    name: TTS engines and generation
+    source: ElevenLabs docs/Text to speech; Piper and Coqui docs
+    match: [tts, tts-engines]
+    subtopics:
+      - {id: te-elevenlabs, name: ElevenLabs text-to-speech API, match: [elevenlabs-api]}
+      - {id: te-xtts, name: Coqui XTTS-v2 local generation, match: [xtts]}
+      - {id: te-piper-training, name: Training a custom Piper voice, match: [piper-training]}
+      - {id: te-batch, name: Batch generation from a script, match: [tts-batch]}
+  - id: voice-cloning
+    name: Voice cloning
+    source: ElevenLabs docs/Voice cloning
+    match: [voice-cloning]
+    subtopics:
+      - {id: vc-instant, name: Instant voice cloning from short samples, match: [instant-voice-clone]}
+      - {id: vc-professional, name: Professional voice cloning from long datasets, match: [professional-voice-clone]}
+      - {id: vc-dataset, name: Preparing a voice dataset, match: [voice-dataset]}
+      - {id: vc-consent, name: Consent, rights and voice likeness, match: [voice-consent]}
+  - id: tts-control
+    name: TTS prosody and pronunciation control
+    source: ElevenLabs docs/Voice settings, Pronunciation dictionaries, Speech to speech; W3C SSML
+    match: [prosody, tts-control]
+    subtopics:
+      - {id: tc-ssml, name: SSML breaks, emphasis and phonemes, match: [ssml]}
+      - {id: tc-pron-dict, name: Pronunciation dictionaries and lexicons, match: [pronunciation-dictionary]}
+      - {id: tc-stability, name: Stability, similarity and style settings, match: [voice-settings]}
+      - {id: tc-sts, name: Speech-to-speech performance transfer, match: [speech-to-speech]}
+  - id: lip-sync
+    name: Lip sync from dialogue
+    source: Rhubarb Lip Sync docs; Montreal Forced Aligner docs; classic exposure-sheet practice
+    match: [lip-sync]
+    subtopics:
+      - {id: ls-forced-alignment, name: Forced alignment of transcript to audio, match: [forced-alignment]}
+      - {id: ls-viseme-set, name: Mouth chart and viseme set design, match: [viseme-set]}
+      - {id: ls-x-sheet, name: Reading dialogue onto an exposure sheet, match: [x-sheet]}
+      - {id: ls-review, name: Lip-sync review and offset correction, match: [lip-sync-offset]}
+  - id: dubbing-localisation
+    name: Dubbing and localisation
+    source: ElevenLabs docs/Dubbing; Netflix dubbing style guide
+    match: [dubbing, localization]
+    subtopics:
+      - {id: dl-script, name: Dub script adaptation and lip-sync fit, match: [dub-script]}
+      - {id: dl-isochrony, name: Isochrony and timing fit of translated lines, match: [isochrony]}
+      - {id: dl-ai-dubbing, name: AI dubbing pipeline, match: [ai-dubbing]}
+      - {id: dl-multi-language, name: Multi-language TTS voice matching, match: [multi-language-tts]}
+  - id: vo-post
+    name: VO asset post-processing
+    source: Audio post curricula/Dialogue; ElevenLabs docs/Audio output formats
+    match: [vo-post]
+    subtopics:
+      - {id: vp-artifacts, name: Repairing TTS artifacts, match: [tts-artifacts]}
+      - {id: vp-take-matching, name: Matching level and tone across takes, match: [take-matching]}
+      - {id: vp-naming, name: VO file naming and line IDs, match: [vo-naming]}
+      - {id: vp-formats, name: Output formats and sample rates for VO, match: [vo-formats]}
+
+  # --- Vector graphics and 2D (Adobe Animate, Illustrator/Inkscape, Toon Boom Harmony)
+  - id: vector-drawing
+    name: Vector drawing tools
+    source: Adobe Animate/Illustrator user guides - Drawing; Inkscape manual
+    match: [vector-drawing, bezier]
+    subtopics:
+      - {id: vd-pen, name: Pen tool and bezier handle discipline, match: [pen-tool]}
+      - {id: vd-boolean, name: Boolean path operations, match: [boolean-ops]}
+      - {id: vd-outline-stroke, name: Outlining strokes to fills, match: [outline-stroke]}
+      - {id: vd-variable-width, name: Variable width strokes, match: [variable-width-stroke]}
+  - id: animate-symbols-tweens
+    name: Adobe Animate symbols and tweens
+    source: Adobe Animate user guide/Symbols, Tweening
+    match: [adobe-animate]
+    subtopics:
+      - {id: at-symbols, name: Graphic, movie clip and button symbols, match: [animate-symbols]}
+      - {id: at-classic-tween, name: Classic tweens and easing, match: [classic-tween]}
+      - {id: at-shape-tween, name: Shape tweens and shape hints, match: [shape-tween]}
+      - {id: at-motion-tween, name: Motion tweens and the motion editor, match: [motion-tween]}
+  - id: harmony-rigging
+    name: Toon Boom Harmony rigging
+    source: Toon Boom Harmony docs/Rigging, Node view, Deformers
+    match: [toon-boom, harmony]
+    subtopics:
+      - {id: hr-node-view, name: Node view network for a cut-out rig, match: [harmony-node-view]}
+      - {id: hr-pegs, name: Pegs and hierarchy, match: [harmony-pegs]}
+      - {id: hr-deformers, name: Bone and curve deformers, match: [harmony-deformers]}
+      - {id: hr-substitution, name: Drawing substitution and libraries, match: [drawing-substitution]}
+  - id: ink-and-paint
+    name: Digital ink and paint
+    source: Toon Boom Harmony docs/Colour, Palettes, Ink and paint
+    match: [ink-and-paint]
+    subtopics:
+      - {id: ip-palettes, name: Palette management and colour models, match: [palette-management]}
+      - {id: ip-gap-closing, name: Gap closing and paint bucket fills, match: [gap-closing]}
+      - {id: ip-colour-styling, name: Colour styling and day/night palettes, match: [palette-styling]}
+      - {id: ip-line-cleanup, name: Line cleanup and inbetween clean-up passes, match: [line-cleanup]}
+  - id: vector-export
+    name: Vector and 2D asset export
+    source: Adobe Animate user guide/Export; Inkscape export docs
+    match: [svg-export, vector-export]
+    subtopics:
+      - {id: vx-sprite-sheet, name: Sprite sheet export, match: [sprite-sheet]}
+      - {id: vx-image-sequence, name: PNG sequence export with alpha, match: [png-sequence]}
+      - {id: vx-lottie, name: Lottie export, match: [lottie]}
+      - {id: vx-inkscape-cli, name: Inkscape command line batch export, match: [inkscape-cli]}
+  - id: vectorization
+    name: Vectorising raster artwork
+    source: Inkscape manual/Trace bitmap; Potrace docs; Illustrator Image Trace
+    match: [vectorization, image-trace]
+    subtopics:
+      - {id: vz-potrace, name: Potrace outline tracing, match: [potrace]}
+      - {id: vz-centerline, name: Centerline tracing for line art, match: [centerline-trace]}
+      - {id: vz-colour-trace, name: Multi-colour trace and quantisation, match: [colour-trace]}
+      - {id: vz-cleanup, name: Post-trace node reduction and cleanup, match: [trace-cleanup]}
+
+  # --- Scripting (After Effects scripting guide, AE expression reference, Animate JSFL, Harmony scripting, Python for DCC)
+  - id: ae-scripting
+    name: After Effects ExtendScript automation
+    source: After Effects Scripting Guide (ae-scripting.docsforadobe.dev)
+    match: [extendscript, ae-scripting]
+    subtopics:
+      - {id: as-object-model, name: AE object model (app, project, comp, layer), match: [ae-object-model]}
+      - {id: as-aerender, name: aerender command line rendering, match: [aerender]}
+      - {id: as-scriptui, name: ScriptUI panels, match: [scriptui]}
+      - {id: as-batch-swap, name: Batch footage replacement and comp versioning, match: [batch-replace-footage]}
+  - id: ae-expressions
+    name: After Effects expressions
+    source: After Effects expression language reference (ae-expressions.docsforadobe.dev)
+    match: [expressions, ae-expressions]
+    subtopics:
+      - {id: ax-wiggle, name: wiggle and noise, match: [wiggle]}
+      - {id: ax-loopout, name: loopOut and loopIn cycles, match: [loopout]}
+      - {id: ax-valueattime, name: valueAtTime delays and echoes, match: [value-at-time]}
+      - {id: ax-controls, name: Expression controls and rig sliders, match: [expression-controls]}
+      - {id: ax-linear, name: linear/ease value mapping, match: [linear-mapping]}
+  - id: twod-app-scripting
+    name: 2D application scripting
+    source: Adobe Animate JSFL reference; Toon Boom Harmony scripting reference
+    match: [jsfl, harmony-scripting]
+    subtopics:
+      - {id: 2s-jsfl-batch, name: JSFL batch publishing, match: [jsfl-batch]}
+      - {id: 2s-harmony-batch, name: Harmony batch render from the command line, match: [harmony-batch]}
+      - {id: 2s-harmony-script, name: Harmony QtScript scene scripting, match: [harmony-qtscript]}
+      - {id: 2s-photoshop, name: Photoshop scripting for layer export, match: [photoshop-scripting]}
+  - id: dcc-python-pipeline
+    name: Python for DCC pipelines
+    source: Pyblish docs; Rez docs; Qt.py docs; Ayon developer docs
+    match: [pipeline-python, dcc-python]
+    subtopics:
+      - {id: dp-pyblish, name: Pyblish collect/validate/extract/integrate plugins, match: [pyblish]}
+      - {id: dp-rez, name: Rez package environments, match: [rez]}
+      - {id: dp-qtpy, name: Qt.py binding-agnostic UIs, match: [qt-py]}
+      - {id: dp-startup, name: DCC startup scripts and environment bootstrap, match: [startup-scripts]}
+  - id: render-farm
+    name: Render farm job scripting
+    source: Thinkbox Deadline docs; OpenCue docs
+    match: [render-farm]
+    subtopics:
+      - {id: rf-deadline, name: Deadline job submission, match: [deadline]}
+      - {id: rf-opencue, name: OpenCue job specs, match: [opencue]}
+      - {id: rf-chunking, name: Frame chunking and task sizing, match: [chunking]}
+      - {id: rf-post-job, name: Post-job scripts and dependent encodes, match: [post-job-script]}
+
+  # --- Encode and delivery (FFmpeg docs, Netflix and YouTube specs, DCP, IMF)
+  - id: ffmpeg-fundamentals
+    name: FFmpeg fundamentals
+    source: ffmpeg manual (ffmpeg.org/ffmpeg.html)
+    match: [ffmpeg]
+    subtopics:
+      - {id: ff-filtergraph, name: Filtergraphs and filter_complex, match: [filtergraph]}
+      - {id: ff-map, name: Stream selection and -map, match: [stream-mapping]}
+      - {id: ff-seeking, name: Input vs output seeking and frame accuracy, match: [ffmpeg-seeking]}
+      - {id: ff-ffprobe, name: ffprobe inspection, match: [ffprobe]}
+      - {id: ff-concat, name: Concat demuxer vs concat filter, match: [concat]}
+  - id: video-codecs
+    name: Video codecs for production and delivery
+    source: FFmpeg codecs docs; Apple ProRes white paper; Avid DNxHR docs
+    match: [video-codecs, codec]
+    subtopics:
+      - {id: vc-h264, name: H.264 with libx264, match: [h264]}
+      - {id: vc-hevc, name: HEVC with libx265, match: [hevc]}
+      - {id: vc-prores, name: ProRes profiles, match: [prores]}
+      - {id: vc-dnxhr, name: DNxHR/DNxHD, match: [dnxhr]}
+      - {id: vc-av1, name: AV1 encoding, match: [av1]}
+  - id: rate-control
+    name: Rate control and GOP structure
+    source: x264/x265 docs; FFmpeg H.264 encoding guide
+    match: [rate-control]
+    subtopics:
+      - {id: rc-crf, name: CRF quality targeting, match: [crf]}
+      - {id: rc-two-pass, name: Two-pass ABR, match: [two-pass]}
+      - {id: rc-vbv, name: VBV maxrate and bufsize, match: [vbv]}
+      - {id: rc-gop, name: GOP length and keyframe placement, match: [gop]}
+  - id: pixel-formats
+    name: Pixel formats and colour tagging in encodes
+    source: FFmpeg colorspace/zscale docs; ITU-R BT.709
+    match: [pixel-format, pix-fmt]
+    subtopics:
+      - {id: pf-subsampling, name: Chroma subsampling 4:4:4/4:2:2/4:2:0, match: [chroma-subsampling]}
+      - {id: pf-colour-tags, name: Colour primaries, transfer and matrix tags, match: [color-tags]}
+      - {id: pf-range, name: Full vs limited range, match: [video-range]}
+      - {id: pf-10bit, name: 10-bit encodes and banding, match: [10-bit]}
+  - id: image-sequences
+    name: Image sequences to video
+    source: FFmpeg image2 demuxer docs; OpenEXR docs
+    match: [image-sequence]
+    subtopics:
+      - {id: is-encode, name: Encoding numbered frame sequences, match: [image-sequence-encode]}
+      - {id: is-exr, name: EXR sequences through a colour transform, match: [exr-to-video]}
+      - {id: is-fps, name: Frame rate conversion, match: [frame-rate-conversion]}
+      - {id: is-missing, name: Detecting missing and duplicate frames, match: [missing-frames]}
+  - id: audio-mux
+    name: Audio encoding and muxing
+    source: FFmpeg audio codecs and formats docs
+    match: [muxing, audio-mux]
+    subtopics:
+      - {id: am-channel-layout, name: Channel layouts and mapping, match: [channel-layout]}
+      - {id: am-pcm, name: PCM audio in mezzanines, match: [pcm-audio]}
+      - {id: am-av-sync, name: A/V sync offsets, match: [av-sync]}
+      - {id: am-aac, name: AAC encoding choices, match: [aac]}
+  - id: streaming
+    name: Adaptive streaming packaging
+    source: FFmpeg HLS/DASH muxer docs; Apple HLS authoring spec
+    match: [adaptive-streaming]
+    subtopics:
+      - {id: st-hls, name: HLS packaging, match: [hls]}
+      - {id: st-dash, name: MPEG-DASH packaging, match: [mpeg-dash]}
+      - {id: st-ladder, name: ABR ladder design, match: [abr-ladder]}
+      - {id: st-segments, name: Segment duration and keyframe alignment, match: [segment-alignment]}
+  - id: professional-delivery
+    name: Professional and broadcast delivery
+    source: Netflix Partner Help Center; SMPTE ST 2067 IMF; DPP AS-11
+    match: [delivery-spec]
+    subtopics:
+      - {id: pd-imf, name: IMF packages, match: [imf]}
+      - {id: pd-netflix, name: Netflix delivery specification, match: [netflix-delivery]}
+      - {id: pd-as11, name: AS-11 DPP broadcast files, match: [as-11]}
+      - {id: pd-auto-qc, name: Automated file QC, match: [automated-qc]}
+  - id: platform-masters
+    name: Platform and festival masters
+    source: YouTube upload encoding settings; DCI DCP spec; social platform specs
+    match: [platform-master]
+    subtopics:
+      - {id: pm-youtube, name: YouTube master, match: [youtube]}
+      - {id: pm-dcp, name: DCP for festival projection, match: [dcp]}
+      - {id: pm-social, name: Social cutdowns and aspect ratio versions, match: [aspect-ratio-versions]}
+      - {id: pm-mezzanine, name: Mezzanine masters, match: [mezzanine]}
+  - id: timed-text
+    name: Timed text and captions
+    source: Netflix Timed Text Style Guide; W3C WebVTT; IMSC1
+    match: [captions, subtitles]
+    subtopics:
+      - {id: tt-srt-vtt, name: SRT and WebVTT authoring, match: [srt, vtt]}
+      - {id: tt-imsc, name: IMSC1/TTML for professional delivery, match: [imsc]}
+      - {id: tt-sdh, name: SDH conventions, match: [sdh]}
+      - {id: tt-reading-speed, name: Reading speed and line length rules, match: [reading-speed]}
+  - id: encode-quality
+    name: Encode quality measurement
+    source: Netflix VMAF docs; FFmpeg libvmaf/psnr/ssim filters
+    match: [encode-quality]
+    subtopics:
+      - {id: eq-vmaf, name: VMAF scoring, match: [vmaf]}
+      - {id: eq-psnr-ssim, name: PSNR and SSIM, match: [psnr-ssim]}
+      - {id: eq-banding, name: Banding detection and debanding, match: [banding]}
+      - {id: eq-visual-qc, name: Visual QC passes, match: [visual-qc]}
+  - id: archive
+    name: Archive and asset preservation
+    source: Producing Animation/Delivery and archiving; VES Handbook/Data management
+    match: [archive, archiving]
+    subtopics:
+      - {id: ar-checksums, name: Checksums and fixity, match: [checksums]}
+      - {id: ar-master, name: Archival master formats, match: [archival-master]}
+      - {id: ar-lto, name: LTO tape and LTFS, match: [lto]}
+      - {id: ar-project-archive, name: Project archive manifests, match: [archive-manifest]}
+
+  # --- Texturing (Substance 3D Painter docs, PBR guides)
+  - id: painter-project
+    name: Substance 3D Painter project setup
+    source: Substance 3D Painter docs/Project configuration, Texture sets
+    match: [substance-painter]
+    subtopics:
+      - {id: pp-texture-sets, name: Texture sets and material IDs, match: [texture-sets]}
+      - {id: pp-baking, name: Baking mesh maps, match: [mesh-map-baking]}
+      - {id: pp-templates, name: Project templates and shaders, match: [painter-template]}
+      - {id: pp-resolution, name: Working and export resolution, match: [texture-resolution]}
+  - id: painter-layers
+    name: Substance 3D Painter layers and masks
+    source: Substance 3D Painter docs/Layer stack, Masks, Generators
+    match: [painter-layers, layer-stack]
+    subtopics:
+      - {id: pl-fill, name: Fill layers and paint layers, match: [fill-layers]}
+      - {id: pl-generators, name: Generators driven by mesh maps, match: [generators]}
+      - {id: pl-smart-masks, name: Smart masks, match: [smart-masks]}
+      - {id: pl-anchor, name: Anchor points, match: [anchor-points]}
+  - id: painter-materials
+    name: Smart materials and projection
+    source: Substance 3D Painter docs/Smart materials, Projection tools
+    match: [smart-materials]
+    subtopics:
+      - {id: pm-sbsar, name: Substance materials (sbsar) parameters, match: [sbsar]}
+      - {id: pm-triplanar, name: Tri-planar projection, match: [triplanar]}
+      - {id: pm-particles, name: Particle brushes for wear, match: [particle-brush]}
+      - {id: pm-decals, name: Decal and stencil projection, match: [decal]}
+  - id: texture-export
+    name: Texture export and channel packing
+    source: Substance 3D Painter docs/Export, Output templates
+    match: [texture-export]
+    subtopics:
+      - {id: tx-presets, name: Export presets per engine, match: [export-presets]}
+      - {id: tx-packing, name: Channel packing (ORM), match: [channel-packing]}
+      - {id: tx-normal-convention, name: DirectX vs OpenGL normal maps, match: [normal-map-convention]}
+      - {id: tx-compression, name: Texture compression formats, match: [texture-compression]}
+  - id: pbr
+    name: PBR material authoring
+    source: Adobe PBR Guide (Physically Based Rendering and Shading)
+    match: [pbr]
+    subtopics:
+      - {id: pbr-metal-rough, name: Metal/roughness workflow, match: [metal-roughness]}
+      - {id: pbr-albedo, name: Albedo value ranges, match: [albedo-range]}
+      - {id: pbr-spec-gloss, name: Specular/glossiness workflow, match: [specular-glossiness]}
+      - {id: pbr-height, name: Height, normal and displacement detail, match: [height-map]}
+  - id: uv-layout
+    name: UV layout for texturing
+    source: Substance 3D Painter docs/UV; Blender Manual/UV editing
+    match: [uv, uv-layout]
+    subtopics:
+      - {id: uv-packing, name: UV packing and padding, match: [uv-packing]}
+      - {id: uv-seams, name: Seam placement, match: [seam-placement]}
+      - {id: uv-texel, name: Texel density, match: [texel-density]}
+      - {id: uv-udim, name: UDIM tiles, match: [udim]}
+  - id: photo-textures
+    name: Photo-sourced and tileable textures
+    source: Substance 3D Sampler docs; photogrammetry texturing guides
+    match: [photo-texture, tileable-texture]
+    subtopics:
+      - {id: pt-seamless, name: Making textures seamless, match: [seamless-tiling]}
+      - {id: pt-delighting, name: Delighting source photos, match: [delighting]}
+      - {id: pt-atlas, name: Texture atlases, match: [texture-atlas]}
+      - {id: pt-capture, name: Capturing texture photos (cross-polarised), match: [texture-capture]}
+
+  # --- Motion graphics (After Effects user guide ToC)
+  - id: ae-compositions
+    name: After Effects compositions and layers
+    source: After Effects user guide/Layers and properties
+    match: [after-effects, ae-compositions]
+    subtopics:
+      - {id: ac-precompose, name: Precomposing and nesting, match: [precompose]}
+      - {id: ac-track-mattes, name: Track mattes, match: [track-matte]}
+      - {id: ac-blend-modes, name: Blending modes, match: [blending-modes]}
+      - {id: ac-parenting, name: Parenting and null objects, match: [null-objects]}
+  - id: ae-keyframes
+    name: Keyframe interpolation and the graph editor
+    source: After Effects user guide/Animation and keyframes
+    match: [keyframe-interpolation]
+    subtopics:
+      - {id: ak-graph-editor, name: Speed and value graphs, match: [graph-editor]}
+      - {id: ak-easy-ease, name: Easy ease and influence, match: [easy-ease]}
+      - {id: ak-spatial, name: Spatial interpolation and motion paths, match: [motion-path]}
+      - {id: ak-roving, name: Roving keyframes, match: [roving-keyframes]}
+  - id: ae-text
+    name: Text animation
+    source: After Effects user guide/Text
+    match: [kinetic-typography, text-animation]
+    subtopics:
+      - {id: at-animators, name: Text animators, match: [text-animator]}
+      - {id: at-range-selector, name: Range and wiggly selectors, match: [range-selector]}
+      - {id: at-type-on, name: Type-on and per-character reveals, match: [type-on]}
+      - {id: at-lower-thirds, name: Lower thirds, match: [lower-third]}
+  - id: ae-shape-layers
+    name: Shape layers
+    source: After Effects user guide/Shape layers
+    match: [shape-layers]
+    subtopics:
+      - {id: sh-trim-paths, name: Trim paths, match: [trim-paths]}
+      - {id: sh-repeater, name: Repeater, match: [repeater]}
+      - {id: sh-merge, name: Merge paths, match: [merge-paths]}
+      - {id: sh-offset-wiggle, name: Offset and wiggle paths, match: [wiggle-paths]}
+  - id: tracking
+    name: Tracking and stabilisation
+    source: After Effects user guide/Tracking; Mocha docs
+    match: [motion-tracking]
+    subtopics:
+      - {id: tk-point, name: Point tracking, match: [point-tracking]}
+      - {id: tk-planar, name: Planar tracking with Mocha, match: [planar-tracking]}
+      - {id: tk-camera, name: 3D camera tracker, match: [camera-tracker]}
+      - {id: tk-stabilize, name: Warp stabilizer, match: [warp-stabilizer]}
+  - id: masks-keying
+    name: Masks, rotoscoping and keying
+    source: After Effects user guide/Masks, Roto Brush, Keying
+    match: [masks, keying]
+    subtopics:
+      - {id: mk-feather, name: Mask modes and variable feather, match: [mask-feather]}
+      - {id: mk-roto-brush, name: Roto Brush, match: [roto-brush]}
+      - {id: mk-keylight, name: Keylight chroma keying, match: [keylight]}
+      - {id: mk-matte-cleanup, name: Matte choking and spill suppression, match: [spill-suppression]}
+  - id: ae-3d
+    name: 3D layers, cameras and lights
+    source: After Effects user guide/3D layers, Cameras, Lights
+    match: [ae-3d]
+    subtopics:
+      - {id: a3-layers, name: 3D layers and renderers, match: [3d-layers]}
+      - {id: a3-camera, name: Camera layers and depth of field, match: [camera-layer]}
+      - {id: a3-lights, name: Lights and shadows, match: [ae-lights]}
+      - {id: a3-cinema4d, name: Cinema 4D integration, match: [cinema-4d]}
+  - id: motion-templates
+    name: Motion graphics templates and data-driven graphics
+    source: After Effects user guide/Essential Graphics, Data-driven animation
+    match: [mogrt, motion-templates]
+    subtopics:
+      - {id: mt-essential, name: Essential properties, match: [essential-properties]}
+      - {id: mt-responsive, name: Responsive design (time and layout), match: [responsive-design]}
+      - {id: mt-data-driven, name: Data-driven graphics from CSV/JSON, match: [data-driven-graphics]}
+      - {id: mt-versioning, name: Template versioning for a series, match: [template-versioning]}
+  - id: ae-render
+    name: After Effects rendering and export
+    source: After Effects user guide/Rendering and exporting
+    match: [render-queue]
+    subtopics:
+      - {id: ar-output-modules, name: Output modules and templates, match: [output-modules]}
+      - {id: ar-media-encoder, name: Adobe Media Encoder queue, match: [media-encoder]}
+      - {id: ar-mfr, name: Multi-frame rendering, match: [multi-frame-rendering]}
+      - {id: ar-collect, name: Collect files and project packaging, match: [collect-files]}
+
+  # --- Pipeline (Producing Animation, VES Handbook, Ayon/ShotGrid docs, OpenUSD)
+  - id: production-management
+    name: Production management
+    source: Producing Animation/Budgeting, Scheduling, Crew
+    match: [producing, production-management]
+    subtopics:
+      - {id: pm-budget, name: Building an animation budget, match: [animation-budget]}
+      - {id: pm-bidding, name: Bidding shots and sequences, match: [bidding]}
+      - {id: pm-crew, name: Crew planning and ramp-up, match: [crew-planning]}
+      - {id: pm-quotas, name: Animator quotas and footage tracking, match: [quotas]}
+  - id: production-phases
+    name: Production phases and outsourcing
+    source: Producing Animation/Development, Pre-production, Production, Post
+    match: [production-phases]
+    subtopics:
+      - {id: ph-development, name: Development phase deliverables, match: [development-phase]}
+      - {id: ph-preprod, name: Pre-production lock list, match: [preproduction-lock]}
+      - {id: ph-outsourcing, name: Outsourcing to service studios, match: [outsourcing]}
+      - {id: ph-retakes, name: Retakes and fix management, match: [retakes]}
+  - id: asset-management
+    name: Asset management and versioning
+    source: VES Handbook/Asset management
+    match: [asset-management]
+    subtopics:
+      - {id: am-naming, name: Naming conventions, match: [naming-convention]}
+      - {id: am-versioning, name: Version numbering and publish states, match: [versioning]}
+      - {id: am-variants, name: Asset variants and LODs, match: [asset-variants]}
+      - {id: am-dependency, name: Dependency tracking, match: [dependency-tracking]}
+  - id: production-tracking-tools
+    name: Production tracking systems
+    source: Flow Production Tracking (ShotGrid) Python API and Toolkit docs; Kitsu docs
+    match: [production-tracking, shotgrid]
+    subtopics:
+      - {id: pt-api3, name: ShotGrid Python API (shotgun_api3), match: [shotgun-api3]}
+      - {id: pt-toolkit, name: ShotGrid Toolkit configuration, match: [sgtk]}
+      - {id: pt-kitsu, name: Kitsu and Gazu, match: [kitsu]}
+      - {id: pt-events, name: Event daemon triggers, match: [shotgrid-events]}
+  - id: ayon
+    name: Ayon/OpenPype pipeline
+    source: Ayon docs (ayon.ynput.io)
+    match: [ayon, openpype]
+    subtopics:
+      - {id: ay-server, name: Ayon server deployment, match: [ayon-server]}
+      - {id: ay-anatomy, name: Project anatomy templates, match: [project-anatomy]}
+      - {id: ay-launcher, name: Launcher and application environments, match: [ayon-launcher]}
+      - {id: ay-loader, name: Loader and scene inventory, match: [ayon-loader]}
+  - id: usd
+    name: USD in animation pipelines
+    source: OpenUSD docs/Composition arcs, Variants, usdview
+    match: [usd]
+    subtopics:
+      - {id: usd-layers, name: Layer stacking and sublayers per department, match: [usd-layers]}
+      - {id: usd-arcs, name: Composition arcs (references, payloads, inherits), match: [composition-arcs]}
+      - {id: usd-variants, name: Variant sets, match: [variant-sets]}
+      - {id: usd-tools, name: usdview and usdcat inspection, match: [usdview]}
+  - id: interchange-formats
+    name: Interchange formats between departments
+    source: VES Handbook/Interchange; Alembic docs; FBX SDK docs
+    match: [interchange-formats]
+    subtopics:
+      - {id: if-alembic, name: Alembic caches, match: [alembic]}
+      - {id: if-fbx, name: FBX export for animation, match: [fbx]}
+      - {id: if-camera, name: Camera interchange between apps, match: [camera-interchange]}
+      - {id: if-units, name: Units, axes and frame-rate conventions, match: [scene-units]}
+  - id: storage-data
+    name: Storage and data management
+    source: VES Handbook/Data management and storage
+    match: [storage, data-management]
+    subtopics:
+      - {id: sd-tiers, name: Storage tiers and project lifecycle, match: [storage-tiers]}
+      - {id: sd-path-mapping, name: Cross-platform path mapping, match: [path-mapping]}
+      - {id: sd-backup, name: Backup strategy (3-2-1), match: [backup-strategy]}
+      - {id: sd-sync, name: Multi-site sync and transfer, match: [file-transfer]}
+  - id: review-tools
+    name: Review and playback tools
+    source: OpenRV docs; VES Handbook/Review
+    match: [dailies, review-tools]
+    subtopics:
+      - {id: rt-openrv, name: OpenRV playback and compare, match: [openrv]}
+      - {id: rt-playlists, name: Review playlists, match: [review-playlist]}
+      - {id: rt-annotations, name: Annotation and note capture, match: [annotations]}
+      - {id: rt-cinesync, name: Synchronised remote review, match: [sync-review]}
+  - id: render-management
+    name: Render management
+    source: VES Handbook/Rendering and render farm
+    match: [render-management, render-preflight]
+    subtopics:
+      - {id: rm-aovs, name: Render layers and AOVs, match: [aovs]}
+      - {id: rm-estimate, name: Render time estimation and budgets, match: [render-estimate]}
+      - {id: rm-licensing, name: Render licence management, match: [render-licensing]}
+      - {id: rm-wedges, name: Wedging and test renders, match: [wedging]}
+  - id: content-security
+    name: Content security
+    source: MPA/TPN content security best practices
+    match: [content-security]
+    subtopics:
+      - {id: cs-tpn, name: TPN assessment readiness, match: [tpn]}
+      - {id: cs-watermark, name: Forensic and visible watermarking, match: [watermarking]}
+      - {id: cs-access, name: Access control and need-to-know, match: [access-control]}
+      - {id: cs-transfer, name: Secure file transfer and screeners, match: [secure-screeners]}

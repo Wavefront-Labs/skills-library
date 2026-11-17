@@ -1,0 +1,1097 @@
+# Canonical coverage spec: Cryptography Implementation (whole field, defensive engineering only).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal to
+# one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (NIST SP/FIPS document outlines, RFC section
+# structure, library documentation tables of contents, Cryptography Engineering chapters, the OWASP
+# Cryptographic Storage cheat sheet), not from what the library already holds.
+# Depth: every topic lists `subtopics` taken from that source's own sub-structure (document
+# sections, man-page lists, API families, chapter sub-sections).
+subject: cryptography-implementation
+scope:
+  category: computing-software
+  field: cryptography-implementation
+  products: [openssl, libsodium, crypto-libraries, applied-cryptography, protocol-implementation, key-management, secure-implementation]
+sources:
+  - "NIST SP 800-57 Part 1 Rev 5 (Recommendation for Key Management) - 5 General Key-Management Guidance (key types, cryptoperiods, security strengths, key usage, compromise), 6 Protection Requirements, 7 Key States and Transitions, 8 Key-Management Phases and Functions (pre-operational, operational, post-operational, destroyed); Part 2 Rev 1 (policy and best practices, key management policy, CKMS); Part 3 Rev 1 (application-specific guidance - PKI, IPsec, TLS, S/MIME, Kerberos, DNSSEC)"
+  - "NIST SP 800-38 series - 38A modes (ECB, CBC, CFB, OFB, CTR), 38A addendum (CBC ciphertext stealing), 38B CMAC, 38C CCM, 38D GCM/GMAC, 38E XTS-AES, 38F key wrap (KW, KWP), 38G format-preserving encryption (FF1, FF3-1)"
+  - "NIST SP 800-90A Rev 1 (Hash_DRBG, HMAC_DRBG, CTR_DRBG, instantiate/reseed/generate, prediction resistance), 800-90B (entropy source design, health tests, min-entropy estimation), 800-90C (RBG constructions)"
+  - "NIST SP 800-131A (transitioning algorithms and key lengths), SP 800-133 (key generation), SP 800-56A/56B/56C (key establishment and key derivation), SP 800-108 (KBKDF), SP 800-132 (PBKDF), SP 800-63B (memorized secret storage), SP 800-208 (LMS/XMSS), FIPS 180-4, FIPS 202, FIPS 186-5, FIPS 198-1"
+  - "FIPS 140-3 / ISO 19790 (security levels 1-4, module specification and boundary, interfaces, roles and authentication, software/firmware security, physical security, SSP management, self-tests, approved mode) and CMVP program guidance"
+  - "FIPS 203 (ML-KEM - parameter sets, KeyGen/Encaps/Decaps, input checking), FIPS 204 (ML-DSA - parameter sets, hedged/deterministic signing, context strings, HashML-DSA), FIPS 205 (SLH-DSA - parameter sets, small vs fast, prehash); NIST IR 8547 transition timeline"
+  - "RFC 8446 TLS 1.3 - 2 Protocol overview (full handshake, HRR, resumption/PSK, 0-RTT), 4 Handshake protocol (key exchange messages, extensions, server parameters, authentication messages, post-handshake messages), 5 Record protocol, 7 Cryptographic computations (key schedule, traffic key calculation, exporters), 8 0-RTT and anti-replay, 9 Compliance requirements, Appendix C/D/E (implementation notes, backward compatibility, security analysis); plus RFC 5280 path validation, RFC 6125/9525 service identity, RFC 9180 HPKE, RFC 7515-7519 JOSE, RFC 4251-4253 SSH"
+  - "OpenSSL 3 manual ToC (docs.openssl.org) - man1 commands (genpkey, pkey, req, x509, ca, verify, s_client, s_server, ciphers, pkcs12, cms, dgst, pkeyutl, enc, rand, kdf, mac, speed, list, fipsinstall), man5 config (openssl.cnf, x509v3_config, fips_config), man7 (provider, migration_guide, ossl-guide-tls-client/server), man3 SSL_CTX/EVP/OSSL_PARAM/ERR families"
+  - "libsodium documentation ToC (doc.libsodium.org) - Quickstart/usage (sodium_init), Helpers (constant-time compare, hex/base64, padding), Secure memory, Generating random data, Secret-key cryptography (secretbox, secretstream, auth), Public-key cryptography (box, signatures, sealed boxes), Hashing (generic, short-input), Password hashing, Key derivation, Key exchange, AEAD constructions (XChaCha20-Poly1305, AEGIS, AES256-GCM), Advanced (scalarmult, Ed25519 to Curve25519, ristretto255, HKDF, SHA-2), Bindings"
+  - "Platform library documentation ToCs - BoringSSL API docs and porting notes, AWS-LC, Go standard library crypto packages (crypto/cipher, crypto/rand, crypto/tls, crypto/x509, crypto/subtle, crypto/mlkem, crypto/hkdf, FIPS 140-3 mode), Java Cryptography Architecture reference guide (Cipher, KeyGenerator, SecureRandom, KeyStore, providers, JSSE), W3C Web Cryptography API, .NET System.Security.Cryptography, pyca/cryptography docs (Fernet, hazmat primitives, x509), rustls/ring docs"
+  - "Cryptography Engineering (Ferguson, Schneier, Kohno) - 1-2 design philosophy and threat model, 3 block ciphers, 4 block cipher modes, 5 hash functions, 6 MACs, 7 secure channel, 8 implementation issues I, 9 generating randomness (Fortuna), 10 primes, 11 Diffie-Hellman, 12 RSA, 13 cryptographic protocols, 14 key negotiation, 15 implementation issues II, 16 clock, 17 key servers, 18 PKI dream, 19 PKI reality, 20 PKI practicalities, 21 storing secrets, 22 standards and patents"
+  - "OWASP Cheat Sheet Series - Cryptographic Storage (architectural design, algorithms, cipher modes, random padding, secure random, defence in depth, key management - generation, rotation, storage, separation of keys and data, encrypting stored keys), Password Storage, Key Management, Transport Layer Security, Pinning; Wycheproof and NIST CAVP/ACVP testing programs"
+topics:
+  # --- Applied cryptography: symmetric primitives (SP 800-38 series, FIPS 180/202/198, Cryptography Engineering 3-6)
+  - id: block-cipher-modes
+    name: Block cipher confidentiality modes (ECB/CBC/CTR/CFB/OFB)
+    source: NIST SP 800-38A / Cryptography Engineering ch 4
+    match: [block-cipher-modes, sp-800-38a]
+    subtopics:
+      - {id: bcm-ecb-detection, name: Detecting and removing ECB mode usage, match: [ecb-mode-detection]}
+      - {id: bcm-cbc-padding-oracle, name: CBC with PKCS7 padding and padding-oracle defence, match: [cbc-padding-oracle]}
+      - {id: bcm-ctr-counter-blocks, name: CTR mode counter block construction and overflow, match: [ctr-counter-block]}
+      - {id: bcm-cfb-ofb-legacy, name: Handling legacy CFB/OFB data, match: [cfb-ofb-legacy]}
+      - {id: bcm-cts, name: CBC ciphertext stealing for length-preserving encryption, match: [ciphertext-stealing]}
+      - {id: bcm-iv-unpredictability, name: Generating unpredictable IVs for CBC and CFB (SP 800-38A App C), match: [iv-unpredictability]}
+      - {id: bcm-nonce-reuse-incident, name: Responding to a CTR or GCM nonce-reuse incident, match: [nonce-reuse-incident]}
+      - {id: bcm-chacha20-counter, name: ChaCha20 stream cipher nonce and block counter layout (RFC 8439 2.4), match: [chacha20-counter]}
+      - {id: bcm-tdea-retirement, name: Retiring 3DES and 64-bit block ciphers (SP 800-67 withdrawal), match: [tdea-retirement]}
+      - {id: bcm-birthday-bound, name: Per-key data limits from the block-size birthday bound, match: [birthday-bound-limits]}
+  - id: aead-modes
+    name: Authenticated encryption with associated data
+    source: NIST SP 800-38C/38D, RFC 8439, RFC 8452
+    match: [aead, authenticated-encryption]
+    subtopics:
+      - {id: aead-gcm-tag-length, name: GCM tag length and invocation limits, match: [gcm-tag-length]}
+      - {id: aead-associated-data, name: Binding context with associated data, match: [associated-data-binding]}
+      - {id: aead-ccm, name: AES-CCM for constrained devices, match: [aes-ccm]}
+      - {id: aead-key-commitment, name: Key commitment and partitioning-oracle defence, match: [key-commitment]}
+      - {id: aead-streaming-release, name: Never releasing unauthenticated plaintext when streaming, match: [unverified-plaintext-release]}
+      - {id: aead-chacha20-poly1305, name: ChaCha20-Poly1305 construction and usage (RFC 8439 2.8), match: [chacha20-poly1305-rfc8439]}
+      - {id: aead-gcm-siv, name: AES-GCM-SIV nonce-misuse resistance (RFC 8452), match: [aes-gcm-siv]}
+      - {id: aead-gcm-nonce-construction, name: Deterministic versus random GCM IV construction (SP 800-38D 8.2), match: [gcm-nonce-construction]}
+      - {id: aead-extended-nonce, name: Extended-nonce AEADs (XChaCha20 and XAES-256-GCM), match: [extended-nonce]}
+      - {id: aead-usage-limits, name: AEAD confidentiality and integrity usage limits per key, match: [aead-usage-limits]}
+  - id: message-authentication
+    name: Message authentication codes
+    source: FIPS 198-1 HMAC / SP 800-38B CMAC / SP 800-185 KMAC / Cryptography Engineering ch 6
+    match: [hmac, message-authentication-code]
+    subtopics:
+      - {id: mac-hmac-usage, name: HMAC key sizing and verification, match: [hmac-verification]}
+      - {id: mac-cmac, name: AES-CMAC usage, match: [aes-cmac]}
+      - {id: mac-kmac, name: KMAC and cSHAKE customisation strings, match: [kmac]}
+      - {id: mac-truncation, name: MAC tag truncation limits, match: [mac-truncation]}
+      - {id: mac-encrypt-then-mac, name: Composing encrypt-then-MAC correctly, match: [encrypt-then-mac-composition]}
+      - {id: mac-poly1305-one-time, name: Poly1305 one-time key requirement, match: [poly1305-one-time-key]}
+      - {id: mac-gmac, name: GMAC authentication-only mode (SP 800-38D), match: [gmac]}
+      - {id: mac-webhook-verification, name: Verifying HMAC-signed webhooks with timestamps, match: [webhook-signature-verification]}
+      - {id: mac-request-signing, name: Canonical HTTP request signing (SigV4 and RFC 9421 style), match: [request-signing]}
+  - id: hash-functions
+    name: Cryptographic hash functions
+    source: FIPS 180-4 / FIPS 202 / Cryptography Engineering ch 5
+    match: [hash-functions, sha-256]
+    subtopics:
+      - {id: hash-length-extension, name: Length-extension attacks and safe constructions, match: [length-extension-attack]}
+      - {id: hash-sha3-shake, name: SHA-3 and SHAKE extendable-output functions, match: [sha3-shake]}
+      - {id: hash-blake3, name: BLAKE2 and BLAKE3 selection and keyed modes, match: [blake3]}
+      - {id: hash-unambiguous-input, name: Unambiguous encoding of hashed tuples, match: [hash-input-encoding]}
+      - {id: hash-sha1-md5-retirement, name: Retiring SHA-1 and MD5, match: [sha1-deprecation]}
+      - {id: hash-sha512-256, name: SHA-512/256 and truncated SHA-2 variants (FIPS 180-4 5.3.6), match: [sha-512-256]}
+      - {id: hash-merkle-trees, name: Merkle trees with leaf and node domain separation (RFC 6962 2.1), match: [merkle-tree-hashing]}
+      - {id: hash-domain-separation, name: Domain separation tags for multi-purpose hashing, match: [hash-domain-separation]}
+      - {id: hash-file-integrity, name: File integrity digests and checksum manifests, match: [file-integrity-digest]}
+      - {id: hash-tuplehash, name: SP 800-185 TupleHash and ParallelHash, match: [tuplehash]}
+  - id: format-preserving-and-storage-modes
+    name: Storage and format-preserving encryption modes
+    source: NIST SP 800-38E XTS / SP 800-38G FF1 / SP 800-38F key wrap
+    match: [storage-encryption-modes]
+    subtopics:
+      - {id: fpe-xts, name: XTS-AES for block-device encryption, match: [xts-aes]}
+      - {id: fpe-ff1, name: FF1 format-preserving encryption, match: [format-preserving-encryption]}
+      - {id: fpe-aes-kw, name: AES key wrap KW and KWP, match: [aes-key-wrap]}
+      - {id: fpe-deterministic-siv, name: Deterministic encryption with AES-SIV, match: [aes-siv-deterministic]}
+      - {id: fpe-ff3-1, name: FF3-1 status and tweak handling (SP 800-38G Rev 1), match: [ff3-1]}
+      - {id: fpe-tokenization, name: Tokenization versus FPE for cardholder data, match: [tokenization-vs-fpe]}
+      - {id: fpe-xts-key-check, name: XTS key1 not equal key2 check and data unit sizing, match: [xts-key-check]}
+      - {id: fpe-luks2, name: dm-crypt and LUKS2 cipher and PBKDF choices, match: [luks2-cipher]}
+      - {id: fpe-adiantum, name: Adiantum wide-block encryption for low-end devices, match: [adiantum]}
+  # --- Applied cryptography: key derivation, passwords, randomness
+  - id: key-derivation
+    name: Key derivation functions
+    source: RFC 5869 / NIST SP 800-108 / SP 800-56C
+    match: [kdf, hkdf]
+    subtopics:
+      - {id: kdf-hkdf-extract-expand, name: HKDF extract and expand parameter choices, match: [hkdf-extract-expand]}
+      - {id: kdf-sp800-108, name: SP 800-108 counter-mode KBKDF, match: [kbkdf]}
+      - {id: kdf-sp800-56c, name: Deriving keys from a key-agreement shared secret, match: [shared-secret-kdf]}
+      - {id: kdf-key-hierarchy-labels, name: Labelled key hierarchies from one root key, match: [kdf-label-hierarchy]}
+      - {id: kdf-kbkdf-feedback, name: KBKDF feedback and double-pipeline modes (SP 800-108r1 4.2-4.3), match: [kbkdf-feedback-mode]}
+      - {id: kdf-kmac-kdf, name: KMAC-based key derivation (SP 800-108r1 4.4), match: [kmac-kdf]}
+      - {id: kdf-concat-kdf, name: One-step concatenation KDF (SP 800-56C 4 and ANSI X9.63), match: [concat-kdf]}
+      - {id: kdf-hkdf-expand-label, name: TLS 1.3 HKDF-Expand-Label and SP 800-135 protocol KDFs, match: [hkdf-expand-label]}
+      - {id: kdf-input-entropy, name: Choosing a KDF by input entropy (never HKDF on passwords), match: [kdf-input-entropy]}
+      - {id: kdf-key-diversification, name: Per-device key diversification from a master key, match: [key-diversification]}
+  - id: password-hashing
+    name: Password storage and password-based key derivation
+    source: OWASP Password Storage cheat sheet / NIST SP 800-63B / SP 800-132
+    match: [password-hashing, password-storage]
+    subtopics:
+      - {id: pw-argon2id-params, name: Argon2id parameter selection, match: [argon2id-parameters]}
+      - {id: pw-bcrypt-limits, name: bcrypt cost factor and 72-byte limit, match: [bcrypt-limits]}
+      - {id: pw-pbkdf2-fips, name: PBKDF2 iteration counts for FIPS environments, match: [pbkdf2-iterations]}
+      - {id: pw-pepper, name: Peppering password hashes, match: [password-pepper]}
+      - {id: pw-hash-migration, name: Migrating legacy password hashes, match: [password-hash-migration]}
+      - {id: pw-pbe-file-keys, name: Password-based encryption of files and keys, match: [password-based-encryption]}
+      - {id: pw-scrypt-params, name: scrypt N r p parameter selection, match: [scrypt-parameters]}
+      - {id: pw-phc-format, name: PHC string format and parameter encoding, match: [phc-string-format]}
+      - {id: pw-breached-check, name: Breached password screening with k-anonymity (SP 800-63B 3.1.1.2), match: [breached-password-check]}
+      - {id: pw-hash-dos, name: Limiting password hashing DoS (length caps and concurrency), match: [password-hash-dos]}
+      - {id: pw-yescrypt-shadow, name: Unix crypt(3) yescrypt and sha512crypt in shadow files, match: [yescrypt]}
+  - id: random-generation
+    name: Random bit generation
+    source: NIST SP 800-90A/B/C / Cryptography Engineering ch 9
+    match: [csprng, random-number-generation]
+    subtopics:
+      - {id: rng-drbg-mechanisms, name: Choosing and operating SP 800-90A DRBGs, match: [drbg]}
+      - {id: rng-entropy-health-tests, name: Entropy source health tests, match: [entropy-health-tests]}
+      - {id: rng-reseed-fork-vm, name: Reseeding after fork and VM snapshot, match: [vm-snapshot-reseed]}
+      - {id: rng-uniform-sampling, name: Unbiased random integers, tokens and identifiers, match: [modulo-bias]}
+      - {id: rng-os-apis, name: OS randomness APIs (getrandom, BCryptGenRandom, arc4random), match: [getrandom]}
+      - {id: rng-early-boot, name: Early-boot entropy starvation and blocking reads, match: [early-boot-entropy]}
+      - {id: rng-insecure-prng, name: Replacing non-cryptographic PRNGs in security code, match: [insecure-prng]}
+      - {id: rng-90b-estimation, name: SP 800-90B min-entropy estimation with the NIST tool, match: [min-entropy-estimation]}
+      - {id: rng-prediction-resistance, name: DRBG prediction resistance and reseed intervals, match: [prediction-resistance]}
+      - {id: rng-rdrand, name: RDRAND and RDSEED hardware RNG use and trust, match: [rdrand]}
+  - id: algorithm-selection-and-strength
+    name: Algorithm selection and security strength
+    source: NIST SP 800-57 Pt1 5.6 / SP 800-131A / Cryptography Engineering ch 1-2
+    match: [algorithm-selection, security-strength]
+    subtopics:
+      - {id: alg-strength-equivalence, name: Security strength equivalence tables, match: [security-strength-equivalence]}
+      - {id: alg-sp800-131a-transitions, name: Applying SP 800-131A deprecation schedule, match: [sp-800-131a]}
+      - {id: alg-threat-model, name: Writing a cryptographic threat model, match: [crypto-threat-model]}
+      - {id: alg-crypto-agility, name: Designing for cryptographic agility, match: [crypto-agility]}
+      - {id: alg-cnsa2, name: CNSA 2.0 algorithm suite requirements, match: [cnsa-2-suite]}
+      - {id: alg-bsi-anssi, name: Cross-checking BSI TR-02102 and ANSSI key-length guidance, match: [bsi-tr-02102]}
+      - {id: alg-legacy-use, name: SP 800-131A legacy-use status for decrypt and verify only, match: [legacy-use-only]}
+      - {id: alg-custom-crypto, name: Rejecting home-grown and nonstandard algorithms, match: [custom-crypto-rejection]}
+      - {id: alg-compliance-mapping, name: Mapping algorithms to PCI DSS 4.0 and other regimes, match: [compliance-crypto-mapping]}
+  # --- Applied cryptography: public-key (SP 800-56A/B, FIPS 186-5, Cryptography Engineering 10-12)
+  - id: rsa-usage
+    name: RSA encryption and signatures
+    source: SP 800-56B / FIPS 186-5 / RFC 8017 / Cryptography Engineering ch 12
+    match: [rsa-oaep, rsa-pss]
+    subtopics:
+      - {id: rsa-oaep-params, name: RSA-OAEP hash and MGF parameters, match: [oaep-parameters]}
+      - {id: rsa-pkcs1v15-bleichenbacher, name: Removing PKCS1 v1.5 encryption and Bleichenbacher oracles, match: [bleichenbacher]}
+      - {id: rsa-pss-salt, name: RSA-PSS salt length and interop, match: [pss-salt-length]}
+      - {id: rsa-key-size-exponent, name: RSA modulus size and public exponent, match: [rsa-key-size]}
+      - {id: rsa-prime-generation, name: FIPS 186-5 RSA key pair generation (Appendix A.1), match: [rsa-prime-generation]}
+      - {id: rsa-textbook, name: Eliminating textbook RSA and raw NoPadding, match: [textbook-rsa]}
+      - {id: rsa-public-key-validation, name: RSA public key validation (SP 800-89 and 56B 6.4), match: [rsa-public-key-validation]}
+      - {id: rsa-kem, name: RSA-KEM and RSASVE key transport (SP 800-56B 7), match: [rsa-kem]}
+      - {id: rsa-weak-keys, name: Detecting weak RSA keys (ROCA, shared primes, Debian), match: [weak-rsa-keys]}
+  - id: key-agreement
+    name: Diffie-Hellman and elliptic-curve key agreement
+    source: NIST SP 800-56A Rev 3 / RFC 7748 / Cryptography Engineering ch 11
+    match: [ecdh, key-agreement]
+    subtopics:
+      - {id: ka-x25519-usage, name: X25519 key agreement and all-zero output check, match: [x25519-key-agreement]}
+      - {id: ka-ecdh-public-key-validation, name: ECDH public key validation on NIST curves, match: [ecdh-public-key-validation]}
+      - {id: ka-ephemeral-static, name: Ephemeral versus static key agreement schemes, match: [ephemeral-static-dh]}
+      - {id: ka-ffdhe-groups, name: Finite-field DH safe groups, match: [ffdhe]}
+      - {id: ka-key-confirmation, name: Key confirmation after key agreement (SP 800-56A 5.9), match: [key-confirmation]}
+      - {id: ka-x448, name: X448 key agreement (RFC 7748), match: [x448]}
+      - {id: ka-curve-selection, name: Choosing between P-256, P-384, X25519 and Brainpool, match: [curve-selection]}
+      - {id: ka-authenticated-exchange, name: Authenticating Diffie-Hellman exchanges against MITM, match: [dh-authentication]}
+      - {id: ka-shared-secret-encoding, name: Encoding the raw shared secret Z (leading zeros, x-coordinate), match: [shared-secret-encoding]}
+  - id: digital-signatures
+    name: Digital signature schemes
+    source: FIPS 186-5 / RFC 8032 / RFC 6979
+    match: [signatures, digital-signatures]
+    subtopics:
+      - {id: sig-ecdsa-deterministic, name: Deterministic and hedged ECDSA nonces, match: [deterministic-ecdsa]}
+      - {id: sig-ed25519-variants, name: Ed25519 versus Ed25519ph and Ed25519ctx, match: [ed25519ph]}
+      - {id: sig-what-to-sign, name: Signing canonical structured data, match: [signed-payload-design]}
+      - {id: sig-verify-before-parse, name: Verify-then-parse and signature stripping, match: [signature-stripping]}
+      - {id: sig-malleability, name: ECDSA signature malleability and low-S normalisation, match: [signature-malleability]}
+      - {id: sig-ed25519-verify-rules, name: Ed25519 verification strictness (cofactored, ZIP-215), match: [ed25519-verification-rules]}
+      - {id: sig-key-substitution, name: Key-substitution and exclusive-ownership attacks, match: [key-substitution-attack]}
+      - {id: sig-timestamping, name: RFC 3161 timestamping for long-term signature validity, match: [rfc3161-timestamp]}
+      - {id: sig-batch-verify, name: Batch signature verification, match: [batch-verification]}
+      - {id: sig-ecdsa-nonce-reuse, name: Detecting ECDSA nonce reuse and bias, match: [ecdsa-nonce-reuse]}
+  - id: hybrid-public-key-encryption
+    name: Hybrid public-key encryption
+    source: RFC 9180 HPKE / SP 800-56A
+    match: [hpke, hybrid-encryption]
+    subtopics:
+      - {id: hpke-modes, name: HPKE base, PSK and auth modes, match: [hpke-modes]}
+      - {id: hpke-suite-selection, name: HPKE KEM KDF AEAD suite selection, match: [hpke-ciphersuite]}
+      - {id: hpke-exporter, name: HPKE secret export, match: [hpke-exporter]}
+      - {id: hpke-ecies-legacy, name: Replacing ad-hoc ECIES constructions, match: [ecies]}
+      - {id: hpke-info-aad, name: Binding context with HPKE info and aad, match: [hpke-info]}
+      - {id: hpke-context-reuse, name: Multi-message HPKE contexts and sequence limits, match: [hpke-context-reuse]}
+      - {id: hpke-x-wing, name: Post-quantum HPKE KEMs (ML-KEM and X-Wing), match: [x-wing]}
+      - {id: hpke-library-apis, name: HPKE library APIs in OpenSSL, BoringSSL and Go, match: [ossl-hpke]}
+      - {id: hpke-ech-ohttp, name: HPKE in ECH and Oblivious HTTP (RFC 9458), match: [ohttp]}
+  # --- Post-quantum (FIPS 203/204/205, SP 800-208)
+  - id: ml-kem
+    name: ML-KEM key encapsulation
+    source: FIPS 203
+    match: [ml-kem, fips-203]
+    subtopics:
+      - {id: mlkem-parameter-sets, name: ML-KEM-512/768/1024 selection, match: [ml-kem-parameter-sets]}
+      - {id: mlkem-key-formats, name: ML-KEM seed versus expanded key formats, match: [ml-kem-key-format]}
+      - {id: mlkem-input-checks, name: ML-KEM encapsulation key and ciphertext input checks, match: [ml-kem-input-validation]}
+      - {id: mlkem-hybrid-kem, name: Hybrid X25519MLKEM768 key exchange, match: [hybrid-kem]}
+      - {id: mlkem-implicit-rejection, name: ML-KEM implicit rejection and decapsulation failures, match: [implicit-rejection]}
+      - {id: mlkem-openssl, name: ML-KEM keys and encapsulation with OpenSSL 3.5, match: [openssl-ml-kem]}
+      - {id: mlkem-test-vectors, name: Testing ML-KEM with ACVP and KAT vectors, match: [ml-kem-test-vectors]}
+      - {id: mlkem-kyberslash, name: ML-KEM timing pitfalls (KyberSlash), match: [kyberslash]}
+      - {id: mlkem-combiner, name: KEM combiners for hybrid shared secrets, match: [kem-combiner]}
+  - id: ml-dsa
+    name: ML-DSA signatures
+    source: FIPS 204
+    match: [ml-dsa, fips-204]
+    subtopics:
+      - {id: mldsa-parameter-sets, name: ML-DSA-44/65/87 selection and sizes, match: [ml-dsa-parameter-sets]}
+      - {id: mldsa-hedged, name: Hedged versus deterministic ML-DSA signing, match: [hedged-signing]}
+      - {id: mldsa-context-prehash, name: ML-DSA context strings and HashML-DSA, match: [hashml-dsa]}
+      - {id: mldsa-composite, name: Composite and hybrid signatures, match: [composite-signatures]}
+      - {id: mldsa-openssl, name: ML-DSA keys and signatures with OpenSSL 3.5, match: [openssl-ml-dsa]}
+      - {id: mldsa-certificates, name: ML-DSA in X.509 certificates, match: [ml-dsa-certificates]}
+      - {id: mldsa-key-format, name: ML-DSA seed versus expanded private key formats, match: [ml-dsa-key-format]}
+      - {id: mldsa-rejection-sampling, name: ML-DSA signing rejection loop timing and side channels, match: [ml-dsa-rejection-sampling]}
+  - id: hash-based-signatures
+    name: Hash-based signatures
+    source: FIPS 205 / NIST SP 800-208
+    match: [slh-dsa, hash-based-signatures]
+    subtopics:
+      - {id: hbs-slh-dsa-params, name: SLH-DSA small versus fast parameter sets, match: [slh-dsa-parameter-sets]}
+      - {id: hbs-lms-xmss, name: LMS and XMSS stateful signatures, match: [lms-xmss]}
+      - {id: hbs-state-management, name: Stateful signature state management, match: [signature-state-management]}
+      - {id: hbs-firmware-signing, name: Hash-based signatures for firmware signing, match: [pq-firmware-signing]}
+      - {id: hbs-openssl-slh-dsa, name: SLH-DSA with OpenSSL 3.5, match: [openssl-slh-dsa]}
+      - {id: hbs-hss-params, name: LMS/HSS tree height and Winternitz parameter selection, match: [hss-parameters]}
+      - {id: hbs-signature-capacity, name: Signature capacity planning and exhaustion monitoring, match: [signature-capacity]}
+      - {id: hbs-stateful-backup, name: Stateful HBS keys in HSMs and backup restrictions (SP 800-208 7-8), match: [stateful-key-backup]}
+  - id: pq-migration
+    name: Post-quantum migration
+    source: NIST IR 8547 / NSA CNSA 2.0 / FIPS 203-205
+    match: [pq-migration, post-quantum]
+    subtopics:
+      - {id: pqm-crypto-inventory, name: Cryptographic inventory and CBOM, match: [cryptographic-inventory]}
+      - {id: pqm-hndl-prioritisation, name: Harvest-now-decrypt-later prioritisation, match: [harvest-now-decrypt-later]}
+      - {id: pqm-tls-rollout, name: Rolling out PQ key exchange in TLS, match: [pq-tls]}
+      - {id: pqm-size-performance, name: Handling PQ key and signature size impacts, match: [pq-size-impact]}
+      - {id: pqm-ir-8547-timeline, name: NIST IR 8547 deprecation and disallow dates, match: [ir-8547-deadlines]}
+      - {id: pqm-pki-migration, name: Post-quantum PKI and certificate migration strategies, match: [pq-pki-migration]}
+      - {id: pqm-openssh-pq-kex, name: Post-quantum key exchange in OpenSSH, match: [sntrup761]}
+      - {id: pqm-readiness, name: Assessing vendor and library PQ readiness, match: [pq-readiness-assessment]}
+      - {id: pqm-large-clienthello, name: Testing middlebox breakage from large ClientHellos, match: [large-clienthello]}
+  # --- Applied cryptography: data protection (OWASP Cryptographic Storage, Cryptography Engineering 7, 21)
+  - id: data-at-rest-encryption
+    name: Encrypting stored data
+    source: OWASP Cryptographic Storage cheat sheet / Cryptography Engineering ch 21
+    match: [data-at-rest-encryption, cryptographic-storage]
+    subtopics:
+      - {id: dar-field-level, name: Application field-level encryption, match: [field-level-encryption]}
+      - {id: dar-blind-index, name: Blind indexes for searching encrypted fields, match: [blind-index]}
+      - {id: dar-ciphertext-format, name: Versioned ciphertext envelope format, match: [ciphertext-format]}
+      - {id: dar-backup-encryption, name: Encrypting backups and exports, match: [backup-encryption]}
+      - {id: dar-tde, name: Database TDE versus application-level encryption, match: [transparent-data-encryption]}
+      - {id: dar-queryable, name: Queryable encryption options for databases, match: [queryable-encryption]}
+      - {id: dar-client-side-object, name: Object storage client-side versus server-side encryption, match: [client-side-encryption]}
+      - {id: dar-event-streams, name: Encrypting PII in logs and event streams, match: [event-stream-encryption]}
+      - {id: dar-mobile-storage, name: Mobile local storage encryption (iOS Data Protection, Android), match: [ios-data-protection]}
+  - id: secure-channel-design
+    name: Secure channel construction
+    source: Cryptography Engineering ch 7 / RFC 8446 5
+    match: [secure-channel]
+    subtopics:
+      - {id: sc-message-numbering, name: Message numbering and replay windows, match: [replay-window]}
+      - {id: sc-directional-keys, name: Per-direction keys and reflection attacks, match: [directional-keys]}
+      - {id: sc-rekeying, name: Rekeying long-lived channels, match: [channel-rekeying]}
+      - {id: sc-length-hiding, name: Length hiding and padding, match: [length-hiding-padding]}
+      - {id: sc-transcript-hash, name: Handshake transcript hashing and binding, match: [transcript-hash]}
+      - {id: sc-forward-secrecy, name: Forward secrecy and ephemeral key erasure, match: [forward-secrecy]}
+      - {id: sc-downgrade, name: Downgrade-resistant version and algorithm negotiation, match: [downgrade-protection]}
+      - {id: sc-dtls, name: Datagram secure channels with DTLS 1.3 (RFC 9147), match: [dtls-1-3]}
+      - {id: sc-record-framing, name: Authenticated record framing and length fields, match: [record-framing]}
+  # --- Key management (SP 800-57, SP 800-133, SP 800-130, OWASP Key Management)
+  - id: key-types-and-cryptoperiods
+    name: Key types, usage and cryptoperiods
+    source: NIST SP 800-57 Pt1 5.1-5.3
+    match: [cryptoperiod, crypto-period]
+    subtopics:
+      - {id: ktc-cryptoperiod-selection, name: Setting cryptoperiods per key type, match: [cryptoperiod-selection]}
+      - {id: ktc-key-usage-separation, name: One key one purpose enforcement, match: [key-usage-separation]}
+      - {id: ktc-key-states, name: Key state model and transitions, match: [key-states]}
+      - {id: ktc-key-metadata, name: Key metadata and labelling, match: [key-metadata]}
+      - {id: ktc-originator-recipient, name: Originator and recipient usage periods (SP 800-57 5.3.5), match: [originator-usage-period]}
+      - {id: ktc-key-inventory, name: Maintaining a key inventory, match: [key-inventory-register]}
+      - {id: ktc-key-type-catalogue, name: SP 800-57 key type catalogue (5.1.1), match: [sp-800-57-key-types]}
+      - {id: ktc-usage-counters, name: Limiting operations per key with usage counters, match: [key-usage-counter]}
+  - id: key-generation
+    name: Key generation
+    source: NIST SP 800-133 Rev 2
+    match: [key-generation]
+    subtopics:
+      - {id: kg-symmetric-from-rbg, name: Generating symmetric keys from an approved RBG, match: [symmetric-key-generation]}
+      - {id: kg-asymmetric-pairs, name: Generating and pairwise-testing asymmetric key pairs, match: [key-pair-generation]}
+      - {id: kg-in-hsm, name: Generating keys inside an HSM or KMS, match: [hsm-key-generation]}
+      - {id: kg-key-ceremony, name: Root key generation ceremony, match: [key-ceremony]}
+      - {id: kg-key-combining, name: Combining keys from multiple sources (SP 800-133 6.3), match: [key-combining]}
+      - {id: kg-rbg-strength, name: Matching RBG security strength to key strength (SP 800-133 4), match: [rbg-security-strength]}
+      - {id: kg-key-check-value, name: Key check values for key transfer verification, match: [key-check-value]}
+      - {id: kg-cloned-images, name: Avoiding duplicated keys in cloned images and containers, match: [cloned-image-keys]}
+      - {id: kg-ecc-keygen, name: FIPS 186-5 ECC key pair generation methods (A.2), match: [ecc-key-generation]}
+  - id: key-storage-and-protection
+    name: Key storage and protection
+    source: NIST SP 800-57 Pt1 6 / OWASP Key Management / Cryptography Engineering ch 21
+    match: [key-storage, secret-storage]
+    subtopics:
+      - {id: ksp-os-keystores, name: OS keystores (Keychain, DPAPI, Secret Service), match: [os-keystore]}
+      - {id: ksp-tpm-sealing, name: TPM sealing and key binding, match: [tpm-sealing]}
+      - {id: ksp-secrets-in-config, name: Keeping keys out of code, env and logs, match: [hardcoded-keys]}
+      - {id: ksp-wrapped-at-rest, name: Storing keys wrapped under a KEK, match: [wrapped-key-storage]}
+      - {id: ksp-k8s-secrets, name: Kubernetes Secrets encryption at rest with KMS v2, match: [kubernetes-secrets-encryption]}
+      - {id: ksp-sops, name: Encrypted secrets in git with SOPS and sealed-secrets, match: [sops-encrypted-secrets]}
+      - {id: ksp-file-permissions, name: Private key file permissions and ownership, match: [key-file-permissions]}
+      - {id: ksp-secure-enclave, name: Hardware-backed mobile keys (Secure Enclave, StrongBox), match: [strongbox]}
+      - {id: ksp-tr31, name: Transporting keys in TR-31 key blocks, match: [tr-31]}
+  - id: key-rotation
+    name: Key rotation and rekeying
+    source: NIST SP 800-57 Pt1 8.2 / OWASP Key Management
+    match: [key-rotation]
+    subtopics:
+      - {id: kr-versioning, name: Key versioning and key identifiers, match: [key-versioning]}
+      - {id: kr-reencryption, name: Bulk and lazy re-encryption, match: [re-encryption]}
+      - {id: kr-signing-key-rollover, name: Signing key rollover and JWKS publication, match: [signing-key-rollover]}
+      - {id: kr-automatic-kms-rotation, name: Automatic KMS key rotation behaviour, match: [kms-automatic-rotation]}
+      - {id: kr-rotation-schedule, name: Rotation triggers and schedules, match: [rotation-schedule]}
+      - {id: kr-overlap-window, name: Accept-old issue-new overlap windows, match: [key-overlap-window]}
+      - {id: kr-tls-key-rotation, name: Rotating TLS private keys at certificate renewal, match: [tls-key-rotation]}
+      - {id: kr-shared-secret-rotation, name: Rotating shared HMAC and webhook secrets without downtime, match: [shared-secret-rotation]}
+  - id: key-compromise-and-recovery
+    name: Key compromise, backup and recovery
+    source: NIST SP 800-57 Pt1 5.5 and 8.2.2 / SP 800-57 Pt2
+    match: [key-compromise, key-recovery]
+    subtopics:
+      - {id: kcr-compromise-response, name: Key compromise response plan, match: [key-compromise-response]}
+      - {id: kcr-key-backup, name: Key backup and escrow, match: [key-backup]}
+      - {id: kcr-secret-sharing, name: Splitting recovery keys with secret sharing, match: [shamir-secret-sharing]}
+      - {id: kcr-recovery-drill, name: Key recovery drills, match: [key-recovery-drill]}
+      - {id: kcr-mass-revocation, name: Mass revocation and re-issuance after compromise, match: [mass-revocation]}
+      - {id: kcr-leak-detection, name: Detecting leaked keys in repos and anomalous key use, match: [key-leak-detection]}
+      - {id: kcr-ca-compromise, name: CA key compromise recovery, match: [ca-compromise]}
+      - {id: kcr-impact-assessment, name: Assessing data exposure after a key compromise, match: [compromise-impact-assessment]}
+  - id: key-destruction
+    name: Key destruction and crypto-shredding
+    source: NIST SP 800-57 Pt1 8.3-8.4 / SP 800-88
+    match: [key-destruction, crypto-shredding]
+    subtopics:
+      - {id: kd-crypto-erase, name: Crypto-erase for data deletion requests, match: [crypto-erase]}
+      - {id: kd-kms-scheduled-deletion, name: KMS scheduled key deletion safeguards, match: [scheduled-key-deletion]}
+      - {id: kd-destruction-records, name: Destruction evidence and audit records, match: [key-destruction-record]}
+      - {id: kd-archived-key-retention, name: Retaining keys for archived data, match: [archived-key-retention]}
+      - {id: kd-hsm-zeroization, name: HSM and token zeroisation procedures, match: [hsm-zeroization]}
+      - {id: kd-nvme-sanitize, name: Cryptographic erase on SEDs and NVMe (SP 800-88), match: [nvme-sanitize]}
+      - {id: kd-copy-destruction, name: Finding and destroying every key copy, match: [key-copy-destruction]}
+      - {id: kd-destroyed-compromised, name: Destroyed versus destroyed-compromised states (SP 800-57 7), match: [destroyed-compromised-state]}
+  - id: cloud-kms
+    name: Cloud key management services
+    source: AWS KMS / Google Cloud KMS / Azure Key Vault developer guides
+    match: [kms, cloud-kms]
+    subtopics:
+      - {id: kms-envelope-datakeys, name: Envelope encryption with data keys, match: [envelope-encryption]}
+      - {id: kms-key-policies, name: KMS key policies and grants, match: [kms-key-policy]}
+      - {id: kms-encryption-context, name: Encryption context and AAD in KMS, match: [encryption-context]}
+      - {id: kms-multi-region-byok, name: Multi-region keys, BYOK and external key stores, match: [byok]}
+      - {id: kms-quota-caching, name: Data key caching and KMS request quotas, match: [data-key-caching]}
+      - {id: kms-aws-cli, name: AWS KMS encrypt, decrypt and generate-data-key operations, match: [aws-kms-cli]}
+      - {id: kms-gcp, name: Google Cloud KMS key rings, versions and IAM, match: [google-cloud-kms]}
+      - {id: kms-azure, name: Azure Key Vault keys, Managed HSM and RBAC, match: [azure-key-vault-keys]}
+      - {id: kms-asymmetric-signing, name: Asymmetric signing keys in cloud KMS, match: [kms-signing]}
+      - {id: kms-audit-logs, name: Auditing KMS use with CloudTrail and Cloud Audit Logs, match: [kms-audit-logs]}
+      - {id: kms-cross-account, name: Cross-account and cross-project key access, match: [cross-account-kms]}
+  - id: secrets-managers
+    name: Secrets managers and transit encryption services
+    source: HashiCorp Vault docs (transit, PKI, KV) / OWASP Secrets Management cheat sheet
+    match: [hashicorp-vault, secrets-manager]
+    subtopics:
+      - {id: sm-vault-transit, name: Vault transit encryption as a service, match: [vault-transit]}
+      - {id: sm-vault-pki, name: Vault PKI short-lived certificates, match: [vault-pki]}
+      - {id: sm-dynamic-secrets, name: Dynamic secrets and leases, match: [dynamic-secrets]}
+      - {id: sm-unseal-auto, name: Vault seal and auto-unseal, match: [vault-unseal]}
+      - {id: sm-aws-secrets-manager, name: AWS Secrets Manager and rotation functions, match: [aws-secrets-manager]}
+      - {id: sm-vault-kv-v2, name: Vault KV v2 versioning and metadata, match: [vault-kv-v2]}
+      - {id: sm-vault-auth, name: Vault auth methods for workloads, match: [vault-auth-methods]}
+      - {id: sm-vault-policy, name: Vault ACL policies, match: [vault-policy]}
+      - {id: sm-secret-injection, name: Injecting secrets into workloads (CSI, agent injector, External Secrets), match: [external-secrets]}
+  - id: hsm-integration
+    name: HSM and PKCS#11 integration
+    source: OASIS PKCS#11 v3 / FIPS 140-3
+    match: [hsm, pkcs11]
+    subtopics:
+      - {id: hsm-key-attributes, name: PKCS#11 key attributes and non-extractability, match: [pkcs11-attributes]}
+      - {id: hsm-sessions-login, name: PKCS#11 sessions, login and threading, match: [pkcs11-sessions]}
+      - {id: hsm-openssl-provider, name: Using HSM keys from OpenSSL via pkcs11 provider, match: [pkcs11-provider]}
+      - {id: hsm-ha-backup, name: HSM high availability and key backup, match: [hsm-high-availability]}
+      - {id: hsm-softhsm, name: pkcs11-tool and SoftHSM2 for development and CI, match: [softhsm]}
+      - {id: hsm-mechanisms, name: Querying and selecting PKCS#11 mechanisms, match: [pkcs11-mechanisms]}
+      - {id: hsm-key-wrap, name: Wrapping keys out of an HSM (CKM_AES_KEY_WRAP_KWP), match: [pkcs11-key-wrap]}
+      - {id: hsm-cloudhsm, name: Cloud HSM services (AWS CloudHSM, Azure Managed HSM), match: [aws-cloudhsm]}
+      - {id: hsm-sunpkcs11, name: Java SunPKCS11 provider configuration, match: [sunpkcs11]}
+  - id: key-management-policy
+    name: Key management policy and CKMS design
+    source: NIST SP 800-57 Pt2 / SP 800-130 / SP 800-152
+    match: [key-management-policy, ckms]
+    subtopics:
+      - {id: kmp-policy-document, name: Writing a key management policy, match: [key-management-practice-statement]}
+      - {id: kmp-key-usage-audit, name: Auditing and logging key usage, match: [key-usage-audit]}
+      - {id: kmp-separation-of-duties, name: Separation of duties and dual control, match: [dual-control]}
+      - {id: kmp-access-control, name: Key access control design, match: [key-access-control]}
+      - {id: kmp-sp800-130, name: SP 800-130 CKMS design framework requirements, match: [sp-800-130]}
+      - {id: kmp-key-custodians, name: Key custodian roles and acknowledgements, match: [key-custodian]}
+      - {id: kmp-pci-dss, name: PCI DSS 3.6 and 3.7 key management requirements, match: [pci-dss-key-management]}
+      - {id: kmp-tenant-isolation, name: Customer-managed keys and tenant key isolation in SaaS, match: [tenant-key-isolation]}
+  - id: fips-140
+    name: FIPS 140-3 validated modules
+    source: FIPS 140-3 / ISO 19790 / CMVP guidance
+    match: [fips-140, fips-140-3]
+    subtopics:
+      - {id: fips-security-levels, name: FIPS 140-3 security levels and module boundary, match: [fips-security-levels]}
+      - {id: fips-approved-mode, name: Operating in approved mode, match: [fips-approved-mode]}
+      - {id: fips-self-tests, name: Power-up and conditional self-tests, match: [fips-self-tests]}
+      - {id: fips-cmvp-certificates, name: Reading CMVP certificates and security policies, match: [cmvp-certificate]}
+      - {id: fips-fipsinstall, name: Installing and configuring the OpenSSL FIPS provider, match: [fipsinstall]}
+      - {id: fips-os-mode, name: Operating system FIPS mode (RHEL, Windows, Ubuntu Pro), match: [fips-mode-setup]}
+      - {id: fips-service-indicator, name: Approved service indicators (FIPS 140-3 IG 2.4.C), match: [service-indicator]}
+      - {id: fips-ssp-zeroisation, name: SSP management and zeroisation requirements (FIPS 140-3 7.9), match: [ssp-zeroisation]}
+      - {id: fips-mip-sunset, name: Modules In Process, historical status and sunset dates, match: [cmvp-modules-in-process]}
+  # --- OpenSSL (man1 / man5 / man7 / man3)
+  - id: openssl-keys
+    name: OpenSSL key generation and conversion
+    source: OpenSSL man1 openssl-genpkey, openssl-pkey, openssl-pkcs8
+    match: [genpkey, openssl-pkey]
+    subtopics:
+      - {id: ossl-genpkey-algorithms, name: genpkey algorithm options, match: [genpkey-options]}
+      - {id: ossl-key-format-conversion, name: Converting PEM, DER and PKCS8 keys, match: [key-format-conversion]}
+      - {id: ossl-encrypted-private-keys, name: Encrypting private keys at rest, match: [encrypted-private-key]}
+      - {id: ossl-key-inspection, name: Inspecting and matching keys, match: [key-inspection]}
+      - {id: ossl-genrsa-legacy, name: Legacy genrsa, rsa and ecparam commands versus genpkey, match: [openssl-genrsa]}
+      - {id: ossl-pubout, name: Extracting public keys and raw key bytes, match: [pubout]}
+      - {id: ossl-dhparam, name: Generating DH and DSA parameters, match: [dhparam]}
+      - {id: ossl-pkey-check, name: Validating keys with pkey -check and -pubcheck, match: [pkey-check]}
+  - id: openssl-csr-and-certs
+    name: OpenSSL CSRs and certificates
+    source: OpenSSL man1 openssl-req, openssl-x509 / man5 x509v3_config
+    match: [csr, x509]
+    subtopics:
+      - {id: ossl-req-config, name: CSR config files with SAN and extensions, match: [openssl-req-config]}
+      - {id: ossl-x509v3-extensions, name: x509v3 extension configuration, match: [x509v3-extensions]}
+      - {id: ossl-cert-inspection, name: Inspecting certificate fields and fingerprints, match: [certificate-inspection]}
+      - {id: ossl-self-signed-dev, name: Self-signed certificates for development, match: [self-signed-certificate]}
+      - {id: ossl-copy-extensions, name: Signing CSRs with x509 -req and -copy_extensions, match: [copy-extensions]}
+      - {id: ossl-subject-dn, name: Subject DN encoding with -subj, UTF8 and multi-valued RDNs, match: [subject-dn]}
+      - {id: ossl-x509toreq, name: Re-issuing a certificate from an existing cert and key, match: [x509toreq]}
+      - {id: ossl-serial-validity, name: Serial numbers and validity dates for issued certificates, match: [certificate-serial-number]}
+  - id: openssl-private-ca
+    name: Running a private CA with OpenSSL
+    source: OpenSSL man1 openssl-ca / Cryptography Engineering ch 18-20
+    match: [private-ca, openssl-ca]
+    subtopics:
+      - {id: ossl-ca-root-intermediate, name: Root and intermediate CA hierarchy, match: [intermediate-ca]}
+      - {id: ossl-ca-database, name: openssl ca database, serials and policy, match: [ca-database]}
+      - {id: ossl-ca-crl-issuance, name: Issuing CRLs from a private CA, match: [crl-issuance]}
+      - {id: ossl-ca-name-constraints, name: Name-constrained intermediates, match: [name-constraints]}
+      - {id: ossl-ocsp-responder, name: Running an openssl ocsp responder, match: [ocsp-responder]}
+      - {id: ossl-ca-revoke, name: Revoking certificates with openssl ca -revoke and reason codes, match: [ca-revoke]}
+      - {id: ossl-offline-root, name: Offline root CA operation and signing sessions, match: [offline-root-ca]}
+      - {id: ossl-cross-signing, name: Cross-signing a new root or intermediate, match: [cross-signing]}
+      - {id: ossl-aia-cdp, name: AIA and CRL distribution point extensions, match: [crl-distribution-points]}
+  - id: openssl-verify
+    name: OpenSSL chain verification
+    source: OpenSSL man1 openssl-verify / man1 openssl-verification-options
+    match: [chain-verification, openssl-verify]
+    subtopics:
+      - {id: ossl-verify-untrusted, name: Verifying with untrusted intermediates, match: [untrusted-intermediates]}
+      - {id: ossl-verify-purpose-host, name: Purpose and hostname checks in verify, match: [verify-purpose]}
+      - {id: ossl-verify-errors, name: Diagnosing verify error codes, match: [verify-error-codes]}
+      - {id: ossl-ocsp-crl-check, name: Revocation checking with OCSP and CRL, match: [revocation-checking]}
+      - {id: ossl-partial-chain, name: Trusting intermediates with -partial_chain, match: [partial-chain]}
+      - {id: ossl-x509-strict, name: Strict checks with -x509_strict, -attime and -policy, match: [x509-strict]}
+      - {id: ossl-rehash, name: CApath directories and openssl rehash, match: [openssl-rehash]}
+      - {id: ossl-show-chain, name: Debugging the built chain with -show_chain, match: [show-chain]}
+  - id: openssl-tls-client-testing
+    name: TLS testing with s_client and s_server
+    source: OpenSSL man1 openssl-s_client, openssl-s_server
+    match: [s-client, tls-testing]
+    subtopics:
+      - {id: ossl-sclient-sni-chain, name: SNI and chain inspection with s_client, match: [showcerts]}
+      - {id: ossl-sclient-version-cipher, name: Forcing protocol versions, ciphers and groups, match: [tls-version-probe]}
+      - {id: ossl-sclient-starttls, name: STARTTLS testing for mail and database protocols, match: [starttls]}
+      - {id: ossl-sclient-resumption, name: Testing session resumption and early data, match: [session-resumption-testing]}
+      - {id: ossl-s-server-test, name: Local test servers with s_server, match: [s-server]}
+      - {id: ossl-sclient-alpn-status, name: ALPN and OCSP stapling checks with s_client, match: [s-client-alpn]}
+      - {id: ossl-sclient-client-cert, name: Testing mutual TLS with s_client -cert and -key, match: [s-client-client-cert]}
+      - {id: ossl-sclient-trace, name: Handshake tracing with -msg, -trace and -keylogfile, match: [s-client-trace]}
+      - {id: ossl-sclient-scripting, name: Scripting s_client health checks in CI and cron, match: [s-client-scripting]}
+      - {id: ossl-sclient-quic, name: QUIC client testing with OpenSSL 3.5, match: [openssl-quic]}
+  - id: openssl-pkcs12
+    name: PKCS#12 bundles
+    source: OpenSSL man1 openssl-pkcs12 / RFC 7292
+    match: [pkcs12, pfx]
+    subtopics:
+      - {id: ossl-p12-export, name: Building PKCS12 bundles with chain, match: [pkcs12-export]}
+      - {id: ossl-p12-legacy, name: Legacy PKCS12 algorithms and OpenSSL 3, match: [pkcs12-legacy]}
+      - {id: ossl-p12-extract, name: Extracting keys and certs from PFX, match: [pkcs12-extract]}
+      - {id: ossl-p12-java-keystore, name: PKCS12 to Java and Windows keystores, match: [keystore-conversion]}
+      - {id: ossl-p12-pbe, name: PKCS12 MAC and PBE algorithm and iteration options, match: [pkcs12-pbe]}
+      - {id: ossl-p12-friendlyname, name: friendlyName, localKeyID and multi-entry PKCS12, match: [pkcs12-friendlyname]}
+      - {id: ossl-p12-truststore, name: Certificate-only PKCS12 truststores, match: [pkcs12-truststore]}
+      - {id: ossl-p12-mac-verify, name: Diagnosing PKCS12 MAC verify and import errors, match: [mac-verify-error]}
+  - id: openssl-signing-and-cms
+    name: OpenSSL signing, digests and CMS
+    source: OpenSSL man1 openssl-dgst, openssl-pkeyutl, openssl-cms
+    match: [openssl-dgst, openssl-cms]
+    subtopics:
+      - {id: ossl-dgst-sign, name: Signing and verifying files with dgst, match: [file-signing]}
+      - {id: ossl-pkeyutl, name: Raw operations with pkeyutl, match: [pkeyutl]}
+      - {id: ossl-cms-sign, name: CMS and S/MIME signing, match: [cms-signing]}
+      - {id: ossl-cms-encrypt, name: CMS and S/MIME encryption, match: [cms-encryption]}
+      - {id: ossl-mac-kdf-cmds, name: openssl mac and kdf commands, match: [openssl-mac-kdf]}
+      - {id: ossl-cms-verify, name: Verifying CMS signatures and signer chains, match: [cms-verify]}
+      - {id: ossl-ts, name: RFC 3161 timestamps with openssl ts, match: [openssl-ts]}
+      - {id: ossl-smime-vs-cms, name: openssl smime versus cms command differences, match: [openssl-smime]}
+      - {id: ossl-pkeyutl-derive, name: Key agreement and KEM operations with pkeyutl, match: [pkeyutl-derive]}
+  - id: openssl-enc
+    name: Symmetric file encryption with openssl enc
+    source: OpenSSL man1 openssl-enc
+    match: [openssl-enc]
+    subtopics:
+      - {id: ossl-enc-pbkdf2, name: enc with -pbkdf2 and iteration counts, match: [enc-pbkdf2]}
+      - {id: ossl-enc-limitations, name: enc limitations and no AEAD, match: [enc-no-aead]}
+      - {id: ossl-enc-legacy-decrypt, name: Decrypting legacy EVP_BytesToKey files, match: [evp-bytestokey]}
+      - {id: ossl-enc-alternatives, name: Choosing age or CMS instead of enc, match: [age-encryption]}
+      - {id: ossl-enc-base64, name: Base64 encoding with openssl enc -a and -A, match: [openssl-base64]}
+      - {id: ossl-enc-raw-key-iv, name: Raw -K and -iv keys for interop with other libraries, match: [enc-raw-key-iv]}
+      - {id: ossl-enc-integrity, name: Adding integrity to openssl enc output, match: [enc-integrity-check]}
+      - {id: ossl-enc-salted-header, name: Salted__ header format and -nosalt, match: [salted-header]}
+  - id: openssl-config-and-providers
+    name: OpenSSL configuration and providers
+    source: OpenSSL man5 config, man7 provider, man7 migration_guide
+    match: [openssl-cnf, providers]
+    subtopics:
+      - {id: ossl-cnf-structure, name: openssl.cnf structure and OPENSSL_CONF, match: [openssl-conf]}
+      - {id: ossl-provider-loading, name: Loading default, legacy and third-party providers, match: [provider-loading]}
+      - {id: ossl-seclevel, name: Security levels and system crypto policies, match: [seclevel]}
+      - {id: ossl-list-capabilities, name: Listing algorithms and capabilities, match: [openssl-list]}
+      - {id: ossl-cnf-include, name: .include directives and FIPS module config sections, match: [openssl-cnf-include]}
+      - {id: ossl-ssl-conf-module, name: system_default ssl_conf sections, match: [ssl-conf-module]}
+      - {id: ossl-property-query, name: Provider property queries such as fips=yes, match: [property-query]}
+      - {id: ossl-engine-migration, name: Migrating ENGINE code and configs to providers, match: [openssl-engine]}
+  - id: openssl-library-tls
+    name: OpenSSL libssl application programming
+    source: OpenSSL man7 ossl-guide-tls-client-block / man3 SSL_CTX_new
+    match: [libssl, ssl-ctx]
+    subtopics:
+      - {id: ossl-lib-tls-client, name: Writing a verifying TLS client with libssl, match: [libssl-client]}
+      - {id: ossl-lib-tls-server, name: Writing a TLS server with libssl, match: [libssl-server]}
+      - {id: ossl-lib-error-queue, name: Handling the OpenSSL error queue, match: [err-get-error]}
+      - {id: ossl-lib-migration-3, name: Migrating from 1.1.1 to 3.x APIs, match: [openssl-3-migration]}
+      - {id: ossl-lib-ossl-param, name: OSSL_PARAM and EVP_PKEY fetch APIs, match: [ossl-param]}
+      - {id: ossl-lib-nonblocking, name: Non-blocking libssl I/O and SSL_ERROR_WANT_READ, match: [ssl-error-want-read]}
+      - {id: ossl-lib-bio, name: BIO chains and memory BIOs, match: [bio-mem]}
+      - {id: ossl-lib-session-cache, name: libssl session caching and tickets, match: [ssl-session-cache]}
+      - {id: ossl-lib-sni-alpn-callbacks, name: SNI and ALPN server callbacks, match: [sni-callback]}
+      - {id: ossl-lib-evp-aead, name: EVP_CIPHER AEAD encryption with GCM tags, match: [evp-cipher-gcm]}
+  - id: openssl-ciphers-and-speed
+    name: Cipher strings and benchmarking
+    source: OpenSSL man1 openssl-ciphers, openssl-speed
+    match: [cipher-strings]
+    subtopics:
+      - {id: ossl-cipherlist-tls12, name: TLS 1.2 cipher list strings, match: [cipher-list]}
+      - {id: ossl-ciphersuites-tls13, name: TLS 1.3 ciphersuites and groups, match: [tls13-ciphersuites]}
+      - {id: ossl-speed, name: Benchmarking with openssl speed, match: [openssl-speed]}
+      - {id: ossl-hw-acceleration, name: Checking AES-NI and hardware acceleration, match: [aes-ni]}
+      - {id: ossl-ciphers-v, name: Expanding cipher strings with openssl ciphers -v -s, match: [openssl-ciphers-v]}
+      - {id: ossl-sigalgs, name: Signature algorithm lists for TLS, match: [sigalgs]}
+      - {id: ossl-cipher-name-mapping, name: Mapping IANA and OpenSSL cipher suite names, match: [cipher-name-mapping]}
+      - {id: ossl-server-preference, name: Server cipher preference ordering, match: [server-cipher-preference]}
+  # --- libsodium (doc.libsodium.org ToC)
+  - id: libsodium-secret-key
+    name: libsodium secret-key cryptography
+    source: libsodium docs Secret-key cryptography
+    match: [secretbox, crypto-secretbox]
+    subtopics:
+      - {id: sod-secretbox-easy-detached, name: secretbox easy and detached modes, match: [secretbox-detached]}
+      - {id: sod-crypto-auth, name: crypto_auth secret-key authentication, match: [crypto-auth]}
+      - {id: sod-secretstream, name: secretstream for chunked data, match: [secretstream]}
+      - {id: sod-keygen-helpers, name: Key generation helpers and key sizes, match: [sodium-keygen]}
+      - {id: sod-secretbox-nonce, name: secretbox nonce handling, match: [secretbox-nonce]}
+      - {id: sod-secretstream-tags, name: secretstream tags, rekeying and truncation detection, match: [secretstream-tags]}
+      - {id: sod-auth-hmacsha, name: crypto_auth_hmacsha256 and hmacsha512 variants, match: [crypto-auth-hmacsha256]}
+      - {id: sod-crypto-stream, name: crypto_stream raw stream ciphers and their limits, match: [crypto-stream]}
+  - id: libsodium-aead
+    name: libsodium AEAD constructions
+    source: libsodium docs AEAD constructions
+    match: [crypto-aead]
+    subtopics:
+      - {id: sod-aead-xchacha, name: XChaCha20-Poly1305-IETF AEAD, match: [xchacha20poly1305-ietf]}
+      - {id: sod-aead-aegis, name: AEGIS-128L and AEGIS-256, match: [aegis-256]}
+      - {id: sod-aead-aes256gcm, name: AES256-GCM availability checks, match: [aes256gcm-is-available]}
+      - {id: sod-aead-detached-ad, name: Detached tags and additional data, match: [aead-detached]}
+      - {id: sod-aead-chacha-variants, name: ChaCha20-Poly1305 original, IETF and X variants, match: [chacha20poly1305-ietf]}
+      - {id: sod-aead-nonce-management, name: libsodium AEAD nonce management, match: [aead-nonce-management]}
+      - {id: sod-aead-sizes, name: AEAD size limits and abytes overhead, match: [aead-abytes]}
+      - {id: sod-aes256gcm-beforenm, name: AES256-GCM precomputed key state, match: [aes256gcm-beforenm]}
+  - id: libsodium-public-key
+    name: libsodium public-key encryption
+    source: libsodium docs Public-key cryptography
+    match: [crypto-box, sealed-box]
+    subtopics:
+      - {id: sod-box-easy, name: crypto_box authenticated public-key encryption, match: [crypto-box-easy]}
+      - {id: sod-box-beforenm, name: Precomputed shared keys with beforenm, match: [box-beforenm]}
+      - {id: sod-sealed-box, name: Anonymous sealed boxes, match: [crypto-box-seal]}
+      - {id: sod-kx, name: crypto_kx session keys, match: [crypto-kx]}
+      - {id: sod-box-seed-keypair, name: crypto_box seed keypairs and key storage, match: [crypto-box-seed-keypair]}
+      - {id: sod-box-nonce, name: crypto_box nonce rules and sender authentication semantics, match: [crypto-box-nonce]}
+      - {id: sod-box-xchacha, name: crypto_box_curve25519xchacha20poly1305, match: [curve25519xchacha20poly1305]}
+      - {id: sod-kx-secretstream, name: Combining crypto_kx with secretstream for sessions, match: [kx-secretstream-session]}
+  - id: libsodium-signatures
+    name: libsodium signatures
+    source: libsodium docs Public-key signatures / Advanced Ed25519 to Curve25519
+    match: [crypto-sign]
+    subtopics:
+      - {id: sod-sign-combined-detached, name: Combined versus detached signatures, match: [crypto-sign-detached]}
+      - {id: sod-sign-multipart, name: Multi-part Ed25519ph signing, match: [crypto-sign-init]}
+      - {id: sod-sign-seed, name: Deterministic keypairs from seeds, match: [crypto-sign-seed-keypair]}
+      - {id: sod-ed-to-curve, name: Ed25519 to Curve25519 conversion, match: [ed25519-to-curve25519]}
+      - {id: sod-sign-sk-to-pk, name: Extracting public key and seed from an Ed25519 secret key, match: [crypto-sign-ed25519-sk-to-pk]}
+      - {id: sod-sign-verify, name: libsodium Ed25519 verification rules, match: [crypto-sign-verify-detached]}
+      - {id: sod-sign-seed-storage, name: Storing Ed25519 seeds versus 64-byte secret keys, match: [ed25519-seed-storage]}
+      - {id: sod-sign-interop, name: Ed25519 key interop between libsodium, OpenSSL and JWK, match: [ed25519-interop]}
+  - id: libsodium-hashing-kdf
+    name: libsodium hashing and key derivation
+    source: libsodium docs Hashing, Key derivation, Advanced HKDF
+    match: [crypto-generichash, crypto-kdf]
+    subtopics:
+      - {id: sod-generichash-multipart, name: Multi-part and keyed BLAKE2b hashing, match: [generichash-multipart]}
+      - {id: sod-shorthash, name: SipHash short-input hashing for hash tables, match: [crypto-shorthash]}
+      - {id: sod-kdf-subkeys, name: crypto_kdf subkey derivation, match: [crypto-kdf-derive]}
+      - {id: sod-hkdf, name: libsodium HKDF-SHA256 and SHA512, match: [crypto-kdf-hkdf]}
+      - {id: sod-blake2b-personal, name: BLAKE2b salt and personalisation parameters, match: [blake2b-personal]}
+      - {id: sod-crypto-hash-sha2, name: crypto_hash_sha256 and sha512 for interop, match: [crypto-hash-sha256]}
+      - {id: sod-kdf-context, name: crypto_kdf context strings and subkey id allocation, match: [kdf-context-string]}
+      - {id: sod-keyed-blake2b, name: Keyed BLAKE2b as a MAC, match: [keyed-blake2b]}
+  - id: libsodium-password-hashing
+    name: libsodium password hashing
+    source: libsodium docs Password hashing
+    match: [crypto-pwhash]
+    subtopics:
+      - {id: sod-pwhash-str, name: pwhash_str storage and verification, match: [pwhash-str]}
+      - {id: sod-pwhash-rehash, name: needs_rehash upgrades, match: [pwhash-needs-rehash]}
+      - {id: sod-pwhash-key-derivation, name: Deriving encryption keys from passwords, match: [pwhash-key-derivation]}
+      - {id: sod-pwhash-limits, name: opslimit and memlimit tuning, match: [opslimit]}
+      - {id: sod-pwhash-scrypt, name: crypto_pwhash Argon2id, Argon2i and scrypt variants, match: [crypto-pwhash-scryptsalsa208sha256]}
+      - {id: sod-pwhash-server-relief, name: Client-side password hashing and server relief, match: [server-relief]}
+      - {id: sod-pwhash-oom, name: Handling pwhash memory failures and return codes, match: [pwhash-out-of-memory]}
+      - {id: sod-argon2-encoded, name: Argon2 encoded hash portability across libraries, match: [argon2-encoded-hash]}
+  - id: libsodium-helpers-memory
+    name: libsodium helpers and secure memory
+    source: libsodium docs Helpers, Padding, Secure memory, Generating random data
+    match: [sodium-helpers]
+    subtopics:
+      - {id: sod-init, name: sodium_init and thread safety, match: [sodium-init]}
+      - {id: sod-encoding-helpers, name: bin2hex and bin2base64 variants, match: [sodium-bin2base64]}
+      - {id: sod-padding, name: ISO 7816-4 padding with sodium_pad, match: [sodium-pad]}
+      - {id: sod-guarded-alloc, name: sodium_malloc guarded allocations, match: [sodium-malloc]}
+      - {id: sod-randombytes, name: randombytes API and deterministic streams, match: [randombytes-buf]}
+      - {id: sod-memcmp, name: sodium_memcmp versus sodium_compare, match: [sodium-memcmp]}
+      - {id: sod-memzero-mlock, name: sodium_memzero and sodium_mlock, match: [sodium-memzero]}
+      - {id: sod-increment, name: sodium_increment and sodium_add for nonces and counters, match: [sodium-increment]}
+      - {id: sod-mprotect, name: sodium_mprotect_noaccess and readonly, match: [sodium-mprotect]}
+  - id: libsodium-advanced
+    name: libsodium advanced primitives and bindings
+    source: libsodium docs Advanced (scalarmult, ristretto255) / Bindings
+    match: [libsodium-advanced]
+    subtopics:
+      - {id: sod-scalarmult, name: Raw X25519 scalarmult and hashing the output, match: [crypto-scalarmult]}
+      - {id: sod-ristretto255, name: ristretto255 group operations, match: [ristretto255]}
+      - {id: sod-bindings-js, name: libsodium.js and sodium-native in JavaScript, match: [libsodium-wrappers]}
+      - {id: sod-bindings-php-python, name: PHP sodium extension and PyNaCl, match: [php-sodium]}
+      - {id: sod-hash-to-group, name: ristretto255 hash-to-group and OPRF building blocks, match: [hash-to-group]}
+      - {id: sod-core-ed25519, name: crypto_core_ed25519 point operations and validation, match: [crypto-core-ed25519]}
+      - {id: sod-bindings-other, name: libsodium bindings for Rust, Go and .NET, match: [libsodium-bindings]}
+      - {id: sod-build, name: Building libsodium (minimal, static, WebAssembly), match: [libsodium-build]}
+      - {id: sod-onetimeauth, name: crypto_onetimeauth Poly1305, match: [crypto-onetimeauth]}
+  # --- Platform crypto libraries
+  - id: java-jca
+    name: Java Cryptography Architecture
+    source: JCA Reference Guide / Java Security Standard Algorithm Names
+    match: [jca, jce]
+    subtopics:
+      - {id: jca-cipher-transformation, name: Explicit Cipher transformation strings, match: [cipher-transformation]}
+      - {id: jca-gcm-parameter-spec, name: GCMParameterSpec and AES-GCM in Java, match: [gcmparameterspec]}
+      - {id: jca-keystore, name: KeyStore PKCS12 handling, match: [java-keystore]}
+      - {id: jca-providers, name: Provider selection and Bouncy Castle, match: [bouncy-castle]}
+      - {id: jca-securerandom, name: SecureRandom instances and blocking, match: [securerandom-strong]}
+      - {id: jca-keypairgenerator, name: KeyGenerator and KeyPairGenerator usage, match: [keypairgenerator]}
+      - {id: jca-signature, name: java.security.Signature algorithms and PSS parameters, match: [java-signature]}
+      - {id: jca-keyfactory, name: KeyFactory and encoded key specs, match: [keyfactory]}
+      - {id: jca-secretkeyfactory, name: Mac and SecretKeyFactory PBKDF2, match: [secretkeyfactory]}
+      - {id: jca-kem, name: Java KEM API and ML-KEM in the JDK, match: [java-kem]}
+  - id: java-jsse
+    name: Java JSSE TLS
+    source: JSSE Reference Guide / java.security
+    match: [jsse]
+    subtopics:
+      - {id: jsse-sslcontext, name: SSLContext and TrustManagerFactory setup, match: [sslcontext]}
+      - {id: jsse-endpoint-identification, name: Endpoint identification for hostname checks, match: [endpoint-identification]}
+      - {id: jsse-disabled-algorithms, name: jdk.tls.disabledAlgorithms tuning, match: [disabledalgorithms]}
+      - {id: jsse-debug, name: Debugging with javax.net.debug, match: [javax-net-debug]}
+      - {id: jsse-keymanager, name: KeyManagerFactory and client certificate selection, match: [keymanagerfactory]}
+      - {id: jsse-cacerts, name: javax.net.ssl trustStore properties and cacerts, match: [cacerts]}
+      - {id: jsse-keytool, name: keytool keystore operations, match: [keytool]}
+      - {id: jsse-sslparameters, name: SSLParameters for SNI, ALPN, protocols and named groups, match: [sslparameters]}
+      - {id: jsse-httpclient, name: java.net.http.HttpClient TLS configuration, match: [java-httpclient-tls]}
+  - id: go-crypto
+    name: Go standard library cryptography
+    source: Go crypto package docs / Go FIPS 140-3 docs
+    match: [golang, go-crypto]
+    subtopics:
+      - {id: go-cipher-aead, name: crypto/cipher AEAD usage, match: [go-cipher-aead]}
+      - {id: go-tls-config, name: crypto/tls Config hardening, match: [go-tls-config]}
+      - {id: go-x509-verify, name: crypto/x509 verification options, match: [go-x509]}
+      - {id: go-fips140-mode, name: Go native FIPS 140-3 mode, match: [gofips140]}
+      - {id: go-mlkem-hkdf, name: crypto/mlkem and crypto/hkdf packages, match: [go-mlkem]}
+      - {id: go-crypto-rand, name: crypto/rand Read and Text, match: [go-crypto-rand]}
+      - {id: go-subtle, name: crypto/subtle constant-time helpers, match: [crypto-subtle]}
+      - {id: go-ecdh-ed25519, name: crypto/ecdh and crypto/ed25519 APIs, match: [go-ecdh]}
+      - {id: go-x-crypto, name: golang.org/x/crypto packages (argon2, chacha20poly1305, ssh), match: [x-crypto]}
+      - {id: go-getcertificate, name: GetCertificate hot reload and autocert, match: [getcertificate]}
+  - id: web-crypto
+    name: Web Crypto API
+    source: W3C Web Cryptography API / MDN SubtleCrypto
+    match: [web-crypto, subtle-crypto]
+    subtopics:
+      - {id: wc-aes-gcm, name: SubtleCrypto AES-GCM encrypt and decrypt, match: [subtle-encrypt]}
+      - {id: wc-import-export, name: importKey and exportKey formats, match: [subtle-importkey]}
+      - {id: wc-derive-key, name: deriveKey and deriveBits with PBKDF2 and HKDF, match: [subtle-derivekey]}
+      - {id: wc-non-extractable, name: Non-extractable CryptoKeys in IndexedDB, match: [non-extractable-cryptokey]}
+      - {id: wc-sign-verify, name: SubtleCrypto sign and verify with ECDSA, Ed25519 and RSA-PSS, match: [subtle-sign]}
+      - {id: wc-wrapkey, name: generateKey, wrapKey and unwrapKey, match: [subtle-wrapkey]}
+      - {id: wc-getrandomvalues, name: crypto.getRandomValues and randomUUID, match: [getrandomvalues]}
+      - {id: wc-secure-context, name: Secure context requirements and runtime support, match: [secure-context]}
+  - id: nodejs-crypto
+    name: Node.js crypto module
+    source: Node.js crypto API docs
+    match: [node-crypto]
+    subtopics:
+      - {id: node-cipheriv-gcm, name: createCipheriv AES-GCM with auth tags, match: [createcipheriv]}
+      - {id: node-keyobject, name: KeyObject and key formats, match: [keyobject]}
+      - {id: node-scrypt-randombytes, name: scrypt, randomBytes and randomUUID, match: [node-scrypt]}
+      - {id: node-sign-verify, name: crypto.sign and crypto.verify one-shot APIs, match: [node-sign-verify]}
+      - {id: node-hkdf-pbkdf2, name: crypto.hkdf and crypto.pbkdf2 async APIs, match: [node-hkdf]}
+      - {id: node-timingsafeequal, name: crypto.timingSafeEqual and length checks, match: [timingsafeequal]}
+      - {id: node-x509certificate, name: Node X509Certificate class and checkHost, match: [node-x509certificate]}
+      - {id: node-generatekeypair, name: generateKeyPair, diffieHellman and ECDH, match: [node-generatekeypair]}
+      - {id: node-tls, name: tls.createSecureContext and https Agent options, match: [node-tls]}
+      - {id: node-fips, name: Node.js FIPS mode and OpenSSL configuration, match: [node-fips]}
+  - id: dotnet-crypto
+    name: .NET cryptography
+    source: .NET System.Security.Cryptography docs / ASP.NET Core Data Protection
+    match: [dotnet, csharp]
+    subtopics:
+      - {id: net-aesgcm, name: AesGcm and ChaCha20Poly1305 classes, match: [dotnet-aesgcm]}
+      - {id: net-pbkdf2-rng, name: Rfc2898DeriveBytes.Pbkdf2 and RandomNumberGenerator, match: [rfc2898derivebytes]}
+      - {id: net-x509-loading, name: Loading X509Certificate2 and private keys, match: [x509certificate2]}
+      - {id: net-data-protection, name: ASP.NET Core Data Protection keys, match: [data-protection-api]}
+      - {id: net-importfrompem, name: RSA and ECDsa classes with ImportFromPem, match: [importfrompem]}
+      - {id: net-sslstream, name: SslStream and SslClientAuthenticationOptions, match: [sslstream]}
+      - {id: net-cert-validation-callback, name: ServerCertificateCustomValidationCallback pitfalls, match: [servercertificatecustomvalidationcallback]}
+      - {id: net-cryptographic-operations, name: CryptographicOperations FixedTimeEquals and ZeroMemory, match: [fixedtimeequals]}
+      - {id: net-hashdata, name: One-shot HashData and HMAC APIs, match: [hashdata]}
+  - id: python-cryptography
+    name: Python pyca/cryptography
+    source: pyca/cryptography documentation
+    match: [pyca-cryptography]
+    subtopics:
+      - {id: py-fernet, name: Fernet and MultiFernet rotation, match: [fernet]}
+      - {id: py-hazmat-aead, name: hazmat AESGCM and ChaCha20Poly1305, match: [pyca-aead]}
+      - {id: py-serialization, name: Loading and serialising keys, match: [pyca-serialization]}
+      - {id: py-x509-builder, name: Building certificates and CSRs in Python, match: [pyca-x509]}
+      - {id: py-kdf, name: pyca hazmat KDFs (HKDF, Scrypt, Argon2id), match: [pyca-kdf]}
+      - {id: py-asymmetric, name: pyca Ed25519, ECDSA and RSA sign and verify, match: [pyca-asymmetric]}
+      - {id: py-x509-verification, name: pyca X.509 verification API, match: [pyca-x509-verification]}
+      - {id: py-pkcs12, name: pyca PKCS12 and PKCS7 serialization, match: [pyca-pkcs12]}
+      - {id: py-ssl-module, name: Python ssl module SSLContext hardening, match: [python-ssl-module]}
+      - {id: py-secrets, name: Python secrets module and hmac.compare_digest, match: [python-secrets]}
+  - id: rust-and-boringssl-family
+    name: BoringSSL, AWS-LC, rustls and ring
+    source: BoringSSL API docs and PORTING.md / AWS-LC docs / rustls docs / ring docs
+    match: [boringssl, rustls]
+    subtopics:
+      - {id: bssl-porting, name: Porting OpenSSL code to BoringSSL, match: [boringssl-porting]}
+      - {id: bssl-aws-lc-fips, name: AWS-LC and aws-lc-rs FIPS builds, match: [aws-lc]}
+      - {id: bssl-rustls-config, name: rustls ClientConfig and ServerConfig, match: [rustls-config]}
+      - {id: bssl-rust-crypto-crates, name: ring and RustCrypto AEAD crates, match: [rustcrypto]}
+      - {id: bssl-evp-aead, name: BoringSSL EVP_AEAD API, match: [evp-aead-ctx]}
+      - {id: bssl-platform-verifier, name: rustls-platform-verifier and webpki roots, match: [rustls-platform-verifier]}
+      - {id: bssl-crypto-provider, name: rustls CryptoProvider selection, match: [rustls-crypto-provider]}
+      - {id: bssl-openssl-crate, name: Rust openssl and native-tls crates, match: [rust-openssl-crate]}
+      - {id: bssl-tokio-rustls, name: tokio-rustls and hyper TLS integration, match: [tokio-rustls]}
+  - id: high-level-crypto-libraries
+    name: Misuse-resistant high-level libraries
+    source: Google Tink docs / age specification / AWS Encryption SDK docs
+    match: [tink, aws-encryption-sdk]
+    subtopics:
+      - {id: hl-tink-keysets, name: Tink keysets and primitives, match: [tink-keyset]}
+      - {id: hl-tink-streaming, name: Tink streaming AEAD, match: [streaming-aead]}
+      - {id: hl-age, name: age file encryption tool and library, match: [age-tool]}
+      - {id: hl-aws-esdk-keyrings, name: AWS Encryption SDK keyrings and commitment policy, match: [commitment-policy]}
+      - {id: hl-tink-kms, name: Tink with KMS envelope AEAD and encrypted keysets, match: [tink-kms]}
+      - {id: hl-tink-primitives, name: Tink deterministic AEAD, MAC and signature primitives, match: [tink-primitives]}
+      - {id: hl-age-plugins, name: age recipient types and plugins, match: [age-plugin]}
+      - {id: hl-aws-esdk-format, name: AWS Encryption SDK message format and caching CMM, match: [aws-esdk-message-format]}
+      - {id: hl-aws-dbesdk, name: AWS Database Encryption SDK, match: [aws-database-encryption-sdk]}
+  - id: cross-language-interop
+    name: Cross-language crypto interoperability
+    source: OWASP Cryptographic Storage / RFC 7468 PEM / RFC 7517 JWK
+    match: [interoperability]
+    subtopics:
+      - {id: interop-byte-layout, name: Ciphertext byte layout across libraries, match: [ciphertext-byte-layout]}
+      - {id: interop-key-encodings, name: Converting between PEM, DER, JWK and raw keys, match: [jwk-pem-conversion]}
+      - {id: interop-ecdsa-sig-formats, name: ECDSA DER versus raw r||s signatures, match: [ecdsa-signature-format]}
+      - {id: interop-text-encoding, name: Base64 and text encoding pitfalls, match: [base64-variants]}
+      - {id: interop-gcm-tag-placement, name: GCM IV and tag placement conventions across libraries, match: [gcm-tag-placement]}
+      - {id: interop-kdf-params, name: PBKDF2 and KDF parameter interop, match: [kdf-parameter-interop]}
+      - {id: interop-oaep, name: RSA-OAEP default hash and MGF1 mismatches, match: [oaep-interop]}
+      - {id: interop-integer-encoding, name: Big-endian integer and fixed-length key encodings, match: [integer-encoding]}
+      - {id: interop-golden-vectors, name: Cross-implementation golden test vectors, match: [interop-golden-vectors]}
+  # --- Protocol implementation (RFC 8446, RFC 5280, RFC 6125, JOSE, SSH)
+  - id: tls13-handshake
+    name: TLS 1.3 handshake and key schedule
+    source: RFC 8446 2, 4, 7
+    match: [tls-1-3, tls13-handshake]
+    subtopics:
+      - {id: tls13-key-schedule, name: TLS 1.3 key schedule and traffic secrets, match: [tls13-key-schedule]}
+      - {id: tls13-hrr, name: HelloRetryRequest and key share negotiation, match: [hello-retry-request]}
+      - {id: tls13-psk-resumption, name: PSK resumption and session tickets, match: [psk-resumption]}
+      - {id: tls13-zero-rtt, name: 0-RTT early data and anti-replay, match: [0-rtt-replay]}
+      - {id: tls13-key-update, name: KeyUpdate and post-handshake messages, match: [key-update]}
+      - {id: tls13-exporters, name: TLS exporters and channel binding, match: [tls-exporter]}
+      - {id: tls13-extensions, name: TLS 1.3 mandatory extensions, match: [tls13-extensions]}
+      - {id: tls13-certificate-verify, name: CertificateVerify and signature schemes, match: [certificateverify]}
+      - {id: tls13-alerts, name: TLS alert protocol handling, match: [tls-alerts]}
+      - {id: tls13-middlebox-compat, name: Middlebox compatibility mode, match: [middlebox-compatibility]}
+      - {id: tls13-record-layer, name: TLS 1.3 record layer, padding and limits, match: [tls-record-layer]}
+      - {id: tls13-ech, name: Encrypted Client Hello, match: [encrypted-client-hello]}
+  - id: tls-server-configuration
+    name: TLS server configuration
+    source: RFC 8446 9 / RFC 9325 (BCP 195) / OWASP TLS cheat sheet / Mozilla server-side TLS
+    match: [tls-configuration, tls-server-config]
+    subtopics:
+      - {id: tlscfg-protocol-versions, name: Protocol version and cipher policy, match: [tls-cipher-policy]}
+      - {id: tlscfg-chain-order, name: Serving a complete correctly ordered chain, match: [certificate-chain-order]}
+      - {id: tlscfg-ticket-keys, name: Session ticket key rotation, match: [session-ticket-keys]}
+      - {id: tlscfg-ocsp-stapling, name: OCSP stapling configuration, match: [ocsp-stapling]}
+      - {id: tlscfg-hsts, name: HSTS and HTTPS redirects, match: [hsts]}
+      - {id: tlscfg-dual-certs, name: Dual RSA and ECDSA certificates, match: [dual-certificates]}
+      - {id: tlscfg-nginx, name: nginx TLS configuration, match: [nginx-tls]}
+      - {id: tlscfg-apache, name: Apache mod_ssl configuration, match: [mod-ssl]}
+      - {id: tlscfg-haproxy-envoy, name: HAProxy and Envoy TLS configuration, match: [haproxy-tls]}
+      - {id: tlscfg-alpn, name: ALPN for HTTP/2 and HTTP/3, match: [alpn-h2-h3]}
+      - {id: tlscfg-sni, name: SNI-based multi-certificate hosting, match: [sni-routing]}
+      - {id: tlscfg-caa, name: DNS CAA records, match: [caa-record]}
+  - id: certificate-validation
+    name: Certificate path validation
+    source: RFC 5280 6 / RFC 9525 / CA/B Forum Baseline Requirements
+    match: [certificate-validation, path-validation]
+    subtopics:
+      - {id: cv-path-building, name: Path building with cross-signed roots, match: [path-building]}
+      - {id: cv-hostname-matching, name: Service identity and hostname matching, match: [hostname-verification]}
+      - {id: cv-custom-trust-store, name: Private trust anchors and custom trust stores, match: [custom-trust-store]}
+      - {id: cv-pinning, name: Public key pinning trade-offs, match: [certificate-pinning]}
+      - {id: cv-ct-sct, name: Certificate Transparency SCT checks, match: [certificate-transparency]}
+      - {id: cv-name-constraints, name: Processing name constraints during validation, match: [name-constraints-validation]}
+      - {id: cv-eku, name: keyUsage and extendedKeyUsage enforcement, match: [extended-key-usage]}
+      - {id: cv-revocation-strategy, name: Client revocation strategy (OCSP soft-fail, must-staple, CRLite), match: [ocsp-must-staple]}
+      - {id: cv-local-issuer, name: Troubleshooting unable to get local issuer certificate, match: [unable-to-get-local-issuer]}
+      - {id: cv-clock-skew, name: Validity periods and clock skew, match: [clock-skew]}
+      - {id: cv-root-store, name: Root store programs and distrust events, match: [root-store]}
+  - id: certificate-lifecycle
+    name: Certificate lifecycle automation
+    source: RFC 8555 ACME / SP 800-57 Pt3 PKI / CA/B Forum validity schedule
+    match: [certificate-lifecycle, acme]
+    subtopics:
+      - {id: cl-acme-clients, name: ACME issuance and renewal, match: [acme-renewal]}
+      - {id: cl-expiry-monitoring, name: Certificate expiry monitoring, match: [cert-expiry]}
+      - {id: cl-short-lived, name: Short-lived certificates and 47-day validity, match: [short-lived-certificates]}
+      - {id: cl-ari, name: ACME renewal information and revocation response, match: [acme-ari]}
+      - {id: cl-acme-challenges, name: Choosing HTTP-01, DNS-01 or TLS-ALPN-01, match: [dns-01]}
+      - {id: cl-cert-manager, name: Kubernetes cert-manager Issuers and Certificates, match: [cert-manager-issuer]}
+      - {id: cl-inventory, name: Certificate discovery and inventory, match: [certificate-inventory]}
+      - {id: cl-step-ca, name: Private ACME CAs with step-ca and EAB, match: [step-ca]}
+  - id: mutual-tls
+    name: Mutual TLS and workload identity
+    source: RFC 8446 4.3.2 / SPIFFE specification / RFC 8705
+    match: [mutual-tls, mtls]
+    subtopics:
+      - {id: mtls-client-cert-auth, name: Client certificate authorisation mapping, match: [client-certificate-auth]}
+      - {id: mtls-spiffe, name: SPIFFE IDs and SVID rotation, match: [spiffe]}
+      - {id: mtls-proxy-termination, name: mTLS termination at proxies and header forwarding, match: [mtls-termination]}
+      - {id: mtls-cert-bound-tokens, name: Certificate-bound access tokens, match: [rfc8705]}
+      - {id: mtls-client-auth-ca, name: Dedicated client-auth CA design, match: [client-auth-ca]}
+      - {id: mtls-service-mesh, name: Service mesh mTLS (Istio, Linkerd), match: [istio-mtls]}
+      - {id: mtls-client-cert-revocation, name: Revoking and deny-listing client certificates, match: [client-cert-revocation]}
+      - {id: mtls-troubleshooting, name: Debugging mTLS handshake failures, match: [mtls-troubleshooting]}
+  - id: jose-jwt
+    name: JOSE and JWT
+    source: RFC 7515-7519 / RFC 8725 JWT BCP
+    match: [jwt, jose]
+    subtopics:
+      - {id: jose-alg-allowlist, name: Algorithm allowlisting and key binding, match: [algorithm-confusion]}
+      - {id: jose-jwks-rotation, name: JWKS fetching, caching and kid lookup, match: [jwks]}
+      - {id: jose-jwe, name: JWE encryption algorithms, match: [jwe]}
+      - {id: jose-claims-validation, name: Claims validation per RFC 8725, match: [rfc8725]}
+      - {id: jose-jws-serialization, name: JWS compact and JSON serializations, match: [jws-json-serialization]}
+      - {id: jose-jwk-thumbprint, name: JWK thumbprints (RFC 7638), match: [jwk-thumbprint]}
+      - {id: jose-paseto, name: PASETO and JWT alternatives, match: [paseto]}
+      - {id: jose-dpop, name: DPoP proof JWTs (RFC 9449), match: [dpop-proof]}
+      - {id: jose-library-config, name: JWT library configuration pitfalls, match: [pyjwt]}
+  - id: ssh-protocol
+    name: SSH keys and certificates
+    source: RFC 4251-4253 / OpenSSH PROTOCOL.certkeys / ssh-keygen manual
+    match: [ssh, openssh]
+    subtopics:
+      - {id: ssh-keygen-types, name: SSH key types and generation, match: [ssh-keygen]}
+      - {id: ssh-certificates, name: SSH certificate authorities, match: [ssh-certificates]}
+      - {id: ssh-host-key-verification, name: Host key verification and known_hosts, match: [known-hosts]}
+      - {id: ssh-algorithm-hardening, name: sshd algorithm hardening, match: [ssh-hardening]}
+      - {id: ssh-sig-signing, name: Signing files and commits with ssh-keygen -Y, match: [ssh-signing]}
+      - {id: ssh-agent, name: ssh-agent, agent forwarding and ProxyJump, match: [ssh-agent]}
+      - {id: ssh-fido, name: FIDO2 security-key SSH keys, match: [ed25519-sk]}
+      - {id: ssh-krl, name: SSH key revocation lists, match: [ssh-krl]}
+      - {id: ssh-authorized-keys-options, name: authorized_keys restriction options, match: [authorized-keys-options]}
+      - {id: ssh-sshfp, name: SSHFP DNS records, match: [sshfp]}
+  - id: e2ee-messaging
+    name: End-to-end encrypted messaging protocols
+    source: Signal specifications (X3DH, PQXDH, Double Ratchet) / RFC 9420 MLS
+    match: [end-to-end-encryption, e2ee]
+    subtopics:
+      - {id: e2ee-double-ratchet, name: Double Ratchet session state, match: [double-ratchet]}
+      - {id: e2ee-pqxdh, name: X3DH and PQXDH initial key agreement, match: [pqxdh]}
+      - {id: e2ee-mls, name: MLS group messaging, match: [mls-protocol]}
+      - {id: e2ee-key-verification, name: Safety numbers and key transparency, match: [key-transparency]}
+      - {id: e2ee-sesame, name: Sesame multi-device session management, match: [sesame]}
+      - {id: e2ee-prekeys, name: Signed and one-time prekey management, match: [prekey-bundle]}
+      - {id: e2ee-sealed-sender, name: Sender metadata protection with sealed sender, match: [sealed-sender]}
+      - {id: e2ee-backup, name: Encrypted backups for E2EE messaging, match: [e2ee-backup]}
+  - id: handshake-frameworks
+    name: Handshake frameworks and PAKEs
+    source: Noise Protocol Framework spec / RFC 9807 OPAQUE / RFC 9382 SPAKE2
+    match: [noise-protocol, pake]
+    subtopics:
+      - {id: hf-noise-patterns, name: Choosing Noise handshake patterns, match: [handshake-pattern]}
+      - {id: hf-opaque, name: OPAQUE asymmetric PAKE, match: [opaque-pake]}
+      - {id: hf-spake2, name: SPAKE2 device pairing, match: [spake2]}
+      - {id: hf-wireguard-keys, name: WireGuard key management, match: [wireguard]}
+      - {id: hf-noise-psk, name: Noise psk modifiers and prologue, match: [noise-psk]}
+      - {id: hf-noise-impl, name: Noise libraries and test vectors, match: [noise-implementation]}
+      - {id: hf-cpace, name: CPace balanced PAKE, match: [cpace]}
+      - {id: hf-srp, name: SRP-6a legacy considerations, match: [srp-6a]}
+  - id: protocol-testing
+    name: Protocol conformance and interop testing
+    source: RFC 8446 9 compliance / tlsfuzzer / testssl.sh / BoGo
+    match: [protocol-conformance]
+    subtopics:
+      - {id: pt-testssl, name: Scanning endpoints with testssl.sh, match: [testssl]}
+      - {id: pt-tlsfuzzer, name: tlsfuzzer and BoGo conformance suites, match: [tlsfuzzer]}
+      - {id: pt-interop-matrix, name: Client interop matrix testing, match: [tls-interop-testing]}
+      - {id: pt-packet-capture, name: Decrypting captures with SSLKEYLOGFILE, match: [sslkeylogfile]}
+      - {id: pt-sslyze, name: SSLyze scans in CI, match: [sslyze]}
+      - {id: pt-badssl, name: Client negative testing with badssl-style endpoints, match: [badssl]}
+      - {id: pt-wireshark, name: Wireshark TLS analysis, match: [wireshark-tls]}
+      - {id: pt-ja4, name: TLS client fingerprinting with JA3 and JA4, match: [ja4]}
+  # --- Secure implementation (Cryptography Engineering 8 and 15, Wycheproof, CAVP)
+  - id: constant-time-implementation
+    name: Constant-time implementation
+    source: Cryptography Engineering ch 8 / BearSSL constant-time notes
+    match: [constant-time, timing-attack]
+    subtopics:
+      - {id: ct-comparison, name: Constant-time comparison of secrets, match: [constant-time-compare]}
+      - {id: ct-branchless-select, name: Branch-free selection and table lookups, match: [branchless-select]}
+      - {id: ct-verification-tools, name: Verifying constant time with dudect and ctgrind, match: [dudect]}
+      - {id: ct-compiler-hazards, name: Compiler optimisations breaking constant time, match: [compiler-constant-time]}
+      - {id: ct-variable-time-instructions, name: Variable-time CPU instructions (division, multiplication), match: [variable-time-instructions]}
+      - {id: ct-language-helpers, name: Constant-time helpers in Rust, Go and Java, match: [subtle-crate]}
+      - {id: ct-length-leak, name: Length leakage and early-exit comparisons, match: [length-leak]}
+      - {id: ct-dit, name: Data-independent timing CPU modes (ARM DIT, Intel DOITM), match: [data-independent-timing]}
+      - {id: ct-timecop, name: Formal and dynamic CT tools (timecop, ct-verif, Binsec/Rel), match: [timecop]}
+  - id: crypto-testing
+    name: Testing cryptographic code
+    source: NIST CAVP/ACVP / Project Wycheproof / Cryptofuzz
+    match: [known-answer-tests, test-vectors]
+    subtopics:
+      - {id: ctest-cavp-vectors, name: Running NIST CAVP and ACVP vectors, match: [acvp]}
+      - {id: ctest-wycheproof, name: Running Wycheproof edge-case vectors, match: [wycheproof]}
+      - {id: ctest-differential-fuzzing, name: Differential fuzzing of crypto libraries, match: [differential-fuzzing]}
+      - {id: ctest-negative-tests, name: Negative tests for tampering and malformed input, match: [negative-testing]}
+      - {id: ctest-rfc-vectors, name: KAT unit tests from RFC test vectors, match: [rfc-test-vectors]}
+      - {id: ctest-property-based, name: Property-based round-trip and tamper tests, match: [property-based-crypto-tests]}
+      - {id: ctest-cryptofuzz, name: Cryptofuzz and OSS-Fuzz integration, match: [cryptofuzz]}
+      - {id: ctest-deterministic-rng, name: Injecting deterministic RNGs in tests, match: [deterministic-test-rng]}
+  - id: input-validation-crypto
+    name: Validating cryptographic inputs
+    source: SP 800-56A 5.6.2 / Cryptography Engineering ch 15
+    match: [point-validation, invalid-curve-attack]
+    subtopics:
+      - {id: iv-small-subgroup, name: Small-subgroup and cofactor checks, match: [small-subgroup-attack]}
+      - {id: iv-length-checks, name: Length and range checks before crypto, match: [crypto-length-checks]}
+      - {id: iv-asn1-parsing, name: Hardened ASN.1 and DER parsing, match: [asn1-parsing]}
+      - {id: iv-decompression-limits, name: Resource limits on untrusted crypto input, match: [crypto-dos-limits]}
+      - {id: iv-sec1-points, name: SEC1 point encoding and decompression checks, match: [sec1-point-encoding]}
+      - {id: iv-signature-range, name: Signature range and canonical encoding checks, match: [signature-range-check]}
+      - {id: iv-chain-limits, name: Certificate chain length and size limits, match: [chain-length-limit]}
+      - {id: iv-pem-parsing, name: Robust PEM parsing, match: [pem-parsing]}
+      - {id: iv-weak-parameters, name: Rejecting weak peer parameters, match: [weak-parameter-rejection]}
+  - id: error-handling-oracles
+    name: Error handling and oracle prevention
+    source: Cryptography Engineering ch 8 / OWASP Cryptographic Storage
+    match: [padding-oracle, error-oracle]
+    subtopics:
+      - {id: eh-uniform-errors, name: Uniform decryption failure responses, match: [uniform-error-responses]}
+      - {id: eh-fail-closed, name: Fail-closed crypto error handling, match: [fail-closed]}
+      - {id: eh-logging-secrets, name: Keeping secrets out of logs and errors, match: [secret-logging]}
+      - {id: eh-return-code-checks, name: Checking every crypto return code, match: [return-code-checks]}
+      - {id: eh-lucky13, name: Timing-uniform error paths (Lucky Thirteen), match: [lucky13]}
+      - {id: eh-compression-oracle, name: Compression oracles (CRIME, BREACH), match: [compression-oracle]}
+      - {id: eh-exception-leaks, name: Exception types and messages that leak crypto state, match: [aeadbadtagexception]}
+      - {id: eh-failure-monitoring, name: Monitoring and rate-limiting decryption failures, match: [decryption-failure-monitoring]}
+  - id: side-channel-and-fault
+    name: Side-channel and fault defences
+    source: Cryptography Engineering ch 8 / FIPS 140-3 non-invasive attacks
+    match: [side-channel, fault-injection]
+    subtopics:
+      - {id: scf-blinding, name: RSA and scalar blinding, match: [blinding]}
+      - {id: scf-cache-timing, name: Cache-timing safe AES implementation choice, match: [cache-timing]}
+      - {id: scf-masking, name: Masking against power analysis, match: [masking]}
+      - {id: scf-fault-verify, name: Verify-after-sign fault countermeasure, match: [result-verification]}
+      - {id: scf-speculative, name: Speculative execution and cryptographic code, match: [speculative-execution]}
+      - {id: scf-tvla, name: TVLA leakage assessment testing, match: [tvla]}
+      - {id: scf-rowhammer, name: Rowhammer and software-induced faults on keys, match: [rowhammer]}
+      - {id: scf-remote-timing, name: Remote timing attacks (Minerva, Raccoon), match: [minerva-attack]}
+      - {id: scf-smt-isolation, name: Co-tenancy and SMT isolation for crypto workloads, match: [smt-isolation]}
+  - id: secure-memory
+    name: Secret memory handling
+    source: Cryptography Engineering ch 8 / libsodium secure memory docs
+    match: [zeroization, secure-memory]
+    subtopics:
+      - {id: smem-explicit-zero, name: Explicit zeroisation that survives optimisation, match: [explicit-bzero]}
+      - {id: smem-mlock-coredump, name: Locking pages and disabling core dumps, match: [mlock]}
+      - {id: smem-managed-languages, name: Secrets in garbage-collected languages, match: [garbage-collection]}
+      - {id: smem-rust-zeroize, name: Rust zeroize and secrecy crates, match: [zeroize-crate]}
+      - {id: smem-encrypted-swap, name: Swap and hibernation exposure, match: [encrypted-swap]}
+      - {id: smem-wipeonfork, name: MADV_DONTDUMP and MADV_WIPEONFORK, match: [madv-wipeonfork]}
+      - {id: smem-secret-copies, name: Hidden secret copies (realloc, immutable strings, spills), match: [secret-copies]}
+      - {id: smem-memfd-secret, name: memfd_secret and hardware memory encryption, match: [memfd-secret]}
+  - id: crypto-code-review
+    name: Reviewing cryptographic code
+    source: Cryptography Engineering ch 8 and 15 / OWASP Cryptographic Storage / CWE-310 family
+    match: [crypto-code-review]
+    subtopics:
+      - {id: ccr-static-analysis, name: Static analysis rules for crypto misuse, match: [crypto-static-analysis]}
+      - {id: ccr-review-checklist, name: Crypto code review checklist, match: [crypto-review-checklist]}
+      - {id: ccr-dependency-hygiene, name: Crypto dependency and CVE hygiene, match: [dependency-management]}
+      - {id: ccr-verified-implementations, name: Choosing formally verified implementations, match: [verified-cryptography]}
+      - {id: ccr-cwe, name: CWE cryptographic weakness classes, match: [cwe-327]}
+      - {id: ccr-protocol-verification, name: Formal protocol analysis with Tamarin and ProVerif, match: [tamarin-prover]}
+      - {id: ccr-third-party-audit, name: Commissioning and reading crypto audits, match: [crypto-audit]}
+      - {id: ccr-api-design, name: Designing misuse-resistant crypto APIs, match: [crypto-api-design]}

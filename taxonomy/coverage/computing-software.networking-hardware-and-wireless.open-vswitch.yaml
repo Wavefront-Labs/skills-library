@@ -1,0 +1,281 @@
+# Coverage spec for Open vSwitch (computing-software / networking-hardware-and-wireless).
+subject: Open vSwitch
+scope:
+  category: computing-software
+  field: networking-hardware-and-wireless
+  products: [open-vswitch]
+sources:
+  - "ovs-vsctl(8) (http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt)"
+  - "ovs-ofctl(8) (http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt)"
+  - "ovs-vswitchd(8) (http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.8.txt)"
+  - "ovs-vswitchd.conf.db(5) (http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt)"
+  - "ovs-actions(7) (https://docs.openvswitch.org/en/latest/ref/ovs-actions.7/)"
+  - "ovs-fields(7) (http://www.openvswitch.org/support/dist-docs/ovs-fields.7.txt)"
+  - "ovs-dpctl(8) (http://www.openvswitch.org/support/dist-docs/ovs-dpctl.8.txt)"
+  - "ovs-appctl(8), ovs-ctl(8), ovs-pki(8), ovs-tcpdump(8) (https://docs.openvswitch.org/en/latest/ref/)"
+  - "ovsdb-tool(1), ovsdb-client(1), ovsdb-server(1), ovsdb(7) (https://docs.openvswitch.org/en/latest/ref/ovsdb.7/)"
+  - "How-to guides (https://docs.openvswitch.org/en/latest/howto/)"
+  - "Deep dive topics including DPDK (https://docs.openvswitch.org/en/latest/topics/)"
+  - "Tutorials (https://docs.openvswitch.org/en/latest/tutorials/)"
+  - "FAQ (https://docs.openvswitch.org/en/latest/faq/)"
+topics:
+  - id: bridge-and-port-basics
+    name: "bridge and port basics"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["bridge and port basics", "add-br", "add-port", "del-br"]
+  - id: fake-vlan-bridge
+    name: "fake vlan bridge"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["fake vlan bridge", "fake-bridge", "add-br-parent"]
+  - id: vsctl-database-commands
+    name: "vsctl database commands"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["vsctl database commands", "vsctl-set", "vsctl-find", "vsctl-list"]
+  - id: vsctl-transactions-and-create
+    name: "vsctl transactions and create"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["vsctl transactions and create", "transactions", "create-record"]
+  - id: vsctl-global-options
+    name: "vsctl global options"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["vsctl global options", "no-wait", "may-exist", "emer-reset"]
+  - id: controller-and-fail-mode
+    name: "controller and fail mode"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["controller and fail mode", "set-controller", "fail-mode"]
+  - id: vlan-access-and-trunk-ports
+    name: "vlan access and trunk ports"
+    source: https://docs.openvswitch.org/en/latest/howto/vlan/
+    match: ["vlan access and trunk ports", "vlan-tag", "trunks", "access-port"]
+  - id: vlan-mode-values
+    name: "vlan mode values"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["vlan mode values", "vlan-mode", "dot1q-tunnel", "native-tagged"]
+  - id: bond-modes-and-lacp
+    name: "bond modes and lacp"
+    source: https://docs.openvswitch.org/en/latest/topics/bonding/
+    match: ["bond modes and lacp", "add-bond", "bond-mode", "lacp"]
+  - id: bond-delay-and-rebalance
+    name: "bond delay and rebalance"
+    source: https://docs.openvswitch.org/en/latest/topics/bonding/
+    match: ["bond delay and rebalance", "bond-updelay", "rebalance"]
+  - id: bond-runtime-inspection
+    name: "bond runtime inspection"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.8.txt
+    match: ["bond runtime inspection", "bond-show", "lacp-show"]
+  - id: gre-tunnel-between-hosts
+    name: "gre tunnel between hosts"
+    source: https://docs.openvswitch.org/en/latest/howto/tunneling/
+    match: ["gre tunnel between hosts", "gre", "tunneling"]
+  - id: tunnel-interface-options
+    name: "tunnel interface options"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["tunnel interface options", "remote-ip", "tunnel-options"]
+  - id: userspace-vxlan-tunnel
+    name: "userspace vxlan tunnel"
+    source: https://docs.openvswitch.org/en/latest/howto/userspace-tunneling/
+    match: ["userspace vxlan tunnel", "vxlan", "tnl-route"]
+  - id: patch-ports
+    name: "patch ports"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["patch ports", "patch-port", "peer"]
+  - id: ipsec-tunnels
+    name: "ipsec tunnels"
+    source: https://docs.openvswitch.org/en/latest/tutorials/ipsec/
+    match: ["ipsec tunnels", "ipsec", "psk", "ovs-monitor-ipsec"]
+  - id: ingress-policing
+    name: "ingress policing"
+    source: https://docs.openvswitch.org/en/latest/howto/qos/
+    match: ["ingress policing", "ingress-policing", "policing-rate"]
+  - id: linux-htb-qos-queues
+    name: "linux htb qos queues"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vsctl.8.txt
+    match: ["linux htb qos queues", "linux-htb", "qos-queues"]
+  - id: dpdk-qos-policers
+    name: "dpdk qos policers"
+    source: https://docs.openvswitch.org/en/latest/topics/dpdk/qos/
+    match: ["dpdk qos policers", "egress-policer", "trtcm"]
+  - id: port-mirror-all
+    name: "port mirror all"
+    source: https://docs.openvswitch.org/en/latest/faq/configuration/
+    match: ["port mirror all", "port-mirror", "mirror-select-all"]
+  - id: rspan-and-gre-mirror
+    name: "rspan and gre mirror"
+    source: https://docs.openvswitch.org/en/latest/faq/configuration/
+    match: ["rspan and gre mirror", "rspan", "output-vlan"]
+  - id: ovs-tcpdump-mirror
+    name: "ovs tcpdump mirror"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-tcpdump.8/
+    match: ["ovs tcpdump mirror", "ovs-tcpdump", "span-capture"]
+  - id: sflow-setup
+    name: "sflow setup"
+    source: https://docs.openvswitch.org/en/latest/howto/sflow/
+    match: ["sflow setup", "sflow", "sflow-collector"]
+  - id: netflow-setup
+    name: "netflow setup"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["netflow setup", "netflow", "active-timeout"]
+  - id: ipfix-sampling
+    name: "ipfix sampling"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["ipfix sampling", "ipfix", "flow-sample-collector"]
+  - id: stp-and-rstp
+    name: "stp and rstp"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["stp and rstp", "stp", "rstp", "spanning-tree"]
+  - id: multicast-snooping
+    name: "multicast snooping"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["multicast snooping", "mcast-snooping", "igmp"]
+  - id: bfd-cfm-lldp-monitoring
+    name: "bfd cfm lldp monitoring"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-vswitchd.conf.db.5.txt
+    match: ["bfd cfm lldp monitoring", "bfd", "cfm", "lldp"]
+  - id: openflow-versions
+    name: "openflow versions"
+    source: https://docs.openvswitch.org/en/latest/topics/openflow/
+    match: ["openflow versions", "protocols", "openflow13"]
+  - id: ofctl-add-and-dump-flows
+    name: "ofctl add and dump flows"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl add and dump flows", "add-flow", "dump-flows"]
+  - id: ofctl-modify-delete-flows
+    name: "ofctl modify and delete flows"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl modify and delete flows", "mod-flows", "del-flows", "strict"]
+  - id: ofctl-flow-match-syntax
+    name: "ofctl flow match syntax"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-fields.7.txt
+    match: ["ofctl flow match syntax", "match-fields", "tun-metadata", "flow-masks"]
+  - id: ofctl-bundle-transactions
+    name: "ofctl bundle transactions"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl bundle transactions", "bundle", "replace-flows", "diff-flows"]
+  - id: ofctl-group-tables
+    name: "ofctl group tables"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl group tables", "add-group", "select-group"]
+  - id: ofctl-meters
+    name: "ofctl meters"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl meters", "add-meter", "meter-bands"]
+  - id: ofctl-packet-out-and-monitor
+    name: "ofctl packet out and monitor"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl packet out and monitor", "packet-out", "snoop", "flow-monitor"]
+  - id: ofctl-switch-inspection
+    name: "ofctl switch inspection"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["ofctl switch inspection", "dump-ports", "dump-tables", "ofport"]
+  - id: actions-output-and-normal
+    name: "actions output and normal"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-actions.7/
+    match: ["actions output and normal", "output-action", "normal", "flood"]
+  - id: actions-header-rewrite
+    name: "actions header rewrite"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-actions.7/
+    match: ["actions header rewrite", "set-field", "push-vlan", "strip-vlan"]
+  - id: actions-resubmit-and-tables
+    name: "actions resubmit and tables"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-actions.7/
+    match: ["actions resubmit and tables", "resubmit", "goto-table", "clone"]
+  - id: actions-learn-conjunction
+    name: "actions learn and conjunction"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-actions.7/
+    match: ["actions learn and conjunction", "learn", "conjunction", "multipath"]
+  - id: conntrack-stateful-firewall
+    name: "conntrack stateful firewall"
+    source: https://docs.openvswitch.org/en/latest/tutorials/ovs-conntrack/
+    match: ["conntrack stateful firewall", "conntrack", "ct-state"]
+  - id: conntrack-nat-and-zones
+    name: "conntrack nat and zones"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-actions.7/
+    match: ["conntrack nat and zones", "ct-nat", "ct-zone", "ct-mark"]
+  - id: conntrack-inspect-and-limits
+    name: "conntrack inspect and limits"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-ofctl.8.txt
+    match: ["conntrack inspect and limits", "dump-conntrack", "ct-flush", "ct-timeout-policy"]
+  - id: ofproto-trace
+    name: "ofproto trace"
+    source: https://docs.openvswitch.org/en/latest/topics/tracing/
+    match: ["ofproto trace", "ofproto-trace", "tracing"]
+  - id: datapath-flow-inspection
+    name: "datapath flow inspection"
+    source: http://www.openvswitch.org/support/dist-docs/ovs-dpctl.8.txt
+    match: ["datapath flow inspection", "dpctl", "datapath-flows", "megaflow"]
+  - id: flowviz-flow-visualization
+    name: "flowviz flow visualization"
+    source: https://docs.openvswitch.org/en/latest/topics/flow-visualization/
+    match: ["flowviz flow visualization", "ovs-flowviz", "flow-visualization"]
+  - id: appctl-logging-and-usdt
+    name: "appctl logging and usdt"
+    source: https://docs.openvswitch.org/en/latest/topics/usdt-probes/
+    match: ["appctl logging and usdt", "vlog", "usdt", "ovs-appctl"]
+  - id: dpdk-netdev-bridge-and-ports
+    name: "dpdk netdev bridge and ports"
+    source: https://docs.openvswitch.org/en/latest/topics/dpdk/phy/
+    match: ["dpdk netdev bridge and ports", "dpdk", "dpdk-devargs", "vfio-pci"]
+  - id: dpdk-vhost-user-client
+    name: "dpdk vhost user client"
+    source: https://docs.openvswitch.org/en/latest/topics/dpdk/vhost-user/
+    match: ["dpdk vhost user client", "vhost-user", "dpdkvhostuserclient"]
+  - id: dpdk-pmd-threads
+    name: "dpdk pmd threads"
+    source: https://docs.openvswitch.org/en/latest/topics/dpdk/pmd/
+    match: ["dpdk pmd threads", "pmd-cpu-mask", "pmd-rxq-affinity", "emc-smc"]
+  - id: dpdk-pmd-load-balancing
+    name: "dpdk pmd load balancing"
+    source: https://docs.openvswitch.org/en/latest/topics/dpdk/pmd/
+    match: ["dpdk pmd load balancing", "pmd-auto-lb", "pmd-rxq-assign", "pmd-sleep-max"]
+  - id: dpdk-jumbo-and-memory
+    name: "dpdk jumbo and memory"
+    source: https://docs.openvswitch.org/en/latest/topics/dpdk/memory/
+    match: ["dpdk jumbo and memory", "jumbo-frames", "mtu-request", "per-port-memory"]
+  - id: afxdp-ports
+    name: "afxdp ports"
+    source: https://docs.openvswitch.org/en/latest/intro/install/afxdp/
+    match: ["afxdp ports", "afxdp", "xdp-mode"]
+  - id: userspace-tso-and-tx-steering
+    name: "userspace tso and tx steering"
+    source: https://docs.openvswitch.org/en/latest/topics/userspace-tso/
+    match: ["userspace tso and tx steering", "userspace-tso", "tx-steering"]
+  - id: hw-offload-tc
+    name: "hw offload tc"
+    source: https://docs.openvswitch.org/en/latest/howto/tc-offload/
+    match: ["hw offload tc", "hw-offload", "tc-flower", "tc-policy"]
+  - id: ovsdb-tool-basics
+    name: "ovsdb tool basics"
+    source: http://www.openvswitch.org/support/dist-docs/ovsdb-tool.1.txt
+    match: ["ovsdb tool basics", "ovsdb-tool", "show-log", "compact"]
+  - id: ovsdb-client-basics
+    name: "ovsdb client basics"
+    source: http://www.openvswitch.org/support/dist-docs/ovsdb-client.1.txt
+    match: ["ovsdb client basics", "ovsdb-client", "monitor", "ovsdb-backup"]
+  - id: ovsdb-server-runtime
+    name: "ovsdb server runtime"
+    source: http://www.openvswitch.org/support/dist-docs/ovsdb-server.1.txt
+    match: ["ovsdb server runtime", "ovsdb-server", "active-backup", "set-manager"]
+  - id: ovsdb-cluster-and-relay
+    name: "ovsdb cluster and relay"
+    source: https://docs.openvswitch.org/en/latest/topics/ovsdb-relay/
+    match: ["ovsdb cluster and relay", "ovsdb-cluster", "ovsdb-relay", "cluster-status"]
+  - id: ovs-ctl-service
+    name: "ovs ctl service"
+    source: https://docs.openvswitch.org/en/latest/ref/ovs-ctl.8/
+    match: ["ovs ctl service", "ovs-ctl", "system-id", "ovs-vswitchd"]
+  - id: ovs-ssl-pki
+    name: "ovs ssl pki"
+    source: https://docs.openvswitch.org/en/latest/howto/ssl/
+    match: ["ovs ssl pki", "ovs-pki", "set-ssl", "tls"]
+  - id: libvirt-and-kvm
+    name: "libvirt and kvm"
+    source: https://docs.openvswitch.org/en/latest/howto/libvirt/
+    match: ["libvirt and kvm", "libvirt", "kvm", "virtualport"]
+  - id: vtep-emulator
+    name: "vtep emulator"
+    source: https://docs.openvswitch.org/en/latest/howto/vtep/
+    match: ["vtep emulator", "vtep", "vtep-ctl"]
+  - id: ovs-advanced-pipeline-tutorial
+    name: "ovs advanced pipeline tutorial"
+    source: https://docs.openvswitch.org/en/latest/tutorials/ovs-advanced/
+    match: ["ovs advanced pipeline tutorial", "ovs-sandbox", "multi-table-pipeline"]

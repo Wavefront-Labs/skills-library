@@ -1,0 +1,230 @@
+# Coverage spec for Apache NiFi (computing-software / data-engineering).
+subject: Apache NiFi
+scope:
+  category: computing-software
+  field: data-engineering
+  products: [apache-nifi]
+sources:
+  - "Apache NiFi Documentation (https://nifi.apache.org/docs/nifi-docs/html/)"
+topics:
+  - id: overview-architecture
+    name: "Overview: concepts and architecture"
+    source: https://nifi.apache.org/docs/nifi-docs/html/overview.html
+    match: ["architecture", "cluster-coordinator", "primary-node"]
+  - id: getting-started
+    name: "Getting started: starting NiFi"
+    source: https://nifi.apache.org/docs/nifi-docs/html/getting-started.html
+    match: ["getting-started", "nifi-sh", "startup", "service"]
+  - id: common-processors
+    name: "Getting started: common processors"
+    source: https://nifi.apache.org/docs/nifi-docs/html/getting-started.html
+    match: ["processors", "getfile", "routeonattribute", "mergecontent"]
+  - id: flowfile-attributes
+    name: "Common FlowFile attributes"
+    source: https://nifi.apache.org/docs/nifi-docs/html/getting-started.html
+    match: ["attributes", "filename", "entrydate"]
+  - id: templates
+    name: "Templates"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["templates", "flow-sharing"]
+  - id: system-requirements
+    name: "System requirements"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["requirements", "java", "browsers", "sizing"]
+  - id: port-configuration
+    name: "Port configuration"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["ports", "firewall"]
+  - id: https-tls
+    name: "HTTPS and keystore/truststore configuration"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["https", "tls", "keystore", "truststore", "autoreload"]
+  - id: single-user
+    name: "Single user authentication"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["single-user-provider", "credentials", "login"]
+  - id: ldap-login
+    name: "LDAP login identity provider"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["ldap", "ldap-provider", "login-identity-providers"]
+  - id: kerberos
+    name: "Kerberos login and service"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["kerberos", "spnego"]
+  - id: oidc
+    name: "OpenID Connect authentication"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["openid-connect", "oidc", "sso"]
+  - id: saml
+    name: "SAML authentication"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["saml", "identity-provider"]
+  - id: authorizers
+    name: "Authorizers and user group providers"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["authorizers", "authorization", "user-group-provider", "standardmanagedauthorizer"]
+    subtopics:
+      - {id: initial-admin, name: "Initial admin and node identities", match: ["initial-admin", "node-identity", "fileaccesspolicyprovider"]}
+      - {id: ldap-user-group, name: "LdapUserGroupProvider", match: ["ldapusergroupprovider"]}
+      - {id: shell-azure-groups, name: "Shell and Azure group providers", match: ["shellusergroupprovider", "azuregraphusergroupprovider"]}
+  - id: flow-configuration
+    name: "Flow configuration and archive"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["flow-json", "flow-archive", "backup"]
+  - id: flowfile-repository
+    name: "FlowFile repository"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["flowfile-repository", "write-ahead-log", "checkpoint"]
+    subtopics:
+      - {id: rocksdb-repo, name: "RocksDB FlowFile repository", match: ["rocksdb"]}
+  - id: content-repository
+    name: "Content repository"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["content-repository", "archive", "disk-usage"]
+  - id: provenance-repository
+    name: "Provenance repository"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["provenance-repository", "retention", "indexing"]
+  - id: status-history
+    name: "Status history repository"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["status-history", "questdb"]
+  - id: repository-encryption
+    name: "Encrypted repositories"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["encryption-at-rest", "repositories"]
+  - id: sensitive-props
+    name: "Sensitive properties key"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["sensitive-properties", "encryption"]
+  - id: site-to-site-config
+    name: "Site-to-Site configuration"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["site-to-site", "s2s", "raw"]
+  - id: proxy-config
+    name: "Proxy configuration"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["reverse-proxy", "nifi-web-proxy-host", "context-path"]
+  - id: web-properties
+    name: "Web properties and limits"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["jetty", "web-server", "rate-limit"]
+  - id: cluster-setup
+    name: "Clustering: setup"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["clustering", "cluster-node"]
+  - id: cluster-common
+    name: "Cluster common properties and flow election"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["heartbeat", "flow-election", "coordinator"]
+  - id: cluster-load-balance
+    name: "Cluster load balancing properties"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["load-balancing", "connections"]
+  - id: state-management
+    name: "State management"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["state-management", "local-state", "zookeeper-state-provider"]
+  - id: embedded-zookeeper
+    name: "Embedded ZooKeeper"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["embedded-zookeeper", "myid", "zookeeper-properties"]
+  - id: zookeeper-security
+    name: "ZooKeeper client security"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["zookeeper", "sasl"]
+  - id: bootstrap
+    name: "Bootstrap properties"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["bootstrap-conf", "jvm", "java-arg"]
+  - id: diagnostics
+    name: "Diagnostics on shutdown and performance monitoring"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["diagnostics", "troubleshooting", "shutdown"]
+  - id: custom-properties
+    name: "Custom properties"
+    source: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html
+    match: ["custom-properties", "variable-registry"]
+  - id: processor-config
+    name: "Processor configuration: settings and scheduling"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["scheduling", "timer-driven", "cron-driven", "penalty-duration", "yield-duration", "processor-config"]
+  - id: relationships
+    name: "Relationships and retry"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["relationships", "auto-terminate", "retry"]
+  - id: connections
+    name: "Connections: back pressure, prioritizers, expiration"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["back-pressure", "prioritizers", "flowfile-expiration", "queues"]
+    subtopics:
+      - {id: queue-listing, name: "Queue listing", match: ["list-queue", "empty-queue"]}
+      - {id: connection-load-balance, name: "Connection load balancing", match: ["compression"]}
+  - id: process-groups
+    name: "Process groups and FlowFile concurrency"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["process-groups", "flowfile-concurrency", "outbound-policy"]
+  - id: ports-rpg
+    name: "Ports and Remote Process Groups"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["input-port", "output-port", "remote-process-group", "funnel"]
+  - id: controller-services
+    name: "Controller services"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["controller-services", "reporting-tasks"]
+  - id: parameters
+    name: "Parameters and parameter contexts"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["parameter-context", "parameters", "sensitive-parameters", "secrets"]
+  - id: data-provenance
+    name: "Data provenance, replay and lineage"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["data-provenance", "replay", "lineage", "event-types"]
+    subtopics:
+      - {id: provenance-tuning, name: "WriteAhead provenance tuning", match: ["write-ahead"]}
+  - id: registry-versioning
+    name: "Flow versioning with NiFi Registry"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["nifi-registry", "version-control", "registry-client"]
+  - id: monitoring
+    name: "Monitoring and bulletins"
+    source: https://nifi.apache.org/docs/nifi-docs/html/user-guide.html
+    match: ["monitoring", "bulletins", "summary", "system-diagnostics"]
+  - id: expression-language
+    name: "Expression Language"
+    source: https://nifi.apache.org/docs/nifi-docs/html/expression-language-guide.html
+    match: ["expression-language", "escaping", "subjectless-functions"]
+    subtopics:
+      - {id: el-boolean, name: "Boolean functions", match: ["boolean", "routing"]}
+      - {id: el-string, name: "String manipulation", match: ["string-functions", "regex"]}
+      - {id: el-math-dates, name: "Math and dates", match: ["math", "dates", "todate"]}
+  - id: record-path
+    name: "RecordPath"
+    source: https://nifi.apache.org/docs/nifi-docs/html/record-path-guide.html
+    match: ["record-path", "records", "paths"]
+    subtopics:
+      - {id: record-path-functions, name: "Predicates and functions", match: ["predicates", "functions", "filter"]}
+  - id: toolkit-cli
+    name: "Toolkit CLI"
+    source: https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html
+    match: ["toolkit", "cli", "cli-sh"]
+  - id: encrypt-config
+    name: "encrypt-config"
+    source: https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html
+    match: ["encrypt-config", "key-management"]
+  - id: tls-toolkit
+    name: "TLS Toolkit"
+    source: https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html
+    match: ["tls-toolkit", "certificates", "ca"]
+  - id: toolkit-cluster-tools
+    name: "node-manager, file-manager, notify, flow-analyzer"
+    source: https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html
+    match: ["node-manager", "file-manager", "notify", "flow-analyzer"]
+  - id: in-depth-flowfile
+    name: "NiFi in depth: FlowFile repository and lifecycle"
+    source: https://nifi.apache.org/docs/nifi-docs/html/nifi-in-depth.html
+    match: ["flowfile", "lifecycle", "swapping"]
+  - id: in-depth-content
+    name: "NiFi in depth: content repository and copy-on-write"
+    source: https://nifi.apache.org/docs/nifi-docs/html/nifi-in-depth.html
+    match: ["content-claim", "copy-on-write", "resource-claim"]

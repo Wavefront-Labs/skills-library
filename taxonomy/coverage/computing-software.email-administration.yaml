@@ -1,0 +1,355 @@
+# Canonical coverage spec: Email administration (SMTP/IMAP mail servers).
+subject: email-administration
+scope:
+  category: computing-software
+  field: email-administration
+  products: [mail-server-administration]
+sources:
+  - "RFC 5321 SMTP, RFC 5322 message format, RFC 6409 submission, RFC 3501 and 9051 IMAP (rfc-editor.org)"
+  - "RFC 6376 DKIM, RFC 7208 SPF, RFC 7489 DMARC, RFC 8617 ARC (rfc-editor.org)"
+  - "RFC 8461 MTA-STS, RFC 8460 TLS-RPT, RFC 7672 SMTP DANE (rfc-editor.org)"
+  - "Postfix documentation (postfix.org/documentation.html) - READMEs, postconf, postqueue, postsuper"
+  - "Dovecot documentation (doc.dovecot.org) - auth, mailbox formats, LMTP, Sieve, quota, replication"
+  - "Rspamd (rspamd.com/doc) and SpamAssassin (spamassassin.apache.org/doc.html) documentation"
+  - "M3AAWG sender best practices (m3aawg.org) and Google/Yahoo bulk sender requirements"
+topics:
+  - id: ea-mail-dns-records
+    name: "DNS records for a mail domain"
+    source: "5321"
+    match: [mail-dns-records]
+    subtopics:
+      - {id: ea-mail-dns-records-mx-record-setup, name: "mx record setup", match: [mx-record-setup]}
+      - {id: ea-mail-dns-records-reverse-dns-ptr, name: "reverse dns ptr", match: [reverse-dns-ptr]}
+      - {id: ea-mail-dns-records-forward-confirmed-rdns, name: "forward confirmed rdns", match: [forward-confirmed-rdns]}
+  - id: ea-smtp-protocol
+    name: "SMTP protocol fundamentals"
+    source: "5321"
+    match: [smtp-protocol]
+    subtopics:
+      - {id: ea-smtp-protocol-smtp-session-by-hand, name: "smtp session by hand", match: [smtp-session-by-hand]}
+      - {id: ea-smtp-protocol-smtp-reply-codes, name: "smtp reply codes", match: [smtp-reply-codes]}
+  - id: ea-message-format
+    name: "Message format and envelope"
+    source: "5322"
+    match: [message-format]
+    subtopics:
+      - {id: ea-message-format-envelope-vs-header-from, name: "envelope vs header from", match: [envelope-vs-header-from]}
+      - {id: ea-message-format-header-anatomy-reading, name: "header anatomy reading", match: [header-anatomy-reading]}
+  - id: ea-submission-relay
+    name: "Submission versus relay"
+    source: "6409"
+    match: [submission-relay]
+    subtopics:
+      - {id: ea-submission-relay-submission-port-587, name: "submission port 587", match: [submission-port-587]}
+      - {id: ea-submission-relay-smtps-465-implicit-tls, name: "smtps 465 implicit tls", match: [smtps-465-implicit-tls]}
+      - {id: ea-submission-relay-relay-vs-submission-policy, name: "relay vs submission policy", match: [relay-vs-submission-policy]}
+  - id: ea-postfix-basics
+    name: "Postfix core configuration"
+    source: "postfix"
+    match: [postfix-basics]
+    subtopics:
+      - {id: ea-postfix-basics-main-cf-essentials, name: "main cf essentials", match: [main-cf-essentials]}
+      - {id: ea-postfix-basics-postconf-usage, name: "postconf usage", match: [postconf-usage]}
+      - {id: ea-postfix-basics-master-cf-services, name: "master cf services", match: [master-cf-services]}
+  - id: ea-postfix-virtual
+    name: "Postfix virtual domains and aliases"
+    source: "postfix"
+    match: [postfix-virtual]
+    subtopics:
+      - {id: ea-postfix-virtual-virtual-alias-domains, name: "virtual alias domains", match: [virtual-alias-domains]}
+      - {id: ea-postfix-virtual-virtual-mailbox-domains, name: "virtual mailbox domains", match: [virtual-mailbox-domains]}
+      - {id: ea-postfix-virtual-local-aliases-newaliases, name: "local aliases newaliases", match: [local-aliases-newaliases]}
+  - id: ea-postfix-access-control
+    name: "Postfix SMTP access restrictions"
+    source: "postfix"
+    match: [postfix-access-control]
+    subtopics:
+      - {id: ea-postfix-access-control-smtpd-recipient-restrictions, name: "smtpd recipient restrictions", match: [smtpd-recipient-restrictions]}
+      - {id: ea-postfix-access-control-smtpd-client-restrictions-order, name: "smtpd client restrictions order", match: [smtpd-client-restrictions-order]}
+      - {id: ea-postfix-access-control-access-maps-tables, name: "access maps tables", match: [access-maps-tables]}
+  - id: ea-postfix-open-relay
+    name: "Open relay prevention"
+    source: "postfix"
+    match: [postfix-open-relay]
+    subtopics:
+      - {id: ea-postfix-open-relay-open-relay-test, name: "open relay test", match: [open-relay-test]}
+      - {id: ea-postfix-open-relay-mynetworks-hardening, name: "mynetworks hardening", match: [mynetworks-hardening]}
+  - id: ea-postfix-postscreen
+    name: "Postscreen pre-filtering"
+    source: "postscreen"
+    match: [postfix-postscreen]
+    subtopics:
+      - {id: ea-postfix-postscreen-postscreen-setup, name: "postscreen setup", match: [postscreen-setup]}
+      - {id: ea-postfix-postscreen-postscreen-dnsbl-weighting, name: "postscreen dnsbl weighting", match: [postscreen-dnsbl-weighting]}
+      - {id: ea-postfix-postscreen-postscreen-pregreet, name: "postscreen pregreet", match: [postscreen-pregreet]}
+  - id: ea-postfix-policy
+    name: "Policy delegation"
+    source: "postfix"
+    match: [postfix-policy]
+    subtopics:
+      - {id: ea-postfix-policy-policy-delegation-protocol, name: "policy delegation protocol", match: [policy-delegation-protocol]}
+      - {id: ea-postfix-policy-policy-service-failure-handling, name: "policy service failure handling", match: [policy-service-failure-handling]}
+  - id: ea-greylisting
+    name: "Greylisting"
+    source: "postfix"
+    match: [greylisting]
+    subtopics:
+      - {id: ea-greylisting-postgrey-setup, name: "postgrey setup", match: [postgrey-setup]}
+      - {id: ea-greylisting-greylisting-tradeoffs, name: "greylisting tradeoffs", match: [greylisting-tradeoffs]}
+  - id: ea-header-body-checks
+    name: "Header and body checks"
+    source: "postfix"
+    match: [header-body-checks]
+    subtopics:
+      - {id: ea-header-body-checks-header-checks-rules, name: "header checks rules", match: [header-checks-rules]}
+      - {id: ea-header-body-checks-body-checks-caution, name: "body checks caution", match: [body-checks-caution]}
+  - id: ea-postfix-milter
+    name: "Milters"
+    source: "postfix"
+    match: [postfix-milter]
+    subtopics:
+      - {id: ea-postfix-milter-milter-integration, name: "milter integration", match: [milter-integration]}
+      - {id: ea-postfix-milter-milter-failure-handling, name: "milter failure handling", match: [milter-failure-handling]}
+  - id: ea-postfix-tls
+    name: "Postfix TLS"
+    source: "postfix"
+    match: [postfix-tls]
+    subtopics:
+      - {id: ea-postfix-tls-smtpd-tls-server, name: "smtpd tls server", match: [smtpd-tls-server]}
+      - {id: ea-postfix-tls-smtp-tls-client-policy, name: "smtp tls client policy", match: [smtp-tls-client-policy]}
+      - {id: ea-postfix-tls-tls-cipher-protocol-selection, name: "tls cipher protocol selection", match: [tls-cipher-protocol-selection]}
+  - id: ea-postfix-sasl
+    name: "SASL authentication"
+    source: "postfix"
+    match: [postfix-sasl]
+    subtopics:
+      - {id: ea-postfix-sasl-sasl-dovecot-auth, name: "sasl dovecot auth", match: [sasl-dovecot-auth]}
+      - {id: ea-postfix-sasl-sasl-submission-restrictions, name: "sasl submission restrictions", match: [sasl-submission-restrictions]}
+  - id: ea-postfix-queue
+    name: "Postfix queue management"
+    source: "postfix"
+    match: [postfix-queue]
+    subtopics:
+      - {id: ea-postfix-queue-queue-inspection-postqueue, name: "queue inspection postqueue", match: [queue-inspection-postqueue]}
+      - {id: ea-postfix-queue-postsuper-operations, name: "postsuper operations", match: [postsuper-operations]}
+      - {id: ea-postfix-queue-queue-lifetime-tuning, name: "queue lifetime tuning", match: [queue-lifetime-tuning]}
+  - id: ea-bounces-dsn
+    name: "Bounces and delivery status notifications"
+    source: "3464"
+    match: [bounces-dsn]
+    subtopics:
+      - {id: ea-bounces-dsn-dsn-reading, name: "dsn reading", match: [dsn-reading]}
+      - {id: ea-bounces-dsn-bounce-notice-policy, name: "bounce notice policy", match: [bounce-notice-policy]}
+      - {id: ea-bounces-dsn-double-bounce-handling, name: "double bounce handling", match: [double-bounce-handling]}
+  - id: ea-postfix-rate-limits
+    name: "Rate and concurrency limits"
+    source: "postfix"
+    match: [postfix-rate-limits]
+    subtopics:
+      - {id: ea-postfix-rate-limits-anvil-rate-limits, name: "anvil rate limits", match: [anvil-rate-limits]}
+      - {id: ea-postfix-rate-limits-destination-concurrency-limits, name: "destination concurrency limits", match: [destination-concurrency-limits]}
+  - id: ea-postfix-lookup-tables
+    name: "Postfix lookup tables"
+    source: "postfix"
+    match: [postfix-lookup-tables]
+    subtopics:
+      - {id: ea-postfix-lookup-tables-lookup-table-types, name: "lookup table types", match: [lookup-table-types]}
+      - {id: ea-postfix-lookup-tables-sql-lookup-tables, name: "sql lookup tables", match: [sql-lookup-tables]}
+  - id: ea-spf
+    name: "SPF"
+    source: "7208"
+    match: [spf]
+    subtopics:
+      - {id: ea-spf-spf-record-authoring, name: "spf record authoring", match: [spf-record-authoring]}
+      - {id: ea-spf-spf-lookup-limit, name: "spf lookup limit", match: [spf-lookup-limit]}
+      - {id: ea-spf-spf-policyd-check, name: "spf policyd check", match: [spf-policyd-check]}
+  - id: ea-dkim
+    name: "DKIM signing and verification"
+    source: "6376"
+    match: [dkim]
+    subtopics:
+      - {id: ea-dkim-opendkim-setup, name: "opendkim setup", match: [opendkim-setup]}
+      - {id: ea-dkim-dkim-key-publishing, name: "dkim key publishing", match: [dkim-key-publishing]}
+      - {id: ea-dkim-dkim-selector-rotation, name: "dkim selector rotation", match: [dkim-selector-rotation]}
+  - id: ea-dmarc
+    name: "DMARC"
+    source: "7489"
+    match: [dmarc]
+    subtopics:
+      - {id: ea-dmarc-dmarc-record-policy, name: "dmarc record policy", match: [dmarc-record-policy]}
+      - {id: ea-dmarc-dmarc-aggregate-reports, name: "dmarc aggregate reports", match: [dmarc-aggregate-reports]}
+      - {id: ea-dmarc-dmarc-alignment-debug, name: "dmarc alignment debug", match: [dmarc-alignment-debug]}
+  - id: ea-arc
+    name: "ARC and forwarding"
+    source: "8617"
+    match: [arc]
+    subtopics:
+      - {id: ea-arc-arc-sealing-forwarders, name: "arc sealing forwarders", match: [arc-sealing-forwarders]}
+      - {id: ea-arc-mailing-list-dmarc, name: "mailing list dmarc", match: [mailing-list-dmarc]}
+  - id: ea-mta-sts-tls-rpt
+    name: "MTA-STS and TLS reporting"
+    source: "8461"
+    match: [mta-sts-tls-rpt]
+    subtopics:
+      - {id: ea-mta-sts-tls-rpt-mta-sts-policy-file, name: "mta sts policy file", match: [mta-sts-policy-file]}
+      - {id: ea-mta-sts-tls-rpt-tls-rpt-reports, name: "tls rpt reports", match: [tls-rpt-reports]}
+  - id: ea-dane-smtp
+    name: "DANE for SMTP"
+    source: "7672"
+    match: [dane-smtp]
+    subtopics:
+      - {id: ea-dane-smtp-dane-tlsa-records, name: "dane tlsa records", match: [dane-tlsa-records]}
+      - {id: ea-dane-smtp-dnssec-for-mail, name: "dnssec for mail", match: [dnssec-for-mail]}
+  - id: ea-bimi
+    name: "BIMI brand indicators"
+    source: "7489"
+    match: [bimi]
+    subtopics:
+      - {id: ea-bimi-bimi-prerequisites, name: "bimi prerequisites", match: [bimi-prerequisites]}
+  - id: ea-dovecot-auth
+    name: "Dovecot authentication"
+    source: "dovecot"
+    match: [dovecot-auth]
+    subtopics:
+      - {id: ea-dovecot-auth-dovecot-passdb-userdb, name: "dovecot passdb userdb", match: [dovecot-passdb-userdb]}
+      - {id: ea-dovecot-auth-dovecot-auth-mechanisms, name: "dovecot auth mechanisms", match: [dovecot-auth-mechanisms]}
+      - {id: ea-dovecot-auth-dovecot-auth-debug, name: "dovecot auth debug", match: [dovecot-auth-debug]}
+  - id: ea-dovecot-mailbox
+    name: "Mailbox formats and layout"
+    source: "dovecot"
+    match: [dovecot-mailbox]
+    subtopics:
+      - {id: ea-dovecot-mailbox-maildir-vs-mdbox, name: "maildir vs mdbox", match: [maildir-vs-mdbox]}
+      - {id: ea-dovecot-mailbox-mail-location-settings, name: "mail location settings", match: [mail-location-settings]}
+  - id: ea-dovecot-imap
+    name: "IMAP service"
+    source: "3501"
+    match: [dovecot-imap]
+    subtopics:
+      - {id: ea-dovecot-imap-imap-by-hand, name: "imap by hand", match: [imap-by-hand]}
+      - {id: ea-dovecot-imap-special-use-folders, name: "special use folders", match: [special-use-folders]}
+  - id: ea-dovecot-lmtp-sieve
+    name: "LMTP delivery and Sieve"
+    source: "dovecot"
+    match: [dovecot-lmtp-sieve]
+    subtopics:
+      - {id: ea-dovecot-lmtp-sieve-lmtp-delivery-from-postfix, name: "lmtp delivery from postfix", match: [lmtp-delivery-from-postfix]}
+      - {id: ea-dovecot-lmtp-sieve-sieve-filtering, name: "sieve filtering", match: [sieve-filtering]}
+      - {id: ea-dovecot-lmtp-sieve-managesieve, name: "managesieve", match: [managesieve]}
+  - id: ea-dovecot-quota
+    name: "Quotas"
+    source: "dovecot"
+    match: [dovecot-quota]
+    subtopics:
+      - {id: ea-dovecot-quota-quota-plugin-setup, name: "quota plugin setup", match: [quota-plugin-setup]}
+      - {id: ea-dovecot-quota-quota-postfix-integration, name: "quota postfix integration", match: [quota-postfix-integration]}
+  - id: ea-dovecot-replication
+    name: "Replication and dsync"
+    source: "dovecot"
+    match: [dovecot-replication]
+    subtopics:
+      - {id: ea-dovecot-replication-dsync-replication, name: "dsync replication", match: [dsync-replication]}
+      - {id: ea-dovecot-replication-dsync-migration, name: "dsync migration", match: [dsync-migration]}
+  - id: ea-spamassassin
+    name: "SpamAssassin"
+    source: "sa"
+    match: [spamassassin]
+    subtopics:
+      - {id: ea-spamassassin-spamassassin-tuning, name: "spamassassin tuning", match: [spamassassin-tuning]}
+      - {id: ea-spamassassin-sa-bayes-training, name: "sa bayes training", match: [sa-bayes-training]}
+  - id: ea-rspamd
+    name: "Rspamd"
+    source: "rspamd"
+    match: [rspamd]
+    subtopics:
+      - {id: ea-rspamd-rspamd-milter-setup, name: "rspamd milter setup", match: [rspamd-milter-setup]}
+      - {id: ea-rspamd-rspamd-actions-scores, name: "rspamd actions scores", match: [rspamd-actions-scores]}
+  - id: ea-malware-scanning
+    name: "Malware scanning"
+    source: "clamav"
+    match: [malware-scanning]
+    subtopics:
+      - {id: ea-malware-scanning-clamav-scanning, name: "clamav scanning", match: [clamav-scanning]}
+  - id: ea-blocklists
+    name: "DNS blocklists"
+    source: "m3aawg"
+    match: [blocklists]
+    subtopics:
+      - {id: ea-blocklists-dnsbl-delisting, name: "dnsbl delisting", match: [dnsbl-delisting]}
+      - {id: ea-blocklists-own-ip-reputation-check, name: "own ip reputation check", match: [own-ip-reputation-check]}
+      - {id: ea-blocklists-rbl-in-postfix, name: "rbl in postfix", match: [rbl-in-postfix]}
+  - id: ea-sender-reputation
+    name: "Sender reputation"
+    source: "m3aawg"
+    match: [sender-reputation]
+    subtopics:
+      - {id: ea-sender-reputation-ip-warmup, name: "ip warmup", match: [ip-warmup]}
+      - {id: ea-sender-reputation-feedback-loops, name: "feedback loops", match: [feedback-loops]}
+  - id: ea-bulk-sender
+    name: "Bulk sender requirements"
+    source: "google"
+    match: [bulk-sender]
+    subtopics:
+      - {id: ea-bulk-sender-bulk-sender-requirements, name: "bulk sender requirements", match: [bulk-sender-requirements]}
+      - {id: ea-bulk-sender-one-click-unsubscribe, name: "one click unsubscribe", match: [one-click-unsubscribe]}
+  - id: ea-mail-logging
+    name: "Mail logging"
+    source: "postfix"
+    match: [mail-logging]
+    subtopics:
+      - {id: ea-mail-logging-mail-log-reading, name: "mail log reading", match: [mail-log-reading]}
+      - {id: ea-mail-logging-trace-message-in-logs, name: "trace message in logs", match: [trace-message-in-logs]}
+  - id: ea-mail-monitoring
+    name: "Monitoring"
+    source: "postfix"
+    match: [mail-monitoring]
+    subtopics:
+      - {id: ea-mail-monitoring-mail-monitoring-checks, name: "mail monitoring checks", match: [mail-monitoring-checks]}
+      - {id: ea-mail-monitoring-queue-length-alerting, name: "queue length alerting", match: [queue-length-alerting]}
+  - id: ea-mail-backup
+    name: "Backup and restore"
+    source: "dovecot"
+    match: [mail-backup]
+    subtopics:
+      - {id: ea-mail-backup-mail-backup-strategy, name: "mail backup strategy", match: [mail-backup-strategy]}
+      - {id: ea-mail-backup-restore-testing, name: "restore testing", match: [restore-testing]}
+  - id: ea-mail-migration
+    name: "Migration"
+    source: "dovecot"
+    match: [mail-migration]
+    subtopics:
+      - {id: ea-mail-migration-imapsync-migration, name: "imapsync migration", match: [imapsync-migration]}
+      - {id: ea-mail-migration-mx-cutover-plan, name: "mx cutover plan", match: [mx-cutover-plan]}
+  - id: ea-mail-hardening
+    name: "Hardening"
+    source: "postfix"
+    match: [mail-hardening]
+    subtopics:
+      - {id: ea-mail-hardening-mail-server-hardening, name: "mail server hardening", match: [mail-server-hardening]}
+      - {id: ea-mail-hardening-fail2ban-for-mail, name: "fail2ban for mail", match: [fail2ban-for-mail]}
+  - id: ea-smarthost-relay
+    name: "Smarthost and outbound relay"
+    source: "postfix"
+    match: [smarthost-relay]
+    subtopics:
+      - {id: ea-smarthost-relay-relayhost-smarthost, name: "relayhost smarthost", match: [relayhost-smarthost]}
+      - {id: ea-smarthost-relay-sender-dependent-relay, name: "sender dependent relay", match: [sender-dependent-relay]}
+  - id: ea-forwarding-srs
+    name: "Forwarding and recipient verification"
+    source: "postfix"
+    match: [forwarding-srs]
+    subtopics:
+      - {id: ea-forwarding-srs-srs-forwarding, name: "srs forwarding", match: [srs-forwarding]}
+      - {id: ea-forwarding-srs-recipient-verification, name: "recipient verification", match: [recipient-verification]}
+  - id: ea-message-limits
+    name: "Size and content limits"
+    source: "postfix"
+    match: [message-limits]
+    subtopics:
+      - {id: ea-message-limits-message-size-limits, name: "message size limits", match: [message-size-limits]}
+  - id: ea-ipv6-mail
+    name: "IPv6 for mail"
+    source: "5321"
+    match: [ipv6-mail]
+    subtopics:
+      - {id: ea-ipv6-mail-ipv6-mail-setup, name: "ipv6 mail setup", match: [ipv6-mail-setup]}

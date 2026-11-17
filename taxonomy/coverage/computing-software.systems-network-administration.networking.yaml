@@ -1,0 +1,1628 @@
+# Canonical coverage spec: Networking (Cisco IOS, Wireshark, vendor-neutral design, DNS/DHCP).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (Cisco CCNA 200-301 v1.1 and CCNP ENCOR
+# 350-401 v1.1 exam topics, CompTIA Network+ N10-009 objectives, the Wireshark User's Guide ToC and
+# WCNA exam domains, the ISC BIND 9 and Kea Administrator Reference Manuals, and the RFC families
+# they implement), not from what we happened to write.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (exam objective
+# sub-bullets, manual chapter sections, RFC sections, CLI sub-commands).
+subject: networking
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [cisco-networking, wireshark, network-design, dns-dhcp]
+sources:
+  - "Cisco CCNA 200-301 v1.1 exam topics - 1.0 Network Fundamentals (1.1 components, 1.2 topology architectures, 1.3 physical interface and cabling, 1.4 interface and cable issues, 1.5 TCP vs UDP, 1.6 IPv4 addressing and subnetting, 1.7 private IPv4, 1.8-1.9 IPv6 addressing and types, 1.10 client OS IP parameters, 1.11 wireless principles, 1.12 virtualization, 1.13 switching concepts); 2.0 Network Access (2.1 VLANs, 2.2 trunking, 2.3 CDP/LLDP, 2.4 EtherChannel LACP, 2.5 Rapid PVST+, 2.6 wireless architectures and AP modes, 2.7 WLAN physical infrastructure, 2.8 AP and WLC management access, 2.9 WLAN GUI configuration); 3.0 IP Connectivity (3.1 routing table, 3.2 forwarding decision, 3.3 static routing, 3.4 single-area OSPFv2, 3.5 FHRP); 4.0 IP Services (4.1 NAT, 4.2 NTP, 4.3 DHCP and DNS, 4.4 SNMP, 4.5 syslog, 4.6 DHCP client and relay, 4.7 QoS PHB, 4.8 SSH, 4.9 TFTP/FTP); 5.0 Security Fundamentals (5.1 threats, 5.2 security program, 5.3 device access control, 5.4 password policy, 5.5 IPsec VPNs, 5.6 ACLs, 5.7 Layer 2 security, 5.8 AAA, 5.9 wireless security protocols, 5.10 WLAN WPA2 PSK); 6.0 Automation (6.1-6.4 controller-based and SDN, 6.5 REST APIs, 6.6 Ansible/Terraform, 6.7 JSON)"
+  - "Cisco CCNP ENCOR 350-401 v1.1 exam topics - 1.0 Architecture (enterprise design tiers, high availability, SD-WAN, SD-Access, QoS, switching mechanisms CEF/TCAM); 2.0 Virtualization (hypervisors, VRF, GRE and IPsec tunnelling, LISP, VXLAN); 3.0 Infrastructure (Layer 2 trunking/EtherChannel/STP and MST, EIGRP vs OSPF, OSPF multi-area and summarisation, eBGP best path and neighbours, policy-based routing, wireless RF, AP modes, roaming, IP services NTP/PTP, NAT/PAT, FHRP HSRP/VRRP, multicast PIM/IGMP); 4.0 Network Assurance (debugs and conditional debugs, ping/traceroute, SNMP, syslog, NetFlow/Flexible NetFlow, SPAN/RSPAN/ERSPAN, IP SLA, Catalyst Center workflows, NETCONF/RESTCONF); 5.0 Security (device access control lines/passwords/AAA, infrastructure security ACLs and CoPP, REST API security, wireless security EAP/WebAuth/PSK, threat defence components, 802.1X/MAB/WebAuth); 6.0 Automation (Python, JSON, YANG, NETCONF/RESTCONF, APIs for Catalyst Center and SD-WAN, EEM applets, Ansible/Chef/Puppet)"
+  - "CompTIA Network+ N10-009 exam objectives - 1.0 Networking Concepts (1.1 OSI model, 1.2 appliances/applications/functions, 1.3 cloud concepts, 1.4 ports/protocols/services, 1.5 transmission media and transceivers, 1.6 topologies/architectures/types, 1.7 IPv4 addressing, 1.8 evolving use cases); 2.0 Network Implementation (2.1 routing technologies, 2.2 switching technologies, 2.3 wireless devices and technologies, 2.4 physical installations); 3.0 Network Operations (3.1 organisational processes and documentation, 3.2 network monitoring technologies, 3.3 disaster recovery, 3.4 IPv4/IPv6 network services, 3.5 network access and management methods); 4.0 Network Security (4.1 security concepts, 4.2 attack types, 4.3 security features/defence techniques); 5.0 Network Troubleshooting (5.1 methodology, 5.2 cabling and physical interface issues, 5.3 network services issues, 5.4 performance issues, 5.5 tools and protocols)"
+  - "Wireshark User's Guide (wireshark.org/docs/wsug_html_chunked) - 4 Capturing Live Network Data (interfaces, capture options, ring buffers, capture filters, remote capture, link-layer header), 5 File Input/Output and Printing (open/save/merge/import from hex dump/export specified packets/export objects/print), 6 Working With Captured Packets (marking, ignoring, time display formats, time reference, filtering, display filter macros, finding packets, Follow Stream, expert information, TCP analysis), 7 Advanced Topics (packet reassembly, name resolution, checksums, TLS decryption), 8 Statistics (capture file properties, resolved addresses, protocol hierarchy, conversations, endpoints, packet lengths, I/O graphs, service response time, DHCP/BOOTP, ONC-RPC, 29West, flow graph, expert info, HTTP, TCP stream graphs), 9 Telephony (VoIP calls, RTP analysis/player, SIP flows, LTE/MTP3), 10 Wireless (Bluetooth, WLAN traffic), 11 Customizing (preferences, configuration profiles, user table, Decode As, coloring rules, Lua), Appendix D command-line tools (tshark, dumpcap, capinfos, rawshark, editcap, mergecap, text2pcap, reordercap); plus wireshark-filter(4) display filter reference and pcap-filter(7)"
+  - "Wireshark Certified Network Analyst (WCNA) exam domains - Wireshark functionality, TCP/IP network communications, network troubleshooting, packet analysis of common protocols (ARP, ICMP, UDP, TCP, DHCP, DNS, HTTP, TLS), network forensics/security (scanning, malware, suspicious traffic), performance analysis (latency, window issues, packet loss)"
+  - "ISC BIND 9 Administrator Reference Manual (bind9.readthedocs.io) - 3 Configurations and Zone Files (authoritative, resolver, load balancing, zone file RRs, SOA, TTLs), 4 Advanced DNS Features (notify, dynamic update/nsupdate, IXFR, split DNS/views, TSIG, SIG(0), DNSSEC, DoT/DoH, DNS64, Response Policy Zones, catalog zones, rate limiting), 5 DNSSEC guide (dnssec-policy, key rollovers, validation, troubleshooting with delv), 6 Security Configurations (ACLs, chroot, file system permissions), 7 Troubleshooting (common problems, SERVFAIL, logging), 8 Configuration reference (options, view, zone, logging channels/categories, statistics-channels), 9 rndc/dig/delv/named-checkconf/named-checkzone manual pages"
+  - "ISC Kea Administrator Reference Manual (kea.readthedocs.io) - Installation, Kea configuration (JSON, includes, config-backend), Managing Kea (keactrl, systemd), Lease database (memfile/MySQL/PostgreSQL), DHCPv4 server (subnets, pools, shared networks, options and custom option definitions, client classification, host reservations, DDNS, relay/option 82, lease lifetimes), DHCPv6 server (IA_NA/IA_PD prefix delegation, DUIDs, rapid commit), DHCP-DDNS server (D2, TSIG), Control Agent and REST API, Hooks libraries (high availability, lease commands, host commands, flex-id, stat commands), Statistics, Logging, Migrating from ISC DHCP (KEA Migration Assistant keama)"
+  - "IETF RFC families - DNS RFC 1034/1035 (concepts and implementation), RFC 2181 (clarifications), RFC 2308 (negative caching), RFC 2136 (UPDATE), RFC 1995/1996 (IXFR/NOTIFY), RFC 8945 (TSIG), RFC 4033-4035 and 9364 (DNSSEC), RFC 5155 (NSEC3), RFC 7858/8484 (DoT/DoH), RFC 7816/9156 (QNAME minimisation), RFC 9460 (SVCB/HTTPS), RFC 8659 (CAA); DHCP RFC 2131/2132 (DHCPv4 and options), RFC 3046 (relay agent information option 82), RFC 8415 (DHCPv6), RFC 4861/4862/8106 (IPv6 ND/SLAAC/RDNSS); email auth RFC 7208 (SPF), 6376 (DKIM), 7489 (DMARC), 8461 (MTA-STS); addressing RFC 1918, 6598, 4193, 6177; QoS RFC 4594/2474"
+topics:
+  # ============ Cisco IOS & enterprise networking (CCNA 200-301, ENCOR 350-401) ============
+  - id: ios-device-management
+    name: IOS CLI configuration and file management
+    source: CCNA 4.9 / ENCOR 4.0
+    match: [ios-cli, running-config, startup-config, ios-file-system]
+    subtopics:
+      - {id: ios-config-archive-rollback, name: Configuration archive and configure replace rollback, match: [configure-replace, config-archive, config-rollback]}
+      - {id: ios-show-filtering, name: Filtering show output with include/section/begin, match: [show-section, output-modifiers]}
+      - {id: ios-image-upgrade, name: IOS XE upgrade in install mode, match: [install-mode, ios-xe-upgrade, software-upgrade]}
+      - {id: ios-password-recovery, name: Password recovery via ROMMON and config register, match: [password-recovery, rommon, config-register]}
+      - {id: ios-tftp-scp-transfer, name: Copying images and configs with TFTP/FTP/SCP and verifying hashes, match: [tftp, scp-server, verify-md5]}
+      - {id: ios-commit-confirm, name: Safe remote changes with reload in and commit timers, match: [reload-in, safe-remote-change]}
+      - {id: ios-alias-macros, name: CLI aliases and interface range macros, match: [ios-alias, interface-range-macro]}
+      - {id: ios-boot-system, name: Boot variables and bundle vs install boot, match: [boot-system, boot-variable]}
+      - {id: ios-flash-management, name: Flash housekeeping (dir/delete/install remove inactive), match: [flash-management, install-remove-inactive]}
+      - {id: ios-config-diff, name: Comparing configs with show archive config differences, match: [config-diff, show-archive-differences]}
+      - {id: ios-zero-touch, name: Zero-touch provisioning and Cisco PnP, match: [zero-touch-provisioning, cisco-pnp]}
+      - {id: ios-smart-licensing, name: Smart Licensing Using Policy and boot levels, match: [smart-licensing, license-boot-level]}
+      - {id: ios-tech-support, name: Collecting show tech-support/crashinfo/core files for TAC, match: [show-tech-support, crashinfo]}
+  - id: interface-cable-issues
+    name: Interface and cable issues (collisions/errors/duplex/speed)
+    source: CCNA 1.4 / Network+ 5.2
+    match: [interface-errors, interface-counters, physical-layer-troubleshooting]
+    subtopics:
+      - {id: iface-crc-input-errors, name: Reading CRC/input errors/runts/giants counters, match: [crc-errors, input-errors, runts-giants]}
+      - {id: iface-duplex-mismatch, name: Diagnosing duplex and speed mismatch, match: [duplex-mismatch, speed-mismatch, late-collisions]}
+      - {id: iface-err-disabled, name: err-disabled causes and errdisable recovery, match: [err-disabled, errdisable-recovery]}
+      - {id: iface-transceiver-dom, name: Transceiver DOM optical levels, match: [transceiver-dom, digital-optical-monitoring, optical-power]}
+      - {id: iface-tdr-cable-diag, name: Built-in TDR cable diagnostics, match: [cable-diagnostics, tdr]}
+      - {id: iface-output-drops, name: Output drops and egress buffer tuning, match: [output-drops, total-output-drops]}
+      - {id: iface-flapping, name: Interface flapping and carrier-delay/link debounce, match: [interface-flapping, carrier-delay]}
+      - {id: iface-load-interval, name: load-interval/txload/rxload and clearing counters, match: [load-interval, clear-counters]}
+      - {id: iface-mtu-config, name: System MTU vs interface MTU on Catalyst, match: [system-mtu, interface-mtu]}
+      - {id: iface-autoneg, name: Auto-negotiation and speed nonegotiate on fibre, match: [auto-negotiation, speed-nonegotiate]}
+      - {id: iface-udld, name: UDLD unidirectional link detection, match: [udld]}
+      - {id: iface-eee, name: Energy Efficient Ethernet side effects, match: [energy-efficient-ethernet]}
+  - id: switching-mac-learning
+    name: Switching concepts (MAC learning/aging/flooding/frame switching)
+    source: CCNA 1.13 / ENCOR 1.6
+    match: [mac-address-table, mac-learning, frame-switching]
+    subtopics:
+      - {id: sw-mac-aging-static, name: MAC aging time and static MAC entries, match: [mac-aging, static-mac]}
+      - {id: sw-mac-flapping, name: Diagnosing MAC flapping and unicast flooding, match: [mac-flapping, unknown-unicast-flooding]}
+      - {id: sw-trace-host, name: Tracing a host to its switch port, match: [find-host-port, mac-trace]}
+      - {id: sw-cef-tcam, name: CEF and TCAM forwarding (FIB/adjacency/SDM templates), match: [cef, tcam, sdm-template]}
+      - {id: sw-mac-notifications, name: MAC move and MAC address-table notifications, match: [mac-move-notification, mac-address-notification]}
+      - {id: sw-arp-timeout, name: ARP timeout vs MAC aging asymmetry, match: [arp-timeout]}
+      - {id: sw-l2-traceroute, name: Layer 2 traceroute, match: [l2-traceroute]}
+      - {id: sw-forwarding-modes, name: Store-and-forward vs cut-through switching, match: [cut-through, store-and-forward]}
+      - {id: sw-mac-table-capacity, name: MAC table capacity and exhaustion, match: [mac-table-capacity]}
+      - {id: sw-switchport-block, name: Blocking unknown unicast/multicast flooding per port, match: [switchport-block]}
+  - id: vlans-access-ports
+    name: VLANs and access ports (data and voice)
+    source: CCNA 2.1
+    match: [vlan, access-port]
+    subtopics:
+      - {id: vlan-voice-data, name: Data plus voice VLAN on one port, match: [voice-vlan]}
+      - {id: vlan-default-native-hygiene, name: VLAN 1 and unused-port hygiene, match: [vlan-1, unused-ports, parking-vlan]}
+      - {id: vlan-intervlan-routing, name: Inter-VLAN routing (router-on-a-stick/SVI), match: [inter-vlan-routing, router-on-a-stick, svi]}
+      - {id: vlan-routed-ports, name: Routed ports and L3 switch configuration, match: [routed-port, no-switchport]}
+      - {id: vlan-private, name: Private VLANs (isolated/community/promiscuous), match: [private-vlan, pvlan]}
+      - {id: vlan-extended-range, name: Normal vs extended-range VLANs, match: [extended-range-vlan]}
+      - {id: vlan-numbering-plan, name: VLAN numbering and naming plan, match: [vlan-numbering-plan]}
+      - {id: vlan-vacl, name: VLAN access maps (VACL), match: [vacl, vlan-access-map]}
+      - {id: vlan-switchport-host, name: switchport host and Smartport macros, match: [switchport-host, smartport-macro]}
+      - {id: vlan-troubleshoot, name: Troubleshooting inactive or missing VLANs, match: [vlan-troubleshooting, inactive-vlan]}
+      - {id: vlan-dynamic-assignment, name: RADIUS dynamic VLAN assignment, match: [dynamic-vlan-assignment]}
+  - id: trunking-8021q
+    name: 802.1Q trunking (DTP/native VLAN/allowed list/VTP)
+    source: CCNA 2.2
+    match: [trunk, 802-1q, dot1q]
+    subtopics:
+      - {id: trunk-dtp, name: DTP negotiation and nonegotiate, match: [dtp, nonegotiate]}
+      - {id: trunk-native-vlan, name: Native VLAN and mismatch detection, match: [native-vlan]}
+      - {id: trunk-allowed-pruning, name: Allowed-VLAN list and pruning, match: [allowed-vlans, vtp-pruning]}
+      - {id: trunk-vtp, name: VTP modes and VTPv3, match: [vtp, vtpv3]}
+      - {id: trunk-troubleshoot, name: Troubleshooting trunks with show interfaces trunk, match: [trunk-troubleshooting]}
+      - {id: trunk-qinq, name: 802.1Q tunnelling (QinQ), match: [qinq, dot1q-tunnel]}
+      - {id: trunk-tag-native, name: Tagging the native VLAN, match: [tag-native-vlan]}
+      - {id: trunk-vtp-revision, name: VTP revision number risk when adding switches, match: [vtp-revision-number]}
+      - {id: trunk-vlan-translation, name: VLAN mapping/translation on trunks, match: [vlan-translation]}
+  - id: cdp-lldp
+    name: Layer 2 discovery protocols CDP and LLDP
+    source: CCNA 2.3
+    match: [cdp, lldp]
+    subtopics:
+      - {id: cdp-lldp-neighbor-mapping, name: Mapping topology from neighbour detail, match: [cdp-neighbors, lldp-neighbors, topology-discovery]}
+      - {id: lldp-enable-tlv, name: Enabling LLDP and selecting TLVs, match: [lldp-run, lldp-tlv]}
+      - {id: cdp-disable-edge, name: Disabling discovery on untrusted edge ports, match: [disable-cdp, discovery-protocol-hardening]}
+      - {id: lldp-med, name: LLDP-MED for phones and PoE negotiation, match: [lldp-med]}
+      - {id: cdp-timers, name: CDP timers/holdtime and version 2, match: [cdp-timers]}
+      - {id: lldp-timers, name: LLDP timers/holdtime/reinit, match: [lldp-timers]}
+      - {id: lldpd-linux, name: LLDP on Linux and hypervisors with lldpd, match: [lldpd]}
+      - {id: cdp-mismatch-messages, name: CDP native VLAN and duplex mismatch messages, match: [cdp-mismatch-messages]}
+      - {id: lldp-mib, name: Polling LLDP-MIB for topology, match: [lldp-mib]}
+  - id: etherchannel
+    name: EtherChannel (LACP/PAgP/static/L3)
+    source: CCNA 2.4 / ENCOR 3.1.b
+    match: [etherchannel, port-channel, lacp]
+    subtopics:
+      - {id: ec-lacp-modes, name: LACP active/passive and PAgP modes, match: [lacp-active, pagp]}
+      - {id: ec-load-balance, name: Load-balancing hash selection, match: [etherchannel-load-balance, port-channel-hash]}
+      - {id: ec-layer3, name: Layer 3 EtherChannel, match: [layer-3-etherchannel, routed-port-channel]}
+      - {id: ec-troubleshoot-suspended, name: Troubleshooting suspended and standalone members, match: [etherchannel-troubleshooting, suspended-member]}
+      - {id: ec-misconfig-guard, name: EtherChannel misconfig guard and LACP rate, match: [etherchannel-guard, lacp-rate-fast]}
+      - {id: ec-min-links, name: min-links/max-bundle/LACP port-priority, match: [min-links, max-bundle, lacp-port-priority]}
+      - {id: ec-inheritance, name: Port-channel config inheritance and member consistency, match: [port-channel-inheritance]}
+      - {id: ec-mec, name: Multichassis EtherChannel with StackWise Virtual, match: [multichassis-etherchannel, mec]}
+      - {id: ec-lacp-fallback, name: LACP to servers and standalone/fallback behaviour, match: [lacp-fallback, port-channel-standalone-disable]}
+      - {id: ec-mode-on, name: Static mode on and its risks, match: [etherchannel-mode-on]}
+  - id: spanning-tree
+    name: Spanning tree (Rapid PVST+ and MST)
+    source: CCNA 2.5 / ENCOR 3.1.c
+    match: [spanning-tree, stp, rapid-pvst]
+    subtopics:
+      - {id: stp-root-election, name: Root bridge placement and priority, match: [root-bridge, stp-priority]}
+      - {id: stp-port-roles-states, name: Port roles/states and cost tuning, match: [stp-port-roles, stp-port-cost]}
+      - {id: stp-portfast-bpduguard, name: PortFast and BPDU Guard on edge ports, match: [portfast, bpduguard]}
+      - {id: stp-root-loop-guard, name: Root Guard and Loop Guard, match: [root-guard, loop-guard]}
+      - {id: stp-mst, name: MST regions and instance mapping, match: [mst, multiple-spanning-tree]}
+      - {id: stp-tcn-troubleshoot, name: Tracing topology changes and STP loops, match: [topology-change, stp-loop]}
+      - {id: stp-legacy-fast, name: UplinkFast/BackboneFast vs RSTP, match: [uplinkfast, backbonefast]}
+      - {id: stp-bpdufilter, name: BPDU filter behaviour and risks, match: [bpdufilter]}
+      - {id: stp-bridge-assurance, name: Bridge Assurance, match: [bridge-assurance]}
+      - {id: stp-timers-diameter, name: STP timers and network diameter, match: [stp-timers, stp-diameter]}
+      - {id: stp-mst-interop, name: MST to PVST+ interoperability boundary, match: [pvst-simulation, mst-boundary]}
+      - {id: stp-extended-system-id, name: Bridge ID and extended system ID math, match: [extended-system-id]}
+  - id: wireless-architecture-wlc
+    name: Cisco wireless architectures and WLC configuration
+    source: CCNA 2.6-2.9 / ENCOR 1.2 and 3.3
+    match: [wlc, wireless-lan-controller, lightweight-ap]
+    subtopics:
+      - {id: wlc-capwap-join, name: CAPWAP AP join and discovery, match: [capwap, ap-join]}
+      - {id: wlc-ap-modes, name: AP modes (local/FlexConnect/monitor/sniffer), match: [flexconnect, ap-modes]}
+      - {id: wlc-wlan-config, name: Creating a WLAN and binding to policy/interfaces, match: [wlan-configuration, wlan-profile]}
+      - {id: wlc-roaming, name: Roaming (L2/L3 and mobility groups), match: [wireless-roaming, mobility-group]}
+      - {id: wlc-management-access, name: AP and WLC management access, match: [wlc-management, ap-console]}
+      - {id: wlc-9800-tags, name: Catalyst 9800 policy/site/RF tags and profiles, match: [policy-tag, site-tag, rf-tag]}
+      - {id: wlc-ha-sso, name: 9800 HA SSO and N+1 redundancy, match: [wlc-ha-sso]}
+      - {id: wlc-rrm, name: RRM DCA and TPC, match: [dca-tpc, rrm-tuning]}
+      - {id: wlc-ap-upgrade, name: AP image predownload and rolling AP upgrade, match: [ap-image-predownload, rolling-ap-upgrade]}
+      - {id: wlc-client-troubleshoot, name: Client troubleshooting with RadioActive tracing, match: [radioactive-trace, wireless-client-troubleshooting]}
+      - {id: wlc-guest-anchor, name: Guest anchor/foreign mobility tunnels, match: [guest-anchor, mobility-anchor]}
+      - {id: wlc-ewc, name: Embedded wireless controller on AP, match: [embedded-wireless-controller]}
+  - id: routing-table-forwarding
+    name: Routing table components and forwarding decisions
+    source: CCNA 3.1-3.2
+    match: [routing-table, forwarding-decision]
+    subtopics:
+      - {id: rt-administrative-distance, name: Administrative distance and route source selection, match: [administrative-distance]}
+      - {id: rt-longest-prefix, name: Longest prefix match, match: [longest-prefix-match]}
+      - {id: rt-codes-metric, name: Reading route codes and metrics, match: [route-codes, show-ip-route]}
+      - {id: rt-gateway-last-resort, name: Gateway of last resort, match: [gateway-of-last-resort]}
+      - {id: rt-recursive-lookup, name: Recursive next-hop resolution, match: [recursive-lookup]}
+      - {id: rt-cef-load-sharing, name: CEF load sharing per-destination vs per-packet, match: [cef-load-sharing]}
+      - {id: rt-show-ip-cef, name: Verifying forwarding with show ip cef exact-route, match: [show-ip-cef, exact-route]}
+      - {id: rt-local-connected, name: Local /32 and connected routes, match: [local-route, connected-route]}
+      - {id: rt-route-flapping, name: Diagnosing route churn, match: [route-flapping]}
+      - {id: rt-ipv6-table, name: Reading the IPv6 routing table, match: [show-ipv6-route]}
+  - id: static-routing
+    name: IPv4 and IPv6 static routing
+    source: CCNA 3.3
+    match: [static-route, static-routing]
+    subtopics:
+      - {id: static-default-route, name: Default routes, match: [default-route]}
+      - {id: static-floating, name: Floating static routes, match: [floating-static-route]}
+      - {id: static-ipv6, name: IPv6 static routes with link-local next hops, match: [ipv6-static-route]}
+      - {id: static-ip-sla-track, name: Tracked static routes with IP SLA, match: [tracked-static-route, ip-sla-tracking]}
+      - {id: static-null0, name: Null0 discard and host routes, match: [null0-route, host-route]}
+      - {id: static-bfd, name: Static routes with BFD, match: [static-bfd]}
+      - {id: static-vrf, name: Static routes in VRFs and cross-VRF next hops, match: [vrf-static-route]}
+      - {id: static-interface-route, name: Static routes to an Ethernet interface and proxy ARP, match: [static-interface-route]}
+      - {id: static-redistribute, name: Redistributing static routes into an IGP, match: [redistribute-static]}
+      - {id: static-route-name, name: Naming/tagging and permanent static routes, match: [static-route-name, permanent-static-route]}
+  - id: ospf-single-area
+    name: OSPFv2 single-area configuration
+    source: CCNA 3.4
+    match: [ospf, ospfv2]
+    subtopics:
+      - {id: ospf-adjacency-states, name: Neighbour adjacency states and requirements, match: [ospf-adjacency, ospf-neighbor-states]}
+      - {id: ospf-network-types, name: Point-to-point vs broadcast network types, match: [ospf-network-type, ospf-point-to-point]}
+      - {id: ospf-dr-bdr, name: DR/BDR election and priority, match: [dr-bdr, ospf-priority]}
+      - {id: ospf-router-id, name: Router ID selection, match: [router-id]}
+      - {id: ospf-cost-refbw, name: Cost and auto-cost reference bandwidth, match: [reference-bandwidth, ospf-cost]}
+      - {id: ospf-passive, name: Passive interfaces, match: [passive-interface]}
+      - {id: ospf-timers, name: Hello/dead timers and fast hellos, match: [ospf-timers, ospf-hello-interval]}
+      - {id: ospf-default-originate, name: default-information originate, match: [default-information-originate]}
+      - {id: ospf-interface-mode, name: Interface-mode vs network statement configuration, match: [ip-ospf-area, ospf-network-statement]}
+      - {id: ospf-verify, name: Verifying with show ip ospf neighbor/interface/database, match: [show-ip-ospf]}
+      - {id: ospf-ecmp, name: OSPF ECMP and maximum-paths, match: [maximum-paths]}
+      - {id: ospf-fast-convergence, name: SPF/LSA throttling and BFD, match: [spf-throttle, ospf-bfd]}
+  - id: ospf-multi-area
+    name: OSPF multi-area design and advanced features
+    source: ENCOR 3.2.b
+    match: [ospf-multi-area, abr]
+    subtopics:
+      - {id: ospf-lsa-types, name: LSA types and the LSDB, match: [lsa-types, lsdb]}
+      - {id: ospf-stub-areas, name: Stub/totally stubby/NSSA areas, match: [stub-area, nssa]}
+      - {id: ospf-summarisation, name: Inter-area and external summarisation, match: [area-range, ospf-summarization]}
+      - {id: ospf-authentication, name: OSPF authentication (SHA key chains), match: [ospf-authentication]}
+      - {id: ospfv3, name: OSPFv3 for IPv6 and address families, match: [ospfv3]}
+      - {id: ospf-mtu-exstart, name: Troubleshooting EXSTART/EXCHANGE and MTU mismatch, match: [exstart, mtu-mismatch]}
+      - {id: ospf-virtual-link, name: Virtual links, match: [virtual-link]}
+      - {id: ospf-external-e1-e2, name: ASBR external E1 vs E2 and forwarding address, match: [ospf-e1-e2, forwarding-address]}
+      - {id: ospf-lsa-filtering, name: Type-3 LSA filtering and distribute-list in, match: [filter-list, lsa-filtering]}
+      - {id: ospf-stub-router, name: Stub router max-metric for maintenance, match: [max-metric, stub-router]}
+      - {id: ospf-area-design, name: Area design and backbone contiguity, match: [ospf-area-design]}
+      - {id: ospf-max-lsa, name: LSDB protection with max-lsa, match: [max-lsa]}
+  - id: eigrp
+    name: EIGRP configuration and operation
+    source: ENCOR 3.2.a
+    match: [eigrp]
+    subtopics:
+      - {id: eigrp-named-mode, name: Named mode configuration, match: [eigrp-named-mode]}
+      - {id: eigrp-feasibility, name: Successors and the feasibility condition, match: [feasible-successor, feasibility-condition]}
+      - {id: eigrp-variance, name: Unequal-cost load balancing with variance, match: [variance, unequal-cost-load-balancing]}
+      - {id: eigrp-stub, name: EIGRP stub routing, match: [eigrp-stub]}
+      - {id: eigrp-sia, name: Stuck-in-active and query scoping, match: [stuck-in-active]}
+      - {id: eigrp-wide-metrics, name: Classic vs wide metrics and K values, match: [wide-metrics, k-values]}
+      - {id: eigrp-summarization, name: Interface summarisation, match: [eigrp-summarization]}
+      - {id: eigrp-authentication, name: EIGRP authentication, match: [eigrp-authentication]}
+      - {id: eigrp-neighbor-troubleshoot, name: Neighbour formation troubleshooting, match: [eigrp-neighbor]}
+      - {id: eigrp-ipv6, name: EIGRP for IPv6 address family, match: [eigrp-ipv6]}
+      - {id: eigrp-leak-map, name: Stub leak-maps and route filtering, match: [leak-map]}
+  - id: bgp
+    name: BGP (eBGP neighbours and path selection)
+    source: ENCOR 3.2.c
+    match: [bgp, ebgp]
+    subtopics:
+      - {id: bgp-neighbor-states, name: Neighbour establishment and state troubleshooting, match: [bgp-neighbor, bgp-states]}
+      - {id: bgp-advertise-network, name: Advertising prefixes (network statement vs redistribute), match: [bgp-network-statement, bgp-advertisement]}
+      - {id: bgp-best-path, name: Best path selection attributes, match: [bgp-best-path, local-preference, as-path-prepend]}
+      - {id: bgp-filtering, name: Prefix-lists/route-maps/maximum-prefix, match: [prefix-list, route-map]}
+      - {id: bgp-ibgp-next-hop, name: iBGP next-hop-self and update-source, match: [ibgp, next-hop-self]}
+      - {id: bgp-communities, name: Communities and well-known community actions, match: [bgp-community]}
+      - {id: bgp-route-reflector, name: Route reflectors and clusters, match: [route-reflector]}
+      - {id: bgp-timers-bfd, name: Keepalive/hold timers and BFD, match: [bgp-timers, bgp-bfd]}
+      - {id: bgp-session-security, name: MD5/TCP-AO and GTSM ttl-security, match: [bgp-md5, ttl-security, gtsm]}
+      - {id: bgp-soft-reset, name: Soft reconfiguration and route refresh, match: [soft-reconfiguration, route-refresh]}
+      - {id: bgp-aggregation, name: aggregate-address and summary-only, match: [aggregate-address]}
+      - {id: bgp-weight-med, name: Weight and MED, match: [bgp-weight, med]}
+      - {id: bgp-default-originate, name: Default-originate and partial tables, match: [bgp-default-originate]}
+      - {id: bgp-rpki, name: RPKI route origin validation, match: [rpki-rov, route-origin-validation]}
+  - id: path-control
+    name: Path control (redistribution/PBR/distribute lists)
+    source: ENCOR 3.2.d
+    match: [path-control, policy-based-routing]
+    subtopics:
+      - {id: pc-redistribution, name: Mutual redistribution and seed metrics, match: [redistribution, route-redistribution]}
+      - {id: pc-route-tags, name: Route tags to prevent redistribution loops, match: [route-tag]}
+      - {id: pc-pbr, name: PBR with route-map set next-hop, match: [pbr, set-ip-next-hop]}
+      - {id: pc-distribute-list, name: Distribute lists and offset lists, match: [distribute-list]}
+      - {id: pc-distance, name: Tuning administrative distance with the distance command, match: [distance-command]}
+      - {id: pc-local-pbr, name: Local policy routing for router-originated traffic, match: [local-policy-routing]}
+      - {id: pc-pbr-tracking, name: PBR with verify-availability and tracking, match: [pbr-verify-availability]}
+      - {id: pc-route-map-logic, name: Route-map match/set logic and continue, match: [route-map-continue]}
+      - {id: pc-redistribution-filter, name: Filtering redistribution, match: [redistribution-filtering]}
+      - {id: pc-two-point, name: Two-point redistribution and suboptimal routing, match: [two-point-redistribution]}
+  - id: fhrp
+    name: First hop redundancy (HSRP/VRRP/GLBP)
+    source: CCNA 3.5 / ENCOR 3.4.e
+    match: [fhrp, hsrp]
+    subtopics:
+      - {id: hsrp-priority-preempt, name: HSRP priority/preempt/timers, match: [hsrp-preempt, hsrp-priority]}
+      - {id: fhrp-object-tracking, name: Object tracking to decrement priority, match: [object-tracking]}
+      - {id: vrrp, name: VRRPv3 configuration, match: [vrrp, vrrpv3]}
+      - {id: glbp, name: GLBP load sharing, match: [glbp]}
+      - {id: hsrp-ipv6, name: HSRPv2 for IPv6, match: [hsrpv2, hsrp-ipv6]}
+      - {id: hsrp-authentication, name: HSRP authentication, match: [hsrp-authentication]}
+      - {id: hsrp-multiple-groups, name: Multiple HSRP groups for load sharing, match: [mhsrp]}
+      - {id: hsrp-troubleshoot, name: HSRP state troubleshooting (dual active), match: [hsrp-troubleshooting, hsrp-states]}
+      - {id: fhrp-stp-alignment, name: Aligning FHRP active with STP root, match: [stp-hsrp-alignment]}
+      - {id: hsrp-timers, name: Sub-second FHRP timers vs BFD, match: [hsrp-timers]}
+      - {id: vrrp-owner, name: VRRP address owner and multivendor interop, match: [vrrp-owner]}
+  - id: ios-ipv6
+    name: IPv6 addressing configuration on IOS
+    source: CCNA 1.8-1.9
+    match: [ipv6-configuration, ipv6-unicast-routing]
+    subtopics:
+      - {id: ipv6-eui64, name: EUI-64 and manual interface addressing, match: [eui-64]}
+      - {id: ipv6-link-local, name: Link-local addresses, match: [link-local]}
+      - {id: ipv6-slaac-ra, name: SLAAC and router advertisement flags, match: [slaac, router-advertisement]}
+      - {id: ipv6-dhcpv6-ios, name: Stateless and stateful DHCPv6 on IOS, match: [stateless-dhcpv6, stateful-dhcpv6]}
+      - {id: ipv6-nd-troubleshoot, name: Neighbour discovery troubleshooting, match: [neighbor-discovery, ipv6-neighbors]}
+      - {id: ipv6-ra-guard, name: RA guard and IPv6 first-hop security, match: [ipv6-first-hop-security]}
+      - {id: ipv6-dhcpv6-guard, name: DHCPv6 guard, match: [dhcpv6-guard]}
+      - {id: ipv6-general-prefix, name: DHCPv6-PD client and general prefix on IOS, match: [general-prefix, dhcpv6-pd-client]}
+      - {id: ipv6-ra-tuning, name: RA intervals/suppression and prefix lifetimes, match: [ra-suppress, ipv6-nd-prefix]}
+      - {id: ipv6-icmpv6-filtering, name: ICMPv6 types that must be permitted, match: [icmpv6-filtering]}
+      - {id: ipv6-manual-tunnels, name: Manual 6in4 tunnels, match: [6in4, ipv6-tunnel]}
+  - id: nat
+    name: NAT and PAT on IOS
+    source: CCNA 4.1 / ENCOR 3.4.d
+    match: [nat, pat]
+    subtopics:
+      - {id: nat-static, name: Static NAT and port forwarding, match: [static-nat, port-forwarding]}
+      - {id: nat-dynamic-pool, name: Dynamic NAT pools, match: [dynamic-nat, nat-pool]}
+      - {id: nat-overload, name: PAT overload on an interface, match: [nat-overload]}
+      - {id: nat-troubleshoot, name: Translations table and NAT troubleshooting, match: [nat-translations, nat-troubleshooting]}
+      - {id: nat-hairpin, name: NAT hairpinning and NVI, match: [nat-hairpin, nat-nvi]}
+      - {id: nat-route-map, name: NAT with route-maps for multiple ISPs, match: [nat-route-map]}
+      - {id: nat-exemption, name: NAT exemption for VPN traffic, match: [nat-exemption]}
+      - {id: nat-timeouts, name: Translation timeouts and max-entries, match: [nat-timeouts, nat-max-entries]}
+      - {id: nat-alg, name: NAT ALGs and when to disable them, match: [nat-alg]}
+      - {id: nat-overlapping, name: NAT for overlapping networks, match: [overlapping-networks, twice-nat]}
+      - {id: nat-stateful-ha, name: Stateful NAT redundancy, match: [stateful-nat]}
+  - id: ntp-time
+    name: NTP and time services
+    source: CCNA 4.2 / ENCOR 3.4.a
+    match: [ntp]
+    subtopics:
+      - {id: ntp-client-server, name: NTP client/server/peer configuration, match: [ntp-server, ntp-client]}
+      - {id: ntp-authentication, name: NTP authentication, match: [ntp-authentication]}
+      - {id: ntp-stratum-master, name: Stratum hierarchy and ntp master, match: [ntp-stratum, ntp-master]}
+      - {id: ntp-clock-timezone, name: Clock timezone/summer-time and log timestamps, match: [clock-timezone, service-timestamps]}
+      - {id: ptp, name: Precision Time Protocol, match: [ptp, precision-time-protocol]}
+      - {id: ntp-access-group, name: Restricting NTP with access-group, match: [ntp-access-group]}
+      - {id: ntp-troubleshoot, name: Troubleshooting unsynchronised clocks, match: [ntp-associations, ntp-troubleshooting]}
+      - {id: ntp-source-vrf, name: NTP source interface and VRF, match: [ntp-source]}
+      - {id: ntp-chrony, name: chrony on Linux servers, match: [chrony]}
+      - {id: ntp-hierarchy-design, name: NTP hierarchy design/public pools/leap seconds, match: [ntp-pool, leap-second]}
+  - id: ios-dhcp
+    name: DHCP server/client/relay on IOS
+    source: CCNA 4.3 and 4.6
+    match: [ios-dhcp, ip-dhcp-pool]
+    subtopics:
+      - {id: ios-dhcp-pool, name: DHCP pool with excluded addresses, match: [dhcp-excluded-address, dhcp-pool]}
+      - {id: ios-dhcp-relay, name: ip helper-address relay, match: [ip-helper-address, dhcp-relay]}
+      - {id: ios-dhcp-client, name: Interface as DHCP client, match: [ip-address-dhcp, dhcp-client]}
+      - {id: ios-dhcp-binding, name: Bindings/conflicts troubleshooting, match: [dhcp-binding, dhcp-conflict]}
+      - {id: ios-dhcp-options, name: Pool options 150/43 and custom options, match: [dhcp-option-150]}
+      - {id: ios-dhcp-manual-binding, name: Manual bindings by client-identifier, match: [client-identifier, manual-binding]}
+      - {id: ios-dhcp-database-agent, name: Persisting bindings with a database agent, match: [dhcp-database-agent]}
+      - {id: ios-dhcpv6-relay, name: IPv6 DHCP relay on IOS, match: [ipv6-dhcp-relay]}
+      - {id: ios-dhcp-debug, name: Debugging DHCP server and relay, match: [debug-ip-dhcp]}
+      - {id: ios-dhcp-smart-relay, name: Smart relay and relay information option, match: [smart-relay]}
+  - id: snmp
+    name: SNMP configuration and use
+    source: CCNA 4.4 / ENCOR 4.3
+    match: [snmp]
+    subtopics:
+      - {id: snmpv2c-community, name: SNMPv2c communities restricted by ACL, match: [snmpv2c, snmp-community]}
+      - {id: snmpv3-users, name: SNMPv3 users/groups/authPriv, match: [snmpv3, authpriv]}
+      - {id: snmp-traps-informs, name: Traps vs informs, match: [snmp-traps, snmp-informs]}
+      - {id: snmp-walk-oid, name: snmpwalk/OIDs/MIBs, match: [snmpwalk, oid, mib]}
+      - {id: snmp-views, name: SNMP views, match: [snmp-view]}
+      - {id: snmp-engineid, name: Engine ID and SNMPv3 user localisation, match: [engineid]}
+      - {id: snmp-ifindex, name: ifIndex persistence, match: [ifindex-persist]}
+      - {id: snmp-trap-receiver, name: Receiving traps with snmptrapd, match: [snmptrapd]}
+      - {id: snmp-hardening, name: SNMP hardening, match: [snmp-hardening]}
+      - {id: snmp-hc-counters, name: 64-bit HC counters and counter wrap, match: [hc-counters, ifhcinoctets]}
+  - id: syslog
+    name: Syslog and device logging
+    source: CCNA 4.5 / ENCOR 4.3
+    match: [syslog, logging]
+    subtopics:
+      - {id: syslog-severity, name: Severity levels and facilities, match: [syslog-severity, logging-trap]}
+      - {id: syslog-buffered-console, name: Buffered/console/monitor logging, match: [logging-buffered, terminal-monitor]}
+      - {id: syslog-remote-host, name: Remote logging host and source interface, match: [logging-host, logging-source-interface]}
+      - {id: syslog-timestamps, name: Timestamps and sequence numbers, match: [sequence-numbers, log-timestamps]}
+      - {id: syslog-discriminator, name: Logging discriminators, match: [logging-discriminator]}
+      - {id: syslog-rate-limit, name: Logging rate limits, match: [logging-rate-limit]}
+      - {id: syslog-tls, name: Syslog over TCP/TLS, match: [syslog-tls]}
+      - {id: syslog-rsyslog, name: rsyslog receiver for network devices, match: [rsyslog]}
+      - {id: syslog-message-format, name: Reading FACILITY-SEVERITY-MNEMONIC messages, match: [syslog-message-format]}
+      - {id: syslog-persistent, name: Persistent logging to flash, match: [logging-persistent]}
+  - id: qos
+    name: QoS (classification/marking/queuing/policing/shaping)
+    source: CCNA 4.7 / ENCOR 1.5
+    match: [qos, quality-of-service]
+    subtopics:
+      - {id: qos-mqc, name: MQC class-map/policy-map/service-policy, match: [mqc, class-map, policy-map]}
+      - {id: qos-marking-dscp, name: Classification and DSCP marking, match: [dscp, qos-marking]}
+      - {id: qos-trust-boundary, name: Trust boundary on access ports, match: [trust-boundary, qos-trust]}
+      - {id: qos-llq-cbwfq, name: LLQ and CBWFQ queuing, match: [llq, cbwfq]}
+      - {id: qos-policing-shaping, name: Policing vs shaping, match: [policing, shaping]}
+      - {id: qos-catalyst-queuing, name: Catalyst 9000 egress queuing, match: [egress-queuing, catalyst-qos]}
+      - {id: qos-wred, name: WRED congestion avoidance, match: [wred]}
+      - {id: qos-nbar, name: NBAR2 application classification, match: [nbar, nbar2]}
+      - {id: qos-auto-qos, name: AutoQoS, match: [auto-qos]}
+      - {id: qos-verify, name: Verifying with show policy-map interface, match: [show-policy-map-interface]}
+      - {id: qos-cos-mapping, name: CoS and CoS-to-DSCP mapping, match: [cos, cos-dscp-mapping]}
+  - id: secure-remote-access
+    name: Device access control (SSH/VTY/passwords/privilege)
+    source: CCNA 4.8 and 5.3-5.4 / ENCOR 5.1
+    match: [ssh, vty, device-access-control]
+    subtopics:
+      - {id: ssh-setup, name: SSH v2 setup with RSA keys and local users, match: [ssh-setup, crypto-key-generate]}
+      - {id: vty-access-class, name: Restricting VTY with access-class, match: [access-class]}
+      - {id: password-types, name: Enable secret and password type 8/9 hashes, match: [enable-secret, password-type-9]}
+      - {id: login-block, name: Login block-for and failure rate limits, match: [login-block-for]}
+      - {id: privilege-levels, name: Privilege levels and role-based CLI, match: [privilege-levels, parser-view]}
+      - {id: ssh-algorithms, name: SSH algorithm hardening, match: [ssh-algorithms, ssh-hardening]}
+      - {id: ssh-pubkey, name: SSH public key authentication on IOS, match: [ssh-public-key]}
+      - {id: exec-timeout-banner, name: exec-timeout and login banners, match: [exec-timeout, banner-motd]}
+      - {id: console-aux, name: Console and AUX line security, match: [console-line, aux-port]}
+      - {id: scrypt-users, name: Local users with algorithm-type scrypt, match: [algorithm-type-scrypt]}
+      - {id: https-management, name: HTTPS management with a trustpoint, match: [ip-http-secure-server]}
+      - {id: mpp, name: Management plane protection, match: [management-plane-protection]}
+  - id: acls
+    name: Access control lists
+    source: CCNA 5.6 / ENCOR 5.2
+    match: [acl, access-control-list]
+    subtopics:
+      - {id: acl-standard-extended, name: Standard vs extended and placement, match: [standard-acl, extended-acl]}
+      - {id: acl-wildcard, name: Wildcard masks, match: [wildcard-mask]}
+      - {id: acl-named-resequence, name: Named ACL editing and resequencing, match: [named-acl, acl-resequence]}
+      - {id: acl-ipv6, name: IPv6 ACLs and implicit ND permits, match: [ipv6-acl]}
+      - {id: acl-object-groups, name: Object groups, match: [object-group]}
+      - {id: acl-verify-counters, name: Verifying hits and logging ACEs, match: [acl-counters, acl-log]}
+      - {id: acl-established, name: established keyword and reflexive ACLs, match: [established-keyword, reflexive-acl]}
+      - {id: acl-time-range, name: Time-based ACLs, match: [time-range]}
+      - {id: acl-mac, name: MAC ACLs, match: [mac-acl]}
+      - {id: acl-pacl, name: Port ACLs on switchports, match: [pacl, port-acl]}
+      - {id: acl-iacl, name: Infrastructure ACLs at the edge, match: [infrastructure-acl, iacl]}
+      - {id: acl-tcam, name: ACL TCAM exhaustion, match: [acl-tcam]}
+  - id: layer2-security
+    name: Layer 2 security features
+    source: CCNA 5.7
+    match: [layer-2-security, port-security]
+    subtopics:
+      - {id: l2-port-security, name: Port security sticky MAC and violation modes, match: [sticky-mac, violation-mode]}
+      - {id: l2-dhcp-snooping, name: DHCP snooping, match: [dhcp-snooping]}
+      - {id: l2-dai, name: Dynamic ARP inspection, match: [dynamic-arp-inspection, dai]}
+      - {id: l2-ip-source-guard, name: IP source guard, match: [ip-source-guard]}
+      - {id: l2-storm-control, name: Storm control, match: [storm-control]}
+      - {id: l2-snooping-option82, name: DHCP snooping option 82 insertion problems, match: [snooping-option-82]}
+      - {id: l2-sisf, name: SISF device tracking and IPv6 snooping, match: [sisf]}
+      - {id: l2-port-security-aging, name: Port security aging and maximums with IP phones, match: [port-security-aging]}
+      - {id: l2-protected-ports, name: Protected ports, match: [protected-port]}
+      - {id: l2-macsec, name: MACsec 802.1AE link encryption, match: [macsec]}
+      - {id: l2-dai-acl, name: ARP ACLs and DAI rate limits, match: [arp-acl, dai-rate-limit]}
+  - id: aaa-8021x
+    name: AAA (TACACS+/RADIUS) and 802.1X
+    source: CCNA 5.8 / ENCOR 5.1 and 5.6
+    match: [aaa, tacacs, radius]
+    subtopics:
+      - {id: aaa-tacacs-admin, name: TACACS+ device administration with local fallback, match: [tacacs-plus, aaa-authentication]}
+      - {id: aaa-authorization-accounting, name: Command authorization and accounting, match: [aaa-authorization, aaa-accounting]}
+      - {id: dot1x-port-auth, name: 802.1X port authentication, match: [dot1x, 802-1x]}
+      - {id: mab, name: MAC authentication bypass, match: [mab, mac-authentication-bypass]}
+      - {id: webauth, name: Web authentication for guests, match: [webauth, central-web-authentication]}
+      - {id: aaa-radius-groups, name: RADIUS server groups and dead criteria, match: [radius-dead-criteria, aaa-server-group]}
+      - {id: dot1x-deployment-modes, name: Monitor/low-impact/closed deployment modes, match: [monitor-mode-8021x, low-impact-mode, closed-mode]}
+      - {id: dot1x-coa, name: RADIUS change of authorization, match: [coa, change-of-authorization]}
+      - {id: dot1x-critical-auth, name: Critical authentication when RADIUS is down, match: [critical-vlan, critical-auth]}
+      - {id: dot1x-ibns2, name: IBNS 2.0 identity policy maps, match: [identity-policy-map]}
+      - {id: dot1x-troubleshoot, name: Troubleshooting with show access-session, match: [access-session, dot1x-troubleshooting]}
+      - {id: dot1x-host-modes, name: Host modes multi-auth/multi-domain, match: [host-mode, multi-domain]}
+      - {id: ise-device-admin, name: ISE device administration policy sets, match: [ise-device-admin]}
+  - id: vpn-tunnels
+    name: VPNs and tunnelling (GRE/IPsec)
+    source: CCNA 5.5 / ENCOR 2.2
+    match: [vpn, ipsec, gre]
+    subtopics:
+      - {id: gre-tunnel, name: GRE tunnel configuration and recursive routing, match: [gre-tunnel, recursive-routing]}
+      - {id: ipsec-vti, name: IPsec route-based VTI with IKEv2, match: [vti, ikev2]}
+      - {id: ipsec-crypto-map, name: Policy-based crypto maps, match: [crypto-map]}
+      - {id: ipsec-troubleshoot, name: IKE/IPsec SA troubleshooting, match: [ipsec-troubleshooting, ike-sa]}
+      - {id: dmvpn, name: DMVPN phases, match: [dmvpn]}
+      - {id: flexvpn, name: FlexVPN, match: [flexvpn]}
+      - {id: ipsec-nat-t, name: NAT traversal, match: [nat-t]}
+      - {id: ipsec-proposals, name: IKEv2 proposals and transform sets, match: [ikev2-proposal, transform-set]}
+      - {id: gre-over-ipsec, name: GRE over IPsec with tunnel protection, match: [gre-over-ipsec, tunnel-protection]}
+      - {id: ipsec-dpd, name: Dead peer detection, match: [dpd, dead-peer-detection]}
+      - {id: ipsec-pki, name: Certificate authentication for IKEv2, match: [ipsec-certificates, crypto-pki]}
+      - {id: ipsec-mtu, name: Tunnel MTU and tcp adjust-mss, match: [tcp-adjust-mss, tunnel-mtu]}
+      - {id: getvpn, name: GETVPN group encryption, match: [getvpn]}
+  - id: vrf
+    name: VRF-lite and path isolation
+    source: ENCOR 2.2
+    match: [vrf, vrf-lite]
+    subtopics:
+      - {id: vrf-definition, name: VRF definition and interface assignment, match: [vrf-definition]}
+      - {id: vrf-mgmt, name: Management VRF, match: [management-vrf, mgmt-vrf]}
+      - {id: vrf-route-leaking, name: Route leaking between VRFs, match: [route-leaking]}
+      - {id: vrf-aware-tools, name: VRF-aware ping/traceroute/show, match: [vrf-aware]}
+      - {id: vrf-l3vpn, name: MPLS L3VPN route distinguishers and targets, match: [route-distinguisher, l3vpn]}
+      - {id: vrf-evn, name: Easy Virtual Network, match: [easy-virtual-network]}
+      - {id: vrf-aware-services, name: VRF-aware NAT/DHCP relay/AAA, match: [vrf-aware-services]}
+      - {id: vrf-routing-protocols, name: Per-VRF OSPF and BGP, match: [vrf-routing-protocols]}
+  - id: multicast
+    name: Multicast (IGMP/PIM)
+    source: ENCOR 3.4.f
+    match: [multicast, pim]
+    subtopics:
+      - {id: igmp-snooping, name: IGMP and IGMP snooping, match: [igmp, igmp-snooping]}
+      - {id: pim-sparse-rp, name: PIM sparse mode and RP configuration, match: [pim-sparse-mode, rendezvous-point]}
+      - {id: pim-ssm, name: Source-specific multicast, match: [ssm, source-specific-multicast]}
+      - {id: mcast-rpf, name: RPF check troubleshooting, match: [rpf-check, mroute]}
+      - {id: mcast-auto-rp-bsr, name: Auto-RP and BSR, match: [auto-rp, bsr]}
+      - {id: mcast-anycast-rp, name: Anycast RP with MSDP, match: [anycast-rp, msdp]}
+      - {id: mcast-bidir, name: Bidirectional PIM, match: [bidir-pim]}
+      - {id: mcast-addressing, name: Multicast address ranges and MAC mapping, match: [multicast-addressing, multicast-mac]}
+      - {id: mcast-troubleshoot, name: Multicast troubleshooting with mroute and mtrace, match: [mtrace, multicast-troubleshooting]}
+      - {id: mcast-mld, name: MLD and MLD snooping, match: [mld, mld-snooping]}
+      - {id: mcast-boundary, name: Multicast boundaries and scoping, match: [multicast-boundary]}
+  - id: ios-troubleshooting-tools
+    name: IOS diagnostics (debugs/ping/traceroute/IP SLA)
+    source: ENCOR 4.1-4.2 and 4.6
+    match: [ios-troubleshooting, debug]
+    subtopics:
+      - {id: conditional-debug, name: Conditional debugging safely, match: [conditional-debug]}
+      - {id: extended-ping-traceroute, name: Extended ping and traceroute, match: [extended-ping, extended-traceroute]}
+      - {id: ip-sla-probes, name: IP SLA probes, match: [ip-sla]}
+      - {id: embedded-packet-capture, name: Embedded packet capture (monitor capture), match: [embedded-packet-capture, monitor-capture]}
+      - {id: high-cpu, name: High CPU troubleshooting, match: [high-cpu, show-processes-cpu]}
+      - {id: memory-leak, name: Memory exhaustion troubleshooting, match: [memory-leak]}
+      - {id: packet-trace, name: IOS XE packet-trace, match: [packet-trace]}
+      - {id: ip-sla-udp-jitter, name: IP SLA udp-jitter for voice paths, match: [udp-jitter]}
+      - {id: punt-path, name: Punted traffic and control-plane drops, match: [punt-path]}
+      - {id: arp-troubleshoot-ios, name: ARP table troubleshooting on IOS, match: [incomplete-arp]}
+  - id: span-mirroring
+    name: SPAN/RSPAN/ERSPAN port mirroring
+    source: ENCOR 4.5
+    match: [span, port-mirroring]
+    subtopics:
+      - {id: local-span, name: Local SPAN sessions, match: [local-span, monitor-session]}
+      - {id: rspan, name: RSPAN VLAN, match: [rspan]}
+      - {id: erspan, name: ERSPAN GRE mirroring, match: [erspan]}
+      - {id: span-limits, name: SPAN oversubscription and drops, match: [span-oversubscription]}
+      - {id: span-vlan-filter, name: VLAN sources and SPAN filters, match: [span-vlan-source, span-filter]}
+      - {id: span-direction, name: SPAN direction and duplicate packets, match: [span-direction]}
+      - {id: span-encap-replicate, name: Destination ingress and encapsulation replicate, match: [encapsulation-replicate]}
+      - {id: flow-span, name: Flow-based SPAN, match: [flow-based-span]}
+      - {id: erspan-decode, name: Decoding ERSPAN at the collector, match: [erspan-decode]}
+  - id: netflow
+    name: NetFlow and Flexible NetFlow
+    source: ENCOR 4.4
+    match: [netflow, flexible-netflow]
+    subtopics:
+      - {id: fnr-record-exporter, name: Flow record/exporter/monitor configuration, match: [flow-record, flow-exporter]}
+      - {id: netflow-v9-ipfix, name: NetFlow v9 vs IPFIX export, match: [ipfix, netflow-v9]}
+      - {id: netflow-sampling, name: Sampled NetFlow, match: [sampled-netflow]}
+      - {id: netflow-collector, name: Collectors and analysis (nfdump), match: [nfdump, flow-collector]}
+      - {id: netflow-direction, name: Ingress vs egress monitoring and double counting, match: [netflow-direction]}
+      - {id: netflow-avc, name: AVC application fields in flow records, match: [avc, application-visibility]}
+      - {id: netflow-timeouts, name: Flow cache active/inactive timeouts, match: [flow-cache-timeout, active-timeout]}
+      - {id: netflow-v5-legacy, name: Traditional NetFlow v5, match: [netflow-v5]}
+      - {id: sflow, name: sFlow vs NetFlow, match: [sflow-agent]}
+      - {id: netflow-top-talkers, name: Top talkers from the flow cache, match: [top-talkers]}
+  - id: infrastructure-security
+    name: Infrastructure security (CoPP/hardening)
+    source: ENCOR 5.2
+    match: [copp, control-plane-policing, device-hardening]
+    subtopics:
+      - {id: copp-policy, name: CoPP class design and verification, match: [copp-policy]}
+      - {id: disable-unused-services, name: Disabling unused services, match: [disable-unused-services, no-ip-http-server]}
+      - {id: urpf, name: Unicast RPF anti-spoofing, match: [urpf, unicast-rpf]}
+      - {id: routing-protocol-auth, name: Routing protocol authentication, match: [routing-authentication]}
+      - {id: ip-options-source-route, name: Dropping IP options and source routing, match: [ip-source-route, ip-options]}
+      - {id: icmp-redirects-unreachables, name: Redirects/unreachables/proxy-ARP hardening, match: [ip-redirects, icmp-rate-limit]}
+      - {id: secure-boot-image, name: Image integrity and secure boot verification, match: [image-verification]}
+      - {id: cis-benchmark, name: CIS benchmark configuration audit, match: [cis-benchmark, configuration-audit]}
+      - {id: tcp-keepalives, name: TCP keepalives for management sessions, match: [tcp-keepalives]}
+      - {id: psirt, name: Tracking PSIRT advisories, match: [psirt, security-advisories]}
+  - id: network-programmability
+    name: Network programmability (NETCONF/RESTCONF/YANG)
+    source: CCNA 6.5 and 6.7 / ENCOR 6.2-6.4
+    match: [netconf, restconf, yang]
+    subtopics:
+      - {id: restconf-calls, name: RESTCONF requests with curl/Postman, match: [restconf-api, rest-api]}
+      - {id: netconf-ncclient, name: NETCONF with ncclient, match: [ncclient]}
+      - {id: yang-models, name: Reading YANG models (pyang/YANG Suite), match: [yang-model, pyang]}
+      - {id: json-xml-encoding, name: JSON and XML payloads, match: [json-encoding, network-json]}
+      - {id: mdt-telemetry, name: Model-driven telemetry subscriptions, match: [model-driven-telemetry, gnmi]}
+      - {id: enable-netconf-restconf, name: Enabling NETCONF/RESTCONF on IOS XE, match: [netconf-yang, restconf-enable]}
+      - {id: netconf-candidate, name: Candidate datastore and confirmed commit, match: [candidate-datastore, confirmed-commit]}
+      - {id: openconfig-models, name: Native vs OpenConfig vs IETF models, match: [openconfig]}
+      - {id: telemetry-tig, name: Telemetry collection with Telegraf/InfluxDB/Grafana, match: [tig-stack, telegraf]}
+      - {id: netconf-filters, name: Subtree and XPath filters, match: [subtree-filter, xpath-filter]}
+      - {id: restconf-methods, name: RESTCONF GET/PATCH/PUT/POST/DELETE semantics, match: [restconf-methods]}
+      - {id: api-authentication, name: Securing device APIs (tokens/certs/AAA), match: [api-authentication]}
+  - id: network-automation-tools
+    name: Network automation (Python/Ansible/Terraform/EEM)
+    source: CCNA 6.6 / ENCOR 6.1 and 6.6-6.7
+    match: [network-automation]
+    subtopics:
+      - {id: netmiko-python, name: Python with Netmiko, match: [netmiko]}
+      - {id: ansible-ios, name: Ansible cisco.ios modules, match: [ansible-network, cisco-ios-collection]}
+      - {id: terraform-network, name: Terraform for network devices, match: [terraform-network]}
+      - {id: eem-applets, name: EEM applets, match: [eem, embedded-event-manager]}
+      - {id: nornir-scale, name: Nornir/inventory-driven automation at scale, match: [nornir]}
+      - {id: napalm, name: NAPALM getters and config merge/replace, match: [napalm-getters]}
+      - {id: textfsm-parsing, name: Parsing show output with TextFSM/Genie, match: [textfsm, ntc-templates, genie-parser]}
+      - {id: pyats, name: pyATS learn/diff testing, match: [pyats]}
+      - {id: jinja2-config, name: Jinja2 configuration templates, match: [jinja2-templates, config-templating]}
+      - {id: netdevops-ci, name: NetDevOps CI with Batfish validation, match: [batfish, netdevops]}
+      - {id: ansible-resource-modules, name: Ansible network resource modules and states, match: [resource-modules]}
+      - {id: scrapli, name: Scrapli for fast SSH/NETCONF, match: [scrapli]}
+  - id: sdn-controllers
+    name: Controller-based networking (SD-WAN/SD-Access/Catalyst Center)
+    source: CCNA 6.1-6.4 / ENCOR 1.3-1.4
+    match: [sdn, sd-wan, sd-access]
+    subtopics:
+      - {id: sdwan-components, name: SD-WAN components and overlay, match: [vmanage, sdwan-overlay]}
+      - {id: sda-fabric, name: SD-Access fabric roles (LISP/VXLAN), match: [lisp, sda-fabric]}
+      - {id: catalyst-center-api, name: Catalyst Center intent API, match: [catalyst-center, dnac]}
+      - {id: underlay-overlay, name: Underlay vs overlay and northbound/southbound APIs, match: [underlay, overlay, northbound-api]}
+      - {id: sdwan-onboarding, name: SD-WAN edge onboarding and PnP Connect, match: [sdwan-onboarding, pnp-connect]}
+      - {id: sdwan-policies, name: Centralised policies and application-aware routing, match: [sdwan-centralized-policy, aar-policy]}
+      - {id: sdwan-troubleshoot, name: OMP and BFD tunnel troubleshooting, match: [omp, sdwan-bfd]}
+      - {id: trustsec-sgt, name: TrustSec SGTs and group-based policy, match: [security-group-tag, cts-role-based]}
+      - {id: catalyst-center-assurance, name: Catalyst Center Assurance, match: [catalyst-center-assurance]}
+      - {id: catalyst-center-swim, name: SWIM image management, match: [swim]}
+      - {id: catalyst-center-templates, name: Template Editor day-N templates, match: [template-editor, day-n-templates]}
+
+  # ============ Wireshark (User's Guide ToC, WCNA) ============
+  - id: ws-capture-setup
+    name: Capturing live data (interfaces/options/privileges)
+    source: WSUG 4
+    match: [packet-capture, capture-options]
+    subtopics:
+      - {id: ws-capture-privileges, name: Capture privileges (dumpcap group/Npcap), match: [dumpcap-permissions, npcap]}
+      - {id: ws-ring-buffer, name: Ring buffers and autostop for long captures, match: [ring-buffer, autostop]}
+      - {id: ws-remote-capture, name: Remote capture via sshdump/rpcap, match: [sshdump, rpcapd, remote-capture]}
+      - {id: ws-capture-drops, name: Avoiding dropped packets (buffers/snaplen), match: [dropped-packets, capture-buffer]}
+      - {id: ws-capture-platforms, name: Capturing on Windows pktmon and in containers, match: [pktmon, container-capture]}
+      - {id: ws-capture-interfaces, name: Choosing interfaces and loopback capture, match: [loopback-capture, capture-interfaces]}
+      - {id: ws-multi-interface, name: Capturing multiple interfaces to pcapng, match: [multi-interface-capture]}
+      - {id: ws-promiscuous, name: Promiscuous mode and its limits, match: [promiscuous-mode]}
+      - {id: ws-pcapng, name: pcap vs pcapng file formats, match: [pcapng]}
+      - {id: ws-usb-capture, name: USB capture with USBPcap/usbmon, match: [usbpcap, usb-capture]}
+      - {id: ws-packet-comments, name: Packet and file comments, match: [packet-comments]}
+      - {id: ws-linux-cooked, name: Linux any-interface cooked capture, match: [linux-cooked-capture, sll]}
+  - id: ws-capture-filters
+    name: Capture filters (BPF/pcap-filter)
+    source: WSUG 4.10 / pcap-filter(7)
+    match: [capture-filter, bpf]
+    subtopics:
+      - {id: ws-bpf-primitives, name: host/net/port primitives and combinations, match: [bpf-primitives]}
+      - {id: ws-bpf-byte-offset, name: Byte-offset and TCP flag filters, match: [byte-offset, tcp-flags]}
+      - {id: ws-bpf-vlan, name: VLAN-tagged traffic filters, match: [vlan-filter]}
+      - {id: ws-bpf-exclude-self, name: Excluding your own remote session, match: [exclude-ssh-session]}
+      - {id: ws-bpf-ipv6, name: IPv6 capture filters and pitfalls, match: [ipv6-capture-filter]}
+      - {id: ws-bpf-compile, name: Testing filters with dumpcap -d and tcpdump -d, match: [bpf-compile]}
+      - {id: ws-bpf-ether-proto, name: ether proto/arp/icmp protocol primitives, match: [ether-proto]}
+      - {id: ws-bpf-saved, name: Saved capture filters (cfilters), match: [cfilters]}
+      - {id: ws-bpf-broadcast, name: Broadcast and multicast filters, match: [broadcast-filter]}
+      - {id: ws-bpf-encapsulated, name: Filtering MPLS/GRE/VXLAN encapsulated traffic, match: [encapsulated-traffic-filter]}
+  - id: ws-display-filters
+    name: Display filters
+    source: WSUG 6.3-6.6 / wireshark-filter(4)
+    match: [display-filter]
+    subtopics:
+      - {id: ws-df-operators, name: Comparison/contains/matches operators, match: [contains, matches]}
+      - {id: ws-df-membership-slices, name: Set membership and slices, match: [set-membership, slice-operator]}
+      - {id: ws-df-functions, name: Display filter functions (len/upper/count), match: [display-filter-functions]}
+      - {id: ws-df-macros-buttons, name: Filter macros and buttons, match: [display-filter-macros, filter-buttons]}
+      - {id: ws-df-prepare-from-packet, name: Building filters from packet fields (Apply as Filter), match: [apply-as-filter]}
+      - {id: ws-df-existence, name: Field existence and != vs !== pitfalls, match: [field-existence, not-equal-operator]}
+      - {id: ws-df-reference, name: Finding field names in the display filter reference, match: [display-filter-reference]}
+      - {id: ws-df-bitwise, name: Bitwise and arithmetic operators, match: [bitwise-and, display-filter-arithmetic]}
+      - {id: ws-df-time, name: Filtering on frame.time and relative time, match: [frame-time-filter]}
+      - {id: ws-df-layer, name: Layer operator for tunnelled fields, match: [layer-operator]}
+      - {id: ws-df-analysis-flags, name: tcp.analysis and expert filter library, match: [tcp-analysis-flags]}
+      - {id: ws-df-raw, name: Raw field @ operator, match: [raw-field-operator]}
+  - id: ws-tshark-cli
+    name: TShark and dumpcap command-line analysis
+    source: WSUG Appendix D
+    match: [tshark, dumpcap]
+    subtopics:
+      - {id: tshark-fields, name: Field extraction with -T fields -e, match: [tshark-fields]}
+      - {id: tshark-statistics, name: -z statistics from the CLI, match: [tshark-statistics]}
+      - {id: tshark-two-pass, name: Two-pass analysis and read filters, match: [two-pass-analysis]}
+      - {id: tshark-json-ek, name: JSON/EK output for pipelines, match: [tshark-json, elastic-ek]}
+      - {id: tshark-decode-prefs, name: -d Decode As and -o preference overrides, match: [tshark-decode-as, tshark-preferences]}
+      - {id: tshark-export-objects, name: --export-objects from the CLI, match: [tshark-export-objects]}
+      - {id: dumpcap-service, name: Long-running dumpcap as a service, match: [dumpcap-service]}
+      - {id: tshark-pdml, name: PDML/PSML output, match: [pdml]}
+      - {id: tshark-verbose, name: -V and -O protocol detail output, match: [tshark-verbose]}
+      - {id: rawshark, name: rawshark for raw field streams, match: [rawshark]}
+      - {id: tshark-line-buffered, name: Line-buffered live pipelines, match: [line-buffered]}
+  - id: ws-file-tools
+    name: Capture file tools (editcap/mergecap/capinfos/text2pcap/reordercap)
+    source: WSUG 5 and Appendix D
+    match: [editcap, mergecap, capinfos]
+    subtopics:
+      - {id: editcap-split-trim, name: Splitting/trimming/deduplicating with editcap, match: [editcap-split, deduplicate-packets]}
+      - {id: mergecap-merge, name: Merging captures chronologically, match: [mergecap-merge]}
+      - {id: text2pcap-import, name: Importing hex dumps with text2pcap, match: [text2pcap, import-hex-dump]}
+      - {id: export-specified-packets, name: Exporting subsets and sanitising captures, match: [export-specified-packets, pcap-sanitization]}
+      - {id: reordercap-timeshift, name: Reordering and timeshifting captures, match: [reordercap, timeshift]}
+      - {id: capinfos-report, name: capinfos reports and time spans, match: [capinfos-report]}
+      - {id: editcap-truncate-convert, name: Truncating with -s and converting formats with -F, match: [editcap-truncate, file-format-conversion]}
+      - {id: pcap-repair, name: Repairing corrupted captures, match: [pcapfix, corrupted-capture]}
+      - {id: large-captures, name: Working with multi-GB captures, match: [large-capture-files]}
+      - {id: capture-file-properties, name: Capture File Properties dialog, match: [capture-file-properties]}
+  - id: ws-customization
+    name: Customising Wireshark (profiles/columns/coloring rules/preferences)
+    source: WSUG 11
+    match: [wireshark-profiles, coloring-rules]
+    subtopics:
+      - {id: ws-profiles, name: Configuration profiles, match: [configuration-profile]}
+      - {id: ws-custom-columns, name: Custom columns, match: [custom-columns]}
+      - {id: ws-time-display, name: Time display formats and delta columns, match: [time-display-format, delta-time]}
+      - {id: ws-name-resolution, name: Name resolution settings, match: [name-resolution]}
+      - {id: ws-decode-as, name: Decode As for non-standard ports, match: [decode-as]}
+      - {id: ws-custom-coloring, name: Writing custom coloring rules, match: [custom-coloring-rules]}
+      - {id: ws-protocol-prefs, name: Protocol preferences, match: [protocol-preferences]}
+      - {id: ws-user-dlt, name: User DLT table for custom link types, match: [user-dlt]}
+      - {id: ws-geoip, name: MaxMind GeoIP databases, match: [geoip, maxmind]}
+      - {id: ws-enabled-protocols, name: Enabled protocols and heuristic toggles, match: [enabled-protocols]}
+  - id: ws-streams-objects
+    name: Follow Stream and Export Objects
+    source: WSUG 6.10 and 5.7
+    match: [follow-stream, export-objects]
+    subtopics:
+      - {id: ws-follow-tcp-http, name: Follow TCP/HTTP/TLS stream, match: [follow-tcp-stream]}
+      - {id: ws-export-http-smb, name: Export HTTP/SMB/TFTP objects, match: [export-http-objects]}
+      - {id: ws-reassembly, name: Packet reassembly settings, match: [packet-reassembly, tcp-reassembly]}
+      - {id: ws-carve-files, name: Carving files from raw streams, match: [file-carving]}
+      - {id: ws-follow-udp-http2, name: Follow UDP/QUIC/HTTP2 streams, match: [follow-udp-stream, follow-http2-stream]}
+      - {id: ws-stream-index, name: Navigating with tcp.stream and udp.stream indexes, match: [tcp-stream-index]}
+      - {id: ws-export-tls-keys, name: Export TLS session keys, match: [export-tls-session-keys]}
+      - {id: ws-export-pdus, name: Export PDUs to file, match: [export-pdus]}
+      - {id: ws-show-data-as, name: Saving stream data as raw/C arrays/YAML, match: [show-data-as]}
+      - {id: ws-export-imf, name: Export IMF/DICOM/FTP-DATA objects, match: [export-imf-objects]}
+  - id: ws-statistics
+    name: Statistics menu (conversations/endpoints/protocol hierarchy/I/O graphs)
+    source: WSUG 8
+    match: [wireshark-statistics, protocol-hierarchy]
+    subtopics:
+      - {id: ws-conversations-endpoints, name: Conversations and endpoints, match: [conversations, endpoints]}
+      - {id: ws-io-graphs, name: I/O graphs, match: [io-graph]}
+      - {id: ws-flow-graph, name: Flow graph sequence diagrams, match: [flow-graph]}
+      - {id: ws-service-response-time, name: Service response time, match: [service-response-time]}
+      - {id: ws-expert-info, name: Expert information, match: [expert-info]}
+      - {id: ws-packet-lengths, name: Packet lengths statistics, match: [packet-lengths]}
+      - {id: ws-http-stats, name: HTTP packet counter/requests/load distribution, match: [http-statistics]}
+      - {id: ws-dns-stats, name: DNS statistics, match: [dns-statistics]}
+      - {id: ws-resolved-addresses, name: Resolved addresses, match: [resolved-addresses]}
+      - {id: ws-ip-stats, name: IPv4/IPv6 statistics, match: [ip-statistics]}
+      - {id: ws-dhcp-stats, name: DHCP/BOOTP statistics, match: [dhcp-statistics]}
+  - id: ws-tcp-analysis
+    name: TCP analysis (WCNA)
+    source: WSUG 7.5 / WCNA TCP domain
+    match: [tcp-analysis]
+    subtopics:
+      - {id: ws-tcp-retrans, name: Retransmissions/dup ACKs/fast retransmit, match: [retransmission, duplicate-ack]}
+      - {id: ws-tcp-window, name: Zero window and window scaling, match: [zero-window, window-scaling]}
+      - {id: ws-tcp-handshake, name: Handshake/MSS/options analysis, match: [tcp-handshake, mss]}
+      - {id: ws-tcp-stream-graphs, name: TCP stream graphs (Stevens/tcptrace/throughput/RTT), match: [tcp-stream-graph, tcptrace]}
+      - {id: ws-tcp-resets, name: Diagnosing resets and connection refusals, match: [tcp-reset, rst]}
+      - {id: ws-tcp-out-of-order, name: Out-of-order vs spurious retransmission, match: [out-of-order, spurious-retransmission]}
+      - {id: ws-tcp-keepalive, name: TCP keep-alives, match: [tcp-keepalive]}
+      - {id: ws-tcp-sack, name: SACK analysis, match: [sack]}
+      - {id: ws-tcp-not-captured, name: Previous segment not captured and ACKed unseen segment, match: [previous-segment-not-captured, acked-unseen-segment]}
+      - {id: ws-tcp-rtt, name: iRTT and ACK RTT, match: [irtt, ack-rtt]}
+      - {id: ws-tcp-bytes-in-flight, name: Bytes in flight and congestion window inference, match: [bytes-in-flight]}
+      - {id: ws-tcp-prefs, name: TCP protocol preferences, match: [relative-sequence-numbers]}
+      - {id: ws-tcp-teardown, name: FIN teardown and TIME_WAIT, match: [tcp-fin, connection-teardown]}
+  - id: ws-tls-decryption
+    name: TLS analysis and decryption
+    source: WSUG 7.6 / WCNA TLS
+    match: [tls, tls-decryption]
+    subtopics:
+      - {id: ws-sslkeylogfile, name: Decrypting with SSLKEYLOGFILE, match: [sslkeylogfile]}
+      - {id: ws-tls-handshake, name: Handshake/certificate/alert analysis, match: [tls-handshake, tls-alert]}
+      - {id: ws-quic, name: QUIC and HTTP/3 analysis, match: [quic, http3]}
+      - {id: ws-embed-keys, name: Embedding secrets with editcap --inject-secrets, match: [inject-secrets, dsb]}
+      - {id: ws-rsa-key, name: RSA private key decryption, match: [rsa-key-decryption]}
+      - {id: ws-tls-fingerprint, name: SNI and JA3/JA4 fingerprints, match: [tls-fingerprinting]}
+      - {id: ws-tls-version-cipher, name: Negotiated TLS version and cipher suite, match: [tls-version, cipher-suite]}
+      - {id: ws-tls-cert-chain, name: Certificate chain problems in captures, match: [certificate-chain]}
+      - {id: ws-http2, name: HTTP/2 analysis, match: [http2]}
+      - {id: ws-app-keylog, name: Key logging from Java/curl/Python apps, match: [application-keylog]}
+      - {id: ws-ech, name: Encrypted Client Hello, match: [encrypted-client-hello]}
+  - id: ws-protocol-analysis
+    name: Common protocol analysis (ARP/ICMP/DNS/DHCP/HTTP)
+    source: WCNA protocol domains
+    match: [protocol-analysis]
+    subtopics:
+      - {id: ws-dns-analysis, name: DNS response time and errors, match: [dns-analysis, dns-time]}
+      - {id: ws-dhcp-analysis, name: DHCP DORA analysis, match: [dhcp-analysis, dora]}
+      - {id: ws-arp-analysis, name: ARP and duplicate IP analysis, match: [arp-analysis, duplicate-ip]}
+      - {id: ws-http-analysis, name: HTTP response time and status analysis, match: [http-analysis, http-time]}
+      - {id: ws-icmp-analysis, name: ICMP and PMTUD analysis, match: [icmp-analysis, pmtud]}
+      - {id: ws-smb-analysis, name: SMB2/3 analysis, match: [smb-analysis, smb2]}
+      - {id: ws-ntp-analysis, name: NTP analysis, match: [ntp-analysis]}
+      - {id: ws-kerberos-ldap, name: Kerberos and LDAP analysis, match: [kerberos-analysis, ldap-analysis]}
+      - {id: ws-ftp-analysis, name: FTP control and data analysis, match: [ftp-analysis]}
+      - {id: ws-smtp-analysis, name: SMTP analysis, match: [smtp-analysis]}
+      - {id: ws-routing-analysis, name: OSPF and BGP packet analysis, match: [ospf-analysis, bgp-analysis]}
+      - {id: ws-stp-analysis, name: STP/CDP/LLDP frame analysis, match: [stp-analysis]}
+      - {id: ws-icmpv6-analysis, name: ICMPv6 ND and RA analysis, match: [icmpv6-analysis]}
+      - {id: ws-radius-analysis, name: RADIUS analysis, match: [radius-analysis]}
+  - id: ws-voip
+    name: Telephony and VoIP analysis
+    source: WSUG 9
+    match: [voip, sip, rtp]
+    subtopics:
+      - {id: ws-sip-flows, name: SIP call flows, match: [sip-flows, voip-calls]}
+      - {id: ws-rtp-analysis, name: RTP stream analysis (jitter/loss), match: [rtp-stream-analysis, jitter]}
+      - {id: ws-rtp-player, name: RTP player audio playback, match: [rtp-player]}
+      - {id: ws-voip-qos-marking, name: Checking DSCP EF on voice packets, match: [voice-dscp]}
+      - {id: ws-sip-response-codes, name: SIP response code diagnosis, match: [sip-response-codes]}
+      - {id: ws-sdp-codecs, name: SDP codec negotiation, match: [codec-negotiation]}
+      - {id: ws-rtcp, name: RTCP reports, match: [rtcp]}
+      - {id: ws-srtp, name: SRTP decryption, match: [srtp]}
+      - {id: ws-mos, name: MOS and R-factor estimation, match: [mos]}
+      - {id: ws-dtmf, name: RFC 4733 DTMF events, match: [dtmf, rfc4733]}
+  - id: ws-wireless
+    name: WLAN capture and analysis
+    source: WSUG 10
+    match: [wlan-capture, 802-11]
+    subtopics:
+      - {id: ws-monitor-mode, name: Monitor mode and radiotap, match: [monitor-mode, radiotap]}
+      - {id: ws-wpa-decrypt, name: Decrypting WPA2-PSK traffic, match: [wpa-decryption, eapol]}
+      - {id: ws-80211-roaming, name: Association/auth/roaming analysis, match: [802-11-association, wlan-roaming-analysis]}
+      - {id: ws-80211-retries, name: Retries/data rates/airtime, match: [wlan-retries, data-rate]}
+      - {id: ws-80211-channels, name: Channel selection and hopping with airmon-ng, match: [airmon-ng, channel-hopping]}
+      - {id: ws-80211-frame-types, name: Management/control/data frame filters, match: [wlan-frame-types]}
+      - {id: ws-80211-deauth, name: Deauth/disassoc reason codes, match: [reason-codes]}
+      - {id: ws-macos-sniffer, name: macOS Wireless Diagnostics sniffer, match: [macos-wireless-sniffer]}
+      - {id: ws-wpa3-sae, name: WPA3 SAE handshake analysis, match: [sae]}
+      - {id: ws-eap-analysis, name: EAP/802.1X wireless authentication analysis, match: [eap-analysis]}
+      - {id: ws-ble, name: Bluetooth LE capture, match: [bluetooth-le]}
+      - {id: ws-wlan-stats, name: Wireless LAN traffic statistics, match: [wlan-traffic-statistics]}
+  - id: ws-security-forensics
+    name: Network forensics and security analysis
+    source: WCNA network forensics
+    match: [network-forensics]
+    subtopics:
+      - {id: ws-scan-detection, name: Detecting port scans, match: [port-scan-detection]}
+      - {id: ws-arp-poisoning, name: Detecting ARP poisoning, match: [arp-poisoning-detection]}
+      - {id: ws-c2-beacon, name: Spotting beaconing/C2 and DNS tunnelling, match: [beaconing, c2-traffic]}
+      - {id: ws-ioc-extract, name: Extracting IOCs and credentials, match: [ioc-extraction, cleartext-credentials]}
+      - {id: ws-malware-triage, name: Malware traffic triage, match: [malware-traffic-analysis]}
+      - {id: ws-exfil, name: Data exfiltration detection, match: [data-exfiltration]}
+      - {id: ws-zeek-suricata, name: Running Zeek and Suricata over pcaps, match: [suricata, zeek-pcap]}
+      - {id: ws-chain-of-custody, name: Evidence handling and hashing of captures, match: [chain-of-custody, pcap-evidence]}
+      - {id: ws-cert-anomalies, name: Suspicious certificates, match: [certificate-anomalies]}
+      - {id: ws-lateral-movement, name: SMB/RPC lateral movement, match: [smb-lateral-movement]}
+      - {id: ws-ntlmssp, name: NTLMSSP authentication analysis, match: [ntlmssp]}
+  - id: ws-extending
+    name: Extending Wireshark (Lua dissectors/extcap/plugins)
+    source: WSUG 11.10 / Developer's Guide
+    match: [lua-dissector, wireshark-lua]
+    subtopics:
+      - {id: ws-lua-dissector, name: Writing a Lua dissector, match: [lua-dissector-proto]}
+      - {id: ws-lua-postdissector, name: Lua post-dissectors and taps, match: [post-dissector, lua-tap]}
+      - {id: ws-heuristic, name: Heuristic dissectors, match: [heuristic-dissector]}
+      - {id: ws-extcap, name: extcap interfaces, match: [extcap]}
+      - {id: ws-lua-protofield, name: ProtoField types and preferences in Lua, match: [protofield]}
+      - {id: ws-dissector-table, name: Registering in dissector tables, match: [dissector-table]}
+      - {id: ws-lua-file-reader, name: Lua file readers, match: [lua-file-reader]}
+      - {id: ws-c-plugin, name: Building C plugins, match: [wireshark-plugin-c]}
+      - {id: ws-lua-console, name: Debugging Lua with the console and reload, match: [lua-console]}
+      - {id: ws-tshark-lua, name: Running Lua scripts with tshark -X, match: [tshark-lua]}
+  - id: ws-performance-methodology
+    name: Latency and performance analysis methodology
+    source: WCNA performance / WSUG 6.12
+    match: [latency-analysis, performance-analysis]
+    subtopics:
+      - {id: ws-capture-location, name: Choosing capture points (tap/SPAN/host), match: [capture-point, network-tap]}
+      - {id: ws-network-vs-app, name: Network vs server vs client delay, match: [application-delay, server-response-time]}
+      - {id: ws-packet-loss-locate, name: Locating packet loss with dual captures, match: [packet-loss, dual-capture]}
+      - {id: ws-time-reference, name: Time references and marking, match: [time-reference]}
+      - {id: ws-traffic-baseline, name: Baselining normal traffic, match: [traffic-baseline]}
+      - {id: ws-path-latency, name: Path latency vs processing delay, match: [path-latency]}
+      - {id: ws-throughput-bottleneck, name: Finding the throughput bottleneck, match: [throughput-bottleneck]}
+      - {id: ws-chatty-apps, name: Chatty applications and turn counts, match: [chatty-application]}
+      - {id: ws-connection-setup, name: Connection setup time, match: [connection-setup-time]}
+      - {id: ws-timestamp-accuracy, name: Timestamp accuracy and hardware timestamping, match: [timestamp-accuracy, hardware-timestamping]}
+      - {id: ws-high-speed-capture, name: Capturing at 10G and above, match: [high-speed-capture]}
+
+  # ============ Network design & operations (Network+ N10-009, CCNA 1.x, ENCOR 1.x) ============
+  - id: osi-encapsulation
+    name: OSI/TCP-IP models and encapsulation
+    source: Network+ 1.1 / CCNA 1.5
+    match: [osi-model, encapsulation]
+    subtopics:
+      - {id: osi-layer-troubleshoot, name: Layered troubleshooting by OSI layer, match: [layered-troubleshooting]}
+      - {id: mtu-mss-fragmentation, name: MTU/MSS/fragmentation and PMTUD black holes, match: [mtu, pmtud-black-hole]}
+      - {id: tcp-vs-udp, name: TCP vs UDP behaviour, match: [tcp-vs-udp]}
+      - {id: jumbo-frames, name: Jumbo frames end to end, match: [jumbo-frames]}
+      - {id: osi-ethernet-frame, name: Ethernet II and 802.1Q frame structure, match: [ethernet-frame]}
+      - {id: osi-ipv4-header, name: IPv4 header fields, match: [ipv4-header]}
+      - {id: osi-ipv6-header, name: IPv6 header and extension headers, match: [ipv6-extension-headers]}
+      - {id: osi-tcp-header, name: TCP header and flags, match: [tcp-header]}
+      - {id: osi-arp, name: ARP resolution and gratuitous ARP, match: [arp-process]}
+      - {id: osi-encap-overhead, name: Encapsulation overhead calculation, match: [encapsulation-overhead]}
+      - {id: osi-cast-types, name: Unicast/broadcast/multicast/anycast and broadcast domains, match: [broadcast-domain]}
+  - id: ports-protocols
+    name: Ports/protocols/services reference
+    source: Network+ 1.4
+    match: [well-known-ports, port-numbers]
+    subtopics:
+      - {id: ip-protocol-numbers, name: IP protocol types (ICMP/TCP/UDP/GRE/ESP/AH), match: [ip-protocol-numbers]}
+      - {id: ephemeral-ports, name: Ephemeral port ranges and exhaustion, match: [ephemeral-ports, port-exhaustion]}
+      - {id: firewall-port-requirements, name: Documenting application port requirements, match: [port-requirements, flow-matrix]}
+      - {id: secure-protocol-alternatives, name: Secure protocol alternatives, match: [secure-protocols]}
+      - {id: iana-registry, name: IANA service registry and etc/services, match: [iana-registry, etc-services]}
+      - {id: ad-ports, name: Active Directory firewall ports, match: [active-directory-ports]}
+      - {id: rtp-ports, name: SIP and RTP port ranges, match: [rtp-port-range]}
+      - {id: email-ports, name: Email ports (SMTP/submission/IMAPS), match: [email-ports]}
+      - {id: port-reachability, name: Testing port reachability (Test-NetConnection/nc), match: [test-netconnection, netcat]}
+  - id: ipv4-addressing
+    name: IPv4 addressing and subnetting
+    source: CCNA 1.6-1.7 / Network+ 1.7
+    match: [ipv4, subnetting]
+    subtopics:
+      - {id: vlsm, name: VLSM allocation, match: [vlsm]}
+      - {id: route-summarization, name: Summarisation/supernetting, match: [route-summarisation, supernetting]}
+      - {id: private-cgnat-ranges, name: RFC 1918/RFC 6598/APIPA ranges, match: [rfc1918, cgnat, apipa]}
+      - {id: slash31-p2p, name: /31 and /30 point-to-point links, match: [slash-31]}
+      - {id: client-ip-verify, name: Verifying client IP parameters on Windows/macOS/Linux, match: [client-ip-parameters, ipconfig]}
+      - {id: special-purpose-addresses, name: Special-purpose IPv4 ranges, match: [special-purpose-addresses]}
+      - {id: binary-conversion, name: Binary and mask arithmetic, match: [binary-conversion]}
+      - {id: ipcalc, name: Subnet calculators (ipcalc/sipcalc/Python ipaddress), match: [ipcalc]}
+      - {id: overlapping-subnets, name: Detecting overlapping subnets, match: [overlapping-subnets]}
+      - {id: secondary-addresses, name: Secondary addresses, match: [secondary-address]}
+      - {id: directed-broadcast, name: Directed broadcast and Wake-on-LAN, match: [directed-broadcast, wake-on-lan]}
+      - {id: renumbering, name: Renumbering a network, match: [network-renumbering]}
+  - id: ipv6-design
+    name: IPv6 addressing plan and transition
+    source: CCNA 1.8-1.9 / RFC 6177 / RFC 4193
+    match: [ipv6-addressing, ipv6]
+    subtopics:
+      - {id: ipv6-plan-nibble, name: Nibble-aligned prefix plan (/48 /56 /64), match: [ipv6-address-plan, nibble-boundary]}
+      - {id: ipv6-ula-gua, name: ULA vs GUA, match: [ula, gua]}
+      - {id: ipv6-prefix-delegation, name: Prefix delegation, match: [prefix-delegation]}
+      - {id: ipv6-dual-stack, name: Dual-stack rollout, match: [dual-stack]}
+      - {id: ipv6-nat64, name: NAT64/DNS64 and 464XLAT, match: [nat64, dns64, 464xlat]}
+      - {id: ipv6-privacy, name: Temporary/privacy addresses, match: [privacy-extensions, temporary-address]}
+      - {id: ipv6-multihoming, name: IPv6 multihoming and NPTv6, match: [nptv6, ipv6-multihoming]}
+      - {id: ipv6-security, name: IPv6 security design, match: [ipv6-security]}
+      - {id: ipv6-only, name: IPv6-only networks and option 108, match: [ipv6-only, option-108]}
+      - {id: ipv6-address-types, name: IPv6 address types and scopes, match: [ipv6-address-types, solicited-node-multicast]}
+      - {id: ipv6-6rd-dslite, name: 6rd and DS-Lite transition, match: [6rd, ds-lite]}
+  - id: topology-architecture
+    name: Topology architectures (2-tier/3-tier/spine-leaf/WAN/SOHO)
+    source: CCNA 1.2 / ENCOR 1.1 / Network+ 1.6
+    match: [network-topology, campus-design]
+    subtopics:
+      - {id: three-tier, name: Three-tier core/distribution/access, match: [three-tier, hierarchical-design]}
+      - {id: collapsed-core, name: Collapsed core, match: [collapsed-core, two-tier]}
+      - {id: spine-leaf, name: Spine-leaf, match: [spine-leaf]}
+      - {id: soho-branch, name: SOHO and small branch design, match: [soho, small-branch]}
+      - {id: oversubscription, name: Oversubscription ratios, match: [oversubscription]}
+      - {id: star-mesh, name: Star/mesh/hybrid topologies, match: [mesh-topology, star-topology]}
+      - {id: access-layer-design, name: Access layer port and uplink sizing, match: [access-layer-design]}
+      - {id: routed-access, name: Routed access layer, match: [routed-access]}
+      - {id: mdf-idf, name: MDF and IDF layout, match: [mdf, idf]}
+      - {id: virtual-networking, name: Virtual switching and NFV, match: [vswitch, nfv]}
+      - {id: sase, name: SASE edge architecture, match: [sase]}
+  - id: physical-media
+    name: Transmission media/transceivers/PoE
+    source: CCNA 1.3 / Network+ 1.5 and 2.4
+    match: [cabling, transceivers]
+    subtopics:
+      - {id: copper-categories, name: Copper categories and distance limits, match: [cat6a, twisted-pair]}
+      - {id: fiber-smf-mmf, name: Fibre SMF vs MMF and connectors, match: [fiber-optic, single-mode, multimode]}
+      - {id: sfp-compatibility, name: SFP/QSFP selection and compatibility, match: [sfp, qsfp]}
+      - {id: poe-budget, name: PoE standards and power budgets, match: [poe, poe-budget]}
+      - {id: structured-cabling, name: Structured cabling and rack installation, match: [structured-cabling, patch-panel]}
+      - {id: dac-aoc, name: DAC and AOC cables, match: [dac, aoc]}
+      - {id: breakout-cables, name: Breakout cables, match: [breakout-cable]}
+      - {id: mpo-polarity, name: MPO trunks and fibre polarity, match: [mpo, fiber-polarity]}
+      - {id: wdm-bidi, name: BiDi and CWDM/DWDM optics, match: [cwdm, dwdm, bidi-optics]}
+      - {id: media-converters, name: Media converters, match: [media-converter]}
+      - {id: docsis, name: Coax and DOCSIS, match: [docsis]}
+      - {id: rack-airflow, name: Rack power and airflow, match: [hot-aisle, rack-airflow]}
+      - {id: cable-labeling, name: TIA-606 labelling, match: [tia-606, cable-labeling]}
+  - id: wireless-design
+    name: Wireless network design and site survey
+    source: Network+ 2.3 / ENCOR 3.3.a
+    match: [wireless-design, wifi-design]
+    subtopics:
+      - {id: wifi-channel-plan, name: Channel planning 2.4/5/6 GHz and widths, match: [channel-planning, channel-width]}
+      - {id: wifi-site-survey, name: Predictive and validation site surveys, match: [site-survey]}
+      - {id: wifi-rssi-snr, name: RSSI/SNR coverage targets, match: [rssi, snr]}
+      - {id: wifi-fast-roaming, name: 802.11r/k/v roaming, match: [802-11r, fast-roaming]}
+      - {id: wifi-high-density, name: High-density capacity design, match: [high-density-wifi, airtime]}
+      - {id: wifi-wpa3, name: WPA3/OWE/enterprise security choices, match: [wpa3, wpa2-enterprise, owe]}
+      - {id: wifi-6e-7, name: Wi-Fi 6E and Wi-Fi 7 design, match: [multi-link-operation]}
+      - {id: antenna-selection, name: Antenna selection and mounting, match: [antenna-selection]}
+      - {id: wireless-ptp, name: Outdoor point-to-point bridges, match: [point-to-point-wireless]}
+      - {id: basic-rates, name: Minimum basic data rates, match: [basic-rates, mandatory-data-rates]}
+      - {id: ssid-overhead, name: SSID count and beacon overhead, match: [ssid-overhead]}
+      - {id: ipsk-mpsk, name: Identity PSK for IoT, match: [ipsk, mpsk]}
+      - {id: dfs-regulatory, name: DFS and regulatory domains, match: [dfs, regulatory-domain]}
+  - id: wan-design
+    name: WAN and internet edge design
+    source: Network+ 1.6 / ENCOR 1.3
+    match: [wan-design, internet-edge]
+    subtopics:
+      - {id: wan-mpls-sdwan-vpn, name: MPLS vs SD-WAN vs internet VPN, match: [mpls, wan-selection]}
+      - {id: dual-isp, name: Dual ISP failover, match: [dual-isp]}
+      - {id: bgp-multihoming-design, name: BGP multihoming with provider-independent space, match: [bgp-multihoming]}
+      - {id: wan-sla, name: Circuit SLAs and handoffs, match: [circuit-sla]}
+      - {id: cellular-wan, name: LTE/5G backup, match: [lte-backup, cellular-wan]}
+      - {id: metro-ethernet, name: Metro Ethernet E-Line/E-LAN, match: [metro-ethernet, e-line]}
+      - {id: dia-broadband, name: Dedicated internet access vs broadband, match: [dedicated-internet-access]}
+      - {id: wan-sizing, name: WAN bandwidth sizing, match: [wan-sizing, bandwidth-planning]}
+      - {id: wan-optimization, name: WAN optimisation, match: [wan-optimization]}
+      - {id: local-breakout, name: Local internet breakout vs backhaul, match: [local-internet-breakout, backhaul]}
+      - {id: leo-satellite, name: LEO satellite links, match: [leo-satellite]}
+  - id: cloud-networking
+    name: Cloud networking concepts
+    source: Network+ 1.3
+    match: [cloud-networking, vpc]
+    subtopics:
+      - {id: cloud-sg-nacl, name: Security groups vs network ACLs, match: [security-group, network-acl]}
+      - {id: cloud-gateways, name: Internet/NAT gateways, match: [nat-gateway, internet-gateway]}
+      - {id: cloud-hybrid-connect, name: Site-to-site VPN and Direct Connect/ExpressRoute, match: [direct-connect, expressroute]}
+      - {id: cloud-transit-hub, name: Transit gateway hub-and-spoke, match: [transit-gateway, hub-and-spoke]}
+      - {id: vpc-cidr-planning, name: VPC CIDR planning, match: [vpc-cidr-planning]}
+      - {id: vpc-peering-privatelink, name: VPC peering vs PrivateLink, match: [privatelink, transitive-peering]}
+      - {id: cloud-load-balancers, name: Cloud load balancers, match: [cloud-load-balancer]}
+      - {id: cloud-private-dns, name: Private DNS zones and resolver endpoints, match: [route-53-resolver, private-dns-zone]}
+      - {id: vpc-flow-logs, name: VPC flow logs, match: [vpc-flow-logs]}
+      - {id: egress-costs, name: Data transfer and egress costs, match: [egress-costs]}
+      - {id: cloud-nva, name: Network virtual appliances in the cloud, match: [nva, network-virtual-appliance]}
+      - {id: multicloud, name: Multicloud interconnect, match: [multicloud-networking]}
+  - id: dc-fabric
+    name: Data centre fabric (VXLAN EVPN)
+    source: ENCOR 2.3 / Network+ 1.8
+    match: [vxlan, evpn]
+    subtopics:
+      - {id: vxlan-vtep, name: VTEPs/VNIs and the underlay, match: [vtep, vni]}
+      - {id: evpn-route-types, name: EVPN route types, match: [evpn-route-types]}
+      - {id: anycast-gateway, name: Distributed anycast gateway, match: [anycast-gateway]}
+      - {id: ecmp-design, name: ECMP and underlay routing choice, match: [ecmp]}
+      - {id: evpn-multihoming, name: EVPN ESI multihoming, match: [esi, evpn-multihoming]}
+      - {id: bgp-underlay, name: eBGP underlay per RFC 7938, match: [rfc7938, bgp-underlay]}
+      - {id: vxlan-mtu, name: VXLAN MTU planning, match: [vxlan-mtu]}
+      - {id: bum-replication, name: BUM handling with ingress replication vs multicast, match: [ingress-replication, bum-traffic]}
+      - {id: symmetric-irb, name: Symmetric vs asymmetric IRB and L3VNI, match: [symmetric-irb, l3vni]}
+      - {id: border-leaf, name: Border leaf external connectivity, match: [border-leaf]}
+      - {id: arp-suppression, name: ARP suppression, match: [arp-suppression]}
+  - id: high-availability
+    name: Redundancy and high availability
+    source: ENCOR 1.2 / Network+ 3.3
+    match: [high-availability, redundancy]
+    subtopics:
+      - {id: sso-nsf, name: SSO/NSF and stateful switchover, match: [sso, nsf]}
+      - {id: stacking-mlag, name: Stacking vs MLAG/vPC, match: [stackwise, mlag]}
+      - {id: bfd, name: BFD fast failure detection, match: [bfd]}
+      - {id: failover-testing, name: Failover testing, match: [failover-testing]}
+      - {id: availability-math, name: Availability nines and MTBF/MTTR, match: [mtbf, mttr, availability-nines]}
+      - {id: dr-site, name: Network DR sites and RPO/RTO, match: [rpo, rto, disaster-recovery-site]}
+      - {id: graceful-restart, name: Graceful restart, match: [graceful-restart]}
+      - {id: issu, name: In-service software upgrade, match: [issu]}
+      - {id: redundant-power, name: Redundant power and UPS, match: [redundant-power, ups]}
+      - {id: path-diversity, name: Physical path diversity, match: [path-diversity]}
+  - id: segmentation-security-zones
+    name: Segmentation and security zones
+    source: Network+ 4.1 and 4.3
+    match: [network-segmentation, security-zones]
+    subtopics:
+      - {id: dmz-design, name: DMZ design, match: [dmz]}
+      - {id: zero-trust, name: Zero trust architecture, match: [zero-trust]}
+      - {id: guest-iot-isolation, name: Guest and IoT isolation, match: [guest-network, iot-segmentation]}
+      - {id: oob-management, name: Out-of-band management network, match: [out-of-band, oob]}
+      - {id: nac, name: Network access control posture, match: [nac, network-access-control]}
+      - {id: microsegmentation, name: Microsegmentation, match: [microsegmentation]}
+      - {id: pci-segmentation, name: PCI DSS scope reduction, match: [pci-scope, cde]}
+      - {id: ot-purdue, name: OT segmentation with the Purdue model, match: [purdue-model, ot-segmentation]}
+      - {id: east-west, name: East-west traffic filtering, match: [east-west-filtering]}
+      - {id: honeypot, name: Deception and honeypots, match: [honeypot]}
+      - {id: byod, name: BYOD onboarding and segmentation, match: [byod]}
+  - id: firewall-design
+    name: Firewall policy design
+    source: Network+ 1.2 and 4.3
+    match: [firewall, firewall-rules]
+    subtopics:
+      - {id: stateful-stateless, name: Stateful vs stateless filtering, match: [stateful-firewall]}
+      - {id: rulebase-design, name: Rule base design and least privilege, match: [rulebase-design, least-privilege-rules]}
+      - {id: rule-review, name: Rule review and cleanup, match: [firewall-rule-review, shadowed-rules]}
+      - {id: ngfw-features, name: NGFW app-ID/IPS/URL filtering, match: [ngfw, ips]}
+      - {id: firewall-ha, name: Firewall HA pairs, match: [firewall-ha, active-passive-firewall]}
+      - {id: firewall-nat, name: Firewall NAT rule ordering, match: [firewall-nat]}
+      - {id: firewall-logging, name: Firewall logging, match: [firewall-logging]}
+      - {id: tls-inspection, name: TLS inspection, match: [ssl-inspection, tls-inspection]}
+      - {id: egress-filtering, name: Egress filtering, match: [egress-filtering]}
+      - {id: host-firewalls, name: Host firewalls (nftables/Windows Firewall), match: [nftables, host-firewall]}
+      - {id: rule-testing, name: Testing rules with packet-tracer, match: [asa-packet-tracer, rule-testing]}
+      - {id: waf, name: Web application firewalls, match: [waf]}
+  - id: network-attacks
+    name: Network attack types and mitigations
+    source: Network+ 4.2 / CCNA 5.1
+    match: [network-attacks]
+    subtopics:
+      - {id: ddos, name: DDoS mitigation, match: [ddos]}
+      - {id: mac-flooding, name: MAC flooding, match: [mac-flooding]}
+      - {id: arp-spoofing, name: ARP spoofing/on-path attacks, match: [arp-spoofing, on-path-attack]}
+      - {id: rogue-dhcp, name: Rogue DHCP servers, match: [rogue-dhcp]}
+      - {id: rogue-ap, name: Rogue AP and evil twin, match: [rogue-ap, evil-twin]}
+      - {id: vlan-hopping, name: VLAN hopping, match: [vlan-hopping]}
+      - {id: dns-poisoning, name: DNS cache poisoning, match: [dns-poisoning]}
+      - {id: syn-flood, name: SYN floods, match: [syn-flood]}
+      - {id: stp-attack, name: STP manipulation attacks, match: [stp-attack]}
+      - {id: dhcp-starvation, name: DHCP starvation, match: [dhcp-starvation]}
+      - {id: deauth-attack, name: Wireless deauthentication attacks, match: [deauth-attack]}
+      - {id: ip-spoofing, name: IP spoofing and BCP 38, match: [bcp38, ip-spoofing]}
+      - {id: bgp-hijacking, name: BGP hijacking and route leaks, match: [bgp-hijacking]}
+  - id: documentation-processes
+    name: Network documentation and organisational processes
+    source: Network+ 3.1
+    match: [network-documentation]
+    subtopics:
+      - {id: diagrams, name: Physical and logical diagrams, match: [network-diagram, logical-diagram]}
+      - {id: change-management, name: Change management for network changes, match: [change-management]}
+      - {id: config-baselines, name: Golden configs and config backup, match: [golden-config, config-backup, oxidized]}
+      - {id: source-of-truth, name: Source of truth/IPAM/asset inventory, match: [source-of-truth, netbox]}
+      - {id: lifecycle-eol, name: Hardware lifecycle EoL/EoS tracking, match: [end-of-life, lifecycle-management]}
+      - {id: runbooks, name: Runbooks and SOPs, match: [runbook, sop]}
+      - {id: cable-schedules, name: Cable schedules and port maps, match: [cable-schedule, port-map]}
+      - {id: rack-elevation, name: Rack elevations, match: [rack-elevation]}
+      - {id: method-of-procedure, name: Method of procedure for maintenance windows, match: [method-of-procedure, mop]}
+      - {id: capacity-planning, name: Capacity planning, match: [network-capacity-planning]}
+      - {id: naming-conventions, name: Device naming conventions, match: [naming-convention]}
+      - {id: config-compliance, name: Configuration compliance checks, match: [config-compliance]}
+  - id: monitoring
+    name: Network monitoring
+    source: Network+ 3.2
+    match: [network-monitoring]
+    subtopics:
+      - {id: baselines, name: Performance baselines, match: [baseline, network-baseline]}
+      - {id: monitoring-stack, name: Polling stacks (LibreNMS/Zabbix/Prometheus snmp_exporter), match: [librenms, snmp-exporter]}
+      - {id: alert-thresholds, name: Alerting thresholds, match: [alert-thresholds, interface-utilization]}
+      - {id: log-aggregation, name: Log aggregation and SIEM, match: [log-aggregation, siem]}
+      - {id: synthetic-monitoring, name: Synthetic monitoring, match: [synthetic-monitoring]}
+      - {id: smokeping, name: Latency monitoring with SmokePing, match: [smokeping]}
+      - {id: network-dashboards, name: Network dashboards, match: [network-dashboard]}
+      - {id: environmental-monitoring, name: Environmental monitoring, match: [environmental-monitoring]}
+      - {id: alert-fatigue, name: Alert routing and noise reduction, match: [alert-fatigue]}
+      - {id: packet-brokers, name: Network packet brokers, match: [packet-broker]}
+      - {id: 95th-percentile, name: 95th percentile utilisation and billing, match: [95th-percentile]}
+  - id: access-management-methods
+    name: Network access and management methods
+    source: Network+ 3.5
+    match: [remote-management]
+    subtopics:
+      - {id: console-servers, name: Console servers and serial access, match: [console-server, serial-console]}
+      - {id: jump-box, name: Jump boxes/bastions, match: [jump-box, bastion]}
+      - {id: remote-access-vpn, name: Client remote access VPN, match: [remote-access-vpn, wireguard]}
+      - {id: clientless-vpn, name: Clientless and ZTNA access, match: [ztna]}
+      - {id: ssh-certificates, name: SSH certificates for device access, match: [ssh-certificates]}
+      - {id: pam-vault, name: Privileged access management for device credentials, match: [privileged-access-management, credential-vault]}
+      - {id: rd-gateway, name: RDP gateways, match: [rd-gateway]}
+      - {id: cellular-oob, name: Cellular out-of-band access, match: [cellular-oob]}
+      - {id: anyconnect, name: Cisco Secure Client remote access, match: [anyconnect, secure-client]}
+  - id: troubleshooting-methodology
+    name: Troubleshooting methodology
+    source: Network+ 5.1
+    match: [troubleshooting-methodology]
+    subtopics:
+      - {id: comptia-steps, name: CompTIA 7-step method, match: [seven-step]}
+      - {id: divide-conquer, name: Top-down/bottom-up/divide-and-conquer, match: [divide-and-conquer, bottom-up]}
+      - {id: incident-notes, name: Documenting findings and post-incident review, match: [post-incident-review]}
+      - {id: problem-identification, name: Identifying the problem and gathering information, match: [problem-identification]}
+      - {id: theory-testing, name: Establishing and testing a theory of probable cause, match: [theory-of-probable-cause]}
+      - {id: escalation, name: Escalation and vendor TAC cases, match: [escalation, tac-case]}
+      - {id: follow-the-path, name: Follow-the-path troubleshooting, match: [follow-the-path]}
+      - {id: change-correlation, name: Correlating faults with recent changes, match: [change-correlation]}
+      - {id: compare-configurations, name: Spot-the-difference against a working config, match: [compare-configurations]}
+      - {id: preventive-measures, name: Verifying full functionality and preventive measures, match: [preventive-measures]}
+  - id: troubleshooting-physical
+    name: Cabling and physical troubleshooting tools
+    source: Network+ 5.2 and 5.5
+    match: [cable-tester, physical-troubleshooting]
+    subtopics:
+      - {id: otdr-light-meter, name: OTDR and optical light meter, match: [otdr, light-meter]}
+      - {id: toner-probe, name: Toner probe and wire map, match: [toner-probe, wire-map]}
+      - {id: fiber-cleaning, name: Fibre inspection and cleaning, match: [fiber-inspection, fiber-cleaning]}
+      - {id: poe-troubleshoot, name: PoE troubleshooting, match: [poe-troubleshooting]}
+      - {id: cable-certification, name: Cable certification testing, match: [cable-certification]}
+      - {id: spectrum-analyzer, name: Spectrum analysis, match: [spectrum-analyzer]}
+      - {id: loopback-plug, name: Loopback plugs and loopback tests, match: [loopback-plug]}
+      - {id: crosstalk-attenuation, name: Crosstalk and attenuation faults, match: [crosstalk, attenuation]}
+      - {id: punchdown, name: Punch-down and RJ45 termination, match: [punchdown, rj45-termination]}
+      - {id: bend-radius, name: Bend radius and macrobending, match: [bend-radius]}
+      - {id: emi, name: EMI and interference on cabling, match: [emi]}
+  - id: troubleshooting-services
+    name: Network services troubleshooting
+    source: Network+ 5.3
+    match: [network-services-troubleshooting]
+    subtopics:
+      - {id: wrong-gateway-mask, name: Incorrect gateway/mask/VLAN, match: [incorrect-gateway, wrong-subnet-mask]}
+      - {id: routing-loops, name: Routing loops and asymmetric routing, match: [routing-loop, asymmetric-routing]}
+      - {id: broadcast-storm, name: Broadcast storms, match: [broadcast-storm]}
+      - {id: ip-conflict, name: IP address conflicts, match: [ip-conflict]}
+      - {id: dhcp-exhaustion-fault, name: Address pool exhaustion, match: [pool-exhaustion]}
+      - {id: incorrect-dns, name: Incorrect DNS server settings, match: [incorrect-dns]}
+      - {id: time-skew, name: Time skew effects on Kerberos and TLS, match: [time-skew]}
+      - {id: duplicate-mac, name: Duplicate MAC addresses, match: [duplicate-mac]}
+      - {id: blocked-ports, name: Blocked ports and services, match: [blocked-ports]}
+      - {id: missing-route, name: Missing routes, match: [missing-route]}
+      - {id: expired-certificate, name: Expired certificates, match: [expired-certificate]}
+  - id: troubleshooting-performance
+    name: Performance troubleshooting
+    source: Network+ 5.4
+    match: [network-performance]
+    subtopics:
+      - {id: iperf-throughput, name: Throughput testing with iperf3, match: [iperf3, throughput-testing]}
+      - {id: latency-jitter-loss, name: Latency/jitter/loss measurement with mtr, match: [mtr, latency]}
+      - {id: bufferbloat, name: Congestion and bufferbloat, match: [bufferbloat, congestion]}
+      - {id: wireless-interference, name: Wireless interference and channel overlap, match: [wireless-interference, co-channel-interference]}
+      - {id: bdp-tuning, name: Bandwidth-delay product and long fat networks, match: [bandwidth-delay-product]}
+      - {id: microbursts, name: Microbursts, match: [microburst]}
+      - {id: tcp-window-tuning, name: Host TCP window tuning, match: [tcp-window-tuning]}
+      - {id: sticky-client, name: Sticky Wi-Fi clients, match: [sticky-client]}
+      - {id: speed-test, name: Speed test methodology, match: [speed-test]}
+      - {id: link-saturation, name: Link saturation, match: [link-saturation]}
+  - id: network-tools
+    name: Network tools and commands
+    source: Network+ 5.5
+    match: [network-tools]
+    subtopics:
+      - {id: nmap, name: nmap scanning, match: [nmap]}
+      - {id: traceroute-variants, name: traceroute/tracert/tcptraceroute, match: [traceroute, tracert]}
+      - {id: ss-netstat, name: ss/netstat socket inspection, match: [netstat, ss]}
+      - {id: arp-neighbor-tables, name: ARP/neighbour tables on hosts, match: [arp-table, ip-neigh]}
+      - {id: tcpdump, name: tcpdump on hosts, match: [tcpdump]}
+      - {id: curl-timing, name: curl timing and verbose HTTP debugging, match: [curl-timing]}
+      - {id: openssl-s-client, name: Testing TLS with openssl s_client, match: [openssl-s-client]}
+      - {id: ping-df, name: Ping with DF bit and size sweeps, match: [ping-df-bit]}
+      - {id: whois-looking-glass, name: whois and BGP looking glasses, match: [whois, looking-glass]}
+      - {id: hping3, name: Crafting probes with hping3, match: [hping3]}
+      - {id: ethtool, name: NIC diagnostics with ethtool, match: [ethtool]}
+      - {id: netsh-trace, name: Windows netsh trace, match: [netsh-trace]}
+      - {id: arping, name: arping, match: [arping]}
+  - id: qos-design
+    name: QoS policy design
+    source: ENCOR 1.5 / RFC 4594
+    match: [qos-design]
+    subtopics:
+      - {id: dscp-plan, name: DSCP marking plan per RFC 4594, match: [dscp-plan, rfc4594]}
+      - {id: voice-video-reqs, name: Voice/video latency jitter loss budgets, match: [voice-requirements]}
+      - {id: wan-qos-shaping, name: WAN edge shaping to the CIR, match: [hierarchical-qos, cir]}
+      - {id: wifi-wmm, name: WMM and wireless QoS mapping, match: [wmm]}
+      - {id: qos-class-models, name: 4/8/12-class QoS models, match: [qos-class-model]}
+      - {id: scavenger, name: Scavenger class, match: [scavenger-class]}
+      - {id: dscp-bleaching, name: QoS across the internet and DSCP bleaching, match: [dscp-bleaching]}
+      - {id: collaboration-qos, name: Teams/Zoom/Webex QoS, match: [teams-qos, collaboration-qos]}
+      - {id: provider-qos, name: Mapping to provider QoS classes, match: [provider-qos-classes]}
+      - {id: bandwidth-allocation, name: Queue bandwidth allocation, match: [bandwidth-allocation]}
+
+  # ============ DNS & DHCP (BIND 9 ARM, Kea ARM, RFCs) ============
+  - id: dns-fundamentals
+    name: DNS resolution fundamentals
+    source: RFC 1034/1035/2308
+    match: [dns-resolution, recursive-resolution]
+    subtopics:
+      - {id: dns-recursion-iteration, name: Recursion vs iteration, match: [iterative-query]}
+      - {id: dns-caching-ttl, name: Caching and TTL strategy, match: [ttl, dns-caching]}
+      - {id: dns-negative-caching, name: Negative caching and SOA minimum, match: [negative-caching]}
+      - {id: dns-delegation-glue, name: Delegation and glue, match: [delegation, glue-records]}
+      - {id: dns-lame-delegation, name: Lame delegation diagnosis, match: [lame-delegation]}
+      - {id: dns-flags-rcodes, name: Header flags and RCODEs, match: [dns-flags, rcode]}
+      - {id: dns-edns0, name: EDNS0 and buffer sizes, match: [edns, edns-buffer-size]}
+      - {id: dns-tcp-fallback, name: Truncation and TCP fallback, match: [dns-over-tcp]}
+      - {id: dns-root-hints, name: Root hints and priming, match: [root-hints]}
+      - {id: dns-search-domains, name: Stub resolvers/search domains/ndots, match: [search-domain, ndots]}
+      - {id: dns-zone-cut, name: Zones vs domains and zone cuts, match: [zone-cut]}
+      - {id: dns-ecs, name: EDNS Client Subnet, match: [client-subnet]}
+      - {id: dns-serve-stale, name: Serve-stale, match: [serve-stale]}
+  - id: dns-record-types
+    name: Resource record types
+    source: RFC 1035/2181/9460/8659
+    match: [dns-records, resource-records]
+    subtopics:
+      - {id: rr-cname-rules, name: CNAME rules and apex aliasing, match: [cname, cname-apex]}
+      - {id: rr-mx, name: MX records, match: [mx]}
+      - {id: rr-srv, name: SRV records, match: [srv]}
+      - {id: rr-caa, name: CAA records, match: [caa]}
+      - {id: rr-svcb-https, name: SVCB/HTTPS records, match: [svcb, https-record]}
+      - {id: rr-ptr, name: Reverse zones and PTR (including classless delegation), match: [ptr, classless-reverse-delegation]}
+      - {id: rr-round-robin, name: A/AAAA and round-robin, match: [round-robin-dns]}
+      - {id: rr-txt, name: TXT records and domain verification, match: [txt-record, domain-verification]}
+      - {id: rr-soa-ns, name: SOA and NS records at the apex, match: [soa-record, ns-record]}
+      - {id: rr-wildcard, name: Wildcard records, match: [wildcard-record]}
+      - {id: rr-dname, name: DNAME, match: [dname]}
+      - {id: rr-naptr, name: NAPTR, match: [naptr]}
+      - {id: rr-tlsa-sshfp, name: TLSA/DANE and SSHFP, match: [sshfp, tlsa-record]}
+  - id: email-dns-auth
+    name: Email authentication DNS records
+    source: RFC 7208/6376/7489/8461
+    match: [email-authentication]
+    subtopics:
+      - {id: spf, name: SPF records and lookup limits, match: [spf]}
+      - {id: dkim, name: DKIM selectors and key rotation, match: [dkim]}
+      - {id: dmarc, name: DMARC policy rollout, match: [dmarc]}
+      - {id: mta-sts, name: MTA-STS and TLS-RPT, match: [mta-sts, tls-rpt]}
+      - {id: bimi, name: BIMI, match: [bimi]}
+      - {id: arc, name: ARC, match: [arc-signing]}
+      - {id: dmarc-reports, name: DMARC aggregate reports, match: [dmarc-aggregate-reports, rua]}
+      - {id: spf-flattening, name: SPF flattening, match: [spf-flattening]}
+      - {id: auth-results, name: Reading Authentication-Results headers, match: [authentication-results]}
+      - {id: dane-smtp, name: DANE for SMTP, match: [dane-smtp]}
+      - {id: parked-domains, name: Parked domain protection, match: [parked-domain]}
+      - {id: null-mx, name: Null MX, match: [null-mx]}
+  - id: bind-authoritative
+    name: BIND authoritative server configuration
+    source: BIND ARM 3 and 8
+    match: [bind, named-conf]
+    subtopics:
+      - {id: bind-zone-statements, name: Zone statements and zone files, match: [zone-file, named-checkzone]}
+      - {id: bind-acls-allow, name: ACLs and allow-query/allow-transfer, match: [allow-query, allow-transfer]}
+      - {id: bind-logging, name: Logging channels and categories, match: [bind-logging]}
+      - {id: bind-rndc, name: rndc operations, match: [rndc]}
+      - {id: bind-views, name: Views for split horizon, match: [bind-views, split-horizon]}
+      - {id: bind-hardening, name: Hardening (version hiding/chroot/minimal-responses), match: [bind-hardening]}
+      - {id: bind-options, name: options block/listen-on/directory, match: [listen-on, options-block]}
+      - {id: bind-checkconf, name: named-checkconf, match: [named-checkconf]}
+      - {id: bind-zone-types, name: Stub/mirror/forward zone types, match: [mirror-zone, bind-zone-types]}
+      - {id: bind-rndc-key, name: rndc-confgen and key files, match: [rndc-confgen]}
+      - {id: bind-upgrade, name: BIND version upgrades, match: [bind-upgrade]}
+      - {id: bind-primaries, name: primaries lists, match: [primaries-statement]}
+      - {id: bind-tuning, name: recursive-clients and tcp-clients tuning, match: [tcp-clients]}
+      - {id: bind-docker, name: BIND in containers, match: [bind-docker]}
+  - id: zone-transfers
+    name: Zone transfers and secondaries
+    source: BIND ARM 4 / RFC 1995/1996/8945
+    match: [zone-transfer, axfr]
+    subtopics:
+      - {id: ixfr-notify, name: IXFR and NOTIFY, match: [ixfr, notify]}
+      - {id: tsig-keys, name: TSIG keys for transfers, match: [tsig]}
+      - {id: soa-timers-serial, name: SOA timers and serial number arithmetic, match: [soa-serial, soa-timers]}
+      - {id: catalog-zones, name: Catalog zones, match: [catalog-zones]}
+      - {id: hidden-primary, name: Hidden primary design, match: [hidden-primary]}
+      - {id: xfr-troubleshoot, name: Zone transfer failure diagnosis, match: [transfer-failure, zone-transfer-troubleshooting]}
+      - {id: also-notify, name: also-notify and notify-source, match: [also-notify]}
+      - {id: xot, name: Zone transfer over TLS, match: [xot]}
+      - {id: transfer-source, name: transfer-source addressing, match: [transfer-source]}
+      - {id: transfers-in, name: Transfer concurrency tuning, match: [transfers-in]}
+      - {id: secondary-provider, name: Third-party secondary DNS providers, match: [secondary-dns-provider]}
+  - id: bind-resolver
+    name: Recursive resolver operation
+    source: BIND ARM 3.2 and 4
+    match: [recursive-resolver, dns-resolver]
+    subtopics:
+      - {id: resolver-acl, name: Restricting recursion (open resolver prevention), match: [allow-recursion, open-resolver]}
+      - {id: forwarders, name: Forwarders and conditional forwarding, match: [forwarders, conditional-forwarding]}
+      - {id: rpz, name: Response policy zones, match: [rpz, response-policy-zone]}
+      - {id: qname-minimisation, name: QNAME minimisation, match: [qname-minimization]}
+      - {id: unbound, name: Unbound resolver configuration, match: [unbound]}
+      - {id: cache-flush, name: Cache inspection and flushing, match: [rndc-flush, cache-flush]}
+      - {id: bind-dns64, name: DNS64 on BIND, match: [bind-dns64]}
+      - {id: prefetch, name: Prefetch, match: [prefetch]}
+      - {id: nta, name: Negative trust anchors, match: [negative-trust-anchor]}
+      - {id: local-root, name: Local root zone per RFC 8806, match: [rfc8806, local-root]}
+      - {id: max-cache-size, name: Cache sizing, match: [max-cache-size]}
+      - {id: pihole, name: Pi-hole filtering resolver, match: [pihole]}
+      - {id: powerdns-recursor, name: PowerDNS Recursor, match: [powerdns-recursor]}
+      - {id: dnsdist, name: dnsdist load balancer, match: [dnsdist]}
+  - id: dnssec
+    name: DNSSEC signing and validation
+    source: BIND ARM 5 / RFC 4033-4035 and 9364
+    match: [dnssec]
+    subtopics:
+      - {id: dnssec-policy-signing, name: Signing with dnssec-policy, match: [dnssec-policy]}
+      - {id: dnssec-key-rollover, name: KSK/ZSK rollovers and DS updates (CDS/CDNSKEY), match: [key-rollover, cds-cdnskey]}
+      - {id: dnssec-validation, name: Validation and trust anchors, match: [dnssec-validation, trust-anchor]}
+      - {id: dnssec-troubleshoot, name: Bogus/SERVFAIL troubleshooting with delv and DNSViz, match: [delv, dnsviz]}
+      - {id: nsec3, name: NSEC vs NSEC3, match: [nsec3]}
+      - {id: dnssec-algorithm-rollover, name: Algorithm rollover and going insecure safely, match: [algorithm-rollover]}
+      - {id: ds-registrar, name: DS record submission at the registrar, match: [ds-record]}
+      - {id: dnssec-manual, name: Manual signing with dnssec-keygen/dnssec-signzone, match: [dnssec-signzone, dnssec-keygen]}
+      - {id: inline-signing, name: Inline signing, match: [inline-signing]}
+      - {id: offline-ksk, name: HSMs/PKCS 11 and offline KSKs, match: [pkcs11, offline-ksk]}
+      - {id: unbound-anchor, name: unbound-anchor trust anchor maintenance, match: [unbound-anchor]}
+      - {id: rrsig-expiry, name: RRSIG expiry monitoring, match: [rrsig-expiry]}
+  - id: dynamic-dns
+    name: Dynamic DNS updates
+    source: BIND ARM 4.2 / RFC 2136
+    match: [dynamic-dns, ddns]
+    subtopics:
+      - {id: nsupdate, name: nsupdate usage, match: [nsupdate]}
+      - {id: update-policy, name: update-policy grants, match: [update-policy]}
+      - {id: dhcp-ddns, name: DDNS from DHCP (Kea D2), match: [kea-ddns, dhcp-ddns]}
+      - {id: journal-files, name: Journal files and freeze/thaw, match: [jnl, rndc-freeze]}
+      - {id: gss-tsig, name: GSS-TSIG with Active Directory, match: [gss-tsig]}
+      - {id: acme-dns-01, name: ACME DNS-01 via RFC 2136, match: [acme-dns-01]}
+      - {id: client-registration, name: Client DNS registration, match: [client-dns-registration]}
+      - {id: sig0, name: SIG(0), match: [sig0]}
+      - {id: ddclient, name: ddclient for dynamic home addresses, match: [ddclient]}
+  - id: dns-troubleshooting
+    name: DNS troubleshooting tools
+    source: BIND ARM 7 and 9
+    match: [dns-troubleshooting, dig]
+    subtopics:
+      - {id: dig-trace, name: dig +trace and +norec, match: [dig-trace]}
+      - {id: kdig-drill, name: kdig/drill for TLS and DNSSEC, match: [kdig, drill]}
+      - {id: resolvectl, name: Host resolver stack (systemd-resolved/nsswitch), match: [resolvectl, systemd-resolved, nsswitch]}
+      - {id: windows-resolve-dnsname, name: Windows Resolve-DnsName and client cache, match: [resolve-dnsname]}
+      - {id: servfail-diagnosis, name: SERVFAIL root-cause diagnosis, match: [servfail]}
+      - {id: dig-output, name: Reading dig output, match: [dig-output]}
+      - {id: dns-propagation, name: Checking propagation per authoritative server, match: [dns-propagation]}
+      - {id: nxdomain-nodata, name: NXDOMAIN vs NODATA, match: [nxdomain-vs-nodata]}
+      - {id: dns-timeout, name: DNS timeouts and blocked/fragmented responses, match: [dns-fragmentation]}
+      - {id: query-logging, name: Query logging, match: [query-logging]}
+      - {id: zonemaster, name: Zonemaster delegation checks, match: [zonemaster]}
+      - {id: ns-mismatch, name: Mismatched NS sets, match: [ns-mismatch]}
+  - id: encrypted-dns
+    name: Encrypted DNS (DoT/DoH)
+    source: RFC 7858/8484 / BIND ARM 4
+    match: [dns-over-tls, dns-over-https]
+    subtopics:
+      - {id: dot-server, name: DoT/DoH listeners on BIND, match: [dot, doh]}
+      - {id: dot-client, name: Client configuration for encrypted DNS, match: [encrypted-dns-client]}
+      - {id: doh-enterprise-policy, name: Enterprise DoH policy and canary domains, match: [doh-policy, canary-domain]}
+      - {id: stubby-dot, name: DoT forwarding with stubby/unbound, match: [stubby, dot-forwarder]}
+      - {id: doh-reverse-proxy, name: DoH behind a reverse proxy, match: [doh-reverse-proxy]}
+      - {id: doq, name: DNS over QUIC, match: [doq, dns-over-quic]}
+      - {id: adot, name: Authoritative DoT and certificates, match: [adot]}
+      - {id: odoh, name: Oblivious DoH, match: [odoh]}
+      - {id: ddr, name: Discovery of designated resolvers, match: [ddr, designated-resolvers]}
+  - id: dns-operations-security
+    name: DNS operations and security
+    source: BIND ARM 4 and 6
+    match: [dns-security]
+    subtopics:
+      - {id: rrl, name: Response rate limiting, match: [rrl, response-rate-limiting]}
+      - {id: dns-stats, name: Statistics channels and monitoring, match: [statistics-channels]}
+      - {id: dnsperf, name: Load testing with dnsperf, match: [dnsperf]}
+      - {id: dns-tunneling, name: DNS tunnelling and exfiltration detection, match: [dns-tunneling]}
+      - {id: subdomain-takeover, name: Dangling records and subdomain takeover, match: [subdomain-takeover, dangling-cname]}
+      - {id: anycast-dns, name: Anycast DNS service design, match: [anycast-dns]}
+      - {id: dns-amplification, name: Amplification attacks and minimal ANY, match: [dns-amplification, minimal-any]}
+      - {id: dns-cookies, name: DNS cookies, match: [dns-cookies]}
+      - {id: dnstap, name: dnstap logging, match: [dnstap]}
+      - {id: registry-lock, name: Registry lock and domain hijacking, match: [registry-lock, domain-hijacking]}
+      - {id: source-port-randomization, name: Source port randomisation, match: [source-port-randomization]}
+      - {id: passive-dns, name: Passive DNS, match: [passive-dns]}
+  - id: dns-migration
+    name: DNS provider migration and registrar operations
+    source: RFC 1034 / registrar practice
+    match: [dns-migration]
+    subtopics:
+      - {id: ttl-lowering, name: TTL lowering before cutover, match: [ttl-lowering]}
+      - {id: registrar-ns-change, name: Registrar NS and glue changes, match: [registrar, nameserver-change]}
+      - {id: dnssec-migration, name: Migrating a DNSSEC-signed zone, match: [dnssec-migration]}
+      - {id: zone-export-import, name: Zone export and import, match: [zone-export, zone-import]}
+      - {id: dns-as-code, name: DNS as code (octoDNS/DNSControl), match: [octodns, dnscontrol]}
+      - {id: migration-validation, name: Validating answers after migration, match: [migration-validation]}
+      - {id: domain-transfer, name: Registrar domain transfer, match: [domain-transfer, epp-code]}
+      - {id: mx-cutover, name: Mail MX cutover, match: [mx-cutover]}
+      - {id: domain-expiry, name: Domain expiry monitoring, match: [domain-expiry]}
+  - id: windows-dns
+    name: Windows Server DNS
+    source: Microsoft DNS Server docs
+    match: [windows-dns]
+    subtopics:
+      - {id: ad-integrated-zones, name: AD-integrated zones and replication scope, match: [ad-integrated-zone]}
+      - {id: win-conditional-forwarders, name: Conditional forwarders, match: [conditional-forwarder]}
+      - {id: aging-scavenging, name: Aging and scavenging, match: [scavenging]}
+      - {id: dns-policies, name: DNS policies, match: [dns-policy]}
+      - {id: dnsserver-powershell, name: DnsServer PowerShell, match: [dnsserver-powershell]}
+      - {id: windows-forwarders, name: Forwarders vs root hints on Windows, match: [windows-forwarders]}
+      - {id: dns-debug-logging, name: DNS debug and analytic logging, match: [dns-debug-logging]}
+      - {id: windows-dnssec, name: DNSSEC on Windows DNS, match: [windows-dnssec]}
+      - {id: ad-stub-zone, name: Stub zones and delegations in AD, match: [ad-stub-zone]}
+      - {id: msdcs, name: _msdcs and DC locator records, match: [msdcs, dc-locator]}
+      - {id: dns-suffix, name: Client DNS suffix policy, match: [dns-suffix]}
+      - {id: socket-pool, name: Socket pool and cache locking, match: [socket-pool]}
+  - id: dhcp-protocol
+    name: DHCPv4 protocol and options
+    source: RFC 2131/2132/3046
+    match: [dhcp, dhcpv4]
+    subtopics:
+      - {id: dhcp-lease-timers, name: Lease lifecycle and T1/T2, match: [lease-renewal, t1-t2]}
+      - {id: dhcp-options-common, name: Common options, match: [dhcp-options]}
+      - {id: dhcp-option-82, name: Relay agent option 82, match: [option-82]}
+      - {id: dhcp-option-43, name: Vendor option 43 for AP discovery, match: [option-43]}
+      - {id: dhcp-classless-routes, name: Classless static routes option 121, match: [option-121]}
+      - {id: dhcp-message-types, name: DHCP message types (NAK/DECLINE/RELEASE/INFORM), match: [dhcpnak, dhcpinform, dhcp-message-types]}
+      - {id: broadcast-flag, name: Broadcast flag and unicast replies, match: [broadcast-flag]}
+      - {id: option-61, name: Client identifier option 61 vs chaddr, match: [option-61]}
+      - {id: option-81, name: Hostname option 12 and client FQDN option 81, match: [option-81, option-12]}
+      - {id: option-119, name: Domain search option 119, match: [option-119]}
+      - {id: option-60, name: Vendor class identifier option 60, match: [option-60, vendor-class]}
+      - {id: wpad, name: WPAD option 252, match: [wpad, option-252]}
+      - {id: rapid-commit, name: Rapid commit option 80, match: [rapid-commit]}
+      - {id: leasequery, name: Leasequery, match: [leasequery]}
+  - id: kea-dhcp4
+    name: Kea DHCPv4 server
+    source: Kea ARM 8
+    match: [kea, kea-dhcp4]
+    subtopics:
+      - {id: kea-subnets-pools, name: Subnets/pools/shared networks, match: [shared-network, kea-subnet]}
+      - {id: kea-reservations, name: Host reservations, match: [host-reservation]}
+      - {id: kea-client-classes, name: Client classification, match: [client-classes, client-classification]}
+      - {id: kea-option-def, name: Custom option definitions, match: [option-def]}
+      - {id: kea-lease-backend, name: Lease database backends, match: [lease-database, memfile]}
+      - {id: kea-control-agent, name: Control agent REST API and keactrl, match: [kea-ctrl-agent, kea-api]}
+      - {id: kea-config-test, name: Config structure/includes and config-test, match: [kea-config-test, kea-dhcp4-conf]}
+      - {id: kea-option-data, name: option-data for standard options, match: [option-data]}
+      - {id: kea-config-backend, name: Configuration backend, match: [config-backend]}
+      - {id: kea-lifetimes, name: valid-lifetime and calculate-tee-times, match: [valid-lifetime, calculate-tee-times]}
+      - {id: kea-reservation-modes, name: Reservation modes global/in-subnet/out-of-pool, match: [reservations-out-of-pool]}
+      - {id: kea-subnet-selection, name: Subnet selection by relay address, match: [relay-subnet-selection]}
+      - {id: kea-lease-cmds, name: lease_cmds hook, match: [lease-cmds]}
+      - {id: stork, name: Stork monitoring, match: [stork]}
+  - id: kea-dhcp6
+    name: Kea DHCPv6 and IPv6 address assignment
+    source: Kea ARM 9 / RFC 8415
+    match: [dhcpv6, kea-dhcp6]
+    subtopics:
+      - {id: dhcpv6-prefix-delegation, name: Prefix delegation pools, match: [pd-pool, ia-pd]}
+      - {id: dhcpv6-duid, name: DUIDs and reservations, match: [duid]}
+      - {id: dhcpv6-ra-flags, name: RA M/O flags interplay, match: [ra-flags, managed-flag]}
+      - {id: dhcpv6-relay, name: DHCPv6 relay, match: [dhcpv6-relay]}
+      - {id: kea6-ia-na, name: IA_NA pools and interface-id, match: [ia-na, dhcp6-pool]}
+      - {id: kea6-rapid-commit, name: DHCPv6 rapid commit, match: [dhcpv6-rapid-commit]}
+      - {id: kea6-options, name: DHCPv6 options (DNS servers/domain search), match: [dhcpv6-options]}
+      - {id: kea6-pd-exclude, name: Prefix exclude, match: [pd-exclude]}
+      - {id: kea6-option-79, name: Client link-layer address option 79, match: [option-79, client-link-layer-address]}
+      - {id: kea6-message-flow, name: SOLICIT/ADVERTISE/REQUEST/REPLY flow, match: [solicit-advertise, dhcpv6-message-flow]}
+  - id: dhcp-high-availability
+    name: DHCP high availability
+    source: Kea ARM HA hook / Windows DHCP failover
+    match: [dhcp-failover, dhcp-ha]
+    subtopics:
+      - {id: kea-ha-modes, name: Kea HA load-balancing and hot-standby, match: [kea-ha, hot-standby]}
+      - {id: kea-ha-states, name: HA state machine and partner-down, match: [partner-down]}
+      - {id: windows-dhcp-failover, name: Windows DHCP failover, match: [windows-dhcp-failover]}
+      - {id: split-scope, name: Split-scope 80/20, match: [split-scope]}
+      - {id: kea-ha-passive-backup, name: Passive-backup mode, match: [passive-backup]}
+      - {id: kea-ha-hub-spoke, name: Hub-and-spoke HA relationships, match: [ha-hub-and-spoke]}
+      - {id: kea-ha-tls, name: TLS between HA partners, match: [kea-ha-tls]}
+      - {id: kea-ha-maintenance, name: HA maintenance mode, match: [ha-maintenance]}
+      - {id: lease-db-replication, name: Shared lease database vs lease sync, match: [lease-database-replication]}
+      - {id: windows-mclt, name: Windows failover MCLT and state switchover, match: [mclt]}
+  - id: isc-dhcp-migration
+    name: Migrating from ISC DHCP to Kea
+    source: Kea ARM migration chapter
+    match: [isc-dhcp-migration, keama]
+    subtopics:
+      - {id: keama-convert, name: Converting dhcpd.conf with keama, match: [keama-convert]}
+      - {id: lease-migration, name: Migrating leases, match: [lease-migration]}
+      - {id: migration-gaps, name: Feature gaps and manual rework, match: [migration-gaps]}
+      - {id: class-conversion, name: Converting classes to Kea expressions, match: [class-expression-conversion]}
+      - {id: failover-to-ha, name: Converting failover peers to HA, match: [failover-to-ha]}
+      - {id: omapi, name: Replacing OMAPI with the control channel, match: [omapi]}
+      - {id: dhcp-cutover, name: Parallel run and cutover plan, match: [dhcp-cutover]}
+      - {id: ddns-migration, name: Converting DDNS settings to D2, match: [ddns-migration]}
+      - {id: host-declarations, name: Host declarations to reservations, match: [host-declarations]}
+  - id: windows-dhcp
+    name: Windows Server DHCP
+    source: Microsoft DHCP Server docs
+    match: [windows-dhcp]
+    subtopics:
+      - {id: win-dhcp-scopes, name: Scopes/superscopes/exclusions, match: [superscope]}
+      - {id: win-dhcp-policies, name: DHCP policies, match: [dhcp-policies]}
+      - {id: win-dhcp-powershell, name: DhcpServer PowerShell, match: [dhcpserver-powershell]}
+      - {id: win-dhcp-audit, name: Audit logs and authorisation in AD, match: [dhcp-audit-log, dhcp-authorization]}
+      - {id: dhcp-export-import, name: Export/import and reservations, match: [dhcp-export-import]}
+      - {id: mac-filter, name: Allow/deny MAC filters, match: [mac-filter]}
+      - {id: dnsupdateproxy, name: DNS dynamic update credentials and DnsUpdateProxy, match: [dnsupdateproxy]}
+      - {id: windows-dhcpv6, name: Windows DHCPv6 scopes, match: [windows-dhcpv6]}
+      - {id: dhcp-server-migration, name: DHCP server migration, match: [dhcp-server-migration]}
+      - {id: name-protection, name: Name protection, match: [name-protection]}
+      - {id: dhcp-database-backup, name: Database backup and restore, match: [dhcp-database-backup]}
+      - {id: windows-ipam, name: Windows Server IPAM, match: [windows-ipam]}
+  - id: dhcp-troubleshooting
+    name: DHCP troubleshooting
+    source: RFC 2131 / Kea ARM logging
+    match: [dhcp-troubleshooting]
+    subtopics:
+      - {id: rogue-dhcp-detect, name: Finding rogue DHCP servers, match: [rogue-dhcp-detection]}
+      - {id: scope-exhaustion, name: Scope exhaustion, match: [scope-exhaustion]}
+      - {id: relay-faults, name: Relay faults, match: [relay-troubleshooting]}
+      - {id: kea-logging, name: Kea logging and statistics, match: [kea-logging, kea-statistics]}
+      - {id: no-offer, name: No offer and APIPA clients, match: [no-dhcp-offer]}
+      - {id: dhcp-decline, name: DECLINE from duplicate addresses, match: [dhcp-decline]}
+      - {id: snooping-drops, name: Legitimate traffic dropped by snooping, match: [snooping-drops]}
+      - {id: slow-dhcp, name: Slow address assignment, match: [slow-dhcp]}
+      - {id: perfdhcp, name: Load testing with perfdhcp, match: [perfdhcp]}
+      - {id: dhcpdump, name: Capturing DHCP with dhcpdump/tcpdump, match: [dhcpdump]}
+      - {id: wrong-options, name: Clients getting wrong options, match: [wrong-dhcp-options]}
+  - id: pxe-boot
+    name: PXE and network boot
+    source: RFC 4578 / Kea ARM classification
+    match: [pxe, network-boot]
+    subtopics:
+      - {id: pxe-options, name: Options 66/67 and next-server, match: [option-66, option-67]}
+      - {id: uefi-bios-arch, name: BIOS vs UEFI by option 93, match: [option-93, uefi-pxe]}
+      - {id: ipxe-chainload, name: iPXE chainloading, match: [ipxe]}
+      - {id: http-boot, name: UEFI HTTP boot, match: [http-boot]}
+      - {id: tftp-server, name: TFTP server and blksize, match: [tftpd, tftp-blocksize]}
+      - {id: secure-boot-pxe, name: Secure Boot with shim and signed GRUB, match: [secure-boot-pxe, shim]}
+      - {id: wds-mecm, name: WDS and MECM PXE responders, match: [wds, mecm-pxe]}
+      - {id: proxydhcp, name: ProxyDHCP, match: [proxydhcp]}
+      - {id: pxe-relay, name: PXE across subnets, match: [pxe-relay]}
+      - {id: pxe-errors, name: PXE error codes, match: [pxe-errors]}
+      - {id: unattended-install, name: Kickstart and autoinstall, match: [kickstart, autoinstall]}
+  - id: ipam-ddi
+    name: IPAM and DDI integration
+    source: Network+ 3.4 / RFC 2136
+    match: [ipam, ddi]
+    subtopics:
+      - {id: netbox-ipam, name: NetBox IPAM modelling, match: [netbox-ipam]}
+      - {id: ip-reconciliation, name: Reconciling discovered vs documented addresses, match: [ip-reconciliation]}
+      - {id: dnsmasq, name: dnsmasq for small DNS/DHCP, match: [dnsmasq]}
+      - {id: phpipam, name: phpIPAM, match: [phpipam-setup]}
+      - {id: infoblox, name: Infoblox, match: [infoblox-nios]}
+      - {id: next-available-ip, name: API-driven next-available allocation, match: [next-available-ip]}
+      - {id: lease-sync, name: Syncing DHCP leases into IPAM, match: [lease-sync]}
+      - {id: ip-hierarchy, name: Address hierarchy and aggregates, match: [ip-address-hierarchy]}
+      - {id: ipam-scanning, name: Subnet scanning discovery, match: [subnet-discovery]}

@@ -1,0 +1,592 @@
+# Canonical coverage spec: chemical engineering (whole field). Topics and subtopics follow the chapter structure of the
+# standard textbooks, handbooks, standards and tool manuals named in `sources` (not the library's own contents).
+subject: chemical-engineering
+scope:
+  category: engineering-technology
+  field: chemical-engineering
+  products: [aspen, process-design, reactor-design, separation-processes, heat-exchanger-design, piping-instrumentation, process-control, process-safety]
+sources:
+  - "Aspen Plus and Aspen HYSYS user guides and help (AspenTech) - property methods, Data Regression, RadFrac, reactors, sensitivity and optimisation"
+  - "Seider Seader Lewin and Widagdo Product and Process Design Principles; Turton et al. Analysis Synthesis and Design of Chemical Processes; Towler and Sinnott Chemical Engineering Design; Peters Timmerhaus and West Plant Design and Economics; Douglas Conceptual Design of Chemical Processes"
+  - "NCEES FE Chemical and PE Chemical exam specifications; ABET program criteria for chemical engineering; AIChE body of knowledge"
+  - "Fogler Elements of Chemical Reaction Engineering; Levenspiel Chemical Reaction Engineering; Froment Bischoff and De Wilde Chemical Reactor Analysis and Design"
+  - "Seader Henley and Roper Separation Process Principles; Perry Chemical Engineers Handbook; Kister Distillation Design; Treybal Mass-Transfer Operations; McCabe Smith and Harriott Unit Operations; Mullin Crystallization"
+  - "Kern Process Heat Transfer; Heat Exchanger Design Handbook; TEMA Standards; Kemp Pinch Analysis and Process Integration; Smith Chemical Process Design and Integration"
+  - "Crane Technical Paper 410; ASME B31.3; ISA-5.1; ISO 10628; ISA-75.01.01 and IEC 60534-2-1; Darby Chemical Engineering Fluid Mechanics; Karassik Pump Handbook"
+  - "Seborg Edgar Mellichamp and Doyle Process Dynamics and Control; Smith and Corripio; Luyben; Skogestad Multivariable Feedback Control; ISA-18.2"
+  - "CCPS Guidelines for Hazard Evaluation Procedures and Layer of Protection Analysis; API 520 521 526 2000; IEC 61511; OSHA 29 CFR 1910.119; Seveso III Directive 2012/18/EU; Crowl and Louvar Chemical Process Safety; Lees Loss Prevention in the Process Industries"
+topics:
+  - id: aspen-property-method-selection
+    name: Property method selection
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-property-method-selection]
+    subtopics:
+      - {id: property-method-decision-tree, name: Choosing a property method by chemistry and pressure, match: [property-method-decision-tree]}
+      - {id: ideal-vs-eos-vs-activity-models, name: Ideal vs equation-of-state vs activity-coefficient methods, match: [ideal-vs-eos-vs-activity-models]}
+      - {id: henry-components-and-supercritical-species, name: Henry components and supercritical species, match: [henry-components-and-supercritical-species]}
+      - {id: property-method-validation-against-data, name: Validating a property method against data, match: [property-method-validation-against-data]}
+  - id: aspen-binary-parameters-and-regression
+    name: Binary parameters and data regression
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-binary-parameters-and-regression]
+    subtopics:
+      - {id: binary-interaction-parameter-retrieval, name: Retrieving and checking binary interaction parameters, match: [binary-interaction-parameter-retrieval]}
+      - {id: vle-data-regression, name: Regressing VLE data to fit parameters, match: [vle-data-regression]}
+      - {id: pure-component-property-estimation, name: Estimating missing pure-component properties, match: [pure-component-property-estimation]}
+      - {id: residue-curve-and-txy-analysis, name: Txy and residue curve analysis in property analysis, match: [residue-curve-and-txy-analysis]}
+  - id: aspen-flowsheet-convergence
+    name: Flowsheet convergence
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-flowsheet-convergence]
+    subtopics:
+      - {id: tear-stream-selection, name: Selecting tear streams, match: [tear-stream-selection]}
+      - {id: wegstein-and-broyden-convergence-methods, name: Wegstein Broyden and Newton convergence methods, match: [wegstein-and-broyden-convergence-methods]}
+      - {id: design-spec-nesting, name: Design specification and calculator nesting, match: [design-spec-nesting]}
+      - {id: sequential-modular-vs-equation-oriented, name: Sequential-modular vs equation-oriented solving, match: [sequential-modular-vs-equation-oriented]}
+  - id: aspen-column-simulation
+    name: Column simulation (RadFrac and HYSYS columns)
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-column-simulation]
+    subtopics:
+      - {id: radfrac-setup-and-specifications, name: RadFrac setup and specification choices, match: [radfrac-setup-and-specifications]}
+      - {id: column-convergence-troubleshooting, name: Column convergence troubleshooting, match: [column-convergence-troubleshooting]}
+      - {id: column-sizing-and-rating-in-simulator, name: Tray and packing sizing and rating in the simulator, match: [column-sizing-and-rating-in-simulator]}
+      - {id: reactive-distillation-modelling, name: Reactive distillation modelling, match: [reactive-distillation-modelling]}
+      - {id: three-phase-and-azeotropic-column-modelling, name: Three-phase and azeotropic column modelling, match: [three-phase-and-azeotropic-column-modelling]}
+  - id: aspen-reactor-blocks
+    name: Reactor blocks
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-reactor-blocks]
+    subtopics:
+      - {id: rstoic-ryield-rgibbs-selection, name: Choosing RStoic RYield or RGibbs, match: [rstoic-ryield-rgibbs-selection]}
+      - {id: rcstr-rplug-kinetic-models, name: RCSTR and RPlug kinetic models, match: [rcstr-rplug-kinetic-models]}
+      - {id: reactor-pressure-and-heat-profiles, name: Reactor pressure and heat profile specification, match: [reactor-pressure-and-heat-profiles]}
+      - {id: lhhw-kinetics-entry, name: Entering LHHW and power-law kinetics, match: [lhhw-kinetics-entry]}
+  - id: aspen-sensitivity-and-optimisation
+    name: Sensitivity analysis and optimisation
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-sensitivity-and-optimisation]
+    subtopics:
+      - {id: sensitivity-analysis-case-studies, name: Sensitivity analysis and case studies, match: [sensitivity-analysis-case-studies]}
+      - {id: optimization-block-constraints, name: Optimization blocks objectives and constraints, match: [optimization-block-constraints]}
+      - {id: hysys-dynamic-mode-setup, name: HYSYS dynamic mode setup, match: [hysys-dynamic-mode-setup]}
+      - {id: hysys-spreadsheet-and-adjust-logic, name: HYSYS spreadsheet and adjust logic, match: [hysys-spreadsheet-and-adjust-logic]}
+  - id: aspen-heat-transfer-and-utilities-blocks
+    name: Heat exchanger and utility blocks
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-heat-transfer-and-utilities-blocks]
+    subtopics:
+      - {id: heatx-shortcut-vs-rigorous, name: HeatX shortcut vs rigorous mode, match: [heatx-shortcut-vs-rigorous]}
+      - {id: hysys-heat-exchanger-model-choice, name: HYSYS heat exchanger model choice, match: [hysys-heat-exchanger-model-choice]}
+      - {id: utility-specification-and-costing, name: Utility specification and costing in the simulator, match: [utility-specification-and-costing]}
+      - {id: simulator-to-pinch-data-extraction, name: Extracting stream data for pinch analysis, match: [simulator-to-pinch-data-extraction]}
+  - id: aspen-rotating-equipment-and-hydraulics
+    name: Rotating equipment and hydraulics blocks
+    source: Aspen Plus and Aspen HYSYS user guides and help (AspenTech) / Seider et al. Product and Pro
+    match: [aspen-rotating-equipment-and-hydraulics]
+    subtopics:
+      - {id: pump-compressor-turbine-blocks, name: Pump compressor and turbine blocks, match: [pump-compressor-turbine-blocks]}
+      - {id: valve-and-pressure-drop-blocks, name: Valve and pressure drop blocks, match: [valve-and-pressure-drop-blocks]}
+      - {id: compressor-curves-and-staging-in-simulator, name: Compressor curves and staging in the simulator, match: [compressor-curves-and-staging-in-simulator]}
+      - {id: pipe-segment-hydraulics-in-simulator, name: Pipe segment hydraulics in the simulator, match: [pipe-segment-hydraulics-in-simulator]}
+  - id: pd-design-basis-and-pfd
+    name: Design basis and process flow diagrams
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-design-basis-and-pfd]
+    subtopics:
+      - {id: design-basis-document, name: Writing the design basis document, match: [design-basis-document]}
+      - {id: pfd-and-stream-table-development, name: PFD and stream table development, match: [pfd-and-stream-table-development]}
+      - {id: equipment-list-and-sparing-philosophy, name: Equipment list and sparing philosophy, match: [equipment-list-and-sparing-philosophy]}
+      - {id: heat-and-material-balance-sheet, name: Heat and material balance sheet for handover, match: [heat-and-material-balance-sheet]}
+  - id: pd-flowsheet-synthesis
+    name: Flowsheet synthesis
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-flowsheet-synthesis]
+    subtopics:
+      - {id: hierarchical-decision-procedure, name: Douglas hierarchical decision procedure, match: [hierarchical-decision-procedure]}
+      - {id: input-output-and-recycle-structure, name: Input-output and recycle structure, match: [input-output-and-recycle-structure]}
+      - {id: reactor-separator-recycle-trade-off, name: Reactor separator recycle economic trade-off, match: [reactor-separator-recycle-trade-off]}
+      - {id: separation-sequencing-heuristics, name: Separation sequencing heuristics, match: [separation-sequencing-heuristics]}
+  - id: pd-utilities-and-offsites
+    name: Utilities and offsites
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-utilities-and-offsites]
+    subtopics:
+      - {id: steam-system-design, name: Steam system design and levels, match: [steam-system-design]}
+      - {id: cooling-water-system-design, name: Cooling water system design, match: [cooling-water-system-design]}
+      - {id: refrigeration-system-selection, name: Refrigeration system selection, match: [refrigeration-system-selection]}
+      - {id: plant-air-nitrogen-fuel-gas-utilities, name: Plant air nitrogen and fuel gas, match: [plant-air-nitrogen-fuel-gas-utilities]}
+  - id: pd-capital-cost-estimation
+    name: Capital cost estimation
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-capital-cost-estimation]
+    subtopics:
+      - {id: equipment-cost-correlations-and-indexing, name: Equipment cost correlations and index escalation, match: [equipment-cost-correlations-and-indexing]}
+      - {id: lang-factor-and-module-costing, name: Lang factor and module costing, match: [lang-factor-and-module-costing]}
+      - {id: estimate-classes-and-accuracy, name: Estimate classes and accuracy ranges, match: [estimate-classes-and-accuracy]}
+      - {id: contingency-and-working-capital, name: Contingency and working capital, match: [contingency-and-working-capital]}
+  - id: pd-profitability-analysis
+    name: Operating cost and profitability
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-profitability-analysis]
+    subtopics:
+      - {id: operating-cost-build-up, name: Operating cost build-up, match: [operating-cost-build-up]}
+      - {id: discounted-cash-flow-npv-irr, name: Discounted cash flow NPV and IRR, match: [discounted-cash-flow-npv-irr]}
+      - {id: project-sensitivity-and-risk-analysis, name: Sensitivity and risk analysis of project economics, match: [project-sensitivity-and-risk-analysis]}
+      - {id: depreciation-and-tax-in-cash-flow, name: Depreciation and tax in cash flow, match: [depreciation-and-tax-in-cash-flow]}
+  - id: pd-equipment-sizing
+    name: Vessel and tank sizing
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-equipment-sizing]
+    subtopics:
+      - {id: knockout-drum-sizing, name: Vapour-liquid knockout drum sizing, match: [knockout-drum-sizing]}
+      - {id: surge-drum-residence-time-sizing, name: Surge drum and residence-time sizing, match: [surge-drum-residence-time-sizing]}
+      - {id: storage-tank-sizing-and-venting, name: Storage tank sizing and venting basis, match: [storage-tank-sizing-and-venting]}
+      - {id: pressure-vessel-preliminary-sizing, name: Preliminary pressure vessel sizing, match: [pressure-vessel-preliminary-sizing]}
+  - id: pd-debottlenecking-and-optimisation
+    name: Debottlenecking and optimisation
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-debottlenecking-and-optimisation]
+    subtopics:
+      - {id: debottlenecking-study-method, name: Debottlenecking study method, match: [debottlenecking-study-method]}
+      - {id: plant-data-reconciliation, name: Plant data reconciliation and performance testing, match: [plant-data-reconciliation]}
+      - {id: energy-and-yield-improvement-screening, name: Energy and yield improvement screening, match: [energy-and-yield-improvement-screening]}
+      - {id: flowsheet-optimisation-with-sensitivities, name: Flowsheet optimisation with sensitivities, match: [flowsheet-optimisation-with-sensitivities]}
+  - id: pd-sustainability-and-lca
+    name: Sustainability and life cycle assessment
+    source: Towler and Sinnott Chemical Engineering Design / Turton et al. Analysis Synthesis and Desig
+    match: [pd-sustainability-and-lca]
+    subtopics:
+      - {id: green-chemistry-metrics, name: Green chemistry metrics E-factor and PMI, match: [green-chemistry-metrics]}
+      - {id: life-cycle-assessment-for-processes, name: Life cycle assessment for processes, match: [life-cycle-assessment-for-processes]}
+      - {id: carbon-footprint-of-utilities, name: Carbon footprint of process utilities, match: [carbon-footprint-of-utilities]}
+      - {id: waste-minimisation-hierarchy, name: Waste minimisation hierarchy, match: [waste-minimisation-hierarchy]}
+  - id: rx-kinetics-and-rate-laws
+    name: Kinetics and rate laws
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-kinetics-and-rate-laws]
+    subtopics:
+      - {id: rate-law-from-batch-data, name: Deriving a rate law from batch data, match: [rate-law-from-batch-data]}
+      - {id: arrhenius-parameter-fitting, name: Fitting Arrhenius parameters, match: [arrhenius-parameter-fitting]}
+      - {id: catalytic-rate-forms, name: Catalytic rate forms and adsorption models, match: [catalytic-rate-forms]}
+      - {id: reaction-network-selectivity-analysis, name: Reaction network and selectivity analysis, match: [reaction-network-selectivity-analysis]}
+  - id: rx-ideal-reactor-design
+    name: Ideal reactor design
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-ideal-reactor-design]
+    subtopics:
+      - {id: cstr-design-equation, name: CSTR sizing and series of CSTRs, match: [cstr-design-equation]}
+      - {id: pfr-design-and-integration, name: PFR design and integration, match: [pfr-design-and-integration]}
+      - {id: batch-and-semibatch-design, name: Batch and semibatch reactor design, match: [batch-and-semibatch-design]}
+      - {id: reactor-comparison-levenspiel-plots, name: Comparing reactors with Levenspiel plots, match: [reactor-comparison-levenspiel-plots]}
+      - {id: recycle-reactor-design, name: Recycle reactor design, match: [recycle-reactor-design]}
+  - id: rx-heat-effects-and-stability
+    name: Heat effects and stability
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-heat-effects-and-stability]
+    subtopics:
+      - {id: adiabatic-temperature-rise, name: Adiabatic temperature rise, match: [adiabatic-temperature-rise]}
+      - {id: nonisothermal-reactor-energy-balance, name: Nonisothermal reactor energy balances, match: [nonisothermal-reactor-energy-balance]}
+      - {id: multiple-steady-states-in-cstr, name: Multiple steady states and stability of a CSTR, match: [multiple-steady-states-in-cstr]}
+      - {id: parametric-sensitivity-and-runaway-margin, name: Parametric sensitivity and runaway margin, match: [parametric-sensitivity-and-runaway-margin]}
+  - id: rx-nonideal-flow
+    name: Nonideal flow and RTD
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-nonideal-flow]
+    subtopics:
+      - {id: rtd-measurement-and-analysis, name: Measuring and analysing RTD, match: [rtd-measurement-and-analysis]}
+      - {id: tanks-in-series-and-dispersion-models, name: Tanks-in-series and dispersion models, match: [tanks-in-series-and-dispersion-models]}
+      - {id: segregation-and-micromixing, name: Segregation and micromixing, match: [segregation-and-micromixing]}
+      - {id: conversion-from-rtd, name: Predicting conversion from RTD, match: [conversion-from-rtd]}
+  - id: rx-catalytic-reactors
+    name: Catalytic reactors
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-catalytic-reactors]
+    subtopics:
+      - {id: packed-bed-pressure-drop-ergun, name: Packed bed pressure drop with the Ergun equation, match: [packed-bed-pressure-drop-ergun]}
+      - {id: thiele-modulus-and-effectiveness-factor, name: Thiele modulus and effectiveness factor, match: [thiele-modulus-and-effectiveness-factor]}
+      - {id: external-mass-transfer-and-weisz-prater, name: External mass transfer and the Weisz-Prater criterion, match: [external-mass-transfer-and-weisz-prater]}
+      - {id: catalyst-deactivation-and-regeneration, name: Catalyst deactivation and regeneration, match: [catalyst-deactivation-and-regeneration]}
+  - id: rx-multiphase-reactors
+    name: Multiphase reactors
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-multiphase-reactors]
+    subtopics:
+      - {id: gas-liquid-reactor-selection, name: Gas-liquid reactor selection, match: [gas-liquid-reactor-selection]}
+      - {id: fluidised-bed-reactor-basics, name: Fluidised bed reactor basics, match: [fluidised-bed-reactor-basics]}
+      - {id: trickle-bed-reactor-design, name: Trickle bed reactor design, match: [trickle-bed-reactor-design]}
+      - {id: slurry-and-bubble-column-design, name: Slurry and bubble column design, match: [slurry-and-bubble-column-design]}
+  - id: rx-scale-up-and-mixing
+    name: Scale-up and mixing
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-scale-up-and-mixing]
+    subtopics:
+      - {id: stirred-tank-power-and-mixing-time, name: Stirred tank power and mixing time, match: [stirred-tank-power-and-mixing-time]}
+      - {id: scale-up-criteria, name: Scale-up criteria, match: [scale-up-criteria]}
+      - {id: jacket-and-coil-heat-transfer-scale-up, name: Jacket and coil heat transfer on scale-up, match: [jacket-and-coil-heat-transfer-scale-up]}
+      - {id: lab-to-pilot-scale-up-plan, name: Lab to pilot scale-up plan, match: [lab-to-pilot-scale-up-plan]}
+  - id: rx-special-reactors
+    name: Special reactor types
+    source: Fogler Elements of Chemical Reaction Engineering / Levenspiel Chemical Reaction Engineering
+    match: [rx-special-reactors]
+    subtopics:
+      - {id: polymerisation-reactor-considerations, name: Polymerisation reactor considerations, match: [polymerisation-reactor-considerations]}
+      - {id: bioreactor-design-fundamentals, name: Bioreactor design fundamentals, match: [bioreactor-design-fundamentals]}
+      - {id: membrane-and-microreactors, name: Membrane and microreactors, match: [membrane-and-microreactors]}
+      - {id: electrochemical-reactor-basics, name: Electrochemical reactor basics, match: [electrochemical-reactor-basics]}
+  - id: sep-vle-and-flash
+    name: VLE and flash calculations
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-vle-and-flash]
+    subtopics:
+      - {id: rachford-rice-flash-calculation, name: Rachford-Rice flash calculation, match: [rachford-rice-flash-calculation]}
+      - {id: bubble-and-dew-point-calculations, name: Bubble and dew point calculations, match: [bubble-and-dew-point-calculations]}
+      - {id: relative-volatility-and-azeotrope-detection, name: Relative volatility and azeotrope detection, match: [relative-volatility-and-azeotrope-detection]}
+      - {id: activity-coefficient-models-nrtl-wilson, name: Activity coefficient models NRTL and Wilson, match: [activity-coefficient-models-nrtl-wilson]}
+  - id: sep-distillation-shortcuts
+    name: Shortcut distillation
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-distillation-shortcuts]
+    subtopics:
+      - {id: fenske-minimum-stages, name: Fenske minimum stages, match: [fenske-minimum-stages]}
+      - {id: underwood-minimum-reflux, name: Underwood minimum reflux, match: [underwood-minimum-reflux]}
+      - {id: gilliland-and-kirkbride-feed-stage, name: Gilliland correlation and Kirkbride feed stage, match: [gilliland-and-kirkbride-feed-stage]}
+      - {id: mccabe-thiele-graphical-method, name: McCabe-Thiele graphical method, match: [mccabe-thiele-graphical-method]}
+  - id: sep-column-hydraulics
+    name: Column hydraulics and efficiency
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-column-hydraulics]
+    subtopics:
+      - {id: tray-diameter-and-flooding, name: Tray column diameter and flooding, match: [tray-diameter-and-flooding]}
+      - {id: tray-efficiency-and-stage-count, name: Tray efficiency and actual stages, match: [tray-efficiency-and-stage-count]}
+      - {id: packed-column-hetp-and-pressure-drop, name: Packed column HETP and pressure drop, match: [packed-column-hetp-and-pressure-drop]}
+      - {id: column-pressure-and-condenser-selection, name: Column pressure and condenser selection, match: [column-pressure-and-condenser-selection]}
+  - id: sep-special-distillation
+    name: Special distillation
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-special-distillation]
+    subtopics:
+      - {id: azeotropic-and-extractive-distillation, name: Azeotropic and extractive distillation, match: [azeotropic-and-extractive-distillation]}
+      - {id: pressure-swing-distillation, name: Pressure-swing distillation, match: [pressure-swing-distillation]}
+      - {id: multicomponent-column-sequencing, name: Multicomponent column sequencing, match: [multicomponent-column-sequencing]}
+      - {id: batch-distillation-design, name: Batch distillation design, match: [batch-distillation-design]}
+  - id: sep-absorption-and-stripping
+    name: Absorption and stripping
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-absorption-and-stripping]
+    subtopics:
+      - {id: kremser-and-minimum-liquid-rate, name: Kremser equation and minimum liquid rate, match: [kremser-and-minimum-liquid-rate]}
+      - {id: packed-absorber-height-ntu-htu, name: Packed absorber height with NTU and HTU, match: [packed-absorber-height-ntu-htu]}
+      - {id: stripper-design, name: Stripper design, match: [stripper-design]}
+      - {id: solvent-selection-for-gas-treating, name: Solvent selection for gas treating, match: [solvent-selection-for-gas-treating]}
+  - id: sep-liquid-extraction
+    name: Liquid-liquid extraction
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-liquid-extraction]
+    subtopics:
+      - {id: ternary-lle-diagram-analysis, name: Ternary LLE diagram analysis, match: [ternary-lle-diagram-analysis]}
+      - {id: extractor-stage-calculation, name: Extractor stage calculation and solvent ratio, match: [extractor-stage-calculation]}
+      - {id: extractor-equipment-selection, name: Extractor equipment selection, match: [extractor-equipment-selection]}
+      - {id: solvent-recovery-loop-design, name: Solvent recovery loop design, match: [solvent-recovery-loop-design]}
+  - id: sep-membranes
+    name: Membrane separations
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-membranes]
+    subtopics:
+      - {id: membrane-flux-and-selectivity, name: Membrane flux and selectivity, match: [membrane-flux-and-selectivity]}
+      - {id: reverse-osmosis-design-basics, name: Reverse osmosis design basics, match: [reverse-osmosis-design-basics]}
+      - {id: gas-membrane-staging, name: Gas membrane staging and recycle, match: [gas-membrane-staging]}
+      - {id: ultrafiltration-fouling-and-cleaning, name: Ultrafiltration fouling and cleaning, match: [ultrafiltration-fouling-and-cleaning]}
+  - id: sep-adsorption-and-ion-exchange
+    name: Adsorption and ion exchange
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-adsorption-and-ion-exchange]
+    subtopics:
+      - {id: adsorption-isotherms, name: Adsorption isotherms Langmuir and Freundlich, match: [adsorption-isotherms]}
+      - {id: fixed-bed-breakthrough-curves, name: Fixed bed breakthrough and mass transfer zone, match: [fixed-bed-breakthrough-curves]}
+      - {id: psa-tsa-cycle-design, name: PSA and TSA cycle design, match: [psa-tsa-cycle-design]}
+      - {id: ion-exchange-column-design, name: Ion exchange column design, match: [ion-exchange-column-design]}
+  - id: sep-crystallisation-drying-evaporation
+    name: Crystallisation drying and evaporation
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-crystallisation-drying-evaporation]
+    subtopics:
+      - {id: solubility-and-supersaturation, name: Solubility curves and supersaturation, match: [solubility-and-supersaturation]}
+      - {id: msmpr-crystalliser-design, name: MSMPR crystalliser design, match: [msmpr-crystalliser-design]}
+      - {id: dryer-selection-and-psychrometrics, name: Dryer selection and psychrometrics, match: [dryer-selection-and-psychrometrics]}
+      - {id: multiple-effect-evaporator-design, name: Multiple-effect evaporator design, match: [multiple-effect-evaporator-design]}
+  - id: sep-solid-liquid-and-gas-solid
+    name: Solid-liquid and gas-solid separation
+    source: Seader Henley and Roper Separation Process Principles / Perry Chemical Engineers Handbook s
+    match: [sep-solid-liquid-and-gas-solid]
+    subtopics:
+      - {id: filtration-and-centrifuge-selection, name: Filtration and centrifuge selection, match: [filtration-and-centrifuge-selection]}
+      - {id: thickener-and-sedimentation-sizing, name: Thickener and sedimentation sizing, match: [thickener-and-sedimentation-sizing]}
+      - {id: cyclone-design, name: Cyclone design, match: [cyclone-design]}
+      - {id: particle-size-distribution-analysis, name: Particle size distribution analysis, match: [particle-size-distribution-analysis]}
+  - id: hx-thermal-fundamentals
+    name: Thermal fundamentals
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-thermal-fundamentals]
+    subtopics:
+      - {id: lmtd-and-f-correction-factor, name: LMTD and F correction factor, match: [lmtd-and-f-correction-factor]}
+      - {id: effectiveness-ntu-method, name: Effectiveness-NTU method, match: [effectiveness-ntu-method]}
+      - {id: overall-u-build-up, name: Overall heat transfer coefficient build-up, match: [overall-u-build-up]}
+      - {id: film-coefficient-correlations, name: Tube-side and shell-side film coefficient correlations, match: [film-coefficient-correlations]}
+  - id: hx-shell-and-tube-selection
+    name: Shell-and-tube selection and layout
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-shell-and-tube-selection]
+    subtopics:
+      - {id: tema-type-selection, name: TEMA type selection, match: [tema-type-selection]}
+      - {id: tube-layout-pitch-and-baffles, name: Tube layout pitch and baffle design, match: [tube-layout-pitch-and-baffles]}
+      - {id: fluid-allocation-and-fouling-factors, name: Fluid allocation and fouling factors, match: [fluid-allocation-and-fouling-factors]}
+      - {id: bell-delaware-shell-side-method, name: Bell-Delaware shell-side method, match: [bell-delaware-shell-side-method]}
+  - id: hx-mechanical-and-vibration
+    name: Mechanical design and vibration
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-mechanical-and-vibration]
+    subtopics:
+      - {id: tube-vibration-assessment, name: Tube vibration assessment, match: [tube-vibration-assessment]}
+      - {id: thermal-expansion-and-tubesheet-basics, name: Thermal expansion and tubesheet basics, match: [thermal-expansion-and-tubesheet-basics]}
+      - {id: materials-and-corrosion-for-exchangers, name: Materials and corrosion for exchangers, match: [materials-and-corrosion-for-exchangers]}
+      - {id: tube-failure-modes-and-leak-detection, name: Tube failure modes and leak detection, match: [tube-failure-modes-and-leak-detection]}
+  - id: hx-condensers-reboilers
+    name: Condensers and reboilers
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-condensers-reboilers]
+    subtopics:
+      - {id: reboiler-type-selection, name: Reboiler type selection, match: [reboiler-type-selection]}
+      - {id: condenser-design-and-subcooling, name: Condenser design and subcooling, match: [condenser-design-and-subcooling]}
+      - {id: boiling-heat-transfer-and-critical-heat-flux, name: Boiling heat transfer and critical heat flux, match: [boiling-heat-transfer-and-critical-heat-flux]}
+      - {id: thermosiphon-hydraulics, name: Thermosiphon reboiler hydraulics, match: [thermosiphon-hydraulics]}
+  - id: hx-compact-and-air-cooled
+    name: Compact and air-cooled exchangers
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-compact-and-air-cooled]
+    subtopics:
+      - {id: plate-and-frame-exchanger-design, name: Plate-and-frame exchanger design, match: [plate-and-frame-exchanger-design]}
+      - {id: air-cooled-exchanger-design, name: Air-cooled exchanger design, match: [air-cooled-exchanger-design]}
+      - {id: double-pipe-exchanger-design, name: Double-pipe and hairpin exchangers, match: [double-pipe-exchanger-design]}
+      - {id: spiral-and-pche-selection, name: Spiral and printed-circuit exchanger selection, match: [spiral-and-pche-selection]}
+  - id: hx-fouling-and-operations
+    name: Fouling and operations
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-fouling-and-operations]
+    subtopics:
+      - {id: fouling-mechanisms-and-mitigation, name: Fouling mechanisms and mitigation, match: [fouling-mechanisms-and-mitigation]}
+      - {id: fouling-resistance-trending, name: Fouling resistance trending from plant data, match: [fouling-resistance-trending]}
+      - {id: cleaning-methods-and-schedule, name: Cleaning methods and schedule, match: [cleaning-methods-and-schedule]}
+      - {id: exchanger-rerate-and-retube, name: Exchanger rerate and retube, match: [exchanger-rerate-and-retube]}
+  - id: hx-pinch-and-integration
+    name: Pinch analysis and heat integration
+    source: Kern Process Heat Transfer / Perry Handbook heat transfer section / TEMA Standards / Heat Exc
+    match: [hx-pinch-and-integration]
+    subtopics:
+      - {id: composite-curves-and-pinch-targets, name: Composite curves and pinch targets, match: [composite-curves-and-pinch-targets]}
+      - {id: pinch-design-method, name: Pinch design method for networks, match: [pinch-design-method]}
+      - {id: grand-composite-curve-and-utility-placement, name: Grand composite curve and utility placement, match: [grand-composite-curve-and-utility-placement]}
+      - {id: plus-minus-principle, name: Plus-minus principle for process changes, match: [plus-minus-principle]}
+      - {id: hen-area-targeting-and-cost-trade-off, name: Area targeting and cost trade-off, match: [hen-area-targeting-and-cost-trade-off]}
+  - id: pi-pid-development
+    name: P&ID development
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-pid-development]
+    subtopics:
+      - {id: pid-symbols-and-line-numbering, name: P&ID symbols and line numbering, match: [pid-symbols-and-line-numbering]}
+      - {id: pid-review-checklist, name: P&ID review checklist, match: [pid-review-checklist]}
+      - {id: control-loops-on-pid, name: Showing control loops and interlocks on the P&ID, match: [control-loops-on-pid]}
+      - {id: pid-equipment-and-nozzle-information, name: Equipment tags and nozzle information on the P&ID, match: [pid-equipment-and-nozzle-information]}
+  - id: pi-line-sizing
+    name: Line sizing
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-line-sizing]
+    subtopics:
+      - {id: liquid-line-sizing, name: Liquid line sizing, match: [liquid-line-sizing]}
+      - {id: vapour-and-two-phase-line-sizing, name: Vapour and two-phase line sizing, match: [vapour-and-two-phase-line-sizing]}
+      - {id: colebrook-friction-factor, name: Darcy friction factor and Colebrook equation, match: [colebrook-friction-factor]}
+      - {id: fittings-k-values-and-equivalent-length, name: Fittings K values and equivalent length, match: [fittings-k-values-and-equivalent-length]}
+      - {id: pipe-schedule-and-wall-thickness, name: Pipe schedule and wall thickness selection, match: [pipe-schedule-and-wall-thickness]}
+  - id: pi-pump-hydraulics
+    name: Pump hydraulics
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-pump-hydraulics]
+    subtopics:
+      - {id: pump-and-system-curve-matching, name: Pump and system curve matching, match: [pump-and-system-curve-matching]}
+      - {id: npsh-available-and-required, name: NPSH available and required, match: [npsh-available-and-required]}
+      - {id: pump-type-selection, name: Centrifugal vs positive displacement selection, match: [pump-type-selection]}
+      - {id: pump-control-and-minimum-flow, name: Pump control and minimum flow, match: [pump-control-and-minimum-flow]}
+  - id: pi-control-valve-sizing
+    name: Control valve sizing
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-control-valve-sizing]
+    subtopics:
+      - {id: cv-calculation-liquid-and-gas, name: Cv calculation for liquid and gas, match: [cv-calculation-liquid-and-gas]}
+      - {id: choked-flow-cavitation-flashing, name: Choked flow cavitation and flashing, match: [choked-flow-cavitation-flashing]}
+      - {id: valve-characteristic-selection, name: Valve characteristic selection, match: [valve-characteristic-selection]}
+      - {id: valve-failure-position-and-actuator, name: Valve failure position and actuator selection, match: [valve-failure-position-and-actuator]}
+  - id: pi-compressors-and-vacuum
+    name: Compressors and vacuum
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-compressors-and-vacuum]
+    subtopics:
+      - {id: compressor-polytropic-head-and-power, name: Compressor polytropic head and power, match: [compressor-polytropic-head-and-power]}
+      - {id: compressor-selection-and-staging, name: Compressor selection and staging, match: [compressor-selection-and-staging]}
+      - {id: surge-and-antisurge-control, name: Surge and antisurge control, match: [surge-and-antisurge-control]}
+      - {id: vacuum-system-design, name: Vacuum system design, match: [vacuum-system-design]}
+  - id: pi-instrument-selection
+    name: Instrument selection
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-instrument-selection]
+    subtopics:
+      - {id: flow-meter-selection, name: Flow meter selection, match: [flow-meter-selection]}
+      - {id: level-measurement-selection, name: Level measurement selection, match: [level-measurement-selection]}
+      - {id: temperature-and-pressure-instrument-selection, name: Temperature and pressure instrument selection, match: [temperature-and-pressure-instrument-selection]}
+      - {id: analyzer-and-sample-system-selection, name: Analyzer and sample system selection, match: [analyzer-and-sample-system-selection]}
+  - id: pi-layout-and-steam-systems
+    name: Layout and steam systems
+    source: Crane Technical Paper 410 / Perry Handbook fluid transport section / ASME B31.3 Process Pipi
+    match: [pi-layout-and-steam-systems]
+    subtopics:
+      - {id: relief-line-pressure-drop, name: Relief inlet and outlet line pressure drop, match: [relief-line-pressure-drop]}
+      - {id: drainage-and-venting-layout, name: Drainage and venting layout, match: [drainage-and-venting-layout]}
+      - {id: steam-trap-and-condensate-systems, name: Steam trap and condensate systems, match: [steam-trap-and-condensate-systems]}
+      - {id: piping-flexibility-awareness, name: Piping flexibility for process engineers, match: [piping-flexibility-awareness]}
+  - id: pc-process-dynamics
+    name: Process dynamics and identification
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-process-dynamics]
+    subtopics:
+      - {id: fopdt-model-identification, name: FOPDT model identification from step tests, match: [fopdt-model-identification]}
+      - {id: step-test-design, name: Step test design, match: [step-test-design]}
+      - {id: laplace-transfer-function-modelling, name: Laplace and transfer-function modelling, match: [laplace-transfer-function-modelling]}
+      - {id: linearisation-and-state-space, name: Linearisation and state-space models, match: [linearisation-and-state-space]}
+  - id: pc-pid-tuning
+    name: PID tuning
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-pid-tuning]
+    subtopics:
+      - {id: imc-lambda-tuning, name: IMC and lambda tuning, match: [imc-lambda-tuning]}
+      - {id: ziegler-nichols-and-relay-autotune, name: Ziegler-Nichols and relay autotune, match: [ziegler-nichols-and-relay-autotune]}
+      - {id: anti-windup-and-bumpless-transfer, name: Anti-windup and bumpless transfer, match: [anti-windup-and-bumpless-transfer]}
+      - {id: level-loop-averaging-control, name: Level loop and averaging control, match: [level-loop-averaging-control]}
+  - id: pc-advanced-regulatory-control
+    name: Advanced regulatory control
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-advanced-regulatory-control]
+    subtopics:
+      - {id: cascade-control-design, name: Cascade control design, match: [cascade-control-design]}
+      - {id: ratio-and-feedforward-control, name: Ratio and feedforward control, match: [ratio-and-feedforward-control]}
+      - {id: split-range-and-override-control, name: Split-range and override control, match: [split-range-and-override-control]}
+      - {id: dead-time-compensation, name: Dead-time compensation and Smith predictor, match: [dead-time-compensation]}
+  - id: pc-multivariable-control
+    name: Multivariable control and pairing
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-multivariable-control]
+    subtopics:
+      - {id: relative-gain-array-pairing, name: Relative gain array pairing, match: [relative-gain-array-pairing]}
+      - {id: decoupling-design, name: Decoupling design, match: [decoupling-design]}
+      - {id: mpc-identification-and-tuning, name: MPC model identification and tuning, match: [mpc-identification-and-tuning]}
+      - {id: plantwide-control-structure, name: Plantwide control structure design, match: [plantwide-control-structure]}
+  - id: pc-unit-operation-control
+    name: Control of unit operations
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-unit-operation-control]
+    subtopics:
+      - {id: distillation-control-structures, name: Distillation column control structures, match: [distillation-control-structures]}
+      - {id: reactor-temperature-control, name: Reactor temperature control schemes, match: [reactor-temperature-control]}
+      - {id: compressor-and-pressure-control, name: Compressor and pressure control, match: [compressor-and-pressure-control]}
+      - {id: heat-exchanger-and-furnace-control, name: Heat exchanger and furnace control, match: [heat-exchanger-and-furnace-control]}
+  - id: pc-alarms-and-interface
+    name: Alarm management and operator interface
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-alarms-and-interface]
+    subtopics:
+      - {id: alarm-rationalisation, name: Alarm rationalisation, match: [alarm-rationalisation]}
+      - {id: alarm-flood-analysis, name: Alarm flood analysis, match: [alarm-flood-analysis]}
+      - {id: bpcs-sis-separation, name: BPCS and SIS separation, match: [bpcs-sis-separation]}
+      - {id: high-performance-hmi, name: High-performance HMI design, match: [high-performance-hmi]}
+  - id: pc-performance-monitoring
+    name: Control performance monitoring
+    source: Seborg Edgar Mellichamp and Doyle Process Dynamics and Control / Smith and Corripio Princip
+    match: [pc-performance-monitoring]
+    subtopics:
+      - {id: loop-performance-assessment, name: Loop performance assessment, match: [loop-performance-assessment]}
+      - {id: valve-stiction-detection, name: Valve stiction detection, match: [valve-stiction-detection]}
+      - {id: oscillation-diagnosis, name: Oscillation diagnosis, match: [oscillation-diagnosis]}
+      - {id: soft-sensor-development, name: Soft sensor development, match: [soft-sensor-development]}
+  - id: ps-hazard-identification
+    name: Hazard identification
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-hazard-identification]
+    subtopics:
+      - {id: hazop-node-selection-and-preparation, name: HAZOP node selection and preparation, match: [hazop-node-selection-and-preparation]}
+      - {id: hazop-guidewords-and-deviations, name: HAZOP guidewords and deviation logic, match: [hazop-guidewords-and-deviations]}
+      - {id: what-if-and-checklist-methods, name: What-if and checklist methods, match: [what-if-and-checklist-methods]}
+      - {id: fmea-for-process-equipment, name: FMEA for process equipment, match: [fmea-for-process-equipment]}
+      - {id: hazop-recording-and-action-tracking, name: HAZOP recording and action tracking, match: [hazop-recording-and-action-tracking]}
+  - id: ps-lopa-and-sil
+    name: LOPA and safety integrity levels
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-lopa-and-sil]
+    subtopics:
+      - {id: lopa-scenario-and-initiating-events, name: LOPA scenario and initiating event frequency, match: [lopa-scenario-and-initiating-events]}
+      - {id: ipl-credit-rules, name: Independent protection layer credit rules, match: [ipl-credit-rules]}
+      - {id: sil-determination-and-verification, name: SIL determination and verification, match: [sil-determination-and-verification]}
+      - {id: proof-test-interval-and-pfd, name: Proof test interval and PFDavg, match: [proof-test-interval-and-pfd]}
+  - id: ps-relief-sizing
+    name: Relief and flare sizing
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-relief-sizing]
+    subtopics:
+      - {id: relief-scenario-identification, name: Relief scenario identification, match: [relief-scenario-identification]}
+      - {id: relief-valve-sizing-vapour-and-liquid, name: Relief valve sizing for vapour and liquid, match: [relief-valve-sizing-vapour-and-liquid]}
+      - {id: rupture-disc-and-pilot-valve-selection, name: Rupture disc and pilot valve selection, match: [rupture-disc-and-pilot-valve-selection]}
+      - {id: two-phase-relief-sizing, name: Two-phase relief sizing, match: [two-phase-relief-sizing]}
+      - {id: relief-header-and-flare-sizing, name: Relief header and flare sizing, match: [relief-header-and-flare-sizing]}
+  - id: ps-consequence-modelling
+    name: Consequence modelling
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-consequence-modelling]
+    subtopics:
+      - {id: source-term-discharge-modelling, name: Source term and discharge modelling, match: [source-term-discharge-modelling]}
+      - {id: gas-dispersion-modelling-basics, name: Gas dispersion modelling basics, match: [gas-dispersion-modelling-basics]}
+      - {id: fire-and-explosion-effects, name: Fire and explosion effects, match: [fire-and-explosion-effects]}
+      - {id: toxic-exposure-and-probit, name: Toxic exposure and probit analysis, match: [toxic-exposure-and-probit]}
+  - id: ps-inherently-safer-and-siting
+    name: Inherently safer design and siting
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-inherently-safer-and-siting]
+    subtopics:
+      - {id: inherently-safer-design-strategies, name: Inherently safer design strategies, match: [inherently-safer-design-strategies]}
+      - {id: facility-siting-and-spacing, name: Facility siting and spacing, match: [facility-siting-and-spacing]}
+      - {id: hazardous-area-classification, name: Hazardous area classification, match: [hazardous-area-classification]}
+      - {id: inventory-minimisation, name: Inventory minimisation, match: [inventory-minimisation]}
+  - id: ps-process-safety-management
+    name: Process safety management
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-process-safety-management]
+    subtopics:
+      - {id: psm-elements-overview, name: OSHA PSM elements overview, match: [psm-elements-overview]}
+      - {id: management-of-change, name: Management of change, match: [management-of-change]}
+      - {id: pre-startup-safety-review, name: Pre-startup safety review, match: [pre-startup-safety-review]}
+      - {id: mechanical-integrity-programme, name: Mechanical integrity programme, match: [mechanical-integrity-programme]}
+      - {id: incident-investigation, name: Incident investigation and learning, match: [incident-investigation]}
+  - id: ps-reactive-and-dust-hazards
+    name: Reactive chemical and dust hazards
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-reactive-and-dust-hazards]
+    subtopics:
+      - {id: reactive-hazard-screening, name: Reactive hazard screening and calorimetry, match: [reactive-hazard-screening]}
+      - {id: runaway-relief-design-considerations, name: Runaway reaction relief design considerations, match: [runaway-relief-design-considerations]}
+      - {id: dust-explosion-hazard-basics, name: Dust explosion hazard basics, match: [dust-explosion-hazard-basics]}
+      - {id: static-electricity-and-bonding, name: Static electricity and bonding, match: [static-electricity-and-bonding]}
+  - id: ps-regulatory-frameworks
+    name: Regulatory frameworks
+    source: CCPS Guidelines for Hazard Evaluation Procedures / CCPS Layer of Protection Analysis / API S
+    match: [ps-regulatory-frameworks]
+    subtopics:
+      - {id: seveso-comah-overview, name: Seveso and COMAH overview, match: [seveso-comah-overview]}
+      - {id: reach-clp-for-process-engineers, name: REACH and CLP for process engineers, match: [reach-clp-for-process-engineers]}
+      - {id: atex-and-dsear-overview, name: ATEX and DSEAR overview, match: [atex-and-dsear-overview]}
+      - {id: qra-and-risk-criteria, name: Quantitative risk assessment and risk criteria, match: [qra-and-risk-criteria]}

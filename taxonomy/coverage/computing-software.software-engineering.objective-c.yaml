@@ -1,0 +1,356 @@
+# Canonical coverage spec: Objective-C language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: objective-c-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [objective-c]
+sources:
+  - "The Objective-C Programming Language and Programming with Objective-C (Apple, developer.apple.com archive)"
+  - "Objective-C Runtime Programming Guide, Advanced Memory Management Programming Guide, Blocks Programming Topics"
+  - "Clang documentation: Objective-C literals, ARC, Block language spec, attributes, ClangFormat, clang-tidy, static analyzer"
+  - "Foundation, Dispatch, UIKit/AppKit, XCTest and Security framework reference (developer.apple.com/documentation)"
+  - "Xcode, xcodebuild, LLDB, Instruments docs; GNUstep documentation (gnustep.org)"
+topics:
+  - id: objc-classes
+    name: "Classes and objects"
+    source: "Programming with Objective-C: Defining Classes"
+    match: [objc-classes]
+    subtopics:
+      - {id: objc-classes-interface-implementation, name: "@interface and @implementation", match: [class-interface-implementation]}
+      - {id: objc-classes-class-extensions, name: "Class extensions for private API", match: [class-extensions]}
+      - {id: objc-classes-class-clusters, name: "Class clusters and abstract factories", match: [class-clusters]}
+  - id: objc-messaging
+    name: "Messaging"
+    source: "Objective-C Programming Language: Messaging"
+    match: [objc-messaging]
+    subtopics:
+      - {id: objc-messaging-message-syntax, name: "Message expressions and method signatures", match: [message-syntax]}
+      - {id: objc-messaging-nil-messaging, name: "Messaging nil and safe defaults", match: [nil-messaging]}
+      - {id: objc-messaging-selectors-sel, name: "Selectors, SEL and performSelector", match: [selectors-sel]}
+  - id: objc-properties
+    name: "Properties"
+    source: "Programming with Objective-C: Encapsulating Data"
+    match: [objc-properties]
+    subtopics:
+      - {id: objc-properties-property-attributes, name: "Property attributes", match: [property-attributes]}
+      - {id: objc-properties-synthesize-ivars, name: "Auto-synthesis, @synthesize and ivars", match: [synthesize-ivars]}
+      - {id: objc-properties-dot-syntax-accessors, name: "Dot syntax and accessor naming", match: [dot-syntax-accessors]}
+      - {id: objc-properties-property-copy-semantics, name: "copy for value-like and mutable-class properties", match: [property-copy-semantics]}
+  - id: objc-categories
+    name: "Categories"
+    source: "Programming with Objective-C: Customizing Existing Classes"
+    match: [objc-categories]
+    subtopics:
+      - {id: objc-categories-category-methods, name: "Adding methods with categories", match: [category-methods]}
+      - {id: objc-categories-associated-objects, name: "Associated objects", match: [associated-objects]}
+      - {id: objc-categories-category-collisions, name: "Category name collisions and load order", match: [category-collisions]}
+  - id: objc-protocols
+    name: "Protocols"
+    source: "Programming with Objective-C: Working with Protocols"
+    match: [objc-protocols]
+    subtopics:
+      - {id: objc-protocols-protocol-declaration, name: "Declaring protocols, required and optional methods", match: [protocol-declaration]}
+      - {id: objc-protocols-protocol-conformance, name: "Adopting and testing conformance", match: [protocol-conformance]}
+      - {id: objc-protocols-delegate-pattern, name: "Delegate pattern and weak delegates", match: [delegate-pattern]}
+  - id: objc-types
+    name: "Types and constants"
+    source: "Programming with Objective-C: Values and Collections; Objective-C Programming Language"
+    match: [objc-types]
+    subtopics:
+      - {id: objc-types-id-type, name: "id, Class and dynamic typing", match: [id-type]}
+      - {id: objc-types-bool-nsinteger-types, name: "BOOL, NSInteger and fixed-width types", match: [bool-nsinteger-types]}
+      - {id: objc-types-instancetype, name: "instancetype return type", match: [instancetype]}
+      - {id: objc-types-type-encodings, name: "@encode and type encodings", match: [type-encodings]}
+  - id: objc-literals
+    name: "Literals and boxing"
+    source: "Clang: Objective-C Literals"
+    match: [objc-literals]
+    subtopics:
+      - {id: objc-literals-nsnumber-literals, name: "NSNumber literals", match: [nsnumber-literals]}
+      - {id: objc-literals-collection-literals, name: "Array and dictionary literals", match: [collection-literals]}
+      - {id: objc-literals-boxed-expressions, name: "Boxed expressions and C strings", match: [boxed-expressions]}
+      - {id: objc-literals-string-literals, name: "NSString literals and constants", match: [string-literals]}
+  - id: objc-subscripting
+    name: "Object subscripting"
+    source: "Clang: Objective-C Literals (Object Subscripting)"
+    match: [objc-subscripting]
+    subtopics:
+      - {id: objc-subscripting-indexed-subscripting, name: "Indexed subscripting for custom classes", match: [indexed-subscripting]}
+      - {id: objc-subscripting-keyed-subscripting, name: "Keyed subscripting for custom classes", match: [keyed-subscripting]}
+  - id: objc-generics
+    name: "Generics and nullability"
+    source: "Clang/Apple: Lightweight Generics, Nullability"
+    match: [objc-generics]
+    subtopics:
+      - {id: objc-generics-lightweight-generics, name: "Lightweight generics", match: [lightweight-generics]}
+      - {id: objc-generics-nullability-annotations, name: "Nullability annotations", match: [nullability-annotations]}
+      - {id: objc-generics-kindof-types, name: "__kindof types", match: [kindof-types]}
+  - id: objc-initialization
+    name: "Object creation and initialization"
+    source: "Programming with Objective-C: Working with Objects"
+    match: [objc-initialization]
+    subtopics:
+      - {id: objc-initialization-designated-initializers, name: "Designated and convenience initializers", match: [designated-initializers]}
+      - {id: objc-initialization-alloc-init-new, name: "alloc, init, new and factory methods", match: [alloc-init-new]}
+      - {id: objc-initialization-class-initialize-load, name: "+load and +initialize", match: [class-initialize-load]}
+  - id: objc-arc
+    name: "Automatic Reference Counting"
+    source: "Clang: Objective-C Automatic Reference Counting"
+    match: [objc-arc]
+    subtopics:
+      - {id: objc-arc-arc-ownership-qualifiers, name: "ARC ownership qualifiers", match: [arc-ownership-qualifiers]}
+      - {id: objc-arc-retain-cycles, name: "Retain cycles and weak references", match: [retain-cycles]}
+      - {id: objc-arc-arc-bridging, name: "Bridging casts for Core Foundation", match: [arc-bridging]}
+      - {id: objc-arc-arc-autoreleasepool, name: "@autoreleasepool blocks", match: [arc-autoreleasepool]}
+  - id: objc-mrc
+    name: "Manual reference counting"
+    source: "Advanced Memory Management Programming Guide"
+    match: [objc-mrc]
+    subtopics:
+      - {id: objc-mrc-retain-release-rules, name: "Ownership rules: alloc, new, copy, retain", match: [retain-release-rules]}
+      - {id: objc-mrc-autorelease-pools-mrc, name: "Autorelease pools under MRC", match: [autorelease-pools-mrc]}
+      - {id: objc-mrc-dealloc-implementation, name: "Implementing dealloc", match: [dealloc-implementation]}
+  - id: objc-blocks
+    name: "Blocks"
+    source: "Clang: Block Language Specification; Blocks Programming Topics"
+    match: [objc-blocks]
+    subtopics:
+      - {id: objc-blocks-block-syntax, name: "Block syntax, typedefs and calling", match: [block-syntax]}
+      - {id: objc-blocks-block-capture, name: "Variable capture and __block", match: [block-capture]}
+      - {id: objc-blocks-block-retain-cycles, name: "Blocks and self retain cycles", match: [block-retain-cycles]}
+      - {id: objc-blocks-block-copy-semantics, name: "Block storage, copy and escaping", match: [block-copy-semantics]}
+  - id: objc-exceptions
+    name: "Exceptions and errors"
+    source: "Programming with Objective-C: Dealing with Errors; Exception Programming Topics"
+    match: [objc-exceptions]
+    subtopics:
+      - {id: objc-exceptions-try-catch-finally, name: "@try, @catch, @finally and @throw", match: [try-catch-finally]}
+      - {id: objc-exceptions-nserror-pattern, name: "NSError out-parameter pattern", match: [nserror-pattern]}
+      - {id: objc-exceptions-exception-vs-error, name: "Exceptions versus errors design", match: [exception-vs-error]}
+  - id: objc-enumeration
+    name: "Fast enumeration and iteration"
+    source: "Programming with Objective-C: Working with Objects (Enumeration)"
+    match: [objc-enumeration]
+    subtopics:
+      - {id: objc-enumeration-fast-enumeration, name: "for...in fast enumeration", match: [fast-enumeration]}
+      - {id: objc-enumeration-enumerate-blocks, name: "Block-based enumeration", match: [enumerate-blocks]}
+  - id: objc-runtime
+    name: "The Objective-C runtime"
+    source: "Objective-C Runtime Programming Guide"
+    match: [objc-runtime]
+    subtopics:
+      - {id: objc-runtime-runtime-introspection, name: "Runtime introspection APIs", match: [runtime-introspection]}
+      - {id: objc-runtime-method-swizzling, name: "Method swizzling", match: [method-swizzling]}
+      - {id: objc-runtime-dynamic-method-resolution, name: "Dynamic method resolution", match: [dynamic-method-resolution]}
+      - {id: objc-runtime-message-forwarding, name: "Message forwarding and proxies", match: [message-forwarding]}
+      - {id: objc-runtime-isa-metaclass, name: "isa, class objects and metaclasses", match: [isa-metaclass]}
+  - id: objc-kvc-kvo
+    name: "Key-Value Coding and Observing"
+    source: "Key-Value Coding Programming Guide; Key-Value Observing Programming Guide"
+    match: [objc-kvc-kvo]
+    subtopics:
+      - {id: objc-kvc-kvo-kvc-accessors, name: "Key-Value Coding access and key paths", match: [kvc-accessors]}
+      - {id: objc-kvc-kvo-kvc-collection-operators, name: "KVC collection operators", match: [kvc-collection-operators]}
+      - {id: objc-kvc-kvo-kvo-observing, name: "KVO observing and context", match: [kvo-observing]}
+      - {id: objc-kvc-kvo-kvo-dependent-keys, name: "KVO dependent keys and manual notification", match: [kvo-dependent-keys]}
+  - id: objc-foundation-text
+    name: "Foundation strings and collections"
+    source: "Foundation framework reference: NSString, NSArray, NSDictionary, NSSet"
+    match: [objc-foundation-text]
+    subtopics:
+      - {id: objc-foundation-text-nsstring-basics, name: "NSString and NSMutableString basics", match: [nsstring-basics]}
+      - {id: objc-foundation-text-string-formatting, name: "Format specifiers and NSLog formatting", match: [string-formatting]}
+      - {id: objc-foundation-text-nsarray-nsmutablearray, name: "NSArray and NSMutableArray", match: [nsarray-nsmutablearray]}
+      - {id: objc-foundation-text-nsdictionary-nsset, name: "NSDictionary, NSSet and ordered sets", match: [nsdictionary-nsset]}
+  - id: objc-foundation-data
+    name: "Foundation data, dates and persistence"
+    source: "Foundation framework reference: NSData, NSJSONSerialization, NSDate, NSCoding, NSUserDefaults"
+    match: [objc-foundation-data]
+    subtopics:
+      - {id: objc-foundation-data-nsjsonserialization, name: "NSData and JSON with NSJSONSerialization", match: [nsjsonserialization]}
+      - {id: objc-foundation-data-nscoding-archiving, name: "NSCoding, NSSecureCoding and archiving", match: [nscoding-archiving]}
+      - {id: objc-foundation-data-nsdate-calendar, name: "NSDate, NSCalendar and NSDateFormatter", match: [nsdate-calendar]}
+      - {id: objc-foundation-data-nsuserdefaults, name: "NSUserDefaults and small preferences", match: [nsuserdefaults]}
+  - id: objc-foundation-io
+    name: "Files, URLs and networking"
+    source: "Foundation framework reference: NSFileManager, NSURL, NSBundle, NSURLSession"
+    match: [objc-foundation-io]
+    subtopics:
+      - {id: objc-foundation-io-nsfilemanager, name: "NSFileManager file operations", match: [nsfilemanager]}
+      - {id: objc-foundation-io-nsurl-nsbundle, name: "NSURL and NSBundle resources", match: [nsurl-nsbundle]}
+      - {id: objc-foundation-io-nsurlsession, name: "NSURLSession tasks", match: [nsurlsession]}
+      - {id: objc-foundation-io-app-transport-security, name: "App Transport Security", match: [app-transport-security]}
+  - id: objc-gcd
+    name: "Grand Central Dispatch"
+    source: "Dispatch framework reference; Concurrency Programming Guide"
+    match: [objc-gcd]
+    subtopics:
+      - {id: objc-gcd-dispatch-queues, name: "Serial and concurrent dispatch queues", match: [dispatch-queues]}
+      - {id: objc-gcd-dispatch-groups, name: "Dispatch groups and semaphores", match: [dispatch-groups]}
+      - {id: objc-gcd-dispatch-once-barrier, name: "dispatch_once and barriers", match: [dispatch-once-barrier]}
+  - id: objc-operations
+    name: "NSOperation and NSThread"
+    source: "Concurrency Programming Guide; NSOperation reference"
+    match: [objc-operations]
+    subtopics:
+      - {id: objc-operations-nsoperationqueue, name: "NSOperationQueue and blocks", match: [nsoperationqueue]}
+      - {id: objc-operations-nsoperation-dependencies, name: "NSOperation subclasses and dependencies", match: [nsoperation-dependencies]}
+  - id: objc-thread-safety
+    name: "Thread safety and synchronization"
+    source: "Threading Programming Guide; Synchronization"
+    match: [objc-thread-safety]
+    subtopics:
+      - {id: objc-thread-safety-synchronized-lock, name: "@synchronized, NSLock and os_unfair_lock", match: [synchronized-lock]}
+      - {id: objc-thread-safety-atomic-properties-thread-safety, name: "Atomic properties are not thread safe", match: [atomic-properties-thread-safety]}
+  - id: objc-runloop
+    name: "Run loops, timers and notifications"
+    source: "Threading Programming Guide: Run Loops; Notification Programming Topics"
+    match: [objc-runloop]
+    subtopics:
+      - {id: objc-runloop-nsrunloop-nstimer, name: "NSRunLoop, run loop modes and NSTimer", match: [nsrunloop-nstimer]}
+      - {id: objc-runloop-nsnotificationcenter, name: "NSNotificationCenter", match: [nsnotificationcenter]}
+  - id: objc-cocoa-patterns
+    name: "Cocoa design patterns"
+    source: "Cocoa Core Competencies; Concepts in Objective-C Programming"
+    match: [objc-cocoa-patterns]
+    subtopics:
+      - {id: objc-cocoa-patterns-singleton-pattern, name: "Singletons with dispatch_once", match: [singleton-pattern]}
+      - {id: objc-cocoa-patterns-target-action, name: "Target-action and responder chain", match: [target-action]}
+  - id: objc-swift-interop
+    name: "Swift interoperability"
+    source: "Apple: Importing Objective-C into Swift; Swift into Objective-C"
+    match: [objc-swift-interop]
+    subtopics:
+      - {id: objc-swift-interop-bridging-header, name: "Bridging headers and the generated Swift header", match: [bridging-header]}
+      - {id: objc-swift-interop-ns-swift-annotations, name: "NS_SWIFT_NAME, NS_ENUM and NS_OPTIONS", match: [ns-swift-annotations]}
+      - {id: objc-swift-interop-objc-from-swift, name: "Exposing Swift to Objective-C with @objc", match: [objc-from-swift]}
+  - id: objc-c-interop
+    name: "C, C++ and Core Foundation interop"
+    source: "Clang docs: Objective-C++; Core Foundation reference"
+    match: [objc-c-interop]
+    subtopics:
+      - {id: objc-c-interop-objective-c-plus-plus, name: "Objective-C++ (.mm)", match: [objective-c-plus-plus]}
+      - {id: objc-c-interop-toll-free-bridging, name: "Toll-free bridging and CF memory rules", match: [toll-free-bridging]}
+  - id: objc-modules
+    name: "Modules and headers"
+    source: "Clang Modules documentation"
+    match: [objc-modules]
+    subtopics:
+      - {id: objc-modules-clang-modules, name: "Clang modules and @import", match: [clang-modules]}
+      - {id: objc-modules-framework-headers, name: "Public, private and project headers in frameworks", match: [framework-headers]}
+  - id: objc-preprocessor
+    name: "Preprocessor and availability"
+    source: "Clang docs; Apple availability macros"
+    match: [objc-preprocessor]
+    subtopics:
+      - {id: objc-preprocessor-import-vs-include, name: "#import versus #include and guards", match: [import-vs-include]}
+      - {id: objc-preprocessor-availability-macros, name: "Availability macros and @available", match: [availability-macros]}
+  - id: objc-attributes
+    name: "Clang attributes and macros"
+    source: "Clang Attribute Reference; Apple Foundation macros"
+    match: [objc-attributes]
+    subtopics:
+      - {id: objc-attributes-designated-attributes, name: "NS_REQUIRES_SUPER, NS_UNAVAILABLE and NS_DESIGNATED_INITIALIZER", match: [designated-attributes]}
+      - {id: objc-attributes-objc-direct-members, name: "objc_direct and objc_final attributes", match: [objc-direct-members]}
+  - id: objc-build
+    name: "Compiler and build tools"
+    source: "Clang user manual; xcodebuild man page; Xcode build settings reference"
+    match: [objc-build]
+    subtopics:
+      - {id: objc-build-clang-compile, name: "Compiling with clang from the command line", match: [clang-compile]}
+      - {id: objc-build-xcodebuild, name: "xcodebuild builds, tests and archives", match: [xcodebuild]}
+      - {id: objc-build-build-settings, name: "Important Objective-C build settings", match: [build-settings]}
+      - {id: objc-build-compiler-warnings, name: "Compiler warning flags", match: [compiler-warnings]}
+  - id: objc-packaging
+    name: "Packaging and dependencies"
+    source: "Swift Package Manager docs; CocoaPods guides; Xcode XCFramework docs"
+    match: [objc-packaging]
+    subtopics:
+      - {id: objc-packaging-spm-objc-targets, name: "Swift Package Manager C-family targets", match: [spm-objc-targets]}
+      - {id: objc-packaging-cocoapods-podspec, name: "CocoaPods podspecs and Podfile", match: [cocoapods-podspec]}
+      - {id: objc-packaging-xcframework, name: "Building XCFrameworks", match: [xcframework]}
+  - id: objc-style-lint
+    name: "Formatting, naming and linting"
+    source: "Clang: ClangFormat, clang-tidy; Apple Coding Guidelines for Cocoa"
+    match: [objc-style-lint]
+    subtopics:
+      - {id: objc-style-lint-clang-format, name: "clang-format for Objective-C", match: [clang-format]}
+      - {id: objc-style-lint-clang-tidy-objc, name: "clang-tidy Objective-C checks", match: [clang-tidy-objc]}
+      - {id: objc-style-lint-naming-conventions, name: "Cocoa naming conventions", match: [naming-conventions]}
+  - id: objc-static-analysis
+    name: "Static analysis"
+    source: "Clang Static Analyzer documentation"
+    match: [objc-static-analysis]
+    subtopics:
+      - {id: objc-static-analysis-clang-static-analyzer, name: "Clang Static Analyzer", match: [clang-static-analyzer]}
+  - id: objc-testing
+    name: "Testing"
+    source: "XCTest framework reference; OCMock documentation"
+    match: [objc-testing]
+    subtopics:
+      - {id: objc-testing-xctest-basics, name: "XCTest test cases and assertions", match: [xctest-basics]}
+      - {id: objc-testing-xctest-async, name: "Asynchronous tests with expectations", match: [xctest-async]}
+      - {id: objc-testing-ocmock-mocking, name: "Mocking with OCMock and protocol fakes", match: [ocmock-mocking]}
+      - {id: objc-testing-code-coverage, name: "Code coverage reports", match: [code-coverage]}
+  - id: objc-debugging
+    name: "Debugging"
+    source: "LLDB documentation; Xcode debugging guides; os_log"
+    match: [objc-debugging]
+    subtopics:
+      - {id: objc-debugging-lldb-commands, name: "LLDB commands for Objective-C", match: [lldb-commands]}
+      - {id: objc-debugging-exception-breakpoints, name: "Exception and symbolic breakpoints", match: [exception-breakpoints]}
+      - {id: objc-debugging-oslog-logging, name: "os_log and NSLog logging", match: [oslog-logging]}
+      - {id: objc-debugging-crash-symbolication, name: "Crash logs and dSYM symbolication", match: [crash-symbolication]}
+  - id: objc-memory-tools
+    name: "Memory debugging tools"
+    source: "Xcode diagnostics; Clang sanitizer docs"
+    match: [objc-memory-tools]
+    subtopics:
+      - {id: objc-memory-tools-zombie-objects, name: "Zombie objects", match: [zombie-objects]}
+      - {id: objc-memory-tools-address-sanitizer, name: "Address, Thread and Undefined Behavior sanitizers", match: [address-sanitizer]}
+  - id: objc-profiling
+    name: "Profiling and performance"
+    source: "Instruments help; xctrace man page"
+    match: [objc-profiling]
+    subtopics:
+      - {id: objc-profiling-instruments-time-profiler, name: "Time Profiler and xctrace", match: [instruments-time-profiler]}
+      - {id: objc-profiling-instruments-allocations-leaks, name: "Allocations, Leaks and Memory Graph", match: [instruments-allocations-leaks]}
+  - id: objc-ui
+    name: "UIKit and AppKit patterns"
+    source: "UIKit and AppKit framework reference"
+    match: [objc-ui]
+    subtopics:
+      - {id: objc-ui-viewcontroller-lifecycle, name: "UIViewController lifecycle", match: [viewcontroller-lifecycle]}
+      - {id: objc-ui-autolayout-programmatic, name: "Programmatic Auto Layout", match: [autolayout-programmatic]}
+      - {id: objc-ui-uitableview-datasource, name: "UITableView data source and cell reuse", match: [uitableview-datasource]}
+  - id: objc-security
+    name: "Security"
+    source: "Apple Platform Security; Security framework reference; Secure Coding Guide"
+    match: [objc-security]
+    subtopics:
+      - {id: objc-security-keychain-services, name: "Keychain Services", match: [keychain-services]}
+      - {id: objc-security-code-signing-notarization, name: "Code signing, hardened runtime and notarization", match: [code-signing-notarization]}
+      - {id: objc-security-secure-input-handling, name: "Secure input handling in Objective-C", match: [secure-input-handling]}
+  - id: objc-ops
+    name: "CI, delivery and non-Apple platforms"
+    source: "Xcode Cloud / GitHub Actions docs; fastlane docs; GNUstep documentation"
+    match: [objc-ops]
+    subtopics:
+      - {id: objc-ops-ci-xcodebuild, name: "CI pipelines with xcodebuild", match: [ci-xcodebuild]}
+      - {id: objc-ops-fastlane-lanes, name: "fastlane lanes for build and release", match: [fastlane-lanes]}
+      - {id: objc-ops-gnustep-make, name: "GNUstep and gnustep-make on Linux", match: [gnustep-make]}
+      - {id: objc-ops-libobjc2-runtime, name: "libobjc2 and GNUstep runtime flags", match: [libobjc2-runtime]}
+  - id: objc-persistence
+    name: "Core Data"
+    source: "Core Data framework reference"
+    match: [objc-persistence]
+    subtopics:
+      - {id: objc-persistence-core-data-stack, name: "NSPersistentContainer and contexts", match: [core-data-stack]}
+      - {id: objc-persistence-nsfetchrequest, name: "NSFetchRequest, predicates and sort descriptors", match: [nsfetchrequest]}
+  - id: objc-localization
+    name: "Localization"
+    source: "Apple: Localizing your app; Strings catalog"
+    match: [objc-localization]
+    subtopics:
+      - {id: objc-localization-localizable-strings, name: "Localizable strings and NSLocalizedString", match: [localizable-strings]}

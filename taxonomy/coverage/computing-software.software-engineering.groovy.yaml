@@ -1,0 +1,343 @@
+# Canonical coverage spec: Groovy language, GDK and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: groovy-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [groovy]
+sources:
+  - "Apache Groovy documentation (groovy-lang.org/documentation.html): syntax, semantics, object orientation, closures, operators"
+  - "Groovy metaprogramming, DSL, Grape, groovysh and tools chapters of the Groovy documentation"
+  - "Groovy GDK (docs.groovy-lang.org groovy-jdk) and Groovy API docs (gapi) including groovy.json, groovy.xml, groovy.sql, groovy.text"
+  - "Groovy testing guide, JUnit and Spock Framework docs"
+  - "Gradle user guide: build scripts in the Groovy DSL and the Groovy plugin"
+  - "Jenkins Pipeline book (Groovy), pointer level only"
+topics:
+  - id: groovy-lexical
+    name: "Lexical structure"
+    source: "Groovy docs: Syntax (comments, keywords, identifiers)"
+    match: [groovy-lexical]
+    subtopics:
+      - {id: groovy-lexical-comments-shebang, name: "Comments and shebang line", match: [comments-shebang]}
+      - {id: groovy-lexical-identifiers-keywords, name: "Identifiers, keywords and quoted names", match: [identifiers-keywords]}
+  - id: groovy-strings
+    name: "String literals and GStrings"
+    source: "Groovy docs: Syntax (String literals)"
+    match: [groovy-strings]
+    subtopics:
+      - {id: groovy-strings-single-double-quoted, name: "Single and double quoted strings", match: [single-double-quoted]}
+      - {id: groovy-strings-gstring-interpolation, name: "GString interpolation and lazy evaluation", match: [gstring-interpolation]}
+      - {id: groovy-strings-triple-quoted-slashy, name: "Triple-quoted, slashy and dollar-slashy strings", match: [triple-quoted-slashy]}
+  - id: groovy-numbers
+    name: "Numbers and arithmetic"
+    source: "Groovy docs: Syntax (Number types), Semantics"
+    match: [groovy-numbers]
+    subtopics:
+      - {id: groovy-numbers-bigdecimal-default, name: "BigDecimal default and number promotion", match: [bigdecimal-default]}
+      - {id: groovy-numbers-number-suffixes, name: "Number suffixes and literal forms", match: [number-suffixes]}
+  - id: groovy-truth
+    name: "Groovy truth"
+    source: "Groovy docs: Semantics (Groovy Truth)"
+    match: [groovy-truth]
+    subtopics:
+      - {id: groovy-truth-truth-rules, name: "Groovy truth rules", match: [truth-rules]}
+      - {id: groovy-truth-asboolean-override, name: "Custom truthiness with asBoolean", match: [asboolean-override]}
+  - id: groovy-lists
+    name: "Lists and arrays"
+    source: "Groovy docs: Syntax (Lists), GDK Collection"
+    match: [groovy-lists]
+    subtopics:
+      - {id: groovy-lists-list-literals, name: "List literals and indexing", match: [list-literals]}
+      - {id: groovy-lists-list-gdk-ops, name: "List GDK operations", match: [list-gdk-ops]}
+  - id: groovy-maps
+    name: "Maps"
+    source: "Groovy docs: Syntax (Maps), GDK Map"
+    match: [groovy-maps]
+    subtopics:
+      - {id: groovy-maps-map-literals, name: "Map literals and access", match: [map-literals]}
+      - {id: groovy-maps-map-gdk-ops, name: "Map GDK iteration and transformation", match: [map-gdk-ops]}
+  - id: groovy-ranges
+    name: "Ranges"
+    source: "Groovy docs: Syntax (Ranges)"
+    match: [groovy-ranges]
+    subtopics:
+      - {id: groovy-ranges-range-literals, name: "Range literals and iteration", match: [range-literals]}
+      - {id: groovy-ranges-range-custom-slicing, name: "Custom ranges and slicing", match: [range-custom-slicing]}
+  - id: groovy-operators
+    name: "Operators"
+    source: "Groovy docs: Operators"
+    match: [groovy-operators]
+    subtopics:
+      - {id: groovy-operators-safe-navigation-elvis, name: "Safe navigation and Elvis operators", match: [safe-navigation-elvis]}
+      - {id: groovy-operators-spread-operators, name: "Spread and method pointer operators", match: [spread-operators]}
+  - id: groovy-op-overload
+    name: "Operator overloading"
+    source: "Groovy docs: Operators (Operator overloading)"
+    match: [groovy-op-overload]
+    subtopics:
+      - {id: groovy-op-overload-operator-methods, name: "Operator to method mapping", match: [operator-methods]}
+      - {id: groovy-op-overload-operator-equality-identity, name: "Equality, identity and coercion", match: [operator-equality-identity]}
+  - id: groovy-regex
+    name: "Regular expressions"
+    source: "Groovy docs: Operators (Regex operators)"
+    match: [groovy-regex]
+    subtopics:
+      - {id: groovy-regex-regex-operators, name: "Find, match and pattern operators", match: [regex-operators]}
+      - {id: groovy-regex-regex-replace-split, name: "Replace, split and each-match", match: [regex-replace-split]}
+  - id: groovy-control
+    name: "Control structures"
+    source: "Groovy docs: Semantics (Control structures)"
+    match: [groovy-control]
+    subtopics:
+      - {id: groovy-control-switch-case, name: "switch with isCase classification", match: [switch-case]}
+      - {id: groovy-control-loops-iteration, name: "Loops and iteration idioms", match: [loops-iteration]}
+  - id: groovy-methods
+    name: "Methods and parameters"
+    source: "Groovy docs: Object orientation (Methods)"
+    match: [groovy-methods]
+    subtopics:
+      - {id: groovy-methods-method-defaults-named-args, name: "Default and named parameters", match: [method-defaults-named-args]}
+      - {id: groovy-methods-multimethods-dispatch, name: "Multiple dispatch", match: [multimethods-dispatch]}
+  - id: groovy-closures
+    name: "Closures"
+    source: "Groovy docs: Closures"
+    match: [groovy-closures]
+    subtopics:
+      - {id: groovy-closures-closure-basics, name: "Closure syntax, parameters and calling", match: [closure-basics]}
+      - {id: groovy-closures-closure-currying-composition, name: "Currying, composition and memoization", match: [closure-currying-composition]}
+      - {id: groovy-closures-closure-to-sam, name: "Closure coercion to interfaces and SAM types", match: [closure-to-sam]}
+  - id: groovy-delegate
+    name: "Closure delegate and resolution"
+    source: "Groovy docs: Closures (Delegation strategy)"
+    match: [groovy-delegate]
+    subtopics:
+      - {id: groovy-delegate-delegate-owner-this, name: "this, owner and delegate", match: [delegate-owner-this]}
+      - {id: groovy-delegate-resolve-strategy, name: "Resolve strategies for DSLs", match: [resolve-strategy]}
+  - id: groovy-classes
+    name: "Classes and properties"
+    source: "Groovy docs: Object orientation"
+    match: [groovy-classes]
+    subtopics:
+      - {id: groovy-classes-properties-fields, name: "Properties, fields and access modifiers", match: [properties-fields]}
+      - {id: groovy-classes-constructors-named-args, name: "Constructors and map-style construction", match: [constructors-named-args]}
+  - id: groovy-traits
+    name: "Traits"
+    source: "Groovy docs: Object orientation (Traits)"
+    match: [groovy-traits]
+    subtopics:
+      - {id: groovy-traits-trait-basics, name: "Defining and implementing traits", match: [trait-basics]}
+      - {id: groovy-traits-trait-advanced, name: "Trait self types, composition and limits", match: [trait-advanced]}
+  - id: groovy-inheritance
+    name: "Inheritance and interfaces"
+    source: "Groovy docs: Object orientation"
+    match: [groovy-inheritance]
+    subtopics:
+      - {id: groovy-inheritance-abstract-interface, name: "Abstract classes and interfaces", match: [abstract-interface]}
+      - {id: groovy-inheritance-enums-inner-classes, name: "Enums and inner/anonymous classes", match: [enums-inner-classes]}
+  - id: groovy-ast-annotations
+    name: "Code-generation annotations (AST transformations)"
+    source: "Groovy docs: Metaprogramming (Available AST transformations), groovy.transform API"
+    match: [groovy-ast-annotations]
+    subtopics:
+      - {id: groovy-ast-annotations-ast-tostring-equals, name: "ToString, EqualsAndHashCode, TupleConstructor, Canonical", match: [ast-tostring-equals]}
+      - {id: groovy-ast-annotations-ast-immutable, name: "Immutable value objects", match: [ast-immutable]}
+      - {id: groovy-ast-annotations-ast-builder, name: "@Builder strategies", match: [ast-builder]}
+      - {id: groovy-ast-annotations-ast-delegate-lazy-singleton, name: "Delegate, Lazy, Singleton and Memoized", match: [ast-delegate-lazy-singleton]}
+  - id: groovy-static
+    name: "Static compilation and type checking"
+    source: "Groovy docs: Semantics (Static compilation), Type checking"
+    match: [groovy-static]
+    subtopics:
+      - {id: groovy-static-typechecked, name: "@TypeChecked", match: [typechecked]}
+      - {id: groovy-static-compilestatic, name: "@CompileStatic and performance", match: [compilestatic]}
+      - {id: groovy-static-type-checking-extensions, name: "Type checking extensions", match: [type-checking-extensions]}
+  - id: groovy-mop
+    name: "Runtime metaprogramming"
+    source: "Groovy docs: Metaprogramming (Runtime metaprogramming)"
+    match: [groovy-mop]
+    subtopics:
+      - {id: groovy-mop-dynamic-methods-missing, name: "methodMissing, propertyMissing, invokeMethod", match: [dynamic-methods-missing]}
+      - {id: groovy-mop-expando-metaclass, name: "ExpandoMetaClass and categories", match: [expando-metaclass]}
+  - id: groovy-compile-meta
+    name: "Compile-time metaprogramming"
+    source: "Groovy docs: Metaprogramming (Compile-time)"
+    match: [groovy-compile-meta]
+    subtopics:
+      - {id: groovy-compile-meta-custom-ast-transform, name: "Writing local and global AST transformations", match: [custom-ast-transform]}
+      - {id: groovy-compile-meta-macro-methods, name: "AST builders and macro methods", match: [macro-methods]}
+  - id: groovy-extension-modules
+    name: "Extension modules"
+    source: "Groovy docs: Metaprogramming (Extension modules)"
+    match: [groovy-extension-modules]
+    subtopics:
+      - {id: groovy-extension-modules-extension-module-descriptor, name: "Extension module descriptor", match: [extension-module-descriptor]}
+      - {id: groovy-extension-modules-extension-static-methods, name: "Static extension methods and discovery", match: [extension-static-methods]}
+  - id: groovy-gdk-strings
+    name: "GDK String and text methods"
+    source: "GDK docs: String, CharSequence"
+    match: [groovy-gdk-strings]
+    subtopics:
+      - {id: groovy-gdk-strings-string-gdk-methods, name: "String GDK methods", match: [string-gdk-methods]}
+      - {id: groovy-gdk-strings-text-formatting-escaping, name: "Formatting and escaping text", match: [text-formatting-escaping]}
+  - id: groovy-gdk-io
+    name: "GDK files, streams and processes"
+    source: "GDK docs: File, InputStream, Process"
+    match: [groovy-gdk-io]
+    subtopics:
+      - {id: groovy-gdk-io-file-io-gdk, name: "File and stream GDK methods", match: [file-io-gdk]}
+      - {id: groovy-gdk-io-process-execute, name: "Running external processes", match: [process-execute]}
+  - id: groovy-datetime
+    name: "Date and time"
+    source: "Groovy docs: groovy-datetime module, GDK Date"
+    match: [groovy-datetime]
+    subtopics:
+      - {id: groovy-datetime-java-time-gdk, name: "java.time with Groovy", match: [java-time-gdk]}
+      - {id: groovy-datetime-legacy-date-timecategory, name: "Legacy Date and TimeCategory", match: [legacy-date-timecategory]}
+  - id: groovy-json
+    name: "JSON"
+    source: "Groovy docs: groovy.json API"
+    match: [groovy-json]
+    subtopics:
+      - {id: groovy-json-json-slurper, name: "Parsing JSON with JsonSlurper", match: [json-slurper]}
+      - {id: groovy-json-json-output-builder, name: "JsonOutput and JsonBuilder", match: [json-output-builder]}
+  - id: groovy-xml
+    name: "XML"
+    source: "Groovy docs: Processing XML"
+    match: [groovy-xml]
+    subtopics:
+      - {id: groovy-xml-xml-slurper-parser, name: "XmlSlurper and XmlParser", match: [xml-slurper-parser]}
+      - {id: groovy-xml-markup-builder-xmlutil, name: "MarkupBuilder and XmlUtil", match: [markup-builder-xmlutil]}
+  - id: groovy-yaml-toml
+    name: "YAML and TOML"
+    source: "Groovy docs: groovy-yaml, groovy-toml APIs"
+    match: [groovy-yaml-toml]
+    subtopics:
+      - {id: groovy-yaml-toml-yaml-slurper, name: "YamlSlurper and YamlBuilder", match: [yaml-slurper]}
+      - {id: groovy-yaml-toml-toml-slurper, name: "TomlSlurper", match: [toml-slurper]}
+  - id: groovy-sql
+    name: "Databases with groovy.sql"
+    source: "Groovy docs: Database features"
+    match: [groovy-sql]
+    subtopics:
+      - {id: groovy-sql-sql-queries-params, name: "Sql queries with bound parameters", match: [sql-queries-params]}
+      - {id: groovy-sql-sql-dataset-batch, name: "Transactions, batches and DataSet", match: [sql-dataset-batch]}
+  - id: groovy-templates
+    name: "Template engines"
+    source: "Groovy docs: Template engines"
+    match: [groovy-templates]
+    subtopics:
+      - {id: groovy-templates-simple-template-engine, name: "SimpleTemplateEngine and StreamingTemplateEngine", match: [simple-template-engine]}
+      - {id: groovy-templates-markup-template-engine, name: "MarkupTemplateEngine", match: [markup-template-engine]}
+  - id: groovy-builders
+    name: "Builders"
+    source: "Groovy docs: Builders (DSLs chapter)"
+    match: [groovy-builders]
+    subtopics:
+      - {id: groovy-builders-builder-support, name: "BuilderSupport and FactoryBuilderSupport", match: [builder-support]}
+      - {id: groovy-builders-closure-builder-pattern, name: "Closure-based builder DSL", match: [closure-builder-pattern]}
+  - id: groovy-dsl
+    name: "Domain-specific languages"
+    source: "Groovy docs: Domain-Specific Languages"
+    match: [groovy-dsl]
+    subtopics:
+      - {id: groovy-dsl-command-chains, name: "Command chains and optional syntax", match: [command-chains]}
+      - {id: groovy-dsl-base-script-delegating-dsl, name: "Base script classes and script DSLs", match: [base-script-delegating-dsl]}
+  - id: groovy-embedding
+    name: "Embedding and scripting"
+    source: "Groovy docs: Integrating Groovy in a Java application"
+    match: [groovy-embedding]
+    subtopics:
+      - {id: groovy-embedding-groovyshell-binding, name: "GroovyShell, Binding and GroovyScriptEngine", match: [groovyshell-binding]}
+      - {id: groovy-embedding-classloader-jsr223, name: "GroovyClassLoader and JSR-223", match: [classloader-jsr223]}
+  - id: groovy-grape
+    name: "Grape dependency management"
+    source: "Groovy docs: Grape"
+    match: [groovy-grape]
+    subtopics:
+      - {id: groovy-grape-grab-annotations, name: "@Grab and @Grapes", match: [grab-annotations]}
+      - {id: groovy-grape-grape-config-cli, name: "Grape configuration and grape command", match: [grape-config-cli]}
+  - id: groovy-tools
+    name: "Command line tools"
+    source: "Groovy docs: Groovy command line"
+    match: [groovy-tools]
+    subtopics:
+      - {id: groovy-tools-groovy-cli-options, name: "groovy, groovyc and groovydoc commands", match: [groovy-cli-options]}
+      - {id: groovy-tools-groovysh-console, name: "groovysh and groovyConsole", match: [groovysh-console]}
+  - id: groovy-cli-builder
+    name: "CliBuilder"
+    source: "Groovy docs: Command line tools (CliBuilder)"
+    match: [groovy-cli-builder]
+    subtopics:
+      - {id: groovy-cli-builder-clibuilder-usage, name: "Parsing command-line options with CliBuilder", match: [clibuilder-usage]}
+      - {id: groovy-cli-builder-args-script-properties, name: "Script arguments, environment and exit codes", match: [args-script-properties]}
+  - id: groovy-testing
+    name: "Testing with JUnit and power assert"
+    source: "Groovy docs: Testing Guide"
+    match: [groovy-testing]
+    subtopics:
+      - {id: groovy-testing-power-assert, name: "Power assert and assert messages", match: [power-assert]}
+      - {id: groovy-testing-junit-groovy, name: "JUnit 4/5 tests in Groovy", match: [junit-groovy]}
+      - {id: groovy-testing-mocking-stubs, name: "Mocks and stubs without a framework", match: [mocking-stubs]}
+  - id: groovy-spock
+    name: "Spock Framework"
+    source: "Spock docs (spockframework.org)"
+    match: [groovy-spock]
+    subtopics:
+      - {id: groovy-spock-spock-spec-structure, name: "Spock specification structure", match: [spock-spec-structure]}
+      - {id: groovy-spock-spock-data-tables-mocks, name: "Data tables, interactions and mocking", match: [spock-data-tables-mocks]}
+  - id: groovy-concurrency
+    name: "Concurrency"
+    source: "Groovy docs: Semantics, groovy.transform; GPars site pointer"
+    match: [groovy-concurrency]
+    subtopics:
+      - {id: groovy-concurrency-threads-executors, name: "Threads, executors and synchronized annotations", match: [threads-executors]}
+      - {id: groovy-concurrency-gpars-async, name: "Async tasks and CompletableFuture", match: [gpars-async]}
+  - id: groovy-java-interop
+    name: "Java interoperability"
+    source: "Groovy docs: Differences with Java, Integrating"
+    match: [groovy-java-interop]
+    subtopics:
+      - {id: groovy-java-interop-groovy-vs-java, name: "Differences from Java", match: [groovy-vs-java]}
+      - {id: groovy-java-interop-joint-compilation-calling, name: "Calling between Java and Groovy", match: [joint-compilation-calling]}
+  - id: groovy-gradle-dsl
+    name: "Gradle Groovy DSL"
+    source: "Gradle user guide: build scripts, Groovy DSL"
+    match: [groovy-gradle-dsl]
+    subtopics:
+      - {id: groovy-gradle-dsl-gradle-build-gradle, name: "build.gradle structure", match: [gradle-build-gradle]}
+      - {id: groovy-gradle-dsl-gradle-groovy-closures, name: "Closures and delegation in Gradle scripts", match: [gradle-groovy-closures]}
+  - id: groovy-gradle-plugin
+    name: "Gradle Groovy plugin"
+    source: "Gradle user guide: Groovy plugin"
+    match: [groovy-gradle-plugin]
+    subtopics:
+      - {id: groovy-gradle-plugin-gradle-groovy-plugin-setup, name: "groovy plugin tasks and source sets", match: [gradle-groovy-plugin-setup]}
+      - {id: groovy-gradle-plugin-gradle-compile-options, name: "GroovyCompile options and compiler configuration", match: [gradle-compile-options]}
+  - id: groovy-jenkins
+    name: "Jenkins Pipeline Groovy (pointer)"
+    source: "Jenkins Pipeline book (jenkins.io/doc/book/pipeline)"
+    match: [groovy-jenkins]
+    subtopics:
+      - {id: groovy-jenkins-jenkinsfile-basics, name: "Declarative vs scripted Jenkinsfile", match: [jenkinsfile-basics]}
+      - {id: groovy-jenkins-jenkins-cps-noncps, name: "CPS, @NonCPS and sandbox limits", match: [jenkins-cps-noncps]}
+  - id: groovy-style
+    name: "Style and idioms"
+    source: "Groovy docs: Style guide"
+    match: [groovy-style]
+    subtopics:
+      - {id: groovy-style-groovy-idioms, name: "Idiomatic Groovy style", match: [groovy-idioms]}
+      - {id: groovy-style-pitfalls-gotchas, name: "Common Groovy pitfalls", match: [pitfalls-gotchas]}
+  - id: groovy-errors
+    name: "Exceptions and diagnostics"
+    source: "Groovy docs: Semantics (Exception handling)"
+    match: [groovy-errors]
+    subtopics:
+      - {id: groovy-errors-exception-handling, name: "Exception handling in Groovy", match: [exception-handling]}
+      - {id: groovy-errors-diagnose-compile-errors, name: "Reading compile and runtime errors", match: [diagnose-compile-errors]}
+  - id: groovy-install
+    name: "Installation and versions"
+    source: "Groovy download and SDKMAN pages"
+    match: [groovy-install]
+    subtopics:
+      - {id: groovy-install-groovy-install-versions, name: "Installing Groovy and picking a version", match: [groovy-install-versions]}
+      - {id: groovy-install-groovy-modules-packaging, name: "Modules, packaging and scripts to jars", match: [groovy-modules-packaging]}

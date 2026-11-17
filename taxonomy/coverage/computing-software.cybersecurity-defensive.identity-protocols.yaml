@@ -1,0 +1,885 @@
+# Canonical coverage spec for identity-protocols, drawn from external sources listed below.
+subject: identity-protocols
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products:
+  - identity-protocols
+  - identity-access-management
+sources:
+- 'OASIS SAML 2.0 Core, Bindings, Profiles, Metadata, Conformance, Security and Privacy Considerations (https://docs.oasis-open.org/security/saml/v2.0/): assertions, protocols, bindings, profiles, metadata,
+  signing, encryption and threat sections map to the saml-* topics'
+- 'OpenID Connect specifications (https://openid.net/specs/): Core 1.0, Discovery, Dynamic Client Registration, Session Management, RP-Initiated, Front-Channel and Back-Channel Logout, Form Post Response
+  Mode, CIBA Core, FAPI 2.0 map to the oidc-* topics'
+- 'IETF OAuth RFCs (https://www.rfc-editor.org/): 6749, 6750, 7009, 7515-7519, 7591, 7636, 7662, 8252, 8414, 8628, 8693, 8705, 8707, 9068, 9101, 9126, 9207, 9396, 9449, 9700 map to the oauth-* and jose-*
+  topics'
+- 'IETF SCIM RFCs 7642, 7643, 7644 (https://www.rfc-editor.org/rfc/rfc7644): schema, resources, protocol, PATCH, filtering, bulk and discovery sections map to the scim-* topics'
+topics:
+- id: saml-assertions
+  name: SAML assertions (Core)
+  source: SAML 2.0 Core sections 2 (assertions) and 3 (protocols)
+  match:
+  - saml-assertions
+  subtopics:
+  - id: saml-assertion-structure
+    name: SAML assertion structure
+    match:
+    - saml-assertion-structure
+  - id: saml-subject-confirmation
+    name: SubjectConfirmation and bearer data
+    match:
+    - saml-subject-confirmation
+  - id: saml-nameid-formats
+    name: NameID formats and subject identifiers
+    match:
+    - saml-nameid-formats
+- id: saml-authn-request-response
+  name: SAML authentication request and response
+  source: SAML 2.0 Core section 3.4 (Authentication Request Protocol) and 3.2 (Request and response)
+  match:
+  - saml-authn-request-response
+  subtopics:
+  - id: saml-authnrequest-fields
+    name: AuthnRequest attributes and elements
+    match:
+    - saml-authnrequest-fields
+  - id: saml-requested-authncontext
+    name: RequestedAuthnContext and AuthnContextClassRef
+    match:
+    - saml-requested-authncontext
+  - id: saml-status-codes
+    name: SAML response status codes
+    match:
+    - saml-status-codes
+- id: saml-bindings
+  name: SAML bindings
+  source: SAML 2.0 Bindings specification, sections 3-3.6
+  match:
+  - saml-bindings
+  subtopics:
+  - id: saml-http-redirect-binding
+    name: HTTP Redirect binding
+    match:
+    - saml-http-redirect-binding
+  - id: saml-http-post-binding
+    name: HTTP POST binding and RelayState
+    match:
+    - saml-http-post-binding
+  - id: saml-artifact-binding
+    name: HTTP Artifact binding and ArtifactResolve
+    match:
+    - saml-artifact-binding
+- id: saml-web-sso-profile
+  name: SAML Web Browser SSO profile
+  source: SAML 2.0 Profiles, section 4.1 (Web Browser SSO) and 4.1.4 (processing rules)
+  match:
+  - saml-web-sso-profile
+  subtopics:
+  - id: saml-sp-initiated-sso
+    name: SP-initiated Web SSO flow
+    match:
+    - saml-sp-initiated-sso
+  - id: saml-idp-initiated-sso
+    name: IdP-initiated SSO and unsolicited responses
+    match:
+    - saml-idp-initiated-sso
+  - id: saml-relaystate-handling
+    name: Preserving return URL across SSO
+    match:
+    - saml-relaystate-handling
+- id: saml-single-logout
+  name: SAML Single Logout
+  source: SAML 2.0 Profiles section 4.4 (Single Logout) and Core section 3.7
+  match:
+  - saml-single-logout
+  subtopics:
+  - id: saml-slo-flow
+    name: Single Logout flow and messages
+    match:
+    - saml-slo-flow
+  - id: saml-slo-sessionindex
+    name: SessionIndex and NameID matching in logout
+    match:
+    - saml-slo-sessionindex
+  - id: saml-slo-failure-handling
+    name: SLO failure modes and local logout policy
+    match:
+    - saml-slo-failure-handling
+- id: saml-metadata
+  name: SAML metadata
+  source: SAML 2.0 Metadata specification, sections 2-4 and 5
+  match:
+  - saml-metadata
+  subtopics:
+  - id: saml-entity-descriptor
+    name: EntityDescriptor, IDPSSODescriptor and SPSSODescriptor
+    match:
+    - saml-entity-descriptor
+  - id: saml-keydescriptor-use
+    name: KeyDescriptor use signing and encryption
+    match:
+    - saml-keydescriptor-use
+  - id: saml-metadata-exchange-refresh
+    name: Metadata exchange, validUntil and cacheDuration
+    match:
+    - saml-metadata-exchange-refresh
+  - id: saml-certificate-rollover-metadata
+    name: Certificate rollover through metadata
+    match:
+    - saml-certificate-rollover-metadata
+- id: saml-xml-signature
+  name: SAML XML signatures
+  source: SAML 2.0 Core section 5 (SAML and XML Signature Syntax and Processing); Security Considerations section 6
+  match:
+  - saml-xml-signature
+  subtopics:
+  - id: saml-enveloped-signature
+    name: Enveloped signature and Reference URI
+    match:
+    - saml-enveloped-signature
+  - id: saml-signature-wrapping-defence
+    name: XML signature wrapping defence
+    match:
+    - saml-signature-wrapping-defence
+  - id: saml-signature-algorithms
+    name: Signature and digest algorithm selection
+    match:
+    - saml-signature-algorithms
+- id: saml-xml-encryption
+  name: SAML encryption
+  source: SAML 2.0 Core section 6 (SAML and XML Encryption Syntax and Processing)
+  match:
+  - saml-xml-encryption
+  subtopics:
+  - id: saml-encrypted-assertion
+    name: EncryptedAssertion and sign-then-encrypt
+    match:
+    - saml-encrypted-assertion
+  - id: saml-cbc-padding-oracle
+    name: Block cipher choice and padding oracle risk
+    match:
+    - saml-cbc-padding-oracle
+  - id: saml-encrypted-nameid-attribute
+    name: EncryptedID and EncryptedAttribute
+    match:
+    - saml-encrypted-nameid-attribute
+- id: saml-attributes
+  name: SAML attributes
+  source: SAML 2.0 Core section 2.7.3 (Attribute statement) and Profiles section 8 (attribute profiles)
+  match:
+  - saml-attributes
+  subtopics:
+  - id: saml-attribute-name-formats
+    name: Attribute NameFormat and FriendlyName
+    match:
+    - saml-attribute-name-formats
+  - id: saml-attribute-mapping
+    name: Attribute release and mapping to local users
+    match:
+    - saml-attribute-mapping
+  - id: saml-eduperson-attribute-profile
+    name: X.500/LDAP and eduPerson attribute profiles
+    match:
+    - saml-eduperson-attribute-profile
+- id: saml-security-considerations
+  name: SAML security considerations
+  source: SAML 2.0 Security and Privacy Considerations (sstc-saml-sec-consider) and Core section 2.5 conditions
+  match:
+  - saml-security-considerations
+  subtopics:
+  - id: saml-replay-and-time-validation
+    name: Replay protection and clock skew
+    match:
+    - saml-replay-and-time-validation
+  - id: saml-audience-and-destination-checks
+    name: Audience, Destination and Issuer checks
+    match:
+    - saml-audience-and-destination-checks
+  - id: saml-xml-parser-hardening
+    name: XML parser hardening for SAML endpoints
+    match:
+    - saml-xml-parser-hardening
+- id: saml-conformance-interop
+  name: SAML conformance and interoperability
+  source: SAML 2.0 Conformance Requirements; SAML2int Interoperable SAML 2.0 Web Browser SSO Deployment Profile
+  match:
+  - saml-conformance-interop
+  subtopics:
+  - id: saml-sso-troubleshooting
+    name: SSO troubleshooting workflow
+    match:
+    - saml-sso-troubleshooting
+  - id: saml2int-deployment-profile
+    name: SAML2int interoperability profile
+    match:
+    - saml2int-deployment-profile
+  - id: saml-debugging-tools
+    name: SAML debugging and signature tools
+    match:
+    - saml-debugging-tools
+- id: saml-advanced-profiles
+  name: SAML advanced profiles
+  source: SAML 2.0 Profiles sections 4.2 (ECP), 4.3 (IdP Discovery) and 3.4.1.2 (proxying, Scoping)
+  match:
+  - saml-advanced-profiles
+  subtopics:
+  - id: saml-ecp-profile
+    name: Enhanced Client or Proxy (ECP) profile
+    match:
+    - saml-ecp-profile
+  - id: saml-idp-discovery
+    name: IdP discovery and home realm selection
+    match:
+    - saml-idp-discovery
+  - id: saml-proxying-scoping
+    name: IdP proxying, Scoping and ProxyRestriction
+    match:
+    - saml-proxying-scoping
+- id: oidc-core-flows
+  name: OpenID Connect authentication flows
+  source: OpenID Connect Core 1.0 sections 3.1 (code), 3.2 (implicit), 3.3 (hybrid) and 3.1.2.1 (request parameters)
+  match:
+  - oidc-core-flows
+  subtopics:
+  - id: oidc-authorization-code-flow
+    name: Authorization Code flow with ID token
+    match:
+    - oidc-authorization-code-flow
+  - id: oidc-implicit-hybrid-flows
+    name: Implicit and Hybrid flows, c_hash and at_hash
+    match:
+    - oidc-implicit-hybrid-flows
+  - id: oidc-authentication-request-parameters
+    name: Authentication request parameters
+    match:
+    - oidc-authentication-request-parameters
+  - id: oidc-rp-configuration
+    name: OIDC relying party configuration checklist
+    match:
+    - oidc-rp-configuration
+- id: oidc-id-token
+  name: OIDC ID token
+  source: OpenID Connect Core 1.0 sections 2 (ID Token), 3.1.3.7 (ID Token validation), 15.5.2 (nonce)
+  match:
+  - oidc-id-token
+  subtopics:
+  - id: oidc-id-token-claims
+    name: ID token claims reference
+    match:
+    - oidc-id-token-claims
+  - id: oidc-id-token-validation
+    name: ID token validation steps
+    match:
+    - oidc-id-token-validation
+  - id: oidc-nonce-replay-protection
+    name: Nonce and state usage
+    match:
+    - oidc-nonce-replay-protection
+- id: oidc-userinfo-claims
+  name: OIDC UserInfo and claims
+  source: OpenID Connect Core 1.0 sections 5 (Claims) and 5.3 (UserInfo Endpoint), 5.5 (claims parameter), 8 (subject identifier types)
+  match:
+  - oidc-userinfo-claims
+  subtopics:
+  - id: oidc-userinfo-endpoint
+    name: UserInfo endpoint
+    match:
+    - oidc-userinfo-endpoint
+  - id: oidc-scope-claim-mapping
+    name: Standard scopes and claim sets
+    match:
+    - oidc-scope-claim-mapping
+  - id: oidc-claims-parameter
+    name: Claims request parameter, aggregated and distributed claims
+    match:
+    - oidc-claims-parameter
+  - id: oidc-pairwise-subject
+    name: Public and pairwise subject identifiers
+    match:
+    - oidc-pairwise-subject
+- id: oidc-discovery
+  name: OIDC Discovery and keys
+  source: OpenID Connect Discovery 1.0 sections 3-4; Core section 10 (signatures) and 10.1.1 (rotation)
+  match:
+  - oidc-discovery
+  subtopics:
+  - id: oidc-provider-metadata
+    name: Provider configuration document
+    match:
+    - oidc-provider-metadata
+  - id: oidc-jwks-key-rotation
+    name: JWKS retrieval and signing key rotation
+    match:
+    - oidc-jwks-key-rotation
+  - id: oidc-issuer-discovery-webfinger
+    name: Issuer discovery via WebFinger
+    match:
+    - oidc-issuer-discovery-webfinger
+- id: oidc-client-registration
+  name: OIDC client registration
+  source: OpenID Connect Dynamic Client Registration 1.0; RFC 7591; RFC 7592
+  match:
+  - oidc-client-registration
+  subtopics:
+  - id: oauth-dynamic-client-registration
+    name: Dynamic client registration request and response
+    match:
+    - oauth-dynamic-client-registration
+  - id: oauth-client-management-rfc7592
+    name: Client configuration management
+    match:
+    - oauth-client-management-rfc7592
+  - id: oidc-sector-and-software-statement
+    name: Software statements and trust of registration metadata
+    match:
+    - oidc-sector-and-software-statement
+- id: oidc-client-authentication
+  name: Client authentication and request objects
+  source: OpenID Connect Core 1.0 sections 9 (client authentication) and 6 (passing request parameters as JWTs)
+  match:
+  - oidc-client-authentication
+  subtopics:
+  - id: oidc-client-auth-methods
+    name: Token endpoint client authentication methods
+    match:
+    - oidc-client-auth-methods
+  - id: oidc-request-object
+    name: Request objects and request_uri
+    match:
+    - oidc-request-object
+- id: oidc-session-management
+  name: OIDC session management
+  source: OpenID Connect Session Management 1.0 (draft) and Core section 3.1.2.1 (prompt, id_token_hint)
+  match:
+  - oidc-session-management
+  subtopics:
+  - id: oidc-check-session-iframe
+    name: check_session_iframe and session_state
+    match:
+    - oidc-check-session-iframe
+  - id: oidc-third-party-cookie-impact
+    name: Third-party cookie blocking and session sync
+    match:
+    - oidc-third-party-cookie-impact
+- id: oidc-logout
+  name: OIDC logout specifications
+  source: OpenID Connect RP-Initiated Logout 1.0, Front-Channel Logout 1.0, Back-Channel Logout 1.0
+  match:
+  - oidc-logout
+  subtopics:
+  - id: oidc-rp-initiated-logout
+    name: RP-Initiated Logout
+    match:
+    - oidc-rp-initiated-logout
+  - id: oidc-front-channel-logout
+    name: Front-Channel Logout
+    match:
+    - oidc-front-channel-logout
+  - id: oidc-back-channel-logout
+    name: Back-Channel Logout and logout tokens
+    match:
+    - oidc-back-channel-logout
+- id: oidc-response-modes
+  name: OAuth and OIDC response modes
+  source: OAuth 2.0 Form Post Response Mode; OAuth 2.0 Multiple Response Type Encoding Practices; JARM (FAPI)
+  match:
+  - oidc-response-modes
+  subtopics:
+  - id: oidc-form-post-response-mode
+    name: form_post response mode
+    match:
+    - oidc-form-post-response-mode
+  - id: oidc-query-fragment-modes
+    name: query, fragment and query.jwt response modes
+    match:
+    - oidc-query-fragment-modes
+  - id: oidc-jarm-signed-response
+    name: JWT Secured Authorization Response Mode (JARM)
+    match:
+    - oidc-jarm-signed-response
+- id: oidc-ciba
+  name: Client-Initiated Backchannel Authentication
+  source: OpenID Connect Client-Initiated Backchannel Authentication (CIBA) Core 1.0
+  match:
+  - oidc-ciba
+  subtopics:
+  - id: ciba-authentication-request
+    name: CIBA authentication request
+    match:
+    - ciba-authentication-request
+  - id: ciba-token-delivery-modes
+    name: CIBA poll, ping and push delivery
+    match:
+    - ciba-token-delivery-modes
+  - id: ciba-security-considerations
+    name: CIBA security considerations
+    match:
+    - ciba-security-considerations
+- id: fapi2
+  name: FAPI 2.0 security profile
+  source: OpenID FAPI 2.0 Security Profile and Message Signing; RFC 9126 and 9449; FAPI conformance suite
+  match:
+  - fapi2
+  subtopics:
+  - id: fapi2-security-profile
+    name: FAPI 2.0 Security Profile requirements
+    match:
+    - fapi2-security-profile
+  - id: fapi2-sender-constraining-choice
+    name: Choosing mTLS versus DPoP in FAPI
+    match:
+    - fapi2-sender-constraining-choice
+  - id: fapi2-message-signing
+    name: FAPI 2.0 Message Signing
+    match:
+    - fapi2-message-signing
+- id: oidc-security-considerations
+  name: OIDC security considerations
+  source: OpenID Connect Core 1.0 section 16 (Security Considerations); OpenID Connect threat analysis; RFC 9700
+  match:
+  - oidc-security-considerations
+  subtopics:
+  - id: oidc-token-substitution-defence
+    name: Token substitution and ID token misuse
+    match:
+    - oidc-token-substitution-defence
+  - id: oidc-account-linking-risks
+    name: Account linking and email claim pitfalls
+    match:
+    - oidc-account-linking-risks
+  - id: oidc-mix-up-and-idp-confusion
+    name: IdP mix-up in OIDC clients
+    match:
+    - oidc-mix-up-and-idp-confusion
+- id: oauth-core-framework
+  name: OAuth 2.0 core framework
+  source: RFC 6749 sections 1-3 (roles, clients, endpoints) and 4.1-4.4, 5, 6, 7
+  match:
+  - oauth-core-framework
+  subtopics:
+  - id: oauth-roles-client-types
+    name: OAuth roles and client types
+    match:
+    - oauth-roles-client-types
+  - id: oauth-authorization-request
+    name: Authorization request parameters
+    match:
+    - oauth-authorization-request
+  - id: oauth-token-endpoint-errors
+    name: Token endpoint request and error responses
+    match:
+    - oauth-token-endpoint-errors
+- id: oauth-authorization-code-security
+  name: Authorization code flow security
+  source: RFC 6749 section 4.1; RFC 9700 sections 2.1, 4.1, 4.5, 4.7
+  match:
+  - oauth-authorization-code-security
+  subtopics:
+  - id: oauth-redirect-uri-matching
+    name: Redirect URI registration and exact matching
+    match:
+    - oauth-redirect-uri-matching
+  - id: oauth-state-csrf-protection
+    name: State parameter and CSRF on the callback
+    match:
+    - oauth-state-csrf-protection
+  - id: oauth-authorization-code-injection
+    name: Authorization code injection and replay
+    match:
+    - oauth-authorization-code-injection
+- id: oauth-pkce
+  name: Proof Key for Code Exchange (PKCE)
+  source: RFC 7636 sections 4 (protocol), 7 (security) and RFC 9700 section 2.1.1
+  match:
+  - oauth-pkce
+  subtopics:
+  - id: oauth-pkce-mechanics
+    name: PKCE verifier, challenge and S256
+    match:
+    - oauth-pkce-mechanics
+  - id: oauth-pkce-downgrade-prevention
+    name: Preventing PKCE downgrade and plain method
+    match:
+    - oauth-pkce-downgrade-prevention
+  - id: oauth-pkce-confidential-clients
+    name: PKCE for confidential clients and BFFs
+    match:
+    - oauth-pkce-confidential-clients
+  - id: oauth-grant-selection
+    name: Grant type selection
+    match:
+    - oauth-grant-selection
+- id: oauth-refresh-tokens
+  name: OAuth refresh tokens
+  source: RFC 6749 section 6 and RFC 9700 section 4.14
+  match:
+  - oauth-refresh-tokens
+  subtopics:
+  - id: oauth-refresh-token-rotation
+    name: Refresh token rotation and reuse detection
+    match:
+    - oauth-refresh-token-rotation
+  - id: oauth-refresh-scope-downscoping
+    name: Refresh requests and scope downscoping
+    match:
+    - oauth-refresh-scope-downscoping
+  - id: token-lifetime-and-revocation
+    name: Token lifetime and revocation policy
+    match:
+    - token-lifetime-and-revocation
+- id: oauth-bearer-tokens
+  name: Bearer token usage
+  source: RFC 6750 sections 2-5
+  match:
+  - oauth-bearer-tokens
+  subtopics:
+  - id: oauth-bearer-presentation
+    name: Presenting bearer tokens
+    match:
+    - oauth-bearer-presentation
+  - id: oauth-bearer-error-responses
+    name: Resource server error responses
+    match:
+    - oauth-bearer-error-responses
+- id: oauth-jwt-access-tokens
+  name: JWT access tokens and audience
+  source: RFC 9068 (JWT Profile for OAuth 2.0 Access Tokens); RFC 8707 (Resource Indicators); RFC 7519
+  match:
+  - oauth-jwt-access-tokens
+  subtopics:
+  - id: oauth-jwt-access-token-profile
+    name: JWT access token profile (RFC 9068)
+    match:
+    - oauth-jwt-access-token-profile
+  - id: oauth-resource-server-jwt-validation
+    name: Resource server validation of JWT access tokens
+    match:
+    - oauth-resource-server-jwt-validation
+  - id: oauth-resource-indicators
+    name: Resource indicators and audience restriction
+    match:
+    - oauth-resource-indicators
+- id: oauth-introspection-revocation
+  name: Token introspection and revocation
+  source: RFC 7662, RFC 7009 and RFC 9701 (JWT response for introspection)
+  match:
+  - oauth-introspection-revocation
+  subtopics:
+  - id: oauth-token-introspection
+    name: Token introspection (RFC 7662)
+    match:
+    - oauth-token-introspection
+  - id: oauth-token-revocation
+    name: Token revocation (RFC 7009)
+    match:
+    - oauth-token-revocation
+  - id: oauth-jwt-introspection-response
+    name: JWT introspection responses
+    match:
+    - oauth-jwt-introspection-response
+- id: oauth-device-grant
+  name: OAuth device authorization grant
+  source: RFC 8628 sections 3-6
+  match:
+  - oauth-device-grant
+  subtopics:
+  - id: oauth-device-flow-steps
+    name: Device authorization flow steps
+    match:
+    - oauth-device-flow-steps
+  - id: oauth-device-flow-polling
+    name: Device flow polling errors and slow_down
+    match:
+    - oauth-device-flow-polling
+  - id: oauth-device-flow-phishing
+    name: Device flow phishing and mitigations
+    match:
+    - oauth-device-flow-phishing
+- id: oauth-token-exchange
+  name: OAuth token exchange
+  source: RFC 8693 sections 2-4 and workload federation usage
+  match:
+  - oauth-token-exchange
+  subtopics:
+  - id: oauth-token-exchange-request
+    name: Token exchange request and response
+    match:
+    - oauth-token-exchange-request
+  - id: oauth-delegation-impersonation
+    name: Delegation versus impersonation (act and may_act)
+    match:
+    - oauth-delegation-impersonation
+  - id: oidc-federation-trust-subject-claims
+    name: Federating external workload tokens
+    match:
+    - oidc-federation-trust-subject-claims
+- id: oauth-metadata-issuer
+  name: Authorization server and resource metadata
+  source: RFC 8414, RFC 9207, RFC 9728
+  match:
+  - oauth-metadata-issuer
+  subtopics:
+  - id: oauth-as-metadata
+    name: Authorization server metadata (RFC 8414)
+    match:
+    - oauth-as-metadata
+  - id: oauth-iss-response-parameter
+    name: Issuer identification in authorization responses (RFC 9207)
+    match:
+    - oauth-iss-response-parameter
+  - id: oauth-protected-resource-metadata
+    name: Protected resource metadata (RFC 9728)
+    match:
+    - oauth-protected-resource-metadata
+- id: oauth-par-jar-rar
+  name: Pushed, signed and rich authorization requests
+  source: RFC 9126 (PAR), RFC 9101 (JAR), RFC 9396 (RAR)
+  match:
+  - oauth-par-jar-rar
+  subtopics:
+  - id: oauth-pushed-authorization-requests
+    name: Pushed Authorization Requests (PAR)
+    match:
+    - oauth-pushed-authorization-requests
+  - id: oauth-jwt-secured-authorization-request
+    name: JWT-Secured Authorization Request (JAR)
+    match:
+    - oauth-jwt-secured-authorization-request
+  - id: oauth-rich-authorization-requests
+    name: Rich Authorization Requests (authorization_details)
+    match:
+    - oauth-rich-authorization-requests
+- id: oauth-dpop
+  name: DPoP sender-constrained tokens
+  source: RFC 9449 sections 4-9
+  match:
+  - oauth-dpop
+  subtopics:
+  - id: oauth-dpop-proof-jwt
+    name: DPoP proof JWT construction
+    match:
+    - oauth-dpop-proof-jwt
+  - id: oauth-dpop-nonce-replay
+    name: DPoP server nonces and replay protection
+    match:
+    - oauth-dpop-nonce-replay
+  - id: oauth-dpop-bound-tokens
+    name: DPoP-bound access and refresh tokens
+    match:
+    - oauth-dpop-bound-tokens
+  - id: token-binding-and-protection
+    name: Token protection against theft
+    match:
+    - token-binding-and-protection
+- id: oauth-mtls
+  name: OAuth mutual TLS
+  source: RFC 8705 sections 2-3 and 6
+  match:
+  - oauth-mtls
+  subtopics:
+  - id: oauth-mtls-client-authentication
+    name: mTLS client authentication
+    match:
+    - oauth-mtls-client-authentication
+  - id: oauth-mtls-certificate-bound-tokens
+    name: Certificate-bound access tokens
+    match:
+    - oauth-mtls-certificate-bound-tokens
+  - id: oauth-mtls-proxy-deployment
+    name: mTLS behind proxies and gateways
+    match:
+    - oauth-mtls-proxy-deployment
+- id: oauth-native-apps
+  name: OAuth for native apps
+  source: RFC 8252 sections 4-8 and RFC 9700 section 4
+  match:
+  - oauth-native-apps
+  subtopics:
+  - id: oauth-native-redirect-schemes
+    name: Native app redirect options
+    match:
+    - oauth-native-redirect-schemes
+  - id: oauth-native-external-user-agent
+    name: External user agent versus embedded webviews
+    match:
+    - oauth-native-external-user-agent
+  - id: oauth-browser-based-apps
+    name: Browser-based apps and the BFF pattern
+    match:
+    - oauth-browser-based-apps
+- id: oauth-security-bcp
+  name: OAuth 2.0 security best current practice
+  source: RFC 9700 (OAuth 2.0 Security Best Current Practice) sections 2-4
+  match:
+  - oauth-security-bcp
+  subtopics:
+  - id: oauth-bcp-requirements-summary
+    name: RFC 9700 requirements checklist
+    match:
+    - oauth-bcp-requirements-summary
+  - id: oauth-mix-up-attack
+    name: Mix-up attack and defences
+    match:
+    - oauth-mix-up-attack
+  - id: oauth-open-redirect-and-leakage
+    name: Token leakage via redirects, Referer and logs
+    match:
+    - oauth-open-redirect-and-leakage
+  - id: oauth-cors-and-endpoint-protection
+    name: CORS and endpoint exposure for OAuth servers
+    match:
+    - oauth-cors-and-endpoint-protection
+- id: oauth-2-1
+  name: OAuth 2.1 consolidation
+  source: IETF draft-ietf-oauth-v2-1 (OAuth 2.1 Authorization Framework)
+  match:
+  - oauth-2-1
+  subtopics:
+  - id: oauth21-changes-from-2-0
+    name: OAuth 2.1 differences from RFC 6749
+    match:
+    - oauth21-changes-from-2-0
+  - id: oauth21-migration-checklist
+    name: Migrating clients to OAuth 2.1 behaviour
+    match:
+    - oauth21-migration-checklist
+- id: jose-jws-jwt
+  name: JWT and JWS processing
+  source: RFC 7519 (JWT), RFC 7515 (JWS), RFC 8725 (JWT best current practices)
+  match:
+  - jose-jws-jwt
+  subtopics:
+  - id: jwt-claims-registered
+    name: Registered JWT claims and validation
+    match:
+    - jwt-claims-registered
+  - id: jwt-algorithm-confusion-defence
+    name: JWT algorithm confusion and none
+    match:
+    - jwt-algorithm-confusion-defence
+  - id: jws-serialization-signing
+    name: JWS compact serialisation and signing
+    match:
+    - jws-serialization-signing
+- id: jose-jwe-jwk
+  name: JWE and JWK
+  source: RFC 7516 (JWE), RFC 7517 (JWK), RFC 7518 (JWA), RFC 7638 (thumbprint)
+  match:
+  - jose-jwe-jwk
+  subtopics:
+  - id: jwe-encrypted-tokens
+    name: JWE structure and algorithm choices
+    match:
+    - jwe-encrypted-tokens
+  - id: jwk-key-sets
+    name: JWK and JWKS key representation
+    match:
+    - jwk-key-sets
+  - id: jose-key-management-rotation
+    name: JOSE key generation, storage and rotation
+    match:
+    - jose-key-management-rotation
+- id: scim-schema
+  name: SCIM schema and resources
+  source: RFC 7643 sections 2-4 (attributes, schema, resources) and 8
+  match:
+  - scim-schema
+  subtopics:
+  - id: scim-attribute-characteristics
+    name: SCIM attribute characteristics
+    match:
+    - scim-attribute-characteristics
+  - id: scim-user-group-resources
+    name: SCIM User and Group resources
+    match:
+    - scim-user-group-resources
+  - id: scim-enterprise-extension
+    name: Enterprise User extension and custom schemas
+    match:
+    - scim-enterprise-extension
+- id: scim-protocol-crud
+  name: SCIM protocol operations
+  source: RFC 7644 sections 3.1-3.6 and 3.12 (errors)
+  match:
+  - scim-protocol-crud
+  subtopics:
+  - id: scim-crud-endpoints
+    name: SCIM endpoints, methods and status codes
+    match:
+    - scim-crud-endpoints
+  - id: scim-error-handling
+    name: SCIM error responses and scimType
+    match:
+    - scim-error-handling
+  - id: scim-etag-versioning
+    name: ETags and optimistic concurrency
+    match:
+    - scim-etag-versioning
+- id: scim-patch
+  name: SCIM PATCH
+  source: RFC 7644 section 3.5.2 (Modifying with PATCH)
+  match:
+  - scim-patch
+  subtopics:
+  - id: scim-patch-operations
+    name: PATCH add, remove and replace semantics
+    match:
+    - scim-patch-operations
+  - id: scim-patch-filter-paths
+    name: PATCH paths with value filters and sub-attributes
+    match:
+    - scim-patch-filter-paths
+  - id: scim-patch-idp-quirks
+    name: PATCH interoperability quirks across IdPs
+    match:
+    - scim-patch-idp-quirks
+- id: scim-filtering-paging
+  name: SCIM filtering, sorting and pagination
+  source: RFC 7644 sections 3.4.2 (query), 3.4.2.2 (filtering), 3.4.2.3 (sorting), 3.4.2.4 (pagination), 3.4.3
+  match:
+  - scim-filtering-paging
+  subtopics:
+  - id: scim-filter-syntax
+    name: Filter operators and grouping
+    match:
+    - scim-filter-syntax
+  - id: scim-pagination-sorting
+    name: Pagination and sorting (startIndex and count)
+    match:
+    - scim-pagination-sorting
+  - id: scim-attribute-projection
+    name: attributes and excludedAttributes projection
+    match:
+    - scim-attribute-projection
+- id: scim-bulk-discovery
+  name: SCIM bulk and discovery
+  source: RFC 7644 sections 3.7 (bulk) and 4 (service provider configuration endpoints)
+  match:
+  - scim-bulk-discovery
+  subtopics:
+  - id: scim-bulk-operations
+    name: Bulk operations and bulkId references
+    match:
+    - scim-bulk-operations
+  - id: scim-service-provider-config
+    name: ServiceProviderConfig, Schemas and ResourceTypes
+    match:
+    - scim-service-provider-config
+- id: scim-operations-security
+  name: SCIM security and lifecycle
+  source: RFC 7644 section 7 (security considerations) and RFC 7642 (use cases and lifecycle)
+  match:
+  - scim-operations-security
+  subtopics:
+  - id: scim-authentication-transport
+    name: SCIM authentication, authorization and transport
+    match:
+    - scim-authentication-transport
+  - id: scim-provisioning-lifecycle
+    name: 'Provisioning lifecycle: create, deactivate, delete'
+    match:
+    - scim-provisioning-lifecycle
+  - id: scim-interop-troubleshooting
+    name: SCIM provisioning troubleshooting
+    match:
+    - scim-interop-troubleshooting

@@ -1,0 +1,218 @@
+# Coverage spec for CrowdSec (cybersecurity-defensive).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: crowdsec
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [crowdsec]
+sources:
+  - https://docs.crowdsec.net/docs/concepts
+  - https://docs.crowdsec.net/docs/local_api/authentication
+  - https://docs.crowdsec.net/docs/log_processor/data_sources/introduction
+  - https://docs.crowdsec.net/docs/appsec/intro
+  - https://docs.crowdsec.net/docs/cscli/cscli
+topics:
+  - id: architecture-and-components
+    name: Architecture and components
+    source: https://docs.crowdsec.net/docs/concepts
+    match: [concepts, security-engine, log-processor, local-api, central-api, remediation-component]
+  - id: alerts-versus-decisions
+    name: Alerts versus decisions
+    source: https://docs.crowdsec.net/docs/concepts
+    match: [decisions]
+  - id: configuration-files-and-directories
+    name: Configuration files and directories
+    source: https://docs.crowdsec.net/docs/configuration/crowdsec_configuration
+    match: [config-yaml, config-directory, profiles-yaml]
+  - id: local-overrides-and-environment-variables
+    name: Local overrides and environment variables
+    source: https://docs.crowdsec.net/docs/configuration/crowdsec_configuration
+    match: [yaml-local, environment-variables]
+  - id: registering-bouncers
+    name: Registering bouncers
+    source: https://docs.crowdsec.net/docs/local_api/authentication
+    match: [cscli, bouncers, api-key]
+  - id: registering-machines
+    name: Registering machines
+    source: https://docs.crowdsec.net/docs/local_api/authentication
+    match: [machines, lapi-register, authentication]
+  - id: listening-on-a-socket-and-tls
+    name: Listening on a socket and TLS
+    source: https://docs.crowdsec.net/docs/local_api/configuration
+    match: [listen-uri, unix-socket, listen-socket, local-api-tls, ssl]
+  - id: ports-and-outbound-connections
+    name: Ports and outbound connections
+    source: https://docs.crowdsec.net/docs/configuration/network_management
+    match: [ports]
+  - id: tls-client-certificates
+    name: TLS client certificates
+    source: https://docs.crowdsec.net/docs/local_api/tls_auth
+    match: [tls-auth, client-certificates, allowed-ou, auto-registration]
+  - id: certificate-revocation
+    name: Certificate revocation
+    source: https://docs.crowdsec.net/docs/local_api/tls_auth
+    match: [crl, ocsp]
+  - id: database-backends
+    name: Database backends
+    source: https://docs.crowdsec.net/docs/local_api/database
+    match: [database, sqlite, mysql, postgresql, db-config]
+  - id: database-retention-flush
+    name: Database retention flush
+    source: https://docs.crowdsec.net/docs/configuration/crowdsec_configuration
+    match: [flush, retention]
+  - id: acquisition-datasources
+    name: Acquisition datasources
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/introduction
+    match: [acquisition, datasources, acquis-d, labels, log-sources]
+  - id: transform-and-time-machine
+    name: Transform and time machine
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/introduction
+    match: [transform, time-machine]
+  - id: file-datasource
+    name: File datasource
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/file
+    match: [file-datasource, inotify, glob]
+  - id: docker-datasource
+    name: Docker datasource
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/docker
+    match: [docker-datasource, swarm]
+  - id: journald-datasource
+    name: Journald datasource
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/journald
+    match: [journald]
+  - id: syslog-datasource
+    name: Syslog datasource
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/syslog_service
+    match: [syslog-datasource]
+  - id: kubernetes-datasource
+    name: Kubernetes datasource
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/kubernetes
+    match: [kubernetes-datasource]
+  - id: windows-event-log-datasource
+    name: Windows event log datasource
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/windows_event_log
+    match: [windows-event-log, wineventlog, xpath]
+  - id: cloud-and-message-queue-datasources
+    name: Cloud and message queue datasources
+    source: https://docs.crowdsec.net/docs/log_processor/data_sources/introduction
+    match: [cloudwatch, kinesis, s3-datasource, kafka-datasource]
+  - id: service-discovery-with-cscli-setup
+    name: Service discovery with cscli setup
+    source: https://docs.crowdsec.net/docs/log_processor/service-discovery-setup/intro
+    match: [cscli-setup, service-discovery, detect-yaml, unattended]
+  - id: parsers-and-stages
+    name: Parsers and stages
+    source: https://docs.crowdsec.net/docs/log_processor/parsers/format
+    match: [parsers, stages, onsuccess, s00-raw, s01-parse, s02-enrich, nodes]
+  - id: grok-patterns
+    name: Grok patterns
+    source: https://docs.crowdsec.net/docs/log_processor/parsers/format
+    match: [grok]
+  - id: enrichers
+    name: Enrichers
+    source: https://docs.crowdsec.net/docs/log_processor/parsers/enricher
+    match: [enrichers, geoip-enrich]
+  - id: scenario-bucket-types
+    name: Scenario bucket types
+    source: https://docs.crowdsec.net/docs/log_processor/scenarios/format
+    match: [scenarios, leaky-bucket, trigger, counter, conditional, bayesian]
+  - id: scenario-grouping-and-capacity
+    name: Scenario grouping and capacity
+    source: https://docs.crowdsec.net/docs/log_processor/scenarios/format
+    match: [groupby, capacity, leakspeed, blackhole]
+  - id: deploying-custom-scenarios
+    name: Deploying custom scenarios
+    source: https://docs.crowdsec.net/docs/log_processor/scenarios/deploy
+    match: [scenario-deploy, tainted, local-scenario, cscli-scenarios]
+  - id: simulation-mode
+    name: Simulation mode
+    source: https://docs.crowdsec.net/docs/log_processor/scenarios/simulation
+    match: [simulation]
+  - id: parser-and-postoverflow-whitelists
+    name: Parser and postoverflow whitelists
+    source: https://docs.crowdsec.net/docs/log_processor/whitelist/introduction
+    match: [whitelist, parser-whitelist, postoverflow, expression-whitelist, cidr, reverse-dns]
+  - id: centralised-allowlists
+    name: Centralised allowlists
+    source: https://docs.crowdsec.net/docs/local_api/allowlists
+    match: [allowlists, cscli-allowlists, lapi-allowlist, ip-range, allowlist-expiry]
+  - id: profiles
+    name: Profiles
+    source: https://docs.crowdsec.net/docs/local_api/profiles/format
+    match: [profiles, ban, captcha, on-success]
+  - id: profile-duration-expressions
+    name: Profile duration expressions
+    source: https://docs.crowdsec.net/docs/local_api/profiles/format
+    match: [duration-expr]
+  - id: bouncers-api-stream-and-query
+    name: Bouncers API stream and query
+    source: https://docs.crowdsec.net/docs/local_api/bouncers-api
+    match: [bouncers-api, decisions-stream, startup, query-mode, x-api-key, custom-bouncer]
+  - id: manual-decisions
+    name: Manual decisions
+    source: https://docs.crowdsec.net/docs/cscli/cscli_decisions_add
+    match: [cscli-decisions, manual-ban, decisions-list, decisions-delete, scope-value, decision-import]
+  - id: notification-plugins
+    name: Notification plugins
+    source: https://docs.crowdsec.net/docs/local_api/notification_plugins/intro
+    match: [notifications, notification-plugins, http-plugin, slack, email, cscli-notifications-test, group-wait]
+  - id: alert-context
+    name: Alert context
+    source: https://docs.crowdsec.net/docs/log_processor/alert_context/intro
+    match: [alert-context, contexts, context-yaml, http-base, alert-enrichment]
+  - id: hub-and-collections
+    name: Hub and collections
+    source: https://docs.crowdsec.net/docs/log_processor/collections/format
+    match: [hub, collections, cscli-hub, cscli-collections, hub-update, hub-upgrade, parsers-install]
+  - id: cscli-explain-and-metrics
+    name: cscli explain and metrics
+    source: https://docs.crowdsec.net/docs/cscli/cscli_explain
+    match: [cscli-explain, cscli-metrics, debugging, lines-unparsed, acquisition-metrics]
+  - id: hub-tests-for-parsers-and-scenarios
+    name: Hub tests for parsers and scenarios
+    source: https://docs.crowdsec.net/docs/cscli/cscli_hubtest
+    match: [hubtest]
+  - id: prometheus-metrics
+    name: Prometheus metrics
+    source: https://docs.crowdsec.net/docs/observability/prometheus
+    match: [prometheus, metrics, metrics-level, grafana, pprof]
+  - id: bouncer-usage-metrics
+    name: Bouncer usage metrics
+    source: https://docs.crowdsec.net/docs/observability/usage_metrics
+    match: [usage-metrics]
+  - id: appsec-waf-overview
+    name: AppSec WAF overview
+    source: https://docs.crowdsec.net/docs/appsec/intro
+    match: [appsec, waf, virtual-patching, appsec-datasource, inband, outofband, owasp-crs]
+  - id: appsec-rule-syntax
+    name: AppSec rule syntax
+    source: https://docs.crowdsec.net/docs/appsec/rules_syntax
+    match: [appsec-rules, waf-rules, zones, transforms, match-types, libinjection, rule-labels]
+  - id: deploying-an-appsec-rule
+    name: Deploying an AppSec rule
+    source: https://docs.crowdsec.net/docs/appsec/rules_deploy
+    match: [appsec-config, appsec-rules-deploy, acquis-appsec, default-remediation, rule-deployment]
+  - id: appsec-rate-limiting
+    name: AppSec rate limiting
+    source: https://docs.crowdsec.net/docs/appsec/rate_limiting
+    match: [appsec-rate-limit, ratelimit-helper, pre-eval, token-bucket, http-429]
+  - id: appsec-hooks
+    name: AppSec hooks
+    source: https://docs.crowdsec.net/docs/appsec/hooks
+    match: [appsec-hooks, on-match, post-eval]
+  - id: bot-detection
+    name: Bot detection
+    source: https://docs.crowdsec.net/docs/appsec/bot_detection/intro
+    match: [bot-detection, challenge]
+  - id: expression-helpers
+    name: Expression helpers
+    source: https://docs.crowdsec.net/docs/expr/intro
+    match: [expr, expr-helpers, ip-helpers, iprange, geoip, lookuphost, event-object]
+  - id: central-api-and-community-blocklist
+    name: Central API and community blocklist
+    source: https://docs.crowdsec.net/docs/central_api/intro
+    match: [capi, community-blocklist]
+  - id: console-enrollment
+    name: Console enrollment
+    source: https://docs.crowdsec.net/docs/cscli/cscli_console_enroll
+    match: [console-enroll]

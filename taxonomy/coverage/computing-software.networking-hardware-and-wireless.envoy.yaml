@@ -1,0 +1,219 @@
+# Coverage spec: envoy. Topics from the external structures named in `sources`.
+subject: envoy
+scope:
+  category: computing-software
+  field: networking-hardware-and-wireless
+  products: [envoy]
+sources:
+  - "Envoy docs intro/arch_overview (listeners, http, upstream, operations, security, observability, other_features)"
+  - "Envoy docs configuration/ (listeners, http conn man, http filters, upstream, operations, overview, security)"
+  - "Envoy docs operations/ (admin interface, command line options)"
+topics:
+  - id: listeners-and-filter-chains
+    name: listeners and filter chains
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/listeners/listeners.rst"
+    match: [listener, filter-chain, filter-chain-match, default-filter-chain, l4-filters]
+  - id: listener-filters-and-filter-chain-updates
+    name: listener filters and filter chain updates
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/listeners/listener_filters.rst"
+    match: [listener-filters, filter-chain-only-update, draining, lds-warming, hot-update]
+  - id: http-connection-manager-lifecycle
+    name: http connection manager lifecycle
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/http/http_connection_management.rst"
+    match: [http-connection-manager, hcm, http2, http3, codec, stream-lifecycle]
+  - id: http-routing-features-overview
+    name: http routing features overview
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/http/http_routing.rst"
+    match: [router, http-routing, virtual-hosts, prefix-rewrite, redirect, timeouts, hedging]
+  - id: http-upgrades-and-websocket
+    name: http upgrades and websocket
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/http/upgrades.rst"
+    match: [upgrade_configs, websocket, connect, http-upgrade, buffer-filter]
+  - id: route-traffic-shifting-and-splitting
+    name: route traffic shifting and splitting
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_conn_man/traffic_splitting.rst"
+    match: [traffic-shifting, traffic-splitting, runtime_fraction, weighted-clusters, canary, blue-green]
+  - id: http-header-sanitizing
+    name: http header sanitizing
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_conn_man/header_sanitizing.rst"
+    match: [header-sanitizing, x-forwarded-for, use_remote_address, internal_address_config, x-envoy-headers, edge]
+  - id: local-reply-customization
+    name: local reply customization
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_conn_man/local_reply.rst"
+    match: [local-reply, local_reply_config, mappers, body_format, status_code_filter]
+  - id: cluster-circuit-breaking
+    name: cluster circuit breaking
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/circuit_breaking.rst"
+    match: [circuit-breaker, max_connections, max_pending_requests, max_requests, retry_budget, overflow-counters]
+  - id: outlier-detection-passive-health
+    name: outlier detection passive health
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/outlier.rst"
+    match: [outlier-detection, passive-health-check, consecutive_5xx, success_rate, ejection, split_external_local_origin_errors]
+  - id: active-health-checking
+    name: active health checking
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/health_checking.rst"
+    match: [health-check, active-health-checking, http-health-check, grpc-health-check, tcp-health-check, redis, eds]
+  - id: upstream-connection-pooling
+    name: upstream connection pooling
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/connection_pooling.rst"
+    match: [connection-pool, http1, http2, http3, max_concurrent_streams, max_requests_per_connection, goaway]
+  - id: dns-resolution-and-resolvers
+    name: dns resolution and resolvers
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/dns_resolution.rst"
+    match: [dns-resolution, c-ares, getaddrinfo, hickory, strict_dns, dns_lookup_family, respect_dns_ttl]
+  - id: aggregate-cluster-failover
+    name: aggregate cluster failover
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/aggregate_cluster.rst"
+    match: [aggregate-cluster, cluster-failover, linearize-priority-set, cluster-fallback, priority]
+  - id: service-discovery-cluster-types
+    name: service discovery cluster types
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/service_discovery.rst"
+    match: [service-discovery, static, strict_dns, logical_dns, original_dst, eds, cluster-type]
+  - id: load-balancing-policies
+    name: load balancing policies
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/load_balancers.rst"
+    match: [load-balancing, round-robin, least-request, ring-hash, maglev, random, client-side-weighted-round-robin]
+  - id: original-destination-cluster
+    name: original destination cluster
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/original_dst.rst"
+    match: [original_dst, original-destination, x-envoy-original-dst-host, iptables-redirect, tproxy, filter-state]
+  - id: panic-threshold-and-fail-traffic
+    name: panic threshold and fail traffic
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/panic_threshold.rst"
+    match: [panic-threshold, healthy_panic_threshold, fail_traffic_on_panic, load-balancing, cascading-failure]
+  - id: zone-aware-load-balancing
+    name: zone aware load balancing
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/zone_aware.rst"
+    match: [zone-aware, locality, local-zone, cross-zone, min_cluster_size, routing_enabled]
+  - id: slow-start-mode
+    name: slow start mode
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/slow_start.rst"
+    match: [slow-start, slow_start_config, slow_start_window, aggression, min_weight_percent, warm-up]
+  - id: subset-load-balancing
+    name: subset load balancing
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/subsets.rst"
+    match: [subset-lb, lb_subset_config, metadata_match, fallback_policy, default_subset, subset-selectors]
+  - id: priority-levels-and-overprovisioning
+    name: priority levels and overprovisioning
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/upstream/load_balancing/priority.rst"
+    match: [priority, overprovisioning_factor, locality-lb-endpoints, failover, priority-load]
+  - id: xds-dynamic-configuration-overview
+    name: xds dynamic configuration overview
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/operations/dynamic_configuration.rst"
+    match: [xds, cds, eds, rds, lds, sds, vhds, srds, dynamic-configuration, static-config]
+  - id: management-server-connectivity-and-stats
+    name: management server connectivity and stats
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/overview/mgmt_server.rst"
+    match: [management-server, control-plane, connected_state, tcp-keepalive, xds-stats, version_text]
+  - id: initialization-sequence
+    name: initialization sequence
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/operations/init.rst"
+    match: [initialization, init-manager, warming, cluster-manager, init_dump, initial_fetch_timeout]
+  - id: runtime-layered-configuration
+    name: runtime layered configuration
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/operations/runtime.rst"
+    match: [runtime, layered_runtime, rtds, disk_layer, admin_layer, runtime_modify, feature-flags]
+  - id: overload-manager-configuration
+    name: overload manager configuration
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/operations/overload_manager/overload_manager.rst"
+    match: [overload_manager, resource_monitors, fixed_heap, overload_actions, load_shed_points, stop_accepting_requests, cgroup_memory]
+  - id: hot-restart-and-restarter
+    name: hot restart and restarter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/operations/hot_restart.rst"
+    match: [hot-restart, restart-epoch, base-id, drain-time-s, parent-shutdown-time-s, hot-restarter]
+  - id: draining-and-graceful-shutdown
+    name: draining and graceful shutdown
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/operations/draining.rst"
+    match: [draining, drain_listeners, graceful, healthcheck-fail, drain-strategy, shutdown]
+  - id: admin-interface-security-and-endpoints
+    name: admin interface security and endpoints
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/operations/admin.rst"
+    match: [admin, admin-interface, config_dump, allow_paths, quitquitquit, healthcheck-fail, clusters, logging]
+  - id: command-line-options
+    name: command line options
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/operations/cli.rst"
+    match: [cli, concurrency, base-id, service-cluster, service-node, log-level, config-yaml, mode, validate]
+  - id: threading-model-and-concurrency
+    name: threading model and concurrency
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/intro/threading_model.rst"
+    match: [threading-model, workers, concurrency, main-thread, worker-threads, file-flusher]
+  - id: access-log-configuration
+    name: access log configuration
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/observability/access_logging.rst"
+    match: [access-log, access_log, response_flags, log-format, json_format, file-access-log, filters]
+  - id: tracing-and-request-id
+    name: tracing and request id
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/observability/tracing.rst"
+    match: [tracing, x-request-id, x-client-trace-id, zipkin, jaeger, datadog, skywalking, opentelemetry]
+  - id: statistics-and-stat-sinks
+    name: statistics and stat sinks
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/observability/statistics.rst"
+    match: [statistics, stats, counters, gauges, histograms, statsd, stat_prefix, stats-sinks]
+  - id: tls-termination-and-origination
+    name: tls termination and origination
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/security/ssl.rst"
+    match: [tls, ssl, downstream-tls-context, upstream-tls-context, alpn, sni, session-resumption, crl]
+  - id: sds-secret-discovery
+    name: sds secret discovery
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/security/secret.rst"
+    match: [sds, secret-discovery-service, tls_certificate_sds_secret_configs, spiffe, spire, certificate-rotation]
+  - id: ext-authz-http-filter
+    name: ext authz http filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/ext_authz_filter.rst"
+    match: [ext_authz, external-authorization, grpc_service, check-request, route-cache-clearing, include_peer_certificate]
+  - id: jwt-authn-http-filter
+    name: jwt authn http filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/jwt_authn_filter.rst"
+    match: [jwt_authn, jwt, jwks, remote_jwks, providers, rules, requirement, forward_payload_header]
+  - id: rbac-http-filter
+    name: rbac http filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/rbac_filter.rst"
+    match: [rbac, role-based-access-control, policies, permissions, principals, shadow-mode, rbac_access_denied]
+  - id: lua-http-filter
+    name: lua http filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/lua_filter.rst"
+    match: [lua, envoy_on_request, envoy_on_response, luajit, lua-per-route, scripting]
+  - id: wasm-http-filter
+    name: wasm http filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/wasm_filter.rst"
+    match: [wasm, proxy-wasm, wasm-filter, wasm-service, vm, plugin]
+  - id: fault-injection-filter
+    name: fault injection filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/fault_filter.rst"
+    match: [fault, fault-injection, abort, delay, x-envoy-fault-abort-request, chaos, header_abort]
+  - id: router-retries-and-timeouts
+    name: router retries and timeouts
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/router_filter.rst"
+    match: [retry_policy, retry_on, x-envoy-retry-on, x-envoy-max-retries, per_try_timeout, backoff, timeouts]
+  - id: local-rate-limit-filter
+    name: local rate limit filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/local_rate_limit_filter.rst"
+    match: [local_ratelimit, token_bucket, rate-limit, 429, x-envoy-ratelimited, descriptors, enable_retry_after_header]
+  - id: global-rate-limit-service
+    name: global rate limit service
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/intro/arch_overview/other_features/global_rate_limiting.rst"
+    match: [rate_limit, ratelimit-service, descriptors, global-rate-limit, redis, rate_limits-actions, quota]
+  - id: tcp-proxy-network-filter
+    name: tcp proxy network filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/listeners/network_filters/tcp_proxy_filter.rst"
+    match: [tcp_proxy, l4-proxy, weighted_clusters, metadata_match, envoy.tcp_proxy.cluster, idle_timeout]
+  - id: grpc-web-and-json-transcoder-filters
+    name: grpc web and json transcoder filters
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/grpc_web_filter.rst"
+    match: [grpc-web, grpc_json_transcoder, protoc, descriptor-set, rest-to-grpc, http-annotations]
+  - id: edge-proxy-best-practices
+    name: edge proxy best practices
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/best_practices/edge.rst"
+    match: [edge-proxy, best-practices, buffer-limits, normalize_path, merge_slashes, headers_with_underscores_action, hardening]
+  - id: header-to-metadata-filter
+    name: header to metadata filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/header_to_metadata_filter.rst"
+    match: [header_to_metadata, request_rules, metadata_namespace, envoy.lb, subset-routing, dynamic-metadata]
+  - id: admission-control-filter
+    name: admission control filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/admission_control_filter.rst"
+    match: [admission_control, sr_threshold, aggression, sampling_window, load-shedding, success_criteria]
+  - id: http-compressor-filter
+    name: http compressor filter
+    source: "https://github.com/envoyproxy/envoy/blob/main/docs/root/configuration/http/http_filters/compressor_filter.rst"
+    match: [compressor, gzip, brotli, zstd, content-length, compression, compressorperroute]

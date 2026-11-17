@@ -1,0 +1,178 @@
+# Coverage spec for Fluent Bit administration, from its official documentation.
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: fluent-bit
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [fluent-bit]
+sources:
+  - "Fluent Bit manual (docs.fluentbit.io/manual) - service configuration, buffering, backpressure, scheduling and retries, monitoring, networking, TLS, proxies, AWS credentials, tail, systemd, throttle, grep, modify and rewrite_tag"
+topics:
+  - id: service-section-settings
+    name: "the service section"
+    source: https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/service-section
+    match: [fluent-bit, service-section, flush]
+  - id: adaptive-flush-intervals
+    name: "adaptive flush intervals"
+    source: https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/service-section
+    match: [fluent-bit, flush-adaptive, backpressure]
+  - id: log-level-and-env-override
+    name: "log level and flb_log_level"
+    source: https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/service-section
+    match: [fluent-bit, log-level, flb-log-level]
+  - id: fips-mode
+    name: "fips mode"
+    source: https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/service-section
+    match: [fluent-bit, fips, openssl]
+  - id: storage-global-keys
+    name: "global storage keys"
+    source: https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/service-section
+    match: [fluent-bit, storage, filesystem-buffering]
+  - id: backpressure-memory-buffering
+    name: "backpressure with memory-only buffering"
+    source: https://docs.fluentbit.io/manual/administration/backpressure
+    match: [fluent-bit, backpressure, mem-buf-limit]
+  - id: backpressure-filesystem-buffering
+    name: "backpressure with filesystem buffering"
+    source: https://docs.fluentbit.io/manual/administration/backpressure
+    match: [fluent-bit, backpressure, pause-on-chunks-overlimit]
+  - id: buffering-modes
+    name: "buffering modes"
+    source: https://docs.fluentbit.io/manual/pipeline/buffering
+    match: [fluent-bit, buffering, chunks]
+  - id: input-rate-gate
+    name: "input rate gate"
+    source: https://docs.fluentbit.io/manual/pipeline/buffering
+    match: [fluent-bit, rate-gate, rate-window]
+  - id: scheduler-backoff
+    name: "scheduler backoff"
+    source: https://docs.fluentbit.io/manual/administration/scheduling-and-retries
+    match: [fluent-bit, scheduler, retry]
+  - id: retry-limit
+    name: "retry limits per output"
+    source: https://docs.fluentbit.io/manual/administration/scheduling-and-retries
+    match: [fluent-bit, retry-limit, no-retries]
+  - id: dead-letter-queue
+    name: "dead letter queue"
+    source: https://docs.fluentbit.io/manual/administration/dead-letter-queue
+    match: [fluent-bit, dead-letter-queue, storage-keep-rejected]
+  - id: monitoring-endpoints
+    name: "monitoring endpoints"
+    source: https://docs.fluentbit.io/manual/administration/monitoring
+    match: [fluent-bit, monitoring, http-server]
+  - id: health-check
+    name: "health check"
+    source: https://docs.fluentbit.io/manual/administration/monitoring
+    match: [fluent-bit, health-check, hc-errors-count]
+  - id: hot-reload
+    name: "hot reload"
+    source: https://docs.fluentbit.io/manual/administration/hot-reload
+    match: [fluent-bit, hot-reload, sighup]
+  - id: input-threaded-mode
+    name: "threaded inputs"
+    source: https://docs.fluentbit.io/manual/administration/multithreading
+    match: [fluent-bit, multithreading, threaded-inputs]
+  - id: output-workers
+    name: "output workers"
+    source: https://docs.fluentbit.io/manual/administration/multithreading
+    match: [fluent-bit, multithreading, workers]
+  - id: memory-estimation
+    name: "memory estimation and jemalloc"
+    source: https://docs.fluentbit.io/manual/administration/memory-management
+    match: [fluent-bit, memory, mem-buf-limit]
+  - id: tail-buffer-tuning
+    name: "tail buffer tuning"
+    source: https://docs.fluentbit.io/manual/administration/performance
+    match: [fluent-bit, tail-input, buffer-chunk-size]
+  - id: simd-json-encoding
+    name: "simd json encoding"
+    source: https://docs.fluentbit.io/manual/administration/performance
+    match: [fluent-bit, simd, json-encoding]
+  - id: network-timeouts-keepalive
+    name: "network timeouts and keepalive"
+    source: https://docs.fluentbit.io/manual/administration/networking
+    match: [fluent-bit, networking, connect-timeout]
+  - id: dns-resolver-settings
+    name: "dns settings"
+    source: https://docs.fluentbit.io/manual/administration/networking
+    match: [fluent-bit, dns, net-dns-mode]
+  - id: network-connection-limits
+    name: "connection limits and probes"
+    source: https://docs.fluentbit.io/manual/administration/networking
+    match: [fluent-bit, networking, max-worker-connections]
+  - id: tls-output-settings
+    name: "tls on outputs"
+    source: https://docs.fluentbit.io/manual/administration/transport-security
+    match: [fluent-bit, tls, ssl]
+  - id: tls-input-and-mtls
+    name: "tls on inputs and mutual tls"
+    source: https://docs.fluentbit.io/manual/administration/transport-security
+    match: [fluent-bit, tls, mtls]
+  - id: http-proxy-environment
+    name: "http proxy through the environment"
+    source: https://docs.fluentbit.io/manual/administration/http-proxy
+    match: [fluent-bit, http-proxy, http-proxy-env]
+  - id: https-proxy-tls
+    name: "tls to an https proxy"
+    source: https://docs.fluentbit.io/manual/administration/http-proxy
+    match: [fluent-bit, http-proxy, tls-proxy]
+  - id: aws-credential-chain
+    name: "aws credential chain"
+    source: https://docs.fluentbit.io/manual/administration/aws-credentials
+    match: [fluent-bit, aws, credentials]
+  - id: tail-start-position-and-db
+    name: "tail start position and database"
+    source: https://docs.fluentbit.io/manual/pipeline/inputs/tail
+    match: [fluent-bit, tail-input, db]
+  - id: tail-many-files-inotify
+    name: "tailing many files"
+    source: https://docs.fluentbit.io/manual/pipeline/inputs/tail
+    match: [fluent-bit, tail-input, inotify]
+  - id: tail-file-selection-and-refresh
+    name: "tail file selection"
+    source: https://docs.fluentbit.io/manual/pipeline/inputs/tail
+    match: [fluent-bit, tail-input, exclude-path]
+  - id: tail-long-lines-and-limits
+    name: "tail long lines"
+    source: https://docs.fluentbit.io/manual/pipeline/inputs/tail
+    match: [fluent-bit, tail-input, skip-long-lines]
+  - id: systemd-input
+    name: "systemd input"
+    source: https://docs.fluentbit.io/manual/pipeline/inputs/systemd
+    match: [fluent-bit, systemd, journald]
+  - id: systemd-journal-namespaces
+    name: "journal namespaces"
+    source: https://docs.fluentbit.io/manual/pipeline/inputs/systemd
+    match: [fluent-bit, systemd, journal-namespaces]
+  - id: throttle-filter
+    name: "throttle filter"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/throttle
+    match: [fluent-bit, throttle-filter, rate-limiting]
+  - id: grep-filter
+    name: "grep filter"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/grep
+    match: [fluent-bit, grep-filter, regex]
+  - id: modify-filter-rules
+    name: "modify filter rules"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/modify
+    match: [fluent-bit, modify-filter, rename]
+  - id: modify-filter-conditions
+    name: "modify filter conditions"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/modify
+    match: [fluent-bit, modify-filter, conditions]
+  - id: record-modifier-filter
+    name: "record modifier filter"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/record-modifier
+    match: [fluent-bit, record-modifier, allowlist-key]
+  - id: parser-filter
+    name: "parser filter"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/parser
+    match: [fluent-bit, parser-filter, key-name]
+  - id: rewrite-tag-rules
+    name: "rewrite tag rules"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/rewrite-tag
+    match: [fluent-bit, rewrite-tag, routing]
+  - id: rewrite-tag-emitter-buffering
+    name: "rewrite tag emitter buffering"
+    source: https://docs.fluentbit.io/manual/pipeline/filters/rewrite-tag
+    match: [fluent-bit, rewrite-tag, emitter]

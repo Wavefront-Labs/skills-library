@@ -1,0 +1,237 @@
+# Coverage spec: openebs. Topics from the OpenEBS docs (openebs.io/docs, v4.x).
+subject: openebs
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [openebs]
+sources:
+  - "OpenEBS docs (openebs.io/docs)"
+topics:
+  # --- Concepts and architecture ---
+  - id: openebs-architecture-and-control-plane
+    name: "OpenEBS architecture, data engines and control plane"
+    source: "https://openebs.io/docs/concepts/architecture"
+    match: [architecture, control-plane, custom-resources]
+  - id: openebs-container-native-storage-pattern
+    name: "Container native storage pattern"
+    source: "https://openebs.io/docs/concepts/cns"
+    match: [cns, blast-radius]
+  - id: openebs-kubernetes-storage-concepts
+    name: "Kubernetes storage concepts for OpenEBS"
+    source: "https://openebs.io/docs/concepts/basics"
+    match: [csi, storageclass, personas]
+  - id: openebs-choose-data-engine
+    name: "Choosing a data engine"
+    source: "https://openebs.io/docs/concepts/data-engines"
+    match: [selection, hyperconverged, capacity-planning]
+  - id: openebs-local-engine-comparison
+    name: "Local PV engine feature comparison"
+    source: "https://openebs.io/docs/concepts/data-engines/localstorage"
+    match: [comparison, local-storage]
+  - id: openebs-volume-replica-states
+    name: "Volume replica states and data layer"
+    source: "https://openebs.io/docs/concepts/architecture"
+    match: [replica, data-layer, nexus]
+  # --- Install, upgrade and uninstall ---
+  - id: openebs-helm-install
+    name: "Install OpenEBS with Helm"
+    source: "https://openebs.io/docs/quickstart-guide/installation"
+    match: [install, helm, openebs-chart]
+  - id: openebs-verify-install
+    name: "Verify the installation"
+    source: "https://openebs.io/docs/quickstart-guide/installation"
+    match: [verification, openebs-hostpath]
+  - id: openebs-prerequisites-hostpath
+    name: "Prerequisites for Local PV Hostpath"
+    source: "https://openebs.io/docs/quickstart-guide/prerequisites"
+    match: [prerequisites, hostpath]
+  - id: openebs-prerequisites-lvm-zfs
+    name: "Prerequisites for Local PV LVM and ZFS"
+    source: "https://openebs.io/docs/quickstart-guide/prerequisites"
+    match: [prerequisites, volume-group, zpool]
+  - id: openebs-prerequisites-rawfile
+    name: "Prerequisites for Local PV Rawfile"
+    source: "https://openebs.io/docs/quickstart-guide/prerequisites"
+    match: [rawfile, reflink]
+  - id: openebs-prerequisites-mayastor
+    name: "Prerequisites for Replicated PV Mayastor nodes"
+    source: "https://openebs.io/docs/quickstart-guide/prerequisites"
+    match: [hugepages, nvme-tcp, io-engine]
+  - id: openebs-unified-kubectl-plugin
+    name: "Unified kubectl openebs plugin"
+    source: "https://openebs.io/docs/user-guides/kubectl-openebs"
+    match: [kubectl-plugin, kubectl-openebs]
+  - id: openebs-upgrade-3x-to-4x
+    name: "Upgrade 3.x to 4.x"
+    source: "https://openebs.io/docs/user-guides/upgrade"
+    match: [upgrade, downgrade]
+  - id: openebs-upgrade-4x-minor
+    name: "Upgrade 4.x to 4.6"
+    source: "https://openebs.io/docs/user-guides/upgrade"
+    match: [4x, upgrade-status]
+  - id: openebs-uninstall
+    name: "Uninstall OpenEBS"
+    source: "https://openebs.io/docs/user-guides/uninstall"
+    match: [uninstall, finalizers, cleanup]
+  # --- Local PV Hostpath ---
+  - id: hostpath-storageclass-config
+    name: "Hostpath StorageClass cas config annotation"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-hostpath/configuration/hostpath-storageclass-parameters"
+    match: [cas-config, reclaim-policy]
+  - id: hostpath-custom-storageclass
+    name: "Custom hostpath StorageClass and node labels"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-hostpath/configuration/hostpath-create-storageclass"
+    match: [nodeaffinitylabels, filepermissions]
+  - id: hostpath-pvc-and-access-mode
+    name: "Hostpath PVC binding and access mode"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-hostpath/configuration/hostpath-create-pvc"
+    match: [pending, readwriteonce]
+  - id: hostpath-node-deployment
+    name: "Hostpath node deployment mode"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-hostpath/advanced-operations/node-deployment-mode"
+    match: [node-deployment, daemonset]
+  - id: hostpath-xfs-quota
+    name: "Hostpath XFS project quotas"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-hostpath/advanced-operations/xfs-quota/enable-xfs-quota"
+    match: [xfs, xfs_quota, softlimitgrace]
+  - id: hostpath-ext4-quota
+    name: "Hostpath ext4 project quotas"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-hostpath/advanced-operations/ext4-quota/ext4-quota-pre"
+    match: [ext4, tune2fs, prjquota]
+  # --- Local PV LVM ---
+  - id: lvm-storageclass-scheduler
+    name: "LVM StorageClass parameters and scheduler"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/configuration/lvm-create-storageclass"
+    match: [volgroup, scheduler, spaceweighted]
+  - id: lvm-thin-provisioning
+    name: "LVM thin provisioning"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/advanced-operations/lvm-thin-provisioning"
+    match: [thin-provisioning, autoextend]
+  - id: lvm-snapshots
+    name: "LVM snapshots"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/advanced-operations/lvm-snapshot"
+    match: [snapsize, snapshot-controller]
+  - id: lvm-restore
+    name: "LVM restore from snapshot"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/advanced-operations/lvm-volume-restore"
+    match: [restore, datasource]
+  - id: lvm-resize
+    name: "LVM volume resize"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/advanced-operations/lvm-resize"
+    match: [lvextend, online-expansion]
+  - id: lvm-raw-block
+    name: "LVM raw block volumes"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/advanced-operations/lvm-raw-block-volume"
+    match: [raw-block, volumedevices]
+  - id: lvm-fsgroup
+    name: "LVM fsGroup permissions"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/advanced-operations/lvm-fs-group"
+    match: [fsgroup, fsgrouppolicy]
+  - id: lvm-vac-qos
+    name: "LVM VolumeAttributesClass QoS"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-lvm/configuration/lvm-create-vac"
+    match: [vac, qos, cgroup-v2]
+  # --- Local PV ZFS ---
+  - id: zfs-storageclass
+    name: "ZFS StorageClass parameters"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-zfs/configuration/zfs-storageclass-parameters"
+    match: [poolname, recordsize, volblocksize]
+  - id: zfs-snapshots
+    name: "ZFS snapshots"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-zfs/advanced-operations/zfs-snapshot"
+    match: [zfssnapshot, deletionpolicy]
+  - id: zfs-clones
+    name: "ZFS clones"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-zfs/advanced-operations/zfs-clone"
+    match: [clone, volumesnapshotdatasource]
+  - id: zfs-resize
+    name: "ZFS volume resize"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-zfs/advanced-operations/zfs-resize"
+    match: [refquota, zvol]
+  # --- Local PV Rawfile ---
+  - id: rawfile-overview
+    name: "Rawfile architecture"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/rawfile-overview"
+    match: [loop-device, capacity-tracking]
+  - id: rawfile-storageclass
+    name: "Rawfile StorageClass parameters"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/configuration/rawfile-storageclass-parameters"
+    match: [thinprovision, copyonwrite]
+  - id: rawfile-storage-pools
+    name: "Rawfile storage pools and reserved capacity"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/advanced-operations/rawfile-storage-pools"
+    match: [storage-pools, reserved-capacity]
+  - id: rawfile-thin-thick
+    name: "Rawfile thin vs thick provisioning"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/advanced-operations/rawfile-thin-provisioning"
+    match: [sparse-files, overprovisioning]
+  - id: rawfile-snapshots
+    name: "Rawfile snapshots and restore"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/advanced-operations/rawfile-snapshot"
+    match: [freezefs, enable-distributed-snapshotting]
+  - id: rawfile-resize
+    name: "Rawfile resize"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/advanced-operations/rawfile-resize"
+    match: [csi-resizer, block-mode]
+  - id: rawfile-metrics
+    name: "Rawfile Prometheus metrics"
+    source: "https://openebs.io/docs/user-guides/local-storage-user-guide/local-pv-rawfile/advanced-operations/rawfile-monitoring"
+    match: [prometheus, servicemonitor]
+  # --- Replicated PV Mayastor ---
+  - id: mayastor-diskpool-create
+    name: "Create DiskPools"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/configuration/rs-create-diskpool"
+    match: [device-links, by-id, aio]
+  - id: mayastor-diskpool-expansion
+    name: "DiskPool expansion"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/diskpool-expansion"
+    match: [maxexpansion, enospc]
+  - id: mayastor-storageclass
+    name: "Mayastor StorageClass parameters"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/configuration/rs-storage-class-parameters"
+    match: [repl, fstype, formatoptions]
+  - id: mayastor-topology
+    name: "Mayastor topology parameters"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/configuration/rs-topology-parameters"
+    match: [nodespreadtopologykey, poolaffinitytopologylabel]
+  - id: mayastor-snapshots
+    name: "Mayastor volume snapshots"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/volume-snapshots"
+    match: [copy-on-write, csi-snapshot-controller]
+  - id: mayastor-snapshot-restore
+    name: "Mayastor snapshot restore policy"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/snapshot-restore"
+    match: [snapshotrestorepolicy, besteffort]
+  - id: mayastor-resize
+    name: "Mayastor volume resize"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/re-resize"
+    match: [online, offline]
+  - id: mayastor-replica-operations
+    name: "Mayastor replica placement and recovery"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/replica-operations"
+    match: [placement, reconciliation, faulted]
+  - id: mayastor-partial-rebuild
+    name: "Partial rebuild and rebuild history"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/replica-rebuilds"
+    match: [partial-rebuild, rebuild-history]
+  - id: mayastor-ha-scheduling
+    name: "HA switch-over and volume scheduling"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/ha"
+    match: [high-availability, switchover, nvme-core]
+  - id: mayastor-drain-cordon
+    name: "Drain and cordon nodes"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/drain-node"
+    match: [drain, cordon]
+  - id: mayastor-pool-cordon-delete
+    name: "Cordon and delete pools"
+    source: "https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/delete-pools"
+    match: [purge, decommission]
+  # --- Troubleshooting ---
+  - id: troubleshoot-local-storage
+    name: "Troubleshoot local storage and install errors"
+    source: "https://openebs.io/docs/troubleshooting"
+    match: [pvc-pending, nodename, cluster-admin]
+  - id: troubleshoot-replicated-storage
+    name: "Troubleshoot Replicated PV Mayastor"
+    source: "https://openebs.io/docs/troubleshootingre"
+    match: [coredump, gdb, sigill, diskpool-schema]

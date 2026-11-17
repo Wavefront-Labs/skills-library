@@ -1,0 +1,246 @@
+# Coverage spec for druid, from the official documentation.
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: druid
+scope:
+  category: computing-software
+  field: data-engineering
+  products: [druid]
+sources:
+  - "Apache Druid documentation (docs in apache/druid master)"
+topics:
+  - id: architecture
+    name: "Architecture and services"
+    source: "https://github.com/apache/druid/blob/master/docs/design/architecture.md"
+    match: [architecture, services, process-types]
+  - id: server-types
+    name: "Master, Query and Data servers"
+    source: "https://github.com/apache/druid/blob/master/docs/design/architecture.md"
+    match: [master-server, query-server, data-server]
+  - id: coordinator
+    name: "Coordinator"
+    source: "https://github.com/apache/druid/blob/master/docs/design/coordinator.md"
+    match: [coordinator, balancing, tiers]
+  - id: overlord
+    name: "Overlord"
+    source: "https://github.com/apache/druid/blob/master/docs/data-management/automatic-compaction.md"
+    match: [overlord, local-mode, remote-mode]
+  - id: worker-blacklist
+    name: "Worker blacklisting"
+    source: "https://github.com/apache/druid/blob/master/docs/design/overlord.md"
+    match: [blacklist]
+  - id: broker
+    name: "Broker"
+    source: "https://github.com/apache/druid/blob/master/docs/design/broker.md"
+    match: [broker, timeline]
+  - id: broker-cache
+    name: "Broker caching"
+    source: "https://github.com/apache/druid/blob/master/docs/design/broker.md"
+    match: [memcached, realtime]
+  - id: historical
+    name: "Historical"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/basic-cluster-tuning.md"
+    match: [historical, load-segments, memory-mapping]
+  - id: segment-cache
+    name: "Segment cache"
+    source: "https://github.com/apache/druid/blob/master/docs/design/deep-storage.md"
+    match: [segment-cache]
+  - id: router
+    name: "Router"
+    source: "https://github.com/apache/druid/blob/master/docs/design/broker.md"
+    match: [router, query-routing]
+  - id: management-proxy
+    name: "Management proxy"
+    source: "https://github.com/apache/druid/blob/master/docs/design/router.md"
+    match: [management-proxy, load-balancer]
+  - id: indexer
+    name: "Indexer"
+    source: "https://github.com/apache/druid/blob/master/docs/design/indexer.md"
+    match: [indexer, peon, jvm]
+  - id: zookeeper
+    name: "ZooKeeper"
+    source: "https://github.com/apache/druid/blob/master/docs/design/zookeeper.md"
+    match: [zookeeper, leader-election, curator]
+  - id: segments
+    name: "Segments"
+    source: "https://github.com/apache/druid/blob/master/docs/design/coordinator.md"
+    match: [segments, columnar]
+  - id: segment-sizing
+    name: "Segment sizing"
+    source: "https://github.com/apache/druid/blob/master/docs/design/segments.md"
+    match: [target-rows-per-segment]
+  - id: deep-storage
+    name: "Deep storage"
+    source: "https://github.com/apache/druid/blob/master/docs/design/deep-storage.md"
+    match: [deep-storage, local-storage, durability]
+  - id: metadata-storage
+    name: "Metadata storage"
+    source: "https://github.com/apache/druid/blob/master/docs/design/metadata-storage.md"
+    match: [metadata-storage, derby, acid, high-availability]
+  - id: rollup
+    name: "Rollup"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/projections.md"
+    match: [rollup, rollup-ratio, pre-aggregation]
+  - id: partitioning
+    name: "Partitioning"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/multitenancy.md"
+    match: [partitioning, time-chunk, partitioned-by]
+  - id: schema-design
+    name: "Schema design"
+    source: "https://github.com/apache/druid/blob/master/docs/ingestion/schema-design.md"
+    match: [schema-design, data-model, dimensions, metrics]
+  - id: supervisors
+    name: "Supervisors"
+    source: "https://github.com/apache/druid/blob/master/docs/ingestion/supervisor.md"
+    match: [supervisor, supervisor-spec, autocompact]
+  - id: kafka-ingestion
+    name: "Kafka ingestion"
+    source: "https://github.com/apache/druid/blob/master/docs/ingestion/kafka-ingestion.md"
+    match: [kafka, kafka-indexing-service, exactly-once]
+  - id: kinesis-ingestion
+    name: "Kinesis ingestion"
+    source: "https://github.com/apache/druid/blob/master/docs/ingestion/supervisor.md"
+    match: [kinesis]
+  - id: tasks
+    name: "Tasks"
+    source: "https://github.com/apache/druid/blob/master/docs/design/overlord.md"
+    match: [tasks, overlord-api, sys-tasks]
+  - id: task-reports
+    name: "Task reports"
+    source: "https://github.com/apache/druid/blob/master/docs/ingestion/tasks.md"
+    match: [task-reports, ingestion-stats]
+  - id: concurrent-append-replace
+    name: "Concurrent append and replace"
+    source: "https://github.com/apache/druid/blob/master/docs/ingestion/concurrent-append-replace.md"
+    match: [concurrent-locks, use-concurrent-locks]
+  - id: compaction
+    name: "Compaction"
+    source: "https://github.com/apache/druid/blob/master/docs/data-management/compaction.md"
+    match: [compaction, small-segments, dimension-order]
+  - id: auto-compaction
+    name: "Automatic compaction"
+    source: "https://github.com/apache/druid/blob/master/docs/data-management/automatic-compaction.md"
+    match: [auto-compaction, compaction-supervisor, coordinator-duties]
+  - id: delete
+    name: "Deleting data"
+    source: "https://github.com/apache/druid/blob/master/docs/data-management/delete.md"
+    match: [delete, kill-task, unused-segments, soft-delete]
+  - id: update
+    name: "Updating data"
+    source: "https://github.com/apache/druid/blob/master/docs/data-management/update.md"
+    match: [update, overwrite, reindex]
+  - id: retention-rules
+    name: "Retention rules"
+    source: "https://github.com/apache/druid/blob/master/docs/data-management/delete.md"
+    match: [retention-rules, load-rules, drop-rules, broadcast-rules]
+  - id: rolling-updates
+    name: "Rolling updates"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/rolling-updates.md"
+    match: [rolling-updates, upgrade, downgrade]
+  - id: cluster-tuning
+    name: "Basic cluster tuning"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/basic-cluster-tuning.md"
+    match: [tuning, heap-sizing, garbage-collector]
+  - id: mixed-workloads
+    name: "Mixed workloads"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/mixed-workloads.md"
+    match: [mixed-workloads, query-laning, service-tiering]
+  - id: tls
+    name: "TLS support"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/tls-support.md"
+    match: [tls, https, jetty, keystore]
+  - id: authentication
+    name: "Authentication and authorization"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/auth.md"
+    match: [authentication, authorization, authenticator-chain, escalator]
+  - id: segment-optimization
+    name: "Segment optimization"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/segment-optimization.md"
+    match: [segment-optimization, rows-per-segment, parallelism]
+  - id: metadata-cleanup
+    name: "Metadata store cleanup"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/clean-metadata-store.md"
+    match: [metadata-cleanup, duration-to-retain, high-churn]
+  - id: web-console
+    name: "Web console"
+    source: "https://github.com/apache/druid/blob/master/docs/design/router.md"
+    match: [web-console, query-view, data-loader]
+  - id: request-logging
+    name: "Request logging"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/request-logging.md"
+    match: [request-logging, query-logs, slf4j, emitter]
+  - id: durable-storage
+    name: "Durable storage"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/durable-storage.md"
+    match: [durable-storage, intermediate-storage]
+  - id: msq-concepts
+    name: "MSQ concepts"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/dart.md"
+    match: [msq, multi-stage-query, controller-task, worker-task]
+  - id: msq-security
+    name: "MSQ security"
+    source: "https://github.com/apache/druid/blob/master/docs/multi-stage-query/security.md"
+    match: [permissions, extern, read-datasource, write-datasource]
+  - id: msq-known-issues
+    name: "MSQ known issues"
+    source: "https://github.com/apache/druid/blob/master/docs/multi-stage-query/known-issues.md"
+    match: [known-issues, grouping-sets, insert-column-list]
+  - id: query-caching
+    name: "Query caching"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/caching.md"
+    match: [caching, per-segment-cache, whole-query-cache]
+  - id: lookups
+    name: "Lookups"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/basic-cluster-tuning.md"
+    match: [lookups, join-like, one-to-one]
+  - id: nested-columns
+    name: "Nested columns"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/nested-columns.md"
+    match: [nested-columns, complex-json, json-functions]
+  - id: multi-value-dimensions
+    name: "Multi-value dimensions"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/multi-value-dimensions.md"
+    match: [multi-value-dimensions]
+  - id: projections
+    name: "Projections"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/projections.md"
+    match: [projections, aggregate-projection, grouping-columns]
+  - id: query-context
+    name: "Query context"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/mixed-workloads.md"
+    match: [query-context, timeout, priority, sql-query-context]
+  - id: dart
+    name: "Dart query engine"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/dart.md"
+    match: [dart, parallel-sort-merge]
+  - id: query-from-deep-storage
+    name: "Query from deep storage"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/query-from-deep-storage.md"
+    match: [query-from-deep-storage, centralized-schema]
+  - id: multitenancy
+    name: "Multitenancy"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/multitenancy.md"
+    match: [multitenancy, tenant-id, datasource-per-tenant, shared-datasource]
+  - id: query-performance
+    name: "Query performance investigation"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/tips-good-queries.md"
+    match: [explain-plan, query-metrics, sql-tuning]
+  - id: query-troubleshooting
+    name: "Query troubleshooting"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/tips-good-queries.md"
+    match: [troubleshooting, jetty-timeout, channel-disconnected]
+  - id: granularities
+    name: "Granularities"
+    source: "https://github.com/apache/druid/blob/master/docs/querying/granularities.md"
+    match: [granularity, segment-granularity, iso8601-period]
+  - id: logging
+    name: "Logging"
+    source: "https://github.com/apache/druid/blob/master/docs/configuration/logging.md"
+    match: [logging, log4j2, rolling-file]
+  - id: metadata-migration
+    name: "Metadata migration"
+    source: "https://github.com/apache/druid/blob/master/docs/operations/metadata-migration.md"
+    match: [metadata-migration, export-metadata]
+  - id: deep-storage-migration
+    name: "Deep storage migration"
+    source: "https://github.com/apache/druid/blob/master/docs/"
+    match: [deep-storage-migration]

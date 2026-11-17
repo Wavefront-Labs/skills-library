@@ -1,0 +1,197 @@
+# Coverage spec: redpanda. Topics from the Redpanda docs (docs.redpanda.com/streaming/current).
+subject: redpanda
+scope:
+  category: computing-software
+  field: messaging-and-integration
+  products: [redpanda]
+sources:
+  - "Redpanda docs (docs.redpanda.com/streaming/current)"
+topics:
+  # --- Architecture and platform ---
+  - id: redpanda-raft-and-thread-per-core
+    name: "Raft replication, leader election and thread-per-core design"
+    source: "https://docs.redpanda.com/streaming/current/get-started/architecture/"
+    match: [raft,replication,leader,election,thread-per-core,seastar]
+  - id: redpanda-controller-snapshots
+    name: "Controller partition and snapshots"
+    source: "https://docs.redpanda.com/streaming/current/get-started/architecture/"
+    match: [controller,snapshot]
+  # --- Host tuning and sizing ---
+  - id: redpanda-autotuner-and-tuners
+    name: "Autotuner, rpk redpanda tune and tuners"
+    source: "https://docs.redpanda.com/streaming/current/reference/rpk/rpk-redpanda/rpk-redpanda-tune/"
+    match: [autotuner,tune,tuners,cpu,irq,disk]
+  - id: redpanda-open-file-limits
+    name: "Linux open file limits"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/linux-system-tuning/"
+    match: [ulimit,file-descriptors,nofile]
+  - id: redpanda-sizing-and-partition-limits
+    name: "Sizing, partition limits and storage benchmarking"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/sizing/"
+    match: [sizing,cores,memory,network,partitions,benchmark]
+  # --- Deployment and readiness ---
+  - id: redpanda-linux-install
+    name: "Linux production install and ports"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/production/production-deployment/"
+    match: [install,packages,ports,systemd]
+  - id: redpanda-bootstrap-seed-servers
+    name: "Bootstrap brokers and seed servers"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/production/production-deployment/"
+    match: [bootstrap,seed-servers,node-id]
+  - id: redpanda-production-readiness-security
+    name: "Production readiness: security and topology"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/production/production-readiness/"
+    match: [readiness,security,topology]
+  - id: redpanda-production-readiness-health
+    name: "Production readiness: health and host checks"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/production/production-readiness/"
+    match: [readiness,health,checklist]
+  - id: redpanda-bootstrap-file-first-user
+    name: "Bootstrap file and first admin user"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/production/production-deployment/"
+    match: [bootstrap-yaml,superuser,admin-api]
+  - id: redpanda-listeners
+    name: "Listeners and advertised addresses"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/listener-configuration/"
+    match: [listeners,advertised-addresses,kafka-api]
+  # --- rpk configuration ---
+  - id: redpanda-rpk-profiles-and-admin-addresses
+    name: "rpk profiles and Admin API addresses"
+    source: "https://docs.redpanda.com/streaming/current/get-started/config-rpk-profile/"
+    match: [rpk,profile,rpk-yaml,admin-api,addresses]
+  - id: redpanda-rpk-x-options
+    name: "rpk -X options and environment variables"
+    source: "https://docs.redpanda.com/streaming/current/reference/rpk/rpk-x-options/"
+    match: [rpk,x-options,env-vars,precedence]
+  # --- Topics ---
+  - id: redpanda-topic-create-alter-trim
+    name: "Creating, altering and trimming topics"
+    source: "https://docs.redpanda.com/streaming/current/reference/rpk/rpk-topic/rpk-topic-create/"
+    match: [rpk-topic,create,alter-config,add-partitions,trim-prefix]
+  - id: redpanda-topic-defaults-and-partition-reduction
+    name: "Topic defaults, overrides and partition reduction"
+    source: "https://docs.redpanda.com/streaming/current/develop/manage-topics/config-topics/"
+    match: [cleanup-policy,defaults,overrides,partitions,reduce]
+  - id: redpanda-write-caching
+    name: "Write caching and flush settings"
+    source: "https://docs.redpanda.com/streaming/current/develop/manage-topics/config-topics/"
+    match: [write-caching,flush,acks]
+  # --- Cluster operations ---
+  - id: redpanda-storage-benchmark
+    name: "Storage benchmarking and throughput assessment"
+    source: "https://docs.redpanda.com/streaming/current/deploy/redpanda/manual/sizing/"
+    match: [benchmark,storage,iops]
+  - id: redpanda-cluster-config
+    name: "Cluster configuration edit, export and import"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/cluster-property-configuration/"
+    match: [cluster-config,edit,export,import]
+  - id: redpanda-rolling-restart
+    name: "Rolling restart with maintenance mode"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/rolling-restart/"
+    match: [rolling-restart,maintenance-mode]
+  - id: redpanda-decommission
+    name: "Decommissioning brokers"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/decommission-brokers/"
+    match: [decommission,remove-broker,scale-down]
+  - id: redpanda-rolling-upgrade
+    name: "Rolling upgrades, rollback and finalization"
+    source: "https://docs.redpanda.com/streaming/current/upgrade/rolling-upgrade/"
+    match: [upgrade,rollback,downgrade,license]
+  # --- Balancing ---
+  - id: redpanda-leader-and-core-balancing
+    name: "Leader balancer, core balancing and partition moves"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/cluster-balancing/"
+    match: [leader-balancer,leadership,transfer,core-balancing,partition-move]
+  - id: redpanda-partition-autobalancing
+    name: "Partition autobalancing modes"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/cluster-balancing/"
+    match: [autobalancing,node-add,continuous]
+  - id: redpanda-continuous-data-balancing
+    name: "Continuous data balancing"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/continuous-data-balancing/"
+    match: [continuous-data-balancing,status,cancel]
+  # --- Retention, compaction and disk ---
+  - id: redpanda-compaction
+    name: "Compaction and dirty ratio"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/compaction-settings/"
+    match: [compaction,cleanup-policy,dirty-ratio]
+  - id: redpanda-compaction-tombstones-and-tuning
+    name: "Tombstones, transaction markers and compaction tuning"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/compaction-settings/"
+    match: [tombstones,delete-retention,transaction-markers,memory,interval]
+  - id: redpanda-retention
+    name: "Retention by time, size and segments"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/disk-utilization/"
+    match: [retention,segment,retention-ms]
+  - id: redpanda-disk-alerts-and-space-management
+    name: "Disk alerts, ballast and space management"
+    source: "https://docs.redpanda.com/streaming/current/manage/cluster-maintenance/disk-utilization/"
+    match: [disk,alerts,full-disk,ballast,space-management,local-cache]
+  # --- Security ---
+  - id: redpanda-tiered-retention-cache
+    name: "Tiered Storage retention and cache tuning"
+    source: "https://docs.redpanda.com/streaming/current/manage/tiered-storage/"
+    match: [local-retention,cache,chunks]
+  - id: redpanda-sasl-superusers
+    name: "SASL authentication and superusers"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/authentication/"
+    match: [sasl,superusers,enable-sasl]
+  - id: redpanda-sasl-scram-users
+    name: "SASL/SCRAM users and clients"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/authentication/"
+    match: [scram,users,sasl-mechanisms]
+  - id: redpanda-tls
+    name: "TLS listeners with PEM and PKCS12"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/encryption/"
+    match: [tls,pem,pkcs12,crl]
+  - id: redpanda-mtls
+    name: "mTLS and minimum TLS version"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/encryption/"
+    match: [mtls,client-auth,tls-min-version]
+  - id: redpanda-acls
+    name: "ACL model and recipes"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/authorization/acl/"
+    match: [acl,principals,operations]
+  - id: redpanda-rbac
+    name: "Roles and RBAC"
+    source: "https://docs.redpanda.com/streaming/current/manage/security/authorization/rbac/"
+    match: [rbac,roles,deny,precedence]
+  # --- Schema Registry ---
+  - id: redpanda-schema-registry-overview-and-api
+    name: "Schema Registry overview, wire format and API"
+    source: "https://docs.redpanda.com/streaming/current/manage/schema-reg/schema-reg-overview/"
+    match: [schema-registry,wire-format,magic-byte,subjects,avro,protobuf]
+  - id: redpanda-schema-registry-compat
+    name: "Compatibility, deletes and modes"
+    source: "https://docs.redpanda.com/streaming/current/manage/schema-reg/schema-reg-api/"
+    match: [compatibility,soft-delete,import-mode]
+  - id: redpanda-schema-registry-authz
+    name: "Schema Registry authorization"
+    source: "https://docs.redpanda.com/streaming/current/manage/schema-reg/schema-reg-authorization/"
+    match: [schema-registry,acl,registry-subject]
+  - id: redpanda-schema-registry-contexts
+    name: "Schema Registry contexts"
+    source: "https://docs.redpanda.com/streaming/current/manage/schema-reg/schema-reg-contexts/"
+    match: [contexts,qualified-subjects,schema-ids]
+  # --- HTTP Proxy and clients ---
+  - id: redpanda-http-proxy
+    name: "HTTP Proxy produce, fetch and consumer groups"
+    source: "https://docs.redpanda.com/streaming/current/develop/http-proxy/"
+    match: [http-proxy,pandaproxy,rest,consumer-groups]
+  - id: redpanda-transactions
+    name: "Transactions and producer ID limits"
+    source: "https://docs.redpanda.com/streaming/current/develop/transactions/"
+    match: [transactions,exactly-once,producer-ids]
+  - id: redpanda-consumer-offsets-and-groups
+    name: "Consumer offsets, commit strategies and group lag"
+    source: "https://docs.redpanda.com/streaming/current/develop/consume-data/consumer-offsets/"
+    match: [offsets,commit,heartbeat,rpk-group,lag]
+  # --- Tiered Storage ---
+  - id: redpanda-tiered-setup
+    name: "Tiered Storage object storage setup"
+    source: "https://docs.redpanda.com/streaming/current/manage/tiered-storage/"
+    match: [tiered-storage,s3,gcs,license]
+  - id: redpanda-tiered-enable-retention-cache
+    name: "Enabling Tiered Storage, retention, cache and pausing uploads"
+    source: "https://docs.redpanda.com/streaming/current/manage/tiered-storage/"
+    match: [storage-mode,remote-read,remote-write,local-retention,cache,pause-uploads]

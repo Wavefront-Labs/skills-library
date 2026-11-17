@@ -1,0 +1,619 @@
+# Canonical coverage spec: Agricultural and Biosystems Engineering (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal to
+# one of its `match` keywords. Topics and subtopics come from external structures (degree curricula,
+# licensing exam outlines, textbook chapter lists, standards-body subject areas), not from what the
+# library already has.
+subject: agricultural-and-biosystems-engineering
+scope:
+  category: engineering-technology
+  field: agricultural-and-biosystems-engineering
+  products: [farm-machinery-design, irrigation-design, food-process-engineering, grain-storage-handling, controlled-environment-systems, precision-agriculture-systems]
+sources:
+  - "NCEES Principles and Practice of Engineering (PE) Agricultural and Biological Engineering exam specifications - subject areas for machinery and power systems, soil and water resources, structures and environment, food and bioprocess engineering, information and electrical systems"
+  - "ABET program criteria for Agricultural, Biological and similar engineering programs, and typical accredited curricula (ASABE-affiliated departments)"
+  - "ASABE Standards, Engineering Practices and Data (asabe.org) - machinery management (EP496 and D497 family), irrigation, structures and environment, food engineering subject areas"
+  - "Srivastava, Goering, Rohrbach & Buckmaster, Engineering Principles of Agricultural Machines (ASABE) - chapter list: tillage, planting, sprayers, harvesting, tractor performance, machine management"
+  - "Hunt & Wilson, Farm Power and Machinery Management; Kepner, Bainer & Barger, Principles of Farm Machinery"
+  - "Keller & Bliesner, Sprinkle and Trickle Irrigation; Walker & Skogerboe, Surface Irrigation; Hoffman et al., Design and Operation of Farm Irrigation Systems (ASABE); USDA NRCS National Engineering Handbook Part 623 Irrigation and Part 650 Engineering Field Handbook (nrcs.usda.gov)"
+  - "FAO Irrigation and Drainage Papers 24, 29, 33, 56, 66 and FAO training materials (fao.org)"
+  - "Singh & Heldman, Introduction to Food Engineering; Toledo, Fundamentals of Food Process Engineering; Earle, Unit Operations in Food Processing; Fellows, Food Processing Technology"
+  - "Codex Alimentarius general principles of food hygiene and HACCP (codexalimentarius.org); EHEDG and 3-A Sanitary Standards hygienic design subject areas; US FDA low-acid canned food and juice HACCP regulatory framework (fda.gov)"
+  - "Chakraverty & Singh, Postharvest Technology and Food Process Engineering; Brooker, Bakker-Arkema & Hall, Drying and Storage of Grains and Oilseeds; Sinha & Muir, Grain Storage; Navarro & Noyes, The Mechanics and Physics of Modern Grain Aeration Management"
+  - "Albright, Environmental Control for Animals and Plants; ASHRAE Handbook Fundamentals and Applications (agricultural applications); MWPS Midwest Plan Service handbooks (Structures and Environment Handbook); Nelson, Greenhouse Operation and Management; von Zabeltitz, Integrated Greenhouse Systems for Mild Climates"
+  - "Pierce, Precision Agriculture (soil and crop sensing, GNSS, variable rate); Zhang, Precision Agriculture Technology for Crop Farming; ISO 11783 (ISOBUS) and ISO 25119 / ISO 18497 functional safety subject areas for agricultural machinery (iso.org)"
+topics:
+  # ---------------- farm-machinery-design
+  - id: fm-machinery-management
+    name: Machinery management and field capacity
+    source: Hunt and Wilson, Farm Power and Machinery Management; ASABE EP496 and D497
+    match: [machinery-management, field-capacity]
+    subtopics:
+      - {id: fm-mm-field-efficiency, name: Field efficiency and effective field capacity, match: [field-efficiency]}
+      - {id: fm-mm-ownership-cost, name: Machine ownership cost depreciation interest taxes insurance, match: [ownership-cost]}
+      - {id: fm-mm-repair-cost, name: Repair and maintenance cost estimation by accumulated use, match: [repair-cost-estimation]}
+      - {id: fm-mm-timeliness, name: Timeliness cost and machinery selection, match: [timeliness-cost]}
+      - {id: fm-mm-replacement, name: Machine replacement economics, match: [replacement-analysis]}
+  - id: fm-tractor-performance
+    name: Tractor performance and traction
+    source: Srivastava et al., Engineering Principles of Agricultural Machines (tractor chapters)
+    match: [tractor-performance, traction]
+    subtopics:
+      - {id: fm-tp-drawbar, name: Drawbar power and tractive efficiency, match: [drawbar-power]}
+      - {id: fm-tp-slip, name: Wheel slip and the traction-slip curve, match: [wheel-slip]}
+      - {id: fm-tp-ballast, name: Ballasting and weight transfer, match: [tractor-ballasting]}
+      - {id: fm-tp-pto, name: PTO power and speeds, match: [pto-power]}
+      - {id: fm-tp-tires, name: Tire selection inflation and soil compaction, match: [tire-inflation]}
+      - {id: fm-tp-hitch, name: Three-point hitch categories and geometry, match: [three-point-hitch]}
+  - id: fm-tillage
+    name: Tillage tool design and draft
+    source: Srivastava et al.; ASABE D497 draft data; Kepner Bainer Barger
+    match: [tillage, tillage-tools]
+    subtopics:
+      - {id: fm-ti-draft-prediction, name: Implement draft prediction from tool parameters, match: [draft-prediction]}
+      - {id: fm-ti-moldboard, name: Moldboard and disk plow design, match: [moldboard-plow]}
+      - {id: fm-ti-chisel, name: Chisel plow and subsoiler design, match: [chisel-plow]}
+      - {id: fm-ti-disk-harrow, name: Disk harrow gang angle and concavity, match: [disk-harrow]}
+      - {id: fm-ti-conservation, name: Conservation tillage residue cover and no-till implements, match: [no-till-implements]}
+  - id: fm-planting
+    name: Planters and seed metering
+    source: Srivastava et al. planting and seeding chapter
+    match: [planter-design, seed-metering]
+    subtopics:
+      - {id: fm-pl-metering-types, name: Mechanical and vacuum metering mechanisms, match: [vacuum-metering]}
+      - {id: fm-pl-spacing, name: Seed spacing uniformity and singulation, match: [seed-spacing-uniformity]}
+      - {id: fm-pl-drill-calibration, name: Grain drill calibration, match: [drill-calibration]}
+      - {id: fm-pl-rowunit, name: Row unit downforce and furrow opener design, match: [row-unit-downforce]}
+      - {id: fm-pl-air-seeder, name: Air seeder and pneumatic distribution, match: [air-seeder]}
+  - id: fm-spraying
+    name: Sprayer design and calibration
+    source: Srivastava et al. chemical application chapter; ASABE sprayer and nozzle standards subject area
+    match: [sprayer-design, sprayer-calibration]
+    subtopics:
+      - {id: fm-sp-nozzles, name: Nozzle types droplet size and selection, match: [nozzle-selection]}
+      - {id: fm-sp-rate-controller, name: Flow-based rate controllers and boom sections, match: [spray-rate-controller]}
+      - {id: fm-sp-drift, name: Spray drift mechanisms and reduction, match: [spray-drift]}
+      - {id: fm-sp-boom, name: Boom suspension height and stability, match: [boom-stability]}
+      - {id: fm-sp-agitation-tank, name: Tank agitation pump sizing and plumbing, match: [sprayer-pump-sizing]}
+  - id: fm-harvesting
+    name: Grain harvesting machines
+    source: Srivastava et al. harvesting chapters
+    match: [combine-harvester, grain-harvesting]
+    subtopics:
+      - {id: fm-hv-threshing, name: Threshing cylinder and concave setting, match: [threshing-cylinder]}
+      - {id: fm-hv-separation, name: Straw walker rotary separation and cleaning shoe, match: [cleaning-shoe]}
+      - {id: fm-hv-losses, name: Harvest loss measurement and monitors, match: [harvest-loss-measurement]}
+      - {id: fm-hv-header, name: Header types reel and cutterbar design, match: [combine-header]}
+      - {id: fm-hv-capacity, name: Combine throughput and capacity matching, match: [combine-throughput]}
+  - id: fm-forage-hay
+    name: Forage and hay machinery
+    source: Srivastava et al. forage harvesting chapter; Hunt and Wilson
+    match: [forage-machinery, hay-machinery]
+    subtopics:
+      - {id: fm-fh-mower, name: Mower-conditioner cutting and conditioning, match: [mower-conditioner]}
+      - {id: fm-fh-baler, name: Baler types and bale density, match: [baler-design]}
+      - {id: fm-fh-chopper, name: Forage harvester chop length and kernel processing, match: [forage-harvester]}
+      - {id: fm-fh-moisture, name: Hay moisture and drying rate, match: [hay-drying-rate]}
+  - id: fm-material-spreading
+    name: Fertilizer and manure spreading equipment
+    source: Srivastava et al.; ASABE spreader pattern testing subject area
+    match: [spreader-design, fertilizer-application]
+    subtopics:
+      - {id: fm-ms-pattern, name: Spread pattern testing and overlap, match: [spread-pattern-testing]}
+      - {id: fm-ms-calibration, name: Spreader calibration and application rate, match: [spreader-calibration]}
+      - {id: fm-ms-manure, name: Manure spreader types and rate control, match: [manure-spreader]}
+      - {id: fm-ms-injection, name: Liquid injection and toolbar design, match: [liquid-injection-toolbar]}
+  - id: fm-hydraulics-drivelines
+    name: Hydraulics and power transmission on machines
+    source: Srivastava et al.; fluid power textbooks; ASABE PTO standards subject area
+    match: [machine-hydraulics, power-transmission]
+    subtopics:
+      - {id: fm-hd-circuit-sizing, name: Hydraulic circuit and cylinder sizing, match: [hydraulic-circuit-sizing]}
+      - {id: fm-hd-pto-driveline, name: PTO driveline selection and shielding, match: [pto-driveline]}
+      - {id: fm-hd-chains-belts, name: Chain and belt drive design, match: [chain-belt-drives]}
+      - {id: fm-hd-clutch-slip, name: Slip clutches and shear-bolt protection, match: [slip-clutch]}
+  - id: fm-safety-structural
+    name: Machine safety and structural design
+    source: ISO 4254 agricultural machinery safety subject area; ROPS standards; Srivastava et al.
+    match: [machinery-safety, machine-structural-design]
+    subtopics:
+      - {id: fm-ss-rops, name: Rollover protective structures and seat belts, match: [rops]}
+      - {id: fm-ss-guarding, name: Guarding of moving parts and entanglement hazards, match: [machine-guarding]}
+      - {id: fm-ss-fatigue, name: Frame fatigue and field load measurement, match: [fatigue-design]}
+      - {id: fm-ss-noise-vibration, name: Operator noise and vibration exposure, match: [operator-noise-vibration]}
+  - id: fm-testing
+    name: Machinery testing and evaluation
+    source: OECD tractor tests; Nebraska Tractor Test Laboratory practice; ASABE test standards subject area
+    match: [machinery-testing, tractor-testing]
+    subtopics:
+      - {id: fm-te-tractor-test, name: Reading a tractor test report, match: [tractor-test-report]}
+      - {id: fm-te-field-trial, name: Field trial design for machinery comparison, match: [machinery-field-trial]}
+      - {id: fm-te-instrumentation, name: Instrumenting machines with load cells and data loggers, match: [machine-instrumentation]}
+  # ---------------- irrigation-design
+  - id: ir-crop-water
+    name: Crop water requirements
+    source: FAO-56 chapters 2 to 8
+    match: [crop-water-requirements, evapotranspiration]
+    subtopics:
+      - {id: ir-cw-et0, name: Reference evapotranspiration inputs and checks, match: [et0-calculation]}
+      - {id: ir-cw-kc, name: Single and dual crop coefficient method, match: [dual-crop-coefficient]}
+      - {id: ir-cw-effective-rain, name: Effective rainfall estimation, match: [effective-rainfall]}
+      - {id: ir-cw-design-peak, name: Design peak demand and system capacity, match: [peak-demand-design]}
+      - {id: ir-cw-missing-data, name: Estimating ET0 with missing weather data, match: [hargreaves-et0]}
+  - id: ir-soil-water
+    name: Soil-water relations and scheduling
+    source: FAO-56 chapter 8; NRCS NEH 623 chapter 1 and 4
+    match: [soil-water, irrigation-scheduling]
+    subtopics:
+      - {id: ir-sw-taw-raw, name: Available water and management allowed depletion, match: [management-allowed-depletion]}
+      - {id: ir-sw-infiltration, name: Infiltration measurement and models, match: [infiltration-rate]}
+      - {id: ir-sw-sensors, name: Soil moisture sensor selection and installation, match: [soil-moisture-sensors]}
+      - {id: ir-sw-checkbook, name: Checkbook water balance scheduling, match: [checkbook-scheduling]}
+      - {id: ir-sw-deficit, name: Deficit irrigation and yield response, match: [deficit-irrigation]}
+  - id: ir-drip
+    name: Drip and micro-irrigation design
+    source: Keller and Bliesner; ASABE micro-irrigation standards subject area
+    match: [drip-design, micro-irrigation]
+    subtopics:
+      - {id: ir-dr-emitters, name: Emitter types flow exponent and selection, match: [emitter-selection]}
+      - {id: ir-dr-lateral, name: Lateral and submain hydraulic design, match: [lateral-hydraulics]}
+      - {id: ir-dr-filtration, name: Filtration design and backflush, match: [filtration-design]}
+      - {id: ir-dr-fertigation, name: Fertigation injection and backflow prevention, match: [fertigation-injection]}
+      - {id: ir-dr-clogging, name: Emitter clogging diagnosis and chemical treatment, match: [emitter-clogging]}
+      - {id: ir-dr-subsurface, name: Subsurface drip installation and root intrusion, match: [subsurface-drip]}
+  - id: ir-sprinkler
+    name: Sprinkler irrigation design
+    source: Keller and Bliesner; NRCS NEH 623 chapter 11
+    match: [sprinkler-design, sprinkler-irrigation-design]
+    subtopics:
+      - {id: ir-sp-spacing, name: Sprinkler spacing and layout, match: [sprinkler-spacing]}
+      - {id: ir-sp-application-rate, name: Application rate versus soil intake, match: [application-rate-intake]}
+      - {id: ir-sp-pivot, name: Center pivot design and end gun, match: [center-pivot-design]}
+      - {id: ir-sp-lateral, name: Sprinkler lateral hydraulics, match: [sprinkler-lateral-hydraulics]}
+      - {id: ir-sp-uniformity, name: Catch-can uniformity testing, match: [catch-can-test]}
+  - id: ir-surface
+    name: Surface irrigation design
+    source: Walker and Skogerboe; NRCS NEH 623 chapters 4 and 5
+    match: [surface-irrigation, furrow-irrigation]
+    subtopics:
+      - {id: ir-su-furrow, name: Furrow length stream size and cutoff, match: [furrow-design]}
+      - {id: ir-su-border, name: Border and basin design, match: [border-irrigation]}
+      - {id: ir-su-surge, name: Surge and cablegation, match: [surge-irrigation]}
+      - {id: ir-su-evaluation, name: Field evaluation of advance and recession, match: [advance-recession]}
+      - {id: ir-su-land-leveling, name: Land leveling and grade design, match: [land-leveling]}
+  - id: ir-pumping
+    name: Pumps and pumping plants
+    source: NRCS NEH 623 chapter 8; pump manufacturer hydraulic handbooks
+    match: [irrigation-pumping, pump-selection]
+    subtopics:
+      - {id: ir-pu-system-curve, name: System curve and pump duty point, match: [system-curve]}
+      - {id: ir-pu-npsh, name: NPSH and cavitation avoidance, match: [npsh]}
+      - {id: ir-pu-affinity, name: Affinity laws and impeller trimming, match: [affinity-laws]}
+      - {id: ir-pu-vfd, name: Variable frequency drives for irrigation pumps, match: [vfd-pumping]}
+      - {id: ir-pu-energy, name: Pumping plant efficiency and energy audit, match: [pumping-plant-efficiency]}
+      - {id: ir-pu-well, name: Well pump testing drawdown and specific capacity, match: [well-drawdown-test]}
+  - id: ir-conveyance
+    name: Pipelines, canals and control structures
+    source: NRCS NEH 623 chapters 6 and 9; FAO-24 and FAO-33 conveyance subject areas
+    match: [irrigation-pipelines, canal-design]
+    subtopics:
+      - {id: ir-co-pipe-sizing, name: Mainline sizing and economic velocity, match: [mainline-sizing]}
+      - {id: ir-co-surge, name: Water hammer and surge protection, match: [water-hammer]}
+      - {id: ir-co-valves, name: Air release and pressure regulating valves, match: [air-vacuum-valves]}
+      - {id: ir-co-thrust, name: Thrust blocks and pipe anchoring, match: [thrust-blocks]}
+      - {id: ir-co-open-channel, name: Open channel design with Manning equation, match: [manning-open-channel]}
+      - {id: ir-co-measurement, name: Weirs flumes and flow measurement, match: [flow-measurement-weir]}
+  - id: ir-water-quality
+    name: Irrigation water quality and salinity
+    source: FAO Irrigation and Drainage Paper 29; FAO-56 salinity sections
+    match: [irrigation-water-quality, salinity-management]
+    subtopics:
+      - {id: ir-wq-leaching, name: Leaching requirement and salt balance, match: [leaching-requirement]}
+      - {id: ir-wq-sar, name: Sodicity and infiltration hazard SAR, match: [sodium-adsorption-ratio]}
+      - {id: ir-wq-ions, name: Specific ion toxicity chloride sodium boron, match: [ion-toxicity]}
+      - {id: ir-wq-reuse, name: Wastewater and drainage water reuse, match: [wastewater-reuse-irrigation]}
+  - id: ir-evaluation
+    name: System evaluation and efficiency
+    source: NRCS NEH 623 chapter 9; ASABE irrigation uniformity standards subject area
+    match: [irrigation-evaluation, irrigation-efficiency]
+    subtopics:
+      - {id: ir-ev-du-lq, name: Distribution uniformity low quarter, match: [distribution-uniformity]}
+      - {id: ir-ev-efficiency-defs, name: Application and project efficiency definitions, match: [application-efficiency]}
+      - {id: ir-ev-mobile-lab, name: Mobile irrigation lab audit procedure, match: [irrigation-audit]}
+      - {id: ir-ev-water-budget, name: Farm water budget and productivity, match: [water-productivity]}
+  - id: ir-drainage
+    name: Agricultural drainage engineering
+    source: Ritzema, Drainage Principles and Applications; NRCS NEH 650 chapter 14
+    match: [agricultural-drainage, subsurface-drainage]
+    subtopics:
+      - {id: ir-dn-spacing, name: Drain spacing with Hooghoudt equation, match: [hooghoudt]}
+      - {id: ir-dn-coefficient, name: Drainage coefficient selection, match: [drainage-coefficient]}
+      - {id: ir-dn-pipe, name: Drain pipe sizing envelope and outlet, match: [drain-pipe-sizing]}
+      - {id: ir-dn-surface, name: Surface drainage and field ditches, match: [surface-drainage]}
+  - id: ir-automation
+    name: Irrigation controls and automation
+    source: Irrigation Association certification subject areas; manufacturer controller manuals
+    match: [irrigation-automation, irrigation-controllers]
+    subtopics:
+      - {id: ir-au-controller, name: Controller programming and valve sequencing, match: [controller-programming]}
+      - {id: ir-au-telemetry, name: Remote telemetry and pivot monitoring, match: [irrigation-telemetry]}
+      - {id: ir-au-et-based, name: ET-based and sensor-based automatic scheduling, match: [et-based-scheduling]}
+      - {id: ir-au-hydraulic-zones, name: Hydraulic zoning and flow balancing, match: [hydraulic-zoning]}
+  # ---------------- food-process-engineering
+  - id: fp-thermal-processing
+    name: Thermal processing and lethality
+    source: Toledo; Singh and Heldman thermal processing chapters; FDA LACF framework
+    match: [thermal-processing, canning-process]
+    subtopics:
+      - {id: fp-tp-dz, name: D-value z-value and thermal death kinetics, match: [d-value-z-value]}
+      - {id: fp-tp-heat-penetration, name: Heat penetration testing and fh and j parameters, match: [heat-penetration-test]}
+      - {id: fp-tp-general-method, name: General and formula method process calculation, match: [formula-method]}
+      - {id: fp-tp-retort, name: Retort types and process deviation handling, match: [retort-operation]}
+      - {id: fp-tp-aseptic, name: Aseptic processing hold tube design, match: [aseptic-processing]}
+      - {id: fp-tp-pasteurization, name: HTST pasteurization hold time and regeneration, match: [htst-pasteurization]}
+  - id: fp-drying
+    name: Food dehydration and drying
+    source: Toledo; Earle; Brooker et al.
+    match: [food-drying, dehydration]
+    subtopics:
+      - {id: fp-dr-psychrometrics, name: Psychrometric chart calculations for drying air, match: [psychrometrics]}
+      - {id: fp-dr-curves, name: Drying curves and falling rate period, match: [drying-curve]}
+      - {id: fp-dr-dryer-sizing, name: Tray and tunnel dryer sizing, match: [dryer-sizing]}
+      - {id: fp-dr-spray, name: Spray dryer design and operation, match: [spray-drying]}
+      - {id: fp-dr-freeze, name: Freeze drying cycle design, match: [freeze-drying]}
+      - {id: fp-dr-water-activity, name: Water activity and sorption isotherms, match: [water-activity]}
+  - id: fp-refrigeration
+    name: Refrigeration and cold chain
+    source: Singh and Heldman refrigeration chapter; ASHRAE Refrigeration Handbook subject areas
+    match: [food-refrigeration, cold-chain]
+    subtopics:
+      - {id: fp-rf-cycle, name: Vapor compression cycle analysis on pressure-enthalpy chart, match: [vapor-compression-cycle]}
+      - {id: fp-rf-load, name: Cold room load calculation, match: [cold-room-load]}
+      - {id: fp-rf-freezing-time, name: Freezing time estimation with Plank equation, match: [plank-equation]}
+      - {id: fp-rf-precooling, name: Produce precooling methods, match: [precooling]}
+      - {id: fp-rf-ammonia, name: Ammonia refrigeration safety and process safety management, match: [ammonia-refrigeration]}
+      - {id: fp-rf-controlled-atmosphere, name: Controlled and modified atmosphere storage, match: [controlled-atmosphere-storage]}
+  - id: fp-heat-exchange
+    name: Heat transfer equipment
+    source: Singh and Heldman; Earle; Toledo heat transfer chapters
+    match: [food-heat-transfer, heat-exchanger-design]
+    subtopics:
+      - {id: fp-he-lmtd, name: LMTD and NTU heat exchanger rating, match: [lmtd]}
+      - {id: fp-he-plate, name: Plate heat exchanger selection, match: [plate-heat-exchanger]}
+      - {id: fp-he-scraped, name: Scraped-surface exchangers for viscous foods, match: [scraped-surface-exchanger]}
+      - {id: fp-he-fouling, name: Fouling allowance and cleaning cycles, match: [heat-exchanger-fouling]}
+      - {id: fp-he-unsteady, name: Unsteady-state conduction with Heisler charts, match: [heisler-chart]}
+  - id: fp-evaporation-concentration
+    name: Evaporation and concentration
+    source: Earle; Singh and Heldman evaporation chapter
+    match: [evaporation, food-concentration]
+    subtopics:
+      - {id: fp-ev-balance, name: Evaporator mass and energy balance, match: [evaporator-balance]}
+      - {id: fp-ev-multi-effect, name: Multiple-effect evaporator steam economy, match: [multiple-effect-evaporator]}
+      - {id: fp-ev-mvr, name: Mechanical vapour recompression, match: [vapour-recompression]}
+      - {id: fp-ev-bpr, name: Boiling point elevation and Duhring plot, match: [boiling-point-elevation]}
+  - id: fp-fluid-rheology
+    name: Food fluid flow and rheology
+    source: Singh and Heldman fluid flow chapter; rheology texts
+    match: [food-rheology, food-fluid-flow]
+    subtopics:
+      - {id: fp-fr-models, name: Power law and Herschel-Bulkley models, match: [power-law-fluid]}
+      - {id: fp-fr-pipe, name: Pipe pressure drop for non-Newtonian foods, match: [non-newtonian-pipe-flow]}
+      - {id: fp-fr-pumps, name: Sanitary pump selection, match: [sanitary-pumps]}
+      - {id: fp-fr-viscometry, name: Viscometer measurement practice, match: [viscometry]}
+  - id: fp-hygienic-design
+    name: Hygienic equipment and plant design
+    source: EHEDG and 3-A Sanitary Standards subject areas; Codex general principles of food hygiene
+    match: [hygienic-design, sanitary-design]
+    subtopics:
+      - {id: fp-hy-surfaces, name: Product contact surface finish and materials, match: [surface-finish-ra]}
+      - {id: fp-hy-cip, name: Clean-in-place circuit design, match: [clean-in-place]}
+      - {id: fp-hy-drainability, name: Drainability dead legs and weld quality, match: [dead-leg]}
+      - {id: fp-hy-zoning, name: Hygienic zoning and plant layout, match: [hygienic-zoning]}
+      - {id: fp-hy-sanitizers, name: Sanitizer validation and verification, match: [sanitation-validation]}
+  - id: fp-food-safety-systems
+    name: Food safety systems for processing plants
+    source: Codex HACCP principles; FDA FSMA preventive controls framework (fda.gov)
+    match: [haccp, food-safety-engineering]
+    subtopics:
+      - {id: fp-fs-hazard-analysis, name: Hazard analysis and critical control point selection, match: [hazard-analysis]}
+      - {id: fp-fs-process-validation, name: Process validation and challenge studies, match: [process-validation]}
+      - {id: fp-fs-monitoring, name: CCP monitoring and calibration, match: [ccp-monitoring]}
+      - {id: fp-fs-metal-detection, name: Foreign matter detection and X-ray inspection, match: [foreign-matter-detection]}
+  - id: fp-extrusion-mixing
+    name: Extrusion mixing and size reduction
+    source: Fellows; Earle; extrusion cooking texts
+    match: [food-extrusion, size-reduction]
+    subtopics:
+      - {id: fp-ex-screw, name: Extruder screw configuration and specific mechanical energy, match: [specific-mechanical-energy]}
+      - {id: fp-ex-mixing, name: Mixer selection and mixing index, match: [mixing-index]}
+      - {id: fp-ex-milling, name: Milling energy laws Rittinger Kick Bond, match: [bond-work-index]}
+      - {id: fp-ex-particle-size, name: Particle size analysis and sieving, match: [particle-size-distribution]}
+  - id: fp-separation-membranes
+    name: Separation and membrane processes
+    source: Singh and Heldman; Earle; membrane filtration texts
+    match: [membrane-filtration, food-separation]
+    subtopics:
+      - {id: fp-sm-flux, name: Membrane flux fouling and cleaning, match: [membrane-flux]}
+      - {id: fp-sm-uf-ro, name: Ultrafiltration and reverse osmosis selection, match: [reverse-osmosis-food]}
+      - {id: fp-sm-centrifuge, name: Centrifuge sizing with sigma factor, match: [sigma-factor-centrifuge]}
+      - {id: fp-sm-filter-press, name: Filtration and pressing equipment, match: [filter-press]}
+  - id: fp-packaging-shelf-life
+    name: Packaging and shelf life
+    source: Singh and Heldman shelf life chapter; Fellows packaging chapters
+    match: [food-packaging, shelf-life]
+    subtopics:
+      - {id: fp-pk-kinetics, name: Shelf-life kinetics and accelerated testing, match: [accelerated-shelf-life]}
+      - {id: fp-pk-permeability, name: Packaging barrier permeability calculation, match: [barrier-permeability]}
+      - {id: fp-pk-map, name: Modified atmosphere packaging design, match: [modified-atmosphere-packaging]}
+      - {id: fp-pk-seal-integrity, name: Seal integrity and leak testing, match: [seal-integrity]}
+  # ---------------- grain-storage-handling
+  - id: gs-grain-properties
+    name: Physical and thermal properties of grain
+    source: Sinha and Muir; Chakraverty and Singh
+    match: [grain-properties, grain-physical-properties]
+    subtopics:
+      - {id: gs-gp-moisture, name: Moisture content measurement and meter checks, match: [grain-moisture-measurement]}
+      - {id: gs-gp-bulk-density, name: Bulk density test weight and porosity, match: [bulk-density]}
+      - {id: gs-gp-repose, name: Angle of repose and flowability, match: [angle-of-repose]}
+      - {id: gs-gp-emc, name: Equilibrium moisture content isotherms, match: [equilibrium-moisture-content]}
+      - {id: gs-gp-airflow-resistance, name: Airflow resistance of grain Shedd curves, match: [airflow-resistance]}
+  - id: gs-structural-loads
+    name: Bin and silo structural loads
+    source: Janssen theory texts; ASABE EP433 and EN standards subject areas
+    match: [silo-loads, bin-structural-design]
+    subtopics:
+      - {id: gs-sl-janssen, name: Janssen wall pressure and friction load, match: [janssen]}
+      - {id: gs-sl-discharge, name: Discharge overpressure and flow patterns, match: [mass-flow-funnel-flow]}
+      - {id: gs-sl-hopper, name: Hopper design and arching, match: [hopper-design]}
+      - {id: gs-sl-foundation, name: Foundation and roof loads on bins, match: [bin-foundation]}
+      - {id: gs-sl-flat-storage, name: Flat storage and bunker design, match: [flat-storage]}
+  - id: gs-drying
+    name: Grain drying systems
+    source: Brooker, Bakker-Arkema and Hall
+    match: [grain-drying, grain-dryer-design]
+    subtopics:
+      - {id: gs-dr-thin-layer, name: Thin-layer drying equations, match: [thin-layer-drying]}
+      - {id: gs-dr-in-bin, name: In-bin natural air and low-temperature drying, match: [in-bin-drying]}
+      - {id: gs-dr-continuous-flow, name: Continuous flow dryer design, match: [continuous-flow-dryer]}
+      - {id: gs-dr-batch, name: Batch dryer operation, match: [batch-dryer]}
+      - {id: gs-dr-energy, name: Dryer energy efficiency and fuel use, match: [dryer-energy-efficiency]}
+      - {id: gs-dr-cooling-tempering, name: Tempering and dryeration, match: [dryeration]}
+  - id: gs-conveying
+    name: Grain conveying equipment
+    source: CEMA conveyor subject areas; Chakraverty and Singh
+    match: [grain-conveying, conveyor-sizing]
+    subtopics:
+      - {id: gs-cv-screw, name: Screw auger capacity and power, match: [screw-auger-capacity]}
+      - {id: gs-cv-bucket, name: Bucket elevator selection, match: [bucket-elevator]}
+      - {id: gs-cv-belt, name: Belt conveyor sizing, match: [belt-conveyor]}
+      - {id: gs-cv-drag, name: Drag chain conveyor sizing, match: [drag-conveyor]}
+      - {id: gs-cv-pneumatic, name: Pneumatic grain conveying, match: [pneumatic-conveying]}
+      - {id: gs-cv-damage, name: Grain damage in handling, match: [handling-damage]}
+  - id: gs-aeration-monitoring
+    name: Aeration control and storage monitoring
+    source: Navarro and Noyes; Sinha and Muir; extension storage guides
+    match: [aeration-control, storage-monitoring]
+    subtopics:
+      - {id: gs-am-controller, name: Aeration controller strategies, match: [aeration-controller]}
+      - {id: gs-am-cables, name: Temperature cable monitoring and interpretation, match: [temperature-cables]}
+      - {id: gs-am-co2, name: CO2 monitoring for early spoilage detection, match: [co2-monitoring]}
+      - {id: gs-am-fan-sizing, name: Fan selection from airflow and static pressure, match: [aeration-fan-sizing]}
+      - {id: gs-am-cooling-front, name: Cooling front movement and timing, match: [cooling-front]}
+  - id: gs-pest-management
+    name: Stored-grain pest and mould management
+    source: Sinha and Muir; Navarro and Noyes; Hagstrum and Subramanyam
+    match: [stored-grain-pests, grain-spoilage]
+    subtopics:
+      - {id: gs-pm-sampling, name: Insect sampling and thresholds, match: [insect-sampling]}
+      - {id: gs-pm-mycotoxin, name: Mould growth and mycotoxin risk limits, match: [mould-risk-mycotoxin]}
+      - {id: gs-pm-hermetic, name: Hermetic storage design, match: [hermetic-storage]}
+      - {id: gs-pm-fumigation-regulation, name: Fumigation planning and regulatory requirements, match: [fumigation-planning]}
+  - id: gs-safety
+    name: Grain facility safety
+    source: OSHA grain handling standard subject area; engulfment and dust explosion guidance
+    match: [grain-bin-safety, grain-dust-explosion]
+    subtopics:
+      - {id: gs-sa-engulfment, name: Engulfment prevention and entry permits, match: [engulfment-prevention]}
+      - {id: gs-sa-dust, name: Dust explosion hazard and housekeeping, match: [dust-explosion-hazard]}
+      - {id: gs-sa-explosion-venting, name: Explosion venting and suppression concepts, match: [explosion-venting]}
+      - {id: gs-sa-electrical, name: Hazardous area classification for grain facilities, match: [hazardous-area-grain]}
+  - id: gs-quality-handling
+    name: Grain quality sampling and cleaning
+    source: Chakraverty and Singh; grain standards bodies subject areas
+    match: [grain-quality, grain-cleaning]
+    subtopics:
+      - {id: gs-qh-sampling, name: Representative sampling and probe use, match: [grain-sampling]}
+      - {id: gs-qh-grading, name: Grading factors and dockage, match: [grain-grading]}
+      - {id: gs-qh-cleaner, name: Air-screen cleaner selection, match: [air-screen-cleaner]}
+      - {id: gs-qh-traceability, name: Lot traceability and blending, match: [grain-blending]}
+  # ---------------- controlled-environment-systems
+  - id: ce-psychrometrics-heat-balance
+    name: Psychrometrics and heat balance of enclosures
+    source: ASHRAE Fundamentals; Albright
+    match: [enclosure-heat-balance, ce-psychrometrics]
+    subtopics:
+      - {id: ce-hb-sensible-latent, name: Sensible and latent heat and moisture balance, match: [moisture-balance]}
+      - {id: ce-hb-transmission, name: Envelope heat loss and U-values, match: [envelope-heat-loss]}
+      - {id: ce-hb-solar-gain, name: Solar gain and cover transmissivity, match: [solar-gain]}
+      - {id: ce-hb-infiltration, name: Infiltration and air-tightness, match: [infiltration-loss]}
+  - id: ce-greenhouse-structure
+    name: Greenhouse structures and covers
+    source: von Zabeltitz; Nelson; EN 13031 subject area
+    match: [greenhouse-structure, greenhouse-covering]
+    subtopics:
+      - {id: ce-gs-loads, name: Wind snow and crop loads on greenhouse frames, match: [greenhouse-loads]}
+      - {id: ce-gs-glazing, name: Glazing and film cover selection, match: [glazing-selection]}
+      - {id: ce-gs-foundations, name: Foundations and anchorage, match: [greenhouse-foundations]}
+      - {id: ce-gs-siting, name: Site selection and orientation, match: [greenhouse-siting]}
+  - id: ce-greenhouse-heating-cooling
+    name: Greenhouse heating and cooling
+    source: Nelson; ASHRAE; von Zabeltitz
+    match: [greenhouse-heating, greenhouse-cooling]
+    subtopics:
+      - {id: ce-hc-boiler, name: Hot water heating system sizing, match: [hot-water-heating]}
+      - {id: ce-hc-unit-heaters, name: Unit heaters and venting of combustion gases, match: [unit-heaters]}
+      - {id: ce-hc-fan-pad, name: Fan-and-pad evaporative cooling design, match: [fan-pad-cooling]}
+      - {id: ce-hc-thermal-screen, name: Thermal screens and energy saving, match: [thermal-screen]}
+      - {id: ce-hc-thermal-storage, name: Thermal storage buffers, match: [thermal-storage-buffer]}
+  - id: ce-ventilation
+    name: Ventilation design
+    source: Albright; MWPS; ASABE ventilation standards subject area
+    match: [ventilation-design, natural-ventilation]
+    subtopics:
+      - {id: ce-ve-natural, name: Natural ventilation vent area and stack effect, match: [vent-area-sizing]}
+      - {id: ce-ve-fan-selection, name: Fan selection and static pressure, match: [ventilation-fan-selection]}
+      - {id: ce-ve-inlets, name: Air inlet design and jet throw, match: [inlet-design]}
+      - {id: ce-ve-fan-testing, name: Fan performance testing and rating, match: [fan-performance-testing]}
+  - id: ce-livestock-housing
+    name: Livestock housing environment
+    source: MWPS Structures and Environment Handbook; CIGR handbook; Albright
+    match: [livestock-housing, animal-housing-environment]
+    subtopics:
+      - {id: ce-lh-poultry, name: Poultry house ventilation stages and minimum rates, match: [poultry-ventilation]}
+      - {id: ce-lh-swine, name: Swine building thermal environment, match: [swine-housing]}
+      - {id: ce-lh-dairy, name: Dairy barn cow comfort and heat stress, match: [dairy-heat-stress]}
+      - {id: ce-lh-tunnel, name: Tunnel ventilation and cooling cells, match: [tunnel-ventilation]}
+      - {id: ce-lh-welfare-codes, name: Housing welfare codes and species requirements, match: [housing-welfare-codes]}
+  - id: ce-lighting
+    name: Horticultural lighting
+    source: Nelson; horticultural lighting handbooks; ASABE lighting measurement subject area
+    match: [horticultural-lighting, grow-lighting]
+    subtopics:
+      - {id: ce-li-par-dli, name: PAR PPFD and daily light integral, match: [daily-light-integral]}
+      - {id: ce-li-led, name: LED fixture efficacy and layout, match: [led-grow-lights]}
+      - {id: ce-li-photoperiod, name: Photoperiod control and blackout, match: [photoperiod-control]}
+      - {id: ce-li-hps, name: Supplemental HPS and heat contribution, match: [supplemental-lighting]}
+  - id: ce-climate-control
+    name: Climate control strategy
+    source: von Zabeltitz; Albright; controller manufacturer manuals
+    match: [climate-control, environment-controller]
+    subtopics:
+      - {id: ce-cc-setpoints, name: Temperature setpoints and integration, match: [temperature-integration]}
+      - {id: ce-cc-vpd, name: Humidity control and vapour pressure deficit, match: [vapor-pressure-deficit]}
+      - {id: ce-cc-co2, name: CO2 enrichment dosing, match: [co2-enrichment]}
+      - {id: ce-cc-sensors, name: Aspirated sensor placement and calibration, match: [aspirated-sensor]}
+      - {id: ce-cc-pid, name: PID tuning for actuators, match: [pid-tuning-climate]}
+  - id: ce-hydroponics-irrigation
+    name: Soilless culture systems
+    source: Nelson; Resh Hydroponic Food Production
+    match: [hydroponics, soilless-culture]
+    subtopics:
+      - {id: ce-hy-nft, name: NFT channel design, match: [nft-design]}
+      - {id: ce-hy-dwc, name: Deep water culture and aeration, match: [deep-water-culture]}
+      - {id: ce-hy-fertigation, name: Nutrient solution EC and pH management, match: [nutrient-solution-management]}
+      - {id: ce-hy-substrate, name: Substrate irrigation and drain-to-waste control, match: [substrate-irrigation]}
+      - {id: ce-hy-sanitation, name: Recirculating solution disinfection, match: [solution-disinfection]}
+  - id: ce-manure-waste
+    name: Livestock waste handling
+    source: MWPS Livestock Waste Facilities Handbook; NRCS NEH 651 Agricultural Waste Management Field Handbook
+    match: [manure-management, livestock-waste]
+    subtopics:
+      - {id: ce-mw-storage, name: Manure storage sizing, match: [manure-storage-sizing]}
+      - {id: ce-mw-lagoon, name: Anaerobic lagoon design basis, match: [anaerobic-lagoon]}
+      - {id: ce-mw-digester, name: Anaerobic digester biogas basics, match: [biogas-digester]}
+      - {id: ce-mw-nutrient-plan, name: Nutrient balance for land application, match: [manure-nutrient-balance]}
+  - id: ce-vertical-farming-energy
+    name: Indoor farming systems and energy
+    source: Controlled environment agriculture engineering literature; ASHRAE
+    match: [vertical-farming, ce-energy-analysis]
+    subtopics:
+      - {id: ce-vf-hvac-load, name: Indoor grow room HVAC and dehumidification load, match: [grow-room-hvac]}
+      - {id: ce-vf-energy-per-kg, name: Energy and water per kilogram benchmarking, match: [energy-per-kilogram]}
+      - {id: ce-vf-airflow, name: Canopy airflow design, match: [canopy-airflow]}
+      - {id: ce-vf-biosecurity, name: Biosecurity and air handling, match: [biosecurity-airflow]}
+  # ---------------- precision-agriculture-systems
+  - id: pa-gnss
+    name: GNSS positioning and correction services
+    source: Pierce; Zhang; GNSS receiver manufacturer documentation
+    match: [gnss-positioning, rtk-gnss]
+    subtopics:
+      - {id: pa-gn-accuracy, name: Accuracy classes pass-to-pass versus absolute, match: [pass-to-pass-accuracy]}
+      - {id: pa-gn-rtk-base, name: RTK base station and network RTK setup, match: [rtk-base-station]}
+      - {id: pa-gn-ntrip, name: NTRIP corrections and mountpoints, match: [ntrip]}
+      - {id: pa-gn-satellite-correction, name: SBAS and satellite-delivered corrections, match: [sbas-corrections]}
+      - {id: pa-gn-multipath, name: Multipath canopy and signal loss troubleshooting, match: [gnss-multipath]}
+  - id: pa-guidance
+    name: Guidance and autosteer
+    source: Zhang; steering system manufacturer documentation
+    match: [autosteer, machine-guidance]
+    subtopics:
+      - {id: pa-gd-ab-lines, name: AB line curved and pivot guidance patterns, match: [ab-line-guidance]}
+      - {id: pa-gd-terrain, name: Terrain compensation and IMU, match: [terrain-compensation]}
+      - {id: pa-gd-implement-offset, name: Implement offset and tow-behind steering, match: [implement-guidance]}
+      - {id: pa-gd-controlled-traffic, name: Controlled traffic farming layout, match: [controlled-traffic]}
+      - {id: pa-gd-calibration, name: Steering calibration and wheel angle sensor, match: [steering-calibration]}
+  - id: pa-yield-mapping
+    name: Yield monitoring and mapping
+    source: Pierce; extension yield monitor guides
+    match: [yield-monitor, yield-mapping]
+    subtopics:
+      - {id: pa-ym-calibration, name: Yield monitor calibration procedure, match: [yield-monitor-calibration]}
+      - {id: pa-ym-cleaning, name: Yield data cleaning and error removal, match: [yield-data-cleaning]}
+      - {id: pa-ym-delay, name: Flow delay and header position settings, match: [flow-delay]}
+      - {id: pa-ym-interpolation, name: Interpolation and map classification, match: [yield-map-interpolation]}
+  - id: pa-variable-rate
+    name: Variable-rate application
+    source: Pierce; Zhang; ISO 11783 task controller subject area
+    match: [variable-rate, prescription-maps]
+    subtopics:
+      - {id: pa-vr-zones, name: Management zone delineation, match: [management-zones]}
+      - {id: pa-vr-prescription, name: Prescription map creation and file formats, match: [prescription-file-formats]}
+      - {id: pa-vr-controller, name: Rate controller response and lag, match: [rate-controller-response]}
+      - {id: pa-vr-asapplied, name: As-applied verification, match: [as-applied-maps]}
+      - {id: pa-vr-economics, name: Economic evaluation of variable rate, match: [variable-rate-economics]}
+  - id: pa-sensing
+    name: Remote and proximal sensing
+    source: Pierce; Zhang; remote sensing texts
+    match: [remote-sensing-agriculture, crop-sensing]
+    subtopics:
+      - {id: pa-se-ndvi, name: Vegetation indices NDVI and NDRE, match: [ndvi]}
+      - {id: pa-se-drone, name: UAV survey flight planning and photogrammetry, match: [uav-mapping]}
+      - {id: pa-se-satellite, name: Satellite imagery selection and cloud handling, match: [satellite-imagery-agriculture]}
+      - {id: pa-se-active-sensor, name: Active optical sensors for nitrogen, match: [active-optical-sensor]}
+      - {id: pa-se-ground-truth, name: Ground-truthing and sensor calibration, match: [ground-truthing]}
+  - id: pa-soil-sensing
+    name: Soil sampling and soil sensing
+    source: Pierce; soil science extension guides
+    match: [soil-sampling, soil-sensing]
+    subtopics:
+      - {id: pa-ss-grid-sampling, name: Grid and zone soil sampling design, match: [grid-soil-sampling]}
+      - {id: pa-ss-ec-mapping, name: Apparent electrical conductivity mapping, match: [ec-mapping]}
+      - {id: pa-ss-sensor-nodes, name: In-field soil sensor network design, match: [soil-sensor-network]}
+      - {id: pa-ss-elevation, name: Elevation and topography derivatives, match: [elevation-mapping]}
+  - id: pa-isobus-networks
+    name: ISOBUS and machine networks
+    source: ISO 11783 parts overview; SAE J1939 subject area
+    match: [isobus, machine-networks]
+    subtopics:
+      - {id: pa-ib-virtual-terminal, name: Virtual terminal and object pool basics, match: [virtual-terminal]}
+      - {id: pa-ib-task-controller, name: Task controller and DDI data dictionary, match: [task-controller]}
+      - {id: pa-ib-can-troubleshooting, name: CAN bus wiring and termination troubleshooting, match: [can-bus-troubleshooting]}
+      - {id: pa-ib-j1939, name: SAE J1939 messages and diagnostic codes, match: [j1939]}
+      - {id: pa-ib-section-control, name: Automatic section control and overlap, match: [section-control]}
+  - id: pa-farm-data
+    name: Farm data management and interoperability
+    source: Precision agriculture data standards subject areas (ADAPT, shapefile and ISO-XML)
+    match: [farm-data-management, data-interoperability]
+    subtopics:
+      - {id: pa-fd-file-formats, name: Shapefile ISOXML and GeoTIFF handling, match: [isoxml-files]}
+      - {id: pa-fd-gis, name: GIS workflow for field boundaries, match: [field-boundary-gis]}
+      - {id: pa-fd-ownership, name: Data ownership and privacy principles, match: [farm-data-ownership]}
+      - {id: pa-fd-onfarm-trials, name: On-farm experiment design and analysis, match: [on-farm-trials]}
+  - id: pa-sensor-networks-iot
+    name: Farm IoT and sensor networks
+    source: Zhang; wireless sensor network engineering texts
+    match: [farm-iot, wireless-sensor-network]
+    subtopics:
+      - {id: pa-io-lora, name: LoRaWAN coverage planning for farms, match: [lorawan]}
+      - {id: pa-io-power, name: Solar and battery power budgeting for field nodes, match: [field-node-power]}
+      - {id: pa-io-weather-station, name: On-farm weather station siting and maintenance, match: [weather-station-siting]}
+      - {id: pa-io-gateway, name: Edge gateway and data pipeline, match: [iot-gateway]}
+  - id: pa-robotics-automation
+    name: Agricultural robotics and automation
+    source: ISO 18497 and ISO 25119 subject areas; field robotics literature
+    match: [agricultural-robotics, autonomous-tractors]
+    subtopics:
+      - {id: pa-ro-safety-concept, name: Safety concept and obstacle detection for autonomous machines, match: [autonomous-machine-safety]}
+      - {id: pa-ro-path-planning, name: Coverage path planning, match: [coverage-path-planning]}
+      - {id: pa-ro-vision, name: Machine vision for weeds and fruit, match: [ag-machine-vision]}
+      - {id: pa-ro-implements, name: Autonomy-ready implement control, match: [autonomous-implement-control]}

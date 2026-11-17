@@ -1,0 +1,1390 @@
+# Canonical coverage spec: systems operations (virtualisation, patch management, backup and recovery).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (VCP-DCV exam objectives and the vSphere
+# documentation set, the Proxmox VE Administration Guide and Hyper-V on Windows Server docs ToCs,
+# NIST SP 800-40r4 and SP 800-34r1, Veeam/restic/Bacula manuals, ITIL 4 practice guides), not
+# from what the library already holds.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (exam objective
+# bullets, manual chapter sub-sections, CLI sub-commands, standard sections).
+subject: sysadmin-ops
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [virtualisation, patch-management, backup-and-recovery]
+sources:
+  - "VMware VCP-DCV (2V0-21.23 / vSphere 8) exam guide - Section 1 Architectures and Technologies (vCenter, ESXi, storage, networking, HA/DRS/FT, vSAN, lifecycle, security), Section 4 Installation/Configuration/Setup (vCenter deployment, SSO/identity sources, vSphere networking/storage config, HA/DRS/EVC, content library, host profiles, VM encryption), Section 5 Performance tuning/optimization/upgrades (VLCM images, alarms, resource management), Section 7 Administrative and operational tasks (VM management, snapshots, vMotion, RBAC, certificates, logs, troubleshooting)"
+  - "vSphere 8 documentation set ToC (docs.vmware.com / techdocs.broadcom.com) - ESXi Installation and Setup, vCenter Server Installation and Setup, vCenter Server Configuration, vSphere Networking, vSphere Storage, vSAN Planning and Deployment, vSphere Availability, vSphere Resource Management, vSphere Virtual Machine Administration, vSphere Security, vSphere Lifecycle Manager, vSphere Monitoring and Performance, PowerCLI and ESXCLI references"
+  - "Proxmox VE Administration Guide ToC (pve.proxmox.com/pve-docs) - Installation, Host System Administration (package repositories, system software updates, network configuration, ZFS on Linux), Cluster Manager (pvecm, corosync, QDevice), Proxmox Cluster File System, Storage (storage.cfg, LVM-thin, ZFS, NFS/CIFS, Ceph RBD/CephFS), Hyper-converged Ceph (pveceph), Storage Replication (pvesr), QEMU/KVM Virtual Machines (qm), Proxmox Container Toolkit (pct), Software Defined Network, Proxmox VE Firewall, User Management (pveum, realms, API tokens), High Availability (ha-manager), Backup and Restore (vzdump); Proxmox Backup Server docs ToC"
+  - "Hyper-V on Windows Server docs ToC (learn.microsoft.com/windows-server/virtualization/hyper-v) - Get started/install, Plan (VM generation, networking, scalability, security), Deploy (virtual switches, SET, live migration, Hyper-V Replica, export/import), Manage (checkpoints, Integration Services, dynamic memory, nested virtualization, DDA), Failover Clustering with CSV and Cluster-Aware Updating, Guarded fabric and shielded VMs"
+  - "NIST SP 800-40 Rev. 4 Guide to Enterprise Patch Management Planning - Section 2 risk responses (accept, mitigate, transfer, avoid), Section 3 maintenance plans (software inventory, asset groups, maintenance groups, routine and emergency plans, EOL software), Section 4 metrics; patch lifecycle (identify, plan, prepare, acquire, validate, deploy, verify, monitor); companion SP 1800-31"
+  - "ITIL 4 practice guides - Change Enablement (standard/normal/emergency changes, change authority, change schedule, risk assessment, PIR), Release Management (release planning, release types, release records), Deployment Management (phased, continuous, big bang, pull deployment), Service Configuration Management (CMDB, baselines)"
+  - "NIST SP 800-34 Rev. 1 Contingency Planning Guide for Federal Information Systems - Section 3 process (policy, BIA with MTD/RTO/RPO, preventive controls, recovery strategies incl. backup methods and alternate sites, plan testing/training/exercises, plan maintenance), Section 4 ISCP development (activation and notification, recovery, reconstitution, appendices), Section 5 technical considerations (client/server, telecom, mainframe)"
+  - "Veeam Backup & Replication 12 User Guide ToC - architecture (backup server, proxies, repositories, SOBR, hardened repository, WAN accelerators), backup jobs (methods, retention, GFS, encryption, health check), backup copy, replication and failover, restore (instant recovery, file-level, application items), SureBackup, Veeam Agents, configuration backup; restic documentation (init, backends, backup, forget/prune, check, restore, mount, keys); Bacula Main Reference (Director, Storage, File daemons, FileSet, Schedule, Pool, Volume, Catalog, bconsole restore, autochangers)"
+topics:
+  # ===== Virtualisation / vSphere (VCP-DCV + vSphere docs) =====
+  - id: esxi-installation
+    name: ESXi installation and host setup
+    source: vSphere docs/ESXi Installation and Setup
+    match: [esxi-installation, esxi-install, esxi-host-setup]
+    subtopics:
+      - {id: esxi-scripted-install, name: Scripted install with kickstart ks.cfg, match: [esxi-kickstart, ks-cfg]}
+      - {id: esxi-auto-deploy, name: Auto Deploy and image profiles, match: [auto-deploy, image-profile]}
+      - {id: esxi-dcui, name: DCUI management network and troubleshooting options, match: [dcui, esxi-shell]}
+      - {id: esxi-host-profiles, name: Host profiles for consistent host configuration, match: [host-profiles, host-profile]}
+      - {id: esxi-boot-media, name: Boot device and OSDATA partition sizing, match: [esxi-boot-device, osdata]}
+      - {id: esxi-interactive-install, name: Interactive install from ISO or USB installer media, match: [esxi-iso-installer, esxi-usb-installer]}
+      - {id: esxi-pxe-boot, name: PXE and UEFI HTTP network boot of the installer, match: [esxi-pxe, uefi-http-boot]}
+      - {id: esxi-custom-iso, name: Custom ISO with vendor drivers via Image Builder, match: [esxi-image-builder, custom-esxi-iso]}
+      - {id: esxi-hcl-check, name: Compatibility guide and CPU support checks before install, match: [vmware-hcl, broadcom-compatibility-guide]}
+      - {id: esxi-ntp-ptp, name: Post-install NTP PTP DNS and hostname setup, match: [esxi-ntp, esxi-ptp]}
+      - {id: esxi-licensing, name: Host licence assignment and evaluation mode, match: [esxi-license, vsphere-licensing]}
+      - {id: esxi-upgrade-vs-fresh, name: Upgrade versus fresh install preserving VMFS, match: [esxi-upgrade-path]}
+      - {id: esxi-secure-boot, name: UEFI secure boot and TPM attestation for hosts, match: [esxi-secure-boot, tpm-host-attestation]}
+  - id: vcenter-deployment
+    name: vCenter Server appliance deployment and configuration
+    source: vSphere docs/vCenter Server Installation and Setup
+    match: [vcsa, vcenter-deployment, vcenter-server-appliance]
+    subtopics:
+      - {id: vcsa-install-stages, name: Two-stage VCSA deployment and sizing, match: [vcsa-deployment, vcsa-sizing]}
+      - {id: vcenter-sso, name: vCenter SSO domain and identity sources, match: [vcenter-sso, identity-source]}
+      - {id: vcenter-elm, name: Enhanced Linked Mode, match: [enhanced-linked-mode]}
+      - {id: vcenter-file-backup, name: File-based backup and restore of vCenter, match: [vcenter-file-based-backup, vcenter-restore]}
+      - {id: vcenter-ha, name: vCenter High Availability, match: [vcenter-ha, vcha]}
+      - {id: vcsa-cli-install, name: CLI deployment with vcsa-deploy JSON templates, match: [vcsa-cli-installer, vcsa-deploy-json]}
+      - {id: vcsa-vami-config, name: Appliance management interface network time and syslog settings, match: [vami-network-settings, vcsa-appliance-config]}
+      - {id: vcenter-inventory, name: Datacenter cluster and folder inventory design, match: [vcenter-inventory, vcenter-folders]}
+      - {id: vcenter-repoint, name: SSO domain repointing and cmsso-util, match: [cmsso-util, sso-domain-repoint]}
+      - {id: vcenter-vpostgres, name: vPostgres database growth and SEAT data cleanup, match: [vpostgres, seat-data]}
+      - {id: vcenter-identity-federation, name: Identity federation with ADFS Entra ID or Okta, match: [identity-federation, vcenter-adfs]}
+      - {id: vcsa-root-password, name: Root and SSO admin password expiry and lockout recovery, match: [vcsa-root-password, sso-admin-lockout]}
+  - id: vsphere-networking
+    name: vSphere standard and distributed switching
+    source: vSphere docs/vSphere Networking
+    match: [vsphere-networking, distributed-switch, standard-switch]
+    subtopics:
+      - {id: vss-config, name: Standard switch port groups and VLAN tagging modes, match: [vss-port-group, vst-vgt-est]}
+      - {id: vds-migration, name: Migrate hosts and VMkernel adapters to a vDS, match: [vds-migration, vmkernel-migration]}
+      - {id: nic-teaming-policy, name: Teaming and failover policies, match: [vsphere-nic-teaming, load-based-teaming]}
+      - {id: vds-lacp, name: LACP link aggregation groups on vDS, match: [vds-lacp, link-aggregation-group]}
+      - {id: nioc, name: Network I/O Control shares and reservations, match: [network-io-control, nioc]}
+      - {id: vmkernel-services, name: VMkernel adapter services and TCP/IP stacks, match: [vmkernel-adapter, tcpip-stack]}
+      - {id: vds-config-backup, name: Export import and restore vDS configuration, match: [vds-export, vds-config-backup]}
+      - {id: vds-port-mirroring, name: Port mirroring and NetFlow on vDS, match: [port-mirroring, vds-netflow]}
+      - {id: private-vlan, name: Private VLANs on vDS, match: [private-vlan, pvlan]}
+      - {id: vds-traffic-filtering, name: Traffic filtering and DSCP CoS marking, match: [traffic-filtering-marking, dscp-marking]}
+      - {id: vds-health-check, name: vDS health check for VLAN MTU and teaming, match: [vds-health-check]}
+      - {id: vsphere-jumbo-frames, name: Jumbo frames end to end on VMkernel and switches, match: [jumbo-frames, vmkernel-mtu]}
+      - {id: vswitch-security-policy, name: Promiscuous mode MAC changes forged transmits and MAC learning, match: [forged-transmits, mac-learning]}
+      - {id: vds-management-rollback, name: Management network rollback and recovery from DCUI, match: [vds-rollback, management-network-recovery]}
+  - id: vsphere-storage
+    name: vSphere storage, datastores and multipathing
+    source: vSphere docs/vSphere Storage
+    match: [vsphere-storage, vmfs, datastore]
+    subtopics:
+      - {id: iscsi-software-adapter, name: Software iSCSI adapter and port binding, match: [esxi-iscsi, iscsi-port-binding]}
+      - {id: nfs-datastore-mount, name: NFS 3 and 4.1 datastores, match: [nfs-datastore, nfs41-kerberos]}
+      - {id: multipathing-psp, name: Path selection policies and NMP/HPP, match: [path-selection-policy, nmp]}
+      - {id: spbm, name: Storage policy based management, match: [spbm, vm-storage-policy]}
+      - {id: unmap-reclaim, name: Space reclamation and thin provisioning, match: [unmap, space-reclamation]}
+      - {id: storage-drs, name: Datastore clusters and Storage DRS, match: [storage-drs, datastore-cluster]}
+      - {id: vvols, name: Virtual Volumes, match: [vvols, virtual-volumes]}
+      - {id: esxi-fc-zoning, name: Fibre Channel HBAs zoning and LUN masking, match: [fc-hba, lun-masking]}
+      - {id: vmfs-expand, name: Increase datastore capacity and extents, match: [vmfs-extent, datastore-expand]}
+      - {id: vmfs6-migration, name: VMFS5 to VMFS6 migration, match: [vmfs6]}
+      - {id: esxi-rdm, name: Raw device mappings physical vs virtual compatibility, match: [rdm, raw-device-mapping]}
+      - {id: storage-io-control, name: Storage I/O Control, match: [sioc-congestion-threshold]}
+      - {id: esxi-nvme-of, name: NVMe over Fabrics (TCP RDMA FC), match: [nvme-of, nvme-tcp]}
+      - {id: datastore-unmount, name: Safely unmount and detach a datastore or LUN, match: [datastore-unmount, lun-detach]}
+  - id: vsan
+    name: vSAN cluster design and operation
+    source: vSphere docs/vSAN Planning and Deployment
+    match: [vsan]
+    subtopics:
+      - {id: vsan-esa-osa, name: ESA vs OSA architecture and disk groups, match: [vsan-esa, vsan-osa]}
+      - {id: vsan-ftt-policy, name: FTT and RAID policies, match: [vsan-ftt, failures-to-tolerate]}
+      - {id: vsan-health, name: Skyline health and resync monitoring, match: [vsan-health, vsan-resync]}
+      - {id: vsan-stretched, name: Stretched and two-node clusters with witness, match: [vsan-stretched-cluster, vsan-witness]}
+      - {id: vsan-maintenance, name: Host maintenance data evacuation modes, match: [vsan-maintenance-mode, ensure-accessibility]}
+      - {id: vsan-quickstart, name: Enable vSAN with Quickstart and vSAN VMkernel adapters, match: [vsan-quickstart, vsan-vmkernel]}
+      - {id: vsan-space-efficiency, name: Deduplication compression and space efficiency, match: [vsan-deduplication, vsan-compression]}
+      - {id: vsan-encryption, name: Data-at-rest and data-in-transit encryption, match: [vsan-encryption]}
+      - {id: vsan-disk-replace, name: Replace a failed cache or capacity device, match: [vsan-disk-replacement]}
+      - {id: vsan-performance-service, name: Performance service and proactive tests, match: [vsan-performance-diagnostics]}
+      - {id: vsan-file-service, name: vSAN File Service shares, match: [vsan-file-service]}
+      - {id: vsan-hcl-db, name: vSAN HCL database and driver firmware compliance, match: [vsan-hcl-database]}
+      - {id: vsan-hci-mesh, name: HCI Mesh and remote datastore sharing, match: [hci-mesh, vsan-datastore-sharing]}
+      - {id: vsan-cli, name: esxcli vsan and RVC troubleshooting, match: [esxcli-vsan, rvc]}
+  - id: vsphere-ha-ft
+    name: vSphere HA and Fault Tolerance
+    source: vSphere docs/vSphere Availability
+    match: [vsphere-ha, fault-tolerance]
+    subtopics:
+      - {id: ha-admission-control, name: Admission control policies, match: [admission-control]}
+      - {id: ha-isolation, name: Host isolation response and heartbeat datastores, match: [isolation-response, datastore-heartbeat]}
+      - {id: ha-vm-monitoring, name: VM and application monitoring, match: [vm-monitoring, vm-component-protection]}
+      - {id: ha-restart-priority, name: VM restart priority and orchestration, match: [restart-priority, vm-restart-orchestration]}
+      - {id: proactive-ha, name: Proactive HA with hardware health providers, match: [proactive-ha]}
+      - {id: vsphere-ft, name: Fault Tolerance logging and limits, match: [vsphere-ft, ft-logging]}
+      - {id: ha-fdm-election, name: Primary host election and FDM agent troubleshooting, match: [fdm, ha-primary-election]}
+      - {id: ha-advanced-options, name: HA advanced options such as das.isolationaddress, match: [das-isolationaddress, ha-advanced-options]}
+      - {id: ha-agent-errors, name: HA agent configuration errors and reconfigure, match: [ha-agent-error]}
+      - {id: ft-test-failover, name: Turn on FT and test failover of the secondary, match: [ft-test-failover]}
+      - {id: ha-network-partition, name: Network partition vs isolation behaviour, match: [network-partition]}
+      - {id: ha-vsan-network, name: HA behaviour on vSAN clusters, match: [ha-vsan-network]}
+      - {id: ha-host-monitoring-off, name: Disable host monitoring during network maintenance, match: [host-monitoring-disable]}
+  - id: vsphere-drs-resources
+    name: DRS and resource management
+    source: vSphere docs/vSphere Resource Management
+    match: [drs, resource-management]
+    subtopics:
+      - {id: drs-automation, name: DRS automation and migration threshold, match: [drs-automation-level, migration-threshold]}
+      - {id: drs-rules, name: VM-VM and VM-Host affinity rules, match: [affinity-rules, vm-host-rules]}
+      - {id: resource-pools, name: Resource pools and the pool-as-folder trap, match: [resource-pools, resource-pool]}
+      - {id: shares-reservations-limits, name: Shares reservations and limits, match: [shares-reservations-limits, cpu-reservation]}
+      - {id: dpm, name: Distributed Power Management, match: [distributed-power-management, dpm]}
+      - {id: drs-score, name: DRS VM happiness score and recommendations, match: [drs-score, drs-recommendations]}
+      - {id: expandable-reservation, name: Expandable reservations and admission, match: [expandable-reservation]}
+      - {id: memory-reclamation, name: Memory reclamation TPS ballooning compression and swapping, match: [tps-balloon-swap]}
+      - {id: cpu-ready, name: CPU ready co-stop and vCPU right-sizing, match: [cpu-ready, co-stop]}
+      - {id: vnuma-sizing, name: NUMA and vNUMA sizing for wide VMs, match: [vnuma-topology]}
+      - {id: latency-sensitivity, name: Latency sensitivity setting for real-time VMs, match: [latency-sensitivity-high]}
+      - {id: predictive-drs, name: Predictive DRS with Aria Operations, match: [predictive-drs]}
+      - {id: drs-vm-overrides, name: Cluster VM overrides, match: [drs-vm-overrides]}
+  - id: vsphere-vmotion
+    name: vMotion and migration types
+    source: vSphere docs/vCenter Server and Host Management - Migrating VMs
+    match: [vmotion, storage-vmotion]
+    subtopics:
+      - {id: evc-mode, name: Enhanced vMotion Compatibility cluster and per-VM EVC, match: [evc, per-vm-evc]}
+      - {id: cross-vcenter-vmotion, name: Cross-vCenter and advanced cross vCenter vMotion, match: [cross-vcenter-vmotion, xvc-vmotion]}
+      - {id: vmotion-encryption, name: Encrypted vMotion, match: [encrypted-vmotion]}
+      - {id: vmotion-troubleshoot, name: Diagnosing failed vMotion, match: [vmotion-failure, vmkping]}
+      - {id: multi-nic-vmotion, name: vMotion TCP/IP stack and multi-NIC vMotion, match: [multi-nic-vmotion, vmotion-stack]}
+      - {id: svmotion-disk-format, name: Storage vMotion disk format conversion and per-disk placement, match: [svmotion-thin-conversion]}
+      - {id: long-distance-vmotion, name: Long-distance vMotion requirements, match: [long-distance-vmotion]}
+      - {id: shared-nothing-vmotion, name: Combined compute and storage vMotion without shared storage, match: [shared-nothing-vmotion]}
+      - {id: vmotion-stun, name: Stun time and large-memory VM vMotion tuning, match: [vmotion-stun, stun-during-page-send]}
+      - {id: vgpu-vmotion, name: vMotion of vGPU and passthrough VMs, match: [vgpu-vmotion]}
+      - {id: migration-compat-checks, name: Migration compatibility check errors, match: [migration-compatibility-check]}
+      - {id: hcx-bulk-migration, name: Bulk migration with HCX, match: [hcx]}
+  - id: vsphere-vm-management
+    name: vSphere virtual machine administration
+    source: vSphere docs/vSphere Virtual Machine Administration
+    match: [vsphere-vm-administration, vm-hardware-version]
+    subtopics:
+      - {id: content-library, name: Content libraries and subscribed libraries, match: [content-library]}
+      - {id: guest-customization, name: Guest OS customization specifications, match: [guest-customization, customization-spec]}
+      - {id: ovf-ova, name: Deploy and export OVF/OVA templates, match: [ovf, ova, ovftool]}
+      - {id: vm-compat-upgrade, name: VM compatibility upgrade and VMware Tools upgrade, match: [vm-compatibility-upgrade, vmware-tools-upgrade]}
+      - {id: vsphere-snapshots, name: Snapshot manager and consolidation, match: [snapshot-consolidation, delta-disk]}
+      - {id: vm-hot-add, name: CPU/memory hot add and disk extend, match: [hot-add, hot-plug]}
+      - {id: vm-templates, name: VM templates and content library check-out and check-in, match: [vm-template, template-check-out]}
+      - {id: instant-clone, name: Instant clones, match: [instant-clone]}
+      - {id: vm-boot-options, name: VM boot options EFI firmware and secure boot, match: [vm-boot-options, efi-secure-boot-vm]}
+      - {id: vm-virtual-devices, name: Virtual device choice PVSCSI NVMe controller and VMXNET3, match: [pvscsi-vmxnet3-choice]}
+      - {id: vmx-advanced, name: Advanced VMX configuration parameters, match: [vmx-advanced-settings]}
+      - {id: vm-console-access, name: VM web console and VMRC access, match: [vmrc]}
+      - {id: register-vm, name: Register unregister and orphaned or invalid VMs, match: [register-vmx, invalid-orphaned-vm]}
+      - {id: vsphere-tags, name: Tags categories and custom attributes, match: [vsphere-tags, custom-attributes]}
+  - id: vsphere-lifecycle
+    name: vSphere Lifecycle Manager and upgrades
+    source: vSphere docs/Managing Host and Cluster Lifecycle
+    match: [vlcm, lifecycle-manager, vsphere-upgrade]
+    subtopics:
+      - {id: vlcm-images, name: Cluster images and desired state, match: [vlcm-image, desired-state-image]}
+      - {id: vlcm-baselines, name: Baselines and baseline groups (deprecated), match: [vlcm-baseline, update-manager]}
+      - {id: vlcm-hsm, name: Firmware via hardware support managers, match: [hardware-support-manager, hsm]}
+      - {id: vcenter-upgrade, name: vCenter upgrade order and patching via VAMI, match: [vcenter-upgrade, vami-patching]}
+      - {id: esxcli-update, name: Offline depot patching with esxcli software, match: [esxcli-software, offline-bundle]}
+      - {id: vlcm-convert, name: Convert a cluster from baselines to an image, match: [vlcm-convert-to-image]}
+      - {id: vlcm-remediation, name: Remediation pre-checks parallel remediation and Quick Boot, match: [vlcm-remediation, quick-boot]}
+      - {id: vlcm-depots, name: Online and offline depots and UMDS, match: [umds, vlcm-depot]}
+      - {id: vlcm-compliance, name: Image compliance checks and drift, match: [image-compliance-check]}
+      - {id: esxi-major-upgrade, name: ESXi major upgrade path and CPU deprecation, match: [esxi-major-upgrade]}
+      - {id: vcenter-rdu, name: vCenter reduced downtime upgrade, match: [reduced-downtime-upgrade]}
+      - {id: interop-matrix, name: Interoperability matrix and solution upgrade sequence, match: [interoperability-matrix, upgrade-sequence]}
+  - id: vsphere-security
+    name: vSphere security and access control
+    source: vSphere docs/vSphere Security
+    match: [vsphere-security, vsphere-rbac]
+    subtopics:
+      - {id: vsphere-permissions, name: Roles privileges and permission propagation, match: [vsphere-roles, permission-propagation]}
+      - {id: lockdown-mode, name: Lockdown mode and exception users, match: [lockdown-mode]}
+      - {id: vsphere-certificates, name: VMCA and certificate management modes, match: [vmca, vsphere-certificates]}
+      - {id: vm-encryption, name: VM encryption and key providers, match: [vm-encryption, native-key-provider, kms]}
+      - {id: vtpm, name: vTPM and VBS for guests, match: [vtpm, virtualization-based-security]}
+      - {id: esxi-hardening, name: ESXi hardening and security configuration guide, match: [esxi-hardening, security-configuration-guide]}
+      - {id: sso-policies, name: SSO password and lockout policies, match: [sso-password-policy, sso-lockout-policy]}
+      - {id: esxi-ad-join, name: Join ESXi to Active Directory and the ESX Admins group, match: [esxi-active-directory, esx-admins]}
+      - {id: esxi-firewall, name: ESXi firewall rulesets, match: [esxi-firewall-ruleset]}
+      - {id: esxi-ssh-shell, name: SSH and ESXi Shell services and timeouts, match: [esxi-ssh, shell-timeout]}
+      - {id: esxi-local-accounts, name: Local ESXi accounts and password complexity, match: [esxi-local-accounts, passwdqc]}
+      - {id: esxi-tls, name: TLS profiles and protocol versions, match: [esxi-tls-profile, tls-configurator]}
+  - id: vsphere-monitoring
+    name: vSphere monitoring, alarms and logs
+    source: vSphere docs/vSphere Monitoring and Performance
+    match: [vsphere-monitoring, vsphere-alarms]
+    subtopics:
+      - {id: perf-charts, name: Performance charts and statistics levels, match: [performance-charts, statistics-level]}
+      - {id: esxtop-usage, name: esxtop batch mode and key counters, match: [esxtop]}
+      - {id: alarm-definitions, name: Custom alarm definitions and actions, match: [alarm-definition, alarm-actions]}
+      - {id: esxi-syslog, name: ESXi syslog forwarding and log locations, match: [esxi-syslog, vmkernel-log]}
+      - {id: support-bundle, name: Support bundles with vm-support, match: [vm-support, support-bundle]}
+      - {id: vcenter-events-tasks, name: Tasks and events console filtering and export, match: [vcenter-events-console]}
+      - {id: aria-operations, name: Aria Operations dashboards and capacity, match: [aria-operations]}
+      - {id: skyline-health, name: Skyline Health checks in vCenter, match: [vcenter-skyline-health]}
+      - {id: esxi-snmp, name: ESXi SNMP agent configuration, match: [esxi-snmp]}
+      - {id: vcenter-logs, name: vCenter log locations and log bundles, match: [vcenter-logs]}
+      - {id: hardware-health, name: Host hardware health via CIM and IPMI sensors, match: [ipmi-sensors]}
+      - {id: vm-rightsizing, name: Right-sizing and idle VM reports, match: [rightsizing, idle-vm]}
+      - {id: vscsistats, name: vscsiStats I/O histograms, match: [vscsistats]}
+  - id: vsphere-troubleshooting
+    name: vSphere troubleshooting
+    source: VCP-DCV Section 7 / vSphere Troubleshooting
+    match: [vsphere-troubleshooting]
+    subtopics:
+      - {id: psod, name: Purple screen diagnosis and core dumps, match: [psod, esxi-coredump]}
+      - {id: host-not-responding, name: Host disconnected or not responding in vCenter, match: [host-not-responding, vpxa]}
+      - {id: apd-pdl, name: All paths down and permanent device loss, match: [apd, pdl]}
+      - {id: vm-stuck, name: Killing a hung VM with esxcli vm process, match: [esxcli-vm-process, hung-vm]}
+      - {id: vcenter-services, name: vCenter service health and vmon-cli, match: [vmon-cli, service-control]}
+      - {id: vcsa-disk-full, name: VCSA partition full (log seat archive), match: [vcsa-disk-full]}
+      - {id: expired-sts-cert, name: Expired STS and machine certificate recovery, match: [sts-certificate, expired-certificate]}
+      - {id: vmfs-lock, name: Locked files and VMFS lock owner identification, match: [vmfs-lock, vmkfstools-lock]}
+      - {id: pktcap-uw, name: Packet capture with pktcap-uw and net-dvs, match: [pktcap-uw, net-dvs]}
+      - {id: storage-latency, name: Diagnosing storage latency DAVG KAVG and QAVG, match: [davg-kavg-qavg]}
+      - {id: bootbank-recovery, name: Bootbank corruption and ESXi boot failures, match: [bootbank, esxi-boot-failure]}
+      - {id: vmkfstools-repair, name: Disk inspection repair and inflate with vmkfstools, match: [vmkfstools]}
+  - id: vsphere-automation
+    name: vSphere automation with PowerCLI and ESXCLI
+    source: VMware PowerCLI and ESXCLI references
+    match: [powercli, esxcli]
+    subtopics:
+      - {id: powercli-reporting, name: Inventory and snapshot reporting with PowerCLI, match: [powercli-reporting, get-vm]}
+      - {id: powercli-bulk-config, name: Bulk host configuration with PowerCLI, match: [powercli-host-config, get-vmhost]}
+      - {id: esxcli-namespaces, name: ESXCLI network storage and system namespaces, match: [esxcli-namespaces, esxcli-network]}
+      - {id: vsphere-api-govc, name: govc and the vSphere REST API, match: [govc, vsphere-api]}
+      - {id: powercli-connect, name: Install PowerCLI and connect to vCenter with certificate handling, match: [connect-viserver, powercli-install]}
+      - {id: powercli-vm-deploy, name: Scripted VM deployment with New-VM and OS customisation, match: [new-vm-powercli]}
+      - {id: powercli-get-view, name: Get-View and ExtensionData for fast queries, match: [get-view]}
+      - {id: powercli-esxcli, name: Get-EsxCli V2 from PowerCLI, match: [get-esxcli]}
+      - {id: terraform-vsphere, name: Terraform vSphere provider, match: [terraform-vsphere]}
+      - {id: ansible-vmware, name: Ansible VMware collections, match: [ansible-vmware]}
+      - {id: pyvmomi, name: pyVmomi scripting, match: [pyvmomi]}
+      - {id: dcli, name: Datacenter CLI (dcli) against the vSphere Automation API, match: [dcli]}
+  # ===== Virtualisation / Proxmox VE (Admin Guide) =====
+  - id: pve-installation
+    name: Proxmox VE installation and host administration
+    source: PVE Admin Guide/Installation, Host System Administration
+    match: [proxmox-installation, pve-install]
+    subtopics:
+      - {id: pve-repos, name: Enterprise vs no-subscription repositories, match: [pve-repositories, pve-no-subscription]}
+      - {id: pve-upgrade, name: Updates and major version upgrade with pveXtoY checker, match: [pve-upgrade, pve8to9]}
+      - {id: pve-on-debian, name: Install on top of Debian, match: [pve-on-debian]}
+      - {id: pve-host-network, name: Host network config with ifupdown2 bridges and bonds, match: [ifupdown2, vmbr0]}
+      - {id: pve-certificates, name: Host certificates and ACME, match: [pve-acme, pve-certificates]}
+      - {id: pve-iso-install, name: ISO installer options ZFS RAID filesystem and hdsize, match: [pve-iso-installer]}
+      - {id: pve-automated-install, name: Automated installation with an answer file, match: [proxmox-auto-install, answer-toml]}
+      - {id: pve-offline-mirror, name: Subscriptions and proxmox-offline-mirror, match: [proxmox-offline-mirror, pve-subscription]}
+      - {id: pve-time-sync, name: Time synchronisation with chrony, match: [pve-chrony]}
+      - {id: pve-kernel-pin, name: Kernel versions opt-in kernels and pinning, match: [proxmox-boot-tool, kernel-pin]}
+      - {id: pve-host-backup, name: Backing up host and cluster configuration, match: [pve-host-backup]}
+      - {id: pve-metric-server, name: External metric server InfluxDB or Graphite, match: [pve-metric-server]}
+      - {id: pve-notifications, name: Notification targets and matchers, match: [pve-notifications]}
+      - {id: pve-disk-health, name: Disk health SMART and SSD wearout, match: [pve-disk-health]}
+  - id: pve-cluster
+    name: Proxmox VE cluster manager and corosync
+    source: PVE Admin Guide/Cluster Manager, pmxcfs
+    match: [pvecm, corosync, proxmox-cluster]
+    subtopics:
+      - {id: pve-cluster-create, name: Create and join a cluster, match: [pvecm-create, pvecm-add]}
+      - {id: pve-node-remove, name: Remove or re-add a node safely, match: [pvecm-delnode, node-removal]}
+      - {id: pve-qdevice, name: QDevice for two-node quorum, match: [qdevice, corosync-qnetd]}
+      - {id: pve-corosync-links, name: Redundant corosync links and network latency, match: [corosync-link, knet]}
+      - {id: pve-quorum-loss, name: Recover from lost quorum and pmxcfs read-only, match: [pmxcfs, pvecm-expected]}
+      - {id: corosync-conf-edit, name: Editing corosync.conf safely, match: [corosync-conf]}
+      - {id: pve-separate-node, name: Separate a node without reinstalling, match: [separate-node]}
+      - {id: pve-cold-start, name: Cluster cold start and boot order, match: [cluster-cold-start]}
+      - {id: pve-ssh-keys, name: Cluster SSH keys and pvecm updatecerts, match: [pve-ssh-keys, pvecm-updatecerts]}
+      - {id: pmxcfs-config-db, name: Recovering /etc/pve from config.db, match: [config-db]}
+      - {id: pve-migration-network, name: Migration network and datacenter.cfg options, match: [migration-network, datacenter-cfg]}
+      - {id: corosync-diagnostics, name: pvecm status and corosync-cfgtool diagnostics, match: [corosync-cfgtool]}
+  - id: pve-storage
+    name: Proxmox VE storage backends
+    source: PVE Admin Guide/Storage, ZFS on Linux
+    match: [pve-storage, storage-cfg]
+    subtopics:
+      - {id: pve-lvm-thin, name: LVM and LVM-thin storage, match: [lvm-thin, pve-lvm]}
+      - {id: pve-zfs, name: ZFS pools on PVE (ARC sizing and replacement), match: [pve-zfs, zfs-arc]}
+      - {id: pve-nfs-cifs, name: NFS and CIFS shared storage, match: [pve-nfs, pve-cifs]}
+      - {id: pve-iscsi-lvm, name: Shared LVM over iSCSI or FC, match: [shared-lvm, pve-iscsi]}
+      - {id: pve-content-types, name: Storage content types and pvesm, match: [pvesm, content-types]}
+      - {id: pve-directory-storage, name: Directory and BTRFS storage, match: [pve-directory-storage, pve-btrfs]}
+      - {id: pve-pbs-storage, name: Proxmox Backup Server as a storage entry, match: [pbs-storage-entry]}
+      - {id: pve-zfs-over-iscsi, name: ZFS over iSCSI, match: [zfs-over-iscsi]}
+      - {id: pve-move-disk, name: Moving disks between storages, match: [qm-move-disk, disk-move]}
+      - {id: pve-discard-trim, name: Discard trim and thin provisioning, match: [pve-discard, fstrim-guest]}
+      - {id: pve-storage-inactive, name: Storage inactive or unavailable troubleshooting, match: [storage-inactive]}
+      - {id: pve-disk-wipe, name: Disk management wipe and GPT initialise, match: [pve-disk-wipe]}
+  - id: pve-ceph
+    name: Hyper-converged Ceph on Proxmox VE
+    source: PVE Admin Guide/Deploy Hyper-Converged Ceph Cluster
+    match: [pveceph, ceph]
+    subtopics:
+      - {id: pveceph-install, name: Install Ceph and create monitors and managers, match: [pveceph-install, ceph-mon]}
+      - {id: ceph-osd, name: Create and replace OSDs, match: [ceph-osd, osd-replacement]}
+      - {id: ceph-pools, name: Pools size min_size and PG autoscaling, match: [ceph-pool, pg-autoscaler]}
+      - {id: ceph-health, name: Ceph health warnings and noout maintenance, match: [ceph-health, ceph-noout]}
+      - {id: cephfs-pve, name: CephFS for ISO and backups, match: [cephfs]}
+      - {id: ceph-network-design, name: Ceph public and cluster network design, match: [ceph-cluster-network]}
+      - {id: ceph-crush, name: CRUSH rules and device classes, match: [crush-rule, device-class]}
+      - {id: ceph-upgrade, name: Ceph major upgrades on PVE, match: [ceph-upgrade]}
+      - {id: ceph-scrub, name: Scrub and deep scrub scheduling and inconsistent PGs, match: [ceph-scrub, deep-scrub]}
+      - {id: ceph-ec-pools, name: Erasure coded pools, match: [erasure-coded-pool]}
+      - {id: ceph-benchmark, name: rados bench and OSD performance, match: [rados-bench]}
+      - {id: ceph-nearfull, name: Nearfull and full OSDs and the balancer, match: [osd-nearfull, ceph-balancer]}
+      - {id: external-ceph, name: External Ceph cluster as PVE storage, match: [external-ceph]}
+  - id: pve-qemu-vms
+    name: Proxmox VE QEMU/KVM virtual machines
+    source: PVE Admin Guide/QEMU/KVM Virtual Machines
+    match: [qm, proxmox-vm]
+    subtopics:
+      - {id: qm-hardware, name: VM hardware settings (machine type CPU type VirtIO), match: [qm-config, pve-cpu-type]}
+      - {id: pve-cloud-init, name: Cloud-init templates on PVE, match: [pve-cloud-init, qm-cloudinit]}
+      - {id: pve-pci-passthrough, name: PCI and GPU passthrough on PVE, match: [pve-pci-passthrough, iommu]}
+      - {id: pve-vm-import, name: Import disks and VMs (qm importdisk and ESXi import), match: [qm-importdisk, esxi-import-wizard]}
+      - {id: pve-windows-guest, name: Windows guests with VirtIO drivers, match: [virtio-win, windows-guest-proxmox]}
+      - {id: pve-qga, name: QEMU guest agent and fs-freeze, match: [qemu-guest-agent-freeze, qm-agent]}
+      - {id: qm-clone, name: Templates linked and full clones, match: [qm-clone, linked-clone]}
+      - {id: qm-snapshot, name: VM snapshots with RAM state, match: [qm-snapshot]}
+      - {id: qm-disk-options, name: Disk bus cache mode IO thread and SSD emulation, match: [virtio-scsi-single, iothread]}
+      - {id: qm-ballooning, name: Memory ballooning and KSM, match: [pve-ballooning, ksm]}
+      - {id: qm-usb, name: USB passthrough, match: [pve-usb-passthrough]}
+      - {id: qm-hookscript, name: Guest hookscripts, match: [hookscript]}
+      - {id: qm-unlock, name: Unlocking and stopping hung VMs, match: [qm-unlock]}
+      - {id: qm-ovmf-tpm, name: OVMF EFI disk and vTPM, match: [ovmf, pve-vtpm]}
+  - id: pve-lxc
+    name: Proxmox container toolkit (LXC)
+    source: PVE Admin Guide/Proxmox Container Toolkit
+    match: [pct, lxc]
+    subtopics:
+      - {id: pct-templates, name: Container templates and pveam, match: [pveam, container-template]}
+      - {id: lxc-unprivileged, name: Unprivileged containers and id mapping, match: [unprivileged-container, idmap]}
+      - {id: lxc-bind-mounts, name: Bind mount points into containers, match: [lxc-mount-point, mp0]}
+      - {id: lxc-features, name: Container features nesting and keyctl, match: [lxc-nesting, lxc-features]}
+      - {id: lxc-vs-vm, name: Choosing LXC vs VM, match: [container-vs-vm]}
+      - {id: pct-create, name: pct create options and resource limits, match: [pct-create]}
+      - {id: pct-restore, name: Container backup restore and privilege conversion, match: [pct-restore]}
+      - {id: docker-in-lxc, name: Running Docker inside LXC caveats, match: [docker-in-lxc]}
+      - {id: lxc-raw-config, name: Raw lxc config keys and device passthrough, match: [lxc-raw-config, lxc-device-passthrough]}
+      - {id: pct-resize, name: Resize rootfs and move volumes, match: [pct-resize]}
+      - {id: oci-containers, name: OCI image based containers, match: [oci-container-pve]}
+      - {id: lxc-start-debug, name: Debugging a container that fails to start, match: [lxc-start-debug]}
+  - id: pve-network-sdn
+    name: Proxmox VE networking and SDN
+    source: PVE Admin Guide/Network Configuration, Software Defined Network
+    match: [pve-sdn, proxmox-sdn]
+    subtopics:
+      - {id: vlan-aware-bridge, name: VLAN-aware bridges, match: [vlan-aware-bridge]}
+      - {id: sdn-zones, name: SDN zones and vnets (simple VLAN VXLAN EVPN), match: [sdn-zone, vnet]}
+      - {id: pve-bond, name: Bonding for host and VM traffic, match: [pve-bond, lacp-bond]}
+      - {id: sdn-ipam, name: SDN subnets IPAM and DHCP, match: [sdn-ipam, pve-ipam]}
+      - {id: sdn-evpn, name: EVPN zone with exit nodes, match: [evpn-zone, exit-node]}
+      - {id: sdn-vxlan, name: VXLAN zone and MTU, match: [vxlan-zone]}
+      - {id: sdn-qinq, name: QinQ zone, match: [qinq-zone]}
+      - {id: sdn-apply, name: SDN pending changes apply and rollback, match: [sdn-pending-changes]}
+      - {id: pve-ifreload, name: Live network changes with ifreload, match: [ifreload]}
+      - {id: pve-nic-pinning, name: Predictable NIC names and interface pinning, match: [nic-name-pinning]}
+      - {id: pve-jumbo, name: MTU and jumbo frames for storage networks, match: [pve-jumbo-frames]}
+      - {id: sdn-fabrics, name: SDN fabrics with OpenFabric or OSPF, match: [sdn-fabric]}
+      - {id: pve-ipv6, name: IPv6 host configuration, match: [pve-ipv6]}
+  - id: pve-firewall
+    name: Proxmox VE firewall
+    source: PVE Admin Guide/Proxmox VE Firewall
+    match: [pve-firewall]
+    subtopics:
+      - {id: pve-fw-levels, name: Datacenter host and VM firewall levels, match: [pve-firewall-levels, cluster-fw]}
+      - {id: pve-security-groups, name: Security groups IP sets and aliases, match: [pve-security-group, pve-ipset]}
+      - {id: pve-fw-lockout, name: Avoiding management lockout and default rules, match: [firewall-lockout]}
+      - {id: pve-nftables, name: nftables-based proxmox-firewall, match: [proxmox-firewall-nftables]}
+      - {id: pve-fw-rules, name: Rule syntax and macros in .fw files, match: [firewall-macro, pve-fw-rules]}
+      - {id: pve-fw-vm-options, name: VM firewall options ipfilter and MAC filter, match: [ipfilter, mac-filter]}
+      - {id: pve-fw-logging, name: Firewall logging and log levels, match: [pve-firewall-log]}
+      - {id: pve-ports, name: Ports used by PVE services, match: [pve-ports]}
+      - {id: pve-fw-compile, name: pve-firewall compile status and troubleshooting, match: [pve-firewall-compile]}
+      - {id: vnet-firewall, name: VNet-level firewall, match: [vnet-firewall]}
+      - {id: nf-conntrack, name: Connection tracking limits, match: [nf-conntrack]}
+  - id: pve-access
+    name: Proxmox VE user management and API
+    source: PVE Admin Guide/User Management
+    match: [pveum, proxmox-api]
+    subtopics:
+      - {id: pve-realms, name: Authentication realms (PAM PVE LDAP AD OpenID), match: [pve-realm, pve-ldap]}
+      - {id: pve-tfa, name: Two-factor authentication, match: [pve-tfa, totp]}
+      - {id: pve-roles-acl, name: Roles privileges and ACL paths, match: [pve-roles, pve-acl]}
+      - {id: pve-api-tokens, name: API tokens and pvesh, match: [api-token, pvesh]}
+      - {id: pve-pools, name: Resource pools for delegation, match: [pve-resource-pool]}
+      - {id: pveum-user, name: Users with pveum user, match: [pveum-user]}
+      - {id: pveum-group, name: Groups and group-based ACLs, match: [pveum-group]}
+      - {id: pve-openid, name: OpenID Connect realm configuration, match: [pve-openid]}
+      - {id: pve-realm-sync, name: LDAP and AD realm sync, match: [realm-sync]}
+      - {id: pve-tfa-recovery, name: Recovering from TFA or root lockout, match: [tfa-recovery]}
+      - {id: pve-api-ticket, name: API calls with tickets and CSRF tokens via curl, match: [pve-api-ticket, csrfpreventiontoken]}
+      - {id: pve-permission-debug, name: Debugging effective permissions, match: [pveum-permissions]}
+  - id: pve-ha-replication
+    name: Proxmox VE high availability and storage replication
+    source: PVE Admin Guide/High Availability, Storage Replication
+    match: [ha-manager, pve-ha]
+    subtopics:
+      - {id: pve-ha-groups, name: HA resources groups and rules, match: [ha-group, ha-resource]}
+      - {id: pve-fencing, name: Fencing and the watchdog, match: [pve-fencing, watchdog-mux]}
+      - {id: pve-ha-maintenance, name: Node maintenance mode and shutdown policy, match: [pve-maintenance-mode, shutdown-policy]}
+      - {id: pvesr, name: ZFS storage replication jobs, match: [pvesr, storage-replication]}
+      - {id: pve-migration, name: Online and offline migration between nodes, match: [qm-migrate, pve-migration]}
+      - {id: pve-ha-states, name: HA resource and request states, match: [ha-state, ha-request-state]}
+      - {id: pve-crs, name: Cluster resource scheduler, match: [cluster-resource-scheduler]}
+      - {id: pve-ha-recovery-policy, name: HA recovery policy max_restart and max_relocate, match: [max-relocate]}
+      - {id: pve-ha-lrm-crm, name: LRM and CRM status troubleshooting, match: [ha-lrm, ha-crm]}
+      - {id: pvesr-failover, name: Recovering after node failure with replicated disks, match: [replication-failover]}
+      - {id: pve-remote-migrate, name: Cross-cluster migration with remote-migrate, match: [remote-migrate]}
+      - {id: pve-datacenter-manager, name: Proxmox Datacenter Manager, match: [proxmox-datacenter-manager]}
+      - {id: pve-startup-order, name: Startup order and bulk actions, match: [startup-order, bulk-migrate]}
+  # ===== Virtualisation / Hyper-V (learn.microsoft.com ToC) =====
+  - id: hyperv-host-setup
+    name: Hyper-V host installation and settings
+    source: Hyper-V docs/Get started, Plan
+    match: [hyper-v-install, hyper-v-host]
+    subtopics:
+      - {id: hyperv-role-install, name: Install the role on Server and Server Core, match: [install-windowsfeature-hyper-v]}
+      - {id: hyperv-host-settings, name: Default paths NUMA spanning and enhanced session, match: [numa-spanning, hyper-v-settings]}
+      - {id: hyperv-scheduler, name: Hypervisor scheduler types, match: [core-scheduler, hypervisor-scheduler]}
+      - {id: hyperv-scalability, name: Scalability limits and sizing, match: [hyper-v-limits]}
+      - {id: hyperv-remote-mgmt, name: Remote management of Server Core hosts, match: [hyper-v-remote-management]}
+      - {id: hyperv-av-exclusions, name: Host security and antivirus exclusions, match: [hyper-v-antivirus-exclusions, hyper-v-host-security]}
+      - {id: hyperv-prereqs, name: Hardware prerequisites SLAT VT-x and DEP, match: [slat, hyper-v-requirements]}
+      - {id: hyperv-root-reserve, name: Host memory reserve and root partition sizing, match: [root-reserve, memoryreserve]}
+      - {id: hyperv-power-plan, name: Host power plan and BIOS power settings, match: [high-performance-power-plan]}
+      - {id: azure-local, name: Azure Local vs Windows Server Hyper-V, match: [azure-local, azure-stack-hci]}
+      - {id: hyperv-avma, name: Datacenter licensing and AVMA, match: [avma, windows-server-licensing]}
+  - id: hyperv-networking
+    name: Hyper-V virtual switches
+    source: Hyper-V docs/Plan for Hyper-V networking
+    match: [hyper-v-switch, vmswitch]
+    subtopics:
+      - {id: hyperv-switch-types, name: External internal and private switches, match: [external-switch, internal-switch]}
+      - {id: hyperv-set, name: Switch Embedded Teaming, match: [switch-embedded-teaming, set-team]}
+      - {id: hyperv-vlan, name: VM VLAN access and trunk modes, match: [set-vmnetworkadaptervlan, hyper-v-vlan]}
+      - {id: hyperv-nat, name: NAT networking for labs, match: [new-netnat, hyper-v-nat]}
+      - {id: hyperv-vmq-rss, name: VMQ vRSS and SR-IOV, match: [vmq, sr-iov]}
+      - {id: hyperv-mac, name: MAC address pools and MAC spoofing, match: [hyper-v-mac-address-pool]}
+      - {id: hyperv-bandwidth, name: VM bandwidth management, match: [vm-bandwidth-management, minimumbandwidth]}
+      - {id: hyperv-port-acl, name: Port ACLs and extended port ACLs, match: [vmnetworkadapteracl, extended-port-acl]}
+      - {id: hyperv-guards, name: DHCP guard and router guard, match: [dhcp-guard, router-guard]}
+      - {id: hyperv-host-vnics, name: Converged host vNICs for management migration and storage, match: [host-vnic, converged-networking]}
+      - {id: hyperv-rdma, name: RDMA RoCE and DCB for storage traffic, match: [roce-dcb-pfc]}
+      - {id: hyperv-sdn, name: SDN Network Controller, match: [network-controller-sdn]}
+      - {id: hyperv-switch-troubleshoot, name: Virtual switch troubleshooting, match: [vmswitch-troubleshooting]}
+  - id: hyperv-vm-config
+    name: Hyper-V virtual machine configuration
+    source: Hyper-V docs/Manage
+    match: [hyper-v-vm, generation-2]
+    subtopics:
+      - {id: hyperv-dynamic-memory, name: Dynamic memory and startup memory, match: [dynamic-memory]}
+      - {id: hyperv-nested, name: Nested virtualization, match: [nested-virtualization]}
+      - {id: hyperv-dda, name: Discrete Device Assignment, match: [discrete-device-assignment, dda]}
+      - {id: hyperv-integration-services, name: Integration services and time sync, match: [integration-services, hyper-v-time-sync]}
+      - {id: hyperv-export-import, name: Export import and VM configuration versions, match: [export-vm, vm-configuration-version]}
+      - {id: hyperv-new-vm, name: Creating VMs with New-VM and choosing generation, match: [new-vm-hyperv]}
+      - {id: hyperv-secure-boot, name: Secure boot templates for Linux guests, match: [secure-boot-template, microsoft-uefi-ca]}
+      - {id: hyperv-linux-guests, name: Linux guests and Hyper-V drivers and daemons, match: [linux-integration-services, hv-kvp]}
+      - {id: hyperv-processor, name: vCPU count reserve weight and NUMA topology, match: [vm-processor-settings, vm-numa]}
+      - {id: hyperv-auto-actions, name: Automatic start and stop actions, match: [automatic-start-action, automatic-stop-action]}
+      - {id: hyperv-gpu-p, name: GPU partitioning, match: [gpu-partitioning, gpu-p]}
+      - {id: hyperv-vm-groups, name: VM groups, match: [vm-group]}
+      - {id: hyperv-hot-add, name: Hot add memory and network adapters, match: [hyper-v-hot-add]}
+  - id: hyperv-storage
+    name: Hyper-V virtual disks and storage
+    source: Hyper-V docs/Plan - storage
+    match: [vhdx, hyper-v-storage]
+    subtopics:
+      - {id: vhdx-types, name: Fixed dynamic and differencing disks, match: [differencing-disk, dynamic-vhdx]}
+      - {id: vhdx-resize-compact, name: Resize and compact VHDX, match: [resize-vhd, optimize-vhd]}
+      - {id: vhds-shared, name: Shared VHDX and VHD Set for guest clusters, match: [vhd-set, shared-vhdx]}
+      - {id: storage-qos, name: Storage QoS policies, match: [storage-qos]}
+      - {id: vhdx-convert, name: Convert VHD to VHDX and between fixed and dynamic, match: [convert-vhd]}
+      - {id: vhdx-mount, name: Mount a VHDX offline for repair, match: [mount-vhd]}
+      - {id: pass-through-disk, name: Pass-through disks, match: [pass-through-disk]}
+      - {id: virtual-fc, name: Virtual Fibre Channel, match: [virtual-fibre-channel]}
+      - {id: vhdx-sector, name: 4K sector sizes for VHDX, match: [vhdx-sector-size]}
+      - {id: sofs-smb3, name: VMs on SMB 3 shares and Scale-Out File Server, match: [scale-out-file-server, smb3-hyper-v]}
+      - {id: s2d, name: Storage Spaces Direct for hyper-converged, match: [s2d-hyper-converged]}
+      - {id: vhdx-chain-repair, name: Inspect and repair VHDX chains, match: [test-vhd, reconnect-parent]}
+  - id: hyperv-checkpoints
+    name: Hyper-V checkpoints
+    source: Hyper-V docs/Manage - checkpoints
+    match: [hyper-v-checkpoint, production-checkpoint]
+    subtopics:
+      - {id: checkpoint-types, name: Production vs standard checkpoints, match: [standard-checkpoint]}
+      - {id: avhdx-merge, name: AVHDX merges and orphaned checkpoint recovery, match: [avhdx, checkpoint-merge]}
+      - {id: checkpoint-policy, name: Disabling checkpoints on DCs and databases, match: [checkpoint-policy]}
+      - {id: rct-backup, name: Resilient change tracking for backups, match: [resilient-change-tracking, rct]}
+      - {id: checkpoint-cmdlets, name: Create apply and export checkpoints, match: [checkpoint-vm, restore-vmsnapshot]}
+      - {id: checkpoint-location, name: Checkpoint file location and space planning, match: [snapshot-file-location]}
+      - {id: production-checkpoint-failure, name: Production checkpoint failures, match: [production-checkpoint-failure]}
+      - {id: recovery-checkpoint, name: Leftover backup recovery checkpoints, match: [recovery-checkpoint]}
+      - {id: linux-production-checkpoint, name: Production checkpoints for Linux guests, match: [linux-production-checkpoint]}
+  - id: hyperv-live-migration
+    name: Hyper-V live migration
+    source: Hyper-V docs/Deploy - live migration
+    match: [hyper-v-live-migration]
+    subtopics:
+      - {id: lm-auth, name: Kerberos constrained delegation vs CredSSP, match: [kerberos-constrained-delegation, credssp]}
+      - {id: lm-performance, name: Compression vs SMB Direct migration options, match: [smb-direct, migration-performance-option]}
+      - {id: shared-nothing-lm, name: Shared-nothing live migration, match: [shared-nothing-live-migration]}
+      - {id: storage-migration-hv, name: Live storage migration, match: [move-vmstorage]}
+      - {id: processor-compat, name: Processor compatibility mode, match: [processor-compatibility]}
+      - {id: lm-networks, name: Selecting live migration networks, match: [vmmigrationnetwork, live-migration-network]}
+      - {id: lm-simultaneous, name: Simultaneous migration limits, match: [simultaneous-live-migrations]}
+      - {id: quick-migration, name: Quick migration vs live migration in clusters, match: [hyper-v-quick-migration]}
+      - {id: lm-failures, name: Live migration failures and Compare-VM, match: [live-migration-failure-events]}
+      - {id: lm-cross-version, name: Cross-version live migration, match: [cross-version-live-migration]}
+      - {id: lm-drain, name: Draining a node with Suspend-ClusterNode, match: [suspend-clusternode, node-drain]}
+  - id: hyperv-replica
+    name: Hyper-V Replica
+    source: Hyper-V docs/Deploy - Hyper-V Replica
+    match: [hyper-v-replica]
+    subtopics:
+      - {id: replica-setup, name: Enable replication and replica server auth, match: [enable-vmreplication, replica-broker]}
+      - {id: replica-test-failover, name: Test planned and unplanned failover, match: [replica-test-failover, planned-failover]}
+      - {id: replica-extended, name: Extended replication and recovery points, match: [extended-replication, recovery-points]}
+      - {id: replica-health, name: Replication health and resync, match: [measure-vmreplication, replication-resync]}
+      - {id: replica-cert-auth, name: Certificate-based replication and firewall rules, match: [replica-certificate-auth]}
+      - {id: replica-initial-copy, name: Initial replication methods, match: [initial-replication]}
+      - {id: replica-frequency, name: Replication frequency and bandwidth, match: [replication-frequency]}
+      - {id: replica-reverse, name: Reverse replication after failover, match: [reverse-replication]}
+      - {id: replica-app-consistent, name: App-consistent recovery points with VSS, match: [app-consistent-recovery-point]}
+      - {id: replica-failover-ip, name: Failover TCP/IP settings, match: [failover-ip-settings]}
+  - id: hyperv-clustering
+    name: Hyper-V failover clustering
+    source: Failover Clustering docs/Hyper-V
+    match: [failover-clustering, hyper-v-cluster]
+    subtopics:
+      - {id: cluster-validation, name: Cluster validation testing, match: [test-cluster, cluster-validation]}
+      - {id: csv, name: Cluster Shared Volumes and redirected IO, match: [cluster-shared-volumes, csv]}
+      - {id: cluster-quorum, name: Quorum witness options, match: [cluster-quorum, cloud-witness]}
+      - {id: cau, name: Cluster-Aware Updating, match: [cluster-aware-updating, cau]}
+      - {id: cluster-networks, name: Cluster network roles and metrics, match: [cluster-network-role]}
+      - {id: new-cluster, name: Create a cluster and add nodes, match: [new-cluster, add-clusternode]}
+      - {id: cluster-vm-placement, name: Preferred owners and anti-affinity class names, match: [preferred-owners, anti-affinity-class]}
+      - {id: cluster-log, name: Get-ClusterLog and cluster event troubleshooting, match: [get-clusterlog]}
+      - {id: cluster-rolling-upgrade, name: Cluster OS rolling upgrade and functional level, match: [cluster-os-rolling-upgrade, cluster-functional-level]}
+      - {id: compute-resiliency, name: VM compute resiliency and quarantine, match: [compute-resiliency, vm-resiliency]}
+      - {id: csv-cache-bitlocker, name: CSV cache and BitLocker on CSV, match: [csv-cache, csv-bitlocker]}
+      - {id: cluster-cno, name: Cluster name object and AD permissions, match: [cluster-name-object, cno]}
+      - {id: stretched-cluster, name: Stretched clusters and site awareness, match: [site-awareness, stretched-cluster]}
+  - id: hyperv-shielded
+    name: Guarded fabric and shielded VMs
+    source: Hyper-V docs/Guarded fabric and shielded VMs
+    match: [shielded-vm, guarded-fabric]
+    subtopics:
+      - {id: hgs, name: Host Guardian Service deployment, match: [host-guardian-service, hgs]}
+      - {id: attestation-modes, name: TPM vs host key attestation, match: [tpm-attestation, host-key-attestation]}
+      - {id: shielding-data, name: Shielding data files and template disks, match: [shielding-data, shielded-template]}
+      - {id: hyperv-vtpm, name: Key protector and vTPM for Gen 2 VMs, match: [key-protector, hyper-v-vtpm]}
+      - {id: hgs-backup, name: HGS backup and disaster recovery, match: [hgs-backup]}
+      - {id: guarded-host-config, name: Configure guarded hosts and code integrity policies, match: [guarded-host, code-integrity-policy]}
+      - {id: attestation-troubleshoot, name: Troubleshooting attestation, match: [attestation-troubleshooting, get-hgsclientconfiguration]}
+      - {id: convert-to-shielded, name: Convert an existing VM to shielded, match: [convert-to-shielded]}
+      - {id: encryption-supported, name: Encryption supported vs shielded VMs, match: [encryption-supported-vm]}
+      - {id: shielded-linux, name: Shielded Linux VMs, match: [shielded-linux-vm]}
+  - id: hyperv-management-tools
+    name: Hyper-V management with PowerShell and Windows Admin Center
+    source: Hyper-V docs/PowerShell module, Windows Admin Center
+    match: [hyper-v-powershell, windows-admin-center]
+    subtopics:
+      - {id: hyperv-ps-bulk, name: Bulk VM operations in the Hyper-V module, match: [get-vm-hyperv, hyper-v-module]}
+      - {id: hyperv-perf-counters, name: Hyper-V performance counters, match: [hyper-v-perfmon, hyper-v-counters]}
+      - {id: hyperv-event-logs, name: Hyper-V event logs and VMMS troubleshooting, match: [vmms, hyper-v-event-logs]}
+      - {id: scvmm-basics, name: SCVMM fabric management, match: [scvmm]}
+      - {id: wac-vms, name: Windows Admin Center virtual machines tool, match: [wac-virtual-machines]}
+      - {id: powershell-direct, name: PowerShell Direct, match: [powershell-direct]}
+      - {id: hyperv-wmi, name: WMI root virtualization v2 queries, match: [virtualization-v2-wmi]}
+      - {id: resource-metering, name: Resource metering, match: [resource-metering, measure-vm]}
+      - {id: hypervdsc, name: Hyper-V configuration as code with DSC, match: [hypervdsc]}
+      - {id: hyperv-inventory-report, name: Inventory and health reporting script, match: [hyper-v-inventory-report]}
+      - {id: vmconnect, name: VMConnect console access, match: [vmconnect]}
+  # ===== Virtualisation / cross-platform =====
+  - id: v2v-conversion
+    name: P2V and V2V conversion between platforms
+    source: virt-v2v docs, PVE ESXi import, VMware Converter
+    match: [v2v, p2v]
+    subtopics:
+      - {id: virt-v2v, name: Convert VMware guests with virt-v2v, match: [virt-v2v]}
+      - {id: qemu-img-convert, name: Convert disk formats with qemu-img, match: [qemu-img, disk-format-conversion]}
+      - {id: vmware-to-hyperv, name: VMware to Hyper-V migration, match: [vmware-to-hyper-v]}
+      - {id: v2v-driver-fixups, name: Post-conversion driver and NIC fixups, match: [v2v-drivers, inaccessible-boot-device]}
+      - {id: vcenter-converter, name: P2V with vCenter Converter Standalone, match: [vcenter-converter]}
+      - {id: disk2vhd, name: Disk2vhd P2V to Hyper-V, match: [disk2vhd]}
+      - {id: migration-preflight, name: Pre-migration checklist, match: [migration-preflight]}
+      - {id: migration-cutover, name: Cutover planning and final delta sync, match: [migration-cutover]}
+      - {id: vmware-tools-removal, name: Removing VMware Tools after migration, match: [vmware-tools-removal]}
+      - {id: initramfs-virtio, name: Linux initramfs virtio driver fixes, match: [dracut-virtio, initramfs-drivers]}
+      - {id: v2v-cloud, name: Migration to AWS or Azure with MGN or Azure Migrate, match: [aws-mgn, azure-migrate]}
+      - {id: forklift, name: Migration Toolkit for Virtualization to KubeVirt, match: [forklift, migration-toolkit-for-virtualization]}
+  # ===== Patch management (NIST SP 800-40r4, ITIL 4) =====
+  - id: patch-software-inventory
+    name: Software and asset inventory for patching
+    source: NIST SP 800-40r4 Section 3.1
+    match: [software-inventory, asset-inventory]
+    subtopics:
+      - {id: inventory-discovery, name: Discovering unmanaged assets, match: [asset-discovery, unmanaged-assets]}
+      - {id: installed-software-query, name: Querying installed software and versions at scale, match: [installed-software-query, osquery]}
+      - {id: sbom-inventory, name: SBOM-based component inventory, match: [sbom-inventory]}
+      - {id: cmdb-reconcile, name: CMDB reconciliation, match: [cmdb-reconciliation, cmdb]}
+      - {id: windows-installed-software, name: Windows installed software from uninstall keys not Win32_Product, match: [uninstall-registry-keys, win32-product]}
+      - {id: linux-package-inventory, name: rpm and dpkg package inventories, match: [rpm-qa, dpkg-query]}
+      - {id: cpe-swid, name: CPE and SWID identifiers for matching, match: [cpe, swid]}
+      - {id: cloud-inventory, name: Cloud asset inventory via AWS Config and Azure Resource Graph, match: [aws-config-inventory, azure-resource-graph]}
+      - {id: hardware-inventory, name: Hardware and firmware inventory, match: [hardware-inventory]}
+      - {id: running-image-inventory, name: Running container image inventory, match: [running-image-inventory]}
+      - {id: asset-ownership, name: Asset ownership and tagging, match: [asset-owner, asset-tagging]}
+      - {id: stale-computer-objects, name: Reconciling stale directory objects with agent counts, match: [stale-computer-objects]}
+  - id: patch-asset-groups
+    name: Asset groups and maintenance groups
+    source: NIST SP 800-40r4 Section 3.2-3.3
+    match: [maintenance-groups, asset-groups]
+    subtopics:
+      - {id: maintenance-plan, name: Writing routine and emergency maintenance plans, match: [maintenance-plan]}
+      - {id: patch-tiers, name: Tiering assets by criticality, match: [asset-criticality-tier, patch-tiers]}
+      - {id: deployment-rings-design, name: Designing deployment rings, match: [deployment-rings]}
+      - {id: maintenance-window-scheduling, name: Scheduling maintenance windows, match: [maintenance-window]}
+      - {id: dynamic-groups, name: Dynamic group membership rules, match: [dynamic-groups, collection-query]}
+      - {id: pilot-group, name: Pilot and canary group selection, match: [pilot-group, canary-ring]}
+      - {id: deferrals-deadlines, name: Deferrals and install deadlines by ring, match: [update-deferral, install-deadline]}
+      - {id: blackout-periods, name: Blackout calendars, match: [blackout-period]}
+      - {id: ot-patching, name: OT and ICS patching groups, match: [ot-patching, ics-patching]}
+      - {id: owner-signoff, name: Application owner sign-off per group, match: [application-owner-signoff]}
+      - {id: monthly-patch-cycle, name: Monthly patch cycle cadence, match: [monthly-patch-cycle]}
+  - id: vulnerability-intelligence
+    name: Learning about new vulnerabilities and patches
+    source: NIST SP 800-40r4 patch lifecycle (identify)
+    match: [vulnerability-intelligence, security-advisories]
+    subtopics:
+      - {id: vendor-advisories, name: Vendor advisory feeds (MSRC USN RHSA), match: [msrc, usn, rhsa]}
+      - {id: csaf-vex, name: Machine-readable advisories CSAF and VEX, match: [csaf, vex]}
+      - {id: nvd-cve, name: CVE and NVD records, match: [nvd, cve]}
+      - {id: advisory-triage, name: Advisory triage workflow, match: [advisory-triage]}
+      - {id: scanner-feeds, name: Vulnerability scanner feeds and authenticated scans, match: [vulnerability-scanner, nessus, openvas]}
+      - {id: osv-ghsa, name: OSV and GitHub advisories for open source, match: [osv, ghsa]}
+      - {id: distro-trackers, name: Distribution security trackers, match: [debian-security-tracker, ubuntu-cve-tracker]}
+      - {id: exploit-availability, name: Exploit availability signals, match: [exploit-availability]}
+      - {id: advisory-ingestion, name: Automated advisory ingestion into tickets, match: [advisory-ingestion]}
+      - {id: patch-tuesday-review, name: Monthly Patch Tuesday review, match: [patch-tuesday-review]}
+      - {id: cisa-directives, name: CISA emergency and binding operational directives, match: [emergency-directive]}
+  - id: patch-prioritisation
+    name: Risk-based patch prioritisation
+    source: NIST SP 800-40r4 Section 2 risk responses
+    match: [risk-based-vulnerability-management, prioritisation]
+    subtopics:
+      - {id: cvss-scoring, name: CVSS base and environmental scoring, match: [cvss, cvss-environmental]}
+      - {id: epss-kev, name: EPSS and CISA KEV signals, match: [epss, cisa-kev]}
+      - {id: ssvc, name: SSVC decision trees, match: [ssvc]}
+      - {id: remediation-sla, name: Remediation SLAs by severity, match: [remediation-sla]}
+      - {id: cvss-v4, name: CVSS v4 vs v3.1, match: [cvss-v4]}
+      - {id: asset-exposure, name: Asset exposure context, match: [internet-facing, asset-exposure]}
+      - {id: patch-supersedence, name: Mapping findings to patches and supersedence, match: [patch-supersedence, finding-deduplication]}
+      - {id: vendor-risk-scores, name: Vendor risk scores VPR and TruRisk, match: [vpr, trurisk]}
+      - {id: priority-matrix, name: Priority matrix combining severity exploitation and exposure, match: [priority-matrix]}
+      - {id: reachability-analysis, name: Reachability analysis for dependencies, match: [reachability-analysis]}
+      - {id: vuln-backlog, name: Vulnerability backlog burn-down, match: [vulnerability-backlog]}
+  - id: patch-risk-responses
+    name: Risk responses beyond patching
+    source: NIST SP 800-40r4 Section 2
+    match: [risk-response, risk-acceptance]
+    subtopics:
+      - {id: mitigation-workarounds, name: Mitigations and vendor workarounds, match: [vendor-workaround, mitigation]}
+      - {id: compensating-controls, name: Compensating controls, match: [compensating-controls]}
+      - {id: patch-exceptions, name: Exception and risk acceptance process, match: [exception-process, patch-exception]}
+      - {id: poam, name: POA&M tracking, match: [poam, plan-of-action-and-milestones]}
+      - {id: risk-transfer, name: Risk transfer, match: [risk-transfer]}
+      - {id: risk-avoidance, name: Risk avoidance by removal or decommission, match: [risk-avoidance, decommission]}
+      - {id: virtual-patching, name: Virtual patching with WAF or IPS, match: [waf-virtual-patching]}
+      - {id: disable-feature, name: Disabling vulnerable features and services, match: [disable-vulnerable-feature]}
+      - {id: exception-expiry, name: Exception review and expiry, match: [exception-expiry]}
+      - {id: risk-register, name: Risk register entries for vulnerabilities, match: [vulnerability-risk-register]}
+      - {id: residual-risk, name: Residual risk documentation, match: [residual-risk]}
+  - id: patch-acquisition
+    name: Patch acquisition, repositories and integrity
+    source: NIST SP 800-40r4 patch lifecycle (acquire)
+    match: [patch-acquisition, patch-repository]
+    subtopics:
+      - {id: repo-mirroring, name: Mirroring Linux repositories (reposync aptly), match: [reposync, aptly]}
+      - {id: repo-snapshots, name: Dated repository snapshots for reproducible patching, match: [repository-snapshot, content-view]}
+      - {id: patch-integrity, name: Verifying patch signatures and hashes, match: [patch-integrity, signature-verification]}
+      - {id: wsus-sync, name: WSUS synchronisation and approvals, match: [wsus-sync, wsus-approval]}
+      - {id: offline-patching, name: Patching air-gapped networks, match: [air-gapped-patching, offline-patching]}
+      - {id: pulp, name: Pulp content management, match: [pulp]}
+      - {id: artifact-proxies, name: Artifactory and Nexus proxies for OS repos, match: [artifactory, nexus-repository]}
+      - {id: apt-cacher-ng, name: Caching proxies apt-cacher-ng, match: [apt-cacher-ng]}
+      - {id: update-catalog, name: Microsoft Update Catalog and MSU files, match: [microsoft-update-catalog, msu]}
+      - {id: delivery-optimization, name: Delivery Optimization and Connected Cache, match: [delivery-optimization, connected-cache]}
+      - {id: repo-signing-keys, name: Repository signing key management, match: [repo-signing-key, apt-key-deprecation]}
+      - {id: createrepo, name: Local RPM repositories with createrepo, match: [createrepo]}
+      - {id: reprepro, name: Local apt repositories with reprepro, match: [reprepro]}
+  - id: patch-testing
+    name: Patch validation and testing
+    source: NIST SP 800-40r4 patch lifecycle (validate)
+    match: [patch-testing]
+    subtopics:
+      - {id: test-environment, name: Representative test environments, match: [test-environment, staging-environment]}
+      - {id: smoke-tests, name: Post-patch smoke tests and health checks, match: [smoke-test, health-check]}
+      - {id: known-issues, name: Tracking vendor known issues, match: [known-issues, release-health]}
+      - {id: rollback-plans, name: Rollback plans and irreversible updates, match: [rollback-plan]}
+      - {id: canary-analysis, name: Canary analysis metrics, match: [canary-analysis]}
+      - {id: post-patch-test-suites, name: Automated post-patch tests with Pester or testinfra, match: [testinfra, pester]}
+      - {id: app-compat, name: Application compatibility testing, match: [application-compatibility]}
+      - {id: test-exit-criteria, name: Test sign-off criteria, match: [test-exit-criteria]}
+      - {id: production-clone-test, name: Testing on cloned production VMs, match: [production-clone-test]}
+      - {id: database-patch-testing, name: Database and middleware patch testing, match: [database-patch-testing]}
+      - {id: patch-uninstall, name: Verifying patch uninstall, match: [patch-uninstall, wusa-uninstall]}
+  - id: patch-deployment
+    name: Patch deployment and orchestration
+    source: NIST SP 800-40r4 patch lifecycle (deploy)
+    match: [patch-deployment, patch-orchestration]
+    subtopics:
+      - {id: rolling-cluster-patch, name: Rolling patching of clustered services, match: [rolling-patching, drain-and-patch]}
+      - {id: ansible-patching, name: Patch playbooks with Ansible serial and max_fail, match: [ansible-patching, serial-batches]}
+      - {id: pre-post-checks, name: Pre-patch snapshots and post-patch checks, match: [pre-patch-checks, post-patch-checks]}
+      - {id: patch-orchestration-tools, name: Patch orchestration platforms (Foreman Satellite Landscape), match: [satellite, foreman, landscape]}
+      - {id: remote-workforce, name: Patching remote and roaming endpoints, match: [remote-endpoint-patching, cloud-management-gateway]}
+      - {id: kured, name: Kubernetes node patching with kured, match: [kured, node-drain-reboot]}
+      - {id: ag-patching, name: SQL Server AG rolling patching, match: [availability-group-patching]}
+      - {id: lb-drain, name: Draining nodes from load balancers, match: [load-balancer-drain]}
+      - {id: ssm-patch-manager, name: AWS Systems Manager Patch Manager, match: [ssm-patch-manager]}
+      - {id: salt-patching, name: Patching with Salt, match: [salt-patching]}
+      - {id: deployment-halt, name: Halt criteria for patch deployments, match: [deployment-halt-criteria]}
+      - {id: wsus-client-targeting, name: WSUS client-side targeting, match: [client-side-targeting]}
+  - id: patch-reboots
+    name: Reboot and restart management
+    source: NIST SP 800-40r4 patch lifecycle (deploy/verify)
+    match: [reboot-management, pending-reboot]
+    subtopics:
+      - {id: needrestart, name: Detecting services needing restart on Linux, match: [needrestart, needs-restarting]}
+      - {id: windows-pending-reboot, name: Detecting pending reboot on Windows, match: [pending-reboot-detection, rebootpending]}
+      - {id: livepatch, name: Kernel live patching, match: [livepatch, kpatch]}
+      - {id: hotpatch, name: Windows Server hotpatch, match: [hotpatch]}
+      - {id: restart-notification, name: Restart notifications deadlines and active hours, match: [restart-notification, active-hours]}
+      - {id: reboot-ordering, name: Dependent service reboot ordering, match: [reboot-ordering]}
+      - {id: reboot-required-file, name: Linux reboot-required and running vs installed kernel, match: [reboot-required]}
+      - {id: pending-file-rename, name: Clearing stuck pending reboots, match: [pendingfilerenameoperations]}
+      - {id: kexec-soft-reboot, name: kexec and systemd soft-reboot, match: [kexec, soft-reboot]}
+      - {id: max-uptime, name: Maximum uptime policy, match: [max-uptime-policy]}
+  - id: patch-verification
+    name: Verifying deployment and compliance reporting
+    source: NIST SP 800-40r4 patch lifecycle (verify)
+    match: [patch-verification, patch-compliance]
+    subtopics:
+      - {id: rescan-verify, name: Rescan to confirm remediation, match: [remediation-verification, rescan]}
+      - {id: compliance-report, name: Patch compliance reports by group, match: [patch-compliance-report]}
+      - {id: failed-installs, name: Diagnosing failed installs, match: [failed-update-install, windowsupdate-log]}
+      - {id: backport-version-check, name: Checking backported fixes by package changelog, match: [backported-fix, package-changelog]}
+      - {id: installed-kb-check, name: Checking installed KBs with Get-HotFix and DISM, match: [get-hotfix, dism-packages]}
+      - {id: oval-check, name: OVAL definition evaluation, match: [oval-definitions]}
+      - {id: client-health, name: Patch agent client health, match: [client-health]}
+      - {id: scan-discrepancy, name: Reconciling scanner vs patch tool results, match: [scan-discrepancy]}
+      - {id: linux-update-history, name: dnf and apt update history, match: [dnf-history-info, apt-history-log]}
+      - {id: reset-wu, name: Resetting Windows Update components, match: [reset-windows-update]}
+      - {id: scanner-false-positive, name: Scanner false positives, match: [scanner-false-positive]}
+  - id: patch-metrics
+    name: Patch management metrics
+    source: NIST SP 800-40r4 Section 4
+    match: [patch-metrics]
+    subtopics:
+      - {id: mttp, name: Time to patch and mean time to remediate, match: [mean-time-to-remediate, mttr]}
+      - {id: patch-coverage, name: Coverage and latency metrics, match: [patch-coverage, patch-latency]}
+      - {id: metrics-maturity, name: Assessment of patching maturity, match: [patching-maturity]}
+      - {id: metrics-dashboard, name: Reporting metrics to leadership, match: [vulnerability-dashboard]}
+      - {id: sla-compliance-rate, name: SLA compliance rate, match: [sla-compliance-rate]}
+      - {id: vuln-age, name: Vulnerability age distribution, match: [vulnerability-age]}
+      - {id: patch-success-rate, name: Deployment success rate, match: [patch-success-rate]}
+      - {id: exception-metrics, name: Exception count and age, match: [exception-metrics]}
+      - {id: key-risk-indicators, name: KPIs vs KRIs for patching, match: [key-risk-indicator]}
+  - id: emergency-patching
+    name: Emergency patching and zero-day response
+    source: NIST SP 800-40r4 Section 3 emergency plans
+    match: [emergency-patching, zero-day]
+    subtopics:
+      - {id: out-of-band, name: Out-of-band vendor releases, match: [out-of-band-update]}
+      - {id: exposure-assessment, name: Rapid exposure assessment for a new CVE, match: [exposure-assessment]}
+      - {id: emergency-change, name: Emergency change approval, match: [emergency-change]}
+      - {id: post-emergency-review, name: Post-incident review of emergency patching, match: [post-implementation-review]}
+      - {id: emergency-playbook, name: Emergency patch playbook, match: [emergency-patch-playbook]}
+      - {id: compromise-assessment, name: Compromise assessment alongside patching, match: [compromise-assessment]}
+      - {id: incident-communication, name: Stakeholder communication during zero-days, match: [incident-communication]}
+      - {id: targeted-scan, name: Targeted scan sweep for a new CVE, match: [targeted-scan]}
+      - {id: remediation-tracker, name: War-room remediation tracking, match: [remediation-tracker]}
+      - {id: embedded-library-search, name: Finding embedded vulnerable library copies, match: [embedded-library-search]}
+  - id: eol-software
+    name: End-of-life and unsupported software
+    source: NIST SP 800-40r4 Section 3.4
+    match: [end-of-life, eol-software]
+    subtopics:
+      - {id: eol-tracking, name: Tracking vendor support lifecycles, match: [support-lifecycle, endoflife-date]}
+      - {id: esu, name: Extended security updates programs, match: [extended-security-updates, esu]}
+      - {id: eol-isolation, name: Isolating legacy systems, match: [legacy-isolation]}
+      - {id: eol-migration, name: Planning OS migrations off EOL, match: [eol-migration]}
+      - {id: eol-detection, name: Detecting EOL software in inventory, match: [eol-detection]}
+      - {id: third-party-els, name: Third-party extended lifecycle support, match: [extended-lifecycle-support, tuxcare]}
+      - {id: runtime-eol, name: EOL language runtimes and databases, match: [runtime-eol]}
+      - {id: support-horizon, name: Procurement support horizon policy, match: [support-horizon]}
+      - {id: in-place-upgrade, name: In-place OS upgrades with leapp or do-release-upgrade, match: [leapp, do-release-upgrade]}
+      - {id: hardware-eosl, name: Hardware end of service life, match: [eosl, hardware-eol]}
+  - id: third-party-patching
+    name: Third-party application patching
+    source: NIST SP 1800-31 / SP 800-40r4 software types
+    match: [third-party-patching]
+    subtopics:
+      - {id: winget, name: winget upgrade and configuration, match: [winget]}
+      - {id: chocolatey, name: Chocolatey package updates, match: [chocolatey]}
+      - {id: browser-updates, name: Browser update policies, match: [browser-updates, chrome-enterprise]}
+      - {id: intune-win32-updates, name: Updating Win32 apps via Intune supersedence, match: [intune-supersedence, win32-app]}
+      - {id: macos-patching, name: macOS software update management, match: [macos-updates, softwareupdate]}
+      - {id: third-party-catalog, name: Third-party patch catalogs, match: [patch-my-pc, third-party-catalog]}
+      - {id: java-updates, name: Java runtime updates, match: [java-updates]}
+      - {id: adobe-updates, name: Adobe Acrobat and Reader updates, match: [adobe-updates]}
+      - {id: m365-apps-channels, name: Microsoft 365 Apps update channels, match: [microsoft-365-apps-updates, update-channel]}
+      - {id: homebrew, name: Homebrew updates on managed Macs, match: [homebrew]}
+      - {id: snap-flatpak, name: Snap and Flatpak refresh control, match: [snap-refresh, flatpak]}
+      - {id: self-updating-apps, name: Controlling self-updating apps, match: [self-updating-apps]}
+  - id: firmware-patching
+    name: Firmware, BIOS and driver patching
+    source: NIST SP 800-40r4 software types (firmware)
+    match: [firmware-updates, bios-update]
+    subtopics:
+      - {id: fwupd, name: fwupd and LVFS on Linux, match: [fwupd, lvfs]}
+      - {id: bmc-firmware, name: Server firmware via iDRAC iLO and vendor bundles, match: [idrac, ilo, service-pack-for-proliant]}
+      - {id: microcode, name: CPU microcode updates, match: [microcode]}
+      - {id: storage-firmware, name: Disk and HBA firmware, match: [disk-firmware, hba-firmware]}
+      - {id: dell-dsu, name: Dell System Update and OpenManage repositories, match: [dell-system-update, openmanage]}
+      - {id: xclarity, name: Lenovo XClarity firmware updates, match: [xclarity-administrator-updates]}
+      - {id: redfish-update, name: Redfish UpdateService firmware push, match: [redfish]}
+      - {id: uefi-capsule, name: UEFI capsule updates, match: [uefi-capsule]}
+      - {id: firmware-rollback, name: Firmware rollback and dual-bank images, match: [firmware-rollback]}
+      - {id: secure-boot-dbx, name: Secure Boot dbx and boot manager revocations, match: [secure-boot-dbx]}
+      - {id: nic-firmware, name: NIC firmware and driver alignment, match: [nic-firmware]}
+  - id: network-device-patching
+    name: Network and appliance OS upgrades
+    source: NIST SP 800-40r4 software types (network devices)
+    match: [network-device-upgrade, appliance-patching]
+    subtopics:
+      - {id: issu, name: In-service software upgrades, match: [issu]}
+      - {id: ha-pair-upgrade, name: Upgrading firewall HA pairs, match: [ha-pair-upgrade, firewall-upgrade]}
+      - {id: golden-image-net, name: Golden image versions for network devices, match: [golden-image-version, recommended-release]}
+      - {id: network-rollback, name: Rollback for network device upgrades, match: [network-rollback, boot-variable]}
+      - {id: ios-xe-install, name: IOS-XE install mode upgrades, match: [ios-xe-install-commit]}
+      - {id: nxos-upgrade, name: NX-OS vPC pair upgrades, match: [nxos-upgrade]}
+      - {id: junos-upgrade, name: Junos upgrade and rollback, match: [junos-upgrade]}
+      - {id: fortigate-upgrade-path, name: FortiGate upgrade paths, match: [fortigate-upgrade-path]}
+      - {id: image-verification, name: On-device image hash verification, match: [image-verification]}
+      - {id: network-config-backup, name: Config backup before upgrade with Oxidized, match: [oxidized]}
+      - {id: ap-predownload, name: Wireless AP image predownload, match: [ap-image-predownload]}
+      - {id: ontap-ndu, name: Storage array non-disruptive upgrades, match: [ontap-ndu, non-disruptive-upgrade]}
+  - id: linux-patch-tooling
+    name: Linux patch tooling
+    source: Debian/RHEL/SUSE update docs
+    match: [linux-patching]
+    subtopics:
+      - {id: unattended-upgrades, name: unattended-upgrades on Debian/Ubuntu, match: [unattended-upgrades]}
+      - {id: dnf-automatic, name: dnf-automatic on RHEL family, match: [dnf-automatic]}
+      - {id: security-only-updates, name: Security-only updates (dnf --security apt security pocket), match: [security-only-updates, updateinfo]}
+      - {id: zypper-patch, name: zypper patch on SUSE, match: [zypper-patch]}
+      - {id: package-holds, name: Holding packages and version locks during patching, match: [package-hold, versionlock]}
+      - {id: apt-full-upgrade, name: apt upgrade vs full-upgrade, match: [apt-full-upgrade]}
+      - {id: dnf-upgrade-minimal, name: dnf upgrade-minimal and advisories, match: [dnf-upgrade-minimal]}
+      - {id: old-kernels, name: Old kernel cleanup and installonly_limit, match: [installonly-limit, old-kernels]}
+      - {id: dnf-history-undo, name: Rolling back with dnf history undo, match: [dnf-history-undo]}
+      - {id: snapper, name: Btrfs snapper rollback on SUSE, match: [snapper-rollback]}
+      - {id: ubuntu-pro, name: Ubuntu Pro ESM, match: [ubuntu-pro, esm-apps]}
+      - {id: red-hat-insights, name: Red Hat Insights patch, match: [red-hat-insights]}
+      - {id: dpkg-conffile, name: Non-interactive conffile handling, match: [dpkg-conffile, debian-frontend-noninteractive]}
+  - id: windows-patch-tooling
+    name: Windows update management platforms
+    source: Microsoft Windows Update for Business / WSUS / ConfigMgr docs
+    match: [windows-update-management]
+    subtopics:
+      - {id: wufb, name: Windows Update for Business policies, match: [windows-update-for-business, wufb]}
+      - {id: autopatch, name: Windows Autopatch, match: [windows-autopatch]}
+      - {id: configmgr-sum, name: ConfigMgr software updates and ADRs, match: [configmgr, automatic-deployment-rules]}
+      - {id: wsus-maintenance, name: WSUS database maintenance and cleanup, match: [wsus-cleanup, susdb]}
+      - {id: azure-update-manager, name: Azure Update Manager for servers, match: [azure-update-manager]}
+      - {id: wsus-gpo, name: WSUS client Group Policy settings, match: [wsus-gpo]}
+      - {id: wsus-downstream, name: WSUS upstream and downstream servers, match: [wsus-downstream]}
+      - {id: intune-update-rings, name: Intune update rings and feature update policies, match: [update-rings, feature-update-policy]}
+      - {id: expedited-updates, name: Expedited quality updates, match: [expedited-updates]}
+      - {id: wufb-drivers, name: Driver and firmware update management, match: [wufb-driver-management]}
+      - {id: ssu-lcu, name: Servicing stack and cumulative updates, match: [ssu-lcu-sequencing]}
+      - {id: pswindowsupdate, name: PSWindowsUpdate module, match: [pswindowsupdate]}
+      - {id: wsus-app-pool, name: WSUS IIS app pool tuning, match: [wsus-app-pool]}
+  - id: container-image-patching
+    name: Patching immutable infrastructure and container images
+    source: NIST SP 800-190 / SP 800-40r4 (immutable infrastructure)
+    match: [image-patching, immutable-infrastructure]
+    subtopics:
+      - {id: base-image-rebuild, name: Rebuilding images on base image updates, match: [base-image-update, image-rebuild]}
+      - {id: image-scanning, name: Scanning images with Trivy or Grype, match: [trivy, grype]}
+      - {id: golden-ami, name: Golden VM image pipelines with Packer, match: [packer, golden-image]}
+      - {id: node-pool-rotation, name: Rotating nodes instead of patching in place, match: [node-rotation]}
+      - {id: minimal-base-image, name: Minimal and distroless base images, match: [distroless, minimal-base-image]}
+      - {id: digest-pinning, name: Digest pinning and automated bumps, match: [digest-pinning, renovate]}
+      - {id: image-admission, name: Blocking vulnerable images at admission, match: [image-admission-policy]}
+      - {id: copacetic, name: In-place image patching with Copacetic, match: [copacetic]}
+      - {id: k8s-version-upgrade, name: Managed Kubernetes version upgrades, match: [kubernetes-version-upgrade]}
+      - {id: instance-refresh, name: AMI rotation with instance refresh, match: [instance-refresh]}
+      - {id: immutable-os, name: Immutable container OSes, match: [bottlerocket, flatcar]}
+  - id: change-enablement
+    name: ITIL change enablement
+    source: ITIL 4 Change Enablement practice guide
+    match: [change-enablement, change-management]
+    subtopics:
+      - {id: change-types, name: Standard normal and emergency changes, match: [standard-change, normal-change]}
+      - {id: rfc-writing, name: Writing a request for change, match: [rfc, request-for-change]}
+      - {id: cab, name: Change authority and CAB, match: [cab, change-advisory-board]}
+      - {id: change-risk, name: Change risk assessment, match: [change-risk-assessment]}
+      - {id: change-schedule, name: Change schedule and freeze periods, match: [change-schedule, change-freeze]}
+      - {id: change-models, name: Change models and pre-approved templates, match: [change-model]}
+      - {id: change-metrics, name: Change success and failure rates, match: [change-success-rate, change-failure-rate]}
+      - {id: backout-plan, name: Implementation and backout plans, match: [backout-plan]}
+      - {id: change-impact, name: Change impact analysis with the CMDB, match: [change-impact-analysis]}
+      - {id: unauthorised-change, name: Detecting unauthorised changes, match: [unauthorised-change]}
+      - {id: servicenow-change, name: ServiceNow change workflow, match: [servicenow-change]}
+      - {id: peer-review-approval, name: Peer review approval in DevOps teams, match: [peer-review-approval]}
+  - id: release-deployment-mgmt
+    name: ITIL release and deployment management
+    source: ITIL 4 Release Management and Deployment Management practice guides
+    match: [release-management, deployment-management]
+    subtopics:
+      - {id: release-planning, name: Release planning and release records, match: [release-planning]}
+      - {id: deployment-approaches, name: Phased big bang pull and continuous deployment, match: [phased-deployment, big-bang-deployment]}
+      - {id: early-life-support, name: Early life support and hypercare, match: [early-life-support, hypercare]}
+      - {id: release-comms, name: Release notes and user communication, match: [release-notes, maintenance-notification]}
+      - {id: release-types, name: Major minor and emergency release types, match: [release-type-classification]}
+      - {id: dml, name: Definitive media library, match: [definitive-media-library-dml]}
+      - {id: pull-deployment, name: Pull deployment and self-service, match: [pull-deployment]}
+      - {id: blue-green, name: Blue-green deployment, match: [blue-green-deployment]}
+      - {id: canary-release, name: Canary releases and feature flags, match: [feature-flags, canary-release]}
+      - {id: go-no-go, name: Go/no-go readiness review, match: [go-no-go-review]}
+      - {id: deployment-verification, name: Deployment verification and rollback triggers, match: [deployment-verification]}
+  - id: config-baselines
+    name: Configuration baselines and drift control
+    source: ITIL 4 Service Configuration Management / CIS Benchmarks
+    match: [configuration-baseline, configuration-drift]
+    subtopics:
+      - {id: cis-baselines, name: CIS benchmark baselines, match: [cis-benchmark]}
+      - {id: drift-detection, name: Detecting drift (check mode DSC test), match: [drift-detection]}
+      - {id: security-baselines-ms, name: Microsoft security baselines, match: [security-baseline, policy-analyzer]}
+      - {id: baseline-versioning, name: Versioning baselines as code, match: [baseline-as-code]}
+      - {id: stig, name: DISA STIG baselines, match: [stig]}
+      - {id: openscap, name: OpenSCAP scanning and remediation, match: [openscap-oscap-xccdf]}
+      - {id: lgpo, name: GPO baseline deployment with LGPO, match: [lgpo]}
+      - {id: machine-configuration, name: Azure Machine Configuration and DSC, match: [machine-configuration, dsc]}
+      - {id: ansible-lockdown, name: Ansible hardening roles, match: [ansible-lockdown]}
+      - {id: baseline-deviation, name: Documenting baseline deviations, match: [baseline-deviation]}
+      - {id: intune-security-baseline, name: Intune security baselines, match: [intune-security-baseline]}
+      - {id: aide, name: File integrity monitoring with AIDE, match: [aide, file-integrity-monitoring]}
+  # ===== Backup and recovery (NIST SP 800-34r1, Veeam/restic/Bacula) =====
+  - id: business-impact-analysis
+    name: Business impact analysis
+    source: NIST SP 800-34r1 Section 3.2
+    match: [business-impact-analysis, bia]
+    subtopics:
+      - {id: mtd, name: Maximum tolerable downtime, match: [mtd, maximum-tolerable-downtime]}
+      - {id: rto-rpo-setting, name: Setting RTO and RPO per system, match: [rto, rpo]}
+      - {id: recovery-priorities, name: Recovery priority and dependency mapping, match: [recovery-priority, dependency-mapping]}
+      - {id: bia-interviews, name: BIA data collection and outage impact categories, match: [bia-questionnaire, outage-impact]}
+      - {id: bia-processes, name: Identifying mission and business processes, match: [business-process-identification]}
+      - {id: bia-resources, name: Identifying resource requirements, match: [resource-requirements]}
+      - {id: cost-of-downtime, name: Cost of downtime modelling, match: [cost-of-downtime]}
+      - {id: wrt, name: Work recovery time, match: [work-recovery-time, wrt]}
+      - {id: fips-199, name: FIPS 199 impact levels and ISCP templates, match: [fips-199]}
+      - {id: bia-report, name: BIA report and sign-off, match: [bia-report]}
+      - {id: time-criticality, name: Peak periods and time criticality, match: [time-criticality]}
+  - id: contingency-plan
+    name: Information system contingency plan (ISCP)
+    source: NIST SP 800-34r1 Section 4
+    match: [contingency-plan, iscp]
+    subtopics:
+      - {id: activation-notification, name: Activation and notification phase, match: [activation-criteria, call-tree]}
+      - {id: recovery-phase, name: Recovery phase procedures and sequence, match: [recovery-procedures, recovery-sequence]}
+      - {id: reconstitution, name: Reconstitution and failback, match: [reconstitution, failback]}
+      - {id: plan-maintenance, name: Plan maintenance and review cycle, match: [plan-maintenance]}
+      - {id: dr-runbook, name: Writing DR runbooks, match: [dr-runbook]}
+      - {id: iscp-roles, name: Recovery teams roles and responsibilities, match: [iscp-recovery-roles]}
+      - {id: iscp-appendices, name: Contact lists and ISCP appendices, match: [contact-list, iscp-appendix]}
+      - {id: concept-of-operations, name: Concept of operations section, match: [concept-of-operations]}
+      - {id: plan-distribution, name: Plan distribution and offline copies, match: [plan-distribution]}
+      - {id: related-plans, name: Relationship to COOP BCP IRP and DRP, match: [iscp-related-plans]}
+      - {id: damage-assessment, name: Damage assessment, match: [damage-assessment]}
+      - {id: crisis-comms, name: Crisis communications plan, match: [crisis-communications]}
+  - id: alternate-sites
+    name: Alternate sites and recovery strategies
+    source: NIST SP 800-34r1 Section 3.4
+    match: [alternate-site, recovery-strategy]
+    subtopics:
+      - {id: hot-warm-cold, name: Hot warm and cold sites, match: [hot-site, warm-site, cold-site]}
+      - {id: draas, name: DR as a service and cloud DR, match: [draas, cloud-dr]}
+      - {id: reciprocal-agreements, name: Reciprocal and vendor agreements, match: [reciprocal-agreement, service-level-agreement]}
+      - {id: pilot-light, name: Pilot light and warm standby in cloud, match: [pilot-light, warm-standby]}
+      - {id: mobile-site, name: Mobile sites, match: [mobile-site]}
+      - {id: mirrored-site, name: Mirrored and active-active sites, match: [active-active, mirrored-site]}
+      - {id: site-selection, name: Site selection and geographic separation, match: [geographic-separation, site-selection]}
+      - {id: equipment-replacement, name: Equipment replacement strategy, match: [equipment-replacement]}
+      - {id: work-area-recovery, name: Work area recovery, match: [work-area-recovery]}
+      - {id: region-pair, name: Cloud region pairing, match: [region-pair]}
+  - id: backup-strategy
+    name: Backup strategy and media
+    source: NIST SP 800-34r1 Section 3.4.2 backup methods
+    match: [backup-strategy, 3-2-1]
+    subtopics:
+      - {id: offsite-copy, name: Offsite copies and failure domains, match: [offsite-backup, failure-domain]}
+      - {id: backup-capacity, name: Backup capacity and change-rate planning, match: [capacity-planning, change-rate]}
+      - {id: object-storage-target, name: Object storage as a backup target, match: [object-storage, s3]}
+      - {id: backup-window, name: Fitting the backup window, match: [backup-window]}
+      - {id: rule-3-2-1-1-0, name: 3-2-1-1-0 rule, match: [3-2-1-1-0]}
+      - {id: backup-scope, name: Backup scope and exclusions, match: [backup-scope, backup-exclusions]}
+      - {id: backup-policy, name: Writing a backup policy, match: [backup-policy]}
+      - {id: protection-tiers, name: Protection tiers and SLA classes, match: [protection-tier]}
+      - {id: backup-network, name: Backup network and bandwidth design, match: [backup-network]}
+      - {id: endpoint-backup, name: Endpoint and laptop backup, match: [endpoint-backup]}
+      - {id: nas-backup, name: NAS and file share backup with NDMP, match: [ndmp, file-share-backup]}
+  - id: backup-methods
+    name: Backup types and schedules
+    source: NIST SP 800-34r1 Section 3.4.2 / Veeam backup methods
+    match: [backup-methods, backup-types]
+    subtopics:
+      - {id: full-incr-diff, name: Full incremental and differential, match: [incremental-backup, differential-backup]}
+      - {id: synthetic-full, name: Synthetic and active fulls, match: [synthetic-full, active-full]}
+      - {id: forever-incremental, name: Forever forward and reverse incremental, match: [forever-incremental, reverse-incremental]}
+      - {id: cbt, name: Changed block tracking, match: [changed-block-tracking, cbt]}
+      - {id: deduplication, name: Deduplication and compression trade-offs, match: [deduplication]}
+      - {id: snapshot-vs-backup, name: Storage snapshots vs backups, match: [storage-snapshot, snapshot-vs-backup]}
+      - {id: file-level-backup, name: File-level vs image-level backup, match: [file-level-backup]}
+      - {id: block-clone, name: Block cloning with ReFS and XFS reflink, match: [block-clone, fast-clone, reflink]}
+      - {id: backup-chain, name: Backup chain dependencies and broken chains, match: [backup-chain]}
+      - {id: dedupe-appliance, name: Source vs target dedupe appliances, match: [dedupe-appliance, data-domain]}
+      - {id: change-journal, name: Change journal and archive bit detection, match: [change-journal, archive-bit]}
+  - id: retention-policy
+    name: Retention policy and GFS
+    source: Veeam User Guide/Retention, NIST SP 800-34r1
+    match: [retention, retention-policy]
+    subtopics:
+      - {id: gfs, name: Grandfather-father-son retention, match: [gfs, grandfather-father-son]}
+      - {id: legal-hold, name: Legal hold and regulatory retention, match: [legal-hold, regulatory-retention]}
+      - {id: retention-cost, name: Retention cost modelling, match: [retention-cost]}
+      - {id: archive-tiering, name: Archive tiers and capacity tier offload, match: [archive-tier, capacity-tier]}
+      - {id: records-retention, name: Records retention schedule mapping, match: [records-retention-schedule]}
+      - {id: worm-sec, name: WORM and SEC 17a-4, match: [sec-17a-4, worm]}
+      - {id: backup-erasure, name: Erasure requests and secure deletion in backups, match: [backup-data-erasure, gdpr-backups]}
+      - {id: restore-points, name: Restore point vs day-based retention, match: [restore-points]}
+      - {id: long-term-retention, name: Long-term retention in Glacier or archive tiers, match: [glacier-deep-archive, long-term-retention]}
+  - id: backup-immutability
+    name: Immutable and ransomware-resilient backups
+    source: Veeam User Guide/Hardened Repository, CISA ransomware guide
+    match: [immutable-backup, ransomware-resilience]
+    subtopics:
+      - {id: object-lock, name: S3 Object Lock compliance vs governance, match: [object-lock, s3-object-lock]}
+      - {id: hardened-repo, name: Linux hardened repository, match: [hardened-repository]}
+      - {id: air-gap, name: Air-gapped and offline copies, match: [air-gap, offline-backup]}
+      - {id: backup-mfa, name: Backup server isolation and MFA, match: [backup-server-hardening, four-eyes-authorization]}
+      - {id: malware-scan-restore, name: Malware detection in backups, match: [malware-detection, secure-restore]}
+      - {id: array-immutable-snapshots, name: Array immutable snapshots SafeMode and SnapLock, match: [safemode, snaplock]}
+      - {id: backup-domain-separation, name: Separating backup identity from production AD, match: [backup-domain-separation]}
+      - {id: cyber-vault, name: Isolated cyber recovery vault, match: [cyber-vault]}
+      - {id: immutability-period, name: Immutability period planning, match: [immutability-period]}
+      - {id: backup-anomaly, name: Alerting on backup deletion and anomalies, match: [backup-anomaly-detection]}
+      - {id: zfs-hold, name: ZFS snapshot holds and pull replication, match: [zfs-hold, pull-replication]}
+      - {id: append-only, name: Append-only repositories with rest-server, match: [rest-server-append-only]}
+  - id: backup-encryption
+    name: Backup encryption and key management
+    source: Veeam User Guide/Encryption, restic docs/keys
+    match: [backup-encryption]
+    subtopics:
+      - {id: encryption-at-rest, name: Encrypting backup repositories at rest, match: [repository-encryption]}
+      - {id: key-escrow, name: Key escrow and password loss protection, match: [key-escrow, password-loss-protection]}
+      - {id: in-flight-encryption, name: Encryption in transit, match: [network-traffic-encryption]}
+      - {id: key-rotation-backup, name: Rotating backup keys and passwords, match: [backup-key-rotation]}
+      - {id: kms-backup-keys, name: KMS-backed backup keys, match: [kms-backup-keys]}
+      - {id: lto-encryption, name: LTO hardware encryption, match: [lto-encryption]}
+      - {id: encryption-dedup, name: Encryption vs deduplication trade-off, match: [encryption-dedup-tradeoff]}
+      - {id: crypto-shredding, name: Crypto-shredding for expiry, match: [crypto-shredding]}
+      - {id: backup-password-storage, name: Storing backup passwords and sealed envelopes, match: [backup-password-storage]}
+      - {id: fips-140, name: FIPS 140 validated encryption for backups, match: [fips-140]}
+  - id: restore-testing
+    name: Restore testing and recovery validation
+    source: NIST SP 800-34r1 Section 3.5 testing
+    match: [restore-test, recovery-testing]
+    subtopics:
+      - {id: file-restore-test, name: File-level restore sampling, match: [file-level-restore]}
+      - {id: full-system-restore, name: Full system restore test, match: [full-system-restore]}
+      - {id: app-restore-test, name: Application-consistent restore validation, match: [application-consistent]}
+      - {id: measured-rto, name: Measuring achieved RTO and RPO, match: [achieved-rto, achieved-rpo]}
+      - {id: restore-test-schedule, name: Restore test schedule and sampling, match: [restore-test-schedule]}
+      - {id: automated-restore-verification, name: Scripted automated restore verification, match: [automated-restore-verification]}
+      - {id: db-restore-test, name: Database restore with integrity checks, match: [dbcc-checkdb-after-restore]}
+      - {id: restore-sandbox, name: Isolated sandbox networks for restore tests, match: [restore-sandbox]}
+      - {id: restore-test-report, name: Restore test evidence and reports, match: [restore-test-report]}
+      - {id: restore-throughput, name: Restore throughput benchmarks, match: [restore-throughput]}
+      - {id: granular-restore, name: Granular item restore tests, match: [granular-restore]}
+  - id: dr-exercises
+    name: Contingency plan testing, training and exercises
+    source: NIST SP 800-34r1 Section 3.5, SP 800-84
+    match: [dr-exercise, tabletop-exercise]
+    subtopics:
+      - {id: tabletop, name: Running a tabletop exercise, match: [tabletop]}
+      - {id: functional-exercise, name: Functional and full-scale exercises, match: [functional-exercise, full-scale-exercise]}
+      - {id: after-action, name: After-action reports and plan updates, match: [after-action-report]}
+      - {id: dr-training, name: Training recovery staff, match: [dr-training]}
+      - {id: hseep, name: Exercise design objectives and HSEEP, match: [hseep, exercise-objectives]}
+      - {id: exercise-injects, name: Scenarios injects and MSEL, match: [exercise-injects, msel]}
+      - {id: exercise-evaluation, name: Exercise evaluation and observers, match: [exercise-evaluator]}
+      - {id: live-failover-test, name: Live failover tests of production, match: [live-failover-test]}
+      - {id: game-day, name: Chaos engineering game days, match: [chaos-engineering, game-day]}
+      - {id: exercise-program, name: Multi-year exercise program, match: [exercise-program]}
+  - id: veeam-architecture
+    name: Veeam Backup and Replication infrastructure
+    source: Veeam B&R 12 User Guide/Backup Infrastructure
+    match: [veeam, veeam-backup-and-replication]
+    subtopics:
+      - {id: veeam-proxies, name: Backup proxies and transport modes, match: [veeam-proxy, transport-mode, hotadd]}
+      - {id: veeam-repositories, name: Repositories and Scale-Out Backup Repository, match: [sobr, scale-out-backup-repository]}
+      - {id: veeam-config-backup, name: Configuration backup and restore, match: [veeam-configuration-backup]}
+      - {id: veeam-wan, name: WAN accelerators, match: [wan-accelerator]}
+      - {id: veeam-sizing, name: Sizing and concurrent tasks, match: [veeam-sizing, concurrent-tasks]}
+      - {id: veeam-install, name: Backup server install and configuration database, match: [veeam-install, veeam-postgresql]}
+      - {id: veeam-managed-servers, name: Adding vCenter and Hyper-V managed servers, match: [veeam-managed-server]}
+      - {id: veeam-gateway-mount, name: Gateway and mount servers, match: [veeam-gateway-server, veeam-mount-server]}
+      - {id: veeam-object-repo, name: Object storage repositories, match: [veeam-object-storage]}
+      - {id: veeam-linux-proxy, name: Linux backup proxies, match: [veeam-linux-proxy]}
+      - {id: veeam-traffic-rules, name: Network traffic rules and throttling, match: [network-traffic-rules]}
+      - {id: veeam-upgrade, name: Upgrading Veeam Backup and Replication, match: [veeam-upgrade]}
+      - {id: enterprise-manager, name: Enterprise Manager and role-based access, match: [enterprise-manager]}
+      - {id: veeam-powershell, name: Veeam PowerShell module, match: [veeam-powershell]}
+  - id: veeam-jobs
+    name: Veeam backup jobs and copies
+    source: Veeam B&R 12 User Guide/Backup, Backup Copy
+    match: [veeam-backup-job]
+    subtopics:
+      - {id: veeam-app-aware, name: Application-aware processing and log truncation, match: [application-aware-processing, log-truncation]}
+      - {id: veeam-backup-copy, name: Backup copy jobs, match: [backup-copy-job]}
+      - {id: veeam-health-check, name: Storage-level health check and compact, match: [backup-health-check, compact-full]}
+      - {id: veeam-agents, name: Veeam Agents for physical servers, match: [veeam-agent]}
+      - {id: veeam-tape, name: Backup to tape jobs, match: [veeam-tape]}
+      - {id: veeam-storage-optimization, name: Compression deduplication and storage optimization settings, match: [veeam-storage-optimization]}
+      - {id: guest-indexing, name: Guest file system indexing, match: [guest-indexing]}
+      - {id: veeam-exclusions, name: VM and disk exclusions, match: [veeam-exclusions]}
+      - {id: job-chaining, name: Job scheduling chaining and backup windows, match: [job-chaining]}
+      - {id: veeam-nas-backup, name: Unstructured data NAS backup, match: [veeam-nas-backup]}
+      - {id: veeam-plugins, name: Enterprise application plug-ins, match: [veeam-plug-in, rman-plugin]}
+      - {id: veeam-logs, name: Job failure troubleshooting with logs, match: [veeam-logs]}
+      - {id: veeamzip, name: VeeamZIP and quick backup, match: [veeamzip]}
+  - id: veeam-recovery
+    name: Veeam restore and replication
+    source: Veeam B&R 12 User Guide/Restore, Replication
+    match: [veeam-restore, veeam-replication]
+    subtopics:
+      - {id: instant-recovery, name: Instant VM recovery, match: [instant-recovery]}
+      - {id: surebackup, name: SureBackup verification, match: [surebackup]}
+      - {id: veeam-explorers, name: Application item restore with Veeam Explorers, match: [veeam-explorer]}
+      - {id: veeam-failover, name: Replica failover and failback, match: [replica-failover, failover-plan]}
+      - {id: veeam-cdp, name: Continuous data protection, match: [veeam-cdp, continuous-data-protection]}
+      - {id: guest-file-restore, name: Guest OS file restore, match: [guest-file-restore]}
+      - {id: entire-vm-restore, name: Entire VM restore and quick rollback, match: [entire-vm-restore, quick-rollback]}
+      - {id: instant-disk, name: Virtual disk restore and instant disk recovery, match: [instant-disk-recovery]}
+      - {id: restore-to-cloud, name: Restore to Azure or AWS, match: [restore-to-cloud]}
+      - {id: staged-restore, name: Staged restore, match: [staged-restore]}
+      - {id: virtual-lab, name: Virtual labs, match: [veeam-virtual-lab]}
+      - {id: replica-seeding, name: Replica seeding and mapping, match: [replica-seeding]}
+  - id: restic
+    name: restic backups
+    source: restic documentation
+    match: [restic]
+    subtopics:
+      - {id: restic-init, name: Repository init and backends, match: [restic-init, restic-backends]}
+      - {id: restic-forget-prune, name: forget and prune policies, match: [restic-forget, restic-prune]}
+      - {id: restic-check, name: Repository checks and read-data-subset, match: [restic-check]}
+      - {id: restic-restore, name: Restore and FUSE mount, match: [restic-restore, restic-mount]}
+      - {id: restic-keys, name: Key management and repository passwords, match: [restic-key]}
+      - {id: restic-automation, name: Scheduling restic with systemd timers and resticprofile, match: [resticprofile, restic-systemd]}
+      - {id: restic-backup-options, name: Backup excludes one-file-system and tags, match: [restic-exclude, restic-backup]}
+      - {id: restic-snapshots, name: Listing finding and diffing snapshots, match: [restic-snapshots, restic-diff]}
+      - {id: restic-copy, name: Copying snapshots between repositories, match: [restic-copy]}
+      - {id: restic-stdin, name: Backing up from stdin, match: [restic-stdin]}
+      - {id: restic-compression, name: Compression pack size and cache tuning, match: [restic-compression, restic-pack-size]}
+      - {id: restic-repair, name: Unlock and repair index and snapshots, match: [restic-repair-index]}
+      - {id: restic-rclone, name: rclone backend, match: [restic-rclone]}
+      - {id: restic-migrate, name: Upgrading repositories to format v2, match: [restic-migrate]}
+  - id: bacula
+    name: Bacula enterprise-style backup
+    source: Bacula Main Reference Manual
+    match: [bacula, bareos]
+    subtopics:
+      - {id: bacula-daemons, name: Director storage and file daemon configuration, match: [bacula-dir, bacula-sd, bacula-fd]}
+      - {id: bacula-fileset-schedule, name: FileSets Schedules and JobDefs, match: [bacula-fileset, bacula-schedule]}
+      - {id: bacula-pools-volumes, name: Pools volumes and labelling, match: [bacula-pool, bacula-volume]}
+      - {id: bacula-restore, name: Restores with bconsole, match: [bconsole, bacula-restore]}
+      - {id: bacula-catalog, name: Catalog backup and bscan recovery, match: [bacula-catalog, bscan]}
+      - {id: bacula-messages, name: Messages resource and notifications, match: [bacula-messages]}
+      - {id: bacula-tls, name: TLS between daemons, match: [bacula-tls]}
+      - {id: bacula-cloud, name: Cloud storage driver, match: [bacula-cloud]}
+      - {id: bacula-virtualfull, name: Virtual full and migration jobs, match: [bacula-virtualfull, bacula-migration-job]}
+      - {id: bacula-runscript, name: RunScript and client run before job, match: [bacula-runscript]}
+      - {id: bacula-disk-volumes, name: Disk-based volumes and vchanger, match: [bacula-disk-volumes]}
+      - {id: bacula-spooling, name: Spooling and concurrency tuning, match: [bacula-spooling, maximum-concurrent-jobs]}
+      - {id: bareos-webui, name: Bareos WebUI and differences from Bacula, match: [bareos-webui]}
+  - id: proxmox-backup
+    name: Proxmox VE backup and Proxmox Backup Server
+    source: PVE Admin Guide/Backup and Restore, PBS docs
+    match: [vzdump, proxmox-backup-server]
+    subtopics:
+      - {id: vzdump-modes, name: vzdump modes and backup jobs, match: [vzdump-mode, snapshot-mode]}
+      - {id: pbs-datastore, name: PBS datastores prune and garbage collection, match: [pbs-datastore, pbs-garbage-collection]}
+      - {id: pbs-verify, name: PBS verify jobs, match: [pbs-verify]}
+      - {id: pbs-sync, name: PBS remote sync jobs, match: [pbs-sync-job, pbs-remote]}
+      - {id: pbs-file-restore, name: Single-file restore from PBS, match: [pbs-file-restore, proxmox-backup-client]}
+      - {id: pbs-install, name: PBS install and datastore on ZFS, match: [pbs-install]}
+      - {id: pbs-namespaces, name: Datastore namespaces, match: [pbs-namespace]}
+      - {id: pbs-encryption, name: Client-side encryption keys and master key, match: [pbs-encryption]}
+      - {id: pbs-tape, name: PBS tape backup, match: [pbs-tape]}
+      - {id: pbs-host-backup, name: Host file backup with proxmox-backup-client, match: [pbs-host-backup]}
+      - {id: pbs-acl, name: PBS users tokens and ACLs, match: [pbs-acl]}
+      - {id: pbs-maintenance, name: Datastore maintenance mode, match: [pbs-maintenance-mode]}
+      - {id: vzdump-conf, name: vzdump.conf bandwidth zstd and hook scripts, match: [vzdump-conf, vzdump-hook]}
+      - {id: backup-fleecing, name: Backup fleecing, match: [backup-fleecing]}
+      - {id: live-restore, name: Live restore of VMs, match: [live-restore]}
+  - id: vm-image-backup
+    name: VM image-level backup
+    source: VMware VADP docs, Hyper-V RCT docs
+    match: [image-level-backup, vadp]
+    subtopics:
+      - {id: vadp-snapshots, name: VADP backup snapshots and stuck snapshot cleanup, match: [vadp-snapshot, stuck-backup-snapshot]}
+      - {id: guest-quiescing, name: Guest quiescing and VSS in VMs, match: [guest-quiescing, vss]}
+      - {id: hyperv-backup, name: Hyper-V host-level backup, match: [hyper-v-backup]}
+      - {id: agent-vs-agentless, name: Agent vs agentless backup, match: [agentless-backup]}
+      - {id: cbt-reset, name: Resetting CBT after corruption, match: [cbt-reset]}
+      - {id: vss-writers, name: VSS writer errors, match: [vss-writers, vssadmin]}
+      - {id: fsfreeze, name: Linux freeze and thaw for VM backups, match: [fsfreeze]}
+      - {id: kvm-backup, name: libvirt backup with dirty bitmaps, match: [virsh-backup, dirty-bitmap]}
+      - {id: snapshot-space, name: Snapshot space planning on datastores, match: [snapshot-space]}
+      - {id: encrypted-vm-backup, name: Backing up encrypted VMs, match: [encrypted-vm-backup]}
+  - id: database-backup
+    name: Application-consistent database backups
+    source: NIST SP 800-34r1 Section 5 / vendor DB backup docs
+    match: [database-backup]
+    subtopics:
+      - {id: sql-server-backup, name: SQL Server full diff and log backups, match: [sql-server-backup, transaction-log-backup]}
+      - {id: postgres-pitr, name: PostgreSQL base backups and PITR, match: [pg-basebackup, point-in-time-recovery]}
+      - {id: mysql-backup, name: MySQL logical and physical backups, match: [mysqldump, xtrabackup]}
+      - {id: pre-post-scripts, name: Pre and post freeze scripts, match: [pre-freeze-script, post-thaw-script]}
+      - {id: rman, name: Oracle RMAN, match: [rman]}
+      - {id: mongodump, name: MongoDB backups, match: [mongodump]}
+      - {id: ag-backup-preference, name: Backups on AG secondaries, match: [backup-preference]}
+      - {id: tde-cert-backup, name: TDE certificate backup, match: [tde-certificate-backup]}
+      - {id: pgbackrest, name: pgBackRest, match: [pgbackrest-stanza]}
+      - {id: redis-backup, name: Redis RDB and AOF backups, match: [redis-persistence-backup]}
+      - {id: sql-restore-sequence, name: SQL Server restore sequence and tail-log backups, match: [tail-log-backup, norecovery]}
+      - {id: binlog-pitr, name: MySQL binlog point-in-time recovery, match: [binlog-pitr]}
+      - {id: etcd-snapshot, name: etcd snapshot backups, match: [etcd-snapshot]}
+  - id: bare-metal-recovery
+    name: Bare-metal recovery
+    source: Relax-and-Recover docs, Windows Server Backup docs
+    match: [bare-metal-recovery, bmr]
+    subtopics:
+      - {id: rear, name: Relax-and-Recover for Linux, match: [rear, relax-and-recover]}
+      - {id: wsb-system-state, name: Windows Server Backup and system state, match: [wbadmin, system-state]}
+      - {id: dissimilar-hardware, name: Restoring to dissimilar hardware, match: [dissimilar-hardware]}
+      - {id: recovery-media, name: Recovery media creation and testing, match: [recovery-media]}
+      - {id: clonezilla, name: Clonezilla imaging, match: [clonezilla]}
+      - {id: boot-repair, name: Boot repair after restore with bcdboot or grub-install, match: [bcdboot, grub-reinstall]}
+      - {id: storage-driver-injection, name: Injecting storage drivers, match: [storage-driver-injection]}
+      - {id: restore-to-virtual, name: Restoring physical backups to a VM, match: [restore-to-virtual]}
+      - {id: winre, name: Windows system image recovery via WinRE, match: [winre]}
+      - {id: disk-layout-restore, name: Recreating partition and LVM layout, match: [vgcfgrestore, sfdisk-dump]}
+  - id: tape-operations
+    name: Tape and offline media operations
+    source: Bacula manual/Autochangers, LTO/LTFS docs
+    match: [tape, lto]
+    subtopics:
+      - {id: tape-rotation, name: Tape rotation schemes and vaulting, match: [tape-rotation, tape-vaulting]}
+      - {id: autochanger, name: Autochangers and barcode inventory, match: [autochanger, mtx]}
+      - {id: ltfs, name: LTFS for portable tape, match: [ltfs]}
+      - {id: tape-handling, name: Tape handling and media lifespan, match: [tape-handling, tape-cleaning]}
+      - {id: mt-tapeinfo, name: Drive status with mt and tapeinfo, match: [mt-st, tapeinfo]}
+      - {id: lto-generations, name: LTO generation compatibility and barcode labels, match: [lto-generations, barcode-labels]}
+      - {id: worm-tape, name: WORM tape, match: [worm-tape-media]}
+      - {id: tape-verify, name: Tape read verification, match: [tape-verify]}
+      - {id: library-partitioning, name: Tape library partitioning, match: [library-partitioning]}
+      - {id: media-sanitization, name: Media sanitisation and destruction, match: [media-sanitization, nist-800-88]}
+  - id: saas-cloud-backup
+    name: SaaS and cloud workload backup
+    source: Microsoft 365 / AWS Backup docs, shared responsibility models
+    match: [saas-backup, cloud-backup]
+    subtopics:
+      - {id: m365-backup, name: Microsoft 365 backup, match: [microsoft-365-backup]}
+      - {id: aws-backup, name: AWS Backup plans and vaults, match: [aws-backup]}
+      - {id: azure-backup, name: Azure Backup vaults and soft delete, match: [azure-backup, soft-delete]}
+      - {id: rclone-sync, name: Copying backups to cloud with rclone, match: [rclone]}
+      - {id: google-workspace-backup, name: Google Workspace backup, match: [google-workspace-backup]}
+      - {id: salesforce-backup, name: Salesforce backup and restore, match: [salesforce-backup]}
+      - {id: ebs-snapshots, name: Cloud disk snapshot lifecycle, match: [ebs-snapshots, data-lifecycle-manager]}
+      - {id: cross-account-backup, name: Cross-account and cross-region backup copies, match: [cross-account-backup, cross-region-copy]}
+      - {id: git-repo-backup, name: Git repository and DevOps SaaS backup, match: [git-repository-backup]}
+      - {id: entra-id-backup, name: Entra ID and Intune configuration backup, match: [entra-id-backup]}
+      - {id: blob-versioning, name: Blob versioning and point-in-time restore, match: [blob-versioning]}
+  - id: backup-monitoring
+    name: Backup monitoring and reporting
+    source: Veeam ONE / NIST SP 800-34r1 plan maintenance
+    match: [backup-monitoring, backup-reporting]
+    subtopics:
+      - {id: job-alerting, name: Alerting on failed and missed jobs, match: [missed-backup-alert, job-failure-alert]}
+      - {id: protection-coverage, name: Unprotected workload detection, match: [unprotected-vms, protection-coverage]}
+      - {id: rpo-compliance, name: RPO compliance reporting, match: [rpo-compliance]}
+      - {id: backup-audit, name: Audit evidence for backups, match: [audit-evidence]}
+      - {id: veeam-one, name: Veeam ONE reporting and alarms, match: [veeam-one-reports]}
+      - {id: backup-sla-dashboard, name: Backup SLA dashboards, match: [backup-sla-dashboard]}
+      - {id: repository-capacity, name: Repository capacity forecasting, match: [repository-capacity]}
+      - {id: backup-metrics-exporter, name: Backup metrics exporters for Prometheus, match: [backup-metrics-exporter]}
+      - {id: dead-mans-switch, name: Dead man's switch heartbeats, match: [dead-mans-switch, healthchecks-io]}
+      - {id: daily-backup-check, name: Daily backup review routine, match: [daily-backup-check]}
+      - {id: backup-duration-trend, name: Job duration trending, match: [backup-duration-trend]}
+  - id: dr-orchestration
+    name: DR replication and failover orchestration
+    source: NIST SP 800-34r1 Section 3.4, Veeam/ASR/SRM docs
+    match: [dr-orchestration, site-recovery]
+    subtopics:
+      - {id: srm, name: VMware Site Recovery Manager, match: [srm, site-recovery-manager]}
+      - {id: asr, name: Azure Site Recovery, match: [azure-site-recovery]}
+      - {id: dr-ip-change, name: Re-IP and DNS cutover during failover, match: [re-ip, dns-cutover]}
+      - {id: storage-replication-dr, name: Array-based vs host-based replication, match: [array-replication, host-based-replication]}
+      - {id: srm-recovery-plans, name: SRM protection groups and recovery plan tests, match: [protection-group, recovery-plan-test]}
+      - {id: vsphere-replication, name: vSphere Replication, match: [vsphere-replication-appliance]}
+      - {id: zerto, name: Zerto, match: [zerto]}
+      - {id: aws-drs, name: AWS Elastic Disaster Recovery, match: [elastic-disaster-recovery]}
+      - {id: dr-automation, name: DR runbook automation, match: [dr-automation]}
+      - {id: l2-extension, name: Layer 2 network extension for DR, match: [l2-extension]}
+      - {id: gslb, name: GSLB for site failover, match: [gslb]}
+  - id: ransomware-recovery
+    name: Recovering from ransomware
+    source: CISA #StopRansomware guide, NIST SP 1800-11
+    match: [ransomware-recovery]
+    subtopics:
+      - {id: clean-restore-point, name: Identifying a clean restore point, match: [clean-restore-point]}
+      - {id: isolated-recovery-env, name: Isolated recovery environment, match: [isolated-recovery-environment, clean-room]}
+      - {id: identity-recovery, name: Recovering Active Directory first, match: [active-directory-restore, forest-recovery]}
+      - {id: recovery-sequencing, name: Rebuild vs restore decisions, match: [rebuild-vs-restore]}
+      - {id: ransomware-containment, name: Containment before recovery, match: [ransomware-containment]}
+      - {id: forensic-preservation, name: Evidence preservation, match: [forensic-preservation]}
+      - {id: credential-reset, name: krbtgt reset and credential rotation, match: [krbtgt-reset, credential-rotation]}
+      - {id: decryptor-ransom, name: Decryptors and ransom payment considerations, match: [decryptor, ransom-payment]}
+      - {id: backup-integrity-check, name: Verifying backup infrastructure is uncompromised, match: [backup-integrity-check]}
+      - {id: breach-notification, name: Regulatory and breach notification, match: [breach-notification]}
+      - {id: reinfection-prevention, name: Hardening before reconnecting, match: [reinfection-prevention]}

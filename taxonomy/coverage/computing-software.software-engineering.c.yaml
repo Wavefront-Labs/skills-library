@@ -1,0 +1,142 @@
+# Canonical coverage spec: C language (ISO C and POSIX systems programming).
+# Topics come from external structures: ISO C N1570 / WG14 clause structure, SEI CERT C rule categories,
+# GCC/Clang/GDB/Valgrind manuals, POSIX.1 and Linux man-pages, GNU C Library manual.
+# Subtopics are the tasks inside each source section. A topic is covered by a tag equal to a match keyword.
+subject: c-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [c]
+sources:
+  - "ISO/IEC 9899 C99/C11/C17/C23 via WG14 documents (open-std.org/jtc1/sc22/wg14) - clauses on types, conversions, expressions, declarations, preprocessing, library"
+  - "SEI CERT C Coding Standard rule categories (INT, ARR, STR, MEM, EXP, FIO, ERR, POS, CON, PRE)"
+  - "GCC manual (warning, optimisation, debugging, link options), Clang user manual, GNU ld, GDB manual, Valgrind manual, GNU C Library manual, POSIX.1 and Linux man-pages"
+topics:
+  - id: c-integer-semantics
+    name: Integer types, conversions and arithmetic
+    source: ISO C (N1570) 6.2.5, 6.3.1, 7.20; SEI CERT C INT rules
+    match: [c-integer-semantics]
+    subtopics:
+      - {id: c-integer-semantics-integer-promotions-and-conversions, name: Integer promotions and conversions, match: [integer-promotion]}
+      - {id: c-integer-semantics-fixed-width-stdint-and-limits, name: Fixed width stdint and limits, match: [stdint-limits]}
+      - {id: c-integer-semantics-signed-overflow-and-checked-arithmetic, name: Signed overflow and checked arithmetic, match: [signed-overflow]}
+  - id: c-pointers-arrays
+    name: Pointers, arrays and function pointers
+    source: ISO C (N1570) 6.3.2.1, 6.5.2, 6.7.6; comp.lang.c FAQ pointers and arrays sections
+    match: [c-pointers-arrays]
+    subtopics:
+      - {id: c-pointers-arrays-array-decay-and-sizeof, name: Array decay and sizeof, match: [array-decay]}
+      - {id: c-pointers-arrays-const-correctness-in-pointer-types, name: Const correctness in pointer types, match: [const-correctness]}
+      - {id: c-pointers-arrays-function-pointers-and-dispatch-tables, name: Function pointers and dispatch tables, match: [function-pointer]}
+  - id: c-strings
+    name: C strings and text handling
+    source: ISO C (N1570) 7.24 string handling, 7.21.6 formatted output; SEI CERT C STR rules
+    match: [c-strings]
+    subtopics:
+      - {id: c-strings-nul-termination-and-bounded-copies, name: Nul termination and bounded copies, match: [nul-termination]}
+      - {id: c-strings-snprintf-and-format-safety, name: Snprintf and format safety, match: [snprintf]}
+      - {id: c-strings-parsing-numbers-with-strtol, name: Parsing numbers with strtol, match: [strtol]}
+  - id: c-dynamic-memory
+    name: Dynamic memory management
+    source: ISO C (N1570) 7.22.3 memory management; glibc manual on memory allocation; SEI CERT C MEM rules
+    match: [c-dynamic-memory]
+    subtopics:
+      - {id: c-dynamic-memory-malloc-realloc-failure-patterns, name: Malloc realloc failure patterns, match: [realloc-pattern]}
+      - {id: c-dynamic-memory-ownership-and-free-conventions, name: Ownership and free conventions, match: [ownership-conventions]}
+      - {id: c-dynamic-memory-flexible-array-members-and-aligned-alloc, name: Flexible array members and aligned alloc, match: [flexible-array-member]}
+  - id: c-undefined-behavior
+    name: Undefined behaviour and the abstract machine
+    source: ISO C (N1570) 3.4.3, 6.5, annex J.2; SEI CERT C EXP and ARR rules
+    match: [c-undefined-behavior]
+    subtopics:
+      - {id: c-undefined-behavior-strict-aliasing-and-type-punning, name: Strict aliasing and type punning, match: [strict-aliasing]}
+      - {id: c-undefined-behavior-uninitialized-and-dangling-pointer-ub, name: Uninitialized and dangling pointer ub, match: [dangling-pointer]}
+      - {id: c-undefined-behavior-sequence-points-and-evaluation-order, name: Sequence points and evaluation order, match: [sequence-point]}
+  - id: c-preprocessor
+    name: Preprocessor and headers
+    source: ISO C (N1570) 6.10; GNU C Preprocessor (cpp) manual
+    match: [c-preprocessor]
+    subtopics:
+      - {id: c-preprocessor-macro-pitfalls-and-do-while-idiom, name: Macro pitfalls and do while idiom, match: [macro-pitfalls]}
+      - {id: c-preprocessor-include-guards-and-header-hygiene, name: Include guards and header hygiene, match: [include-guards]}
+      - {id: c-preprocessor-conditional-compilation-and-feature-macros, name: Conditional compilation and feature macros, match: [conditional-compilation]}
+  - id: c-structs-unions
+    name: Structs, unions and data layout
+    source: ISO C (N1570) 6.7.2.1, 6.7.9, 6.5.2.5; platform psABI documents
+    match: [c-structs-unions]
+    subtopics:
+      - {id: c-structs-unions-struct-padding-and-layout, name: Struct padding and layout, match: [struct-padding]}
+      - {id: c-structs-unions-bit-fields-and-unions, name: Bit fields and unions, match: [bit-fields]}
+      - {id: c-structs-unions-designated-initializers-and-compound-literals, name: Designated initializers and compound literals, match: [designated-initializers]}
+  - id: c-stdio
+    name: Standard I/O
+    source: ISO C (N1570) 7.21 input/output; GNU C Library manual, Input/Output on Streams
+    match: [c-stdio]
+    subtopics:
+      - {id: c-stdio-fopen-fread-error-handling, name: Fopen fread error handling, match: [stdio-error-handling]}
+      - {id: c-stdio-stdio-buffering-setvbuf, name: Stdio buffering setvbuf, match: [setvbuf]}
+      - {id: c-stdio-binary-io-and-endianness, name: Binary io and endianness, match: [endianness]}
+  - id: c-error-handling
+    name: Error handling patterns
+    source: POSIX errno and ISO C 7.5; SEI CERT C ERR rules; Linux kernel coding style goto section
+    match: [c-error-handling]
+    subtopics:
+      - {id: c-error-handling-errno-and-return-code-conventions, name: Errno and return code conventions, match: [errno]}
+      - {id: c-error-handling-goto-cleanup-pattern, name: Goto cleanup pattern, match: [goto-cleanup]}
+      - {id: c-error-handling-assert-and-static-assert, name: Assert and static assert, match: [static-assert]}
+  - id: c-toolchain-diagnostics
+    name: Compiler, linker and diagnostics
+    source: GCC manual (Warning Options, Optimize Options, Debugging Options, Link Options); Clang user manual; GNU ld manual
+    match: [c-toolchain-diagnostics]
+    subtopics:
+      - {id: c-toolchain-diagnostics-gcc-clang-warning-flags, name: Gcc clang warning flags, match: [warning-flags]}
+      - {id: c-toolchain-diagnostics-linker-undefined-reference-debugging, name: Linker undefined reference debugging, match: [undefined-reference]}
+      - {id: c-toolchain-diagnostics-debug-info-and-optimisation-levels, name: Debug info and optimisation levels, match: [optimisation-levels]}
+  - id: c-debugging-tools
+    name: Debugging with gdb and Valgrind
+    source: GDB manual (sourceware.org/gdb); Valgrind user manual; core(5) man page
+    match: [c-debugging-tools]
+    subtopics:
+      - {id: c-debugging-tools-gdb-core-dump-analysis, name: Gdb core dump analysis, match: [core-dump]}
+      - {id: c-debugging-tools-valgrind-memcheck-leaks, name: Valgrind memcheck leaks, match: [valgrind-memcheck]}
+      - {id: c-debugging-tools-gdb-watchpoints-and-conditional-breakpoints, name: Gdb watchpoints and conditional breakpoints, match: [watchpoint]}
+  - id: c-posix-processes
+    name: POSIX processes, signals and pipes
+    source: POSIX.1 (Open Group Base Specifications); Linux man-pages (fork, execve, wait, sigaction, pipe, dup2)
+    match: [c-posix-processes]
+    subtopics:
+      - {id: c-posix-processes-fork-exec-waitpid, name: Fork exec waitpid, match: [fork-exec]}
+      - {id: c-posix-processes-sigaction-signal-handling, name: Sigaction signal handling, match: [sigaction]}
+      - {id: c-posix-processes-pipes-and-dup2-redirection, name: Pipes and dup2 redirection, match: [dup2]}
+  - id: c-sockets
+    name: Network programming with sockets
+    source: POSIX socket API (Open Group); Linux man-pages (socket, getaddrinfo, poll, epoll); Beej's Guide to Network Programming
+    match: [c-sockets]
+    subtopics:
+      - {id: c-sockets-getaddrinfo-tcp-client-server, name: Getaddrinfo tcp client server, match: [getaddrinfo]}
+      - {id: c-sockets-handling-partial-reads-and-writes, name: Handling partial reads and writes, match: [partial-io]}
+      - {id: c-sockets-poll-and-epoll-event-loops, name: Poll and epoll event loops, match: [epoll]}
+  - id: c-threads-atomics
+    name: Threads and atomics
+    source: POSIX threads (pthreads); ISO C11 7.17 atomics and 7.26 threads; Linux man-pages pthreads(7)
+    match: [c-threads-atomics]
+    subtopics:
+      - {id: c-threads-atomics-pthread-mutex-and-condition-variables, name: Pthread mutex and condition variables, match: [pthread-mutex]}
+      - {id: c-threads-atomics-c11-atomics-and-memory-order, name: C11 atomics and memory order, match: [c11-atomics]}
+      - {id: c-threads-atomics-thread-local-storage-and-once-init, name: Thread local storage and once init, match: [thread-local]}
+  - id: c-secure-coding
+    name: Secure C coding
+    source: SEI CERT C Coding Standard; OWASP guidance; GCC and Clang hardening options; CWE Top 25 memory safety weaknesses
+    match: [c-secure-coding]
+    subtopics:
+      - {id: c-secure-coding-cert-c-buffer-overflow-rules, name: Cert c buffer overflow rules, match: [buffer-overflow]}
+      - {id: c-secure-coding-format-string-vulnerabilities, name: Format string vulnerabilities, match: [format-string-vulnerability]}
+      - {id: c-secure-coding-hardening-flags-fortify-stack-protector-relro, name: Hardening flags fortify stack protector relro, match: [hardening-flags]}
+  - id: c-standards-portability
+    name: Standards, portability and API design
+    source: ISO/IEC 9899 (C99, C11, C17, C23) via WG14 documents; POSIX.1 feature test macros (feature_test_macros(7)); GNU C Library manual
+    match: [c-standards-portability]
+    subtopics:
+      - {id: c-standards-portability-c-standard-versions-c99-to-c23, name: C standard versions c99 to c23, match: [c-standard-versions]}
+      - {id: c-standards-portability-feature-test-macros-posix-gnu-source, name: Feature test macros posix gnu source, match: [feature-test-macros]}
+      - {id: c-standards-portability-opaque-types-and-callback-context-api-design, name: Opaque types and callback context api design, match: [opaque-pointer]}

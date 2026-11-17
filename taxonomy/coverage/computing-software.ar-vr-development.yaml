@@ -1,0 +1,673 @@
+# Canonical coverage spec: AR/VR/XR Development.
+subject: ar-vr-development
+scope:
+  category: computing-software
+  field: ar-vr-development
+  products:
+  - openxr
+  - unity-xr
+  - unreal-xr
+  - webxr
+  - mobile-and-spatial-ar
+  - xr-design-and-performance
+sources:
+- Khronos OpenXR 1.1 specification (registry.khronos.org/OpenXR)
+- Unity Manual XR section and XR Interaction Toolkit / AR Foundation package manuals
+- Unreal Engine documentation Developing for XR Experiences
+- W3C WebXR Device API and WebXR module specifications
+- Google ARCore developer documentation
+- Apple ARKit and visionOS developer documentation
+- Meta Horizon developer documentation (design and performance guidelines)
+topics:
+- id: xr-instance-and-loader
+  name: OpenXR instance, extensions and loader
+  source: OpenXR 1.1 spec ch. Fundamentals and API Layers
+  match:
+  - xr-instance-and-loader
+  subtopics:
+  - id: instance-extensions-enable
+    name: Enable extensions when creating an XrInstance
+    match:
+    - instance-extensions-enable
+  - id: api-layers-validation
+    name: Use API layers for validation
+    match:
+    - api-layers-validation
+  - id: active-runtime-selection
+    name: Select and verify the active OpenXR runtime
+    match:
+    - active-runtime-selection
+- id: xr-system-and-view-config
+  name: System and view configuration
+  source: 'OpenXR 1.1 spec: Systems, View Configurations'
+  match:
+  - xr-system-and-view-config
+  subtopics:
+  - id: system-form-factor
+    name: Get an XrSystemId for a form factor
+    match:
+    - system-form-factor
+  - id: view-configuration-types
+    name: Choose a view configuration
+    match:
+    - view-configuration-types
+- id: xr-session-lifecycle
+  name: Session creation and state machine
+  source: 'OpenXR 1.1 spec: Session'
+  match:
+  - xr-session-lifecycle
+  subtopics:
+  - id: session-state-machine
+    name: Handle the session state machine
+    match:
+    - session-state-machine
+  - id: begin-end-session
+    name: Create a session with a graphics binding
+    match:
+    - begin-end-session
+- id: xr-frame-loop
+  name: Frame loop and timing
+  source: 'OpenXR 1.1 spec: Frame Synchronization'
+  match:
+  - xr-frame-loop
+  subtopics:
+  - id: wait-begin-end-frame
+    name: Run the xrWaitFrame/BeginFrame/EndFrame loop
+    match:
+    - wait-begin-end-frame
+  - id: predicted-display-time
+    name: Use predictedDisplayTime for poses
+    match:
+    - predicted-display-time
+- id: xr-swapchains
+  name: Swapchains
+  source: 'OpenXR 1.1 spec: Swapchain Image Management'
+  match:
+  - xr-swapchains
+  subtopics:
+  - id: swapchain-formats
+    name: Pick a swapchain format
+    match:
+    - swapchain-formats
+  - id: swapchain-image-acquire-release
+    name: Acquire, wait and release swapchain images
+    match:
+    - swapchain-image-acquire-release
+- id: xr-spaces-and-poses
+  name: Spaces and pose location
+  source: 'OpenXR 1.1 spec: Spaces'
+  match:
+  - xr-spaces-and-poses
+  subtopics:
+  - id: reference-spaces
+    name: Create reference spaces
+    match:
+    - reference-spaces
+  - id: locate-space-views
+    name: Locate spaces and views
+    match:
+    - locate-space-views
+- id: xr-actions-and-bindings
+  name: Action system and bindings
+  source: 'OpenXR 1.1 spec: Input and Haptics'
+  match:
+  - xr-actions-and-bindings
+  subtopics:
+  - id: action-sets-and-actions
+    name: Define action sets and actions
+    match:
+    - action-sets-and-actions
+  - id: interaction-profile-bindings
+    name: Suggest interaction profile bindings
+    match:
+    - interaction-profile-bindings
+  - id: haptic-output
+    name: Send haptic feedback
+    match:
+    - haptic-output
+- id: xr-composition-layers
+  name: Composition layers
+  source: 'OpenXR 1.1 spec: Composition'
+  match:
+  - xr-composition-layers
+  subtopics:
+  - id: projection-layer-depth
+    name: Submit a projection layer with depth
+    match:
+    - projection-layer-depth
+  - id: quad-cylinder-layers
+    name: Use quad and cylinder layers for UI
+    match:
+    - quad-cylinder-layers
+- id: xr-graphics-bindings
+  name: Graphics API bindings
+  source: 'OpenXR 1.1 spec: graphics extensions'
+  match:
+  - xr-graphics-bindings
+  subtopics:
+  - id: vulkan-enable2
+    name: Bind Vulkan with XR_KHR_vulkan_enable2
+    match:
+    - vulkan-enable2
+  - id: d3d12-opengl-binding
+    name: Bind D3D11/D3D12/OpenGL
+    match:
+    - d3d12-opengl-binding
+- id: xr-hand-and-eye-tracking
+  name: Hand and eye tracking extensions
+  source: OpenXR extension registry
+  match:
+  - xr-hand-and-eye-tracking
+  subtopics:
+  - id: ext-hand-tracking
+    name: Read hand joints with XR_EXT_hand_tracking
+    match:
+    - ext-hand-tracking
+  - id: eye-gaze-interaction
+    name: Use eye gaze interaction
+    match:
+    - eye-gaze-interaction
+- id: xr-blend-modes-passthrough
+  name: Blend modes and passthrough
+  source: 'OpenXR 1.1 spec: environment blend modes'
+  match:
+  - xr-blend-modes-passthrough
+  subtopics:
+  - id: environment-blend-modes
+    name: Select an environment blend mode
+    match:
+    - environment-blend-modes
+  - id: passthrough-extensions
+    name: Enable vendor passthrough
+    match:
+    - passthrough-extensions
+- id: xr-conformance-and-debug
+  name: Debugging and conformance
+  source: OpenXR conformance test suite and XR_EXT_debug_utils
+  match:
+  - xr-conformance-and-debug
+  subtopics:
+  - id: debug-utils-messenger
+    name: Add an XR_EXT_debug_utils messenger
+    match:
+    - debug-utils-messenger
+  - id: conformance-test-suite
+    name: Understand the Khronos conformance test suite
+    match:
+    - conformance-test-suite
+- id: xr-android-integration
+  name: OpenXR on Android
+  source: OpenXR 1.1 spec Android extensions
+  match:
+  - xr-android-integration
+  subtopics:
+  - id: android-loader-init
+    name: Initialise the Android loader
+    match:
+    - android-loader-init
+  - id: android-activity-lifecycle
+    name: Map Android lifecycle to the session
+    match:
+    - android-activity-lifecycle
+- id: unity-xr-plugin-management
+  name: Unity XR Plug-in Management
+  source: 'Unity Manual: XR Plug-in Management and OpenXR plug-in'
+  match:
+  - unity-xr-plugin-management
+  subtopics:
+  - id: xr-plugin-management-setup
+    name: Enable XR Plug-in Management per platform
+    match:
+    - xr-plugin-management-setup
+  - id: openxr-feature-groups-profiles
+    name: Choose OpenXR interaction profiles and features
+    match:
+    - openxr-feature-groups-profiles
+- id: unity-xr-origin-rig
+  name: XR Origin and tracking
+  source: 'XR Interaction Toolkit manual: XR Origin'
+  match:
+  - unity-xr-origin-rig
+  subtopics:
+  - id: xr-origin-camera-offset
+    name: Set up the XR Origin rig
+    match:
+    - xr-origin-camera-offset
+  - id: tracking-origin-modes
+    name: Floor versus device tracking origin
+    match:
+    - tracking-origin-modes
+- id: unity-xri-interactors
+  name: XRI interactors
+  source: 'XR Interaction Toolkit manual: Interactors'
+  match:
+  - unity-xri-interactors
+  subtopics:
+  - id: ray-direct-poke-interactors
+    name: Pick ray, direct, poke and gaze interactors
+    match:
+    - ray-direct-poke-interactors
+  - id: interaction-layers-masks
+    name: Filter with interaction layers
+    match:
+    - interaction-layers-masks
+- id: unity-xri-interactables
+  name: XRI interactables
+  source: 'XR Interaction Toolkit manual: Interactables'
+  match:
+  - unity-xri-interactables
+  subtopics:
+  - id: grab-interactable-attach
+    name: Configure XR Grab Interactable
+    match:
+    - grab-interactable-attach
+  - id: socket-interactor-snapping
+    name: Snap objects into XR Socket Interactors
+    match:
+    - socket-interactor-snapping
+- id: unity-xri-locomotion
+  name: XRI locomotion
+  source: 'XR Interaction Toolkit manual: Locomotion'
+  match:
+  - unity-xri-locomotion
+  subtopics:
+  - id: teleportation-area-anchor
+    name: Teleportation areas and anchors
+    match:
+    - teleportation-area-anchor
+  - id: continuous-snap-turn-move
+    name: Continuous move and turn
+    match:
+    - continuous-snap-turn-move
+- id: unity-xr-input-actions
+  name: XR input with the Input System
+  source: Unity Input System and XRI manuals
+  match:
+  - unity-xr-input-actions
+  subtopics:
+  - id: xr-input-system-action-maps
+    name: Bind XR controllers with Input Actions
+    match:
+    - xr-input-system-action-maps
+  - id: haptics-impulse-unity
+    name: Send controller haptics
+    match:
+    - haptics-impulse-unity
+- id: unity-xr-hands
+  name: XR Hands package
+  source: com.unity.xr.hands manual
+  match:
+  - unity-xr-hands
+  subtopics:
+  - id: xr-hands-package-joints
+    name: Read hand joints with XR Hands
+    match:
+    - xr-hands-package-joints
+  - id: hand-gesture-pinch-poke
+    name: Pinch and poke interaction with hands
+    match:
+    - hand-gesture-pinch-poke
+- id: unity-ar-foundation-session
+  name: AR Foundation session setup
+  source: 'AR Foundation manual: AR Session, XR Origin'
+  match:
+  - unity-ar-foundation-session
+  subtopics:
+  - id: ar-session-origin-setup
+    name: Set up AR Session and XR Origin
+    match:
+    - ar-session-origin-setup
+  - id: ar-subsystem-availability
+    name: Check AR availability and permissions
+    match:
+    - ar-subsystem-availability
+- id: unity-ar-planes-raycasts
+  name: Plane detection and raycasts
+  source: 'AR Foundation manual: Plane detection, Raycast'
+  match:
+  - unity-ar-planes-raycasts
+  subtopics:
+  - id: ar-plane-manager-detection
+    name: Detect planes with ARPlaneManager
+    match:
+    - ar-plane-manager-detection
+  - id: ar-raycast-placement
+    name: Place content with ARRaycastManager
+    match:
+    - ar-raycast-placement
+- id: unity-ar-anchors-and-images
+  name: Anchors and image tracking
+  source: 'AR Foundation manual: Anchors, Image tracking'
+  match:
+  - unity-ar-anchors-and-images
+  subtopics:
+  - id: ar-anchor-manager
+    name: Create and persist AR anchors
+    match:
+    - ar-anchor-manager
+  - id: ar-tracked-image-library
+    name: Track images with a reference library
+    match:
+    - ar-tracked-image-library
+- id: unity-ar-occlusion-meshing
+  name: Occlusion and meshing
+  source: 'AR Foundation manual: Occlusion, Meshing'
+  match:
+  - unity-ar-occlusion-meshing
+  subtopics:
+  - id: ar-occlusion-depth
+    name: Occlude virtual content with environment depth
+    match:
+    - ar-occlusion-depth
+  - id: ar-mesh-manager-lidar
+    name: Scan the environment with ARMeshManager
+    match:
+    - ar-mesh-manager-lidar
+- id: unity-xr-build-quest
+  name: Building and testing for devices
+  source: 'Unity Manual: XR build and Android'
+  match:
+  - unity-xr-build-quest
+  subtopics:
+  - id: android-quest-build-settings
+    name: Configure Android builds for standalone headsets
+    match:
+    - android-quest-build-settings
+  - id: xr-device-simulator-testing
+    name: Test without a headset using the XR Device Simulator
+    match:
+    - xr-device-simulator-testing
+- id: unity-xr-rendering
+  name: XR rendering in Unity
+  source: 'Unity Manual: XR rendering, URP'
+  match:
+  - unity-xr-rendering
+  subtopics:
+  - id: single-pass-instanced-urp
+    name: Use single pass instanced stereo in URP
+    match:
+    - single-pass-instanced-urp
+  - id: foveated-rendering-unity
+    name: Enable foveated rendering
+    match:
+    - foveated-rendering-unity
+- id: unreal-openxr-setup
+  name: Unreal OpenXR plugin and preview
+  source: 'Unreal docs: OpenXR in Unreal Engine'
+  match:
+  - unreal-openxr-setup
+  subtopics:
+  - id: unreal-openxr-plugin-enable
+    name: Enable the OpenXR plugin
+    match:
+    - unreal-openxr-plugin-enable
+  - id: unreal-vr-preview-launch
+    name: Launch VR Preview and standalone
+    match:
+    - unreal-vr-preview-launch
+- id: unreal-vr-pawn-motion-controllers
+  name: VR pawn and controllers
+  source: 'Unreal docs: VR Template'
+  match:
+  - unreal-vr-pawn-motion-controllers
+  subtopics:
+  - id: motioncontroller-component-hands
+    name: Use MotionControllerComponent
+    match:
+    - motioncontroller-component-hands
+  - id: enhanced-input-vr
+    name: Bind VR input with Enhanced Input
+    match:
+    - enhanced-input-vr
+- id: unreal-vr-rendering-settings
+  name: VR rendering settings
+  source: 'Unreal docs: VR best practices'
+  match:
+  - unreal-vr-rendering-settings
+  subtopics:
+  - id: forward-shading-msaa-vr
+    name: Use forward shading with MSAA
+    match:
+    - forward-shading-msaa-vr
+  - id: instanced-stereo-mobile-multiview
+    name: Enable Instanced Stereo or Mobile Multi-View
+    match:
+    - instanced-stereo-mobile-multiview
+  - id: vr-pixel-density
+    name: Tune pixel density
+    match:
+    - vr-pixel-density
+- id: unreal-vr-interaction-locomotion
+  name: VR interaction in Unreal
+  source: 'Unreal docs: VR Template interaction'
+  match:
+  - unreal-vr-interaction-locomotion
+  subtopics:
+  - id: vr-teleport-locomotion
+    name: Implement teleport locomotion
+    match:
+    - vr-teleport-locomotion
+  - id: vr-widget-interaction-ui
+    name: Interact with UMG widgets in VR
+    match:
+    - vr-widget-interaction-ui
+- id: unreal-ar-handheld
+  name: Handheld AR in Unreal
+  source: 'Unreal docs: Handheld AR'
+  match:
+  - unreal-ar-handheld
+  subtopics:
+  - id: unreal-arcore-arkit-session
+    name: Start an AR session in Unreal
+    match:
+    - unreal-arcore-arkit-session
+  - id: unreal-ar-trackables-pins
+    name: Work with AR trackables and pins
+    match:
+    - unreal-ar-trackables-pins
+- id: unreal-xr-android-package
+  name: Packaging for standalone headsets
+  source: 'Unreal docs: Android and Quest development'
+  match:
+  - unreal-xr-android-package
+  subtopics:
+  - id: unreal-quest-packaging
+    name: Package an Android XR build
+    match:
+    - unreal-quest-packaging
+- id: webxr-session-request
+  name: WebXR sessions
+  source: W3C WebXR Device API
+  match:
+  - webxr-session-request
+  subtopics:
+  - id: webxr-feature-detection
+    name: Detect and request a WebXR session
+    match:
+    - webxr-feature-detection
+  - id: webxr-reference-spaces-features
+    name: Request reference spaces and features
+    match:
+    - webxr-reference-spaces-features
+- id: webxr-render-loop
+  name: WebXR render loop
+  source: W3C WebXR Device API
+  match:
+  - webxr-render-loop
+  subtopics:
+  - id: xrwebgllayer-framebuffer
+    name: Render into the XRWebGLLayer
+    match:
+    - xrwebgllayer-framebuffer
+  - id: xr-frame-pose-views
+    name: Read viewer pose and views
+    match:
+    - xr-frame-pose-views
+- id: webxr-input-sources
+  name: WebXR input
+  source: WebXR Device API, Gamepads Module
+  match:
+  - webxr-input-sources
+  subtopics:
+  - id: webxr-controllers-gamepad
+    name: Read controllers and gamepad buttons
+    match:
+    - webxr-controllers-gamepad
+  - id: webxr-hand-input
+    name: Use WebXR hand input
+    match:
+    - webxr-hand-input
+- id: webxr-hit-test-anchors
+  name: Hit test and anchors
+  source: WebXR Hit Test and Anchors modules
+  match:
+  - webxr-hit-test-anchors
+  subtopics:
+  - id: webxr-hit-test
+    name: Run an AR hit test
+    match:
+    - webxr-hit-test
+  - id: webxr-anchors-dom-overlay
+    name: Anchors and DOM overlay
+    match:
+    - webxr-anchors-dom-overlay
+- id: webxr-three-js-integration
+  name: three.js and WebXR
+  source: three.js manual WebXR
+  match:
+  - webxr-three-js-integration
+  subtopics:
+  - id: threejs-renderer-xr
+    name: Enable WebXR in three.js
+    match:
+    - threejs-renderer-xr
+  - id: webxr-emulation-testing
+    name: Test WebXR without hardware
+    match:
+    - webxr-emulation-testing
+- id: arcore-session-config
+  name: ARCore
+  source: ARCore developer guide
+  match:
+  - arcore-session-config
+  subtopics:
+  - id: arcore-depth-instant
+    name: ARCore Depth API and Instant Placement
+    match:
+    - arcore-depth-instant
+  - id: arcore-cloud-geospatial
+    name: Cloud Anchors and Geospatial API
+    match:
+    - arcore-cloud-geospatial
+- id: arkit-world-tracking
+  name: ARKit
+  source: Apple ARKit documentation
+  match:
+  - arkit-world-tracking
+  subtopics:
+  - id: arkit-plane-lidar
+    name: Plane detection and scene reconstruction
+    match:
+    - arkit-plane-lidar
+  - id: arkit-world-map-persistence
+    name: Persist world maps
+    match:
+    - arkit-world-map-persistence
+- id: visionos-spatial
+  name: visionOS spatial apps
+  source: Apple visionOS documentation
+  match:
+  - visionos-spatial
+  subtopics:
+  - id: visionos-immersive-space
+    name: Open an ImmersiveSpace
+    match:
+    - visionos-immersive-space
+  - id: visionos-arkit-providers
+    name: Use ARKit providers on visionOS
+    match:
+    - visionos-arkit-providers
+- id: xr-comfort-design
+  name: Comfort and motion sickness
+  source: Meta Horizon design guidelines and OpenXR/HMD vendor comfort guidance
+  match:
+  - xr-comfort-design
+  subtopics:
+  - id: xr-comfort-locomotion
+    name: Design comfortable locomotion
+    match:
+    - xr-comfort-locomotion
+  - id: xr-comfort-reprojection-framerate
+    name: Hold frame rate and latency
+    match:
+    - xr-comfort-reprojection-framerate
+- id: xr-frame-budget-profiling
+  name: Frame budget and profiling
+  source: Vendor profiling tools and engine profilers
+  match:
+  - xr-frame-budget-profiling
+  subtopics:
+  - id: xr-frame-budget
+    name: Set a frame budget and content limits
+    match:
+    - xr-frame-budget
+  - id: xr-gpu-profiling-tools
+    name: Profile XR GPU and CPU
+    match:
+    - xr-gpu-profiling-tools
+- id: xr-ui-ux-world-space
+  name: UI and input design
+  source: Meta Horizon design and platform HIG guidance
+  match:
+  - xr-ui-ux-world-space
+  subtopics:
+  - id: xr-ui-depth-size
+    name: Place and size world-space UI
+    match:
+    - xr-ui-depth-size
+  - id: xr-input-fallbacks-accessibility
+    name: Design input fallbacks and accessibility
+    match:
+    - xr-input-fallbacks-accessibility
+- id: xr-spatial-audio
+  name: Spatial audio
+  source: Engine and platform spatial audio documentation
+  match:
+  - xr-spatial-audio
+  subtopics:
+  - id: xr-spatial-audio-hrtf
+    name: Use spatialised audio with HRTF
+    match:
+    - xr-spatial-audio-hrtf
+  - id: xr-audio-room-acoustics
+    name: Add room acoustics
+    match:
+    - xr-audio-room-acoustics
+- id: xr-privacy-sensor-data
+  name: Privacy of XR sensor data
+  source: OWASP/Platform privacy guidance and platform permission docs
+  match:
+  - xr-privacy-sensor-data
+  subtopics:
+  - id: xr-eye-hand-data-privacy
+    name: Handle eye, hand and body tracking data safely
+    match:
+    - xr-eye-hand-data-privacy
+  - id: xr-camera-permission-handling
+    name: Handle camera and environment-mapping permissions
+    match:
+    - xr-camera-permission-handling
+- id: xr-store-submission-testing
+  name: Testing and store readiness
+  source: Platform store requirement documents
+  match:
+  - xr-store-submission-testing
+  subtopics:
+  - id: xr-device-test-matrix
+    name: Build a device test matrix
+    match:
+    - xr-device-test-matrix
+  - id: xr-store-requirements
+    name: Prepare for store certification
+    match:
+    - xr-store-requirements

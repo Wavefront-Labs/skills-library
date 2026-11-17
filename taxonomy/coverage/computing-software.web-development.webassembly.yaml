@@ -1,0 +1,293 @@
+# Coverage spec: WebAssembly. Topics and subtopics from the external structures in `sources`.
+subject: webassembly
+scope:
+  category: computing-software
+  field: web-development
+  products: [webassembly]
+sources:
+  - "WebAssembly Core Specification ToC (webassembly.github.io/spec) - Structure (types, instructions, modules), Validation, Execution, Binary format, Text format, Appendix"
+  - "WebAssembly JS API and Web API specs"
+  - "WASI and the Component Model (wasi.dev, component-model.bytecodealliance.org, WIT)"
+  - "MDN WebAssembly guides (concepts, compiling from C/Rust, JS API, text format, memory, tables, exported functions)"
+  - "Emscripten, wasm-bindgen/wasm-pack, wasm-opt/Binaryen, WABT, Wasmtime, Wasmer, WasmEdge documentation"
+topics:
+  - id: core-types
+    name: Core types and values
+    source: "Core spec/Structure/Types"
+    match: [wasm-value-types, i32-i64-f32-f64, wasm-reference-types]
+    subtopics:
+      - {id: numeric-and-vector-types, name: "Numeric and vector value types", match: [wasm-numeric-types, v128-simd-type, wasm-integer-semantics]}
+      - {id: function-and-block-types, name: "Function types and block types", match: [wasm-functype, multi-value, block-types]}
+  - id: core-modules
+    name: Module structure
+    source: "Core spec/Structure/Modules"
+    match: [wasm-module-sections, wasm-imports-exports, wasm-start-function]
+    subtopics:
+      - {id: sections-and-indices, name: "Sections and index spaces", match: [wasm-sections, function-index-space, custom-sections]}
+      - {id: imports-exports-start, name: "Imports, exports and start function", match: [wasm-import, wasm-export, start-section]}
+  - id: text-format
+    name: Text format (WAT)
+    source: "Core spec/Text format"
+    match: [wat, wasm-text-format, s-expressions]
+    subtopics:
+      - {id: writing-wat-modules, name: "Writing WAT by hand", match: [wat-module, wat2wasm, folded-instructions]}
+      - {id: control-flow-instructions, name: "Control flow: block, loop, br", match: [wasm-block-loop-br, br-table, structured-control-flow]}
+  - id: validation-execution
+    name: Validation and execution semantics
+    source: "Core spec/Validation, Execution"
+    match: [wasm-validation, wasm-traps, wasm-stack-machine]
+    subtopics:
+      - {id: stack-machine-validation, name: "Stack machine and validation", match: [wasm-validation-algorithm, operand-stack, type-checking]}
+      - {id: traps-and-determinism, name: "Traps and determinism", match: [wasm-trap, unreachable-trap, nondeterminism-sources]}
+  - id: memory
+    name: Linear memory
+    source: "Core spec/Memory; MDN WebAssembly.Memory"
+    match: [wasm-linear-memory, memory-grow, wasm-memory64]
+    subtopics:
+      - {id: linear-memory-management, name: "Linear memory and growth", match: [memory-grow, wasm-memory-pages, memory-buffer-detach]}
+      - {id: bulk-memory-and-data-segments, name: "Bulk memory operations and data segments", match: [memory-copy, memory-fill, passive-data-segments]}
+  - id: tables-refs
+    name: Tables and reference types
+    source: "Core spec/Tables"
+    match: [wasm-table, call-indirect, externref]
+    subtopics:
+      - {id: tables-and-call-indirect, name: "Tables and call_indirect", match: [call-indirect, funcref-table, indirect-function-calls]}
+      - {id: reference-types-externref, name: "Reference types and externref", match: [externref, funcref, table-get-set]}
+  - id: js-api
+    name: JavaScript API
+    source: "WebAssembly JS API spec; MDN"
+    match: [webassembly-instantiate, webassembly-module, wasm-js-api]
+    subtopics:
+      - {id: instantiate-and-streaming, name: "Loading and instantiating modules", match: [instantiatestreaming, webassembly-compile, wasm-fetch]}
+      - {id: js-wasm-boundary-types, name: "Passing data across the JS boundary", match: [wasm-js-bigint, wasm-string-passing, typed-array-views]}
+  - id: emscripten
+    name: Emscripten toolchain
+    source: "Emscripten docs"
+    match: [emscripten, emcc, emscripten-fs]
+    subtopics:
+      - {id: emcc-compile-flags, name: "emcc build flags", match: [emcc-optimization, emcc-exported-functions, modularize]}
+      - {id: emscripten-virtual-fs-and-ports, name: "Virtual filesystem, ports and embind", match: [emscripten-preload-file, embind, emscripten-ports]}
+  - id: rust-wasm
+    name: Rust to WebAssembly
+    source: "wasm-bindgen guide"
+    match: [wasm-bindgen, wasm-pack, wasm32-unknown-unknown]
+    subtopics:
+      - {id: wasm-bindgen-workflow, name: "wasm-bindgen and wasm-pack", match: [wasm-pack-build, js-sys, web-sys]}
+      - {id: rust-wasm-size-and-perf, name: "Size and performance tuning in Rust Wasm", match: [wasm-opt-rust, twiggy, wee-alloc]}
+  - id: toolchain-binaryen
+    name: Binaryen, WABT and tooling
+    source: "Binaryen and WABT docs"
+    match: [binaryen, wasm-opt, wabt]
+    subtopics:
+      - {id: wasm-opt-optimisation, name: "wasm-opt", match: [wasm-opt-o3, binaryen-passes, wasm-strip]}
+      - {id: wabt-and-wasm-tools, name: "WABT and wasm-tools", match: [wasm2wat, wasm-objdump, wasm-tools-print]}
+  - id: debugging
+    name: Debugging and profiling
+    source: "Chrome DevTools and Emscripten debugging docs"
+    match: [wasm-debugging, dwarf-wasm, source-maps]
+    subtopics:
+      - {id: devtools-wasm-debugging, name: "Browser debugging with DWARF", match: [chrome-wasm-dwarf, source-map-wasm, wasm-breakpoints]}
+      - {id: wasm-profiling, name: "Profiling Wasm", match: [wasm-profiler, chrome-performance-wasm, name-section-profiling]}
+  - id: threads-simd
+    name: Threads, atomics and SIMD
+    source: "Wasm threads and SIMD proposals/MDN"
+    match: [wasm-threads, shared-memory-atomics, wasm-simd]
+    subtopics:
+      - {id: wasm-threads-sharedarraybuffer, name: "Threads and atomics", match: [sharedarraybuffer, wasm-atomics, pthreads-emscripten]}
+      - {id: wasm-simd-128, name: "128-bit SIMD", match: [wasm-simd128, v128-ops, simd-intrinsics]}
+  - id: gc-exceptions
+    name: Newer language features
+    source: "Wasm feature proposals roadmap"
+    match: [wasm-gc, wasm-exception-handling, tail-calls]
+    subtopics:
+      - {id: wasm-gc-proposal, name: "WasmGC", match: [wasm-gc-types, struct-array-types, kotlin-wasm]}
+      - {id: exceptions-tailcalls-stack-switching, name: "Exception handling, tail calls, stack switching", match: [wasm-exceptions, return-call, jspi]}
+  - id: wasi
+    name: WASI and server-side runtimes
+    source: "WASI docs; Wasmtime/Wasmer documentation"
+    match: [wasi, wasmtime, wasmer]
+    subtopics:
+      - {id: wasi-preview-and-capabilities, name: "WASI capabilities and preopens", match: [wasi-preview1, preopened-directories, capability-security]}
+      - {id: runtimes-wasmtime-wasmer-wasmedge, name: "Runtime selection and embedding", match: [wasmtime-embed, wasmer-run, wasmedge]}
+  - id: component-model
+    name: Component Model
+    source: "Component Model docs"
+    match: [component-model, wit, wasm-components]
+    subtopics:
+      - {id: wit-interfaces, name: "WIT interface definitions", match: [wit-world, wit-interface, wit-bindgen]}
+      - {id: component-composition-runtime, name: "Composing and running components", match: [wasm-tools-component, wac-compose, wasmtime-component]}
+  - id: edge-plugins
+    name: Edge and plugin use cases
+    source: "Cloudflare, Fastly, Spin, extism docs"
+    match: [wasm-edge-workers, wasm-plugins, wasm-sandboxing]
+    subtopics:
+      - {id: wasm-plugin-systems, name: "Wasm as a plugin system", match: [extism, plugin-sandbox, host-functions]}
+      - {id: wasm-edge-serverless, name: "Edge and serverless runtimes", match: [spin-framework, cloudflare-workers-wasm, wasi-http]}
+  - id: security-wasm
+    name: Security
+    source: "WebAssembly security docs"
+    match: [wasm-security, wasm-sandbox-escape, spectre-wasm]
+    subtopics:
+      - {id: wasm-threat-model, name: "Threat model and hardening", match: [wasm-memory-safety, control-flow-integrity, wasm-capabilities]}
+      - {id: supply-chain-wasm, name: "Supply chain for Wasm modules", match: [wasm-signing, warg-registry, oci-wasm]}
+  - id: performance
+    name: Performance engineering
+    source: "V8/SpiderMonkey blog docs"
+    match: [wasm-startup, tiered-compilation, wasm-size-budget]
+    subtopics:
+      - {id: startup-and-compile-caching, name: "Startup and compile caching", match: [liftoff, code-caching, lazy-compilation]}
+      - {id: js-vs-wasm-perf-decisions, name: "When Wasm beats JS", match: [wasm-vs-js-performance, boundary-crossing-cost, numeric-kernels]}
+  - id: interop-frameworks
+    name: Frameworks using Wasm
+    source: "Blazor, Pyodide, Yew docs"
+    match: [blazor-wasm, pyodide, wasm-ui]
+    subtopics:
+      - {id: pyodide-python-in-browser, name: "Pyodide", match: [pyodide, micropip, pyodide-js-bridge]}
+      - {id: blazor-and-rust-ui, name: "Blazor WebAssembly and Rust UI frameworks", match: [blazor-webassembly, yew-leptos, aot-compilation]}
+  - id: testing-ci
+    name: Testing and CI for Wasm
+    source: "Testing practice"
+    match: [wasm-testing, wasm-pack-test, wasm-ci]
+    subtopics:
+      - {id: wasm-unit-and-browser-tests, name: "Unit and browser tests", match: [wasm-bindgen-test, headless-browser-tests, wasm-test-runner]}
+      - {id: wasm-build-reproducibility, name: "Build reproducibility and size budgets in CI", match: [reproducible-wasm, size-budget-ci, wasm-binary-diff]}
+  - id: binary-format
+    name: Binary format
+    source: "Core spec/Binary format"
+    match: [wasm-binary-format, leb128, wasm-section-ids]
+    subtopics:
+      - {id: leb128-and-section-encoding, name: "LEB128 and section encoding", match: [leb128-encoding, wasm-magic-number, section-size]}
+      - {id: custom-sections-name-section, name: "Custom sections and the name section", match: [name-section, producers-section, source-mapping-url]}
+  - id: instructions
+    name: Instruction set
+    source: "Core spec/Instructions"
+    match: [wasm-instructions, wasm-numeric-instructions, wasm-variable-instructions]
+    subtopics:
+      - {id: numeric-instructions, name: "Numeric instructions", match: [i32-add, f64-sqrt, wasm-comparisons]}
+      - {id: variable-and-parametric-instructions, name: "Locals, globals and parametric instructions", match: [local-get-set-tee, global-get-set, select-instruction]}
+  - id: globals-data
+    name: Globals, element and data segments
+    source: "Core spec/Modules"
+    match: [wasm-globals, element-segments, active-passive-segments]
+    subtopics:
+      - {id: active-vs-passive-segments, name: "Active, passive and declarative segments", match: [data-segment, elem-segment, table-init]}
+      - {id: imported-globals-and-constants, name: "Imported globals and constant expressions", match: [extended-const, imported-global-offset, dynamic-link-base]}
+  - id: dynamic-linking
+    name: Linking and dynamic loading
+    source: "Linking"
+    match: [wasm-ld, dynamic-linking-wasm, side-modules]
+    subtopics:
+      - {id: wasm-ld-static-linking, name: "Static linking with wasm-ld", match: [wasm-ld, wasm-object-files, linking-section]}
+      - {id: emscripten-side-modules, name: "MAIN_MODULE and SIDE_MODULE", match: [emscripten-dynamic-linking, main-module, side-module]}
+  - id: wasi-sdk-c
+    name: C/C++ with WASI SDK
+    source: "WASI SDK docs"
+    match: [wasi-sdk, wasm32-wasi, wasi-libc]
+    subtopics:
+      - {id: wasi-sdk-compile, name: "Compiling with wasi-sdk", match: [clang-wasi, wasi-sysroot, wasm32-wasip1]}
+      - {id: porting-posix-code, name: "Porting POSIX code", match: [wasi-posix-gaps, no-fork-exec, socket-gaps]}
+  - id: assemblyscript-zig-go
+    name: Other source languages
+    source: "Language toolchain docs"
+    match: [assemblyscript, tinygo, zig-wasm]
+    subtopics:
+      - {id: assemblyscript-basics, name: "AssemblyScript", match: [assemblyscript-asc, asc-compile, typed-typescript]}
+      - {id: tinygo-and-zig, name: "TinyGo and Zig", match: [tinygo-wasm, zig-wasm32, go-wasm-exec]}
+  - id: dotnet-java-kotlin
+    name: Managed languages on Wasm
+    source: "Platform docs"
+    match: [dotnet-wasm, teavm-java, kotlin-wasm]
+    subtopics:
+      - {id: dotnet-wasm-aot, name: ".NET on WebAssembly", match: [dotnet-wasm-browser, wasmbuildtools, wasm-aot-dotnet]}
+      - {id: java-kotlin-wasm, name: "Java and Kotlin", match: [teavm, cheerpj, kotlin-wasm-target]}
+  - id: web-workers-audio
+    name: Workers, audio and graphics
+    source: "Web platform docs"
+    match: [wasm-web-workers, audioworklet-wasm, wasm-webgl]
+    subtopics:
+      - {id: wasm-in-web-workers, name: "Running Wasm in workers", match: [web-worker-wasm, offscreencanvas, comlink]}
+      - {id: audioworklet-and-webgl, name: "AudioWorklet and WebGL/WebGPU with Wasm", match: [audio-worklet, webgl-wasm, wgpu-web]}
+  - id: storage-io
+    name: Persistence and I/O in browsers
+    source: "Browser storage docs"
+    match: [wasm-opfs, indexeddb-wasm, wasm-file-system]
+    subtopics:
+      - {id: opfs-and-persistent-fs, name: "OPFS and persistent filesystems", match: [origin-private-file-system, idbfs, sqlite-wasm]}
+      - {id: fetch-and-streams-from-wasm, name: "Network access from Wasm", match: [wasm-fetch-bridge, asyncify, jspi-fetch]}
+  - id: node-deno-embed
+    name: Wasm outside browsers (JS runtimes)
+    source: "Node, Deno docs"
+    match: [node-wasm, deno-wasm, bun-wasm]
+    subtopics:
+      - {id: node-wasm-usage, name: "Wasm in Node.js and Deno", match: [node-wasi, webassembly-in-node, deno-wasm-import]}
+      - {id: embedding-in-other-languages, name: "Embedding runtimes in host languages", match: [wasmtime-py, wasmtime-go, wasmer-java]}
+  - id: csp-deploy
+    name: Deployment and web integration
+    source: "MDN, web.dev"
+    match: [wasm-mime-type, csp-wasm, cache-headers]
+    subtopics:
+      - {id: serving-wasm-correctly, name: "Serving Wasm correctly", match: [application-wasm-mime, brotli-wasm, cache-control-wasm]}
+      - {id: csp-and-wasm, name: "Content Security Policy for Wasm", match: [wasm-unsafe-eval, csp-script-src, trusted-types-wasm]}
+  - id: ml-media-wasm
+    name: ML and media on Wasm
+    source: "Library docs"
+    match: [onnx-runtime-web, wasm-ffmpeg, tfjs-wasm]
+    subtopics:
+      - {id: ml-inference-in-browser, name: "ML inference", match: [onnxruntime-web, tfjs-wasm-backend, webnn]}
+      - {id: media-codecs-wasm, name: "Codecs and media processing", match: [ffmpeg-wasm, image-codecs-wasm, squoosh]}
+  - id: containers-k8s-wasm
+    name: Wasm in containers and Kubernetes
+    source: "runwasi docs"
+    match: [runwasi, containerd-wasm, wasm-kubernetes]
+    subtopics:
+      - {id: runwasi-and-runtimeclass, name: "runwasi and RuntimeClass", match: [containerd-shim-wasmtime, runtimeclass-wasm, wasm-pods]}
+      - {id: spin-and-wasmcloud, name: "Spin and wasmCloud", match: [spin-up, wasmcloud-lattice, wadm]}
+  - id: proposals-features
+    name: Proposals and feature detection
+    source: "WebAssembly proposals repo"
+    match: [wasm-proposals, feature-detection, wasm-phases]
+    subtopics:
+      - {id: proposal-process-and-status, name: "The proposal process", match: [wasm-phases-process, proposals-repo, wasm-3-0]}
+      - {id: feature-detection-fallbacks, name: "Feature detection and fallback builds", match: [wasm-feature-detect, multi-build-fallback, validate-bytes]}
+  - id: gpu-wasm
+    name: WebGPU and compute
+    source: "WebGPU spec/MDN"
+    match: [webgpu-wasm, wgpu, compute-shader-wasm]
+    subtopics:
+      - {id: webgpu-from-wasm, name: "WebGPU from Wasm", match: [webgpu-bindings, wgsl, wgpu-rs]}
+      - {id: wasm-simd-vs-webgpu-choice, name: "CPU SIMD vs GPU", match: [simd-vs-gpu, workload-fit, transfer-overhead]}
+  - id: embedded-wasm
+    name: Embedded and IoT runtimes
+    source: "WAMR, wasm3 docs"
+    match: [wamr, wasm3, wasm-iot]
+    subtopics:
+      - {id: wamr-aot-interpreter, name: "WAMR interpreter and AOT", match: [wamr-iwasm, wamrc-aot, wamr-memory-footprint]}
+      - {id: host-native-api-registration, name: "Registering native host functions", match: [wasm-native-api, wasm-c-api, host-import-binding]}
+  - id: wasm-testing-security
+    name: Fuzzing and security testing
+    source: "Bytecode Alliance fuzzing docs"
+    match: [wasm-smith, wasm-fuzzing, wasm-validation-fuzz]
+    subtopics:
+      - {id: fuzzing-wasm-modules, name: "Fuzzing runtimes and modules", match: [wasm-smith-fuzz, cargo-fuzz-wasm, differential-testing]}
+      - {id: resource-limits-and-timeouts, name: "Resource limits and timeouts", match: [fuel-metering, epoch-interruption, memory-limits]}
+  - id: observability-wasm
+    name: Logging and tracing
+    source: "Platform docs"
+    match: [wasm-logging, wasm-tracing, opentelemetry-wasm]
+    subtopics:
+      - {id: logging-from-wasm, name: "Logging and diagnostics", match: [console-log-import, wasi-logging, panic-hooks]}
+      - {id: tracing-and-metrics-wasm, name: "Tracing and metrics", match: [otel-wasm, host-metrics, span-propagation]}
+  - id: canonical-abi
+    name: Canonical ABI and strings
+    source: "Component Model Canonical ABI"
+    match: [canonical-abi, string-encoding, wasm-lifting-lowering]
+    subtopics:
+      - {id: strings-and-lists-across-boundary, name: "Strings, lists and records across components", match: [utf8-utf16-latin1, lift-lower, realloc-export]}
+      - {id: resources-and-handles, name: "Resources and handles", match: [wit-resource, own-borrow, handle-tables]}
+  - id: wasi-http-sockets
+    name: WASI HTTP and sockets
+    source: "WASI proposals"
+    match: [wasi-http, wasi-sockets, outbound-http]
+    subtopics:
+      - {id: wasi-http-handlers, name: "WASI HTTP handlers", match: [wasi-http-proxy, incoming-handler, outgoing-request]}
+      - {id: wasi-sockets-and-async, name: "Sockets and async I/O", match: [wasi-tcp, wasi-poll, wasi-io-streams]}

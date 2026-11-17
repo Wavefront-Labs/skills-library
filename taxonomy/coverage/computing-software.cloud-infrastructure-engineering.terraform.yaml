@@ -1,0 +1,847 @@
+# Canonical coverage spec: Terraform / OpenTofu.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (HashiCorp exam objectives and the
+# Terraform docs table of contents), not from what we happened to write.
+# Subtopics (depth) come from the sub-headings of the developer.hashicorp.com/terraform language
+# and CLI reference pages (function families, command flags, backend types, meta-arguments) and
+# the OpenTofu docs.
+subject: terraform
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [terraform]
+sources:
+  - "HashiCorp Certified: Terraform Associate (003) objectives: IaC concepts, Terraform purpose, basics, CLI outside core workflow, modules, core workflow, state, read/generate/modify configuration, HCP Terraform capabilities"
+  - "HashiCorp Certified: Terraform Authoring & Operations Professional objectives: manage resource lifecycle, develop and troubleshoot dynamic configuration, develop collaborative Terraform workflows, create/maintain/use Terraform modules, configure and use Terraform providers, collaborate on infrastructure as code"
+  - "developer.hashicorp.com/terraform/language table of contents: Files/syntax, Resources, Data Sources, Providers, Variables/Outputs, Modules, Functions, Expressions, State, Backends, Import, Checks/Tests, Stacks"
+  - "developer.hashicorp.com/terraform/cli commands: init, plan, apply, destroy, fmt, validate, state, import, taint/untaint, workspace, console, providers, graph, refresh, force-unlock"
+  - "developer.hashicorp.com/terraform/language/functions: string, collection, encoding, filesystem, numeric, date/time, hash/crypto, IP network, type conversion families"
+  - "developer.hashicorp.com/terraform/language/backend: local, remote, s3, gcs, azurerm, kubernetes, pg, consul, http, oss, cos"
+  - "developer.hashicorp.com/terraform/language/meta-arguments: depends_on, count, for_each, provider, lifecycle"
+  - "OpenTofu docs: state encryption, provider-defined functions, early variable evaluation, provider for_each, -exclude"
+topics:
+  # --- Core workflow and CLI (Associate: basics, core workflow, CLI)
+  - id: core-workflow
+    name: init/plan/apply/destroy workflow
+    source: Associate/Core workflow + CLI plan/apply pages
+    match: [core-workflow, plan-apply, terraform-plan, terraform-apply, apply-workflow]
+    subtopics:
+      - {id: saved-plan-files, name: plan -out and applying a saved binary plan, match: [plan-out, saved-plan-file, binary-plan]}
+      - {id: automation-flags, name: -auto-approve and -input=false for non-interactive runs, match: [auto-approve, input-false, non-interactive]}
+      - {id: refresh-and-lock-flags, name: -refresh=false, -lock and -lock-timeout on plan/apply, match: [refresh-false, lock-flag, skip-refresh]}
+      - {id: destroy-planning, name: plan -destroy and reviewing a destroy plan, match: [plan-destroy, destroy-plan]}
+      - {id: json-ui-output, name: -json machine-readable UI output for plan/apply, match: [json-ui, machine-readable-output, apply-json]}
+      - {id: compact-warnings-no-color, name: -compact-warnings and -no-color for log-friendly output, match: [compact-warnings, no-color]}
+      - {id: legacy-state-flags, name: "Legacy -state, -state-out and -backup local-backend flags", match: [state-out-flag, backup-flag, legacy-state-flags]}
+      - {id: apply-interruption, name: Interrupting apply with Ctrl-C and recovering a partial apply, match: [apply-interrupt, sigint, interrupted-apply]}
+      - {id: stale-saved-plan, name: Saved plan is stale errors and plan/apply serial checks, match: [stale-plan, saved-plan-stale]}
+  - id: init-and-lockfile
+    name: terraform init, provider installation and the dependency lock file
+    source: Associate/Core workflow + CLI init and providers lock pages
+    match: [terraform-init, lock-file, dependency-lock, lockfile, provider-installation]
+    subtopics:
+      - {id: providers-lock-platform, name: terraform providers lock -platform for multi-OS hashes, match: [providers-lock, lock-platform, multi-platform-lockfile]}
+      - {id: init-upgrade, name: init -upgrade semantics and when it changes the lock file, match: [init-upgrade, upgrade-flag]}
+      - {id: init-reconfigure-migrate, name: init -reconfigure vs -migrate-state, match: [init-reconfigure, init-migrate-state]}
+      - {id: partial-backend-config, name: init -backend-config partial backend configuration, match: [backend-config-flag, partial-backend-configuration, partial-backend-config]}
+      - {id: init-from-module, name: init -from-module to bootstrap a root module, match: [init-from-module, from-module]}
+      - {id: lockfile-hashes, name: h1 vs zh hashes and checksum verification failures, match: [h1-hash, zh-hash, checksum-mismatch]}
+      - {id: init-plugin-dir, name: init -plugin-dir for air-gapped installs, match: [plugin-dir, air-gapped-init]}
+      - {id: lockfile-readonly, name: init -lockfile=readonly in CI, match: [lockfile-readonly]}
+      - {id: providers-mirror, name: terraform providers mirror to build a local mirror, match: [providers-mirror-command]}
+      - {id: providers-schema, name: terraform providers tree and providers schema -json, match: [providers-schema, providers-tree]}
+  - id: plan-reading
+    name: Reading plan output and diffs safely
+    source: Associate/Core workflow + CLI show and plan pages
+    match: [plan-output, plan-review, reading-plans, saved-plan]
+    subtopics:
+      - {id: show-json-plan, name: terraform show -json and the plan JSON schema, match: [show-json, plan-json-schema, resource-changes]}
+      - {id: detailed-exitcode, name: -detailed-exitcode for change detection, match: [detailed-exitcode, exit-code-2]}
+      - {id: planning-modes, name: Planning modes - normal, destroy, refresh-only, match: [planning-modes, plan-mode]}
+      - {id: unknown-values, name: Reading known after apply and unknown values, match: [known-after-apply, unknown-values]}
+      - {id: outside-changes, name: Objects changed outside of Terraform section, match: [outside-changes, changed-outside]}
+      - {id: plan-symbols, name: Plan action symbols and update in-place vs replace, match: [plan-symbols, action-symbols]}
+      - {id: forces-replacement, name: Spotting forces replacement attributes, match: [forces-replacement]}
+      - {id: sensitive-in-plan, name: Sensitive value markers in plan diffs, match: [sensitive-plan-diff]}
+      - {id: json-diff-noise, name: Noisy JSON policy diffs and normalisation, match: [json-diff-noise, policy-diff-normalisation]}
+      - {id: plan-summary-jq, name: Summarising large plans with jq over resource_changes, match: [plan-summary-jq]}
+  - id: fmt-validate
+    name: terraform fmt and validate in local and CI checks
+    source: Associate/CLI fmt and validate pages
+    match: [terraform-fmt, terraform-validate, fmt, validate]
+    subtopics:
+      - {id: fmt-flags, name: fmt -check -diff -recursive -list, match: [fmt-check, fmt-recursive, fmt-diff]}
+      - {id: validate-json, name: validate -json diagnostics output, match: [validate-json, diagnostics-json]}
+      - {id: validate-without-backend, name: init -backend=false for validate in CI, match: [backend-false, validate-without-backend]}
+      - {id: pre-commit-terraform, name: pre-commit-terraform hooks, match: [pre-commit-terraform, pre-commit-hooks]}
+      - {id: terraform-ls, name: terraform-ls language server and editor integration, match: [terraform-ls, language-server, editor-integration]}
+      - {id: fmt-stdin, name: fmt from stdin and format-on-save, match: [fmt-stdin]}
+      - {id: validate-errors, name: "Common validate errors - unsupported argument, missing required argument", match: [unsupported-argument, missing-required-argument]}
+      - {id: hcl-style, name: HCL style conventions fmt enforces and does not, match: [hcl-style, style-conventions]}
+      - {id: validate-no-tests, name: validate with .tftest.hcl files and -no-tests, match: [validate-no-tests]}
+  - id: console-graph
+    name: terraform console and graph for debugging expressions and dependencies
+    source: Associate/CLI console and graph pages
+    match: [terraform-console, terraform-graph, dependency-graph]
+    subtopics:
+      - {id: console-eval, name: Evaluating expressions from stdin with console, match: [console-eval, console-stdin, console-pipe]}
+      - {id: graph-types, name: graph -type=plan/apply and -draw-cycles, match: [graph-type, draw-cycles]}
+      - {id: graph-render, name: Rendering graph output with Graphviz dot, match: [graphviz-render, dot-rendering]}
+      - {id: console-types, name: Inspecting types with type() in console, match: [type-function, console-type]}
+      - {id: console-state, name: Inspecting state values and resources in console, match: [console-state]}
+      - {id: console-plan, name: console -plan to evaluate against planned values, match: [console-plan]}
+      - {id: graph-filtering, name: Filtering large graphs for one resource or module, match: [graph-filtering, large-graph]}
+      - {id: console-prototyping, name: Prototyping functions and for-expressions in console, match: [console-prototyping]}
+  - id: debug-logging
+    name: TF_LOG debugging and crash logs
+    source: Associate/CLI debugging page
+    match: [tf-log, debug-logging, crash-log, trace-logging]
+    subtopics:
+      - {id: tf-log-core-provider, name: TF_LOG_CORE vs TF_LOG_PROVIDER separation, match: [tf-log-core, tf-log-provider]}
+      - {id: tf-log-path, name: TF_LOG_PATH persistent log files, match: [tf-log-path]}
+      - {id: provider-debug-mode, name: Attaching a debugger to a provider with -debug, match: [provider-debug-mode, delve-debugging, reattach]}
+      - {id: crash-log-triage, name: crash.log triage and filing a bug report, match: [crash-log-triage, bug-report, panic]}
+      - {id: log-levels, name: Log levels and JSON log format, match: [log-levels, json-logging]}
+      - {id: tf-log-sdk, name: Plugin SDK logs TF_LOG_SDK and TF_LOG_SDK_PROTO, match: [tf-log-sdk, sdk-proto-logs]}
+      - {id: http-trace, name: Reading provider HTTP request and response traces, match: [http-trace, api-request-logs]}
+      - {id: log-redaction, name: Redacting secrets before sharing logs, match: [log-redaction]}
+      - {id: run-logs, name: HCP Terraform run logs and structured run output, match: [run-logs, structured-run-output]}
+  - id: cli-config-credentials
+    name: CLI configuration, credentials and provider mirrors
+    source: Associate/CLI config and environment variables pages
+    match: [cli-config, terraformrc, provider-mirror, network-mirror, filesystem-mirror]
+    subtopics:
+      - {id: terraform-login, name: terraform login and credential helpers, match: [terraform-login, credentials-helper]}
+      - {id: dev-overrides, name: dev_overrides for local provider builds, match: [dev-overrides]}
+      - {id: provider-installation-block, name: provider_installation direct/exclude/include, match: [provider-installation-block, direct-exclude]}
+      - {id: tf-cli-args, name: TF_CLI_ARGS and TF_CLI_ARGS_name, match: [tf-cli-args, tf-cli-args-plan]}
+      - {id: tf-env-vars, name: TF_DATA_DIR, TF_IN_AUTOMATION, TF_INPUT, match: [tf-data-dir, tf-in-automation, tf-input]}
+      - {id: plugin-cache-dir, name: TF_PLUGIN_CACHE_DIR and plugin_cache_dir, match: [plugin-cache-dir, terraform-plugin-cache-dir]}
+      - {id: tf-token, name: credentials blocks and TF_TOKEN_ host variables, match: [tf-token, credentials-block]}
+      - {id: host-block, name: host blocks overriding service discovery, match: [host-block]}
+      - {id: disable-checkpoint, name: disable_checkpoint and CHECKPOINT_DISABLE, match: [disable-checkpoint]}
+      - {id: tf-cli-config-file, name: TF_CLI_CONFIG_FILE and config file locations per OS, match: [tf-cli-config-file]}
+  # --- State (Associate: state; Professional: resource lifecycle)
+  - id: remote-state-backends
+    name: Remote state backends (S3, GCS, Azure, HCP)
+    source: language/backend pages
+    match: [remote-state, backend, backends, s3-backend, state-backend]
+    subtopics:
+      - {id: s3-backend-config, name: S3 backend configuration and native locking, match: [s3-backend-configuration, use-lockfile, dynamodb-table]}
+      - {id: gcs-backend, name: GCS backend, match: [gcs-backend, gcs-encryption-key]}
+      - {id: azurerm-backend, name: azurerm backend, match: [azurerm-backend, azure-storage-backend]}
+      - {id: kubernetes-pg-consul-backends, name: kubernetes, pg and consul backends, match: [kubernetes-backend, pg-backend, consul-backend]}
+      - {id: http-backend, name: http backend, match: [http-backend, gitlab-http-backend]}
+      - {id: local-backend, name: local backend and path, match: [local-backend, local-state-path]}
+      - {id: oss-cos-backends, name: "oss and cos backends (Alibaba Cloud, Tencent Cloud)", match: [oss-backend, cos-backend]}
+      - {id: s3-backend-assume-role, name: S3 backend assume_role and cross-account state buckets, match: [s3-backend-assume-role, cross-account-state]}
+      - {id: s3-compatible, name: "S3-compatible storage (MinIO, R2, Spaces) with the s3 backend", match: [s3-compatible, minio-backend, skip-credentials-validation]}
+      - {id: azurerm-backend-auth, name: "azurerm backend auth - use_azuread_auth, OIDC, MSI", match: [use-azuread-auth, azurerm-backend-oidc]}
+      - {id: state-bucket-bootstrap, name: Bootstrapping the state bucket (chicken-and-egg), match: [state-bucket-bootstrap, backend-bootstrap]}
+  - id: state-locking
+    name: State locking and force-unlock
+    source: language/state/locking + CLI force-unlock
+    match: [state-locking, state-lock, force-unlock]
+    subtopics:
+      - {id: lock-timeout, name: -lock-timeout retries, match: [lock-timeout]}
+      - {id: force-unlock-procedure, name: Safe force-unlock procedure for stale locks, match: [force-unlock-procedure, stale-lock]}
+      - {id: dynamodb-lock-table, name: DynamoDB lock table vs S3 conditional writes, match: [dynamodb-lock-table, conditional-writes]}
+      - {id: lock-false, name: Running with -lock=false and its risks, match: [lock-false, disable-locking]}
+      - {id: workspace-lock, name: HCP Terraform workspace locks, match: [workspace-lock, hcp-workspace-lock]}
+      - {id: lock-info, name: Reading lock info in lock acquisition errors, match: [lock-info, lock-error]}
+      - {id: gcs-azure-locking, name: GCS lock files and azurerm blob lease locking, match: [blob-lease, gcs-lock]}
+      - {id: lock-contention, name: Lock contention in CI and serialising pipelines, match: [lock-contention]}
+  - id: state-manipulation
+    name: state mv/rm/pull/push and surgical state edits
+    source: CLI state subcommands
+    match: [state-mv, state-rm, state-manipulation, state-surgery, state-pull]
+    subtopics:
+      - {id: state-list-show, name: state list and state show with filters, match: [state-list, state-show]}
+      - {id: state-mv-into-module, name: state mv into modules and indexed instances, match: [move-into-module, state-mv-for-each]}
+      - {id: state-rm-forget, name: state rm to forget resources without destroying, match: [state-remove, forget-resource]}
+      - {id: state-push, name: state push with serial and -force, match: [state-push, push-serial]}
+      - {id: replace-provider, name: state replace-provider, match: [replace-provider, state-replace-provider]}
+      - {id: cross-state-move, name: Moving resources between state files, match: [cross-state-move, state-mv-state-out]}
+      - {id: state-pull-jq, name: state pull with jq for inspection, match: [state-pull-jq]}
+      - {id: state-dry-run, name: Backups and -dry-run before state surgery, match: [state-dry-run, surgery-backup]}
+      - {id: state-identities, name: state identities -json listing, match: [state-identities]}
+  - id: moved-blocks
+    name: moved blocks and refactoring without recreation
+    source: language/modules/develop/refactoring
+    match: [moved-block, moved-blocks, refactoring, rename-resource]
+    subtopics:
+      - {id: moved-to-module, name: Moving resources into and out of modules, match: [moved-to-module, module-move]}
+      - {id: moved-count-for-each, name: Moving between count and for_each, match: [count-to-for-each, moved-count-to-for-each]}
+      - {id: chained-moves, name: Chained moves and when to delete moved blocks, match: [chained-moves, moved-cleanup]}
+      - {id: moved-in-published-modules, name: moved blocks inside published modules, match: [moved-in-modules, module-refactor-moved]}
+      - {id: moved-limitations, name: moved block limitations and cross-module cases, match: [moved-limitations, cross-package-move]}
+      - {id: move-resource-type, name: Moving between resource types (move_state support), match: [move-resource-type, cross-resource-type-move]}
+      - {id: has-moved-to, name: Reviewing has moved to entries in plans, match: [has-moved-to]}
+      - {id: moved-vs-state-mv, name: moved blocks vs state mv decision, match: [moved-vs-state-mv]}
+  - id: import
+    name: Importing existing infrastructure (import blocks and CLI)
+    source: language/import + CLI import
+    match: [import, import-block, import-blocks, terraform-import]
+    subtopics:
+      - {id: import-for-each, name: import blocks with for_each, match: [import-for-each, for-each-import]}
+      - {id: generate-config-out, name: -generate-config-out HCL generation, match: [generate-config-out]}
+      - {id: import-id-formats, name: Provider import ID formats, match: [import-id-syntax, import-id-format]}
+      - {id: import-into-module, name: Importing into module and indexed addresses, match: [import-into-module, import-indexed]}
+      - {id: import-identity, name: import identity blocks, match: [import-identity, identity-attribute]}
+      - {id: cli-import-command, name: terraform import CLI vs import block, match: [cli-import-command, terraform-import-command]}
+      - {id: bulk-import-discovery, name: "Bulk import discovery tools (terraformer, aztfexport)", match: [terraformer, aztfexport]}
+      - {id: generated-config-cleanup, name: Cleaning up generated configuration, match: [generated-config-cleanup]}
+      - {id: import-hcp-run, name: import blocks in HCP Terraform and VCS-driven runs, match: [import-hcp-run]}
+      - {id: terraform-query, name: terraform query and list blocks for discovering resources, match: [terraform-query, list-block]}
+  - id: terraform-state-data-source
+    name: terraform_remote_state and cross-stack references
+    source: language/state/remote-state-data
+    match: [terraform-remote-state, remote-state-data, cross-stack]
+    subtopics:
+      - {id: remote-state-config, name: remote_state config per backend type, match: [remote-state-config, remote-state-backend-config]}
+      - {id: output-contract, name: Root outputs as a cross-state contract, match: [remote-state-outputs, output-contract]}
+      - {id: data-source-alternatives, name: Replacing remote_state with tag/SSM lookups, match: [data-source-lookup, ssm-parameter-lookup]}
+      - {id: tfe-outputs, name: tfe_outputs data source, match: [tfe-outputs]}
+      - {id: remote-state-workspace, name: workspace argument in remote_state, match: [remote-state-workspace]}
+      - {id: remote-state-defaults, name: defaults argument and missing outputs, match: [remote-state-defaults]}
+      - {id: remote-state-permissions, name: Read permissions and full-state exposure of remote_state, match: [remote-state-permissions]}
+      - {id: remote-state-sharing, name: HCP Terraform remote state sharing settings, match: [remote-state-sharing]}
+  - id: state-security
+    name: Sensitive values in state and state encryption
+    source: OpenTofu/State encryption
+    match: [state-encryption, sensitive-state, state-security, sensitive-values]
+    subtopics:
+      - {id: tofu-encryption-block, name: OpenTofu encryption block, match: [tofu-encryption-block, encryption-block]}
+      - {id: key-providers, name: Key providers - pbkdf2, aws_kms, gcp_kms, match: [key-provider, pbkdf2, aws-kms-key-provider]}
+      - {id: encryption-fallback, name: Encryption fallback and key rotation, match: [encryption-fallback, encryption-migration]}
+      - {id: sensitive-output-redaction, name: Sensitive output redaction and nonsensitive, match: [sensitive-output, nonsensitive]}
+      - {id: plan-encryption, name: Encrypting plan files, match: [plan-encryption, encrypted-plan]}
+      - {id: state-bucket-hardening, name: "State bucket encryption, versioning and access policy", match: [state-bucket-hardening, bucket-policy-state]}
+      - {id: transit-key-provider, name: OpenBao/Vault transit key provider, match: [openbao-key-provider, transit-key-provider]}
+      - {id: state-secret-audit, name: Auditing state for leaked secrets, match: [state-secret-audit]}
+  - id: drift-detection
+    name: Drift detection and refresh-only runs
+    source: Professional/Resource lifecycle + CLI refresh
+    match: [drift, drift-detection, refresh-only, drift-reconciliation]
+    subtopics:
+      - {id: drift-check-pipeline, name: Scheduled drift-check pipeline, match: [drift-check-pipeline, scheduled-drift]}
+      - {id: refresh-only-apply, name: apply -refresh-only to accept drift into state, match: [refresh-only-apply, accept-drift]}
+      - {id: expected-drift, name: ignore_changes for expected drift, match: [expected-drift, ignore-drift]}
+      - {id: health-assessments, name: HCP Terraform health assessments, match: [health-assessments, continuous-validation]}
+      - {id: refresh-command, name: terraform refresh command and its deprecation, match: [terraform-refresh-command, refresh-command]}
+      - {id: drift-alerting, name: Drift alerting to chat and issue trackers, match: [drift-alerting]}
+      - {id: unmanaged-resources, name: Detecting unmanaged resources (driftctl successors), match: [unmanaged-resources, driftctl]}
+      - {id: drift-root-cause, name: Root-causing drift with CloudTrail and activity logs, match: [drift-root-cause, cloudtrail-drift]}
+  - id: state-migration
+    name: Migrating state between backends
+    source: language/backend migration
+    match: [state-migration, backend-migration, migrate-state]
+    subtopics:
+      - {id: local-to-remote, name: Migrating local state to a remote backend, match: [local-to-remote, migrate-local-state]}
+      - {id: backend-to-backend, name: Backend-to-backend migration with -migrate-state, match: [migrate-state-flag, backend-to-backend]}
+      - {id: workspace-migration, name: Migrating multiple workspaces between backends, match: [workspace-migration, migrate-workspaces]}
+      - {id: migrate-to-hcp, name: Migrating to the cloud block / HCP Terraform, match: [migrate-to-hcp, cloud-migration]}
+      - {id: migrate-to-local, name: Removing a backend and migrating back to local, match: [remove-backend, migrate-to-local]}
+      - {id: state-split-migration, name: Splitting one state into several during migration, match: [state-split-migration]}
+      - {id: state-version-upload, name: Uploading state through the HCP state versions API, match: [state-version-upload]}
+      - {id: migration-verification, name: "Verifying a migration with serial, lineage and a no-op plan", match: [migration-verification]}
+  # --- Resource lifecycle (Professional: manage resource lifecycle)
+  - id: lifecycle-meta-arguments
+    name: lifecycle - create_before_destroy, prevent_destroy, ignore_changes, replace_triggered_by
+    source: language/meta-arguments/lifecycle
+    match: [lifecycle, create-before-destroy, prevent-destroy, ignore-changes, replace-triggered-by]
+    subtopics:
+      - {id: cbd-pitfalls, name: create_before_destroy naming and dependency propagation, match: [cbd-naming, cbd-propagation]}
+      - {id: prevent-destroy-workflow, name: prevent_destroy and intentional destroy workflow, match: [prevent-destroy-override, prevent-destroy-workflow]}
+      - {id: ignore-changes-forms, name: ignore_changes all vs attribute list, match: [ignore-changes-all, ignore-changes-list]}
+      - {id: replace-triggered-by-usage, name: replace_triggered_by with terraform_data, match: [replace-triggered-by-usage, triggers-replace]}
+      - {id: lifecycle-literal, name: lifecycle arguments must be static literals, match: [lifecycle-literal]}
+      - {id: ignore-changes-tags, name: ignore_changes on tags maps and keys, match: [ignore-changes-tags]}
+      - {id: lifecycle-module-caller, name: Exposing lifecycle choices to module callers, match: [lifecycle-module-caller]}
+      - {id: zero-downtime-replacement, name: Zero-downtime replacement of ASGs and launch templates, match: [zero-downtime-replacement]}
+  - id: taint-replace
+    name: taint/untaint and -replace
+    source: CLI taint/untaint + plan -replace
+    match: [taint, untaint, replace, forced-replacement]
+    subtopics:
+      - {id: replace-addressing, name: -replace addressing for indexed instances, match: [replace-address, replace-indexed]}
+      - {id: untaint-provisioner, name: untaint after a failed creation provisioner, match: [untaint-provisioner, tainted-loop]}
+      - {id: replace-cbd, name: -replace with create_before_destroy, match: [replace-create-before-destroy]}
+      - {id: deposed-objects, name: Deposed objects after failed replacement, match: [deposed-object, deposed]}
+      - {id: multiple-replace, name: Multiple -replace flags and replace in HCP runs, match: [multiple-replace, replace-hcp-run]}
+      - {id: tainted-status, name: Finding tainted instances in state, match: [tainted-status]}
+      - {id: address-quoting, name: Quoting for_each addresses in shells, match: [address-quoting, shell-quoting-address]}
+      - {id: replace-data-loss, name: Data-loss checks before replacing stateful resources, match: [replace-data-loss]}
+  - id: targeted-applies
+    name: -target and -exclude and why to avoid them
+    source: CLI plan -target/-exclude
+    match: [target, targeted-apply, resource-targeting]
+    subtopics:
+      - {id: exclude-flag, name: -exclude flag, match: [exclude-flag, exclude-addresses]}
+      - {id: target-module, name: Targeting a whole module, match: [target-module, module-target]}
+      - {id: target-ci, name: Targeted plans in saved plan files and CI, match: [target-ci, targeted-plan-file]}
+      - {id: target-alternatives, name: Alternatives to -target, match: [target-alternatives, avoid-target]}
+      - {id: targeting-warning, name: Resource targeting warning and the follow-up full plan, match: [targeting-warning]}
+      - {id: target-dependencies, name: Dependencies pulled in by -target, match: [target-dependencies]}
+      - {id: two-phase-apply, name: Two-phase bootstrap applies that genuinely need -target, match: [two-phase-apply, target-bootstrap]}
+      - {id: target-data-source, name: Targeting data sources and outputs, match: [target-data-source]}
+  - id: depends-on-ordering
+    name: Implicit vs explicit dependencies (depends_on)
+    source: language/meta-arguments/depends_on
+    match: [depends-on, dependencies, dependency-ordering, implicit-dependency]
+    subtopics:
+      - {id: module-depends-on, name: depends_on on module blocks, match: [module-depends-on]}
+      - {id: data-source-depends-on, name: depends_on on data sources and deferred reads, match: [data-source-depends-on, deferred-data-read]}
+      - {id: hidden-dependencies, name: Hidden dependencies via provisioners and scripts, match: [hidden-dependency, hidden-dependencies]}
+      - {id: apply-ordering, name: Apply ordering and parallelism interactions, match: [apply-ordering, parallel-ordering]}
+      - {id: depends-on-overuse, name: depends_on over-use causing perpetual known after apply, match: [depends-on-overuse]}
+      - {id: time-sleep, name: Eventual consistency and time_sleep, match: [time-sleep, eventual-consistency]}
+      - {id: destroy-order-reversal, name: Destroy-time dependency order reversal, match: [destroy-order-reversal]}
+      - {id: iam-propagation, name: IAM propagation delays and retry patterns, match: [iam-propagation]}
+  - id: provisioners-cloud-init
+    name: Provisioners and why cloud-init/user_data beats them
+    source: language/resources/provisioners
+    match: [provisioner, provisioners, local-exec, remote-exec, null-resource, terraform-data]
+    subtopics:
+      - {id: file-provisioner, name: file provisioner and connection block, match: [file-provisioner, connection-block]}
+      - {id: bastion-ssh, name: remote-exec through a bastion with SSH agent, match: [bastion-host, ssh-connection]}
+      - {id: user-data-replace, name: user_data and user_data_replace_on_change, match: [user-data-replace-on-change, cloud-config]}
+      - {id: terraform-data-triggers, name: terraform_data triggers_replace and input, match: [terraform-data-triggers, terraform-data-input]}
+      - {id: destroy-time-provisioner, name: Destroy-time provisioners, match: [destroy-time-provisioner, when-destroy]}
+      - {id: on-failure, name: on_failure = continue and provisioner failure behaviour, match: [on-failure, provisioner-failure]}
+      - {id: local-exec-interpreter, name: "local-exec interpreter, environment and working_dir", match: [local-exec-interpreter, local-exec-environment]}
+      - {id: winrm, name: WinRM connections for Windows hosts, match: [winrm]}
+      - {id: ansible-handoff, name: Handing off to Ansible after provisioning, match: [ansible-handoff]}
+  - id: removed-destroy
+    name: removed blocks and destroy-time behaviour
+    source: language/resources/syntax removed + CLI destroy
+    match: [removed-block, removed-blocks, destroy, destroy-time]
+    subtopics:
+      - {id: removed-destroy-false, name: removed block with destroy = false, match: [removed-destroy-false, forget-without-destroy]}
+      - {id: removed-provisioner, name: Destroy provisioners inside removed blocks, match: [removed-provisioner]}
+      - {id: destroy-target, name: destroy -target and safe partial teardown, match: [destroy-target, teardown]}
+      - {id: deletion-protection, name: Deletion protection attributes blocking destroy, match: [deletion-protection, destroy-ordering]}
+      - {id: ephemeral-env-teardown, name: Destroying ephemeral environments in CI, match: [ephemeral-destroy, pr-env-teardown]}
+      - {id: destroy-flags, name: terraform destroy flags and plan -destroy equivalence, match: [destroy-flags, destroy-auto-approve]}
+      - {id: removed-module, name: removed blocks for whole modules, match: [removed-module]}
+      - {id: destroy-failures, name: Destroy failures - non-empty buckets and dependency violations, match: [force-destroy, dependency-violation]}
+  # --- Configuration language (Associate: read/generate/modify; Professional: dynamic configuration)
+  - id: variables-validation
+    name: Input variables, types, validation and sensitive
+    source: language/values/variables
+    match: [variables, input-variables, variable-validation, validation-block, sensitive-variable]
+    subtopics:
+      - {id: cross-variable-validation, name: Validation referencing other variables, match: [cross-variable-validation]}
+      - {id: nullable, name: nullable = false, match: [nullable, nullable-false]}
+      - {id: ephemeral-variables, name: Ephemeral input variables, match: [ephemeral-variable, ephemeral-input]}
+      - {id: variable-defaults, name: Defaults for object variables, match: [variable-defaults, default-object]}
+      - {id: validation-patterns, name: Validation with regex, contains and can, match: [validation-regex, can-regex]}
+      - {id: invalid-variable-value, name: Invalid value for input variable type errors, match: [invalid-variable-value]}
+      - {id: variable-description, name: Variable descriptions and documentation, match: [variable-description]}
+      - {id: sensitive-variable-masking, name: "sensitive variables in plans, outputs and errors", match: [sensitive-variable-masking]}
+      - {id: undeclared-variable, name: Undeclared variable warnings from tfvars files, match: [undeclared-variable]}
+  - id: outputs
+    name: Outputs and output preconditions
+    source: language/values/outputs + CLI output
+    match: [outputs, output-values]
+    subtopics:
+      - {id: output-json, name: terraform output -json and sensitive outputs, match: [output-json, output-sensitive]}
+      - {id: output-precondition, name: Output preconditions, match: [output-precondition]}
+      - {id: output-raw, name: terraform output -raw in scripts, match: [output-raw]}
+      - {id: module-outputs, name: Module outputs and depends_on on outputs, match: [output-depends-on, module-outputs]}
+      - {id: ephemeral-outputs, name: Ephemeral outputs, match: [ephemeral-output]}
+      - {id: output-description, name: Output descriptions and documentation, match: [output-description]}
+      - {id: output-changes, name: Changes to Outputs in plans, match: [output-changes]}
+      - {id: github-output, name: Passing outputs to later CI jobs, match: [github-output, output-to-ci]}
+  - id: locals
+    name: Locals for derived values
+    source: language/values/locals
+    match: [locals, local-values]
+    subtopics:
+      - {id: lookup-tables, name: Lookup-table locals keyed by environment, match: [lookup-table, lookup-tables]}
+      - {id: flatten-nested, name: Flattening nested structures for for_each, match: [flatten, flatten-nested]}
+      - {id: sensitive-locals, name: Sensitivity propagation through locals, match: [sensitive-local, sensitive-locals]}
+      - {id: locals-naming, name: Naming and organising locals, match: [locals-naming, locals-file]}
+      - {id: merge-defaults, name: Merging defaults with overrides in locals, match: [merge-defaults]}
+      - {id: locals-cycle, name: Locals self-reference cycles, match: [locals-cycle]}
+      - {id: common-tags, name: common_tags pattern with merge, match: [common-tags]}
+      - {id: locals-vs-variables, name: When to use locals vs variables, match: [locals-vs-variables]}
+  - id: data-sources
+    name: Data sources
+    source: language/data-sources
+    match: [data-source, data-sources]
+    subtopics:
+      - {id: data-filters, name: Filters and most_recent lookups, match: [most-recent, data-filter]}
+      - {id: external-data-source, name: external data source programs, match: [external-data-source, external-program]}
+      - {id: http-data-source, name: http data source, match: [http-data-source]}
+      - {id: local-archive-data, name: local_file and archive_file data sources, match: [local-file-data, archive-file]}
+      - {id: data-source-for-each, name: Data sources with count and for_each, match: [data-source-for-each, data-for-each]}
+      - {id: data-read-during-apply, name: Data sources read during apply and perpetual diffs, match: [data-read-during-apply]}
+      - {id: iam-policy-document, name: aws_iam_policy_document data source, match: [iam-policy-document]}
+      - {id: data-not-found, name: Handling not-found results from data sources, match: [data-not-found]}
+      - {id: caller-identity, name: Account and region context data sources, match: [caller-identity]}
+  - id: count-for-each
+    name: count vs for_each and index-shift pitfalls
+    source: language/meta-arguments/count and for_each
+    match: [count, for-each, for_each, index-shift]
+    subtopics:
+      - {id: for-each-toset, name: for_each over toset lists, match: [toset-for-each, for-each-set]}
+      - {id: module-for-each, name: for_each on module blocks, match: [module-for-each, module-count]}
+      - {id: unknown-keys, name: each.key and keys unknown until apply, match: [each-key, unknown-keys]}
+      - {id: conditional-count, name: Conditional resources with count ternary, match: [conditional-count, count-ternary]}
+      - {id: for-each-sensitive, name: for_each with sensitive values error, match: [for-each-sensitive]}
+      - {id: count-index, name: count.index and element wraparound, match: [count-index, element-wraparound]}
+      - {id: each-value, name: for_each over maps of objects with each.value, match: [each-value, map-of-objects]}
+      - {id: resource-chaining, name: Chaining for_each between resources, match: [resource-chaining, chaining-for-each]}
+      - {id: stable-keys, name: Choosing stable for_each keys, match: [stable-keys]}
+  - id: dynamic-blocks
+    name: dynamic blocks
+    source: language/expressions/dynamic-blocks
+    match: [dynamic-block, dynamic-blocks]
+    subtopics:
+      - {id: nested-dynamic, name: Nested dynamic blocks, match: [nested-dynamic]}
+      - {id: dynamic-iterator, name: iterator argument, match: [iterator, dynamic-iterator]}
+      - {id: optional-block, name: Optional single blocks via 0/1 lists, match: [optional-block, conditional-block]}
+      - {id: dynamic-labels, name: Block labels and content in dynamic, match: [dynamic-labels, content-block]}
+      - {id: dynamic-overuse, name: When not to use dynamic blocks, match: [dynamic-overuse]}
+      - {id: dynamic-map, name: dynamic blocks over maps and objects, match: [dynamic-map]}
+      - {id: attributes-as-blocks, name: Attributes-as-blocks mode and dynamic, match: [attributes-as-blocks]}
+      - {id: dynamic-ingress, name: dynamic ingress and egress rules pattern, match: [dynamic-ingress]}
+  - id: expressions-functions
+    name: Expressions, for-expressions, splats and built-in functions
+    source: language/functions families + language/expressions
+    match: [expressions, for-expression, for-expressions, splat, built-in-functions, functions]
+    subtopics:
+      - {id: string-functions, name: String functions - format, join, split, replace, regex, match: [string-functions, regex-function, format-function]}
+      - {id: collection-functions, name: Collection functions - flatten, merge, lookup, zipmap, setproduct, match: [collection-functions, setproduct, zipmap]}
+      - {id: encoding-functions, name: Encoding functions - jsonencode, yamldecode, base64, match: [encoding-functions, yamldecode, jsondecode]}
+      - {id: filesystem-functions, name: Filesystem functions - file, fileset, path.module, match: [filesystem-functions, fileset, path-module]}
+      - {id: datetime-functions, name: Date and time functions - timestamp, timeadd, formatdate, match: [datetime-functions, formatdate, plantimestamp]}
+      - {id: hash-crypto-functions, name: Hash and crypto functions - sha256, filemd5, bcrypt, match: [hash-functions, filemd5, crypto-functions]}
+      - {id: ip-network-functions, name: IP network functions - cidrsubnet, cidrhost, cidrsubnets, match: [cidrsubnet, cidrhost, ip-functions]}
+      - {id: type-conversion-functions, name: Type conversion functions - tostring, tolist, tomap, match: [type-conversion, tolist, tomap]}
+      - {id: splat-expressions, name: Splat expressions and full splat, match: [splat-expression, full-splat]}
+      - {id: operators, name: Operators, precedence and string interpolation, match: [operators, interpolation, operator-precedence]}
+      - {id: for-if-filter, name: for expressions with if filters and grouping mode, match: [for-if-filter, grouping-mode]}
+      - {id: numeric-functions, name: "Numeric functions - min, max, ceil, parseint", match: [numeric-functions, parseint]}
+      - {id: named-values, name: "References to named values - path, self, count, each", match: [named-values, path-root]}
+  - id: conditionals-try
+    name: Conditionals, try/can and null handling
+    source: language/functions/try can coalesce one + expressions/conditionals
+    match: [conditional, conditionals, try, can, null-handling, optional-attributes]
+    subtopics:
+      - {id: try-vs-can, name: try vs can and error masking, match: [try-vs-can]}
+      - {id: coalesce, name: coalesce and coalescelist, match: [coalesce, coalescelist]}
+      - {id: null-arguments, name: null to omit arguments, match: [null-argument, null-attribute]}
+      - {id: conditional-types, name: Conditional branches with mismatched types, match: [conditional-types, type-mismatch]}
+      - {id: one-function, name: one() for zero-or-one lists, match: [one-function]}
+      - {id: lookup-default, name: lookup with defaults and map access errors, match: [lookup-default]}
+      - {id: alltrue-anytrue, name: alltrue and anytrue in conditions, match: [alltrue, anytrue]}
+      - {id: short-circuit, name: Logical operator short-circuit evaluation, match: [short-circuit]}
+  - id: type-constraints-objects
+    name: Type constraints, object types and optional attributes
+    source: language/expressions/type-constraints
+    match: [type-constraints, object-type, optional, complex-types]
+    subtopics:
+      - {id: optional-default, name: optional() with default values, match: [optional-default]}
+      - {id: any-type, name: any type and inference, match: [any-type]}
+      - {id: object-vs-map, name: object vs map and tuple vs list, match: [object-vs-map, tuple-vs-list]}
+      - {id: structural-types, name: Structural vs collection types and conversion, match: [structural-types, collection-types]}
+      - {id: nested-defaults, name: Nested optional defaults, match: [nested-defaults]}
+      - {id: set-type, name: "set types, ordering and indexing errors", match: [set-type]}
+      - {id: type-unification, name: map(any) and list unification errors, match: [map-any, type-unification]}
+      - {id: type-error-messages, name: Reading inconsistent type error messages, match: [type-error-messages]}
+  - id: templatefile-heredoc
+    name: templatefile and heredoc rendering
+    source: language/functions/templatefile + expressions/strings
+    match: [templatefile, heredoc, template-rendering]
+    subtopics:
+      - {id: template-directives, name: Template directives for and if, match: [template-directives, template-for]}
+      - {id: strip-markers, name: Strip markers and indented heredocs, match: [strip-markers, indented-heredoc]}
+      - {id: json-templates, name: templatefile with jsonencode for policy documents, match: [policy-template, json-template]}
+      - {id: templatestring, name: templatestring function, match: [templatestring]}
+      - {id: template-escaping, name: Escaping interpolation and directive sequences in templates, match: [template-escaping]}
+      - {id: cloud-init-template, name: Rendering cloud-init with templatefile, match: [cloud-init-template]}
+      - {id: template-variable-error, name: Missing template variable errors, match: [template-variable-error]}
+      - {id: yamlencode, name: yamlencode instead of templated YAML, match: [yamlencode]}
+  - id: preconditions-postconditions
+    name: Custom conditions - preconditions, postconditions, check blocks
+    source: language/expressions/custom-conditions + language/checks
+    match: [precondition, postcondition, preconditions, postconditions, check-block, check-blocks]
+    subtopics:
+      - {id: resource-precondition, name: Resource preconditions, match: [resource-precondition]}
+      - {id: postcondition-self, name: Postconditions using self, match: [postcondition-self]}
+      - {id: scoped-data-source, name: check blocks with scoped data sources, match: [scoped-data-source, check-assertion]}
+      - {id: error-messages, name: Writing error_message strings, match: [error-message, error-messages]}
+      - {id: data-precondition, name: Data source preconditions, match: [data-precondition]}
+      - {id: check-results, name: check block results in HCP and continuous validation, match: [check-results]}
+      - {id: condition-choice, name: Choosing validation vs precondition vs check, match: [condition-choice]}
+      - {id: condition-unknown, name: Conditions on unknown values deferred to apply, match: [condition-unknown]}
+  - id: variable-precedence
+    name: Variable definition precedence (tfvars, env, CLI)
+    source: language/values/variables assigning values
+    match: [tfvars, variable-precedence, tf-var, auto-tfvars]
+    subtopics:
+      - {id: tf-var-env, name: TF_VAR_ environment variables, match: [tf-var-env, tf-var-prefix]}
+      - {id: var-file-order, name: -var-file and auto.tfvars ordering, match: [var-file-order, auto-tfvars-ordering]}
+      - {id: tfvars-json, name: tfvars.json files, match: [tfvars-json]}
+      - {id: var-complex, name: Complex values via -var and env, match: [var-complex, var-cli-complex]}
+      - {id: workspace-variable-precedence, name: HCP workspace and variable-set precedence, match: [workspace-variable-precedence, variable-set-precedence]}
+      - {id: variable-prompt, name: Interactive variable prompts and -input=false errors, match: [variable-prompt]}
+      - {id: env-tfvars, name: Per-environment tfvars files, match: [env-tfvars]}
+      - {id: ci-secret-variables, name: TF_VAR_ values from CI secrets, match: [ci-secret-variables]}
+  # --- Modules (Associate: modules; Professional: create/maintain/use modules)
+  - id: module-design
+    name: Module interface design and composition
+    source: language/modules/develop
+    match: [module-design, module, modules, module-composition, module-interface]
+    subtopics:
+      - {id: module-input-objects, name: Object-typed module inputs, match: [module-inputs-objects, module-input-objects]}
+      - {id: module-output-design, name: Designing module outputs, match: [module-output-design]}
+      - {id: module-nesting, name: Flat vs nested module trees, match: [module-nesting, nested-modules]}
+      - {id: terraform-docs, name: terraform-docs README generation, match: [terraform-docs]}
+      - {id: module-examples, name: examples/ directory and CHANGELOG, match: [module-examples, module-changelog]}
+      - {id: wrapper-modules, name: Wrapper and thin modules anti-pattern, match: [wrapper-module, thin-wrapper]}
+      - {id: module-required-version, name: Module required_providers and required_version blocks, match: [module-required-version]}
+      - {id: conditional-module, name: Conditional module creation and create flags, match: [conditional-module, create-flag]}
+      - {id: dependency-inversion, name: Dependency inversion - passing IDs between modules, match: [dependency-inversion]}
+  - id: module-sources-versioning
+    name: Module sources, registry and version constraints
+    source: language/modules/sources
+    match: [module-source, module-sources, module-versioning, module-registry, version-constraint, version-constraints]
+    subtopics:
+      - {id: git-sources, name: Git sources with ref and subdirectory, match: [git-source, ref-subdir]}
+      - {id: pessimistic-constraint, name: Pessimistic ~> version constraints, match: [pessimistic-constraint, tilde-constraint]}
+      - {id: local-modules, name: Local path modules, match: [local-module, local-path-source]}
+      - {id: archive-sources, name: S3, GCS and HTTP archive sources, match: [archive-source, s3-module-source]}
+      - {id: terraform-get, name: terraform get -update, match: [terraform-get, get-update]}
+      - {id: registry-source, name: Registry source addresses and hostnames, match: [registry-source]}
+      - {id: private-git-source, name: Private git sources with SSH and tokens, match: [private-git-source, git-ssh-source]}
+      - {id: modules-json, name: .terraform/modules and modules.json, match: [modules-json]}
+  - id: private-registry
+    name: Private module registry publishing
+    source: HCP Terraform private registry docs + registry protocol
+    match: [private-registry, module-publishing, registry-publishing]
+    subtopics:
+      - {id: registry-vcs-publish, name: Publishing via VCS tags, match: [registry-vcs-publish, semver-tags]}
+      - {id: registry-protocol, name: Registry protocol and self-hosted registries, match: [registry-protocol, gitlab-module-registry]}
+      - {id: no-code-modules, name: No-code modules, match: [no-code-module, no-code-modules]}
+      - {id: private-provider-registry, name: Private provider registry publishing, match: [private-provider-registry]}
+      - {id: service-discovery, name: Service discovery and well-known terraform.json, match: [service-discovery, well-known-terraform]}
+      - {id: branch-based-publishing, name: Branch-based publishing and registry-driven tests, match: [branch-based-publishing]}
+      - {id: tfe-registry-module, name: Managing registry modules with tfe_registry_module, match: [tfe-registry-module]}
+      - {id: module-deprecation, name: Deprecating and revoking module versions, match: [module-deprecation]}
+  - id: module-testing
+    name: terraform test and module testing strategy
+    source: language/tests + CLI test
+    match: [terraform-test, module-testing, testing, terratest, mock-provider]
+    subtopics:
+      - {id: run-blocks, name: run blocks and command = plan, match: [run-block, command-plan]}
+      - {id: override-resource, name: override_resource and mock data, match: [override-resource, mock-data]}
+      - {id: expect-failures, name: expect_failures, match: [expect-failures]}
+      - {id: test-helper-modules, name: Setup helper modules in tests, match: [test-helper-module, setup-module]}
+      - {id: test-flags, name: test -filter, -verbose and -junit-xml, match: [test-junit, test-filter]}
+      - {id: test-cleanup, name: Test cleanup and destroy on failure, match: [test-cleanup]}
+      - {id: test-variables, name: Variables in test files and run blocks, match: [test-variables]}
+      - {id: test-state-key, name: state_key and parallel run blocks, match: [test-state-key, parallel-run-blocks]}
+      - {id: registry-tests, name: Running module tests in the HCP private registry, match: [registry-tests]}
+  - id: root-module-layout
+    name: Root module and repository layout (stacks, environments)
+    source: Professional/Collaborative workflows + language/modules/develop/structure
+    match: [repository-layout, root-module, directory-layout, multi-environment, environment-layout]
+    subtopics:
+      - {id: env-directories, name: Per-environment directories, match: [env-directories, per-environment-dirs]}
+      - {id: file-conventions, name: main/variables/outputs/versions file conventions, match: [versions-tf, file-conventions]}
+      - {id: monorepo-polyrepo, name: Monorepo vs polyrepo for modules, match: [monorepo, polyrepo]}
+      - {id: layered-states, name: Layered states - network/platform/app, match: [layered-states, state-layering]}
+      - {id: naming-conventions, name: Resource naming conventions, match: [naming-conventions, resource-naming]}
+      - {id: account-matrix, name: Account and region directory matrices, match: [account-matrix]}
+      - {id: symlinked-config, name: Sharing backend and provider config across roots, match: [symlinked-config]}
+      - {id: bootstrap-root, name: Bootstrap root modules for state and CI identity, match: [bootstrap-root]}
+  - id: workspaces
+    name: CLI workspaces and when not to use them
+    source: CLI workspace subcommands
+    match: [workspace, workspaces, cli-workspaces]
+    subtopics:
+      - {id: workspace-commands, name: workspace new/select/delete, match: [workspace-select, workspace-delete]}
+      - {id: workspace-interpolation, name: terraform.workspace interpolation, match: [terraform-workspace-interpolation, workspace-interpolation]}
+      - {id: workspace-key-prefix, name: workspace_key_prefix and backend storage, match: [workspace-key-prefix]}
+      - {id: tf-workspace-env, name: TF_WORKSPACE environment variable, match: [tf-workspace]}
+      - {id: cloud-workspace-mapping, name: Mapping CLI workspaces to HCP workspaces with tags, match: [workspace-mapping, cloud-workspaces-tags]}
+      - {id: workspace-show, name: workspace show and list in scripts, match: [workspace-show, workspace-list]}
+      - {id: default-workspace, name: The default workspace and deletion rules, match: [default-workspace]}
+      - {id: workspace-vs-directories, name: Workspaces vs directories for environments, match: [workspace-vs-directories]}
+  # --- Providers (Professional: configure and use providers)
+  - id: provider-configuration-aliases
+    name: Provider configuration, aliases and multi-region
+    source: language/providers/configuration
+    match: [provider-configuration, provider-alias, provider-aliases, multi-region, multi-provider]
+    subtopics:
+      - {id: default-provider, name: Default and empty provider configurations, match: [default-provider, implicit-provider]}
+      - {id: region-alias, name: Region aliases for replication, match: [region-alias, multi-region-replication]}
+      - {id: provider-meta-argument, name: provider meta-argument on resources, match: [provider-meta-argument]}
+      - {id: provider-for-each-limitation, name: Provider configs from variables and the for_each limitation, match: [provider-for-each-limitation, provider-variables]}
+      - {id: account-alias, name: Cross-account provider aliases, match: [account-alias, cross-account-provider]}
+      - {id: default-tags, name: AWS provider default_tags and ignore_tags, match: [default-tags, ignore-tags]}
+      - {id: custom-endpoints, name: Provider endpoint overrides and retry settings, match: [custom-endpoints, endpoint-override]}
+      - {id: provider-local-name, name: Provider local names in required_providers, match: [provider-local-name]}
+  - id: provider-versions-upgrades
+    name: Provider version constraints and major upgrades
+    source: language/providers/requirements
+    match: [provider-version, provider-versions, provider-upgrade, required-providers]
+    subtopics:
+      - {id: constraint-operators, name: Version constraint operators, match: [constraint-operators]}
+      - {id: upgrade-lockfile-diff, name: Upgrading providers and reviewing lock file diffs, match: [provider-upgrade-lockfile, upgrade-diff]}
+      - {id: major-version-upgrade, name: Major provider upgrades and deprecations, match: [major-version-upgrade, deprecation-warnings]}
+      - {id: module-provider-constraints, name: Provider constraints in modules vs root, match: [module-provider-constraints]}
+      - {id: source-address, name: Provider source addresses and namespaces, match: [source-address, provider-namespace]}
+      - {id: prerelease-provider, name: Pre-release provider versions, match: [prerelease-provider]}
+      - {id: provider-changelog, name: Reading provider changelogs and upgrade guides, match: [provider-changelog]}
+      - {id: legacy-provider-address, name: Legacy provider address errors, match: [legacy-provider-address]}
+  - id: provider-authentication
+    name: Provider authentication (assume role, OIDC, workload identity)
+    source: Professional/Providers + provider auth docs
+    match: [provider-authentication, assume-role, oidc, workload-identity]
+    subtopics:
+      - {id: aws-assume-role, name: AWS assume_role and profiles, match: [aws-assume-role, aws-profile]}
+      - {id: azure-oidc, name: Azure use_oidc authentication, match: [azure-oidc, use-oidc]}
+      - {id: gcp-impersonation, name: GCP service account impersonation, match: [impersonate-service-account, gcp-impersonation]}
+      - {id: dynamic-provider-credentials, name: HCP dynamic provider credentials, match: [dynamic-provider-credentials]}
+      - {id: kubernetes-exec-auth, name: Kubernetes and Helm provider exec auth, match: [exec-plugin, kubeconfig-auth]}
+      - {id: github-oidc-aws, name: GitHub Actions OIDC to AWS, match: [github-oidc-aws, aws-oidc]}
+      - {id: gcp-wif, name: GCP workload identity federation from CI, match: [gcp-workload-identity-federation, gcp-wif]}
+      - {id: managed-identity, name: Azure managed identity and service principal auth, match: [managed-identity, service-principal]}
+      - {id: vault-auth-login, name: Vault provider auth_login methods, match: [vault-auth-login]}
+  - id: providers-in-modules
+    name: Passing providers to modules and configuration_aliases
+    source: language/modules/develop/providers
+    match: [configuration-aliases, provider-passing, providers-in-modules]
+    subtopics:
+      - {id: providers-map, name: providers map in module blocks, match: [providers-map]}
+      - {id: required-providers-aliases, name: configuration_aliases in required_providers, match: [required-providers-aliases]}
+      - {id: implicit-inheritance, name: Implicit provider inheritance, match: [implicit-inheritance]}
+      - {id: legacy-provider-in-module, name: Provider blocks inside modules and for_each errors, match: [legacy-provider-in-module, module-provider-block-error]}
+      - {id: orphaned-provider, name: Orphaned provider configurations on module removal, match: [orphaned-provider]}
+      - {id: module-for-each-providers, name: Aliased providers into for_each modules, match: [module-for-each-providers]}
+      - {id: provider-not-present, name: Provider configuration not present errors, match: [provider-not-present]}
+      - {id: paired-providers, name: Multi-region modules with paired providers, match: [paired-providers]}
+  - id: provider-development
+    name: Writing a provider with the Plugin Framework
+    source: Terraform docs/Plugin development
+    match: [provider-development, plugin-framework, custom-provider]
+    subtopics:
+      - {id: resource-crud, name: Resource schema and CRUD methods, match: [resource-crud, framework-schema]}
+      - {id: acceptance-tests, name: Acceptance tests with terraform-plugin-testing, match: [acceptance-tests, resource-test]}
+      - {id: plan-modifiers, name: Plan modifiers and RequiresReplace, match: [plan-modifiers, requires-replace]}
+      - {id: tfplugindocs, name: Generating docs with tfplugindocs, match: [tfplugindocs]}
+      - {id: state-upgraders, name: State upgraders for schema versions, match: [state-upgrader, schema-version]}
+      - {id: provider-release, name: Releasing with goreleaser and GPG, match: [goreleaser, provider-release]}
+      - {id: muxing, name: Muxing SDKv2 and Framework, match: [muxing]}
+      - {id: framework-data-source, name: Implementing data sources in the Plugin Framework, match: [framework-data-source]}
+      - {id: import-state-method, name: ImportState and resource identity support, match: [import-state-method]}
+      - {id: attribute-validators, name: Attribute validators, match: [attribute-validators]}
+  - id: provider-functions
+    name: Provider-defined functions
+    source: OpenTofu/Provider-defined functions + language/functions provider
+    match: [provider-functions, provider-defined-functions]
+    subtopics:
+      - {id: aws-arn-functions, name: AWS arn_parse and arn_build, match: [arn-build, arn-parse]}
+      - {id: manifest-decode, name: Kubernetes manifest_decode functions, match: [manifest-decode]}
+      - {id: function-implementation, name: Implementing a function in the Plugin Framework, match: [function-definition, function-implementation]}
+      - {id: tofu-provider-functions, name: OpenTofu provider function differences, match: [tofu-provider-functions]}
+      - {id: provider-function-syntax, name: Provider function call syntax and required_providers requirement, match: [provider-function-syntax]}
+      - {id: encode-tfvars, name: terraform provider functions encode_tfvars and decode_tfvars, match: [encode-tfvars, decode-tfvars]}
+      - {id: function-tests, name: Testing provider-defined functions, match: [function-tests]}
+      - {id: function-error, name: Function errors and argument validation, match: [function-error]}
+  # --- Collaboration, CI/CD and governance (Professional: collaborative workflows; Associate: HCP Terraform)
+  - id: ci-cd-pipelines
+    name: Terraform in CI/CD - plan on PR, apply on merge
+    source: Professional/Collaborative workflows + automation docs
+    match: [ci-cd, pipeline, github-actions, gitlab-ci, plan-on-pr, apply-on-merge]
+    subtopics:
+      - {id: setup-terraform, name: hashicorp/setup-terraform action, match: [setup-terraform, hashicorp-setup-terraform]}
+      - {id: gitlab-terraform, name: GitLab Terraform template and managed state, match: [gitlab-terraform-template, gitlab-managed-state]}
+      - {id: plan-artifact, name: Plan artifacts between pipeline stages, match: [plan-artifact]}
+      - {id: pr-comment, name: Posting plans as PR comments, match: [pr-comment]}
+      - {id: environment-protection, name: Environment protection and concurrency groups, match: [environment-protection, concurrency-group]}
+      - {id: azure-pipelines-jenkins, name: Azure Pipelines and Jenkins Terraform jobs, match: [azure-pipelines, jenkins]}
+      - {id: ci-cache, name: Caching providers and modules in CI, match: [ci-cache]}
+      - {id: ci-oidc, name: OIDC cloud credentials in CI pipelines, match: [ci-oidc]}
+      - {id: tfcmt, name: tfcmt plan notifications, match: [tfcmt]}
+  - id: hcp-terraform-workspaces
+    name: HCP Terraform / Enterprise workspaces and run workflows
+    source: HCP Terraform docs
+    match: [hcp-terraform, terraform-cloud, terraform-enterprise, remote-runs, run-triggers]
+    subtopics:
+      - {id: cloud-block, name: cloud block configuration, match: [cloud-block-config, cloud-block]}
+      - {id: variable-sets, name: Variable sets, match: [variable-sets]}
+      - {id: tfc-agent, name: HCP Terraform agents, match: [tfc-agent, hcp-agents]}
+      - {id: run-tasks, name: Run tasks and notifications, match: [run-tasks, notifications]}
+      - {id: projects-permissions, name: Projects and team permissions, match: [tfe-projects, team-permissions]}
+      - {id: tfe-provider, name: Managing workspaces with the tfe provider, match: [tfe-provider]}
+      - {id: run-trigger-config, name: Run triggers between workspaces, match: [run-trigger-config]}
+      - {id: speculative-plan, name: Speculative plans, match: [speculative-plan]}
+      - {id: api-driven-runs, name: API-driven runs and configuration versions, match: [api-driven-runs, configuration-version]}
+      - {id: execution-mode, name: Execution modes and CLI-driven runs, match: [execution-mode, cli-driven-runs]}
+  - id: policy-as-code
+    name: Sentinel / OPA policy as code for plans
+    source: HCP Terraform policy docs
+    match: [sentinel, opa, policy-as-code, conftest]
+    subtopics:
+      - {id: tfplan-v2, name: Sentinel tfplan/v2 imports, match: [tfplan-v2, sentinel-imports]}
+      - {id: sentinel-test, name: Sentinel mocks and sentinel test, match: [sentinel-test, sentinel-mocks]}
+      - {id: opa-plan-json, name: OPA rego over plan JSON, match: [opa-plan-json, rego-terraform]}
+      - {id: enforcement-levels, name: Policy sets and enforcement levels, match: [enforcement-levels, policy-set]}
+      - {id: conftest-ci, name: conftest in CI, match: [conftest-ci]}
+      - {id: tfconfig-v2, name: Sentinel tfconfig/v2 and tfstate/v2 imports, match: [tfconfig-v2, tfstate-v2]}
+      - {id: hcp-opa, name: OPA policies in HCP Terraform, match: [hcp-opa]}
+      - {id: policy-override, name: Policy overrides and soft-mandatory workflow, match: [policy-override]}
+  - id: static-analysis-security
+    name: tflint, checkov, trivy and tfsec scanning
+    source: tool docs
+    match: [tflint, checkov, trivy, tfsec, static-analysis, security-scanning]
+    subtopics:
+      - {id: tflint-config, name: .tflint.hcl and rulesets, match: [tflint-config, tflint-ruleset]}
+      - {id: checkov-config, name: checkov config and skips, match: [checkov-skip, checkov-config]}
+      - {id: trivy-config, name: trivy config scanning, match: [trivy-config, trivy-misconfig]}
+      - {id: tfsec-migration, name: Migrating tfsec to trivy, match: [tfsec-migration]}
+      - {id: kics-terrascan, name: KICS and terrascan, match: [kics, terrascan]}
+      - {id: inline-suppression, name: Inline suppression comments, match: [inline-suppression]}
+      - {id: tflint-plugin, name: tflint custom rule plugins, match: [tflint-plugin]}
+      - {id: sarif, name: SARIF upload to code scanning, match: [sarif]}
+      - {id: checkov-custom-policy, name: checkov custom policies, match: [checkov-custom-policy]}
+  - id: code-review-practices
+    name: Reviewing Terraform changes and plan diffs
+    source: Professional/Collaborative workflows
+    match: [code-review, plan-review, change-review]
+    subtopics:
+      - {id: review-checklist, name: Review checklist, match: [review-checklist]}
+      - {id: codeowners, name: CODEOWNERS for Terraform, match: [codeowners]}
+      - {id: atlantis-plan-comment, name: Atlantis plan comments in review, match: [atlantis-plan-comment]}
+      - {id: dependency-bumps, name: Reviewing Renovate/Dependabot bumps, match: [renovate, dependabot-terraform]}
+      - {id: blast-radius-review, name: Blast radius and PR sizing, match: [blast-radius-review, pr-sizing]}
+      - {id: plan-visualisation, name: Plan visualisation tools, match: [plan-visualisation]}
+      - {id: change-approval, name: Change approval and change windows, match: [change-approval]}
+      - {id: review-refactors, name: "Reviewing moved, import and removed blocks", match: [review-refactors]}
+  - id: secrets-management
+    name: Secrets handling and avoiding plaintext in state and VCS
+    source: Professional/Collaborative workflows
+    match: [secrets, secrets-management, vault, sensitive-data]
+    subtopics:
+      - {id: vault-kv, name: Vault KV secrets in Terraform, match: [vault-kv, vault-generic-secret]}
+      - {id: random-password, name: random_password and Secrets Manager, match: [random-password, secretsmanager]}
+      - {id: sops, name: SOPS-encrypted files, match: [sops]}
+      - {id: write-only-password, name: Write-only password arguments, match: [write-only-password]}
+      - {id: secret-scanning, name: gitleaks and secret scanning, match: [gitleaks, secret-scanning]}
+      - {id: env-credentials, name: Credentials via environment variables, match: [env-credentials]}
+      - {id: vault-dynamic-secrets, name: Vault dynamic cloud and database credentials, match: [vault-dynamic-secrets]}
+      - {id: ssm-securestring, name: SSM Parameter Store SecureString, match: [ssm-securestring]}
+      - {id: kms-secrets, name: KMS ciphertext with aws_kms_secrets, match: [kms-secrets]}
+  - id: orchestration-wrappers
+    name: Terragrunt, Atlantis, Spacelift and other orchestration wrappers
+    source: tool docs
+    match: [terragrunt, atlantis, spacelift, env0, orchestration]
+    subtopics:
+      - {id: atlantis-yaml, name: atlantis.yaml and server config, match: [atlantis-yaml, atlantis-server]}
+      - {id: spacelift-stacks, name: Spacelift stacks and policies, match: [spacelift-stacks, spacelift-policies]}
+      - {id: env0-templates, name: env0 templates, match: [env0-templates]}
+      - {id: terragrunt-dependency, name: Terragrunt dependency blocks, match: [dependency-blocks]}
+      - {id: terragrunt-run-all, name: Terragrunt run-all, match: [run-all]}
+      - {id: digger-terramate, name: Digger and Terramate, match: [digger, terramate]}
+      - {id: terragrunt-generate, name: Terragrunt generate and remote_state blocks, match: [terragrunt-generate, terragrunt-remote-state]}
+      - {id: terragrunt-stacks, name: Terragrunt stacks and units, match: [terragrunt-stacks]}
+      - {id: atlantis-workflows, name: Atlantis custom workflows and apply requirements, match: [atlantis-workflows, apply-requirements]}
+  - id: stacks
+    name: Terraform Stacks
+    source: Terraform docs/Stacks
+    match: [stacks, terraform-stacks, deferred-actions]
+    subtopics:
+      - {id: stack-components, name: Component blocks, match: [stack-components, component-block]}
+      - {id: deployments, name: Deployments and tfdeploy.hcl, match: [tfdeploy, deployments]}
+      - {id: stack-identity-token, name: Identity tokens and OIDC in stacks, match: [stack-identity-token]}
+      - {id: deferred-changes, name: Deferred changes, match: [deferred-changes]}
+      - {id: stacks-cli, name: Stacks CLI, match: [stacks-cli, tfstacks]}
+      - {id: deployment-group, name: Deployment groups and auto-approve rules, match: [deployment-group, orchestrate-rule]}
+      - {id: publish-output, name: publish_output and upstream_input, match: [publish-output, upstream-input]}
+      - {id: stack-providers, name: Provider blocks in stacks, match: [stack-providers]}
+  - id: opentofu-migration
+    name: OpenTofu migration and divergences
+    source: OpenTofu docs
+    match: [opentofu, tofu, opentofu-migration]
+    subtopics:
+      - {id: tofu-init, name: tofu init and registry switch, match: [tofu-init, tofu-registry]}
+      - {id: early-evaluation, name: Early variable evaluation, match: [early-evaluation, early-variable-evaluation]}
+      - {id: provider-for-each, name: Provider for_each and other tofu-only features, match: [provider-for-each, tofu-exclude]}
+      - {id: tofu-compatibility, name: Version compatibility and migrating back, match: [tofu-compatibility, migrate-back]}
+      - {id: tofu-extension, name: .tofu file extension, match: [tofu-extension]}
+      - {id: tofu-test, name: tofu test differences, match: [tofu-test]}
+      - {id: setup-opentofu, name: setup-opentofu in CI, match: [setup-opentofu]}
+      - {id: provider-gpg-keys, name: OpenTofu registry and provider signing keys, match: [provider-gpg-keys]}
+      - {id: tofu-lockfile, name: Lock file differences between tofu and terraform, match: [tofu-lockfile]}
+  # --- Operations and troubleshooting
+  - id: upgrade-terraform-version
+    name: Upgrading Terraform core versions and required_version
+    source: Associate/Basics + upgrade guides
+    match: [required-version, version-upgrade, terraform-upgrade, core-upgrade]
+    subtopics:
+      - {id: version-managers, name: tfenv and tenv, match: [tenv]}
+      - {id: terraform-version-file, name: .terraform-version file, match: [terraform-version-file]}
+      - {id: upgrade-guides, name: Upgrade guides and deprecations, match: [upgrade-guide]}
+      - {id: state-version, name: State format version compatibility, match: [state-version]}
+      - {id: compatibility-promises, name: 1.x compatibility promises, match: [compatibility-promises]}
+      - {id: version-bump-automation, name: Automating version bumps, match: [version-bump-automation]}
+      - {id: version-json, name: terraform version -json, match: [version-json]}
+      - {id: required-version-modules, name: required_version in modules vs root, match: [required-version-modules]}
+  - id: large-state-performance
+    name: Large state performance, parallelism and splitting states
+    source: Professional/Collaborative workflows
+    match: [parallelism, large-state, state-splitting, performance]
+    subtopics:
+      - {id: parallelism-flag, name: -parallelism flag, match: [parallelism-flag]}
+      - {id: plugin-cache, name: Plugin cache, match: [plugin-cache]}
+      - {id: api-throttling, name: Provider API throttling and retries, match: [api-throttling, retry-mode]}
+      - {id: monolith-split, name: Splitting monolith states, match: [monolith-split]}
+      - {id: refresh-time, name: Refresh time and -refresh=false trade-offs at scale, match: [refresh-time]}
+      - {id: slow-plan, name: Profiling slow plans with log timestamps, match: [slow-plan]}
+      - {id: out-of-memory, name: Memory exhaustion on large plans, match: [out-of-memory, memory-usage]}
+      - {id: state-size, name: Measuring state size and resource counts, match: [state-size]}
+  - id: cycle-errors
+    name: Resolving dependency cycles
+    source: Professional/Dynamic configuration
+    match: [cycle, cycle-error, dependency-cycle]
+    subtopics:
+      - {id: sg-rule-cycles, name: Security group rule cycles, match: [security-group-rules]}
+      - {id: cbd-cycle, name: create_before_destroy cycles, match: [cbd-cycle, create-before-destroy-cycle]}
+      - {id: module-cycle, name: Module output cycles, match: [module-cycle]}
+      - {id: graph-cycle-detection, name: Finding cycles from graph output, match: [graph-cycle-detection]}
+      - {id: self-reference, name: Self references, match: [self-reference]}
+      - {id: destroy-cycle, name: Cycles that appear only during destroy, match: [destroy-cycle]}
+      - {id: provider-dependency, name: Provider configuration depending on resources, match: [provider-dependency]}
+      - {id: data-source-cycle, name: Data source cycles, match: [data-source-cycle]}
+  - id: disaster-recovery-state
+    name: State backup, corruption recovery and serial conflicts
+    source: Associate/State
+    match: [state-backup, state-recovery, state-corruption, serial-conflict]
+    subtopics:
+      - {id: s3-versioning-restore, name: Restoring from S3 versioning, match: [s3-versioning]}
+      - {id: tfstate-backup, name: terraform.tfstate.backup files, match: [tfstate-backup, backup-file]}
+      - {id: lineage-mismatch, name: Lineage and serial mismatch, match: [lineage-mismatch, serial-mismatch]}
+      - {id: rebuild-state, name: Rebuilding state from scratch, match: [rebuild-state]}
+      - {id: errored-tfstate, name: errored.tfstate after failed state write, match: [errored-tfstate]}
+      - {id: state-rollback, name: Rolling back state versions in HCP Terraform, match: [state-rollback]}
+      - {id: gcs-versioning, name: GCS object versioning and Azure blob snapshot restore, match: [gcs-versioning, blob-snapshot]}
+      - {id: manual-state-edit, name: Hand-editing state JSON safely, match: [manual-state-edit]}
+  - id: ephemeral-values
+    name: Ephemeral values and write-only arguments
+    source: Terraform docs/Ephemeral
+    match: [ephemeral, ephemeral-values, write-only]
+    subtopics:
+      - {id: ephemeral-resource, name: Ephemeral resources, match: [ephemeral-resource, ephemeral-block]}
+      - {id: write-only-argument, name: Write-only arguments and version attributes, match: [write-only-argument, write-only-version]}
+      - {id: ephemeralasnull, name: ephemeralasnull function, match: [ephemeralasnull]}
+      - {id: ephemeral-provider-config, name: Ephemeral values in provider configuration, match: [vault-ephemeral, ephemeral-provider-config]}
+      - {id: ephemeral-vs-sensitive, name: Ephemeral vs sensitive, match: [ephemeral-vs-sensitive]}
+      - {id: ephemeral-lifecycle, name: "Ephemeral resource open, renew and close lifecycle", match: [ephemeral-lifecycle]}
+      - {id: ephemeral-not-allowed, name: Ephemeral value not allowed errors, match: [ephemeral-not-allowed]}
+      - {id: ephemeral-random-password, name: Ephemeral random_password and secret fetches, match: [ephemeral-random-password]}

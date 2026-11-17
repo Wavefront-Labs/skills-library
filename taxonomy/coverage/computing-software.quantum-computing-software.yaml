@@ -1,0 +1,331 @@
+# Canonical coverage spec: quantum computing software (Qiskit, Cirq, PennyLane, OpenQASM 3, algorithms, error correction, PQC).
+# Topics come from the external sources listed below.
+subject: quantum-computing-software
+scope:
+  category: computing-software
+  field: quantum-computing-software
+  products: [quantum-fundamentals, qiskit, cirq-pennylane, quantum-algorithms, quantum-error-correction-noise, quantum-cloud-hardware]
+sources:
+  - "Nielsen and Chuang, Quantum Computation and Quantum Information (chapter structure)"
+  - "Qiskit documentation and Qiskit textbook table of contents (quantum.cloud.ibm.com/docs)"
+  - "Cirq documentation (quantumai.google/cirq)"
+  - "PennyLane documentation (docs.pennylane.ai)"
+  - "OpenQASM 3 specification (openqasm.com)"
+  - "IBM Quantum Developer certification exam blueprint (exam version unconfirmed)"
+  - "NIST post-quantum standards FIPS 203, FIPS 204, FIPS 205 (csrc.nist.gov), software level only"
+topics:
+  - id: qf-qubit
+    name: "Qubits and state vectors"
+    source: "Nielsen and Chuang ch.1-2 (postulate 1)"
+    match: [qubit-state]
+    subtopics:
+      - {id: qf-bloch-sphere, name: "Bloch sphere representation", match: [bloch-sphere]}
+      - {id: qf-superposition, name: "Superposition and amplitudes", match: [superposition-amplitudes]}
+      - {id: qf-born-rule, name: "Measurement and the Born rule", match: [measurement-born-rule]}
+  - id: qf-multi
+    name: "Multi-qubit systems and entanglement"
+    source: "Nielsen and Chuang ch.2.2.8-2.2.9 (composite systems, EPR)"
+    match: [multi-qubit-systems]
+    subtopics:
+      - {id: qf-tensor, name: "Tensor products and qubit ordering", match: [tensor-products]}
+      - {id: qf-entangle, name: "Entanglement and Bell states", match: [entanglement-bell-states]}
+      - {id: qf-partial-trace, name: "Partial trace and reduced states", match: [partial-trace-reduced-state]}
+  - id: qf-gates
+    name: "Quantum gates and universality"
+    source: "Nielsen and Chuang ch.1.3 and ch.4 (quantum circuits)"
+    match: [quantum-gates]
+    subtopics:
+      - {id: qf-paulis-h, name: "Pauli, Hadamard, phase and T gates", match: [single-qubit-gates]}
+      - {id: qf-rotations, name: "Rotation gates Rx Ry Rz", match: [rotation-gates]}
+      - {id: qf-controlled, name: "Controlled gates and CNOT", match: [controlled-gates-cnot]}
+      - {id: qf-universal, name: "Universal gate sets", match: [universal-gate-sets]}
+  - id: qf-circuit-model
+    name: "Circuit model and unitary evolution"
+    source: "Nielsen and Chuang ch.2.2.2 and ch.4"
+    match: [circuit-model]
+    subtopics:
+      - {id: qf-unitary, name: "Unitary matrices and circuit composition", match: [unitary-composition]}
+      - {id: qf-nocloning, name: "No-cloning and teleportation", match: [no-cloning-teleportation]}
+  - id: qf-measure
+    name: "Measurement theory and observables"
+    source: "Nielsen and Chuang ch.2.2.3 and ch.2.2.6 (measurement, POVM)"
+    match: [measurement-theory]
+    subtopics:
+      - {id: qf-projective, name: "Projective measurement and observables", match: [projective-measurement-observables]}
+      - {id: qf-expect-pauli, name: "Expectation values of Pauli strings", match: [expectation-values-pauli]}
+      - {id: qf-povm, name: "POVM and generalized measurement", match: [povm]}
+  - id: qf-density
+    name: "Density matrices and quantum channels"
+    source: "Nielsen and Chuang ch.2.4 and ch.8"
+    match: [density-matrices]
+    subtopics:
+      - {id: qf-mixed, name: "Mixed states and purity", match: [mixed-states-purity]}
+      - {id: qf-kraus, name: "Quantum channels and Kraus operators", match: [quantum-channels-kraus]}
+  - id: qk-circuits
+    name: "Building circuits with QuantumCircuit"
+    source: "Qiskit docs: Construct circuits"
+    match: [qiskit-circuits]
+    subtopics:
+      - {id: qk-quantumcircuit, name: "QuantumCircuit construction and registers", match: [quantumcircuit-basics]}
+      - {id: qk-param, name: "Parameterized circuits", match: [parameterized-circuits]}
+      - {id: qk-control-flow, name: "Dynamic circuits and control flow", match: [dynamic-circuits]}
+  - id: qk-primitives
+    name: "Primitives V2: Sampler and Estimator"
+    source: "Qiskit docs: Primitives"
+    match: [qiskit-primitives]
+    subtopics:
+      - {id: qk-sampler, name: "SamplerV2 and primitive unified blocks", match: [sampler-v2]}
+      - {id: qk-estimator, name: "EstimatorV2 and observables", match: [estimator-v2]}
+      - {id: qk-pubs, name: "PUB shapes and broadcasting", match: [pub-broadcasting]}
+  - id: qk-transpile
+    name: "Transpilation and pass manager"
+    source: "Qiskit docs: Transpile"
+    match: [qiskit-transpile]
+    subtopics:
+      - {id: qk-transpile-basics, name: "transpile and optimization levels", match: [transpile-optimization-level]}
+      - {id: qk-passmanager, name: "Custom PassManager and layout/routing", match: [custom-passmanager]}
+      - {id: qk-target, name: "Target, coupling map and basis gates", match: [backend-target-isa]}
+  - id: qk-simulate
+    name: "Simulators and quantum_info"
+    source: "Qiskit Aer docs and qiskit.quantum_info"
+    match: [qiskit-simulation]
+    subtopics:
+      - {id: qk-aer, name: "Qiskit Aer simulators", match: [aer-simulator]}
+      - {id: qk-qinfo, name: "Statevector, Operator and Pauli algebra", match: [quantum-info-module]}
+  - id: qk-runtime
+    name: "Qiskit Runtime and IBM Quantum Platform"
+    source: "IBM Quantum Platform docs: Execute on hardware"
+    match: [qiskit-runtime]
+    subtopics:
+      - {id: qk-account, name: "Account setup and authentication", match: [ibm-quantum-account]}
+      - {id: qk-modes, name: "Execution modes: job, session, batch", match: [runtime-execution-modes]}
+      - {id: qk-options, name: "Runtime options and resilience", match: [runtime-options-resilience]}
+  - id: qk-visual
+    name: "Visualization and results"
+    source: "Qiskit docs: Visualization"
+    match: [qiskit-visualization]
+    subtopics:
+      - {id: qk-draw, name: "Circuit drawing and histograms", match: [circuit-visualization]}
+      - {id: qk-bloch, name: "State visualizations", match: [state-visualization]}
+  - id: qk-algos-lib
+    name: "Qiskit circuit library and algorithm libraries"
+    source: "Qiskit docs: circuit library"
+    match: [qiskit-circuit-library]
+    subtopics:
+      - {id: qk-library, name: "Circuit library blocks", match: [circuit-library-blocks]}
+      - {id: qk-opflow, name: "Operators and the Qiskit Algorithms migration", match: [qiskit-algorithms-migration]}
+  - id: cp-cirq-circuits
+    name: "Cirq circuits, qubits and moments"
+    source: "Cirq docs: Build circuits"
+    match: [cirq-circuits]
+    subtopics:
+      - {id: cp-cirq-qubits, name: "Cirq qubits, gates and Circuit", match: [cirq-qubits-gates]}
+      - {id: cp-cirq-moments, name: "Moments and InsertStrategy", match: [cirq-moments-insert]}
+      - {id: cp-cirq-sim, name: "Cirq simulation and sampling", match: [cirq-simulator]}
+  - id: cp-cirq-adv
+    name: "Cirq parameters, noise and devices"
+    source: "Cirq docs: Noise, Parameter resolvers, Devices"
+    match: [cirq-advanced]
+    subtopics:
+      - {id: cp-cirq-params, name: "Symbols and ParamResolver sweeps", match: [cirq-parameter-sweeps]}
+      - {id: cp-cirq-noise, name: "Cirq noise models", match: [cirq-noise-models]}
+      - {id: cp-cirq-transform, name: "Circuit transformers and optimization", match: [cirq-transformers]}
+  - id: cp-pl-qnode
+    name: "PennyLane devices and QNodes"
+    source: "PennyLane docs: Devices and QNodes"
+    match: [pennylane-qnode]
+    subtopics:
+      - {id: cp-pl-device, name: "Devices and the QNode decorator", match: [pennylane-qnode-device]}
+      - {id: cp-pl-measure, name: "Measurement returns", match: [pennylane-measurements]}
+  - id: cp-pl-diff
+    name: "Differentiation and gradients"
+    source: "PennyLane docs: Gradients and differentiation"
+    match: [pennylane-gradients]
+    subtopics:
+      - {id: cp-pl-diffmethods, name: "diff_method choices", match: [pennylane-diff-method]}
+      - {id: cp-pl-ml, name: "Interfaces and optimizers", match: [pennylane-optimizers]}
+  - id: cp-pl-templates
+    name: "PennyLane templates, Hamiltonians and QML"
+    source: "PennyLane docs: Templates, Quantum chemistry, QML demos"
+    match: [pennylane-templates]
+    subtopics:
+      - {id: cp-pl-templates-layers, name: "Templates and embeddings", match: [pennylane-templates-layers]}
+      - {id: cp-pl-chem, name: "Quantum chemistry Hamiltonians", match: [pennylane-qchem]}
+  - id: cp-interop
+    name: "Framework interoperability"
+    source: "PennyLane plugins and OpenQASM converters"
+    match: [framework-interop]
+    subtopics:
+      - {id: cp-interop-qasm, name: "Convert between frameworks via OpenQASM", match: [circuit-conversion-qasm]}
+      - {id: cp-interop-backends, name: "Running one circuit on many backends", match: [multi-backend-execution]}
+  - id: qa-oracle
+    name: "Oracle algorithms"
+    source: "Nielsen and Chuang ch.1.4 and ch.6 (Deutsch-Jozsa, Grover); Qiskit textbook"
+    match: [oracle-algorithms]
+    subtopics:
+      - {id: qa-dj, name: "Deutsch-Jozsa and Bernstein-Vazirani", match: [deutsch-jozsa]}
+      - {id: qa-simon, name: "Simon's algorithm", match: [simons-algorithm]}
+  - id: qa-search
+    name: "Grover search and amplitude amplification"
+    source: "Nielsen and Chuang ch.6; Qiskit textbook Grover"
+    match: [grover-search]
+    subtopics:
+      - {id: qa-grover, name: "Grover's algorithm circuit", match: [grovers-algorithm]}
+      - {id: qa-amplitude, name: "Amplitude amplification and counting", match: [amplitude-amplification]}
+  - id: qa-qft
+    name: "Quantum Fourier transform and phase estimation"
+    source: "Nielsen and Chuang ch.5"
+    match: [qft-phase-estimation]
+    subtopics:
+      - {id: qa-qft, name: "Quantum Fourier transform circuit", match: [quantum-fourier-transform]}
+      - {id: qa-qpe, name: "Quantum phase estimation", match: [quantum-phase-estimation]}
+  - id: qa-shor
+    name: "Shor's factoring and period finding"
+    source: "Nielsen and Chuang ch.5.3 to 5.4"
+    match: [shor-factoring]
+    subtopics:
+      - {id: qa-period, name: "Period finding and order finding", match: [period-finding]}
+      - {id: qa-shor-impl, name: "Implementing Shor with modular arithmetic", match: [shor-implementation]}
+  - id: qa-variational
+    name: "Variational algorithms: VQE and QAOA"
+    source: "Qiskit and PennyLane docs: VQE, QAOA"
+    match: [variational-algorithms]
+    subtopics:
+      - {id: qa-vqe, name: "VQE for ground-state energies", match: [vqe]}
+      - {id: qa-qaoa, name: "QAOA for combinatorial optimization", match: [qaoa]}
+      - {id: qa-barren, name: "Barren plateaus and trainability", match: [barren-plateaus]}
+  - id: qa-hamsim
+    name: "Hamiltonian simulation"
+    source: "Nielsen and Chuang ch.4.7; Qiskit and PennyLane docs"
+    match: [hamiltonian-simulation]
+    subtopics:
+      - {id: qa-trotter, name: "Trotter-Suzuki product formulas", match: [trotterization]}
+      - {id: qa-qsvt, name: "Qubitization, LCU and QSVT", match: [qsvt-block-encoding]}
+  - id: qa-linear-ml
+    name: "Linear algebra and quantum machine learning"
+    source: "HHL paper and PennyLane QML demos"
+    match: [quantum-ml-linear]
+    subtopics:
+      - {id: qa-hhl, name: "HHL linear systems algorithm", match: [hhl]}
+      - {id: qa-qml, name: "Quantum kernels and variational classifiers", match: [quantum-machine-learning]}
+  - id: qa-primitives
+    name: "Quantum random access and state preparation"
+    source: "Qiskit and PennyLane docs: state preparation, random number generation"
+    match: [state-preparation]
+    subtopics:
+      - {id: qa-stateprep, name: "State preparation and amplitude encoding", match: [amplitude-encoding]}
+      - {id: qa-qrng, name: "Quantum random number generation", match: [quantum-random-numbers]}
+  - id: qe-noise
+    name: "Noise models and error sources"
+    source: "Nielsen and Chuang ch.8; Qiskit Aer noise docs"
+    match: [quantum-noise]
+    subtopics:
+      - {id: qe-t1t2, name: "T1, T2 and decoherence", match: [t1-t2-decoherence]}
+      - {id: qe-noise-model, name: "Building noise models in Aer", match: [aer-noise-model]}
+      - {id: qe-channels, name: "Standard error channels", match: [pauli-depolarizing-amplitude-damping]}
+  - id: qe-mitigation
+    name: "Error mitigation"
+    source: "Qiskit Runtime and Mitiq docs: Error mitigation"
+    match: [error-mitigation]
+    subtopics:
+      - {id: qe-zne, name: "Zero-noise extrapolation", match: [zero-noise-extrapolation]}
+      - {id: qe-pec, name: "Probabilistic error cancellation", match: [probabilistic-error-cancellation]}
+      - {id: qe-readout, name: "Readout error mitigation", match: [readout-error-mitigation]}
+      - {id: qe-twirl, name: "Pauli twirling and dynamical decoupling", match: [twirling-dynamical-decoupling]}
+  - id: qe-benchmark
+    name: "Characterization and benchmarking"
+    source: "Randomized benchmarking literature; Qiskit Experiments docs"
+    match: [device-benchmarking]
+    subtopics:
+      - {id: qe-rb, name: "Randomized benchmarking", match: [randomized-benchmarking]}
+      - {id: qe-tomography, name: "State and process tomography", match: [quantum-tomography]}
+      - {id: qe-qv, name: "Quantum volume and layer fidelity", match: [quantum-volume]}
+  - id: qe-qecc
+    name: "Quantum error-correcting codes"
+    source: "Nielsen and Chuang ch.10"
+    match: [quantum-error-correction]
+    subtopics:
+      - {id: qe-bitflip, name: "Three-qubit repetition codes", match: [repetition-code]}
+      - {id: qe-shor9, name: "Shor nine-qubit and Steane codes", match: [shor-steane-code]}
+      - {id: qe-stabilizer, name: "Stabilizer formalism and Gottesman-Knill", match: [stabilizer-formalism]}
+  - id: qe-surface
+    name: "Surface codes and fault tolerance"
+    source: "Fowler et al. 2012 surface code review; Stim docs"
+    match: [surface-code]
+    subtopics:
+      - {id: qe-surface-code, name: "Surface code layout and decoding", match: [surface-code-decoding]}
+      - {id: qe-fault-tolerance, name: "Fault-tolerant gates and magic states", match: [fault-tolerance-magic-states]}
+  - id: qe-qldpc
+    name: "Resource estimation and modern codes"
+    source: "Azure Quantum Resource Estimator docs; qLDPC literature"
+    match: [resource-estimation]
+    subtopics:
+      - {id: qe-resource, name: "Resource estimation tooling", match: [resource-estimation-tools]}
+      - {id: qe-qldpc, name: "qLDPC and bosonic codes overview", match: [qldpc-bosonic-codes]}
+  - id: qc-qasm
+    name: "OpenQASM 3 language"
+    source: "OpenQASM 3 specification (openqasm.com)"
+    match: [openqasm-3]
+    subtopics:
+      - {id: qc-qasm-syntax, name: "OpenQASM 3 types, gates and registers", match: [openqasm3-syntax]}
+      - {id: qc-qasm-control, name: "Classical control flow in OpenQASM 3", match: [openqasm3-control-flow]}
+      - {id: qc-qasm-pulse, name: "Timing and pulse-level (defcal)", match: [openqasm3-timing-defcal]}
+      - {id: qc-qasm-qiskit, name: "Import and export with Qiskit", match: [qasm3-qiskit-export]}
+  - id: qc-providers
+    name: "Cloud quantum services"
+    source: "IBM Quantum, Amazon Braket and Azure Quantum documentation"
+    match: [quantum-cloud-providers]
+    subtopics:
+      - {id: qc-braket, name: "Amazon Braket SDK", match: [amazon-braket]}
+      - {id: qc-azure, name: "Azure Quantum and Q#", match: [azure-quantum]}
+      - {id: qc-ibm-platform, name: "IBM Quantum Platform backends and queue", match: [ibm-quantum-backends]}
+  - id: qc-hardware
+    name: "Hardware platforms and native gates"
+    source: "Vendor hardware documentation; Nielsen and Chuang ch.7"
+    match: [quantum-hardware]
+    subtopics:
+      - {id: qc-modalities, name: "Qubit modalities", match: [qubit-modalities]}
+      - {id: qc-native, name: "Native gates and connectivity constraints", match: [native-gates-connectivity]}
+  - id: qc-cert
+    name: "IBM Quantum Developer certification"
+    source: "IBM Quantum Developer Certification exam blueprint (exam version unconfirmed)"
+    match: [ibm-quantum-certification]
+    subtopics:
+      - {id: qc-cert-circuits, name: "Exam area: perform quantum operations", match: [cert-circuit-operations]}
+      - {id: qc-cert-exec, name: "Exam area: execute and transpile", match: [cert-execution-transpile]}
+  - id: qc-pqc
+    name: "NIST post-quantum standards (software level)"
+    source: "NIST FIPS 203, FIPS 204, FIPS 205"
+    match: [nist-pqc-standards]
+    subtopics:
+      - {id: qc-mlkem, name: "ML-KEM (FIPS 203) key encapsulation", match: [ml-kem]}
+      - {id: qc-mldsa, name: "ML-DSA (FIPS 204) signatures", match: [ml-dsa]}
+      - {id: qc-slhdsa, name: "SLH-DSA (FIPS 205) hash-based signatures", match: [slh-dsa]}
+  - id: qc-pqc-migrate
+    name: "Post-quantum migration in software"
+    source: "NIST PQC project and CNSA 2.0 guidance (defensive)"
+    match: [pqc-migration]
+    subtopics:
+      - {id: qc-inventory, name: "Cryptographic inventory and agility", match: [crypto-inventory-agility]}
+      - {id: qc-hybrid, name: "Hybrid key exchange in TLS", match: [hybrid-tls-kem]}
+  - id: qf-linalg
+    name: "Linear algebra and Dirac notation"
+    source: "Nielsen and Chuang ch.2.1 (linear algebra)"
+    match: [dirac-linear-algebra]
+    subtopics:
+      - {id: qf-dirac, name: "Dirac notation, inner and outer products", match: [dirac-notation]}
+      - {id: qf-hermitian, name: "Hermitian, unitary and eigendecomposition", match: [hermitian-unitary-spectral]}
+  - id: qf-info
+    name: "Quantum information measures"
+    source: "Nielsen and Chuang ch.9 (distance measures) and ch.11 (entropy)"
+    match: [quantum-information-measures]
+    subtopics:
+      - {id: qf-fidelity, name: "Fidelity and trace distance", match: [fidelity-trace-distance]}
+      - {id: qf-entropy, name: "Von Neumann entropy and mutual information", match: [von-neumann-entropy]}
+  - id: qk-env
+    name: "Installation, versions and testing"
+    source: "Qiskit release notes and installation docs"
+    match: [qiskit-environment]
+    subtopics:
+      - {id: qk-install, name: "Installation and version management", match: [qiskit-installation]}
+      - {id: qk-testing, name: "Testing quantum code", match: [qiskit-testing-practice]}

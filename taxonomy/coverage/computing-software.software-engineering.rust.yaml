@@ -1,0 +1,234 @@
+# Canonical coverage spec: Rust language and Cargo ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: rust-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [rust]
+sources:
+  - "The Rust Programming Language book (doc.rust-lang.org/book)"
+  - "The Rust Reference (doc.rust-lang.org/reference)"
+  - "The Cargo Book (doc.rust-lang.org/cargo)"
+  - "The Rustonomicon (doc.rust-lang.org/nomicon)"
+  - "Rust API Guidelines (rust-lang.github.io/api-guidelines)"
+  - "Asynchronous Programming in Rust and the Tokio tutorial (rust-lang.github.io/async-book, tokio.rs/tokio/tutorial)"
+  - "Clippy lint documentation and rustc lint levels (rust-lang.github.io/rust-clippy, doc.rust-lang.org/rustc)"
+  - "Rust standard library docs (doc.rust-lang.org/std) and Rust by Example"
+topics:
+  - id: rust-ownership
+    name: "Ownership, borrowing and lifetimes"
+    source: "Rust book ch4 and ch10.3; Reference: Lifetime elision"
+    match: [rust-ownership]
+    subtopics:
+      - {id: rust-borrow-checker-errors, name: "Reading and fixing borrow checker errors", match: [rust-borrowck-errors]}
+      - {id: rust-lifetime-elision-annotations, name: "Lifetime annotations and elision rules", match: [rust-lifetimes]}
+      - {id: rust-lifetime-structs-hrtb, name: "Structs holding references and higher-ranked bounds", match: [rust-hrtb]}
+      - {id: rust-interior-mutability, name: "Interior mutability with Cell, RefCell and OnceCell", match: [rust-interior-mutability]}
+  - id: rust-types-data
+    name: "Types, structs and enums"
+    source: "Rust book ch3, ch5, ch6; Reference: Types"
+    match: [rust-types-data]
+    subtopics:
+      - {id: rust-integer-overflow-semantics, name: "Integer overflow, wrapping, checked and saturating arithmetic", match: [rust-integer-overflow]}
+      - {id: rust-enums-state-machines, name: "Enums and the type-state pattern", match: [rust-typestate]}
+      - {id: rust-builder-pattern, name: "Builder pattern and constructors", match: [rust-builder-pattern]}
+  - id: rust-collections-strings
+    name: "Collections and strings"
+    source: "Rust book ch8; std::collections docs"
+    match: [rust-collections-strings]
+    subtopics:
+      - {id: rust-hashmap-entry-api, name: "HashMap, entry API and hashing", match: [rust-hashmap-entry]}
+      - {id: rust-cow-and-borrowed-data, name: "Cow and avoiding allocations", match: [rust-cow]}
+      - {id: rust-utf8-unicode-text, name: "UTF-8, chars, graphemes and OsString", match: [rust-utf8-text]}
+  - id: rust-errors
+    name: "Error handling"
+    source: "Rust book ch9; API guidelines C-GOOD-ERR"
+    match: [rust-errors]
+    subtopics:
+      - {id: rust-thiserror-anyhow, name: "thiserror for libraries and anyhow for applications", match: [rust-thiserror-anyhow]}
+      - {id: rust-question-mark-from, name: "The ? operator and From conversions", match: [rust-question-mark]}
+      - {id: rust-panic-vs-result, name: "Panics, unwinding and panic=abort", match: [rust-panic-unwind]}
+  - id: rust-traits-generics
+    name: "Traits and generics"
+    source: "Rust book ch10, ch17, ch19; Reference: Traits"
+    match: [rust-traits-generics]
+    subtopics:
+      - {id: rust-trait-bounds-where, name: "Trait bounds, where clauses and impl Trait", match: [rust-trait-bounds]}
+      - {id: rust-object-safety-dyn, name: "Dyn compatibility and trait objects", match: [rust-dyn-compat]}
+      - {id: rust-blanket-impls-coherence, name: "Blanket impls and coherence", match: [rust-coherence]}
+      - {id: rust-const-generics, name: "Const generics and const fn", match: [rust-const-generics]}
+      - {id: rust-from-into-asref, name: "From, Into, AsRef and Borrow conversions", match: [rust-conversion-traits]}
+  - id: rust-iterators-closures
+    name: "Iterators and closures"
+    source: "Rust book ch13; std::iter docs"
+    match: [rust-iterators-closures]
+    subtopics:
+      - {id: rust-iterator-adaptors-collect, name: "Iterator adaptors and collect targets", match: [rust-iterator-collect]}
+      - {id: rust-closure-capture-move, name: "Closure capture modes and move", match: [rust-closure-capture]}
+      - {id: rust-impl-trait-returns, name: "Returning closures and iterators with impl Trait", match: [rust-return-impl-trait]}
+  - id: rust-smart-pointers
+    name: "Smart pointers"
+    source: "Rust book ch15; std::rc, std::sync docs"
+    match: [rust-smart-pointers]
+    subtopics:
+      - {id: rust-box-rc-arc, name: "Box, Rc and Arc", match: [rust-box-rc-arc]}
+      - {id: rust-deref-coercion, name: "Deref and deref coercion", match: [rust-deref-coercion]}
+      - {id: rust-arc-mutex-patterns, name: "Arc<Mutex<T>> and lock granularity", match: [rust-arc-mutex]}
+  - id: rust-concurrency
+    name: "Threads and fearless concurrency"
+    source: "Rust book ch16; std::thread, std::sync docs; Rustonomicon Send and Sync"
+    match: [rust-concurrency]
+    subtopics:
+      - {id: rust-scoped-threads, name: "Scoped threads", match: [rust-scoped-threads]}
+      - {id: rust-rwlock-condvar-barrier, name: "RwLock, Condvar and Barrier", match: [rust-rwlock-condvar]}
+      - {id: rust-crossbeam-parking-lot, name: "crossbeam and parking_lot", match: [rust-crossbeam]}
+      - {id: rust-lock-poisoning, name: "Mutex poisoning", match: [rust-lock-poisoning]}
+  - id: rust-async
+    name: "Async Rust"
+    source: "Asynchronous Programming in Rust; Tokio tutorial"
+    match: [rust-async]
+    subtopics:
+      - {id: rust-futures-polling-wakers, name: "Futures, poll and wakers", match: [rust-futures-poll]}
+      - {id: rust-async-cancellation-safety, name: "Cancellation safety and drop of futures", match: [rust-cancel-safety]}
+      - {id: rust-blocking-in-async, name: "spawn_blocking and blocking in async code", match: [rust-spawn-blocking]}
+      - {id: rust-async-runtime-choice, name: "Choosing a runtime: tokio, async-std, smol", match: [rust-runtime-choice]}
+      - {id: rust-tokio-graceful-shutdown, name: "Graceful shutdown with CancellationToken", match: [rust-graceful-shutdown]}
+  - id: rust-unsafe-ffi
+    name: "Unsafe Rust and FFI"
+    source: "Rust book ch19.1; Rustonomicon"
+    match: [rust-unsafe-ffi]
+    subtopics:
+      - {id: rust-unsafe-invariants-safety-docs, name: "Safety comments and unsafe invariants", match: [rust-safety-comments]}
+      - {id: rust-maybeuninit-rawptr, name: "MaybeUninit and raw pointers", match: [rust-maybeuninit]}
+      - {id: rust-repr-c-ffi-strings, name: "repr(C), CString and FFI strings", match: [rust-ffi-strings]}
+      - {id: rust-no-mangle-extern-c, name: "Exporting extern C functions and cdylib", match: [rust-cdylib]}
+  - id: rust-macros
+    name: "Macros"
+    source: "Rust book ch19.5; Reference: Macros"
+    match: [rust-macros]
+    subtopics:
+      - {id: rust-derive-macros, name: "Derive macros", match: [rust-derive-macros]}
+      - {id: rust-attribute-macros, name: "Attribute macros", match: [rust-attribute-macros]}
+  - id: rust-modules-crates
+    name: "Modules, crates and visibility"
+    source: "Rust book ch7; Reference: Visibility and privacy"
+    match: [rust-modules-crates]
+    subtopics:
+      - {id: rust-pub-crate-visibility, name: "pub(crate) and API surface", match: [rust-visibility]}
+      - {id: rust-editions-migration, name: "Editions and cargo fix --edition", match: [rust-editions]}
+  - id: rust-cargo-build
+    name: "Cargo build system"
+    source: "The Cargo Book: Cargo Reference"
+    match: [rust-cargo-build]
+    subtopics:
+      - {id: rust-cargo-lockfile-msrv, name: "Cargo.lock policy and rust-version (MSRV)", match: [rust-msrv]}
+      - {id: rust-cargo-config-aliases, name: ".cargo/config.toml, aliases and target dirs", match: [rust-cargo-config]}
+      - {id: rust-cargo-xtask, name: "xtask automation pattern", match: [rust-xtask]}
+  - id: rust-testing
+    name: "Testing"
+    source: "Rust book ch11; Cargo Book: cargo test"
+    match: [rust-testing]
+    subtopics:
+      - {id: rust-snapshot-testing-insta, name: "Snapshot testing with insta", match: [rust-insta]}
+      - {id: rust-mocking-mockall, name: "Mocking with mockall and trait seams", match: [rust-mockall]}
+      - {id: rust-nextest, name: "cargo-nextest", match: [rust-nextest]}
+      - {id: rust-test-fixtures-tempfile, name: "Fixtures and temporary directories", match: [rust-test-fixtures]}
+      - {id: rust-criterion-benchmarks, name: "Benchmarking with criterion", match: [rust-criterion]}
+  - id: rust-tooling-quality
+    name: "Tooling and code quality"
+    source: "rustfmt, Clippy and rustc lint docs; cargo-deny, cargo-udeps"
+    match: [rust-tooling-quality]
+    subtopics:
+      - {id: rust-clippy-configuration, name: "Clippy configuration and lint groups", match: [rust-clippy]}
+      - {id: rust-rustfmt-config, name: "rustfmt configuration", match: [rust-rustfmt]}
+      - {id: rust-unused-deps, name: "Finding unused dependencies", match: [rust-unused-deps]}
+  - id: rust-performance
+    name: "Performance and optimisation"
+    source: "The Rust Performance Book (nnethercote.github.io/perf-book)"
+    match: [rust-performance]
+    subtopics:
+      - {id: rust-allocation-reduction, name: "Reducing allocations and heap profiling", match: [rust-allocations]}
+      - {id: rust-inlining-codegen-units, name: "Inlining, codegen-units and PGO", match: [rust-codegen-units]}
+      - {id: rust-binary-size, name: "Reducing binary size", match: [rust-binary-size]}
+  - id: rust-serde-data
+    name: "Serialisation with serde"
+    source: "serde.rs documentation"
+    match: [rust-serde-data]
+    subtopics:
+      - {id: rust-serde-attributes, name: "serde container and field attributes", match: [rust-serde-attributes]}
+      - {id: rust-serde-custom, name: "Custom serialisers and deserializers", match: [rust-serde-custom]}
+      - {id: rust-serde-enums-formats, name: "Enum representations and format crates", match: [rust-serde-enums]}
+  - id: rust-web-services
+    name: "Web services"
+    source: "axum, reqwest and tower docs; hyper guides"
+    match: [rust-web-services]
+    subtopics:
+      - {id: rust-axum-handlers-state, name: "axum routing, extractors and state", match: [rust-axum]}
+      - {id: rust-tower-middleware, name: "tower layers and middleware", match: [rust-tower]}
+      - {id: rust-reqwest-client, name: "reqwest clients, timeouts and TLS", match: [rust-reqwest]}
+      - {id: rust-tracing-logging, name: "tracing and structured logs", match: [rust-tracing]}
+  - id: rust-databases
+    name: "Databases"
+    source: "sqlx, diesel and sea-orm documentation"
+    match: [rust-databases]
+    subtopics:
+      - {id: rust-sqlx-compile-checked, name: "sqlx compile-time checked queries and offline mode", match: [rust-sqlx]}
+  - id: rust-cli-apps
+    name: "Command-line applications"
+    source: "Command Line Applications in Rust book (rust-cli.github.io/book); clap docs"
+    match: [rust-cli-apps]
+    subtopics:
+      - {id: rust-clap-derive, name: "clap derive API", match: [rust-clap]}
+      - {id: rust-cli-exit-codes-output, name: "Exit codes, signals and machine-readable output", match: [rust-cli-output]}
+  - id: rust-embedded-nostd
+    name: "Embedded and no_std"
+    source: "The Embedded Rust Book (docs.rust-embedded.org/book); embassy docs"
+    match: [rust-embedded-nostd]
+    subtopics:
+      - {id: rust-no-std-alloc, name: "no_std, core and alloc", match: [rust-no-std]}
+      - {id: rust-embedded-hal, name: "embedded-hal drivers", match: [rust-embedded-hal]}
+  - id: rust-wasm
+    name: "WebAssembly and bindings"
+    source: "wasm-bindgen Guide; Rust and WebAssembly book; PyO3 and napi-rs docs"
+    match: [rust-wasm]
+    subtopics:
+      - {id: rust-wasm-bindgen-pack, name: "wasm-bindgen and wasm-pack", match: [rust-wasm-bindgen]}
+  - id: rust-security
+    name: "Security practice"
+    source: "Rust Secure Code WG guidance; RustSec advisory database; ANSSI Rust guide"
+    match: [rust-security]
+    subtopics:
+      - {id: rust-secrets-zeroize, name: "Secrets handling with zeroize and secrecy", match: [rust-zeroize]}
+      - {id: rust-crypto-crates, name: "Choosing vetted cryptography crates", match: [rust-crypto-crates]}
+      - {id: rust-cargo-vet-supply-chain, name: "cargo-vet and cargo-crev supply-chain audits", match: [rust-cargo-vet]}
+      - {id: rust-sanitizers-miri, name: "Sanitizers with nightly", match: [rust-sanitizers]}
+  - id: rust-patterns-design
+    name: "Design patterns and API design"
+    source: "Rust API Guidelines; Rust Design Patterns book (rust-unofficial.github.io/patterns)"
+    match: [rust-patterns-design]
+    subtopics:
+      - {id: rust-api-naming-flexibility, name: "Naming and API flexibility guidelines", match: [rust-api-guidelines]}
+      - {id: rust-sealed-traits-extension, name: "Sealed traits and extension traits", match: [rust-sealed-traits]}
+      - {id: rust-semver-breaking-changes, name: "SemVer and what breaks it", match: [rust-semver]}
+      - {id: rust-non-exhaustive, name: "non_exhaustive and evolving enums", match: [rust-non-exhaustive]}
+  - id: rust-pattern-matching
+    name: "Patterns and control flow"
+    source: "Rust book ch6, ch18; Reference: Patterns"
+    match: [rust-pattern-matching]
+    subtopics:
+      - {id: rust-let-else-if-let-chains, name: "let-else and if-let chains", match: [rust-let-else]}
+      - {id: rust-slice-patterns-bindings, name: "Slice patterns and @ bindings", match: [rust-slice-patterns]}
+  - id: rust-debugging-diagnostics
+    name: "Debugging and diagnostics"
+    source: "rustc book; Cargo Book; lldb/gdb rust support"
+    match: [rust-debugging-diagnostics]
+    subtopics:
+      - {id: rust-gdb-lldb-debugging, name: "Debugging with gdb, lldb and rust-gdb", match: [rust-debuggers]}
+  - id: rust-release-ci
+    name: "Release and CI"
+    source: "Cargo Book: publishing; cargo-dist, cross and GitHub Actions docs"
+    match: [rust-release-ci]
+    subtopics:
+      - {id: rust-ci-caching, name: "CI pipelines and sccache or rust-cache", match: [rust-ci-caching]}
+      - {id: rust-cargo-dist, name: "Binary releases with cargo-dist", match: [rust-cargo-dist]}
+      - {id: rust-docker-builds, name: "Container builds with cargo-chef and static musl", match: [rust-docker-builds]}

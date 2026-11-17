@@ -1,0 +1,284 @@
+# Coverage spec: Headscale. Topics from the official docs in sources.
+subject: Headscale
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [headscale]
+sources:
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/requirements.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/official.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/container.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/source.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/community.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/upgrade.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/getting-started.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/connect/android.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/connect/apple.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/connect/windows.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/configuration.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/routes.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/dns.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/derp.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/oidc.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/policy.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/registration.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/tags.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/tls.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/debug.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/api.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/reverse-proxy.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/tools.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/web-ui.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/faq.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/features.md"
+  - "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/clients.md"
+topics:
+  - id: server-requirements
+    name: "Server requirements and ports"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/requirements.md"
+    match: [requirements, ports, tcp-443, stun, dedicated-user]
+  - id: deb-package-install
+    name: "Install from DEB package"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/official.md"
+    match: [deb, apt, install, systemd, debian]
+  - id: standalone-binary-install
+    name: "Install standalone binary"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/official.md"
+    match: [binary, useradd, systemd, unix-socket, install]
+  - id: container-install
+    name: "Run in a container"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/container.md"
+    match: [docker, container, compose, podman, health]
+  - id: container-debugging
+    name: "Debug the container image"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/container.md"
+    match: [debug-image, distroless, busybox, docker-exec]
+  - id: community-and-source-installs
+    name: "Community packages and source builds"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/community.md"
+    match: [community, arch, nixos, openbsd, source-build]
+  - id: upgrade-procedure
+    name: "Upgrade procedure"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/upgrade.md"
+    match: [upgrade, minor-version, release-notes, migrations]
+  - id: upgrade-backup
+    name: "Back up before upgrading"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/upgrade.md"
+    match: [backup, sqlite, postgresql, data-directory]
+  - id: verify-running
+    name: "Verify Headscale is running"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/setup/install/container.md"
+    match: [health, logs, status, verify]
+  - id: cli-help-and-socket
+    name: "CLI help and socket permissions"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/getting-started.md"
+    match: [cli, help, unix-socket, permissions]
+  - id: create-users
+    name: "Create and list users"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/getting-started.md"
+    match: [users, create, list, tailnet]
+  - id: register-web-auth
+    name: "Register nodes with web authentication"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/registration.md"
+    match: [web-authentication, auth-id, register, tailscale-up]
+  - id: register-preauthkey
+    name: "Register nodes with pre-authenticated keys"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/registration.md"
+    match: [preauthkeys, authkey, automation, one-hour]
+  - id: register-tagged-nodes
+    name: "Register tagged and personal nodes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/registration.md"
+    match: [tagged-devices, tagowners, personal-nodes, advertise-tags]
+  - id: pending-registration-limits
+    name: "Pending registration limits"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/registration.md"
+    match: [register-cache, http-503, retry-after, 64-kib]
+  - id: client-windows
+    name: "Connect Windows clients"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/connect/windows.md"
+    match: [windows, login-server, unattended-mode, reset]
+  - id: client-apple
+    name: "Connect iOS macOS and tvOS clients"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/connect/apple.md"
+    match: [ios, macos, tvos, custom-coordination-server]
+  - id: client-android
+    name: "Connect Android clients"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/usage/connect/android.md"
+    match: [android, alternate-server, auth-key, f-droid]
+  - id: supported-clients
+    name: "Supported client platforms"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/clients.md"
+    match: [clients, platforms, linux, freebsd]
+  - id: config-file-location
+    name: "Config file location and validation"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/configuration.md"
+    match: [config, configtest, search-path, headscale-config]
+  - id: server-url-listen-addr
+    name: "server_url and listen_addr"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [server-url, listen-addr, metrics-listen-addr, unix-socket-permission]
+  - id: ip-prefixes
+    name: "IP prefixes and allocation"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [prefixes, allocation, cgnat, ipv6]
+  - id: migrate-ip-prefixes
+    name: "Migrate back to default IP prefixes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/faq.md"
+    match: [prefixes, migration, sql, ip-address]
+  - id: node-expiry
+    name: "Node expiry"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [expiry, node-expire, reauthentication]
+  - id: ephemeral-nodes
+    name: "Ephemeral nodes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [ephemeral, inactivity-timeout, ci]
+  - id: database-choice
+    name: "Database choice and SQLite settings"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [sqlite, postgres, wal, database]
+  - id: logging-config
+    name: "Logging configuration"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/debug.md"
+    match: [log-level, debug, trace, database-debug]
+  - id: tls-own-certificate
+    name: "TLS with your own certificate"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/tls.md"
+    match: [tls, cert-path, key-path, full-chain]
+  - id: tls-acme-challenges
+    name: "TLS with Let's Encrypt challenges"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/tls.md"
+    match: [acme, http-01, tls-alpn-01, dns-01]
+  - id: tls-reload-renewal
+    name: "TLS reload and renewal"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/tls.md"
+    match: [sighup, reload, renewal, certmagic]
+  - id: magicdns-base-domain
+    name: "MagicDNS and base domain"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [magicdns, base-domain, override-local-dns]
+  - id: dns-nameservers-split
+    name: "Nameservers and split DNS"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/config-example.yaml"
+    match: [nameservers, split-dns, search-domains]
+  - id: dns-extra-records
+    name: "Extra DNS records"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/dns.md"
+    match: [extra-records, a-record, hujson, dns]
+  - id: embedded-derp
+    name: "Embedded DERP server"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/derp.md"
+    match: [derp, embedded, stun, udp-3478]
+  - id: derp-custom-map
+    name: "Custom DERP maps"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/derp.md"
+    match: [derp-map, regions, derp-yaml, urls]
+  - id: derp-client-verification
+    name: "DERP client verification"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/derp.md"
+    match: [verify-clients, derper, verify-client-url, fail-open]
+  - id: subnet-routers
+    name: "Subnet routers"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/routes.md"
+    match: [subnet-router, advertise-routes, approve-routes, accept-routes]
+  - id: exit-nodes
+    name: "Exit nodes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/routes.md"
+    match: [exit-node, advertise-exit-node, suggest, default-route]
+  - id: route-restriction-policy
+    name: "Restrict and auto-approve routes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/routes.md"
+    match: [autoapprovers, via, tagowners, grants]
+  - id: ha-routing
+    name: "High availability routing"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/routes.md"
+    match: [high-availability, failover, probe-interval, standby]
+  - id: policy-basics
+    name: "Policy basics"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/policy.md"
+    match: [policy, grants, allow-all, deny-all]
+  - id: policy-autogroups
+    name: "Policy autogroups"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/policy.md"
+    match: [autogroup, member, tagged, self]
+  - id: policy-node-attributes
+    name: "Policy node attributes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/policy.md"
+    match: [nodeattrs, magicdns-aaaa, randomize-client-port, nextdns]
+  - id: policy-limitations
+    name: "Policy limitations"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/policy.md"
+    match: [postures, ip-sets, limitations, autogroup-self]
+  - id: policy-recovery
+    name: "Recover an invalid database policy"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/faq.md"
+    match: [policy-get, policy-check, policy-set, recovery]
+  - id: node-tags-cli
+    name: "Manage node tags"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/tags.md"
+    match: [tags, nodes-tag, force-reauth, tagged-devices]
+  - id: oidc-basic-config
+    name: "OIDC basic configuration"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/oidc.md"
+    match: [oidc, issuer, client-id, pkce]
+  - id: oidc-filters
+    name: "OIDC access filters"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/oidc.md"
+    match: [allowed-domains, allowed-users, allowed-groups, email-verified]
+  - id: oidc-provider-notes
+    name: "OIDC provider notes"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/oidc.md"
+    match: [keycloak, google, entra, kanidm, authentik]
+  - id: oidc-identity-caveats
+    name: "OIDC identity caveats"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/oidc.md"
+    match: [provider-identifier, usernames, switching-providers, claims]
+  - id: api-keys-rest
+    name: "API keys and the REST API"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/api.md"
+    match: [apikeys, rest, bearer, api-v1]
+  - id: remote-cli
+    name: "Remote CLI"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/api.md"
+    match: [remote-cli, cli-address, cli-api-key, insecure]
+  - id: oauth-clients
+    name: "OAuth clients"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/api.md"
+    match: [oauth-clients, tskey-client, base-url, github-action]
+  - id: reverse-proxy-requirements
+    name: "Reverse proxy requirements"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/reverse-proxy.md"
+    match: [reverse-proxy, websocket, trusted-proxies, tailscale-control-protocol]
+  - id: reverse-proxy-nginx
+    name: "Reverse proxy with Nginx"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/reverse-proxy.md"
+    match: [nginx, connection-upgrade, proxy-buffering, generate-204]
+  - id: reverse-proxy-other-proxies
+    name: "Reverse proxy with Apache Caddy Envoy and Istio"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/reverse-proxy.md"
+    match: [apache, caddy, envoy, istio, cloudflare]
+  - id: web-ui-and-tools
+    name: "Web UIs and third-party tools"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/integration/web-ui.md"
+    match: [web-ui, headplane, operator, exporter]
+  - id: debug-endpoint
+    name: "Metrics and debug endpoint"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/debug.md"
+    match: [metrics, debug-endpoint, debugkey, prometheus]
+  - id: client-troubleshooting
+    name: "Client troubleshooting commands"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/ref/debug.md"
+    match: [netcheck, derp-map, netmap, troubleshooting]
+  - id: feature-support
+    name: "Feature support matrix"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/features.md"
+    match: [features, funnel, taildrop, supported]
+  - id: scaling-and-faq
+    name: "Scaling and FAQ gotchas"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/faq.md"
+    match: [scaling, faq, same-machine, device-visibility]
+  - id: logtail-privacy
+    name: "Avoid sending logs to Tailscale"
+    source: "https://raw.githubusercontent.com/juanfont/headscale/main/docs/about/faq.md"
+    match: [logtail, no-logs-no-support, privacy]

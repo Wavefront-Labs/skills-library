@@ -1,0 +1,296 @@
+# Coverage spec: Apple device management (Jamf Pro, ABM, MDM).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: apple-device-management
+scope:
+  category: computing-software
+  field: it-support-helpdesk
+  products: [apple-device-management]
+sources:
+  - "Apple Platform Deployment guide (support.apple.com/guide/deployment) - table of contents"
+  - "Apple Device Management documentation (developer.apple.com/documentation/devicemanagement)"
+  - "Jamf Pro Documentation table of contents (learn.jamf.com) and Jamf 200/300 certification outlines"
+  - "macOS Security Compliance Project (github.com/usnistgov/macos_security)"
+topics:
+  - id: abm-setup
+    name: "Apple Business Manager and School Manager setup"
+    source: "https://support.apple.com/guide/apple-business-manager/welcome/web"
+    match: [abm-setup]
+    subtopics:
+      - {id: abm-setup-abm-roles-and-locations, name: "Roles and locations", match: [abm-roles-and-locations]}
+      - {id: abm-setup-abm-mdm-server-tokens, name: "MDM server tokens", match: [abm-mdm-server-tokens]}
+  - id: abm-accounts
+    name: "Managed Apple Accounts and federation"
+    source: "https://support.apple.com/guide/apple-business-manager/welcome/web"
+    match: [abm-accounts]
+    subtopics:
+      - {id: abm-accounts-managed-apple-accounts, name: "Managed Apple Accounts", match: [managed-apple-accounts]}
+      - {id: abm-accounts-federated-authentication, name: "Federated authentication", match: [federated-authentication]}
+  - id: ade-enrollment
+    name: "Automated Device Enrollment"
+    source: "https://support.apple.com/guide/deployment/automated-device-enrollment-management-dep73069DD0/web"
+    match: [ade-enrollment]
+    subtopics:
+      - {id: ade-enrollment-ade-device-assignment, name: "Device assignment and prestage", match: [ade-device-assignment]}
+      - {id: ade-enrollment-setup-assistant-panes, name: "Setup Assistant panes", match: [setup-assistant-panes]}
+  - id: user-enrollment
+    name: "User and device enrolment types"
+    source: "https://support.apple.com/guide/deployment/user-enrollment-dep23db2037d/web"
+    match: [user-enrollment]
+    subtopics:
+      - {id: user-enrollment-enrollment-types-compared, name: "Enrolment types compared", match: [enrollment-types-compared]}
+      - {id: user-enrollment-user-enrollment-managed-boundary, name: "User enrolment data boundary", match: [user-enrollment-managed-boundary]}
+  - id: mdm-protocol
+    name: "MDM protocol and APNs"
+    source: "https://developer.apple.com/documentation/devicemanagement"
+    match: [mdm-protocol]
+    subtopics:
+      - {id: mdm-protocol-apns-push-certificate, name: "APNs push certificate", match: [apns-push-certificate]}
+      - {id: mdm-protocol-mdm-check-in-and-commands, name: "Check-in and commands", match: [mdm-check-in-and-commands]}
+  - id: config-profiles
+    name: "Configuration profiles and payloads"
+    source: "https://support.apple.com/guide/deployment/configuration-profiles-and-payloads-dep9c8f4f2a0/web"
+    match: [config-profiles]
+    subtopics:
+      - {id: config-profiles-profile-structure-and-payloads, name: "Profile structure and payloads", match: [profile-structure-and-payloads]}
+      - {id: config-profiles-profile-signing-and-removal, name: "Profile signing and removal", match: [profile-signing-and-removal]}
+  - id: ddm
+    name: "Declarative Device Management"
+    source: "https://developer.apple.com/documentation/devicemanagement/declarative_management"
+    match: [ddm]
+    subtopics:
+      - {id: ddm-ddm-declarations, name: "Declarations and activations", match: [ddm-declarations]}
+      - {id: ddm-ddm-status-reports, name: "Status reports and subscriptions", match: [ddm-status-reports]}
+      - {id: ddm-ddm-software-update-enforcement, name: "DDM software update enforcement", match: [ddm-software-update-enforcement]}
+  - id: jamf-groups
+    name: "Jamf Pro smart and static groups"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Smart_Computer_Groups.html"
+    match: [jamf-groups]
+    subtopics:
+      - {id: jamf-groups-jamf-smart-groups, name: "Smart groups", match: [jamf-smart-groups]}
+      - {id: jamf-groups-jamf-static-groups, name: "Static groups", match: [jamf-static-groups]}
+  - id: jamf-policies
+    name: "Jamf Pro policies"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Policies.html"
+    match: [jamf-policies]
+    subtopics:
+      - {id: jamf-policies-jamf-policy-triggers, name: "Policy triggers and frequency", match: [jamf-policy-triggers]}
+      - {id: jamf-policies-jamf-policy-scope-and-recon, name: "Scope, exclusions and recon", match: [jamf-policy-scope-and-recon]}
+  - id: jamf-ea
+    name: "Jamf Pro extension attributes"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Computer_Extension_Attributes.html"
+    match: [jamf-ea]
+    subtopics:
+      - {id: jamf-ea-jamf-extension-attributes, name: "Extension attributes", match: [jamf-extension-attributes]}
+      - {id: jamf-ea-ea-script-patterns, name: "Extension attribute script patterns", match: [ea-script-patterns]}
+  - id: jamf-self-service
+    name: "Jamf Self Service"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Self_Service.html"
+    match: [jamf-self-service]
+    subtopics:
+      - {id: jamf-self-service-self-service-branding-and-categories, name: "Self Service branding and categories", match: [self-service-branding-and-categories]}
+      - {id: jamf-self-service-self-service-bookmarks-and-remediation, name: "Self Service remediation items", match: [self-service-bookmarks-and-remediation]}
+  - id: jamf-connect
+    name: "Jamf Connect"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-current/page/Jamf_Connect_Documentation.html"
+    match: [jamf-connect]
+    subtopics:
+      - {id: jamf-connect-jamf-connect-login, name: "Jamf Connect login window", match: [jamf-connect-login]}
+      - {id: jamf-connect-jamf-connect-menu-bar, name: "Jamf Connect menu bar", match: [jamf-connect-menu-bar]}
+  - id: jamf-protect
+    name: "Jamf Protect"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-protect-documentation/page/Jamf_Protect_Documentation.html"
+    match: [jamf-protect]
+    subtopics:
+      - {id: jamf-protect-jamf-protect-plans, name: "Protect plans and analytics", match: [jamf-protect-plans]}
+      - {id: jamf-protect-jamf-protect-triage, name: "Protect alert triage", match: [jamf-protect-triage]}
+  - id: jamf-patch
+    name: "Jamf Pro patch management"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Patch_Management.html"
+    match: [jamf-patch]
+    subtopics:
+      - {id: jamf-patch-patch-management-titles, name: "Patch titles and reporting", match: [patch-management-titles]}
+      - {id: jamf-patch-patch-policies, name: "Patch policies", match: [patch-policies]}
+  - id: jamf-api
+    name: "Jamf Pro API"
+    source: "https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview"
+    match: [jamf-api]
+    subtopics:
+      - {id: jamf-api-classic-vs-pro-api, name: "Classic and Pro API", match: [classic-vs-pro-api]}
+      - {id: jamf-api-api-roles-and-clients, name: "API roles and clients", match: [api-roles-and-clients]}
+  - id: jamf-scripts
+    name: "Jamf Pro scripts"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Scripts.html"
+    match: [jamf-scripts]
+    subtopics:
+      - {id: jamf-scripts-policy-script-parameters, name: "Script parameters", match: [policy-script-parameters]}
+      - {id: jamf-scripts-jamf-script-best-practices, name: "Script best practices", match: [jamf-script-best-practices]}
+  - id: mdm-alternatives
+    name: "Jamf alternatives and open-source MDM"
+    source: "https://docs.kandji.io/"
+    match: [mdm-alternatives]
+    subtopics:
+      - {id: mdm-alternatives-kandji-and-mosyle, name: "Kandji and Mosyle", match: [kandji-and-mosyle]}
+      - {id: mdm-alternatives-intune-for-mac, name: "Intune for Mac", match: [intune-for-mac]}
+      - {id: mdm-alternatives-nanomdm-and-micromdm, name: "NanoMDM and MicroMDM", match: [nanomdm-and-micromdm]}
+  - id: vpp-apps
+    name: "Apps and VPP licences"
+    source: "https://support.apple.com/guide/apple-business-manager/welcome/web"
+    match: [vpp-apps]
+    subtopics:
+      - {id: vpp-apps-vpp-licence-assignment, name: "VPP licence assignment", match: [vpp-licence-assignment]}
+      - {id: vpp-apps-managed-app-configuration, name: "Managed app configuration", match: [managed-app-configuration]}
+  - id: app-automation
+    name: "Mac app packaging and automation"
+    source: "https://github.com/Installomator/Installomator/wiki"
+    match: [app-automation]
+    subtopics:
+      - {id: app-automation-installomator, name: "Installomator", match: [installomator]}
+      - {id: app-automation-autopkg, name: "AutoPkg", match: [autopkg]}
+      - {id: app-automation-munki, name: "Munki", match: [munki]}
+  - id: provisioning
+    name: "macOS provisioning"
+    source: "https://support.apple.com/guide/deployment/welcome/web"
+    match: [provisioning]
+    subtopics:
+      - {id: provisioning-first-boot-automation, name: "First-boot automation", match: [first-boot-automation]}
+      - {id: provisioning-bootstrap-token, name: "Bootstrap token", match: [bootstrap-token]}
+  - id: platform-sso
+    name: "Platform SSO and the SSO extension"
+    source: "https://support.apple.com/guide/deployment/platform-sso-for-macos-dep7bbb09a79/web"
+    match: [platform-sso]
+    subtopics:
+      - {id: platform-sso-platform-sso-methods, name: "Platform SSO methods", match: [platform-sso-methods]}
+      - {id: platform-sso-sso-extension-kerberos, name: "SSO extension and Kerberos", match: [sso-extension-kerberos]}
+  - id: filevault
+    name: "FileVault and Secure Token"
+    source: "https://support.apple.com/guide/deployment/intro-to-filevault-dep82064ec40/web"
+    match: [filevault]
+    subtopics:
+      - {id: filevault-filevault-key-escrow, name: "FileVault key escrow", match: [filevault-key-escrow]}
+      - {id: filevault-secure-token-volume-owner, name: "Secure Token and Volume Owner", match: [secure-token-volume-owner]}
+  - id: local-admin
+    name: "Local administrator accounts"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Local_Accounts.html"
+    match: [local-admin]
+    subtopics:
+      - {id: local-admin-local-admin-laps, name: "Local admin password rotation", match: [local-admin-laps]}
+      - {id: local-admin-admin-demotion-and-privilege, name: "Admin demotion and privilege", match: [admin-demotion-and-privilege]}
+  - id: sw-updates
+    name: "macOS and iOS software updates"
+    source: "https://support.apple.com/guide/deployment/manage-software-updates-depc4c80847a/web"
+    match: [sw-updates]
+    subtopics:
+      - {id: sw-updates-managed-software-updates, name: "Managed software updates", match: [managed-software-updates]}
+      - {id: sw-updates-update-deferrals, name: "Update deferrals and beta access", match: [update-deferrals]}
+  - id: gatekeeper
+    name: "Gatekeeper and notarisation"
+    source: "https://support.apple.com/guide/security/gatekeeper-and-runtime-protection-sec5599b66df/web"
+    match: [gatekeeper]
+    subtopics:
+      - {id: gatekeeper-gatekeeper-notarisation, name: "Gatekeeper and notarisation", match: [gatekeeper-notarisation]}
+      - {id: gatekeeper-quarantine-attribute, name: "Quarantine attribute", match: [quarantine-attribute]}
+  - id: pppc-tcc
+    name: "PPPC and TCC"
+    source: "https://support.apple.com/guide/deployment/privacy-preferences-policy-control-payload-dep38df53c2a/web"
+    match: [pppc-tcc]
+    subtopics:
+      - {id: pppc-tcc-pppc-payload, name: "PPPC payload", match: [pppc-payload]}
+      - {id: pppc-tcc-tcc-troubleshooting, name: "TCC troubleshooting", match: [tcc-troubleshooting]}
+  - id: system-extensions
+    name: "System and kernel extensions"
+    source: "https://support.apple.com/guide/deployment/system-and-kernel-extensions-in-macos-depe6c2d1f0b/web"
+    match: [system-extensions]
+    subtopics:
+      - {id: system-extensions-system-extension-approval, name: "System extension approval", match: [system-extension-approval]}
+      - {id: system-extensions-kernel-extension-approval, name: "Kernel extension approval", match: [kernel-extension-approval]}
+  - id: supervised-ios
+    name: "Supervised iOS and iPadOS"
+    source: "https://support.apple.com/guide/deployment/supervision-dep1d6c8b1ae/web"
+    match: [supervised-ios]
+    subtopics:
+      - {id: supervised-ios-supervision-benefits, name: "Supervision", match: [supervision-benefits]}
+      - {id: supervised-ios-ios-restrictions-payload, name: "iOS restrictions payload", match: [ios-restrictions-payload]}
+  - id: lost-mode
+    name: "Lost Mode and Activation Lock"
+    source: "https://support.apple.com/guide/deployment/activation-lock-dep91fc2c9e5/web"
+    match: [lost-mode]
+    subtopics:
+      - {id: lost-mode-lost-mode-and-find-my, name: "Lost Mode", match: [lost-mode-and-find-my]}
+      - {id: lost-mode-activation-lock-management, name: "Activation Lock management", match: [activation-lock-management]}
+  - id: shared-ipad
+    name: "Shared iPad"
+    source: "https://support.apple.com/guide/deployment/shared-ipad-dep2d0e6e0f2/web"
+    match: [shared-ipad]
+    subtopics:
+      - {id: shared-ipad-shared-ipad-setup, name: "Shared iPad setup", match: [shared-ipad-setup]}
+      - {id: shared-ipad-shared-ipad-sessions-and-quota, name: "Shared iPad sessions and quota", match: [shared-ipad-sessions-and-quota]}
+  - id: kiosk
+    name: "Kiosk and Single App Mode"
+    source: "https://support.apple.com/guide/deployment/single-app-mode-depa1a6dbfd5/web"
+    match: [kiosk]
+    subtopics:
+      - {id: kiosk-single-app-mode, name: "Single App Mode", match: [single-app-mode]}
+      - {id: kiosk-kiosk-lockdown-app-config, name: "Kiosk lockdown settings", match: [kiosk-lockdown-app-config]}
+  - id: compliance-inventory
+    name: "Compliance and inventory reporting"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Computer_Inventory.html"
+    match: [compliance-inventory]
+    subtopics:
+      - {id: compliance-inventory-inventory-collection, name: "Inventory collection", match: [inventory-collection]}
+      - {id: compliance-inventory-compliance-reporting, name: "Compliance reporting", match: [compliance-reporting]}
+  - id: certificates
+    name: "Certificates for Apple devices"
+    source: "https://support.apple.com/guide/deployment/certificates-payload-dep8d3a0d7c8/web"
+    match: [certificates]
+    subtopics:
+      - {id: certificates-scep-payload, name: "SCEP payload", match: [scep-payload]}
+      - {id: certificates-acme-device-attestation, name: "ACME and device attestation", match: [acme-device-attestation]}
+  - id: wifi-vpn
+    name: "Wi-Fi and VPN profiles"
+    source: "https://developer.apple.com/documentation/devicemanagement/wifi"
+    match: [wifi-vpn]
+    subtopics:
+      - {id: wifi-vpn-wifi-8021x-payload, name: "Wi-Fi 802.1X payload", match: [wifi-8021x-payload]}
+      - {id: wifi-vpn-vpn-per-app, name: "VPN and per-app VPN", match: [vpn-per-app]}
+  - id: lifecycle
+    name: "Device lifecycle"
+    source: "https://support.apple.com/guide/deployment/welcome/web"
+    match: [lifecycle]
+    subtopics:
+      - {id: lifecycle-erase-and-reenroll, name: "Erase and re-enrol", match: [erase-and-reenroll]}
+      - {id: lifecycle-device-return-offboarding, name: "Device return and offboarding", match: [device-return-offboarding]}
+  - id: client-troubleshooting
+    name: "Client-side troubleshooting"
+    source: "https://support.apple.com/guide/deployment/welcome/web"
+    match: [client-troubleshooting]
+    subtopics:
+      - {id: client-troubleshooting-profiles-cli, name: "profiles CLI", match: [profiles-cli]}
+      - {id: client-troubleshooting-mdmclient-and-logs, name: "mdmclient and logs", match: [mdmclient-and-logs]}
+  - id: jamf-troubleshooting
+    name: "Jamf troubleshooting"
+    source: "https://learn.jamf.com/en-US/bundle/jamf-pro-documentation-current/page/Troubleshooting.html"
+    match: [jamf-troubleshooting]
+    subtopics:
+      - {id: jamf-troubleshooting-jamf-binary-and-log, name: "Jamf binary and log", match: [jamf-binary-and-log]}
+      - {id: jamf-troubleshooting-enrollment-failures, name: "Enrolment failures", match: [enrollment-failures]}
+  - id: security-baselines
+    name: "Security baselines"
+    source: "https://github.com/usnistgov/macos_security"
+    match: [security-baselines]
+    subtopics:
+      - {id: security-baselines-mscp-baselines, name: "macOS Security Compliance Project", match: [mscp-baselines]}
+      - {id: security-baselines-cis-benchmarks, name: "CIS benchmarks", match: [cis-benchmarks]}
+  - id: content-caching
+    name: "Content caching"
+    source: "https://support.apple.com/guide/deployment/content-caching-dep9ec2f1b6f/web"
+    match: [content-caching]
+    subtopics:
+      - {id: content-caching-content-caching-setup, name: "Content caching setup", match: [content-caching-setup]}
+      - {id: content-caching-content-caching-network-requirements, name: "Content caching network requirements", match: [content-caching-network-requirements]}
+  - id: passcode-login
+    name: "Passcode and login window policy"
+    source: "https://developer.apple.com/documentation/devicemanagement/passcode"
+    match: [passcode-login]
+    subtopics:
+      - {id: passcode-login-passcode-policy-payload, name: "Passcode policy payload", match: [passcode-policy-payload]}
+      - {id: passcode-login-login-window-settings, name: "Login window settings", match: [login-window-settings]}

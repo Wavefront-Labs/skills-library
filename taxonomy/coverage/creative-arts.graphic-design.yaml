@@ -1,0 +1,703 @@
+# Canonical coverage spec: graphic design (all products in the graphic-design field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics and subtopics come from external, authoritative structures (Adobe Certified Professional
+# exam objectives, Adobe and Figma help-centre tables of contents, the standard texts of the craft,
+# AIGA competencies, ISO print standards), so the check measures the library against the subject.
+# Print production (PDF/X, ISO 12647, proofing, imposition, paper and finishing) sits under
+# editorial-layout and adobe-indesign, the products that own print-ready output.
+subject: graphic-design
+scope:
+  category: creative-arts
+  field: graphic-design
+  products: [typography, brand-identity, editorial-layout, poster-and-campaign-graphics, information-design, commercial-illustration, lettering-and-calligraphy, adobe-illustrator, adobe-indesign, adobe-photoshop]
+sources:
+  - "Adobe Certified Professional in Visual Design using Adobe Photoshop - exam objectives (1 Working in the design industry, 2 Project setup and interface, 3 Organizing documents (layers, masks, selections), 4 Creating and modifying visual elements (type, adjustments, transforms, filters, retouching), 5 Publishing digital media (export, packaging)); subtopics from Photoshop User Guide (helpx.adobe.com/photoshop/user-guide.html) section headings"
+  - "Adobe Certified Professional in Graphic Design and Illustration using Adobe Illustrator - exam objectives (artboards, paths and shapes, colour and swatches, type, brushes and symbols, effects and appearance, image trace, export); subtopics from Illustrator User Guide (helpx.adobe.com/illustrator/user-guide.html) section headings"
+  - "Adobe Certified Professional in Print and Digital Media Publication using Adobe InDesign - exam objectives (document setup, parent pages, text and styles, tables, graphics and frames, long documents, data merge, interactive and EPUB output, preflight, package and PDF export); subtopics from InDesign User Guide (helpx.adobe.com/indesign/user-guide.html)"
+  - "Figma Help Center table of contents (help.figma.com) - frames and auto layout, components and variants, styles and variables, libraries, exporting, prototyping; used for screen-delivery and design-system subtopics"
+  - "Ellen Lupton, Thinking with Type (2nd ed.) - Letter (anatomy, classification, families, type on screen, font formats), Text (kerning, tracking, line spacing, alignment, hierarchy, punctuation, OpenType), Grid (golden section, single and multicolumn grids, modular grids, data tables)"
+  - "Robert Bringhurst, The Elements of Typographic Style - rhythm and proportion, harmony and counterpoint, structural forms (headings, lists, tables, notes), etiquette of hyphenation and pagination, analphabetic symbols"
+  - "Josef Muller-Brockmann, Grid Systems in Graphic Design - format and type area, column and grid-field construction, typeface and line spacing, image placement within the grid, grid in practice for books catalogues and posters"
+  - "Alina Wheeler, Designing Brand Identity (5th ed.) - process phases (conducting research, clarifying strategy, designing identity, creating touchpoints, managing assets); basics (brand architecture, names, taglines, signature, colour, typography, sound, motion); touchpoints and guidelines"
+  - "AIGA Designer of 2025 / design competencies and AIGA Standard Form of Agreement for Design Services - briefs, research, presentation and critique, accessibility, intellectual property, professional practice"
+  - "ISO 15930 (PDF/X-1a, PDF/X-3, PDF/X-4), ISO 12647-2 process control for offset (paper types, tone value increase, FOGRA39/FOGRA51, GRACoL/G7), ISO 3664 viewing conditions, Ghent Workgroup output suite; Pantone/PMS spot workflow"
+  - "Edward Tufte, The Visual Display of Quantitative Information, and Isotype / ISO 7001 public information symbols, SEGD wayfinding practice, WCAG 2.2 contrast for graphics"
+  - "Edward Johnston, Writing and Illuminating and Lettering; IAMPETH pointed-pen copperplate and Spencerian instruction; Glyphs and FontForge manuals for type design basics"
+topics:
+  # ===================== Adobe Photoshop (ACP Photoshop objectives + User Guide)
+  - id: ps-document-setup
+    name: Photoshop document setup and workspace
+    source: ACP Photoshop obj 2 / User Guide Workspace basics
+    match: [photoshop-document-setup, photoshop-workspace]
+    subtopics:
+      - {id: ps-ds-new-doc-presets, name: New document presets resolution and colour mode, match: [photoshop-new-document, document-resolution-ppi]}
+      - {id: ps-ds-artboards, name: Artboards for multi-size screen work, match: [photoshop-artboards]}
+      - {id: ps-ds-image-size-resample, name: Image size and resampling methods, match: [image-size-resampling, preserve-details-upscale]}
+      - {id: ps-ds-canvas-size-crop, name: Canvas size and crop tool (content-aware and perspective crop), match: [canvas-size, perspective-crop]}
+      - {id: ps-ds-custom-workspace, name: Custom workspaces shortcuts and preferences, match: [photoshop-custom-workspace, photoshop-keyboard-shortcuts]}
+  - id: ps-layers
+    name: Layers and layer organisation
+    source: ACP Photoshop obj 3 / User Guide Layers
+    match: [photoshop-layers, layer-organisation]
+    subtopics:
+      - {id: ps-ly-groups-naming, name: Layer groups naming and colour coding, match: [layer-groups, layer-naming]}
+      - {id: ps-ly-blend-modes, name: Blending modes and opacity vs fill, match: [blend-modes, opacity-vs-fill]}
+      - {id: ps-ly-layer-styles, name: Layer styles (drop shadow stroke bevel), match: [layer-styles, drop-shadow-layer-style]}
+      - {id: ps-ly-smart-objects, name: Smart objects embedded vs linked, match: [smart-object-linked, smart-object-embedded]}
+      - {id: ps-ly-layer-comps, name: Layer comps for presenting variations, match: [layer-comps]}
+      - {id: ps-ly-fill-layers, name: Fill layers and gradient fill layers, match: [fill-layers, gradient-fill-layer]}
+  - id: ps-selections
+    name: Selections
+    source: ACP Photoshop obj 3 / User Guide Selecting
+    match: [photoshop-selections, selection-tools]
+    subtopics:
+      - {id: ps-sel-object-subject, name: Object selection select subject and select sky, match: [object-selection-tool, select-sky]}
+      - {id: ps-sel-color-range, name: Color range and focus area selections, match: [color-range-selection, focus-area]}
+      - {id: ps-sel-quick-mask, name: Quick mask and refining selections by painting, match: [quick-mask]}
+      - {id: ps-sel-channels, name: Channel-based selections and saving alpha channels, match: [channel-selection, alpha-channels]}
+      - {id: ps-sel-pen-paths, name: Pen paths to selection for hard-edged products, match: [photoshop-pen-path, clipping-path-product]}
+  - id: ps-masking
+    name: Masking
+    source: ACP Photoshop obj 3 / User Guide Masking layers
+    match: [photoshop-masking, layer-mask]
+    subtopics:
+      - {id: ps-mk-select-and-mask, name: Select and Mask workspace for hair and fur, match: [select-and-mask, hair-masking]}
+      - {id: ps-mk-vector-masks, name: Vector masks, match: [vector-mask]}
+      - {id: ps-mk-clipping-masks, name: Clipping masks and adjustment clipping, match: [clipping-mask]}
+      - {id: ps-mk-blend-if, name: Blend If sliders for luminosity masking, match: [blend-if, luminosity-mask]}
+      - {id: ps-mk-mask-properties, name: Mask density feather and refine in Properties, match: [mask-density-feather]}
+  - id: ps-adjustments
+    name: Adjustment layers and tonal correction
+    source: ACP Photoshop obj 4 / User Guide Color and tonal adjustments
+    match: [adjustment-layers, tonal-correction]
+    subtopics:
+      - {id: ps-adj-levels-curves, name: Levels and Curves tonal correction, match: [levels-adjustment, curves-adjustment]}
+      - {id: ps-adj-hue-sat, name: Hue/Saturation and selective colour targeting, match: [hue-saturation, selective-color]}
+      - {id: ps-adj-color-balance, name: Neutralising colour casts (color balance and gray point), match: [color-cast-correction, gray-point]}
+      - {id: ps-adj-black-white, name: Black and white conversion and duotones, match: [black-and-white-conversion, duotone]}
+      - {id: ps-adj-camera-raw, name: Camera Raw filter for global photo correction, match: [camera-raw-filter]}
+      - {id: ps-adj-match-color, name: Colour matching composited elements, match: [colour-matching]}
+  - id: ps-retouching
+    name: Retouching and repair
+    source: ACP Photoshop obj 4 / User Guide Retouching and repairing photos
+    match: [photo-retouching, image-repair]
+    subtopics:
+      - {id: ps-rt-healing, name: Spot healing healing brush and patch tool, match: [spot-healing-brush, patch-tool]}
+      - {id: ps-rt-clone-stamp, name: Clone stamp and clone source panel, match: [clone-stamp]}
+      - {id: ps-rt-content-aware-fill, name: Content-aware fill workspace, match: [content-aware-fill]}
+      - {id: ps-rt-frequency-separation, name: Frequency separation skin retouching, match: [frequency-separation, skin-retouching]}
+      - {id: ps-rt-dodge-burn, name: Non-destructive dodge and burn, match: [dodge-and-burn]}
+      - {id: ps-rt-liquify, name: Liquify and face-aware liquify ethics, match: [liquify]}
+  - id: ps-compositing
+    name: Compositing and photo manipulation
+    source: ACP Photoshop obj 4 / User Guide Combining images
+    match: [compositing, photo-manipulation]
+    subtopics:
+      - {id: ps-cp-perspective-match, name: Matching perspective and horizon line, match: [perspective-matching]}
+      - {id: ps-cp-light-shadow, name: Building contact and cast shadows, match: [cast-shadows, contact-shadow]}
+      - {id: ps-cp-grain-blur-match, name: Matching grain noise and depth of field, match: [grain-matching]}
+      - {id: ps-cp-generative-fill, name: Generative fill and generative expand, match: [generative-fill, generative-expand]}
+      - {id: ps-cp-mockups, name: Smart-object product mockups, match: [mockup, smart-object-mockup]}
+  - id: ps-transform-filters
+    name: Transformations and filters
+    source: ACP Photoshop obj 4 / User Guide Transforming objects and Filters
+    match: [photoshop-transform, smart-filters]
+    subtopics:
+      - {id: ps-tf-free-transform, name: Free transform warp and perspective warp, match: [free-transform, perspective-warp]}
+      - {id: ps-tf-puppet-warp, name: Puppet warp, match: [puppet-warp]}
+      - {id: ps-tf-content-aware-scale, name: Content-aware scale, match: [content-aware-scale]}
+      - {id: ps-tf-smart-filters, name: Smart filters with masks and blending, match: [smart-filter-mask]}
+      - {id: ps-tf-blur-gallery, name: Blur gallery and lens blur, match: [blur-gallery, lens-blur]}
+      - {id: ps-tf-sharpening, name: Output sharpening (smart sharpen and high pass), match: [smart-sharpen, high-pass-sharpening]}
+  - id: ps-type-and-shapes
+    name: Type and vector shapes in Photoshop
+    source: ACP Photoshop obj 4 / User Guide Type
+    match: [photoshop-type, photoshop-shapes]
+    subtopics:
+      - {id: ps-ts-point-paragraph, name: Point vs paragraph type, match: [point-type-vs-paragraph-type]}
+      - {id: ps-ts-type-on-path, name: Type on a path and warped text, match: [photoshop-type-on-path, warp-text]}
+      - {id: ps-ts-shape-layers, name: Live shape layers and path operations, match: [shape-layers, live-shapes]}
+      - {id: ps-ts-text-effects, name: Text effects via layer styles and clipping images, match: [image-in-text]}
+  - id: ps-color-management
+    name: Colour modes and colour management in Photoshop
+    source: ACP Photoshop obj 2 / User Guide Color management
+    match: [photoshop-color-management, color-modes]
+    subtopics:
+      - {id: ps-cm-color-settings, name: Color settings and working spaces, match: [color-settings, working-space]}
+      - {id: ps-cm-rgb-to-cmyk, name: RGB to CMYK conversion and rendering intents, match: [rgb-to-cmyk, rendering-intent]}
+      - {id: ps-cm-soft-proof, name: Soft proofing and gamut warning, match: [soft-proofing, gamut-warning]}
+      - {id: ps-cm-bit-depth, name: Bit depth 8 vs 16 bit and banding, match: [bit-depth, banding]}
+      - {id: ps-cm-assign-convert, name: Assign vs convert profile and missing profiles, match: [assign-vs-convert-profile]}
+  - id: ps-export-automation
+    name: Export and automation
+    source: ACP Photoshop obj 5 / User Guide Saving and exporting, Automation
+    match: [photoshop-export, photoshop-automation]
+    subtopics:
+      - {id: ps-ex-export-as, name: Export As and quick export formats, match: [export-as, quick-export]}
+      - {id: ps-ex-save-for-web, name: Save for Web legacy optimisation, match: [save-for-web]}
+      - {id: ps-ex-generate-assets, name: Generate image assets from layer names, match: [generate-image-assets]}
+      - {id: ps-ex-actions, name: Actions and batch processing, match: [photoshop-actions, batch-processing]}
+      - {id: ps-ex-image-processor, name: Image processor and scripts, match: [image-processor]}
+      - {id: ps-ex-variables, name: Data-driven graphics with variables, match: [data-driven-graphics]}
+      - {id: ps-ex-file-formats, name: PSD vs PSB vs TIFF vs PNG vs JPEG choice, match: [psb-large-document, file-format-choice]}
+  # ===================== Adobe Illustrator (ACP Illustrator objectives + User Guide)
+  - id: ai-document-artboards
+    name: Illustrator documents and artboards
+    source: ACP Illustrator obj 2 / User Guide Artboards
+    match: [illustrator-artboards, illustrator-document-setup]
+    subtopics:
+      - {id: ai-da-new-doc, name: New document profiles units and raster effects resolution, match: [document-raster-effects-resolution]}
+      - {id: ai-da-multiple-artboards, name: Multiple artboards and artboard panel, match: [multiple-artboards]}
+      - {id: ai-da-layers-panel, name: Layers panel sublayers and locking, match: [illustrator-layers]}
+      - {id: ai-da-guides-grids, name: Guides smart guides and pixel grid alignment, match: [smart-guides, pixel-perfect]}
+      - {id: ai-da-align-distribute, name: Align and distribute to key object, match: [align-to-key-object, distribute-spacing]}
+  - id: ai-paths-shapes
+    name: Paths and shapes
+    source: ACP Illustrator obj 4 / User Guide Drawing
+    match: [pen-tool, shape-builder]
+    subtopics:
+      - {id: ai-ps-pen-tool, name: Pen tool bezier construction, match: [bezier-curves]}
+      - {id: ai-ps-shape-builder, name: Shape builder for merging and cutting, match: [shape-builder-tool]}
+      - {id: ai-ps-pathfinder, name: Pathfinder and compound shapes, match: [pathfinder, compound-shapes]}
+      - {id: ai-ps-live-shapes, name: Live shapes and live corners, match: [live-corners]}
+      - {id: ai-ps-width-tool, name: Variable-width strokes and width profiles, match: [width-tool, variable-width-stroke]}
+      - {id: ai-ps-stroke-panel, name: Stroke panel caps joins dashes and arrowheads, match: [stroke-panel, dashed-lines]}
+      - {id: ai-ps-path-cleanup, name: Simplify join and outline stroke cleanup, match: [simplify-path, outline-stroke]}
+  - id: ai-color
+    name: Colour in Illustrator
+    source: ACP Illustrator obj 4 / User Guide Color
+    match: [illustrator-color, illustrator-swatches]
+    subtopics:
+      - {id: ai-co-global-swatches, name: Global swatches and colour groups, match: [global-swatches, color-groups]}
+      - {id: ai-co-spot-colors, name: Spot colours and Pantone libraries, match: [spot-colors, pantone]}
+      - {id: ai-co-recolor, name: Recolor artwork and colour variations, match: [recolor-artwork]}
+      - {id: ai-co-gradients, name: Linear radial and freeform gradients, match: [freeform-gradient, gradient-tool]}
+      - {id: ai-co-gradient-mesh, name: Gradient mesh, match: [gradient-mesh]}
+      - {id: ai-co-live-paint, name: Live paint for flat colouring, match: [live-paint]}
+  - id: ai-type
+    name: Type in Illustrator
+    source: ACP Illustrator obj 4 / User Guide Type
+    match: [illustrator-type]
+    subtopics:
+      - {id: ai-ty-area-type, name: Point vs area type and text threading, match: [area-type]}
+      - {id: ai-ty-type-on-path, name: Type on a path and circular text, match: [type-on-a-path]}
+      - {id: ai-ty-create-outlines, name: Creating outlines and when not to, match: [create-outlines]}
+      - {id: ai-ty-touch-type, name: Touch type tool and per-glyph edits, match: [touch-type-tool]}
+      - {id: ai-ty-envelope-distort, name: Envelope distort warped type, match: [envelope-distort]}
+  - id: ai-brushes-symbols-patterns
+    name: Brushes symbols and patterns
+    source: ACP Illustrator obj 4 / User Guide Painting and Symbols
+    match: [illustrator-brushes, illustrator-symbols]
+    subtopics:
+      - {id: ai-bs-art-pattern-brushes, name: Art and pattern brushes, match: [art-brush, pattern-brush]}
+      - {id: ai-bs-blob-brush, name: Blob brush and eraser drawing, match: [blob-brush]}
+      - {id: ai-bs-symbols, name: Symbols dynamic symbols and instances, match: [dynamic-symbols]}
+      - {id: ai-bs-pattern-options, name: Seamless pattern creation with pattern options, match: [seamless-pattern, pattern-options]}
+      - {id: ai-bs-repeat, name: Repeat radial grid and mirror, match: [repeat-radial, repeat-mirror]}
+  - id: ai-effects-appearance
+    name: Effects and appearance
+    source: ACP Illustrator obj 4 / User Guide Effects
+    match: [appearance-panel, illustrator-effects]
+    subtopics:
+      - {id: ai-ea-multiple-fills, name: Multiple fills and strokes in Appearance, match: [multiple-fills-strokes]}
+      - {id: ai-ea-graphic-styles, name: Graphic styles, match: [graphic-styles]}
+      - {id: ai-ea-blends, name: Blend tool and blend options, match: [blend-tool]}
+      - {id: ai-ea-3d-materials, name: 3D and materials effect, match: [illustrator-3d-materials]}
+      - {id: ai-ea-opacity-masks, name: Opacity masks and transparency, match: [opacity-mask]}
+      - {id: ai-ea-clipping-masks, name: Clipping masks and draw inside, match: [illustrator-clipping-mask, draw-inside]}
+      - {id: ai-ea-distort-transform, name: Distort and transform effects (zig zag roughen transform), match: [transform-effect, roughen-effect]}
+  - id: ai-tracing-images
+    name: Image trace and working with raster
+    source: ACP Illustrator obj 4 / User Guide Image Trace
+    match: [image-trace, vectorising]
+    subtopics:
+      - {id: ai-tr-presets, name: Image trace presets and settings, match: [image-trace-settings]}
+      - {id: ai-tr-sketch-to-vector, name: Hand sketch to clean vector, match: [sketch-to-vector]}
+      - {id: ai-tr-placed-images, name: Placing linking and embedding images, match: [illustrator-linked-images]}
+      - {id: ai-tr-mockup, name: Perspective grid and mockup placement, match: [perspective-grid]}
+  - id: ai-export
+    name: Illustrator output and export
+    source: ACP Illustrator obj 5 / User Guide Import export and save
+    match: [illustrator-export]
+    subtopics:
+      - {id: ai-ex-asset-export, name: Asset export panel and export for screens, match: [asset-export, export-for-screens]}
+      - {id: ai-ex-svg, name: Optimised SVG output, match: [svg-export]}
+      - {id: ai-ex-print-pdf, name: Print PDF from Illustrator and separations preview, match: [illustrator-print-pdf, separations-preview]}
+      - {id: ai-ex-package, name: Package and font handling, match: [illustrator-package]}
+      - {id: ai-ex-eps-legacy, name: EPS and legacy format delivery, match: [eps-export]}
+  # ===================== Adobe InDesign (ACP InDesign objectives + User Guide)
+  - id: id-document-setup
+    name: InDesign document setup
+    source: ACP InDesign obj 2 / User Guide Layout
+    match: [indesign-document-setup]
+    subtopics:
+      - {id: id-ds-bleed-slug, name: Page size bleed and slug, match: [bleed-and-slug]}
+      - {id: id-ds-margins-columns, name: Margins and columns, match: [margins-and-columns]}
+      - {id: id-ds-facing-pages, name: Facing pages spreads and page numbering sections, match: [numbering-and-section]}
+      - {id: id-ds-adjust-layout, name: Adjust layout and liquid layout rules, match: [adjust-layout, liquid-layout]}
+      - {id: id-ds-alternate-layouts, name: Alternate layouts and multiple page sizes, match: [alternate-layouts]}
+  - id: id-parent-pages
+    name: Parent pages
+    source: ACP InDesign obj 3 / User Guide Parent pages
+    match: [parent-pages, master-pages]
+    subtopics:
+      - {id: id-pp-running-heads, name: Running heads and text variables, match: [running-heads, text-variables]}
+      - {id: id-pp-auto-page-numbers, name: Automatic page numbers and section markers, match: [auto-page-numbers]}
+      - {id: id-pp-nested-parents, name: Parent pages based on parents, match: [nested-parent-pages]}
+      - {id: id-pp-overrides, name: Overriding and detaching parent items, match: [parent-item-overrides]}
+  - id: id-text
+    name: Text frames and text flow
+    source: ACP InDesign obj 4 / User Guide Text
+    match: [indesign-text-frames, text-threading]
+    subtopics:
+      - {id: id-tx-threading, name: Threading frames and autoflow, match: [autoflow]}
+      - {id: id-tx-import-word, name: Importing Word with style mapping, match: [word-import-style-mapping]}
+      - {id: id-tx-text-wrap, name: Text wrap and anchored objects, match: [text-wrap, anchored-objects]}
+      - {id: id-tx-span-split, name: Span and split columns, match: [span-columns]}
+      - {id: id-tx-find-change, name: Find/Change text GREP and glyph queries, match: [find-change]}
+      - {id: id-tx-story-editor, name: Story editor and overset text, match: [story-editor, overset-text]}
+  - id: id-styles
+    name: Styles in InDesign
+    source: ACP InDesign obj 4 / User Guide Styles
+    match: [paragraph-styles, character-styles]
+    subtopics:
+      - {id: id-st-based-on, name: Based-on and next style chains, match: [based-on, next-style]}
+      - {id: id-st-nested-styles, name: Nested and line styles, match: [nested-styles]}
+      - {id: id-st-grep-styles, name: GREP styles, match: [grep-styles]}
+      - {id: id-st-object-styles, name: Object styles, match: [object-styles]}
+      - {id: id-st-table-cell-styles, name: Table and cell styles, match: [table-styles, cell-styles]}
+      - {id: id-st-lists-bullets, name: Bullets and numbering lists across stories, match: [bullets-and-numbering]}
+  - id: id-tables
+    name: Tables
+    source: ACP InDesign obj 4 / User Guide Tables
+    match: [indesign-tables]
+    subtopics:
+      - {id: id-tb-import-excel, name: Importing Excel tables and updating links, match: [excel-table-import]}
+      - {id: id-tb-header-rows, name: Header and footer rows across frames, match: [table-header-rows]}
+      - {id: id-tb-alternating-fills, name: Alternating fills strokes and cell insets, match: [alternating-fills]}
+      - {id: id-tb-numeric-alignment, name: Aligning numbers on decimal tabs, match: [decimal-tab-alignment]}
+  - id: id-graphics
+    name: Graphics and frames
+    source: ACP InDesign obj 4 / User Guide Graphics
+    match: [indesign-graphics, frame-fitting]
+    subtopics:
+      - {id: id-gr-placing, name: Placing images and frame fitting options, match: [frame-fitting-options]}
+      - {id: id-gr-links-panel, name: Links panel relinking and effective ppi, match: [links-panel, effective-ppi]}
+      - {id: id-gr-psd-layers, name: Object layer options for PSD and AI, match: [object-layer-options]}
+      - {id: id-gr-content-collector, name: Content collector and placer, match: [content-collector]}
+      - {id: id-gr-captions, name: Live captions from metadata, match: [live-captions]}
+  - id: id-color
+    name: Colour in InDesign
+    source: ACP InDesign obj 4 / User Guide Color
+    match: [indesign-swatches]
+    subtopics:
+      - {id: id-co-swatches, name: Process vs spot swatches and mixed inks, match: [process-vs-spot, mixed-ink]}
+      - {id: id-co-tints-gradients, name: Tints and gradient swatches, match: [tint-swatches]}
+      - {id: id-co-cc-libraries, name: CC libraries for shared brand colour, match: [cc-libraries]}
+      - {id: id-co-overprint, name: Overprint attributes and preview, match: [overprint]}
+  - id: id-long-documents
+    name: Long documents
+    source: ACP InDesign obj 4 / User Guide Long documents
+    match: [long-documents]
+    subtopics:
+      - {id: id-ld-book-panel, name: Book panel and synchronising styles, match: [book-panel]}
+      - {id: id-ld-toc, name: Table of contents generation, match: [table-of-contents]}
+      - {id: id-ld-index, name: Indexing, match: [indesign-index]}
+      - {id: id-ld-footnotes-endnotes, name: Footnotes and endnotes, match: [footnotes, endnotes]}
+      - {id: id-ld-cross-references, name: Cross-references and hyperlinks, match: [cross-references]}
+      - {id: id-ld-conditional-text, name: Conditional text for versions, match: [conditional-text]}
+  - id: id-automation
+    name: Automation in InDesign
+    source: ACP InDesign obj 4 / User Guide Data merge and Scripting
+    match: [indesign-automation]
+    subtopics:
+      - {id: id-au-data-merge, name: Data merge from CSV including images, match: [data-merge]}
+      - {id: id-au-scripts, name: Running scripts and the scripts panel, match: [indesign-scripts]}
+      - {id: id-au-snippets-libraries, name: Snippets and CC library assets, match: [indesign-snippets]}
+  - id: id-output
+    name: InDesign preflight and output
+    source: ACP InDesign obj 5 / User Guide Preflight and PDF
+    match: [preflight, indesign-export]
+    subtopics:
+      - {id: id-op-preflight-profiles, name: Live preflight profiles, match: [preflight-profile]}
+      - {id: id-op-package, name: Package for handoff, match: [package]}
+      - {id: id-op-pdf-presets, name: PDF export presets for print, match: [pdf-export-presets]}
+      - {id: id-op-interactive-pdf, name: Interactive PDF with forms and bookmarks, match: [interactive-pdf]}
+      - {id: id-op-epub, name: Reflowable and fixed-layout EPUB, match: [epub-export]}
+      - {id: id-op-idml, name: IDML for version downsaving and interchange, match: [idml]}
+      - {id: id-op-accessible-pdf, name: Accessible tagged PDF from InDesign, match: [accessible-pdf, pdf-tagging]}
+  # ===================== Typography (Lupton, Bringhurst)
+  - id: ty-anatomy-classification
+    name: Letter anatomy and type classification
+    source: Lupton Letter / Bringhurst ch 7
+    match: [type-anatomy, type-classification]
+    subtopics:
+      - {id: ty-ac-anatomy, name: Letterform anatomy (x-height counters terminals), match: [letterform-anatomy]}
+      - {id: ty-ac-classification, name: Classification (humanist transitional modern grotesque geometric), match: [vox-atypi]}
+      - {id: ty-ac-families, name: Type families weights widths and optical sizes, match: [optical-sizes, type-family]}
+      - {id: ty-ac-history, name: Historical periods for period-appropriate type choice, match: [type-history]}
+  - id: ty-selection-pairing
+    name: Typeface selection and pairing
+    source: Lupton Letter / Bringhurst ch 6
+    match: [typeface-selection, font-pairing]
+    subtopics:
+      - {id: ty-sp-brief-criteria, name: Choosing type for purpose (text vs display) and language support, match: [text-vs-display-type, language-support]}
+      - {id: ty-sp-pairing, name: Pairing by shared skeleton and contrast, match: [type-pairing-contrast]}
+      - {id: ty-sp-superfamilies, name: Using superfamilies, match: [superfamily]}
+      - {id: ty-sp-evaluation, name: Testing type in proof settings, match: [type-specimen-testing]}
+  - id: ty-hierarchy
+    name: Typographic hierarchy and scale
+    source: Lupton Text (hierarchy) / Bringhurst ch 8
+    match: [type-hierarchy, type-scale]
+    subtopics:
+      - {id: ty-hi-modular-scale, name: Modular scale for sizes, match: [modular-scale]}
+      - {id: ty-hi-few-variables, name: Separating levels with minimal variables, match: [hierarchy-variables]}
+      - {id: ty-hi-headings, name: Headings subheads and run-in heads, match: [run-in-heads]}
+      - {id: ty-hi-lists-captions, name: Captions pull quotes and display text, match: [pull-quotes]}
+  - id: ty-spacing
+    name: Spacing (kerning tracking leading)
+    source: Lupton Text / Bringhurst ch 2
+    match: [kerning, tracking]
+    subtopics:
+      - {id: ty-sp-metric-optical, name: Metric vs optical kerning, match: [optical-kerning, metric-kerning]}
+      - {id: ty-sp-manual-kerning, name: Manual kerning of display type, match: [display-kerning]}
+      - {id: ty-sp-tracking-caps, name: Letterspacing capitals and small caps, match: [letterspacing-caps]}
+      - {id: ty-sp-leading, name: Leading and baseline rhythm, match: [leading]}
+      - {id: ty-sp-measure, name: Measure and line length, match: [measure]}
+      - {id: ty-sp-word-spacing, name: Word spacing, match: [word-spacing]}
+  - id: ty-alignment-justification
+    name: Alignment hyphenation and justification
+    source: Lupton Text / Bringhurst ch 2 and 3
+    match: [justification, text-alignment]
+    subtopics:
+      - {id: ty-aj-rag, name: Shaping a ragged right, match: [rag]}
+      - {id: ty-aj-hj-settings, name: H and J settings for justified text, match: [hyphenation-and-justification]}
+      - {id: ty-aj-paragraph-composer, name: Paragraph vs single-line composer, match: [paragraph-composer]}
+      - {id: ty-aj-optical-margin, name: Optical margin alignment and hanging punctuation, match: [optical-margin-alignment, hanging-punctuation]}
+      - {id: ty-aj-widows-orphans, name: Widows orphans and runts, match: [widows-and-orphans]}
+      - {id: ty-aj-paragraph-indication, name: Paragraph indication (indents vs space), match: [paragraph-indication]}
+  - id: ty-details
+    name: Typographic details and punctuation
+    source: Bringhurst ch 5 analphabetic symbols / Lupton punctuation
+    match: [typographic-details, punctuation]
+    subtopics:
+      - {id: ty-de-dashes, name: Hyphens en dashes and em dashes, match: [dashes]}
+      - {id: ty-de-quotes, name: Smart quotes apostrophes and primes, match: [smart-quotes]}
+      - {id: ty-de-figures, name: Lining vs oldstyle and tabular vs proportional figures, match: [oldstyle-figures, tabular-figures]}
+      - {id: ty-de-small-caps, name: True small caps and acronyms, match: [small-caps]}
+      - {id: ty-de-ligatures, name: Ligatures and discretionary ligatures, match: [ligatures]}
+      - {id: ty-de-special-spaces, name: Non-breaking and fixed-width spaces, match: [non-breaking-space]}
+  - id: ty-opentype-fonts
+    name: Fonts formats OpenType and management
+    source: Lupton Letter (font formats) / OpenType spec
+    match: [opentype, font-management]
+    subtopics:
+      - {id: ty-of-features, name: OpenType features (stylistic sets alternates fractions), match: [stylistic-sets, opentype-features]}
+      - {id: ty-of-variable-fonts, name: Variable fonts and axes, match: [variable-fonts]}
+      - {id: ty-of-licensing, name: Font licensing (desktop web app embedding), match: [font-licensing]}
+      - {id: ty-of-font-manager, name: Font managers activation and conflicts, match: [font-manager]}
+      - {id: ty-of-formats, name: Font formats OTF TTF WOFF2, match: [woff2, font-formats]}
+  - id: ty-screen
+    name: Typography for screen
+    source: Lupton Letter (type on screen) / WCAG 2.2
+    match: [web-typography, screen-typography]
+    subtopics:
+      - {id: ty-sc-font-loading, name: Web font loading and font-display, match: [font-display, font-loading]}
+      - {id: ty-sc-fluid-type, name: Fluid responsive type with clamp, match: [fluid-typography]}
+      - {id: ty-sc-legibility-contrast, name: Text contrast and minimum sizes for accessibility, match: [text-contrast]}
+      - {id: ty-sc-ui-type-scale, name: UI type ramps and design tokens, match: [type-tokens]}
+  # ===================== Editorial and layout (Muller-Brockmann, Lupton Grid) + print production
+  - id: el-grid
+    name: Grid systems
+    source: Muller-Brockmann Grid Systems / Lupton Grid
+    match: [grid-system, modular-grid]
+    subtopics:
+      - {id: el-gr-type-area, name: Type area and margins from format proportion, match: [type-area, canons-of-page-construction]}
+      - {id: el-gr-column-grid, name: Column grids and gutters, match: [column-grid]}
+      - {id: el-gr-modular, name: Modular grid fields from line count, match: [grid-fields]}
+      - {id: el-gr-baseline, name: Baseline grid alignment, match: [baseline-grid]}
+      - {id: el-gr-breaking-grid, name: Deliberately breaking the grid, match: [breaking-the-grid]}
+  - id: el-layout-composition
+    name: Page composition
+    source: Muller-Brockmann image placement / Lupton Grid
+    match: [page-composition, layout-composition]
+    subtopics:
+      - {id: el-lc-image-cropping, name: Image cropping and scale for drama, match: [image-cropping]}
+      - {id: el-lc-white-space, name: Using white space, match: [white-space]}
+      - {id: el-lc-spreads, name: Designing across the spread and the gutter, match: [spread-design]}
+      - {id: el-lc-entry-points, name: Entry points and reading paths, match: [entry-points]}
+  - id: el-magazine
+    name: Magazine and periodical design
+    source: Lupton Grid / editorial design practice
+    match: [magazine-layout, magazine-design]
+    subtopics:
+      - {id: el-mg-flatplan, name: Flatplan and pacing, match: [flatplan, pacing]}
+      - {id: el-mg-cover, name: Magazine cover design and coverlines, match: [magazine-cover, coverlines]}
+      - {id: el-mg-feature-opener, name: Feature openers and departments, match: [feature-opener]}
+      - {id: el-mg-templates, name: Editorial templates and style sheets for issue production, match: [editorial-templates]}
+  - id: el-book
+    name: Book design
+    source: Bringhurst ch 8 (structural forms) / Chicago Manual of Style book parts
+    match: [book-design]
+    subtopics:
+      - {id: el-bk-front-matter, name: Front matter and back matter order, match: [front-matter]}
+      - {id: el-bk-page-proportion, name: Page proportion and text block, match: [page-proportion]}
+      - {id: el-bk-chapter-openers, name: Chapter openings and running heads, match: [chapter-openers]}
+      - {id: el-bk-cover-spine, name: Cover spine width and dust jacket, match: [book-cover, spine-width]}
+      - {id: el-bk-pagination, name: Pagination rules (recto starts and blanks), match: [pagination]}
+  - id: el-print-pdf-standards
+    name: Print-ready PDF standards
+    source: ISO 15930 PDF/X / Ghent Workgroup
+    match: [pdf-x, print-ready-pdf]
+    subtopics:
+      - {id: el-ps-pdfx1a-vs-x4, name: Choosing PDF/X-1a vs PDF/X-4, match: [pdf-x-4, pdf-x-1a]}
+      - {id: el-ps-acrobat-preflight, name: Acrobat preflight and fixups, match: [acrobat-preflight]}
+      - {id: el-ps-output-preview, name: Output preview and total area coverage, match: [total-area-coverage, ink-limit]}
+      - {id: el-ps-transparency, name: Transparency flattening issues, match: [transparency-flattening]}
+      - {id: el-ps-fonts-embedding, name: Font embedding and subsetting, match: [font-embedding]}
+  - id: el-color-print
+    name: Colour for print
+    source: ISO 12647-2 / FOGRA / GRACoL G7
+    match: [print-colour, iso-12647]
+    subtopics:
+      - {id: el-cp-output-intents, name: Output intent profiles (FOGRA39 FOGRA51 GRACoL), match: [output-intent, fogra]}
+      - {id: el-cp-rich-black, name: Rich black and registration, match: [rich-black]}
+      - {id: el-cp-spot-to-process, name: Spot colour to process and Pantone bridge, match: [spot-to-process]}
+      - {id: el-cp-paper-dot-gain, name: Paper stock and tone value increase, match: [dot-gain, tone-value-increase]}
+      - {id: el-cp-proofing, name: Contract proofs and press checks, match: [contract-proof, press-check]}
+      - {id: el-cp-viewing-conditions, name: ISO 3664 viewing conditions, match: [iso-3664]}
+  - id: el-print-finishing
+    name: Print formats paper and finishing
+    source: Print production practice / ISO 216
+    match: [print-finishing, print-specification]
+    subtopics:
+      - {id: el-pf-paper, name: Paper sizes weights and grain, match: [paper-stock, iso-216]}
+      - {id: el-pf-binding, name: Binding methods and page count rules, match: [binding-methods, saddle-stitch]}
+      - {id: el-pf-imposition, name: Imposition and printer spreads, match: [imposition]}
+      - {id: el-pf-die-cut, name: Dielines and die-cut artwork, match: [dieline, die-cut]}
+      - {id: el-pf-special-finishes, name: Spot UV foil and embossing artwork, match: [spot-uv, foil-stamping]}
+      - {id: el-pf-print-quote, name: Writing a print spec and getting quotes, match: [print-quote]}
+  # ===================== Brand identity (Wheeler, AIGA)
+  - id: bi-research-strategy
+    name: Brand research and strategy
+    source: Wheeler process phases 1-2
+    match: [brand-strategy, brand-research]
+    subtopics:
+      - {id: bi-rs-brief, name: Writing the design brief, match: [design-brief, creative-brief]}
+      - {id: bi-rs-audit, name: Brand and competitive audit, match: [brand-audit, competitive-audit]}
+      - {id: bi-rs-positioning, name: Positioning and brand attributes, match: [brand-positioning]}
+      - {id: bi-rs-stakeholder-interviews, name: Stakeholder interviews, match: [stakeholder-interviews]}
+      - {id: bi-rs-moodboards, name: Moodboards and visual direction, match: [moodboard]}
+  - id: bi-logo
+    name: Logo design
+    source: Wheeler basics (signature) / identity design practice
+    match: [logo-design, logo]
+    subtopics:
+      - {id: bi-lg-types, name: Logo types (wordmark monogram symbol emblem), match: [wordmark, monogram]}
+      - {id: bi-lg-sketching, name: Ideation and sketching, match: [logo-sketching]}
+      - {id: bi-lg-optical-refinement, name: Optical refinement and overshoot, match: [optical-refinement, overshoot]}
+      - {id: bi-lg-construction-grids, name: Construction geometry and logo grids, match: [logo-construction-grid]}
+      - {id: bi-lg-scalability, name: Small-size versions and responsive logos, match: [responsive-logo]}
+      - {id: bi-lg-lockups, name: Lockups and signatures, match: [logo-lockup]}
+  - id: bi-identity-system
+    name: Identity system elements
+    source: Wheeler basics (colour typography imagery)
+    match: [identity-system, visual-identity]
+    subtopics:
+      - {id: bi-is-color-palette, name: Brand colour palette with specs, match: [brand-colour-palette]}
+      - {id: bi-is-typography, name: Brand typography system, match: [brand-typography]}
+      - {id: bi-is-graphic-elements, name: Graphic devices and patterns, match: [graphic-devices]}
+      - {id: bi-is-photography, name: Photography and imagery direction, match: [imagery-direction]}
+      - {id: bi-is-iconography, name: Brand iconography, match: [brand-iconography]}
+      - {id: bi-is-motion, name: Motion and sonic identity basics, match: [motion-identity]}
+  - id: bi-touchpoints
+    name: Touchpoints and applications
+    source: Wheeler phase 4 creating touchpoints
+    match: [brand-touchpoints, brand-applications]
+    subtopics:
+      - {id: bi-tp-stationery, name: Stationery and business cards, match: [stationery, business-card]}
+      - {id: bi-tp-signage, name: Environmental signage and vehicles, match: [brand-signage]}
+      - {id: bi-tp-packaging, name: Packaging graphics, match: [packaging-design]}
+      - {id: bi-tp-digital, name: Social avatars and digital templates, match: [social-media-templates]}
+      - {id: bi-tp-merch, name: Merchandise and apparel graphics, match: [merchandise]}
+  - id: bi-guidelines-assets
+    name: Brand guidelines and asset management
+    source: Wheeler phase 5 managing assets
+    match: [brand-guidelines, brand-assets]
+    subtopics:
+      - {id: bi-ga-guidelines-doc, name: Writing the brand guidelines document, match: [brand-book]}
+      - {id: bi-ga-logo-files, name: Logo file delivery package, match: [logo-file-formats]}
+      - {id: bi-ga-clear-space, name: Clear space minimum size and misuse, match: [clear-space, logo-misuse]}
+      - {id: bi-ga-design-system-library, name: Shared libraries and design tokens for brand, match: [brand-library, design-tokens]}
+      - {id: bi-ga-templates, name: Office and slide templates, match: [slide-template]}
+  - id: bi-naming-architecture
+    name: Naming and brand architecture
+    source: Wheeler basics (brand architecture names taglines)
+    match: [brand-architecture, naming]
+    subtopics:
+      - {id: bi-na-architecture-models, name: Monolithic endorsed and pluralistic models, match: [endorsed-brand]}
+      - {id: bi-na-sub-brands, name: Sub-brand and product logo systems, match: [sub-brand]}
+      - {id: bi-na-taglines, name: Taglines and lockups, match: [tagline]}
+      - {id: bi-na-trademark-check, name: Trademark search before launch, match: [trademark-search]}
+  - id: bi-practice
+    name: Presenting and managing identity projects
+    source: AIGA competencies / AIGA Standard Form of Agreement
+    match: [design-presentation, design-practice]
+    subtopics:
+      - {id: bi-pr-client-presentation, name: Presenting concepts to clients, match: [client-presentation]}
+      - {id: bi-pr-feedback, name: Handling feedback and revision rounds, match: [revision-rounds]}
+      - {id: bi-pr-proposal-pricing, name: Proposals scope and pricing, match: [design-proposal]}
+      - {id: bi-pr-ip-ownership, name: IP transfer and ownership of final art, match: [ip-transfer]}
+      - {id: bi-pr-rebrand-rollout, name: Rebrand rollout planning, match: [rebrand-rollout]}
+  # ===================== Poster and campaign graphics
+  - id: pc-composition
+    name: Poster composition
+    source: Muller-Brockmann grid in practice for posters / AIGA
+    match: [poster-composition, poster-design]
+    subtopics:
+      - {id: pc-co-focal-point, name: Single focal point and visual hierarchy, match: [focal-point]}
+      - {id: pc-co-type-as-image, name: Typographic posters (type as image), match: [typographic-poster]}
+      - {id: pc-co-image-text, name: Integrating image and headline, match: [image-text-integration]}
+      - {id: pc-co-colour-impact, name: Limited palettes and colour impact, match: [limited-palette]}
+      - {id: pc-co-viewing-distance, name: Sizing for viewing distance, match: [viewing-distance]}
+  - id: pc-campaign
+    name: Campaign systems and adaptation
+    source: Advertising campaign practice / Figma Help Center (frames and auto layout)
+    match: [campaign, campaign-system]
+    subtopics:
+      - {id: pc-ca-key-visual, name: Key visual and campaign idea, match: [key-visual, key-art]}
+      - {id: pc-ca-series, name: Series consistency across a set, match: [series-design]}
+      - {id: pc-ca-resizing, name: Resizing to many formats (adaptations), match: [format-adaptation, resizing]}
+      - {id: pc-ca-copy-lockup, name: Headline and CTA lockups, match: [call-to-action]}
+      - {id: pc-ca-figma-variants, name: Building adaptations with Figma auto layout and components, match: [figma-auto-layout, figma-components]}
+  - id: pc-formats
+    name: Campaign formats and specs
+    source: Out-of-home and social platform spec sheets
+    match: [ad-specs, media-specs]
+    subtopics:
+      - {id: pc-fm-ooh, name: Billboards and out-of-home artwork, match: [billboard, out-of-home]}
+      - {id: pc-fm-large-format, name: Large-format print resolution and scaling, match: [large-format-print]}
+      - {id: pc-fm-social, name: Social media graphics sizes and safe zones, match: [social-media-graphics, safe-zones]}
+      - {id: pc-fm-digital-display, name: Display banner ads and file weight, match: [display-ads, banner-ads]}
+      - {id: pc-fm-print-ads, name: Magazine and newspaper print ads, match: [print-ad]}
+  # ===================== Information design (Tufte, Isotype, SEGD)
+  - id: in-charts
+    name: Chart design
+    source: Tufte VDQI / Lupton Grid (data tables)
+    match: [chart-design, data-visualisation]
+    subtopics:
+      - {id: in-ch-chart-choice, name: Choosing the chart type, match: [chart-selection]}
+      - {id: in-ch-axes-scales, name: Axes scales and honest baselines, match: [chart-axes, truncated-axis]}
+      - {id: in-ch-annotation, name: Annotation and direct labelling, match: [annotation, direct-labelling]}
+      - {id: in-ch-color, name: Colour palettes for data (sequential diverging categorical), match: [sequential-palette, diverging-palette]}
+      - {id: in-ch-small-multiples, name: Small multiples, match: [small-multiples]}
+      - {id: in-ch-tables, name: Data table design, match: [data-tables]}
+  - id: in-infographics
+    name: Infographics and explanatory graphics
+    source: Isotype / editorial graphics practice
+    match: [infographic, explanatory-graphics]
+    subtopics:
+      - {id: in-ig-structure, name: Story structure and reading order, match: [infographic-structure]}
+      - {id: in-ig-isotype, name: Isotype pictogram counts, match: [isotype, pictogram-charts]}
+      - {id: in-ig-timelines, name: Timelines, match: [timeline-design]}
+      - {id: in-ig-process, name: Process and how-it-works graphics, match: [process-graphic]}
+      - {id: in-ig-maps, name: Thematic and locator maps, match: [locator-map, thematic-map]}
+  - id: in-diagrams
+    name: Diagrams
+    source: Information design practice
+    match: [diagram-design]
+    subtopics:
+      - {id: in-dg-flowcharts, name: Flowcharts and decision trees, match: [flowchart]}
+      - {id: in-dg-org-charts, name: Org charts and hierarchies, match: [org-chart]}
+      - {id: in-dg-exploded-views, name: Exploded and cutaway technical views, match: [exploded-view]}
+      - {id: in-dg-network-maps, name: Schematic transit-style network maps, match: [schematic-map]}
+  - id: in-wayfinding
+    name: Wayfinding and signage graphics
+    source: SEGD wayfinding practice / ISO 7001 / ADA Standards 703
+    match: [wayfinding, signage]
+    subtopics:
+      - {id: in-wf-sign-types, name: Sign family and sign types, match: [sign-family]}
+      - {id: in-wf-pictograms, name: Public information symbols ISO 7001, match: [iso-7001, pictograms]}
+      - {id: in-wf-sign-legibility, name: Sign letter height and viewing distance, match: [sign-legibility]}
+      - {id: in-wf-ada-signs, name: Tactile and braille sign requirements, match: [ada-signage, tactile-signs]}
+      - {id: in-wf-message-schedule, name: Message schedule and location plan, match: [message-schedule]}
+  - id: in-icons-accessibility
+    name: Icons and accessible graphics
+    source: ISO 7001 / WCAG 2.2 (1.4.1 1.4.11)
+    match: [icon-design, accessible-graphics]
+    subtopics:
+      - {id: in-ia-icon-grid, name: Icon grids keylines and pixel snapping, match: [icon-grid, keylines]}
+      - {id: in-ia-icon-set-consistency, name: Consistent icon set style, match: [icon-set]}
+      - {id: in-ia-contrast-graphics, name: Non-text contrast and colour-not-alone, match: [non-text-contrast, colorblind-safe]}
+      - {id: in-ia-alt-text, name: Alt text and long descriptions for graphics, match: [alt-text]}
+  # ===================== Commercial illustration
+  - id: ci-process
+    name: Illustration commission process
+    source: AOI (Association of Illustrators) / Graphic Artists Guild Handbook
+    match: [illustration-brief, commercial-illustration]
+    subtopics:
+      - {id: ci-pr-roughs, name: Thumbnails and roughs for approval, match: [roughs, thumbnails]}
+      - {id: ci-pr-visual-metaphor, name: Concept and visual metaphor for editorial, match: [visual-metaphor]}
+      - {id: ci-pr-pricing-licensing, name: Pricing usage licensing and kill fees, match: [usage-rights, kill-fee]}
+      - {id: ci-pr-portfolio, name: Portfolio and pitching art directors, match: [illustration-portfolio]}
+      - {id: ci-pr-delivery, name: Final file delivery specs, match: [illustration-delivery]}
+  - id: ci-styles-techniques
+    name: Illustration techniques
+    source: Graphic Artists Guild Handbook / tool manuals
+    match: [illustration-technique, digital-illustration]
+    subtopics:
+      - {id: ci-st-flat-vector, name: Flat vector illustration, match: [flat-vector-illustration]}
+      - {id: ci-st-digital-painting, name: Digital painting in Photoshop or Procreate, match: [digital-painting, procreate]}
+      - {id: ci-st-texture, name: Texture and grain for vector and raster, match: [texture-brushes]}
+      - {id: ci-st-limited-palette, name: Limited colour and value structure, match: [value-structure]}
+      - {id: ci-st-character, name: Character illustration and consistency, match: [character-illustration]}
+  - id: ci-applications
+    name: Illustration applications
+    source: Graphic Artists Guild Handbook market chapters
+    match: [editorial-illustration, spot-illustration]
+    subtopics:
+      - {id: ci-ap-editorial, name: Editorial illustration for articles, match: [editorial-illustration-commission]}
+      - {id: ci-ap-spot, name: Spot illustrations as a set, match: [spot-illustration-set]}
+      - {id: ci-ap-icon-sets, name: Product and UI icon sets, match: [ui-icon-set]}
+      - {id: ci-ap-book-covers, name: Book cover and children's book illustration, match: [childrens-book-illustration]}
+      - {id: ci-ap-advertising, name: Advertising and packaging illustration, match: [advertising-illustration]}
+  # ===================== Lettering and calligraphy (Johnston, IAMPETH, Glyphs)
+  - id: lc-broad-pen
+    name: Broad-pen calligraphy
+    source: Johnston Writing and Illuminating and Lettering
+    match: [broad-pen, calligraphy]
+    subtopics:
+      - {id: lc-bp-foundational, name: Foundational hand, match: [foundational-hand]}
+      - {id: lc-bp-italic, name: Italic hand, match: [italic-hand]}
+      - {id: lc-bp-blackletter, name: Blackletter textura, match: [blackletter]}
+      - {id: lc-bp-uncial, name: Uncial, match: [uncial]}
+      - {id: lc-bp-roman-caps, name: Roman capitals with the broad pen, match: [roman-capitals]}
+  - id: lc-pointed-pen
+    name: Pointed-pen scripts
+    source: IAMPETH copperplate and Spencerian instruction
+    match: [pointed-pen]
+    subtopics:
+      - {id: lc-pp-copperplate, name: Copperplate (English roundhand), match: [copperplate]}
+      - {id: lc-pp-spencerian, name: Spencerian script, match: [spencerian]}
+      - {id: lc-pp-oblique-holder, name: Oblique holder and nib setup, match: [oblique-holder]}
+      - {id: lc-pp-modern-calligraphy, name: Modern pointed-pen calligraphy, match: [modern-calligraphy]}
+  - id: lc-brush-hand-lettering
+    name: Brush and hand lettering
+    source: Lettering practice / sign painting
+    match: [hand-lettering, brush-lettering]
+    subtopics:
+      - {id: lc-bh-brush-pen, name: Brush pen script, match: [brush-pen]}
+      - {id: lc-bh-layout, name: Lettering composition and layout, match: [lettering-layout]}
+      - {id: lc-bh-drawn-letters, name: Drawn letters (built-up forms), match: [drawn-letters]}
+      - {id: lc-bh-sign-painting, name: Sign painting and chalkboard lettering, match: [sign-painting, chalkboard-lettering]}
+  - id: lc-digitising-type-design
+    name: Digitising lettering and type design basics
+    source: Glyphs Handbook / FontForge manual
+    match: [type-design, lettering-digitising]
+    subtopics:
+      - {id: lc-dt-vectorising-lettering, name: Vectorising hand lettering cleanly, match: [vectorising-lettering]}
+      - {id: lc-dt-custom-logotype, name: Custom logotype drawing, match: [custom-logotype]}
+      - {id: lc-dt-glyphs-basics, name: Drawing glyphs in a font editor, match: [glyphs-app, fontforge]}
+      - {id: lc-dt-spacing-kerning-font, name: Spacing and kerning a font, match: [font-spacing]}
+      - {id: lc-dt-font-export, name: Font export and testing, match: [font-export]}

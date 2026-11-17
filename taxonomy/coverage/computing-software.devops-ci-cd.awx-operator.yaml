@@ -1,0 +1,210 @@
+# Coverage spec for awx-operator, from the official documentation.
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: awx-operator
+scope:
+  category: computing-software
+  field: devops-ci-cd
+  products: [awx-operator]
+sources:
+  - "AWX Operator documentation (docs/ in ansible/awx-operator)"
+topics:
+  - id: basic-install
+    name: "Basic install with kustomize"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/installation/basic-install.md"
+    match: [install, kustomize, awx-cr]
+  - id: upgrade
+    name: "Upgrading the operator"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/auto-upgrade.md"
+    match: [upgrade, default-awx-version]
+  - id: backup-before-upgrade
+    name: "Backup before upgrade"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/upgrade/upgrading.md"
+    match: [backup, restore]
+  - id: uninstall
+    name: "Uninstalling AWX"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/uninstall/uninstall.md"
+    match: [uninstall, garbage-collect]
+  - id: secret-recovery
+    name: "Secrets after uninstall"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/custom-volume-and-volume-mount-options.md"
+    match: [pvc, recovery]
+  - id: migration
+    name: "Migrating from old AWX"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/migration/migration.md"
+    match: [migration, old-awx, pg-dump-suffix]
+  - id: debugging
+    name: "Debugging the operator"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/troubleshooting/debugging.md"
+    match: [debugging, no_log, installer-role]
+  - id: external-database
+    name: "External PostgreSQL"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/database-configuration.md"
+    match: [external-database, postgres-configuration-secret]
+  - id: database-sslmode
+    name: "Database sslmode and target session"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/database-configuration.md"
+    match: [sslmode, target-session-attrs]
+  - id: managed-database
+    name: "Managed PostgreSQL"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/database-configuration.md"
+    match: [managed-postgres, postgres-storage-class]
+  - id: database-resources
+    name: "Managed database resources"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/database-configuration.md"
+    match: [sclorg, hostpath, data-volume-init]
+  - id: postgres-extra-settings
+    name: "Postgres extra settings"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/database-configuration.md"
+    match: [postgres-extra-settings, max-connections]
+  - id: service-type
+    name: "Service type"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/installation/basic-install.md"
+    match: [service-type, loadbalancer, nodeport]
+  - id: service-annotations
+    name: "Service annotations"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/network-and-tls-configuration.md"
+    match: [service-annotations, clusterip]
+  - id: ingress
+    name: "Ingress"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/network-and-tls-configuration.md"
+    match: [ingress, ingress-hosts, ingress-class]
+  - id: ingress-tls
+    name: "Ingress TLS secret"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/network-and-tls-configuration.md"
+    match: [tls-secret, contour]
+  - id: openshift-route
+    name: "OpenShift route"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/network-and-tls-configuration.md"
+    match: [route]
+  - id: admin-user
+    name: "Admin user and password"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/admin-user-account-configuration.md"
+    match: [admin-user, admin-password-secret]
+  - id: secret-key
+    name: "Secret key secret"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/admin-user-account-configuration.md"
+    match: [secret-key-secret, encryption]
+  - id: extra-settings
+    name: "extra_settings"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/extra-settings.md"
+    match: [extra-settings, settings-py]
+  - id: extra-settings-files
+    name: "extra_settings_files"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/extra-settings.md"
+    match: [configmap, conf-d, read-only-settings]
+  - id: custom-image
+    name: "Custom AWX image"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/deploying-a-specific-version-of-awx.md"
+    match: [image, mirror]
+  - id: pull-secrets
+    name: "Image pull secrets"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/deploying-a-specific-version-of-awx.md"
+    match: [image-pull-secrets, private-registry]
+  - id: ee-images
+    name: "Execution environment images"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/deploying-a-specific-version-of-awx.md"
+    match: [ee-images, control-plane-ee]
+  - id: extra-volumes
+    name: "Extra volumes"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/custom-volume-and-volume-mount-options.md"
+    match: [extra-volumes, volume-mounts]
+  - id: init-container
+    name: "Init container"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/custom-volume-and-volume-mount-options.md"
+    match: [init-container, ansible-cfg]
+  - id: uwsgi-tuning
+    name: "uWSGI tuning"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/custom-volume-and-volume-mount-options.md"
+    match: [uwsgi, listen-queue, somaxconn]
+  - id: nginx-tuning
+    name: "nginx tuning"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/custom-volume-and-volume-mount-options.md"
+    match: [nginx, worker-processes]
+  - id: mesh-ingress
+    name: "Mesh ingress"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/mesh-ingress.md"
+    match: [mesh-ingress, awxmeshingress]
+  - id: mesh-ingress-nginx-traefik
+    name: "Mesh ingress controllers"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/mesh-ingress.md"
+    match: [ssl-passthrough, hop-node, execution-node]
+  - id: liveness-probe
+    name: "Liveness probes"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/container-probes.md"
+    match: [liveness-probe, supervisor]
+  - id: readiness-probe
+    name: "Readiness probes"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/container-probes.md"
+    match: [readiness-probe, awx-manage]
+  - id: node-selector
+    name: "Node selector"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/assigning-awx-pods-to-specific-nodes.md"
+    match: [node-selector, postgres-selector]
+  - id: tolerations
+    name: "Tolerations"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/assigning-awx-pods-to-specific-nodes.md"
+    match: [tolerations]
+  - id: affinity
+    name: "Affinity and topology spread"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/assigning-awx-pods-to-specific-nodes.md"
+    match: [affinity, topology-spread]
+  - id: db-migration-scheduling
+    name: "DB migration job scheduling"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/assigning-awx-pods-to-specific-nodes.md"
+    match: [db-migration]
+  - id: termination-grace
+    name: "Termination grace period"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/pods-termination-grace-period.md"
+    match: [termination-grace-period, prestop-hook]
+  - id: resource-requirements
+    name: "Container resource requirements"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/containers-resource-requirements.md"
+    match: [resource-requirements, requests, limits]
+  - id: resource-quota
+    name: "Resource quotas"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/containers-resource-requirements.md"
+    match: [resourcequota, rsyslog]
+  - id: scaling-replicas
+    name: "Scaling replicas"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/horizontal-pod-autoscaler.md"
+    match: [replicas, web-replicas, task-replicas]
+  - id: hpa
+    name: "Horizontal pod autoscaler"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/horizontal-pod-autoscaler.md"
+    match: [hpa, web-manage-replicas, task-manage-replicas]
+  - id: auto-upgrade
+    name: "Auto upgrade flag"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/auto-upgrade.md"
+    match: [auto-upgrade, staged-upgrade]
+  - id: ldap
+    name: "LDAP integration"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/enabling-ldap-integration-at-awx-bootstrap.md"
+    match: [ldap, django-auth-ldap]
+  - id: custom-ca
+    name: "Trusting custom CA"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/trusting-a-custom-certificate-authority.md"
+    match: [custom-ca, bundle-cacert-secret, ldap-cacert-secret]
+  - id: receptor-ca
+    name: "Custom Receptor CA"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/custom-receptor-certs.md"
+    match: [receptor, receptor-ca, mtls]
+  - id: projects-persistence
+    name: "Persist projects directory"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/persisting-projects-directory.md"
+    match: [projects-persistence, existing-claim, readwritemany]
+  - id: labels
+    name: "Additional labels"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/priority-classes.md"
+    match: [additional-labels]
+  - id: priority-class
+    name: "Priority classes"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/priority-classes.md"
+    match: [priority-class, control-plane-priority-class, eviction]
+  - id: task-privileged
+    name: "Privileged task containers"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/exporting-environment-variables-to-containers.md"
+    match: [task-privileged, scc]
+  - id: extra-env
+    name: "Extra environment variables"
+    source: "https://github.com/ansible/awx-operator/blob/devel/docs/user-guide/advanced-configuration/exporting-environment-variables-to-containers.md"
+    match: [extra-env, environment-variables]

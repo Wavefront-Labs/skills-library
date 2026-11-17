@@ -1,0 +1,1355 @@
+# Canonical coverage spec: Ansible and tool-agnostic infrastructure-as-code practice.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (Red Hat exam objectives, the Ansible
+# documentation table of contents, the IaC discipline as described by HashiCorp/AWS/Google
+# well-architected guidance), not from what we happened to write. Tool-agnostic IaC practice
+# topics live under the infrastructure-as-code product; Ansible-specific ones under ansible.
+# Subtopics (depth) come from the sub-headings of the docs.ansible.com user/developer guide pages,
+# the ansible.builtin module index, the ansible-lint rule list, the Molecule command list and the
+# AWX / Ansible Automation Platform documentation sections named in each topic's source.
+subject: ansible
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [ansible, infrastructure-as-code]
+sources:
+  - "RHCE EX294 exam objectives (Red Hat Certified Engineer, RHEL 9) - core components, roles and collections, control node, managed nodes, ansible-navigator, plays and playbooks, RHCSA task automation, templates and Vault"
+  - "EX374 Red Hat Certified Specialist in Developing Automation with Ansible Automation Platform objectives - collections, filters/lookups, execution environments, ansible-builder, task execution control, testing with ansible-lint and molecule"
+  - "EX467 Red Hat Certified Specialist in Managing Automation with Ansible Automation Platform objectives - automation controller (organizations, RBAC, credentials, projects, inventories, job and workflow templates, surveys, notifications, schedules), automation hub, backup and restore"
+  - "Ansible documentation user guide table of contents - Building inventories, Command line tools, Playbooks (variables, facts, conditionals, loops, handlers, blocks, error handling, tags, delegation, strategies, async, templating, filters, tests, lookups, module defaults, prompts, debugging), Roles, Collections, Vault, Windows, Network automation, Plugins"
+  - "Ansible developer guide table of contents - developing modules, module utilities, plugins, collections (galaxy.yml, build, publish), ansible-test sanity/units/integration"
+  - "Ansible ecosystem docs - Molecule, ansible-lint, ansible-builder/execution environments, ansible-navigator, ansible-runner, AWX/automation controller, Event-Driven Ansible"
+  - "IaC discipline - HashiCorp Terraform recommended practices (workflow, environments), AWS Well-Architected Operational Excellence (infrastructure as code, change management), Google Cloud architecture framework (IaC, CI/CD, policy), OpenGitOps principles"
+  - "Subtopic sources - docs.ansible.com page sub-headings (Installation guide, Configuring Ansible, Privilege escalation, Connection methods, Building inventories, Patterns, Playbook guide pages), ansible.builtin and ansible.posix/community.general module index grouped by files/packages/services/users/storage, ansible-lint rule index and profiles page, Molecule command reference, ansible-builder definition reference, ansible-navigator settings and subcommands, AWX/AAP controller user guide and administration guide sections, EDA rulebook reference"
+topics:
+  # --- Control node, managed nodes, configuration (EX294: install/configure control node, configure managed nodes)
+  - id: control-node-setup
+    name: Install and configure the control node
+    source: EX294/Control node; docs/Installation guide sections
+    match: [control-node, ansible-install, pipx, ansible-core, python-venv]
+    subtopics:
+      - {id: pip-pipx-install, name: Install ansible or ansible-core with pip or pipx in a venv, match: [pipx, python-venv]}
+      - {id: distro-package-install, name: Install from distribution or AAP repositories (dnf, apt), match: [distro-packages, rhel-ansible-repo, apt-ansible-ppa]}
+      - {id: interpreter-discovery, name: Python interpreter discovery on managed nodes (interpreter_python), match: [interpreter-python, interpreter-discovery]}
+      - {id: upgrade-ansible, name: Upgrade ansible-core and the community package, match: [upgrade, ansible-upgrade]}
+      - {id: shell-completion, name: Shell completion with argcomplete, match: [argcomplete, shell-completion]}
+      - {id: devel-install, name: Run from source or the devel branch, match: [ansible-devel, source-install]}
+      - {id: control-node-requirements, name: "Control node platform and Python requirements (no native Windows, WSL)", match: [control-node-requirements, wsl-control-node]}
+      - {id: managed-node-requirements, name: "Managed node requirements (Python, sftp, SELinux bindings)", match: [managed-node-requirements, libselinux-python]}
+      - {id: core-version-matrix, name: "ansible vs ansible-core version matrix and support lifecycle", match: [core-version-matrix, support-lifecycle]}
+      - {id: side-by-side-versions, name: "Several Ansible versions side by side in venvs", match: [side-by-side-versions, multiple-venvs]}
+      - {id: install-verification, name: "Verifying an install with ansible --version and a localhost ping", match: [install-verification, ansible-version-output]}
+  - id: ansible-cfg
+    name: ansible.cfg precedence and key settings
+    source: EX294/Control node; docs/Configuring Ansible sections
+    match: [ansible-cfg, ansible-config, config-precedence]
+    subtopics:
+      - {id: config-file-locations, name: Config file search order and ANSIBLE_CONFIG, match: [config-locations, ansible-config-env]}
+      - {id: ansible-config-cli, name: ansible-config dump, list, view and init, match: [config-dump, config-init, ansible-config-dump]}
+      - {id: env-var-overrides, name: Overriding settings with environment variables, match: [ansible-env-vars, environment-overrides]}
+      - {id: cfg-sections, name: The defaults, privilege_escalation, ssh_connection and galaxy sections, match: [cfg-sections, ssh-connection-section]}
+      - {id: world-writable-cwd, name: Config in a world-writable directory is ignored, match: [world-writable, config-security]}
+      - {id: config-option-lookup, name: "Finding an option's ini key, env var and default with ansible-config list", match: [config-option-lookup]}
+      - {id: per-project-cfg, name: "Per-project ansible.cfg and relative paths", match: [per-project-cfg, relative-config-paths]}
+      - {id: config-only-changed, name: "Auditing changed settings with dump --only-changed and validate", match: [only-changed, config-validate]}
+      - {id: connection-defaults-cfg, name: "remote_user, private_key_file and inventory defaults in cfg", match: [remote-user-default, private-key-file]}
+      - {id: plugin-paths-cfg, name: "Plugin path settings (library, filter_plugins, collections_path)", match: [plugin-paths, library-path]}
+  - id: managed-node-ssh-become
+    name: Managed node access with SSH keys and privilege escalation
+    source: EX294/Managed nodes; docs/Understanding privilege escalation sections
+    match: [managed-nodes, ssh-keys, become, privilege-escalation, sudo]
+    subtopics:
+      - {id: become-directives, name: become, become_user, become_method as keywords and variables, match: [become-user, become-method]}
+      - {id: become-password, name: Become passwords with --ask-become-pass and ansible_become_password, match: [become-password, ask-become-pass]}
+      - {id: sudoers-nopasswd, name: Configure NOPASSWD sudoers for the automation user, match: [nopasswd, sudoers-automation]}
+      - {id: become-unprivileged, name: Become an unprivileged user and temporary file permissions, match: [become-unprivileged, allow-world-readable-tmpfiles]}
+      - {id: become-plugins, name: Alternative become plugins (su, doas, pbrun, runas, dzdo), match: [become-plugins, doas, runas]}
+      - {id: ssh-key-distribution, name: Distribute the control node key to managed nodes, match: [ssh-copy-id, key-distribution]}
+      - {id: become-cli, name: "--become, -K and become on ad hoc vs playbook runs", match: [become-cli]}
+      - {id: become-timeout, name: "Troubleshooting become timeouts and missing sudo password errors", match: [become-timeout, missing-sudo-password]}
+      - {id: requiretty, name: "requiretty and pipelining interaction", match: [requiretty]}
+      - {id: become-exe, name: "become_exe and become_flags", match: [become-exe, become-flags-option]}
+  - id: connection-plugins
+    name: Connection plugins (ssh, paramiko, local, docker, winrm)
+    source: docs/Connection methods and details sections
+    match: [connection-plugins, connection-plugin, ssh-pipelining, pipelining, controlpersist]
+    subtopics:
+      - {id: ssh-plugin-args, name: ssh_args, ssh_common_args and ssh_extra_args, match: [ssh-args, ansible-ssh-common-args]}
+      - {id: controlpersist-multiplexing, name: ControlPersist and ControlMaster multiplexing, match: [controlpersist, control-master]}
+      - {id: jump-host, name: Bastion and ProxyJump connections, match: [proxyjump, jump-host, bastion]}
+      - {id: ssh-retries-timeouts, name: SSH retries and connection timeouts, match: [ssh-retries, connection-timeout]}
+      - {id: transfer-method, name: sftp vs scp vs piped file transfer, match: [transfer-method, sftp-scp, piped-transfer]}
+      - {id: host-key-checking, name: Host key checking and known_hosts handling, match: [host-key-checking, known-hosts]}
+      - {id: container-connections, name: docker and podman connection plugins, match: [docker-connection, podman-connection]}
+      - {id: local-connection, name: "The local connection plugin and ansible_connection", match: [local-connection]}
+      - {id: paramiko, name: "paramiko_ssh connection", match: [paramiko]}
+      - {id: agent-forwarding, name: "SSH agent forwarding for git and hops", match: [agent-forwarding]}
+      - {id: per-host-connection-vars, name: "ansible_ssh_private_key_file and per-host connection variables", match: [ansible-ssh-private-key-file]}
+      - {id: reset-connection, name: "meta reset_connection after group or env changes", match: [reset-connection]}
+  - id: ad-hoc-commands
+    name: Ad hoc commands and command-line tools
+    source: docs/Introduction to ad hoc commands sections
+    match: [ad-hoc, adhoc, ansible-cli, ansible-doc, ansible-console]
+    subtopics:
+      - {id: ad-hoc-file-transfer, name: Transfer files ad hoc with copy and fetch, match: [ad-hoc-copy, ad-hoc-file]}
+      - {id: ad-hoc-packages-services, name: Manage packages, users and services ad hoc, match: [ad-hoc-service, ad-hoc-package]}
+      - {id: ad-hoc-facts, name: Gather facts ad hoc with setup and filter, match: [setup-filter, ad-hoc-facts]}
+      - {id: ansible-console, name: Interactive ansible-console sessions, match: [ansible-console]}
+      - {id: ansible-pull, name: Pull mode with ansible-pull, match: [ansible-pull]}
+      - {id: ansible-inventory-cli, name: ansible-inventory --list, --graph and --host, match: [ansible-inventory, inventory-graph]}
+      - {id: ad-hoc-one-line, name: "Ad hoc with forks, -o one-line output and become", match: [ad-hoc-one-line, ad-hoc-forks]}
+      - {id: ad-hoc-background, name: "Background ad hoc with -B and -P", match: [ad-hoc-background, ad-hoc-async]}
+      - {id: ad-hoc-tree, name: "Saving per-host output with --tree", match: [ad-hoc-tree]}
+      - {id: ad-hoc-reboot, name: "Rolling reboots and uptime checks ad hoc", match: [ad-hoc-reboot]}
+  - id: static-inventory
+    name: Static inventory (INI/YAML), groups and children
+    source: EX294/Core components; docs/How to build your inventory sections
+    match: [static-inventory, inventory, yaml-inventory, ini-inventory, children-groups]
+    subtopics:
+      - {id: host-ranges, name: Adding ranges of hosts, match: [host-ranges, numeric-ranges]}
+      - {id: default-groups, name: The all and ungrouped default groups, match: [all-group, ungrouped]}
+      - {id: behavioral-parameters, name: Behavioral inventory parameters (ansible_host, ansible_port, ansible_user), match: [behavioral-parameters, ansible-port, ansible-user]}
+      - {id: multiple-inventory-sources, name: Inventory directories and multiple -i sources, match: [multiple-inventories, inventory-directory]}
+      - {id: variable-merging, name: Parent/child variable merging and hash_behaviour, match: [variable-merging, hash-behaviour]}
+      - {id: host-aliases, name: Host aliases and non-standard ports, match: [host-alias, inventory-alias]}
+      - {id: ini-to-yaml, name: "Converting INI inventory to YAML with ansible-inventory -y", match: [ini-to-yaml]}
+      - {id: inventory-vars-block, name: "[group:vars] sections and vars blocks in inventory", match: [group-vars-section, inventory-vars-block]}
+      - {id: inventory-export, name: "Validating and exporting inventory with --list --export", match: [inventory-export, inventory-validation]}
+      - {id: group-connection-vars, name: "Per-group connection settings for windows and network groups", match: [group-connection-vars]}
+  - id: dynamic-inventory
+    name: Dynamic inventory plugins and scripts
+    source: docs/Working with dynamic inventory and Inventory plugins sections
+    match: [dynamic-inventory, inventory-plugins, aws-ec2-inventory, constructed]
+    subtopics:
+      - {id: enable-plugins, name: Enabling inventory plugins and the auto plugin, match: [enable-plugins, auto-plugin]}
+      - {id: inventory-scripts, name: Legacy inventory scripts with --list and --host, match: [inventory-script, script-plugin]}
+      - {id: cloud-inventory-filters, name: Filtering cloud inventories by tag and state, match: [inventory-filters, ec2-filters]}
+      - {id: vmware-inventory, name: VMware vCenter inventory plugin, match: [vmware-inventory, vmware-vm-inventory]}
+      - {id: netbox-inventory, name: NetBox and CMDB-backed inventory, match: [netbox-inventory, cmdb-inventory]}
+      - {id: keyed-groups-compose, name: keyed_groups and compose for derived groups and vars, match: [keyed-groups, compose]}
+      - {id: inventory-cache, name: Inventory caching, match: [inventory-cache]}
+      - {id: azure-rm-inventory, name: "Azure RM inventory plugin", match: [azure-rm-inventory]}
+      - {id: gcp-compute-inventory, name: "GCP compute inventory plugin", match: [gcp-compute-inventory]}
+      - {id: constructed-plugin, name: "constructed plugin layered over other sources", match: [constructed-plugin, constructed-groups]}
+      - {id: inventory-plugin-debug, name: "Debugging inventory plugin configs", match: [inventory-plugin-debug]}
+      - {id: k8s-openstack-inventory, name: "Kubernetes and OpenStack inventory plugins", match: [k8s-inventory, openstack-inventory]}
+  - id: host-patterns
+    name: Host patterns and --limit
+    source: docs/Patterns targeting hosts and groups sections
+    match: [host-patterns, patterns, limit]
+    subtopics:
+      - {id: pattern-set-operations, name: Union, intersection and exclusion patterns, match: [pattern-intersection, pattern-exclusion]}
+      - {id: regex-patterns, name: Regular expression patterns, match: [regex-patterns, pattern-regex]}
+      - {id: pattern-slices, name: Group index and slice patterns, match: [pattern-slice, group-index]}
+      - {id: limit-file, name: Limiting to a retry or host-list file, match: [limit-file, retry-files]}
+      - {id: wildcard-patterns, name: Wildcard patterns on names and IPs, match: [wildcard-patterns, pattern-wildcards]}
+      - {id: dynamic-hosts, name: "Variables in hosts and runtime-selected targets", match: [hosts-variable, dynamic-hosts]}
+      - {id: pattern-quoting, name: "Pattern gotchas (shell quoting of !, commas, IPv6)", match: [pattern-quoting]}
+      - {id: limit-intersection, name: "How --limit intersects the play hosts", match: [limit-intersection]}
+  - id: group-host-vars
+    name: group_vars and host_vars layout
+    source: docs/Organizing host and group variables sections
+    match: [group-vars, host-vars, inventory-variables]
+    subtopics:
+      - {id: vars-directories, name: Split group_vars/<group>/ into multiple files, match: [vars-directories, split-vars-files]}
+      - {id: adjacent-vars, name: Inventory-adjacent vs playbook-adjacent vars, match: [playbook-adjacent-vars, inventory-adjacent-vars]}
+      - {id: vault-in-group-vars, name: Vault files beside plain vars in group_vars, match: [vault-group-vars, vars-and-vault]}
+      - {id: group-vars-all, name: Layering group_vars/all with group and host overrides, match: [group-vars-all, vars-layering]}
+      - {id: vars-plugins, name: Vars plugins and the vars_plugins_enabled setting, match: [vars-plugins]}
+      - {id: vars-file-extensions, name: "Recognised vars file extensions and formats", match: [vars-file-extensions]}
+      - {id: host-vars-directory, name: "host_vars/<host>/ directories", match: [host-vars-directory]}
+      - {id: ansible-group-priority, name: "ansible_group_priority for sibling groups", match: [ansible-group-priority]}
+      - {id: variable-origin, name: "Finding where a variable value came from", match: [variable-origin]}
+  # --- Plays, playbooks and tasks (EX294/Create plays and playbooks; docs/Playbooks)
+  - id: playbook-syntax
+    name: Playbook structure and project layout
+    source: EX294/Core components; docs/Ansible playbooks and Playbook keywords
+    match: [playbook-structure, project-layout, playbook-syntax, site-yml]
+    subtopics:
+      - {id: play-keywords, name: Play-level keywords (hosts, gather_facts, vars, become, environment), match: [play-keywords, play-level-keywords]}
+      - {id: multiple-plays, name: Multi-play playbooks and ordering, match: [multiple-plays, multi-play]}
+      - {id: pre-post-tasks, name: pre_tasks, post_tasks and roles ordering, match: [pre-tasks, post-tasks]}
+      - {id: yaml-syntax, name: YAML syntax gotchas (quoting, booleans, multiline), match: [yaml-syntax, yaml-quoting, folded-scalars]}
+      - {id: task-naming, name: Naming tasks and plays for readable output, match: [task-naming, name-tasks]}
+      - {id: play-order, name: The order keyword and host execution order, match: [play-order, host-order]}
+      - {id: keyword-reference, name: "Playbook keyword reference by level (play, role, block, task)", match: [keyword-reference]}
+      - {id: play-vars-files, name: "vars and vars_files at play level", match: [play-vars-files]}
+      - {id: ansible-project-skeleton, name: "Project skeleton with inventories, collections and requirements", match: [ansible-project-skeleton]}
+      - {id: hosts-all-guard, name: "Guarding against accidental hosts all runs", match: [hosts-all-guard]}
+  - id: modules-fqcn
+    name: Modules, FQCN and finding modules with ansible-doc
+    source: EX294/Core components; docs/Introduction to modules
+    match: [modules, fqcn, module-selection]
+    subtopics:
+      - {id: command-vs-shell, name: command vs shell vs raw vs script, match: [command-vs-shell, raw-module, script-module]}
+      - {id: module-return-values, name: Reading return values (rc, stdout_lines, changed, msg), match: [return-values, stdout-lines]}
+      - {id: free-form-args, name: Free-form arguments and the args keyword, match: [free-form, args-keyword]}
+      - {id: module-redirects, name: Deprecated modules and collection redirects, match: [module-redirects, deprecated-modules]}
+      - {id: ansible-doc-snippet, name: ansible-doc -s snippets and -t plugin types, match: [ansible-doc-snippet, plugin-types]}
+      - {id: builtin-modules, name: "The ansible.builtin module index by category", match: [builtin-modules]}
+      - {id: state-parameter, name: "state present, absent, latest semantics", match: [state-parameter]}
+      - {id: module-search-path, name: "Module search path and library directories", match: [module-search-path]}
+      - {id: ansible-legacy, name: "Short names, ansible.legacy and collection resolution", match: [ansible-legacy-namespace]}
+      - {id: uri-module, name: "REST calls with the uri module", match: [uri-module]}
+  - id: variables-precedence
+    name: Variables and precedence
+    source: docs/Using variables sections
+    match: [variables, variable-precedence, set-fact, vars-files]
+    subtopics:
+      - {id: variable-naming, name: Valid variable names and reserved words, match: [variable-naming, valid-variable-names]}
+      - {id: extra-vars-file, name: Extra vars from JSON and @file, match: [extra-vars-file, at-file]}
+      - {id: nested-access, name: Dot vs bracket notation for nested data, match: [bracket-notation, nested-variables]}
+      - {id: include-vars, name: include_vars for files and directories, match: [include-vars, dir-include-vars]}
+      - {id: variable-scope, name: Global, play and host variable scope, match: [variable-scope, scoping]}
+      - {id: registered-variables, name: Registering task results, match: [register, registered-variables]}
+      - {id: undefined-handling, name: Undefined variables, error_on_undefined_vars and default, match: [error-on-undefined, strict-undefined]}
+      - {id: precedence-levels, name: "Debugging the variable precedence ladder", match: [precedence-levels]}
+      - {id: set-fact-cacheable, name: "set_fact cacheable and its precedence", match: [set-fact-cacheable]}
+      - {id: vars-files-fallback, name: "vars_files fallback lists", match: [vars-files-fallback]}
+      - {id: unsafe-strings, name: "!unsafe strings and templating safety", match: [unsafe-strings]}
+  - id: facts-magic-vars
+    name: Facts, custom facts and magic variables
+    source: docs/Discovering variables facts and magic variables sections
+    match: [facts, gather-facts, custom-facts, magic-variables, hostvars, fact-caching]
+    subtopics:
+      - {id: gather-subset, name: gather_subset and gather_timeout, match: [gather-subset]}
+      - {id: facts-d, name: Custom facts in facts.d, match: [facts-d, local-facts]}
+      - {id: fact-caching, name: Fact caching with jsonfile and redis, match: [jsonfile-cache, redis-cache]}
+      - {id: setup-filter, name: Filtering facts with the setup filter argument, match: [setup-filter, facts-filter]}
+      - {id: gathering-policy, name: gathering smart/implicit/explicit, match: [smart-gathering, gathering-policy]}
+      - {id: date-time-env-facts, name: ansible_date_time and ansible_env facts, match: [ansible-date-time, ansible-env]}
+      - {id: package-service-facts, name: package_facts and service_facts, match: [package-facts, service-facts]}
+      - {id: hostvars-other-hosts, name: "Reading other hosts' facts via hostvars", match: [hostvars-other-hosts]}
+      - {id: group-names, name: "group_names, groups, inventory_hostname and ansible_play_hosts", match: [group-names, inventory-hostname]}
+      - {id: inject-facts-as-vars, name: "ansible_facts dict vs injected ansible_ variables", match: [inject-facts-as-vars]}
+      - {id: default-ipv4, name: "Network and hardware facts (default_ipv4, interfaces, mounts)", match: [default-ipv4, hardware-facts]}
+  - id: conditionals
+    name: Conditionals with when
+    source: docs/Conditionals sections
+    match: [conditionals, when]
+    subtopics:
+      - {id: when-in-loops, name: Conditionals combined with loops, match: [when-in-loop, conditional-loop]}
+      - {id: when-on-facts, name: Conditionals based on facts (os_family, distribution), match: [os-family]}
+      - {id: when-on-registered, name: Conditionals on registered results and rc, match: [registered-conditionals, rc-check]}
+      - {id: when-on-imports, name: Conditionals on imports vs includes, match: [conditional-import, when-import]}
+      - {id: fact-based-file-selection, name: Selecting vars files by facts with first_found, match: [first-found, with-first-found]}
+      - {id: when-lists-logic, name: when as a list, and/or/not and grouping, match: [when-list, and-or-conditions]}
+      - {id: is-defined, name: "is defined, is undefined and is none checks", match: [is-defined]}
+      - {id: when-bool, name: "Boolean strings and the bool filter in when", match: [when-bool]}
+      - {id: when-jinja-delimiters, name: "Avoiding {{ }} in when and the templating warning", match: [when-jinja-delimiters]}
+      - {id: conditional-role, name: "Conditionals on roles and the when inheritance trap", match: [conditional-role]}
+  - id: loops
+    name: Loops (loop, with_, loop_control)
+    source: docs/Loops sections
+    match: [loops, loop, loop-control, with-items]
+    subtopics:
+      - {id: loop-dicts, name: Looping over dicts with dict2items and with_dict, match: [with-dict, dict2items]}
+      - {id: loop-results, name: Registering loop results and iterating results, match: [loop-results, results-list]}
+      - {id: until-retries, name: Retrying with until, retries and delay, match: [until, retries]}
+      - {id: loop-control-options, name: loop_var, label, index_var, pause and extended, match: [loop-var, index-var, extended-loop]}
+      - {id: nested-loops, name: Nested loops with product and subelements, match: [nested-loops, subelements]}
+      - {id: loop-include-tasks, name: Looping include_tasks and include_role, match: [loop-include-tasks, include-in-loop]}
+      - {id: loop-migration, name: Migrating with_X to loop plus filters, match: [with-x-migration, loop-migration]}
+      - {id: loop-inventory, name: Looping over groups and hostvars, match: [loop-hosts, loop-groups]}
+      - {id: loop-flatten, name: "Flattening nested lists for loops", match: [loop-flatten]}
+      - {id: loop-range, name: "range and sequence loops", match: [loop-range, with-sequence]}
+      - {id: with-fileglob, name: "fileglob loops over control-node files", match: [with-fileglob]}
+  - id: handlers
+    name: Handlers, notify, listen and flush
+    source: docs/Handlers sections
+    match: [handlers, notify, listen, flush-handlers]
+    subtopics:
+      - {id: handler-listen, name: Grouping handlers with listen, match: [listen]}
+      - {id: flush-handlers, name: meta flush_handlers mid-play, match: [flush-handlers]}
+      - {id: role-handlers, name: Handlers in roles and cross-role notification, match: [role-handlers, cross-role-handlers]}
+      - {id: handler-naming, name: Variables in handler names and naming rules, match: [handler-naming, dynamic-handler-names]}
+      - {id: force-handlers, name: --force-handlers and handlers on failed hosts, match: [force-handlers]}
+      - {id: handler-includes, name: Handlers from imported and included task files, match: [handler-includes, import-handlers]}
+      - {id: handler-delegation, name: run_once and delegate_to on handlers, match: [handler-run-once, handler-delegate]}
+      - {id: handler-order, name: "Handler execution order follows definition order", match: [handler-order]}
+      - {id: notify-on-change, name: "Handlers fire only on changed results", match: [notify-on-change]}
+      - {id: handler-loop, name: "Notifying from loops and looping handlers", match: [handler-loop]}
+  - id: error-handling
+    name: Error handling (ignore_errors, failed_when, rescue, any_errors_fatal)
+    source: EX294/Handling task failure; docs/Error handling in playbooks sections
+    match: [error-handling, failed-when, ignore-errors, block-rescue-always, any-errors-fatal]
+    subtopics:
+      - {id: failed-when, name: Defining failure with failed_when, match: [failed-when]}
+      - {id: ignore-errors-unreachable, name: ignore_errors and ignore_unreachable, match: [ignore-errors, ignore-unreachable]}
+      - {id: any-errors-fatal, name: Aborting on first error with any_errors_fatal, match: [any-errors-fatal]}
+      - {id: max-fail-percentage, name: max_fail_percentage for rolling runs, match: [max-fail-percentage]}
+      - {id: fail-assert, name: fail and assert modules, match: [fail-module, assert-module]}
+      - {id: end-host-play, name: meta end_host, end_play and end_batch, match: [meta-end-host, meta-end-play, end-batch]}
+      - {id: unreachable-hosts, name: Unreachable hosts, retry files and clear_host_errors, match: [unreachable-hosts, clear-host-errors, retry-file]}
+      - {id: loop-failures, name: "Failures inside loops", match: [loop-failures]}
+      - {id: failed-when-multiple, name: "Multiple failed_when conditions and combining with changed_when", match: [failed-when-multiple]}
+  - id: blocks
+    name: Blocks for grouping tasks
+    source: docs/Blocks sections
+    match: [blocks, block]
+    subtopics:
+      - {id: rescue-always, name: rescue and always sections, match: [rescue, always]}
+      - {id: block-keywords, name: when, become and tags on a block, match: [block-when, block-become]}
+      - {id: block-vars, name: Block-level vars, match: [block-vars]}
+      - {id: block-loop-limitation, name: Blocks cannot loop, use include_tasks, match: [block-loop, block-no-loop]}
+      - {id: block-rollback, name: Rollback patterns with rescue and ansible_failed_task, match: [rollback, ansible-failed-task]}
+      - {id: block-naming, name: "Naming blocks for readable output", match: [block-naming]}
+      - {id: nested-blocks, name: "Nested blocks and inheritance", match: [nested-blocks]}
+      - {id: block-delegate, name: "delegate_to and run_once on blocks", match: [block-delegate]}
+      - {id: ansible-failed-result, name: "ansible_failed_result inside rescue", match: [ansible-failed-result]}
+  - id: tags
+    name: Tags and selective execution
+    source: docs/Tags sections
+    match: [tags, tag, skip-tags]
+    subtopics:
+      - {id: always-never-tags, name: The always and never special tags, match: [always-tag, never-tag]}
+      - {id: tag-inheritance, name: Tag inheritance on imports vs includes, match: [tag-inheritance, tagged-includes]}
+      - {id: list-tags, name: Listing tags with --list-tags, match: [list-tags]}
+      - {id: role-play-tags, name: Tags on roles, blocks and plays, match: [role-tags, play-tags]}
+      - {id: tagged-untagged, name: The tagged and untagged selectors, match: [tagged, untagged]}
+      - {id: skip-tags, name: Skipping with --skip-tags, match: [skip-tags]}
+      - {id: tags-cli, name: "--tags all, multiple tags and tag listing combos", match: [tags-cli]}
+      - {id: tag-strategy, name: "Tagging strategy for large repositories", match: [tag-strategy]}
+      - {id: handler-tags, name: "Tags and handlers", match: [handler-tags]}
+  - id: idempotency
+    name: Idempotent tasks, changed_when and check mode
+    source: EX294/Create plays; docs/Validating tasks check mode and diff mode
+    match: [idempotency, idempotent, changed-when, check-mode, diff-mode]
+    subtopics:
+      - {id: creates-removes, name: creates and removes guards on command tasks, match: [creates, removes, stat-guard]}
+      - {id: changed-when-stdout, name: changed_when on command output, match: [changed-when-stdout, changed-when-false]}
+      - {id: check-mode-false, name: check_mode false and ansible_check_mode, match: [check-mode-false, ansible-check-mode]}
+      - {id: diff-output, name: Showing diffs with --diff, match: [diff-output, show-diff]}
+      - {id: run-twice-test, name: Run twice, zero changed verification, match: [run-twice, idempotence-check, idempotence]}
+      - {id: state-latest, name: "state latest vs present and idempotence", match: [state-latest]}
+      - {id: shell-to-module, name: "Replacing shell tasks with modules", match: [shell-to-module]}
+      - {id: idempotent-content, name: "Idempotent file content (no timestamps, sorted data)", match: [idempotent-content]}
+      - {id: changed-every-run, name: "Finding tasks that report changed every run", match: [changed-every-run]}
+  - id: delegation
+    name: Delegation, local_action, run_once
+    source: docs/Controlling where tasks run delegation and local actions sections
+    match: [delegation, delegate-to, run-once, local-action]
+    subtopics:
+      - {id: delegate-facts, name: delegate_facts for facts gathered elsewhere, match: [delegate-facts]}
+      - {id: local-playbooks, name: Local playbooks with localhost and connection local, match: [localhost-play, implicit-localhost]}
+      - {id: delegated-become-vars, name: Become and variables on the delegated host, match: [delegated-become, delegate-vars]}
+      - {id: run-once-serial, name: run_once with serial batches, match: [run-once-serial]}
+      - {id: delegate-loop, name: Loop over play hosts delegating to one host (load balancer pattern), match: [delegate-loop, loadbalancer-pattern]}
+      - {id: delegate-api-calls, name: "Calling APIs from localhost via delegate_to", match: [delegate-api-calls]}
+      - {id: delegate-connection, name: "Connection variables when delegating", match: [delegate-connection]}
+      - {id: run-once-results, name: "Sharing run_once results across hosts", match: [run-once-results]}
+      - {id: local-action-syntax, name: "local_action syntax vs delegate_to localhost", match: [local-action-syntax]}
+  - id: strategies-forks
+    name: Strategies, forks, serial and rolling updates
+    source: docs/Controlling playbook execution strategies and more sections
+    match: [strategies, strategy, forks, serial, rolling-update, free-strategy]
+    subtopics:
+      - {id: throttle, name: Limiting concurrency with throttle, match: [throttle]}
+      - {id: host-pinned, name: host_pinned strategy, match: [host-pinned]}
+      - {id: serial-batches, name: serial as percentage or batch list, match: [serial-batches, serial-percent]}
+      - {id: order-keyword, name: order keyword (sorted, reverse, shuffle), match: [inventory-order, order-keyword]}
+      - {id: linear-strategy, name: Linear strategy behaviour and fork sizing, match: [linear-strategy, forks-sizing]}
+      - {id: debug-strategy, name: "The debug strategy", match: [debug-strategy]}
+      - {id: strategy-plugins, name: "Choosing and configuring strategy plugins", match: [strategy-plugins]}
+      - {id: serial-failure-handling, name: "serial with max_fail_percentage and any_errors_fatal", match: [serial-failure-handling]}
+      - {id: forks-memory, name: "Forks vs control node memory and CPU", match: [forks-memory]}
+  - id: async-polling
+    name: Asynchronous actions and polling
+    source: docs/Asynchronous actions and polling sections
+    match: [async, poll, async-status, fire-and-forget]
+    subtopics:
+      - {id: async-status-cleanup, name: async_status polling and cleanup mode, match: [async-cleanup]}
+      - {id: async-concurrency, name: Running tasks concurrently on one host, match: [parallel-tasks, concurrency]}
+      - {id: async-dir, name: async_dir and job file location, match: [async-dir]}
+      - {id: reboot-module, name: Reboots with the reboot module and wait_for_connection, match: [reboot-module, wait-for-connection]}
+      - {id: task-timeout, name: Task timeout vs async timeout, match: [task-timeout]}
+      - {id: async-become, name: Async with become and ownership of job files, match: [async-become]}
+      - {id: async-long-running, name: "Long-running updates with async and wait", match: [async-long-running]}
+      - {id: async-loop, name: "Async tasks in loops with async_status loops", match: [async-loop]}
+      - {id: wait-for, name: "Waiting for ports, files and strings with wait_for", match: [wait-for-module]}
+  - id: jinja2-templates
+    name: Jinja2 templates and the template module
+    source: EX294/Manage content; docs/Templating Jinja2 sections
+    match: [jinja2, templates, template-module, templating]
+    subtopics:
+      - {id: ansible-managed, name: ansible_managed headers, match: [ansible-managed]}
+      - {id: template-validate, name: Validating rendered files with validate, match: [validate]}
+      - {id: whitespace-control, name: trim_blocks, lstrip_blocks and whitespace control, match: [trim-blocks, whitespace-control]}
+      - {id: macros-includes, name: Macros and template includes, match: [macros]}
+      - {id: template-loops, name: for loops and if blocks inside templates, match: [template-for-loop, template-if]}
+      - {id: raw-comments, name: raw blocks and Jinja comments for literal braces, match: [raw-block, jinja-comments]}
+      - {id: template-trees, name: Templating directory trees with filetree, match: [filetree, template-tree]}
+      - {id: native-jinja, name: jinja2_native and type preservation, match: [native-jinja]}
+      - {id: template-filters, name: "Filters and tests inside templates", match: [template-filters]}
+      - {id: template-lookup, name: "template lookup and inline templating", match: [template-lookup]}
+      - {id: template-backup, name: "template backup, mode and owner", match: [template-backup]}
+      - {id: template-defaults, name: "Defaults and undefined values in templates", match: [template-defaults]}
+  - id: filters
+    name: Filters and data transformation
+    source: EX374/Transform data; docs/Using filters to manipulate data sections
+    match: [filters, filter-plugins, json-query, combine, selectattr]
+    subtopics:
+      - {id: json-query, name: json_query and JMESPath, match: [json-query, jmespath]}
+      - {id: combine-merge, name: combine with recursive and list_merge, match: [combine, hash-merge]}
+      - {id: regex-filters, name: regex_replace, regex_search and regex_findall, match: [regex-replace, regex-search]}
+      - {id: string-filters, name: String filters (split, join, replace, format, upper), match: [string-filters, split-join]}
+      - {id: math-random-filters, name: Math and random filters, match: [math-filters, random-filter]}
+      - {id: path-filters, name: Path filters (basename, dirname, realpath, splitext), match: [path-filters, basename]}
+      - {id: datetime-filters, name: strftime and to_datetime, match: [strftime, to-datetime]}
+      - {id: hash-encoding-filters, name: hash, checksum, b64 and uuid filters, match: [hash-filter, b64decode, to-uuid]}
+      - {id: type-filters, name: Type conversion and type_debug, match: [type-debug, bool-filter]}
+      - {id: ternary-default, name: ternary, default and mandatory, match: [ternary, mandatory]}
+      - {id: ipaddr, name: ipaddr and network filters from ansible.utils, match: [ipaddr]}
+      - {id: list-filters, name: "unique, union, difference, intersect, zip", match: [list-filters]}
+      - {id: items2dict, name: "dict2items, items2dict and building dicts", match: [items2dict]}
+      - {id: to-nice-yaml, name: "to_json, to_nice_yaml, from_json and from_yaml", match: [to-nice-yaml, from-json]}
+      - {id: rejectattr, name: "selectattr, rejectattr and map attribute", match: [rejectattr, map-attribute]}
+  - id: tests
+    name: Tests (Jinja tests) and lookups
+    source: docs/Tests and Lookups sections
+    match: [tests, jinja-tests, lookups, lookup-plugins, query]
+    subtopics:
+      - {id: version-test, name: version comparison test, match: [is-version]}
+      - {id: match-search-tests, name: match, search and regex tests, match: [is-match, is-search]}
+      - {id: path-tests, name: exists, is_dir, is_file and is_abs tests, match: [path-tests, is-exists]}
+      - {id: vault-encrypted-test, name: vault_encrypted test, match: [vault-encrypted-test]}
+      - {id: list-tests, name: contains, any, all and subset tests, match: [any-all, contains-test, is-subset]}
+      - {id: truthy-falsy, name: truthy and falsy tests, match: [truthy, falsy]}
+      - {id: lookup-vs-query, name: lookup vs query and wantlist, match: [wantlist]}
+      - {id: file-env-lookups, name: file, env, pipe and password lookups, match: [file-lookup, env-lookup, password-lookup]}
+      - {id: task-result-tests, name: "succeeded, failed, changed and skipped tests", match: [task-result-tests]}
+      - {id: type-tests, name: "string, number, mapping and iterable tests", match: [type-tests]}
+      - {id: url-lookup, name: "url and template lookups", match: [url-lookup]}
+      - {id: csvfile-lookup, name: "lines, ini and csvfile lookups", match: [csvfile-lookup, ini-lookup]}
+  - id: module-defaults
+    name: module_defaults and action groups
+    source: docs/Module defaults sections
+    match: [module-defaults, action-groups]
+    subtopics:
+      - {id: group-defaults, name: Action group defaults (group/aws, group/k8s), match: [group-aws, group-k8s]}
+      - {id: scoped-module-defaults, name: module_defaults on blocks and roles, match: [block-module-defaults, role-module-defaults]}
+      - {id: module-defaults-precedence, name: Precedence of module_defaults vs task args, match: [module-defaults-precedence]}
+      - {id: collection-action-groups, name: Defining action_groups in meta/runtime.yml, match: [meta-runtime]}
+      - {id: environment-keyword, name: The environment keyword for proxies and PATH, match: [environment-keyword, proxy-settings]}
+      - {id: module-defaults-play, name: "Play-level module_defaults for cloud auth and region", match: [module-defaults-play]}
+      - {id: play-environment, name: "environment at play vs task level", match: [play-environment]}
+      - {id: env-reset, name: "environment with become and sudo env_reset", match: [env-reset]}
+  - id: prompts-interactive
+    name: Interactive input (vars_prompt, pause)
+    source: docs/Interactive input prompts sections
+    match: [vars-prompt, pause, interactive-input]
+    subtopics:
+      - {id: private-prompts, name: Private input and encrypted password hashes, match: [private-input, encrypt-password-hash]}
+      - {id: confirm-prompts, name: Confirmation prompts and unsafe input, match: [confirm, unsafe-input]}
+      - {id: timed-pause, name: Timed pause with minutes and seconds, match: [timed-pause, pause-seconds]}
+      - {id: prompt-non-interactive, name: Skipping prompts in CI with extra vars, match: [non-interactive, ci-safe]}
+      - {id: pause-echo-prompt, name: pause with prompt and echo for human gates, match: [human-gate, pause-echo]}
+      - {id: prompt-default, name: "Prompt defaults, salt and confirm options", match: [prompt-default]}
+      - {id: prompt-limitations, name: "Where vars_prompt is not available", match: [prompt-limitations]}
+      - {id: prompt-vs-survey, name: "Surveys instead of vars_prompt in controller", match: [prompt-vs-survey]}
+  - id: debugging
+    name: Debugging playbooks (debug, debugger, verbosity, callbacks)
+    source: docs/Debugging tasks sections
+    match: [debugging, debugger, debug-module, verbosity, callback-plugins]
+    subtopics:
+      - {id: debug-var-msg, name: debug with var, msg and verbosity, match: [debug-var, debug-verbosity]}
+      - {id: debugger-commands, name: Debugger commands (p, task.args, redo, continue), match: [debugger-commands, redo]}
+      - {id: ssh-debug, name: Connection debugging with -vvvv, match: [ssh-debug, connection-debug]}
+      - {id: keep-remote-files, name: Keeping remote module files for inspection, match: [keep-remote-files]}
+      - {id: start-at-step, name: --start-at-task and --step, match: [start-at-task, step]}
+      - {id: log-path, name: log_path and ANSIBLE_LOG_PATH, match: [log-path, ansible-log]}
+      - {id: stdout-callbacks, name: yaml, json and minimal stdout callbacks, match: [yaml-callback, json-callback]}
+      - {id: debugger-keyword, name: "debugger keyword and ANSIBLE_ENABLE_TASK_DEBUGGER", match: [debugger-keyword, enable-task-debugger]}
+      - {id: display-skipped-hosts, name: "display_args_to_stdout and display_skipped_hosts", match: [display-args, display-skipped-hosts]}
+      - {id: ansible-debug-env, name: "ANSIBLE_DEBUG and running a module directly", match: [ansible-debug-env]}
+  - id: include-import
+    name: Include vs import (tasks, roles, playbooks)
+    source: docs/Re-using Ansible artifacts sections
+    match: [include-tasks, import-tasks, import-role, include-role, static-vs-dynamic]
+    subtopics:
+      - {id: import-playbook, name: import_playbook for composing site playbooks, match: [import-playbook]}
+      - {id: tasks-from, name: include_role with tasks_from, vars_from and defaults_from, match: [tasks-from, include-role-tasks-from]}
+      - {id: role-public-apply, name: public and apply keywords on include_role, match: [role-public, apply-keyword]}
+      - {id: include-loops, name: Looping includes and the include_tasks file lookup, match: [include-in-loop]}
+      - {id: static-dynamic-tradeoffs, name: Static vs dynamic trade-offs (tags, handlers, --list-tasks), match: [static-vs-dynamic]}
+      - {id: import-tasks-vars, name: "Passing vars to import_tasks and include_tasks", match: [import-tasks-vars]}
+      - {id: import-limitations, name: "What imports cannot do (loops, inventory-var file names)", match: [import-limitations]}
+      - {id: roles-keyword-vs-include, name: "roles keyword vs import_role vs include_role ordering", match: [roles-keyword-vs-include]}
+  - id: windows-automation
+    name: Windows management with WinRM/SSH and ansible.windows
+    source: docs/Windows guides sections; ansible.windows module index
+    match: [windows, winrm, ansible-windows, powershell-modules]
+    subtopics:
+      - {id: winrm-setup, name: WinRM listener setup and authentication (basic, NTLM, Kerberos, CredSSP), match: [kerberos, credssp]}
+      - {id: win-updates, name: Windows updates with win_updates, match: [win-updates]}
+      - {id: win-chocolatey, name: Software with win_package and win_chocolatey, match: [win-chocolatey, chocolatey]}
+      - {id: win-regedit, name: Registry management with win_regedit, match: [win-regedit, registry]}
+      - {id: win-users-domain, name: Local users, groups and domain membership, match: [win-user, win-domain-membership]}
+      - {id: win-files-acl, name: win_copy, win_template and win_acl, match: [win-acl, win-copy]}
+      - {id: win-firewall, name: win_firewall_rule, match: [win-firewall, win-firewall-rule]}
+      - {id: win-iis, name: IIS sites and app pools with community.windows, match: [win-iis, iis]}
+      - {id: win-dsc, name: DSC resources via win_dsc, match: [dsc]}
+      - {id: win-openssh, name: "Windows over OpenSSH", match: [win-openssh]}
+      - {id: win-service, name: "Windows services and scheduled tasks", match: [win-service, win-scheduled-task]}
+      - {id: win-powershell, name: "win_shell, win_command and win_powershell", match: [win-powershell]}
+      - {id: win-become, name: "runas become on Windows", match: [win-become]}
+  - id: network-automation
+    name: Network automation (network_cli, netconf, resource modules)
+    source: docs/Network Getting Started and Advanced topics sections
+    match: [network-automation, network-cli, netconf, resource-modules, cisco-ios]
+    subtopics:
+      - {id: network-facts, name: Gathering network facts and gather_network_resources, match: [network-facts, gather-network-resources]}
+      - {id: resource-module-states, name: Resource module states (merged, replaced, overridden, gathered), match: [merged, replaced, overridden]}
+      - {id: config-backup, name: Backing up running configs, match: [config-backup]}
+      - {id: cli-parsing, name: Parsing CLI output with textfsm and cli_parse, match: [textfsm, cli-parse]}
+      - {id: cli-prompts, name: cli_command with prompts and answers, match: [cli-prompt, command-prompts]}
+      - {id: config-diff, name: Config diffs and before/after comparison, match: [config-diff, network-diff]}
+      - {id: interface-vlan-modules, name: Interfaces and VLAN resource modules, match: [ios-vlans, ios-interfaces]}
+      - {id: httpapi-netconf, name: httpapi and netconf connections, match: [httpapi]}
+      - {id: ansible-network-os, name: "ansible_network_os and platform options", match: [ansible-network-os]}
+      - {id: save-when, name: "Saving running config to startup with save_when", match: [save-when]}
+      - {id: network-enable, name: "Enable mode with become on network devices", match: [network-enable]}
+      - {id: network-rollback, name: "Config replace and rollback", match: [network-rollback]}
+  # --- RHCSA tasks automated (EX294/Automate standard RHCSA tasks)
+  - id: packages-repos
+    name: Packages and software repositories
+    source: EX294/RHCSA tasks; ansible.builtin packaging module index
+    match: [package-management, dnf, yum-repository, apt, package-module]
+    subtopics:
+      - {id: repo-and-keys, name: Repositories and GPG keys (yum_repository, apt_repository, deb822), match: [apt-repository, deb822-repository, rpm-key]}
+      - {id: package-facts-audit, name: Auditing installed packages with package_facts, match: [package-facts]}
+      - {id: version-locking, name: Version locks and holds (dnf versionlock, apt hold), match: [dnf-versionlock, apt-hold, dpkg-selections]}
+      - {id: dnf-modules-groups, name: dnf module streams and package groups, match: [dnf-module-streams, package-groups]}
+      - {id: local-package-files, name: Installing local rpm/deb files and URLs, match: [local-rpm, deb-file]}
+      - {id: other-package-managers, name: zypper, pacman, homebrew and pip, match: [zypper, pacman, homebrew]}
+      - {id: patching, name: Security updates and patch runs, match: [patching, security-updates]}
+      - {id: subscription, name: RHSM registration with redhat_subscription, match: [rhsm, redhat-subscription]}
+      - {id: generic-package, name: "The generic package module and cross-distro names", match: [generic-package]}
+      - {id: pip-module, name: "pip module with virtualenvs", match: [pip-module, virtualenv]}
+      - {id: update-cache, name: "update_cache and cache_valid_time", match: [update-cache, cache-valid-time]}
+  - id: services-systemd
+    name: Services and systemd units
+    source: EX294/RHCSA tasks; ansible.builtin service and systemd modules
+    match: [services, systemd, service-module, systemd-units]
+    subtopics:
+      - {id: unit-files-dropins, name: Unit files and drop-in overrides with daemon_reload, match: [unit-files, drop-in, daemon-reload]}
+      - {id: systemd-timers, name: systemd timers, match: [systemd-timer, timers]}
+      - {id: user-services, name: User-scope services, match: [user-services, scope-user]}
+      - {id: masked-services, name: Masking and unmasking services, match: [masked]}
+      - {id: restart-vs-reload, name: Restart vs reload handlers, match: [reload-vs-restart, restart-handlers]}
+      - {id: unit-environment, name: Environment and resource limits in units, match: [unit-environment, systemd-env]}
+      - {id: service-init-systems, name: sysvinit, openrc and the generic service module, match: [sysvinit, openrc]}
+      - {id: journal-logs, name: Querying journald logs during runs, match: [journalctl]}
+      - {id: systemd-socket, name: "Socket-activated units", match: [systemd-socket]}
+      - {id: systemd-analyze, name: "Verifying unit files with systemd-analyze", match: [systemd-analyze]}
+  - id: users-groups
+    name: Users, groups and authorized keys
+    source: EX294/RHCSA tasks; ansible.builtin user, group, authorized_key modules
+    match: [users, groups, user-module, authorized-key]
+    subtopics:
+      - {id: authorized-keys, name: Managing authorized_keys and key options, match: [authorized-key]}
+      - {id: password-hashes, name: Password hashes with password_hash, match: [password-hash]}
+      - {id: sudoers-rules, name: sudoers rules with community.general.sudoers, match: [sudoers, community-general-sudoers]}
+      - {id: uid-gid-system, name: Fixed UID/GID and system accounts, match: [uid-gid, system-accounts]}
+      - {id: generate-ssh-key, name: Generating user SSH keys with generate_ssh_key, match: [generate-ssh-key]}
+      - {id: user-shell-home, name: Shell, home directory and skeleton, match: [home-directory, user-shell]}
+      - {id: append-groups, name: Supplementary groups and append, match: [append-groups, supplementary-groups]}
+      - {id: password-aging, name: Password aging and expiry (chage), match: [password-aging, chage, expire]}
+      - {id: offboarding, name: Removing users and locking accounts, match: [remove-users, offboarding, locked-accounts]}
+      - {id: group-module, name: "Groups with gid, system and local options", match: [group-module]}
+      - {id: authorized-key-exclusive, name: "Exclusive authorized_keys management", match: [authorized-key-exclusive]}
+  - id: files-archives
+    name: Files, copy, fetch, archives, lineinfile
+    source: EX294/RHCSA tasks; ansible.builtin files module index
+    match: [file-management, copy, lineinfile, blockinfile, unarchive, archives]
+    subtopics:
+      - {id: lineinfile-regex, name: lineinfile with regexp, insertafter and backrefs, match: [lineinfile]}
+      - {id: blockinfile-markers, name: blockinfile markers and idempotence, match: [blockinfile]}
+      - {id: replace-module, name: Multi-line replace with the replace module, match: [replace]}
+      - {id: archives, name: archive, unarchive and remote_src, match: [unarchive, archive, remote-src]}
+      - {id: get-url-checksum, name: get_url with checksum and headers, match: [get-url, checksum]}
+      - {id: stat-find, name: stat and find for file discovery, match: [stat, find]}
+      - {id: synchronize-rsync, name: synchronize (rsync) and fetch, match: [synchronize, rsync, fetch]}
+      - {id: acl-module, name: POSIX ACLs with ansible.posix.acl, match: [acl, posix-acl]}
+      - {id: links-recurse, name: Symlinks, hardlinks and recursive permissions, match: [symlink, hardlink, recurse]}
+      - {id: assemble, name: Assembling files from fragments, match: [assemble, fragments]}
+      - {id: ini-xml, name: ini_file and xml modules, match: [ini-file, xml-module]}
+      - {id: file-state, name: "file module states (touch, directory, absent)", match: [file-state, touch]}
+      - {id: copy-content, name: "copy with content, backup and validate", match: [copy-content]}
+  - id: storage-filesystems
+    name: Storage, LVM, filesystems and mounts
+    source: EX294/RHCSA tasks; community.general and ansible.posix storage modules
+    match: [storage, lvm, filesystems, mount, parted]
+    subtopics:
+      - {id: partitions, name: Partitions with parted, match: [partitions, parted]}
+      - {id: lvm-lvg-lvol, name: Volume groups and logical volumes (lvg, lvol), match: [lvg, lvol]}
+      - {id: filesystem-resize, name: filesystem creation and resizefs, match: [mkfs, resizefs]}
+      - {id: mount-fstab, name: Mounts and fstab with ansible.posix.mount, match: [fstab, uuid-mounts]}
+      - {id: swap, name: Swap files and partitions, match: [swap]}
+      - {id: nfs-mounts, name: NFS and network mounts, match: [nfs-mount]}
+      - {id: luks, name: LUKS encryption with community.crypto.luks_device, match: [luks, crypttab]}
+      - {id: mdadm-raid, name: Software RAID with mdadm, match: [mdadm, raid]}
+      - {id: iscsi-multipath, name: iSCSI initiators and multipath, match: [iscsi, multipath]}
+      - {id: ansible-devices, name: "Selecting disks from ansible_devices facts", match: [ansible-devices]}
+      - {id: stratis, name: "Stratis pools and filesystems", match: [stratis]}
+  - id: firewall-selinux
+    name: Firewall and SELinux
+    source: EX294/RHCSA tasks; ansible.posix firewalld, selinux, seboolean, sefcontext modules
+    match: [firewalld, firewall, selinux, sefcontext, seboolean]
+    subtopics:
+      - {id: firewalld-services-ports, name: firewalld services, ports and zones, match: [zones, ports]}
+      - {id: rich-rules, name: firewalld rich rules, match: [rich-rules]}
+      - {id: firewalld-sources, name: Zone sources and interface assignment, match: [firewalld-source, firewalld-interface]}
+      - {id: ufw-iptables-nftables, name: ufw, iptables and nftables, match: [ufw, iptables, nftables]}
+      - {id: selinux-mode, name: SELinux mode and policy with the selinux module, match: [enforcing, permissive]}
+      - {id: sefcontext-restorecon, name: File contexts with sefcontext and restorecon, match: [restorecon]}
+      - {id: seboolean-seport, name: Booleans and ports (seboolean, seport), match: [seport]}
+      - {id: custom-policy-modules, name: Custom policy modules with audit2allow and semodule, match: [custom-policy-module, semodule, audit2allow]}
+      - {id: firewalld-permanent, name: "permanent vs immediate firewalld changes", match: [firewalld-permanent]}
+      - {id: selinux-reboot, name: "SELinux mode changes requiring reboot", match: [selinux-reboot]}
+      - {id: masquerade, name: "Masquerading and port forwarding", match: [masquerade, port-forward]}
+  - id: cron-scheduled-tasks
+    name: Cron and scheduled tasks
+    source: EX294/RHCSA tasks; ansible.builtin cron and at modules
+    match: [cron, scheduled-tasks, at-jobs]
+    subtopics:
+      - {id: cron-d-files, name: cron.d files with cron_file, match: [cron-d, cron-file]}
+      - {id: special-time, name: special_time (reboot, daily) entries, match: [special-time]}
+      - {id: cron-env, name: Cron environment variables and MAILTO, match: [cron-env, mailto]}
+      - {id: at-module, name: One-off jobs with at, match: [at-module]}
+      - {id: cron-remove, name: Removing and disabling cron entries idempotently, match: [cron-remove, cron-absent, idempotent-cron]}
+      - {id: job-locking, name: Preventing overlap with flock, match: [flock, job-locking]}
+      - {id: logrotate, name: logrotate configuration, match: [logrotate]}
+      - {id: cron-user, name: "Per-user crontabs and entry name uniqueness", match: [cron-user]}
+  - id: rhel-system-roles
+    name: RHEL system roles (timesync, selinux, network, storage)
+    source: EX294/Roles; RHEL system roles documentation sections
+    match: [rhel-system-roles, system-roles, linux-system-roles]
+    subtopics:
+      - {id: system-roles-install, name: Installing system roles (rpm vs collection), match: [system-roles-install, redhat-collection-install]}
+      - {id: timesync-role, name: timesync role, match: [timesync, chrony]}
+      - {id: network-role, name: network role, match: [network-role]}
+      - {id: storage-role, name: storage role, match: [storage-role]}
+      - {id: selinux-firewall-roles, name: selinux and firewall roles, match: [selinux-role, firewall-role]}
+      - {id: sshd-role, name: sshd and ssh roles, match: [sshd-role, ssh-role]}
+      - {id: logging-metrics-roles, name: logging and metrics roles, match: [logging-role, metrics-role]}
+      - {id: kernel-settings-role, name: kernel_settings role, match: [kernel-settings]}
+      - {id: podman-role, name: podman role, match: [podman-role]}
+      - {id: ha-cluster-role, name: ha_cluster role, match: [ha-cluster]}
+      - {id: certificate-role, name: certificate role, match: [certificate-role]}
+      - {id: cockpit-crypto-roles, name: cockpit and crypto_policies roles, match: [cockpit-role, crypto-policies]}
+      - {id: journald-role, name: journald role, match: [journald-role]}
+      - {id: ad-integration-role, name: ad_integration role, match: [ad-integration-role, ad-integration]}
+      - {id: vpn-role, name: vpn role, match: [vpn-role]}
+      - {id: nbde-roles, name: "nbde_client and nbde_server roles", match: [nbde-client-role, nbde-server-role]}
+      - {id: postfix-role, name: "postfix role", match: [postfix-role]}
+  # --- Roles and collections (EX294/Roles and collections; EX374; docs/Collections, developer guide)
+  - id: roles
+    name: Role structure, defaults, meta, dependencies
+    source: EX294/Roles; docs/Roles sections
+    match: [roles, role-structure, role-dependencies, meta-main, argument-specs]
+    subtopics:
+      - {id: role-defaults-vs-vars, name: defaults vs vars precedence in roles, match: [role-defaults, role-vars]}
+      - {id: argument-specs, name: Argument validation with meta/argument_specs.yml, match: [argument-specs, validate-argument-spec]}
+      - {id: role-init, name: Scaffolding roles with ansible-galaxy role init, match: [role-init, role-skeleton]}
+      - {id: roles-path, name: roles_path and role search order, match: [roles-path]}
+      - {id: role-dependencies, name: meta/main.yml dependencies, match: [role-dependencies, meta-main]}
+      - {id: allow-duplicates, name: allow_duplicates and role deduplication, match: [allow-duplicates, role-deduplication]}
+      - {id: role-readme, name: Role README and metadata for Galaxy, match: [role-readme]}
+      - {id: role-directories, name: "Role directory meanings (files, templates, library, module_utils)", match: [role-directories]}
+      - {id: role-params, name: "Role params vs vars on the roles keyword", match: [role-params]}
+      - {id: collection-roles, name: "Roles inside collections and FQCN role names", match: [collection-roles]}
+      - {id: galaxy-info, name: "galaxy_info platforms and min_ansible_version", match: [galaxy-info]}
+  - id: ansible-galaxy
+    name: ansible-galaxy and requirements.yml
+    source: EX294/Roles and collections; docs/Galaxy user guide sections
+    match: [ansible-galaxy, requirements-yml, galaxy]
+    subtopics:
+      - {id: role-install, name: Installing roles from Galaxy, git and tarballs, match: [role-install, roles-from-git]}
+      - {id: collection-offline, name: Installing collections from tarballs and offline, match: [collection-tarball, offline-install]}
+      - {id: collection-verify, name: ansible-galaxy collection list and verify, match: [collection-verify, galaxy-list]}
+      - {id: role-import-publish, name: Importing and publishing roles to Galaxy, match: [role-import, galaxy-role-publish]}
+      - {id: requirements-both, name: requirements.yml with roles and collections sections, match: [requirements-roles-collections]}
+      - {id: galaxy-server-config, name: Galaxy server list and tokens, match: [galaxy-server-list, galaxy-token]}
+      - {id: galaxy-install-path, name: "-p install paths, --force and --upgrade", match: [galaxy-install-path, galaxy-force]}
+      - {id: collection-download, name: "ansible-galaxy collection download for offline transfer", match: [collection-download]}
+      - {id: galaxy-proxy, name: "Galaxy behind proxies and --ignore-certs", match: [galaxy-proxy]}
+  - id: collections-usage
+    name: Using collections and collection paths
+    source: EX294/Collections; docs/Using collections sections
+    match: [collections, collection, collections-path]
+    subtopics:
+      - {id: collections-keyword, name: The collections keyword in plays and roles, match: [collections-keyword]}
+      - {id: collection-pinning, name: Pinning collection versions and ranges, match: [collection-pinning, version-ranges]}
+      - {id: collection-docs-listing, name: Listing installed collections and reading their docs, match: [collection-list, ansible-galaxy-collection-list]}
+      - {id: community-vs-core, name: ansible community package vs ansible-core, match: [ansible-community-package]}
+      - {id: project-collections, name: Project-local collections directory, match: [project-collections, collections-dir]}
+      - {id: collection-filters-fqcn, name: "Using collection filters, lookups and tests by FQCN", match: [collection-filters-fqcn]}
+      - {id: collection-shadowing, name: "Duplicate collections across paths and precedence", match: [collection-shadowing]}
+      - {id: collection-python-deps, name: "Collection Python and system dependencies", match: [collection-python-deps]}
+      - {id: ansible-collections-path, name: "ANSIBLE_COLLECTIONS_PATH and collections_path", match: [ansible-collections-path]}
+  - id: collection-development
+    name: Developing and publishing a collection (galaxy.yml, build, publish)
+    source: Developer guide/Collections sections
+    match: [collection-development, galaxy-yml, collection-build, collection-publish]
+    subtopics:
+      - {id: galaxy-yml-fields, name: galaxy.yml fields and dependencies, match: [galaxy-yml, collection-dependencies]}
+      - {id: meta-runtime, name: meta/runtime.yml redirects and requires_ansible, match: [redirects, meta-runtime]}
+      - {id: collection-changelog, name: Changelogs with antsibull-changelog, match: [antsibull-changelog, changelog]}
+      - {id: collection-docs-site, name: Building docs with antsibull-docs, match: [antsibull-docs, docs-build]}
+      - {id: collection-imports, name: module_utils imports inside a collection, match: [collection-module-utils, collection-imports]}
+      - {id: build-ignore, name: build_ignore and manifest directives, match: [build-ignore, manifest-directives]}
+      - {id: collection-signing, name: Signing collections with GPG, match: [collection-signing, gpg-sign]}
+      - {id: collection-deprecation, name: Deprecating modules and options, match: [deprecation]}
+      - {id: collection-init, name: "ansible-galaxy collection init skeleton", match: [collection-init]}
+      - {id: collection-versioning, name: "Collection versioning and release policy", match: [collection-versioning]}
+      - {id: collection-playbooks, name: "Playbooks shipped inside collections", match: [collection-playbooks]}
+  - id: module-development
+    name: Writing custom modules and module_utils
+    source: Developer guide/Developing modules sections
+    match: [module-development, custom-modules, module-utils, ansiblemodule]
+    subtopics:
+      - {id: argument-spec, name: argument_spec types, choices and defaults, match: [argument-spec, argument-choices]}
+      - {id: arg-constraints, name: mutually_exclusive, required_together and required_if, match: [mutually-exclusive, required-together, required-if]}
+      - {id: exit-fail-json, name: exit_json, fail_json and return conventions, match: [exit-json, fail-json, return-conventions]}
+      - {id: module-check-diff, name: check mode and diff support in modules, match: [module-diff, supports-check-mode]}
+      - {id: module-docs-blocks, name: DOCUMENTATION, EXAMPLES and RETURN blocks, match: [documentation-yaml, return-yaml]}
+      - {id: module-local-testing, name: Testing modules locally with args files and unit tests, match: [module-unit-tests, hacking-test-module]}
+      - {id: desired-state-pattern, name: Desired-state comparison pattern for idempotence, match: [state-comparison, desired-state-pattern]}
+      - {id: powershell-modules, name: PowerShell modules for Windows, match: [powershell-modules]}
+      - {id: run-command, name: "run_command safely from modules", match: [run-command]}
+      - {id: fetch-url, name: "fetch_url and open_url for HTTP modules", match: [fetch-url]}
+      - {id: no-log-option, name: "no_log in argument_spec options", match: [no-log-option]}
+  - id: plugin-development
+    name: Writing filter, lookup, inventory and callback plugins
+    source: Developer guide/Developing plugins sections
+    match: [plugin-development, custom-plugins, custom-filters, custom-lookup]
+    subtopics:
+      - {id: filter-plugin, name: Filter plugins with FilterModule, match: [filtermodule]}
+      - {id: lookup-plugin, name: Lookup plugins with LookupBase, match: [lookupbase]}
+      - {id: inventory-plugin, name: Inventory plugins with BaseInventoryPlugin and Constructable, match: [baseinventoryplugin, constructable]}
+      - {id: callback-plugin, name: Callback plugins with CallbackBase, match: [callbackbase]}
+      - {id: action-plugin, name: Action plugins, match: [action-plugins]}
+      - {id: plugin-options, name: Plugin options via DOCUMENTATION, env and ini, match: [plugin-options, plugin-configuration]}
+      - {id: connection-become-plugins, name: Custom connection and become plugins, match: [custom-connection-plugin, custom-become-plugin]}
+      - {id: cache-plugin, name: Custom cache plugins, match: [custom-cache-plugin]}
+      - {id: plugin-tests, name: Unit testing plugins, match: [plugin-tests]}
+      - {id: test-plugin, name: "Jinja test plugins", match: [test-plugin]}
+      - {id: custom-vars-plugin, name: "Custom vars plugins", match: [custom-vars-plugin]}
+  - id: automation-hub
+    name: Automation hub and private galaxy servers
+    source: EX467/Automation hub; AAP private automation hub guide sections
+    match: [automation-hub, private-automation-hub, galaxy-ng, pulp]
+    subtopics:
+      - {id: hub-install, name: Installing private automation hub, match: [hub-install, hub-installer]}
+      - {id: collection-sync, name: Syncing certified and validated content, match: [collection-sync, requirements-sync]}
+      - {id: hub-approval, name: Approval workflow and staging repositories, match: [approval-workflow, staging-repo]}
+      - {id: hub-ee-registry, name: Execution environment container registry, match: [execution-environment-registry, container-registry]}
+      - {id: hub-namespaces-rbac, name: Namespaces and RBAC in hub, match: [hub-namespaces, hub-rbac]}
+      - {id: hub-signing, name: Collection signing and signature validation, match: [hub-signing, signature-validation]}
+      - {id: air-gapped-hub, name: Air-gapped content loading, match: [air-gapped-collections]}
+      - {id: hub-remotes, name: Remotes and requirements files for community sync, match: [pulp-remote, requirements-file-remote]}
+      - {id: hub-api-token, name: "Hub API tokens in ansible.cfg", match: [hub-api-token]}
+      - {id: hub-backup, name: "Hub backup and upgrade", match: [hub-backup]}
+      - {id: validated-content, name: "Validated content collections", match: [validated-content]}
+  # --- Secrets (EX294/Manage content with Vault)
+  - id: ansible-vault
+    name: Ansible Vault, vault IDs and secrets management
+    source: EX294/Vault; docs/Protecting sensitive data with Ansible vault sections
+    match: [ansible-vault, vault-id, encrypt-string]
+    subtopics:
+      - {id: vault-ids, name: Multiple vault IDs and password sources, match: [vault-id, vault-password-file]}
+      - {id: vault-password-client, name: Vault password client scripts, match: [vault-password-client]}
+      - {id: encrypt-string, name: Inline encrypted variables with encrypt_string, match: [encrypt-string]}
+      - {id: rekey, name: Rekeying and rotating vault passwords, match: [rekey]}
+      - {id: vault-edit-view, name: view, edit, decrypt and encrypt subcommands, match: [vault-edit, vault-view, vault-decrypt]}
+      - {id: vault-git-diff, name: Diffing vault files in git with textconv, match: [git-textconv]}
+      - {id: vault-file-layout, name: Vault file layout and the vault.yml indirection pattern, match: [vault-indirection, vault-file-layout]}
+      - {id: external-secret-managers, name: HashiCorp Vault and cloud secret manager lookups, match: [hashi-vault-lookup, aws-secrets-manager]}
+      - {id: vault-encrypted-files, name: "Encrypting whole files used by copy and template", match: [vault-encrypted-files]}
+      - {id: vault-identity-list, name: "vault_identity_list and default vault ids in cfg", match: [vault-identity-list]}
+  - id: no-log-secrets
+    name: Keeping secrets out of logs and output
+    source: docs/Logging and no_log sections
+    match: [no-log, secret-hygiene, log-redaction]
+    subtopics:
+      - {id: no-log-task, name: no_log on tasks and modules, match: [no-log-task]}
+      - {id: no-log-loops, name: Loop items leaking secrets and loop no_log, match: [no-log-loop]}
+      - {id: hide-sensitive-output, name: Hiding secrets from debug and callback output, match: [hide-sensitive-output, debug-secrets]}
+      - {id: env-secrets, name: Passing secrets via environment and lookups instead of extra vars, match: [env-secrets, extra-vars-secrets]}
+      - {id: log-hygiene, name: log_path and controller job output hygiene, match: [log-path-hygiene]}
+      - {id: censored-output, name: "no_log on module options and censored output", match: [censored-output]}
+      - {id: register-secrets, name: "Registered variables containing secrets", match: [register-secrets]}
+      - {id: diff-false, name: "--diff leaking secrets and diff false", match: [diff-false]}
+  # --- Quality and testing (EX374/Test content; ecosystem)
+  - id: ansible-lint
+    name: ansible-lint rules, profiles and pre-commit
+    source: EX374/Testing; ansible-lint rules index and profiles page
+    match: [ansible-lint, lint-profiles, pre-commit]
+    subtopics:
+      - {id: lint-config, name: The .ansible-lint config file (exclude_paths, skip_list, warn_list), match: [ansible-lint-config, skip-list, warn-list]}
+      - {id: lint-profiles, name: Profiles from min to production, match: [lint-profiles, production-profile]}
+      - {id: lint-naming-rules, name: fqcn, name and yaml rules, match: [fqcn-rule, name-rule, yaml-rule]}
+      - {id: lint-noqa-fix, name: noqa comments and --fix autofix, match: [noqa, lint-fix, autofix]}
+      - {id: lint-custom-rules, name: Writing custom rules, match: [custom-lint-rules]}
+      - {id: lint-risky-rules, name: no-changed-when, command-instead-of-module and risky-file-permissions, match: [no-changed-when, command-instead-of-module, risky-file-permissions]}
+      - {id: lint-ci-output, name: SARIF and codeclimate output for CI, match: [sarif, lint-ci-output]}
+      - {id: lint-pre-commit, name: ansible-lint in pre-commit, match: [pre-commit]}
+      - {id: var-naming, name: "var-naming rule and role prefixes", match: [var-naming]}
+      - {id: jinja-rule, name: "jinja[spacing] and jinja[invalid]", match: [jinja-rule]}
+      - {id: schema-rule, name: "schema rules for meta, galaxy and playbooks", match: [schema-rule]}
+      - {id: package-latest, name: "package-latest, partial-become and no-free-form", match: [package-latest, partial-become]}
+  - id: molecule
+    name: Role and collection testing with Molecule
+    source: EX374/Testing; Molecule command reference and configuration guide
+    match: [molecule, role-testing, molecule-plugins]
+    subtopics:
+      - {id: molecule-init, name: molecule init scenario, match: [molecule-init, molecule-scenario-init]}
+      - {id: molecule-sequence, name: converge, verify, idempotence and the test sequence, match: [converge, verify, idempotence]}
+      - {id: molecule-login-destroy, name: login, destroy, list and reset, match: [molecule-login, molecule-destroy]}
+      - {id: molecule-prepare-side-effect, name: prepare, cleanup and side_effect playbooks, match: [prepare, side-effect]}
+      - {id: molecule-drivers, name: docker, podman and delegated drivers, match: [docker-driver, podman-driver, delegated-driver]}
+      - {id: molecule-cloud-drivers, name: Vagrant and EC2 drivers, match: [vagrant-driver, ec2-driver]}
+      - {id: molecule-verifiers, name: ansible and testinfra verifiers, match: [testinfra, ansible-verifier]}
+      - {id: molecule-shared-config, name: Shared base config and scenario inheritance, match: [molecule-shared-config, molecule-base-config]}
+      - {id: molecule-collection-layout, name: Molecule inside collections (extensions/molecule), match: [molecule-collection-layout, extensions-molecule]}
+      - {id: molecule-dependency, name: The dependency step and requirements, match: [molecule-dependency]}
+      - {id: molecule-matrix, name: "molecule matrix and custom test sequences", match: [molecule-matrix, test-sequence]}
+      - {id: molecule-systemd, name: "systemd inside Molecule containers", match: [molecule-systemd]}
+      - {id: molecule-ci, name: "Molecule in CI", match: [molecule-ci]}
+  - id: ansible-test
+    name: ansible-test sanity, units and integration
+    source: Developer guide/Testing collections sections
+    match: [ansible-test, sanity-tests, integration-tests-collections]
+    subtopics:
+      - {id: sanity, name: Sanity tests and ignore files, match: [sanity-tests, tests-sanity-ignore]}
+      - {id: units, name: Unit tests with pytest, match: [unit-tests, pytest]}
+      - {id: integration-targets, name: Integration targets and aliases files, match: [test-targets, aliases-file]}
+      - {id: docker-default, name: Running in the default docker container, match: [docker-default]}
+      - {id: integration-config, name: integration_config.yml for cloud tests, match: [integration-config]}
+      - {id: test-environments, name: venv, docker and remote test environments, match: [ansible-test-remote, ansible-test-venv]}
+      - {id: coverage, name: Coverage reports, match: [coverage]}
+      - {id: ansible-test-shell, name: ansible-test shell for debugging, match: [ansible-test-shell]}
+      - {id: validate-modules, name: "Specific sanity tests (validate-modules, pylint, pep8)", match: [validate-modules]}
+      - {id: ansible-test-requirements, name: "Test requirements files", match: [ansible-test-requirements]}
+      - {id: network-integration, name: "network-integration and windows-integration", match: [network-integration]}
+  - id: syntax-check-dry-run
+    name: Syntax check, check mode and diff validation
+    source: EX294/Validate; docs/Validating tasks sections
+    match: [syntax-check, dry-run, validation, ansible-playbook-check]
+    subtopics:
+      - {id: syntax-check, name: --syntax-check, match: [syntax-check]}
+      - {id: list-tasks-hosts, name: --list-tasks and --list-hosts, match: [list-tasks, list-hosts]}
+      - {id: yamllint, name: yamllint configuration, match: [yamllint]}
+      - {id: check-mode-register, name: Check mode with registered results and check_mode false, match: [check-mode-register, check-mode-false]}
+      - {id: canary-runs, name: Canary runs with --limit, match: [canary-run]}
+      - {id: render-tests, name: Rendering templates and inventory without applying, match: [render-test, template-render-check]}
+      - {id: check-mode-unsupported, name: "Modules without check mode support", match: [check-mode-unsupported]}
+      - {id: preflight-checks, name: "Preflight assertions before changes", match: [preflight-checks]}
+      - {id: validation-chain, name: "Ordered validation chain before merge", match: [validation-chain]}
+  - id: performance-tuning
+    name: Performance tuning (pipelining, forks, fact gathering, callbacks)
+    source: docs/Performance tuning and settings sections
+    match: [performance, performance-tuning, mitogen, profile-tasks, fact-gathering]
+    subtopics:
+      - {id: profile-tasks-timer, name: profile_tasks and timer callbacks, match: [profile-tasks, timer]}
+      - {id: fact-gathering-tuning, name: Reducing fact gathering cost, match: [gather-subset, fact-caching]}
+      - {id: pipelining-multiplexing, name: Pipelining and SSH multiplexing, match: [pipelining, controlpersist]}
+      - {id: mitogen, name: Mitogen strategy, match: [mitogen]}
+      - {id: forks-poll, name: Forks sizing and internal_poll_interval, match: [forks-sizing, internal-poll-interval]}
+      - {id: loop-performance, name: Loop and package list performance, match: [loop-performance, package-lists]}
+      - {id: cgroup-perf-recap, name: cgroup_perf_recap and memory profiling, match: [cgroup-perf-recap]}
+      - {id: control-path, name: "ControlPath length and socket issues", match: [control-path]}
+      - {id: inventory-performance, name: "Inventory parsing performance", match: [inventory-performance]}
+      - {id: callbacks-enabled, name: "callbacks_enabled cost and selection", match: [callbacks-enabled]}
+  # --- Execution environments, navigator, runner (EX294/navigator; EX374/EEs; ecosystem)
+  - id: execution-environments
+    name: Execution environments and ansible-builder
+    source: EX374/Execution environments; ansible-builder definition reference
+    match: [execution-environments, execution-environment, ansible-builder]
+    subtopics:
+      - {id: ee-definition, name: execution-environment.yml version 3 definition, match: [execution-environment-yml, ee-definition]}
+      - {id: ee-dependencies, name: Python, galaxy and bindep dependencies, match: [bindep, ee-dependencies]}
+      - {id: ee-base-images, name: Base images (ee-minimal, supported, community), match: [ee-minimal, base-image]}
+      - {id: ee-build-push, name: Building and pushing EE images, match: [ee-build, ee-push, build-context]}
+      - {id: ee-build-steps, name: additional_build_steps and build args, match: [additional-build-steps, prepend-append]}
+      - {id: ee-controller, name: Registering EEs in automation controller, match: [controller-ee, ee-registration]}
+      - {id: ee-local-run, name: Running EEs locally with navigator and runner, match: [ee-local-run, navigator-ee]}
+      - {id: ee-inspect, name: "Inspecting EE contents", match: [ee-inspect]}
+      - {id: registry-auth, name: "Private registry authentication for EEs", match: [registry-auth]}
+      - {id: ee-build-failures, name: "Troubleshooting EE build failures", match: [ee-build-failures]}
+      - {id: ee-ansible-core-pin, name: "Pinning ansible-core and runner in EEs", match: [ee-ansible-core-pin]}
+  - id: ansible-navigator
+    name: Running playbooks with ansible-navigator
+    source: EX294/Automation content navigator; ansible-navigator settings and subcommands
+    match: [ansible-navigator, navigator]
+    subtopics:
+      - {id: navigator-settings, name: ansible-navigator.yml settings file, match: [navigator-settings, ansible-navigator-yml]}
+      - {id: navigator-modes, name: stdout vs interactive mode, match: [navigator-mode, navigator-stdout]}
+      - {id: navigator-subcommands, name: images, doc, inventory, config and collections subcommands, match: [navigator-images, navigator-doc]}
+      - {id: navigator-artifacts, name: Playbook artifacts and replay, match: [playbook-artifacts, navigator-replay]}
+      - {id: navigator-pull-policy, name: Container engine and pull policy, match: [pull-policy, container-engine]}
+      - {id: navigator-exec, name: ansible-navigator exec inside the EE, match: [navigator-exec]}
+      - {id: navigator-volume-mounts, name: "Volume mounts and environment passing", match: [navigator-volume-mounts, navigator-env]}
+      - {id: navigator-ssh-agent, name: "SSH keys and agent inside the EE", match: [navigator-ssh-agent]}
+      - {id: navigator-vault, name: "Vault passwords with navigator", match: [navigator-vault]}
+      - {id: navigator-lint, name: "navigator lint and settings subcommands", match: [navigator-lint]}
+  - id: ansible-runner
+    name: ansible-runner and embedding Ansible
+    source: ecosystem/ansible-runner documentation sections
+    match: [ansible-runner, runner, python-api]
+    subtopics:
+      - {id: private-data-dir, name: Private data directory layout, match: [private-data-dir]}
+      - {id: runner-events, name: Job events and event callbacks, match: [event-callbacks, job-events]}
+      - {id: runner-artifacts, name: Artifacts directory and status, match: [artifacts, status-handler]}
+      - {id: runner-process-isolation, name: Process isolation and container execution, match: [process-isolation, container-runner]}
+      - {id: runner-transmit-worker, name: transmit, worker and process remote execution, match: [runner-transmit, remote-runner]}
+      - {id: runner-env-settings, name: env/settings, envvars and passwords files, match: [runner-settings, runner-passwords]}
+      - {id: runner-run, name: "ansible-runner run, start and stop", match: [runner-run]}
+      - {id: runner-python-interface, name: "ansible_runner.run Python interface", match: [runner-python-interface]}
+      - {id: runner-role, name: "Running roles and modules via runner", match: [runner-role]}
+  - id: ci-pipelines
+    name: Running Ansible in CI/CD pipelines
+    source: IaC discipline/CI-CD; GitHub Actions, GitLab CI, Azure Pipelines docs
+    match: [ci-cd, ci-pipeline, github-actions, gitlab-ci, pipeline]
+    subtopics:
+      - {id: github-actions, name: GitHub Actions workflows for lint, molecule and deploy, match: [github-actions, ansible-lint-action]}
+      - {id: gitlab-ci, name: GitLab CI pipelines, match: [gitlab-ci]}
+      - {id: jenkins, name: Jenkins pipelines, match: [jenkins]}
+      - {id: azure-pipelines, name: Azure DevOps pipelines, match: [azure-devops, azure-pipelines]}
+      - {id: ci-secrets, name: Vault passwords and SSH keys in CI, match: [vault-in-ci, ssh-agent-ci]}
+      - {id: ci-caching, name: Caching collections and roles between runs, match: [collection-caching, ci-cache]}
+      - {id: ci-ee, name: Running in execution environments in CI, match: [execution-environment-ci, ansible-navigator-ci]}
+      - {id: ci-approval-gates, name: Approval gates and deployment environments, match: [approval-gates, deployment-pipeline]}
+      - {id: ci-check-mode, name: "Check mode diffs in pull requests", match: [ci-check-mode]}
+      - {id: ci-controller-launch, name: "Triggering controller jobs from CI", match: [ci-controller-launch]}
+      - {id: ci-matrix, name: "Testing several Ansible versions in CI", match: [ci-matrix]}
+  # --- Automation controller / AWX (EX467)
+  - id: controller-install
+    name: Install AWX or automation controller (operator, containerized)
+    source: EX467/Install; AWX operator and AAP installation guide sections
+    match: [awx-install, awx-operator, controller-install, containerized-installer]
+    subtopics:
+      - {id: awx-operator, name: AWX operator on Kubernetes with kustomize, match: [awx-operator, kustomize]}
+      - {id: containerized-installer, name: AAP containerized installer, match: [containerized-installer]}
+      - {id: rpm-installer, name: RPM installer with setup.sh and inventory file, match: [rpm-installer, setup-sh]}
+      - {id: external-database, name: External PostgreSQL database, match: [external-postgres, external-database]}
+      - {id: awx-ingress-tls, name: Ingress and TLS certificates, match: [awx-ingress, tls-certificates]}
+      - {id: awx-extra-settings, name: extra_settings and operator spec options, match: [extra-settings, awx-spec]}
+      - {id: subscription-manifest, name: Subscription manifest and licensing, match: [subscription-manifest]}
+      - {id: awx-dev-install, name: Local dev install on minikube or kind, match: [minikube-awx, awx-dev-install]}
+      - {id: aap-topology, name: "AAP sizing and topologies", match: [aap-topology]}
+      - {id: awx-pod-troubleshooting, name: "Troubleshooting AWX pods and migrations", match: [awx-pod-troubleshooting]}
+      - {id: api-ping, name: "Health checks with /api/v2/ping", match: [api-ping]}
+  - id: controller-rbac
+    name: Organizations, teams, users and RBAC
+    source: EX467/Controller; AAP access management guide sections
+    match: [awx-rbac, controller-rbac, organizations, teams]
+    subtopics:
+      - {id: role-types, name: Admin, Execute, Use, Read and Auditor roles, match: [execute-role, use-role, system-auditor]}
+      - {id: ldap-mapping, name: LDAP team and organization mapping, match: [ldap-team-mapping]}
+      - {id: saml-oidc, name: SAML and OIDC single sign-on, match: [saml, oidc]}
+      - {id: social-auth, name: GitHub and Azure AD social auth, match: [social-auth, azure-ad-auth]}
+      - {id: object-roles, name: Granting roles on inventories, projects and templates, match: [object-roles, grant-role]}
+      - {id: object-ownership, name: Resource ownership and organization scoping, match: [object-ownership, resource-ownership]}
+      - {id: org-settings, name: Organization settings and max hosts, match: [org-max-hosts, org-settings]}
+      - {id: team-roles, name: "Teams and team role grants", match: [team-roles]}
+      - {id: superuser, name: "Local users, superusers and password policy", match: [superuser]}
+      - {id: platform-gateway, name: "AAP 2.5 platform gateway authentication", match: [platform-gateway]}
+  - id: controller-credentials
+    name: Credentials and custom credential types
+    source: EX467/Credentials; AAP credentials and credential plugins sections
+    match: [credentials, credential-types, machine-credential, custom-credential-type]
+    subtopics:
+      - {id: machine-credentials, name: Machine credentials and become passwords, match: [machine-credential]}
+      - {id: vault-scm-credentials, name: Vault and source control credentials, match: [vault-credential, source-control-credential]}
+      - {id: cloud-credentials, name: Cloud credentials (AWS, Azure, GCP, VMware), match: [cloud-credentials, aws-credential]}
+      - {id: custom-credential-types, name: Custom credential types with inputs and injectors, match: [injectors, inputs]}
+      - {id: external-lookups, name: External secret lookups (HashiCorp Vault, CyberArk, Azure Key Vault), match: [external-secret-lookup, hashicorp-vault-credential, cyberark]}
+      - {id: registry-galaxy-credentials, name: Container registry and Galaxy credentials, match: [container-registry-credential, galaxy-credential]}
+      - {id: network-credentials, name: Network credentials and enable mode, match: [network-credential]}
+      - {id: credential-test, name: Testing external credential lookups, match: [credential-test, lookup-test]}
+      - {id: credential-sharing, name: "Sharing credentials across teams and orgs", match: [credential-sharing]}
+      - {id: credential-prompt, name: "Prompt-on-launch credential fields and key passphrases", match: [credential-prompt]}
+  - id: controller-projects-inventories
+    name: Projects, inventory sources and smart/constructed inventories
+    source: EX467/Projects and inventories; AAP user guide sections
+    match: [awx-projects, awx-inventories, inventory-sources, constructed-inventory, smart-inventory]
+    subtopics:
+      - {id: scm-projects, name: SCM projects, branches and update on launch, match: [scm-projects, update-on-launch]}
+      - {id: allow-override, name: Allow branch override and pinned revisions, match: [allow-override, scm-revision]}
+      - {id: inventory-from-project, name: Inventory sourced from a project, match: [sourced-from-project]}
+      - {id: cloud-inventory-sources, name: Cloud inventory sources and overwrite options, match: [cloud-inventory-source, overwrite]}
+      - {id: constructed-smart, name: Constructed and smart inventories, match: [constructed-inventory, smart-inventory, host-filter]}
+      - {id: inventory-import, name: awx-manage inventory_import, match: [inventory-import, awx-manage-inventory-import]}
+      - {id: manual-projects, name: Manual projects in the projects directory, match: [manual-projects, projects-dir]}
+      - {id: project-requirements, name: Collections and roles requirements in projects, match: [collections-requirements, roles-requirements]}
+      - {id: project-signing, name: Project content signing and verification, match: [project-signing]}
+      - {id: project-update-failure, name: "Troubleshooting project update failures", match: [project-update-failure]}
+      - {id: controller-host-vars, name: "Host and group variables in controller inventories", match: [controller-host-vars]}
+  - id: job-templates
+    name: Job templates, surveys and launch options
+    source: EX467/Job templates; AAP user guide job templates sections
+    match: [job-templates, job-template, surveys, extra-vars]
+    subtopics:
+      - {id: surveys, name: Surveys and survey_spec, match: [surveys, survey-spec]}
+      - {id: prompt-on-launch, name: Prompt on launch and ask_ fields, match: [prompt-on-launch, ask-on-launch]}
+      - {id: job-slicing, name: Job slicing, match: [job-slicing]}
+      - {id: concurrent-jobs, name: Concurrent jobs and timeouts, match: [concurrent-jobs, timeout]}
+      - {id: webhooks, name: Webhook launches from GitHub and GitLab, match: [webhooks]}
+      - {id: fact-storage, name: Fact storage and fact cache, match: [fact-storage]}
+      - {id: jt-instance-group, name: Instance and container group assignment on templates, match: [jt-instance-group, container-group-jt]}
+      - {id: job-output, name: Job output, stdout download and relaunch, match: [job-stdout, job-output-download, relaunch]}
+      - {id: job-labels, name: Labels and job tags, match: [labels, job-tags]}
+      - {id: job-type-check, name: "Check job type vs run", match: [job-type-check]}
+      - {id: jt-limit, name: "Limit, verbosity and forks on templates", match: [jt-limit, jt-forks]}
+  - id: workflow-templates
+    name: Workflow templates and approval nodes
+    source: EX467/Workflows; AAP user guide workflows sections
+    match: [workflow-templates, workflow, approval-nodes]
+    subtopics:
+      - {id: approval-nodes, name: Approval nodes and timeouts, match: [approval-nodes, workflow-approval]}
+      - {id: convergence, name: Convergence (any/all) and on_success/on_failure/always, match: [convergence, on-success]}
+      - {id: nested-workflows, name: Nested workflows, match: [nested-workflows]}
+      - {id: set-stats-artifacts, name: Passing data with set_stats artifacts, match: [set-stats, workflow-artifacts]}
+      - {id: sync-nodes, name: Inventory and project sync nodes, match: [inventory-sync-node, project-sync-node]}
+      - {id: workflow-visualizer, name: Workflow visualizer, match: [workflow-visualizer]}
+      - {id: workflow-prompts, name: Workflow surveys and prompted extra vars, match: [workflow-survey, workflow-extra-vars]}
+      - {id: workflow-inventory, name: "Workflow-level inventory and limit", match: [workflow-inventory]}
+      - {id: workflow-failure-path, name: "Failure paths and retries in workflows", match: [workflow-failure-path]}
+      - {id: workflow-job-template-node, name: "Building workflows as code", match: [workflow-job-template-node]}
+  - id: schedules-notifications
+    name: Schedules and notifications
+    source: EX467/Schedules and notifications; AAP user guide sections
+    match: [schedules, notifications, notification-templates]
+    subtopics:
+      - {id: rrule, name: RRULE schedules, match: [rrule]}
+      - {id: schedule-prompts, name: Extra vars and prompts on schedules, match: [schedule-extra-vars, schedule-prompt]}
+      - {id: schedule-timezones, name: Time zones and DST on schedules, match: [schedule-timezone, dst]}
+      - {id: chat-notifications, name: Slack, Mattermost and Teams notifications, match: [slack-notification, mattermost, teams-webhook]}
+      - {id: email-webhook, name: Email and webhook notifications, match: [email-notification, webhook-notification]}
+      - {id: pagerduty-grafana, name: PagerDuty and Grafana notifications, match: [pagerduty, grafana]}
+      - {id: custom-messages, name: Custom notification messages, match: [custom-messages]}
+      - {id: management-jobs, name: Management jobs and cleanup schedules, match: [management-jobs, cleanup-jobs]}
+      - {id: notification-events, name: "Notification events (started, success, failure, approval)", match: [notification-events]}
+      - {id: schedule-audit, name: "Disabling and auditing schedules", match: [schedule-audit]}
+  - id: controller-api-cli
+    name: Controller API, awx CLI and configuration as code
+    source: EX467/API; AWX API reference and awx CLI docs
+    match: [awx-cli, controller-api, awx-api, controller-configuration-as-code]
+    subtopics:
+      - {id: api-tokens, name: OAuth2 and application tokens, match: [oauth2-token, application-token]}
+      - {id: awx-cli, name: awx CLI (awxkit) usage, match: [awxkit]}
+      - {id: controller-collections, name: awx.awx and ansible.controller collections, match: [awx-awx-collection, ansible-controller-collection]}
+      - {id: casc, name: Configuration as code with infra.aap_configuration, match: [infra-aap-configuration, casc]}
+      - {id: export-import, name: awx export and import, match: [awx-export, awx-import]}
+      - {id: api-launch-poll, name: Launching jobs via API and polling status, match: [api-launch, job-polling]}
+      - {id: awx-manage, name: awx-manage commands, match: [awx-manage]}
+      - {id: controller-metrics, name: Metrics endpoint and Prometheus, match: [controller-metrics, api-v2-metrics]}
+      - {id: activity-stream, name: Activity stream and audit queries, match: [activity-stream]}
+      - {id: api-filtering, name: "API filtering, search and pagination", match: [api-filtering, pagination]}
+      - {id: token-scope, name: "Token scopes and expiry", match: [token-scope]}
+  - id: controller-backup-restore
+    name: Controller backup, restore and upgrade
+    source: EX467/Backup and restore; AAP administration guide sections
+    match: [controller-backup, awx-backup, backup-restore, controller-upgrade]
+    subtopics:
+      - {id: operator-backup, name: AWXBackup and AWXRestore custom resources, match: [awxbackup, awxrestore]}
+      - {id: setup-sh-backup, name: setup.sh -b and -r backups, match: [setup-sh-backup]}
+      - {id: containerized-backup, name: Containerized installer backup and restore, match: [containerized-backup]}
+      - {id: secret-key, name: SECRET_KEY and database dump handling, match: [secret-key, pg-dump]}
+      - {id: aap-upgrade, name: AAP and operator upgrades, match: [aap-upgrade, operator-upgrade]}
+      - {id: backup-retention, name: Scheduled backups and retention, match: [backup-retention, scheduled-backup]}
+      - {id: restore-new-cluster, name: Restoring to a new cluster, match: [restore-new-cluster, cross-cluster-restore]}
+      - {id: database-maintenance, name: "Controller database maintenance", match: [database-maintenance]}
+      - {id: upgrade-precheck, name: "Pre-upgrade checks and rollback plan", match: [upgrade-precheck]}
+  - id: automation-mesh
+    name: Instance groups, execution nodes and automation mesh
+    source: EX467/Mesh; AAP automation mesh guide sections
+    match: [instance-groups, automation-mesh, execution-nodes, receptor, hop-nodes]
+    subtopics:
+      - {id: node-types, name: Control, execution, hybrid and hop node types, match: [node-types, hybrid-nodes]}
+      - {id: receptorctl, name: receptorctl status and ping, match: [receptorctl]}
+      - {id: container-groups, name: Container groups and pod specs, match: [container-groups]}
+      - {id: capacity-policy, name: Capacity and policy_instance_percentage, match: [capacity, policy-instance-percentage]}
+      - {id: install-bundle, name: Adding execution nodes with install bundles, match: [install-bundle]}
+      - {id: receptor-tls, name: Receptor TLS and certificates, match: [receptor-tls, mesh-certificates]}
+      - {id: deprovision-node, name: Removing and deprovisioning nodes, match: [deprovision-node, node-removal]}
+      - {id: mesh-topology, name: "Mesh topology design and peers", match: [mesh-topology, mesh-peers]}
+      - {id: instance-health-check, name: "Instance health checks", match: [instance-health-check]}
+      - {id: receptor-work-units, name: "receptorctl work list and results", match: [receptor-work-units]}
+  - id: event-driven-ansible
+    name: Event-Driven Ansible and rulebooks
+    source: ecosystem/EDA; ansible-rulebook docs and EDA controller guide
+    match: [event-driven-ansible, eda, rulebooks, ansible-rulebook]
+    subtopics:
+      - {id: event-sources, name: Event sources (webhook, kafka, alertmanager), match: [webhook-source, kafka-source, alertmanager-source]}
+      - {id: rule-conditions, name: Rule conditions and actions, match: [conditions, actions]}
+      - {id: run-job-template, name: run_job_template and run_playbook actions, match: [run-job-template, run-playbook]}
+      - {id: eda-controller, name: EDA controller and rulebook activations, match: [eda-controller, rulebook-activation]}
+      - {id: decision-environments, name: Decision environments, match: [decision-environments]}
+      - {id: rulebook-testing, name: Testing rulebooks locally with print_events, match: [rulebook-test, print-events]}
+      - {id: event-filters, name: Event filters and dashes_to_underscores, match: [event-filters, dashes-to-underscores]}
+      - {id: eda-throttle, name: Throttle and time-window rules, match: [eda-throttle, time-window]}
+      - {id: eda-secrets, name: Variables and secrets in rulebooks, match: [eda-vars, eda-secrets]}
+      - {id: event-streams, name: AAP event streams, match: [event-streams]}
+      - {id: eda-controller-token, name: "EDA credentials and controller tokens", match: [eda-controller-token]}
+      - {id: custom-event-source, name: "Writing a custom event source plugin", match: [custom-event-source]}
+  # --- IaC discipline, tool-agnostic (infrastructure-as-code product)
+  - id: iac-fundamentals
+    name: IaC principles (declarative, idempotent, versioned, reviewed)
+    source: IaC discipline; HashiCorp and AWS well-architected IaC guidance
+    match: [iac-principles, iac-fundamentals, declarative, infrastructure-as-code]
+    subtopics:
+      - {id: declarative-imperative, name: Declarative vs imperative models, match: [imperative-vs-declarative]}
+      - {id: infra-repo-layout, name: Repository layout and branching for infrastructure, match: [infra-repo-layout, branching-strategy]}
+      - {id: reproducibility, name: Reproducibility and pinning, match: [reproducible-builds, version-pinning]}
+      - {id: no-manual-changes, name: No-manual-changes policy and change freezes, match: [no-manual-changes, change-freeze]}
+      - {id: iac-maturity, name: IaC maturity and adoption roadmap, match: [iac-maturity, adoption-roadmap]}
+      - {id: iac-anti-patterns, name: IaC anti-patterns, match: [iac-anti-patterns]}
+      - {id: convergence-principle, name: "Convergence and idempotence as principles", match: [convergence-principle]}
+      - {id: itsm-integration, name: "Change management and ITSM integration", match: [itsm-integration, change-ticket]}
+      - {id: ownership-model, name: "Ownership model for infrastructure code", match: [infra-ownership-model]}
+  - id: config-vs-provisioning
+    name: Choosing provisioning vs configuration tools (Terraform + Ansible)
+    source: IaC discipline; HashiCorp Terraform and Ansible better together guidance
+    match: [tool-selection, provisioning-vs-configuration, terraform-ansible, ansible-terraform]
+    subtopics:
+      - {id: terraform-provider-ansible, name: Terraform provider for Ansible, match: [terraform-provider-ansible]}
+      - {id: cloud-terraform-collection, name: cloud.terraform collection, match: [cloud-terraform-collection]}
+      - {id: terraform-inventory, name: Terraform outputs as Ansible inventory, match: [terraform-inventory, terraform-output-inventory]}
+      - {id: cloud-modules, name: Provisioning with amazon.aws and azure.azcollection, match: [cloud-modules, amazon-aws-modules]}
+      - {id: cloud-init-handoff, name: cloud-init and user-data handoff, match: [cloud-init, user-data]}
+      - {id: day-0-1-2, name: Day 0/1/2 responsibilities, match: [day-0-day-1-day-2, boundary-of-responsibility]}
+      - {id: stateless-provisioning, name: "Limits of stateless provisioning with Ansible", match: [stateless-provisioning]}
+      - {id: tool-landscape, name: "Tool landscape comparison (Terraform, Pulumi, Crossplane, Ansible)", match: [tool-landscape]}
+      - {id: provision-configure-pipeline, name: "Provision-then-configure pipeline orchestration", match: [provision-configure-pipeline]}
+  - id: environment-promotion
+    name: Environment promotion and parity
+    source: IaC discipline; HashiCorp recommended practices for environments
+    match: [environment-promotion, environment-parity, promotion]
+    subtopics:
+      - {id: env-directories, name: Directory-per-environment vs workspaces, match: [environment-directories, env-per-directory]}
+      - {id: parity-check, name: Diffing environments for parity, match: [environment-diff, parity-check]}
+      - {id: promotion-pipeline, name: Promotion pipelines and gates, match: [promotion-pipeline, promotion-gates]}
+      - {id: ephemeral-environments, name: Ephemeral preview environments, match: [ephemeral-environments]}
+      - {id: env-config-data, name: Environment config data and inventories, match: [environment-config, env-inventories]}
+      - {id: artifact-promotion, name: "Promoting the same versioned artifact", match: [artifact-promotion]}
+      - {id: prod-safeguards, name: "Guarding production from accidental runs", match: [prod-safeguards]}
+      - {id: release-tags, name: "Release tags per environment", match: [release-tags]}
+  - id: plan-review
+    name: Change review and approval of plans
+    source: IaC discipline/Review; Atlantis and HCP Terraform run workflows
+    match: [plan-review, change-review, code-review]
+    subtopics:
+      - {id: atlantis, name: Atlantis pull request automation, match: [atlantis]}
+      - {id: plan-in-pr, name: Posting plan output to pull requests, match: [plan-comment, plan-in-pr]}
+      - {id: change-risk, name: Change risk classification and blast radius, match: [change-risk, blast-radius]}
+      - {id: review-checklist, name: Review checklists for infrastructure changes, match: [review-checklist]}
+      - {id: destructive-changes, name: Detecting destructive and replace changes, match: [destructive-changes, replace-detection]}
+      - {id: codeowners, name: CODEOWNERS and required reviewers, match: [codeowners]}
+      - {id: ansible-check-diff-review, name: "Reviewing Ansible check and diff output in PRs", match: [ansible-check-diff-review]}
+      - {id: run-tasks, name: "HCP Terraform run tasks", match: [run-tasks]}
+  - id: policy-as-code
+    name: Policy as code and guardrails
+    source: IaC discipline/Policy; OPA, Conftest, Sentinel docs
+    match: [policy-as-code, opa, conftest, sentinel]
+    subtopics:
+      - {id: rego-terraform, name: Rego policies over Terraform plan JSON, match: [plan-json, rego-terraform]}
+      - {id: sentinel-levels, name: Sentinel enforcement levels, match: [enforcement-levels, hard-mandatory]}
+      - {id: policy-testing, name: Policy unit tests, match: [opa-test, policy-testing]}
+      - {id: admission-policies, name: Gatekeeper and Kyverno admission policies, match: [gatekeeper, kyverno]}
+      - {id: cloud-native-policies, name: Azure Policy, SCPs and organization policies, match: [azure-policy, service-control-policies]}
+      - {id: policy-gate, name: Policy gates in CI, match: [policy-gate]}
+      - {id: waivers, name: Waivers and exceptions, match: [waivers, exceptions]}
+      - {id: playbook-policy, name: "Policy checks on Ansible content and AAP policy enforcement", match: [playbook-policy, aap-policy-enforcement]}
+      - {id: policy-bundles, name: "Distributing policy bundles", match: [policy-bundles]}
+  - id: drift-detection
+    name: Drift detection and remediation
+    source: IaC discipline/Drift; HCP Terraform health assessments, driftctl docs
+    match: [drift-detection, drift, configuration-drift, remediation]
+    subtopics:
+      - {id: scheduled-plan, name: Scheduled plan runs for drift, match: [scheduled-plan, drift-cron]}
+      - {id: check-mode-drift, name: Ansible check-mode drift schedules, match: [drift-schedule]}
+      - {id: drift-tools, name: driftctl and cloud-native drift tools, match: [driftctl, snyk-iac-drift]}
+      - {id: drift-remediation, name: Auto-remediation vs alert-only, match: [auto-remediation]}
+      - {id: compliance-scans, name: Host compliance scans (aide, osquery, openscap), match: [compliance-scan, aide, openscap]}
+      - {id: drift-alerts, name: Alerting on drift, match: [drift-alerts]}
+      - {id: drift-report, name: "Drift reports from check-mode runs", match: [drift-report]}
+      - {id: detailed-exitcode, name: "-detailed-exitcode for drift checks", match: [detailed-exitcode]}
+  - id: iac-testing
+    name: IaC testing strategy and pyramid
+    source: IaC discipline/Testing; Terraform test, Terratest docs
+    match: [iac-testing, test-pyramid, terratest]
+    subtopics:
+      - {id: terraform-test, name: terraform test and tftest, match: [terraform-test, tftest]}
+      - {id: terratest, name: Terratest, match: [terratest]}
+      - {id: localstack, name: LocalStack and mock providers, match: [localstack, mock-providers]}
+      - {id: smoke-tests, name: Post-deploy smoke tests, match: [smoke-tests, post-deploy-tests]}
+      - {id: compliance-test-frameworks, name: InSpec, goss and serverspec, match: [inspec, goss, serverspec]}
+      - {id: test-cleanup, name: Test isolation and cleanup (cloud-nuke), match: [test-isolation, cloud-nuke]}
+      - {id: tflint, name: "Static analysis with tflint and terraform validate", match: [tflint, terraform-validate]}
+      - {id: contract-tests, name: "Contract tests for modules", match: [contract-tests]}
+  - id: module-versioning
+    name: Module versioning and registries
+    source: IaC discipline/Modularity; Terraform registry and semver docs
+    match: [module-versioning, module-registry, semver]
+    subtopics:
+      - {id: semver-constraints, name: Semantic versioning and version constraints, match: [semantic-versioning, pessimistic-constraint]}
+      - {id: private-registry, name: Private registries, match: [private-registry]}
+      - {id: mono-polyrepo, name: Monorepo vs polyrepo, match: [monorepo, polyrepo]}
+      - {id: release-automation, name: Release automation (release-please, semantic-release), match: [release-please, semantic-release]}
+      - {id: module-interface, name: Module interface design and variable validation, match: [module-interface, variable-validation]}
+      - {id: root-modules, name: Root modules and composition, match: [root-module, module-composition]}
+      - {id: module-deprecation, name: Deprecating modules and upgrade paths, match: [module-deprecation, upgrade-path]}
+      - {id: conventional-commits, name: "Conventional commits and changelogs", match: [conventional-commits]}
+  - id: state-management
+    name: State, locking and backends
+    source: IaC discipline/State; Terraform backends docs
+    match: [state-management, remote-state, state-locking, state-backend]
+    subtopics:
+      - {id: s3-backend, name: S3 backend with locking, match: [s3-backend, dynamodb-lock, s3-lockfile]}
+      - {id: cloud-backends, name: azurerm, gcs and HCP backends, match: [azurerm-backend, gcs-backend]}
+      - {id: state-move-rm, name: state mv, rm and moved blocks, match: [state-move, state-rm, moved-block]}
+      - {id: force-unlock, name: force-unlock and stuck locks, match: [force-unlock]}
+      - {id: state-inspection, name: state list, show and pull, match: [terraform-state-list, state-show, state-pull]}
+      - {id: state-recovery, name: Recovering corrupted state and backups, match: [state-recovery, corrupted-state, state-backup]}
+      - {id: refresh-only, name: refresh-only plans, match: [refresh-only]}
+      - {id: state-isolation, name: State isolation per environment and workspaces, match: [state-isolation, workspaces]}
+      - {id: state-encryption, name: "Encrypting state at rest", match: [state-encryption]}
+      - {id: terraform-remote-state, name: "Cross-stack references with terraform_remote_state", match: [terraform-remote-state]}
+  - id: immutable-infrastructure
+    name: Immutable infrastructure and image pipelines
+    source: IaC discipline; Packer and EC2 Image Builder docs
+    match: [immutable-infrastructure, golden-images, image-pipeline, packer]
+    subtopics:
+      - {id: packer-ansible, name: Packer with the Ansible provisioner, match: [ansible-provisioner, hcl2-packer]}
+      - {id: image-hardening, name: Image hardening to CIS benchmarks, match: [image-hardening, cis-benchmark]}
+      - {id: image-promotion, name: Image promotion and tagging, match: [image-promotion, image-tagging]}
+      - {id: instance-refresh, name: Rolling replacement and instance refresh, match: [instance-refresh, rolling-replace]}
+      - {id: image-tests, name: Testing images before promotion, match: [image-tests]}
+      - {id: image-scanning, name: Vulnerability scanning of images, match: [image-scanning, trivy-image]}
+      - {id: container-images, name: Immutable container images with buildah and Dockerfiles, match: [container-images, buildah]}
+      - {id: image-expiry, name: Image expiry and deregistration, match: [image-expiry]}
+      - {id: blue-green, name: "Blue/green deployments", match: [blue-green]}
+  - id: gitops
+    name: GitOps workflows for infrastructure
+    source: OpenGitOps principles; Argo CD and Flux docs
+    match: [gitops, pull-based, reconciliation-loop]
+    subtopics:
+      - {id: argocd-flux, name: Argo CD and Flux, match: [argocd, flux]}
+      - {id: pull-based, name: Pull-based delivery with ansible-pull, match: [pull-based, ansible-pull-gitops]}
+      - {id: reconciliation, name: Reconciliation loops and self-healing, match: [reconciliation-loop, reconcile]}
+      - {id: gitops-repo-structure, name: GitOps repository structure (app-of-apps, env branches), match: [gitops-repo-structure, app-of-apps]}
+      - {id: gitops-controller, name: GitOps for automation controller config, match: [gitops-controller]}
+      - {id: sealed-secrets, name: Secrets in GitOps repos (sealed secrets, SOPS), match: [sealed-secrets]}
+      - {id: sync-waves, name: "Sync waves, hooks and pruning", match: [sync-waves, prune]}
+      - {id: image-updater, name: "Image update automation", match: [image-updater]}
+      - {id: gitops-eda, name: "GitOps triggers with EDA webhooks", match: [gitops-eda]}
+  - id: secrets-in-iac
+    name: Secrets handling in IaC
+    source: IaC discipline/Security; SOPS, External Secrets, gitleaks docs
+    match: [secrets-in-iac, secret-scanning, sops, external-secrets]
+    subtopics:
+      - {id: sops, name: SOPS with age and KMS, match: [sops, age]}
+      - {id: secret-scanning, name: Secret scanning with gitleaks and trufflehog, match: [gitleaks, trufflehog, secret-scanning]}
+      - {id: external-secrets-operator, name: External Secrets Operator, match: [external-secrets, eso]}
+      - {id: sensitive-variables, name: Sensitive and ephemeral values in Terraform, match: [sensitive-variables, ephemeral-values]}
+      - {id: secret-rotation, name: Secret rotation, match: [secret-rotation]}
+      - {id: git-crypt, name: git-crypt and transparent encryption, match: [git-crypt]}
+      - {id: dynamic-secrets, name: "HashiCorp Vault dynamic secrets", match: [dynamic-secrets]}
+      - {id: oidc-federation, name: "OIDC workload identity for CI credentials", match: [oidc-federation]}
+  - id: security-scanning
+    name: Static security scanning of IaC
+    source: IaC discipline/Security; Checkov, Trivy, KICS docs
+    match: [security-scanning, checkov, trivy, kics, tfsec]
+    subtopics:
+      - {id: checkov-config, name: Checkov configuration and skips, match: [checkov-skip, checkov-config]}
+      - {id: trivy-config, name: Trivy misconfiguration scanning, match: [trivy-config, trivy-misconfig]}
+      - {id: kics, name: KICS scans including Ansible playbooks, match: [kics, kics-ansible]}
+      - {id: sarif-upload, name: SARIF upload to code scanning, match: [sarif-upload, code-scanning]}
+      - {id: custom-checkov-policies, name: Custom Checkov policies, match: [custom-checkov-policy, checkov-yaml-policy]}
+      - {id: scan-baselines, name: Baselines and suppressions, match: [scan-baseline, suppressions]}
+      - {id: pre-commit-security, name: "Security scanners in pre-commit", match: [pre-commit-security]}
+      - {id: playbook-security-scan, name: "Security scanning of playbooks", match: [playbook-security-scan]}
+  - id: tagging-naming
+    name: Tagging and naming standards
+    source: AWS Well-Architected; AWS tag policies and Azure policy docs
+    match: [tagging, naming-conventions, resource-tagging, tag-policy]
+    subtopics:
+      - {id: default-tags, name: Provider default tags, match: [default-tags, provider-default-tags]}
+      - {id: tag-policies, name: AWS tag policies and Azure policy for tags, match: [aws-tag-policies, azure-policy-tags]}
+      - {id: cost-allocation-tags, name: Cost allocation tags, match: [cost-allocation-tags]}
+      - {id: tag-enforcement, name: Tag enforcement with OPA and SCPs, match: [tag-enforcement, opa-tags]}
+      - {id: naming-standard, name: Naming standards and label schemas, match: [naming-standard, label-schema]}
+      - {id: tag-backfill, name: Tag remediation and backfill, match: [tag-backfill, tag-remediation]}
+      - {id: hostname-conventions, name: "Host naming conventions for inventory", match: [hostname-conventions]}
+      - {id: tag-compliance-report, name: "Tag compliance reporting", match: [tag-compliance-report]}
+  - id: iac-cost
+    name: Cost awareness in IaC changes
+    source: IaC discipline/FinOps; Infracost docs
+    match: [infracost, cost-estimation, iac-cost]
+    subtopics:
+      - {id: infracost-ci, name: Infracost in CI with cost diffs on PRs, match: [infracost-ci, cost-diff-comment]}
+      - {id: cost-policies, name: Cost policies and budget gates, match: [cost-policy, budget-gate]}
+      - {id: rightsizing, name: Rightsizing in code, match: [rightsizing]}
+      - {id: usage-file, name: Usage files for usage-based costs, match: [usage-file, infracost-usage]}
+      - {id: cost-tagging, name: Cost visibility via tagging, match: [finops]}
+      - {id: orphaned-resources, name: "Cleaning idle and orphaned resources", match: [orphaned-resources]}
+      - {id: scheduled-shutdown, name: "Scheduled shutdown of non-production", match: [scheduled-shutdown]}
+      - {id: infracost-config, name: "Infracost config files for monorepos", match: [infracost-config]}
+  - id: iac-documentation
+    name: Documentation and READMEs for IaC
+    source: IaC discipline; terraform-docs and ADR practice
+    match: [iac-documentation, terraform-docs, readme, runbooks]
+    subtopics:
+      - {id: terraform-docs, name: terraform-docs generation, match: [terraform-docs]}
+      - {id: adr, name: Architecture decision records, match: [architecture-decision-records, adr]}
+      - {id: role-collection-docs, name: Role and collection docs from argument_specs, match: [argument-specs, antsibull-docs]}
+      - {id: diagrams-as-code, name: Diagrams as code, match: [diagrams-as-code]}
+      - {id: inventory-docs, name: Inventory and host documentation generation, match: [inventory-docs, ansible-cmdb]}
+      - {id: docs-ci, name: Docs checks in CI (links, drift), match: [docs-ci, link-check, documentation-drift]}
+      - {id: runbooks, name: Operational runbooks, match: [operational-runbook]}
+      - {id: aar-doc, name: "Generating role docs from argument specs", match: [aar-doc]}
+  - id: dependency-updates
+    name: Dependency and provider update automation
+    source: IaC discipline; Renovate and Dependabot docs
+    match: [dependency-updates, renovate, dependabot, provider-upgrades]
+    subtopics:
+      - {id: renovate-terraform, name: Renovate for Terraform providers and modules, match: [renovate-terraform]}
+      - {id: renovate-ansible, name: Renovate for Galaxy requirements and EEs, match: [renovate-ansible, galaxy-requirements-updates]}
+      - {id: provider-upgrade-testing, name: Testing provider upgrades, match: [provider-upgrade, upgrade-testing]}
+      - {id: automerge, name: Automerge and update grouping, match: [automerge, update-grouping]}
+      - {id: lock-files, name: Lock files (.terraform.lock.hcl, requirements lock), match: [lock-file, dependency-lock]}
+      - {id: dependabot-config, name: "Dependabot for actions, pip and Docker", match: [dependabot-config]}
+      - {id: ee-image-updates, name: "Base image updates for EEs", match: [ee-image-updates]}
+      - {id: porting-guide, name: "ansible-core porting guides between versions", match: [porting-guide]}
+      - {id: update-cadence, name: "Update cadence and patch policy", match: [update-cadence]}
+  - id: disaster-recovery-iac
+    name: Rebuild from code and DR drills
+    source: AWS Well-Architected Reliability; DR planning guidance
+    match: [disaster-recovery, dr-drill, rebuild-from-code, game-day]
+    subtopics:
+      - {id: game-day, name: Game days and chaos drills, match: [game-day, chaos-day]}
+      - {id: rebuild-runbook, name: Rebuild-from-code runbooks, match: [rebuild-runbook, rebuild-from-code]}
+      - {id: rpo-rto, name: RPO and RTO targets, match: [rpo, rto]}
+      - {id: state-secrets-backup, name: Backing up state and secrets, match: [state-backup]}
+      - {id: failover-as-code, name: Multi-region failover as code, match: [failover-as-code, multi-region]}
+      - {id: dr-test-automation, name: Automated DR tests, match: [dr-test]}
+      - {id: aap-disaster-recovery, name: "AAP disaster recovery", match: [aap-disaster-recovery]}
+      - {id: recovery-order, name: "Dependency mapping and recovery order", match: [recovery-order]}
+      - {id: restore-test, name: "Restore testing of backups", match: [restore-test]}
+  - id: brownfield-import
+    name: Importing existing infrastructure into code
+    source: IaC discipline; Terraform import and terraformer docs
+    match: [brownfield, import, adoption, terraformer]
+    subtopics:
+      - {id: import-blocks, name: Terraform import blocks and generate-config-out, match: [import-blocks, generate-config-out]}
+      - {id: terraformer, name: Bulk import with terraformer, match: [terraformer, bulk-import]}
+      - {id: pulumi-cfn-import, name: Pulumi and CloudFormation import, match: [pulumi-import, cloudformation-import]}
+      - {id: ansible-gathered-state, name: Capturing existing hosts with gathered state, match: [ansible-gathered-state]}
+      - {id: strangler, name: Strangler and read-only-first adoption, match: [strangler, read-only-first]}
+      - {id: import-verification, name: Verifying zero-diff after import, match: [zero-diff, import-verification]}
+      - {id: config-capture, name: "Capturing existing config files into roles", match: [config-capture]}
+      - {id: host-discovery, name: "Discovering hosts to build inventory", match: [host-discovery]}

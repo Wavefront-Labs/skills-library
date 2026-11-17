@@ -1,0 +1,61 @@
+# Canonical coverage spec: Palo Alto Networks PAN-OS firewalls and Panorama.
+# Topics come from external structures (vendor certification blueprints and the PAN-OS admin guide), not from the library.
+subject: palo-alto-pan-os
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [palo-alto-pan-os]
+sources:
+  - "Palo Alto Networks PCNSA exam blueprint: platforms and architecture, configuration management, policy, App-ID, User-ID, Content-ID, decryption, GlobalProtect, monitoring, HA"
+  - "Palo Alto Networks PCNSE exam blueprint: deploy and configure, operate and manage, troubleshoot, Panorama, VPN, advanced decryption, certificates, upgrades"
+  - "docs.paloaltonetworks.com PAN-OS Administrator's Guide table of contents: firewall administration, authentication, certificates, HA, networking, App-ID, User-ID, Content-ID, URL filtering, decryption, policy, VPN, QoS, VSYS, monitoring, reports, software and content updates"
+  - "docs.paloaltonetworks.com Panorama Administrator's Guide and PAN-OS XML/REST API guides"
+  - "docs.paloaltonetworks.com GlobalProtect Administrator's Guide"
+topics:
+  - {id: mgmt-interface, name: Management interface and initial setup, source: PAN-OS admin guide - firewall administration, match: [management-interface]}
+  - {id: dynamic-updates, name: Licensing and dynamic content updates, source: PAN-OS admin guide - software and content updates, match: [dynamic-updates]}
+  - {id: candidate-config, name: Candidate vs running configuration commit and rollback, source: PCNSA - configuration management, match: [candidate-config]}
+  - {id: admin-roles, name: Administrator accounts and role profiles, source: PAN-OS admin guide - administrative access, match: [admin-role-profile]}
+  - {id: auth-profile, name: Authentication profiles LDAP RADIUS SAML, source: PAN-OS admin guide - authentication, match: [authentication-profile]}
+  - {id: l3-interfaces, name: Layer 3 interfaces and management profiles, source: PAN-OS admin guide - networking, match: [layer3-interfaces]}
+  - {id: virtual-wire, name: Virtual wire and tap interfaces, source: PAN-OS admin guide - networking, match: [virtual-wire]}
+  - {id: security-zones, name: Security zones and zone types, source: PCNSA - policy, match: [security-zones]}
+  - {id: virtual-router, name: Virtual routers and static routes, source: PAN-OS admin guide - static routes, match: [virtual-router]}
+  - {id: dynamic-routing, name: OSPF and BGP dynamic routing, source: PAN-OS admin guide - routing protocols, match: [bgp-routing]}
+  - {id: pbf, name: Policy based forwarding, source: PAN-OS admin guide - PBF, match: [policy-based-forwarding]}
+  - {id: source-nat, name: Source NAT dynamic IP and port, source: PAN-OS admin guide - NAT, match: [source-nat]}
+  - {id: destination-nat, name: Destination NAT and U-turn NAT, source: PAN-OS admin guide - NAT, match: [destination-nat]}
+  - {id: security-policy, name: Security policy rules and rule order, source: PCNSA - policy, match: [security-policy-rules]}
+  - {id: app-id, name: App-ID application identification and dependencies, source: PCNSA - App-ID, match: [app-id]}
+  - {id: app-override, name: Application override and custom applications, source: PAN-OS admin guide - App-ID, match: [application-override]}
+  - {id: user-id, name: User-ID group mapping and IP to user mapping, source: PCNSA - User-ID, match: [user-id]}
+  - {id: user-id-agent, name: User-ID agents and redistribution, source: PAN-OS admin guide - User-ID, match: [user-id-agent]}
+  - {id: url-filtering, name: URL filtering profiles and categories, source: PCNSA - Content-ID, match: [url-filtering]}
+  - {id: anti-spyware, name: Anti-spyware and DNS sinkhole, source: PCNSA - threat prevention, match: [anti-spyware-profile]}
+  - {id: vuln-protection, name: Vulnerability protection profiles, source: PCNSA - threat prevention, match: [vulnerability-protection]}
+  - {id: wildfire, name: WildFire analysis profiles, source: PCNSA - WildFire, match: [wildfire]}
+  - {id: file-blocking, name: File blocking and data filtering, source: PAN-OS admin guide - Content-ID, match: [file-blocking]}
+  - {id: zone-protection, name: Zone protection and DoS protection, source: PAN-OS admin guide - zone protection, match: [zone-protection]}
+  - {id: ssl-forward-proxy, name: SSL forward proxy decryption, source: PCNSE - decryption, match: [ssl-forward-proxy]}
+  - {id: ssl-inbound, name: SSL inbound inspection, source: PCNSE - decryption, match: [ssl-inbound-inspection]}
+  - {id: cert-mgmt, name: Certificate management, source: PAN-OS admin guide - certificate management, match: [certificate-management]}
+  - {id: qos, name: Quality of service policy, source: PAN-OS admin guide - QoS, match: [qos-policy]}
+  - {id: log-forwarding, name: Log forwarding profiles, source: PCNSA - monitoring, match: [log-forwarding]}
+  - {id: syslog-profile, name: Syslog server profiles, source: PAN-OS admin guide - monitoring, match: [syslog-server-profile]}
+  - {id: acc-reports, name: ACC and reports, source: PCNSA - monitoring, match: [application-command-center]}
+  - {id: ha-active-passive, name: High availability active passive, source: PCNSE - HA, match: [ha-active-passive]}
+  - {id: ha-active-active, name: High availability active active, source: PCNSE - HA, match: [ha-active-active]}
+  - {id: ha-monitoring, name: HA link and path monitoring, source: PCNSE - HA, match: [ha-path-monitoring]}
+  - {id: ipsec, name: Site to site IPsec VPN, source: PCNSE - VPN, match: [ipsec-tunnel]}
+  - {id: gp-gateway, name: GlobalProtect portal and gateway, source: GlobalProtect admin guide, match: [globalprotect-gateway]}
+  - {id: gp-hip, name: GlobalProtect host information profile, source: GlobalProtect admin guide, match: [host-information-profile]}
+  - {id: device-groups, name: Panorama device groups and rule hierarchy, source: Panorama admin guide, match: [device-groups]}
+  - {id: template-stacks, name: Panorama templates and template stacks, source: Panorama admin guide, match: [template-stacks]}
+  - {id: log-collector, name: Panorama log collectors and collector groups, source: Panorama admin guide, match: [log-collector]}
+  - {id: xml-api, name: XML API and REST API automation, source: PAN-OS XML API guide, match: [pan-os-xml-api]}
+  - {id: os-upgrade, name: PAN-OS software upgrade, source: PCNSE - operate and manage, match: [pan-os-upgrade]}
+  - {id: packet-flow, name: Packet flow and packet capture troubleshooting, source: PCNSE - troubleshoot, match: [packet-flow-debug]}
+  - {id: session-table, name: Session table and session management, source: PCNSE - troubleshoot, match: [session-table]}
+  - {id: dag, name: Tags and dynamic address groups, source: PAN-OS admin guide - objects, match: [dynamic-address-group]}
+  - {id: edl, name: External dynamic lists, source: PAN-OS admin guide - objects, match: [external-dynamic-list]}
+  - {id: vsys, name: Virtual systems, source: PAN-OS admin guide - virtual systems, match: [virtual-systems]}

@@ -1,0 +1,39 @@
+name: skills-ci
+# Minutes matter (private repo, monthly Actions limit): manual dispatch only. Agent and batch
+# PRs are linted locally by the merge runner (tools/lint.py), so no pull_request run is started.
+# To bring PR checks back later, add `pull_request:` under `on:` (the job below already skips
+# everything except batch-* branches and manual runs).
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: skills-ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.head_ref, 'batch-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # --changed-since needs the base branch history
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Lint skill frontmatter
+        run: python tools/lint.py
+      - name: Published ids never vanish; changed skills bump version
+        if: github.event_name == 'pull_request'
+        run: python tools/lint.py --changed-since origin/${{ github.base_ref }}
+      - name: Build the manifest and indexes
+        run: python tools/reindex.py
+      - name: Every served response starts with the licence notice
+        run: python tools/serve.py --selftest
+      - name: Level-2 fields cover every category and protect live fields
+        run: python taxonomy/fields/check.py
+      - name: Level-3 products are consistent and protect live products
+        run: python taxonomy/products/check.py
+      - name: Coverage specs are well-formed; report canonical-topic gaps
+        run: python tools/coverage_check.py --selftest && python tools/coverage_check.py

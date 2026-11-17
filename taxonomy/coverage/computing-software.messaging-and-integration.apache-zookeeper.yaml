@@ -1,0 +1,247 @@
+# Coverage spec for Apache ZooKeeper (computing-software / messaging-and-integration).
+subject: Apache ZooKeeper
+scope:
+  category: computing-software
+  field: messaging-and-integration
+  products: [apache-zookeeper]
+sources:
+  - "Apache ZooKeeper documentation (https://zookeeper.apache.org/doc/current/)"
+topics:
+  - id: overview
+    name: "ZooKeeper overview and data model"
+    source: https://zookeeper.apache.org/doc/current/zookeeperOver.html
+    match: ["overview", "data-model", "replicated-database"]
+    subtopics:
+      - {id: overview-performance, name: "Performance and reliability expectations", match: ["benchmarks", "read-write-ratio", "leader-election-time"]}
+  - id: getting-started-standalone
+    name: "Getting started: standalone mode"
+    source: https://zookeeper.apache.org/doc/current/zookeeperStarted.html
+    match: ["standalone", "getting-started", "zkserver"]
+  - id: getting-started-replicated
+    name: "Getting started: replicated mode"
+    source: https://zookeeper.apache.org/doc/current/zookeeperStarted.html
+    match: ["replicated-mode", "server-list", "initlimit", "synclimit"]
+  - id: prerequisites
+    name: "Prerequisites and supported platforms"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["prerequisites", "java", "supported-platforms"]
+  - id: ensemble-deployment
+    name: "Ensemble deployment and sizing"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["ensemble", "quorum", "fault-tolerance", "deployment"]
+  - id: myid-bootstrap
+    name: "myid and new ensemble bootstrap"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["myid", "initialize", "bootstrap"]
+  - id: minimum-config
+    name: "Minimum configuration"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["clientport", "datadir", "ticktime", "zoo-cfg"]
+  - id: multi-server-config
+    name: "Multi-server configuration"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["server-x", "connecttolearnermasterlimit", "standaloneenabled", "multiaddress"]
+  - id: data-directories
+    name: "Data and log directories"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["datalogdir", "transaction-log", "snapshot-files", "disk-layout"]
+  - id: maintenance-purge
+    name: "Maintenance: autopurge and purge tools"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["autopurge", "purgetxnlog", "zkcleanup", "retention"]
+  - id: snapshot-settings
+    name: "Snapshot triggers and compression"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["snapcount", "snapsizelimitinkb", "snapshot-compression", "preallocsize"]
+  - id: jvm-heap
+    name: "Java heap and things to avoid"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["java-heap", "swapping", "things-to-avoid"]
+  - id: cluster-election-options
+    name: "Cluster and election options"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["leaderserves", "cnxtimeout", "electionportbindretry", "quorumlistenonallips"]
+  - id: client-connections
+    name: "Connection limits and sessions settings"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["maxclientcnxns", "maxcnxns", "clientportaddress", "connection-limits"]
+  - id: throttling
+    name: "Throttling and request limits"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["throttling", "connectionmaxtokens", "requestthrottlelimit", "globaloutstandinglimit"]
+  - id: jute-maxbuffer
+    name: "jute.maxbuffer and unsafe options"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["jute-maxbuffer", "znode-size", "unsafe-options"]
+  - id: write-tuning
+    name: "Fsync and write-path tuning"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["fsync", "forcesync", "flushdelay", "write-tuning"]
+  - id: performance-threads
+    name: "Performance tuning: threads and processors"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["performance-tuning", "nio", "commitprocessor", "worker-threads"]
+  - id: container-ttl
+    name: "Container and TTL znodes"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["container-znode", "ttl-nodes", "extendedtypesenabled", "checkintervalms"]
+  - id: four-letter-words
+    name: "Four-letter-word commands"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["four-letter-words", "ruok", "mntr", "4lw-commands-whitelist"]
+  - id: admin-server
+    name: "AdminServer"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["adminserver", "commands-endpoint", "jetty"]
+    subtopics:
+      - {id: admin-server-security, name: "AdminServer hardening", match: ["hardening", "forcehttps", "needclientauth"]}
+  - id: tls
+    name: "TLS for clients and quorum"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["tls", "ssl", "keystore", "truststore"]
+    subtopics:
+      - {id: quorum-tls-upgrade, name: "Quorum TLS rolling upgrade", match: ["quorum-tls", "sslquorum", "portunification"]}
+  - id: authentication-config
+    name: "Authentication and superuser settings"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["authentication", "superuser", "superdigest", "digest-auth"]
+  - id: kerberos-enforce-auth
+    name: "Enforcing auth and Kerberos"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAdmin.html
+    match: ["enforce-auth", "kerberos", "canonicalizehostnames"]
+  - id: znode-types
+    name: "Znode types"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["znode", "ephemeral", "persistent", "sequential"]
+    subtopics:
+      - {id: sequential-counter, name: "Sequential node counter", match: ["sequential-nodes", "counter", "create-s"]}
+  - id: stat-structure
+    name: "Stat structure and versions"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["stat", "czxid", "version", "ephemeralowner"]
+  - id: watches
+    name: "Watches"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["watches", "one-time-trigger", "events"]
+    subtopics:
+      - {id: persistent-watches, name: "Persistent recursive watches", match: ["persistent-watches", "recursive-watches", "addwatch"]}
+  - id: acls
+    name: "ACLs and permissions"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["acl", "permissions", "acl-schemes", "addauth"]
+  - id: pluggable-auth
+    name: "Pluggable authentication"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["pluggable-authentication", "authenticationprovider", "authprovider"]
+  - id: sessions
+    name: "Sessions and timeouts"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["sessions", "session-timeout", "reconnection", "expiration"]
+    subtopics:
+      - {id: local-sessions, name: "Local sessions", match: ["local-sessions", "localsessionsenabled"]}
+  - id: consistency
+    name: "Consistency guarantees"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["consistency", "sequential-consistency", "stale-reads"]
+  - id: path-size-rules
+    name: "Path and data size rules"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["znode-paths", "path-rules", "data-size", "reserved-names"]
+  - id: bindings
+    name: "Java and C bindings"
+    source: https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html
+    match: ["java-client", "event-thread", "c-binding", "zookeeper-mt"]
+  - id: zab-internals
+    name: "Atomic broadcast internals"
+    source: https://zookeeper.apache.org/doc/current/zookeeperInternals.html
+    match: ["zab", "atomic-broadcast", "zxid", "epoch"]
+  - id: logging
+    name: "Logging guidelines"
+    source: https://zookeeper.apache.org/doc/current/zookeeperInternals.html
+    match: ["logging", "logback", "slf4j", "log-levels"]
+  - id: observers
+    name: "Observers"
+    source: https://zookeeper.apache.org/doc/current/zookeeperObservers.html
+    match: ["observers", "peertype", "non-voting"]
+    subtopics:
+      - {id: observer-masters, name: "Observer masters", match: ["observer-master", "observermasterport"]}
+  - id: reconfig-config
+    name: "Dynamic reconfiguration: config files"
+    source: https://zookeeper.apache.org/doc/current/zookeeperReconfig.html
+    match: ["dynamic-reconfiguration", "dynamicconfigfile", "reconfigenabled"]
+  - id: reconfig-command
+    name: "Reconfig command usage"
+    source: https://zookeeper.apache.org/doc/current/zookeeperReconfig.html
+    match: ["reconfig", "add-remove-servers", "incremental", "bulk"]
+  - id: reconfig-security
+    name: "Reconfig security and client rebalancing"
+    source: https://zookeeper.apache.org/doc/current/zookeeperReconfig.html
+    match: ["reconfig-security", "zookeeper-config", "client-rebalancing"]
+  - id: quotas
+    name: "Quotas"
+    source: https://zookeeper.apache.org/doc/current/zookeeperQuotas.html
+    match: ["quotas", "setquota", "hard-quota", "soft-quota"]
+  - id: audit-logs
+    name: "Audit logs"
+    source: https://zookeeper.apache.org/doc/current/zookeeperAuditLogs.html
+    match: ["audit-log", "audit-enable", "slf4jauditlogger"]
+  - id: prometheus
+    name: "Prometheus metrics and Grafana"
+    source: https://zookeeper.apache.org/doc/current/zookeeperMonitor.html
+    match: ["prometheus", "metrics", "metricsprovider", "grafana"]
+    subtopics:
+      - {id: alert-rules, name: "Alert rules", match: ["alerting", "alertmanager", "promtool"]}
+  - id: jmx
+    name: "JMX"
+    source: https://zookeeper.apache.org/doc/current/zookeeperJMX.html
+    match: ["jmx", "mbeans", "jconsole"]
+  - id: zkcli
+    name: "ZooKeeper CLI"
+    source: https://zookeeper.apache.org/doc/current/zookeeperCLI.html
+    match: ["zkcli", "zkcli-ls", "zkcli-create", "startup-options"]
+    subtopics:
+      - {id: zkcli-admin, name: "CLI ACL, quota, watch and reconfig commands", match: ["zkcli-setacl", "zkcli-quota", "removewatches", "reconfig-cli"]}
+  - id: snapshot-restore
+    name: "Snapshot and restore"
+    source: https://zookeeper.apache.org/doc/current/zookeeperSnapshotAndRestore.html
+    match: ["snapshot", "restore", "disaster-recovery", "backup"]
+  - id: tools
+    name: "Server scripts and offline tools"
+    source: https://zookeeper.apache.org/doc/current/zookeeperTools.html
+    match: ["zkserver-sh", "snapshotformatter", "snapshot-comparer", "zktxnlogtoolkit"]
+  - id: benchmarking
+    name: "Benchmarking and testing"
+    source: https://zookeeper.apache.org/doc/current/zookeeperTools.html
+    match: ["benchmark", "ycsb", "jepsen", "load-testing"]
+  - id: recipes-basics
+    name: "Recipes: group membership and cautions"
+    source: https://zookeeper.apache.org/doc/current/recipes.html
+    match: ["recipes", "group-membership", "herd-effect"]
+  - id: recipes-barriers
+    name: "Recipes: barriers"
+    source: https://zookeeper.apache.org/doc/current/recipes.html
+    match: ["barrier", "double-barrier", "synchronization"]
+  - id: recipes-queues
+    name: "Recipes: queues"
+    source: https://zookeeper.apache.org/doc/current/recipes.html
+    match: ["queue", "priority-queue", "producer-consumer"]
+  - id: recipes-locks
+    name: "Recipes: locks"
+    source: https://zookeeper.apache.org/doc/current/recipes.html
+    match: ["distributed-lock", "locknode", "read-write-lock", "revocable-lock"]
+  - id: recipes-election
+    name: "Recipes: leader election"
+    source: https://zookeeper.apache.org/doc/current/recipes.html
+    match: ["leader-election", "election-node", "predecessor-watch"]
+  - id: recipes-2pc
+    name: "Recipes: two-phase commit"
+    source: https://zookeeper.apache.org/doc/current/recipes.html
+    match: ["two-phase-commit", "coordinator", "voting"]
+  - id: tutorial
+    name: "Java tutorial: barrier and queue"
+    source: https://zookeeper.apache.org/doc/current/zookeeperTutorial.html
+    match: ["tutorial", "syncprimitive"]
+  - id: use-cases
+    name: "Use cases"
+    source: https://zookeeper.apache.org/doc/current/zookeeperUseCases.html
+    match: ["use-cases", "service-discovery", "hbase", "kafka"]

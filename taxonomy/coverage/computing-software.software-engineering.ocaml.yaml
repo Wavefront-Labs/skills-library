@@ -1,0 +1,342 @@
+# Canonical coverage spec: OCaml language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: ocaml-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [ocaml]
+sources:
+  - "OCaml manual (ocaml.org/manual) - language reference, tutorials, tools, compilers, runtime, parallelism with domains, effects"
+  - "OCaml Stdlib documentation (ocaml.org/manual/api) and Real World OCaml (dev.realworldocaml.org)"
+  - "ocaml.org/docs guides - dune, opam, ocamlformat, merlin, ocaml-lsp, and the OCaml programming guidelines"
+  - "dune and opam documentation (dune.readthedocs.io, opam.ocaml.org/doc)"
+  - "Alcotest, OUnit, ppx_expect, QCheck, odoc, ocamlformat, Lwt and Eio documentation"
+topics:
+  - id: ocaml-bindings
+    name: "Bindings, expressions and control flow"
+    source: "OCaml manual 11.7 expressions; ocaml.org tutorials"
+    match: [ocaml-bindings]
+    subtopics:
+      - {id: ocaml-bindings-let-bindings, name: "let, let rec, and-bindings and shadowing", match: [let-bindings]}
+      - {id: ocaml-bindings-if-match-loops, name: "if, match, while and for expressions", match: [if-match-loops]}
+      - {id: ocaml-bindings-functions-currying, name: "Functions, currying and partial application", match: [functions-currying]}
+  - id: ocaml-types
+    name: "Core data types"
+    source: "OCaml manual 11.8 type definitions; Stdlib"
+    match: [ocaml-types]
+    subtopics:
+      - {id: ocaml-types-numbers-chars-strings, name: "int, float, char, string, bool and operators", match: [numbers-chars-strings]}
+      - {id: ocaml-types-tuples-records, name: "Tuples and records", match: [tuples-records]}
+      - {id: ocaml-types-variants-options, name: "Variant types and option", match: [variants-options]}
+  - id: ocaml-patterns
+    name: "Pattern matching"
+    source: "OCaml manual 11.6 patterns"
+    match: [ocaml-patterns]
+    subtopics:
+      - {id: ocaml-patterns-patterns-guards, name: "Or-patterns, as, guards and ranges", match: [patterns-guards]}
+      - {id: ocaml-patterns-let-patterns-exception, name: "Destructuring let and match with exception", match: [let-patterns-exception]}
+  - id: ocaml-polymorphism
+    name: "Polymorphism and inference"
+    source: "OCaml manual 11.4 type system; RWO"
+    match: [ocaml-polymorphism]
+    subtopics:
+      - {id: ocaml-polymorphism-parametric-polymorphism, name: "Parametric polymorphism and type inference", match: [parametric-polymorphism]}
+      - {id: ocaml-polymorphism-value-restriction, name: "Value restriction and weak type variables", match: [value-restriction]}
+      - {id: ocaml-polymorphism-polymorphic-variants, name: "Polymorphic variants", match: [polymorphic-variants]}
+  - id: ocaml-modules
+    name: "Modules and functors"
+    source: "OCaml manual ch.2 modules and 11.9 module system; RWO"
+    match: [ocaml-modules]
+    subtopics:
+      - {id: ocaml-modules-structures-signatures, name: "Modules, structures and signatures (.ml/.mli)", match: [structures-signatures]}
+      - {id: ocaml-modules-functors, name: "Functors and sharing constraints", match: [functors]}
+      - {id: ocaml-modules-module-open-include, name: "open, include, local open and aliases", match: [module-open-include]}
+  - id: ocaml-imperative
+    name: "Imperative features and labels"
+    source: "OCaml manual 11.7 expressions, 5 labels; Stdlib"
+    match: [ocaml-imperative]
+    subtopics:
+      - {id: ocaml-imperative-references-mutability, name: "ref cells, mutable fields and arrays", match: [references-mutability]}
+      - {id: ocaml-imperative-labelled-optional-args, name: "Labelled and optional arguments", match: [labelled-optional-args]}
+      - {id: ocaml-imperative-lazy-evaluation, name: "Lazy values and Seq", match: [lazy-evaluation]}
+  - id: ocaml-advanced-types
+    name: "Advanced type system features"
+    source: "OCaml manual 11.10 GADTs, 8 extensions; RWO"
+    match: [ocaml-advanced-types]
+    subtopics:
+      - {id: ocaml-advanced-types-gadts, name: "GADTs and locally abstract types", match: [gadts]}
+      - {id: ocaml-advanced-types-phantom-private-types, name: "Phantom types and private types", match: [phantom-private-types]}
+      - {id: ocaml-advanced-types-extensible-variants, name: "Extensible variants (type t += ...)", match: [extensible-variants]}
+  - id: ocaml-objects
+    name: "Objects and classes"
+    source: "OCaml manual ch.3 objects in OCaml"
+    match: [ocaml-objects]
+    subtopics:
+      - {id: ocaml-objects-classes-objects, name: "Classes, methods and inheritance", match: [classes-objects]}
+      - {id: ocaml-objects-object-rows, name: "Structural object types and row polymorphism", match: [object-rows]}
+  - id: ocaml-stdlib-collections
+    name: "Standard library collections"
+    source: "Stdlib API: List, Array, Hashtbl, Map, Set, Seq"
+    match: [ocaml-stdlib-collections]
+    subtopics:
+      - {id: ocaml-stdlib-collections-list-module, name: "List module and tail recursion", match: [list-module]}
+      - {id: ocaml-stdlib-collections-array-bytes-buffer, name: "Array, Bytes and Buffer", match: [array-bytes-buffer]}
+      - {id: ocaml-stdlib-collections-hashtbl-map-set, name: "Hashtbl, Map and Set", match: [hashtbl-map-set]}
+      - {id: ocaml-stdlib-collections-option-result-either, name: "Option, Result and Either modules", match: [option-result-either]}
+      - {id: ocaml-stdlib-collections-seq-gc-misc-stdlib, name: "Sys, Filename, Random and Gc basics", match: [seq-gc-misc-stdlib]}
+  - id: ocaml-errors
+    name: "Error handling"
+    source: "OCaml manual exceptions chapter; Stdlib Printexc, Fun; RWO error handling"
+    match: [ocaml-errors]
+    subtopics:
+      - {id: ocaml-errors-exceptions, name: "Defining, raising and catching exceptions", match: [exceptions]}
+      - {id: ocaml-errors-backtraces, name: "Backtraces and Printexc", match: [backtraces]}
+      - {id: ocaml-errors-result-error-style, name: "Result types and error design", match: [result-error-style]}
+      - {id: ocaml-errors-binding-operators, name: "Binding operators (let*, and*, let+)", match: [binding-operators]}
+  - id: ocaml-memory-runtime
+    name: "Memory management and runtime"
+    source: "OCaml manual runtime chapters (OCAMLRUNPARAM), Gc and Weak docs"
+    match: [ocaml-memory-runtime]
+    subtopics:
+      - {id: ocaml-memory-runtime-gc-tuning, name: "GC tuning with OCAMLRUNPARAM and Gc", match: [gc-tuning]}
+      - {id: ocaml-memory-runtime-weak-ephemerons-finalise, name: "Weak, Ephemeron and Gc.finalise", match: [weak-ephemerons-finalise]}
+      - {id: ocaml-memory-runtime-stack-overflow-tailcalls, name: "Stack overflow and tail calls", match: [stack-overflow-tailcalls]}
+  - id: ocaml-concurrency
+    name: "Parallelism, domains and effects"
+    source: "OCaml manual ch.9 parallelism, ch.10 effects, Stdlib Domain/Atomic/Mutex"
+    match: [ocaml-concurrency]
+    subtopics:
+      - {id: ocaml-concurrency-domains-parallel, name: "Domains (OCaml 5 multicore)", match: [domains-parallel]}
+      - {id: ocaml-concurrency-atomic-mutex-memory-model, name: "Atomic, Mutex, Condition and the memory model", match: [atomic-mutex-memory-model]}
+      - {id: ocaml-concurrency-effects-handlers, name: "Effect handlers", match: [effects-handlers]}
+      - {id: ocaml-concurrency-threads-systhreads, name: "Systhreads (Thread module)", match: [threads-systhreads]}
+  - id: ocaml-lwt
+    name: "Lwt promises"
+    source: "Lwt documentation (ocsigen.org/lwt)"
+    match: [ocaml-lwt]
+    subtopics:
+      - {id: ocaml-lwt-lwt-basics, name: "Lwt promises, bind and Lwt_main.run", match: [lwt-basics]}
+      - {id: ocaml-lwt-lwt-concurrency, name: "Lwt.both, join, pick and streams", match: [lwt-concurrency]}
+  - id: ocaml-eio
+    name: "Eio direct-style concurrency"
+    source: "Eio documentation (github.com/ocaml-multicore/eio, ocaml.org/p/eio)"
+    match: [ocaml-eio]
+    subtopics:
+      - {id: ocaml-eio-eio-basics, name: "Eio_main.run, Switch and Fiber", match: [eio-basics]}
+      - {id: ocaml-eio-eio-io-net, name: "Eio files, network and Domain_manager", match: [eio-io-net]}
+  - id: ocaml-text-formatting
+    name: "Strings, formatting and text"
+    source: "Stdlib Printf, Format, Scanf, Str, Uchar; RWO"
+    match: [ocaml-text-formatting]
+    subtopics:
+      - {id: ocaml-text-formatting-printf-format, name: "Printf, Format and pretty-printing", match: [printf-format]}
+      - {id: ocaml-text-formatting-string-module-utf8, name: "String functions and UTF-8", match: [string-module-utf8]}
+      - {id: ocaml-text-formatting-regex-scanf, name: "Regular expressions and Scanf", match: [regex-scanf]}
+  - id: ocaml-io-unix
+    name: "Files, processes and the Unix library"
+    source: "Stdlib In_channel/Out_channel, Unix library docs"
+    match: [ocaml-io-unix]
+    subtopics:
+      - {id: ocaml-io-unix-file-io-channels, name: "File I/O with in_channel and out_channel", match: [file-io-channels]}
+      - {id: ocaml-io-unix-unix-processes, name: "Unix library: processes, pipes, signals", match: [unix-processes]}
+  - id: ocaml-serialization-cli
+    name: "Serialization and command-line interfaces"
+    source: "Yojson, ppx_deriving_yojson, sexplib, Marshal, Cmdliner docs"
+    match: [ocaml-serialization-cli]
+    subtopics:
+      - {id: ocaml-serialization-cli-json-yojson, name: "JSON with Yojson and ppx_deriving_yojson", match: [json-yojson]}
+      - {id: ocaml-serialization-cli-cmdliner, name: "Command-line apps with Cmdliner", match: [cmdliner]}
+      - {id: ocaml-serialization-cli-marshal-sexp, name: "Marshal and s-expression serialization", match: [marshal-sexp]}
+  - id: ocaml-toolchain
+    name: "Compilers and toplevel"
+    source: "OCaml manual ch.13-16 (ocamlc, ocamlopt, toplevel, ocamlfind)"
+    match: [ocaml-toolchain]
+    subtopics:
+      - {id: ocaml-toolchain-ocamlc-ocamlopt, name: "ocamlc, ocamlopt and ocamlfind commands", match: [ocamlc-ocamlopt]}
+      - {id: ocaml-toolchain-toplevel-utop, name: "The ocaml toplevel and utop", match: [toplevel-utop]}
+      - {id: ocaml-toolchain-flambda-options, name: "flambda and ocamlopt optimisation flags", match: [flambda-options]}
+  - id: ocaml-dune
+    name: "dune build system"
+    source: "dune documentation (dune.readthedocs.io)"
+    match: [ocaml-dune]
+    subtopics:
+      - {id: ocaml-dune-dune-project-layout, name: "dune-project, dune files and executables/libraries", match: [dune-project-layout]}
+      - {id: ocaml-dune-dune-commands, name: "dune build, test, exec, watch and promote", match: [dune-commands]}
+      - {id: ocaml-dune-dune-ppx-preprocess, name: "Dune preprocess, flags and profile settings", match: [dune-ppx-preprocess]}
+      - {id: ocaml-dune-dune-rules-cram, name: "Dune rule stanza, generated files and cram tests", match: [dune-rules-cram]}
+  - id: ocaml-opam
+    name: "opam package manager"
+    source: "opam documentation (opam.ocaml.org/doc)"
+    match: [ocaml-opam]
+    subtopics:
+      - {id: ocaml-opam-opam-switches, name: "opam init, switches and environment", match: [opam-switches]}
+      - {id: ocaml-opam-opam-packages-pin, name: "Installing, pinning and the opam file", match: [opam-packages-pin]}
+      - {id: ocaml-opam-opam-publish, name: "Publishing a package to opam-repository", match: [opam-publish]}
+  - id: ocaml-editor-tooling
+    name: "Editor tooling: Merlin and ocaml-lsp"
+    source: "ocaml.org/docs set up editor guides; Merlin and ocaml-lsp docs"
+    match: [ocaml-editor-tooling]
+    subtopics:
+      - {id: ocaml-editor-tooling-merlin-lsp-setup, name: "Setting up Merlin and ocaml-lsp-server", match: [merlin-lsp-setup]}
+      - {id: ocaml-editor-tooling-merlin-features, name: "Merlin features: holes, destruct, construct", match: [merlin-features]}
+  - id: ocaml-formatting
+    name: "ocamlformat"
+    source: "ocamlformat documentation (ocaml.org/p/ocamlformat)"
+    match: [ocaml-formatting]
+    subtopics:
+      - {id: ocaml-formatting-ocamlformat-config, name: ".ocamlformat configuration and dune fmt", match: [ocamlformat-config]}
+  - id: ocaml-testing
+    name: "Testing"
+    source: "Alcotest, OUnit2, ppx_expect, ppx_inline_test, QCheck documentation"
+    match: [ocaml-testing]
+    subtopics:
+      - {id: ocaml-testing-alcotest, name: "Unit tests with Alcotest", match: [alcotest]}
+      - {id: ocaml-testing-ounit2, name: "Unit tests with OUnit2", match: [ounit2]}
+      - {id: ocaml-testing-ppx-expect, name: "Expect tests with ppx_expect and inline tests", match: [ppx-expect]}
+      - {id: ocaml-testing-qcheck, name: "Property-based testing with QCheck", match: [qcheck]}
+      - {id: ocaml-testing-coverage-bisect, name: "Coverage with bisect_ppx", match: [coverage-bisect]}
+  - id: ocaml-docs-style
+    name: "Documentation and style"
+    source: "odoc documentation; OCaml programming guidelines on ocaml.org"
+    match: [ocaml-docs-style]
+    subtopics:
+      - {id: ocaml-docs-style-odoc-docs, name: "Documentation comments and odoc", match: [odoc-docs]}
+      - {id: ocaml-docs-style-ocaml-style-guidelines, name: "Programming guidelines and naming conventions", match: [ocaml-style-guidelines]}
+      - {id: ocaml-docs-style-warnings-linting, name: "Compiler warnings and -w flags", match: [warnings-linting]}
+  - id: ocaml-ppx
+    name: "Metaprogramming with ppx"
+    source: "ppxlib documentation (ocaml-ppx.github.io/ppxlib); ppx_deriving; OCaml manual attributes"
+    match: [ocaml-ppx]
+    subtopics:
+      - {id: ocaml-ppx-ppx-deriving-usage, name: "Using ppx_deriving and attributes", match: [ppx-deriving-usage]}
+      - {id: ocaml-ppx-ppxlib-write, name: "Writing a ppx with ppxlib", match: [ppxlib-write]}
+  - id: ocaml-ffi
+    name: "Interop with C and other targets"
+    source: "OCaml manual ch.22 C interface; ctypes; js_of_ocaml; Melange documentation"
+    match: [ocaml-ffi]
+    subtopics:
+      - {id: ocaml-ffi-c-stubs, name: "Calling C: external, CAMLparam and dune foreign_stubs", match: [c-stubs]}
+      - {id: ocaml-ffi-ctypes, name: "ctypes and foreign without writing C", match: [ctypes]}
+      - {id: ocaml-ffi-js-of-ocaml-melange, name: "OCaml in the browser: js_of_ocaml, wasm_of_ocaml, Melange", match: [js-of-ocaml-melange]}
+  - id: ocaml-debugging
+    name: "Debugging"
+    source: "OCaml manual ocamldebug chapter; ocaml.org debugging guides"
+    match: [ocaml-debugging]
+    subtopics:
+      - {id: ocaml-debugging-ocamldebug, name: "ocamldebug and bytecode debugging", match: [ocamldebug]}
+      - {id: ocaml-debugging-native-debugging, name: "Native debugging with gdb and lldb", match: [native-debugging]}
+      - {id: ocaml-debugging-printf-trace-debug, name: "Print debugging, assertions and toplevel tracing", match: [printf-trace-debug]}
+  - id: ocaml-performance
+    name: "Profiling and performance"
+    source: "OCaml manual native-code and profiling chapters; perf, Memtrace, bechamel docs"
+    match: [ocaml-performance]
+    subtopics:
+      - {id: ocaml-performance-perf-profiling, name: "Profiling native code with perf", match: [perf-profiling]}
+      - {id: ocaml-performance-memtrace, name: "Memtrace and allocation profiling", match: [memtrace]}
+      - {id: ocaml-performance-benchmarking, name: "Microbenchmarks with bechamel and core_bench", match: [benchmarking]}
+  - id: ocaml-deployment
+    name: "Deployment and CI"
+    source: "dune and opam docs; ocaml/setup-ocaml; ocaml.org Docker images"
+    match: [ocaml-deployment]
+    subtopics:
+      - {id: ocaml-deployment-static-binaries, name: "Release builds and static linking", match: [static-binaries]}
+      - {id: ocaml-deployment-docker-images, name: "Docker multi-stage builds for OCaml", match: [docker-images]}
+      - {id: ocaml-deployment-ci-github-actions, name: "GitHub Actions with setup-ocaml", match: [ci-github-actions]}
+  - id: ocaml-security
+    name: "Security"
+    source: "OCaml manual Obj/Marshal warnings; OWASP-style guidance applied to OCaml"
+    match: [ocaml-security]
+    subtopics:
+      - {id: ocaml-security-memory-safety-unsafe, name: "Memory safety and unsafe features", match: [memory-safety-unsafe]}
+      - {id: ocaml-security-crypto-randomness, name: "Cryptography and secure random numbers", match: [crypto-randomness]}
+      - {id: ocaml-security-supply-chain-opam, name: "Supply chain: opam pins, locks and auditing", match: [supply-chain-opam]}
+  - id: ocaml-ecosystem
+    name: "Standard-library alternatives and ecosystem libraries"
+    source: "Base/Core, Containers, Batteries documentation; opam ecosystem"
+    match: [ocaml-ecosystem]
+    subtopics:
+      - {id: ocaml-ecosystem-base-core, name: "Stdlib versus Base and Core", match: [base-core]}
+      - {id: ocaml-ecosystem-container-libs, name: "Containers, Fmt, Logs and other common libraries", match: [container-libs]}
+      - {id: ocaml-ecosystem-numerics-zarith, name: "Numerics: Zarith, Int64 and Bigarray", match: [numerics-zarith]}
+  - id: ocaml-parsing
+    name: "Parsing and lexing"
+    source: "Menhir, ocamllex, sedlex, Angstrom documentation"
+    match: [ocaml-parsing]
+    subtopics:
+      - {id: ocaml-parsing-ocamllex-menhir, name: "ocamllex and Menhir", match: [ocamllex-menhir]}
+      - {id: ocaml-parsing-angstrom-sedlex, name: "Parser combinators: Angstrom and sedlex", match: [angstrom-sedlex]}
+  - id: ocaml-web-db
+    name: "Web servers, HTTP and databases"
+    source: "Dream, Cohttp, Caqti documentation"
+    match: [ocaml-web-db]
+    subtopics:
+      - {id: ocaml-web-db-dream-web, name: "Web servers with Dream", match: [dream-web]}
+      - {id: ocaml-web-db-cohttp-client, name: "HTTP clients with cohttp and TLS", match: [cohttp-client]}
+      - {id: ocaml-web-db-caqti-database, name: "Databases with Caqti and SQLite/PostgreSQL", match: [caqti-database]}
+  - id: ocaml-versions
+    name: "OCaml versions and migration"
+    source: "OCaml release notes and Changes files (ocaml.org/releases)"
+    match: [ocaml-versions]
+    subtopics:
+      - {id: ocaml-versions-ocaml5-migration, name: "Migrating from OCaml 4.14 to 5.x", match: [ocaml5-migration]}
+      - {id: ocaml-versions-deprecations-and-compat, name: "Deprecations, alerts and stdlib evolution", match: [deprecations-and-compat]}
+  - id: ocaml-equality-types
+    name: "Equality, comparison and hashing"
+    source: "OCaml manual comparison semantics; Stdlib compare"
+    match: [ocaml-equality-types]
+    subtopics:
+      - {id: ocaml-equality-types-polymorphic-equality, name: "Polymorphic equality, compare and physical equality", match: [polymorphic-equality]}
+      - {id: ocaml-equality-types-data-structure-libs, name: "Queue, Stack, Hashtbl and priority queues", match: [data-structure-libs]}
+      - {id: ocaml-equality-types-type-error-reading, name: "Reading type errors and debugging inference", match: [type-error-reading]}
+  - id: ocaml-observability
+    name: "Logging and runtime observability"
+    source: "Logs and Runtime_events documentation"
+    match: [ocaml-observability]
+    subtopics:
+      - {id: ocaml-observability-logs-library, name: "The Logs library: sources, levels and reporters", match: [logs-library]}
+      - {id: ocaml-observability-runtime-events, name: "Runtime_events and olly tracing (OCaml 5)", match: [runtime-events]}
+  - id: ocaml-workspaces
+    name: "Multi-package projects and workspaces"
+    source: "dune documentation (workspaces, vendoring, packages)"
+    match: [ocaml-workspaces]
+    subtopics:
+      - {id: ocaml-workspaces-dune-multi-package, name: "Several libraries and packages in one dune project", match: [dune-multi-package]}
+      - {id: ocaml-workspaces-dune-vendoring, name: "Vendoring dependencies and dune workspaces", match: [dune-vendoring]}
+  - id: ocaml-time
+    name: "Time and dates"
+    source: "ptime, mtime, timedesc and Unix time docs"
+    match: [ocaml-time]
+    subtopics:
+      - {id: ocaml-time-time-ptime-mtime, name: "Wall-clock and monotonic time", match: [time-ptime-mtime]}
+      - {id: ocaml-time-dates-calendars, name: "Dates, time zones and calendar arithmetic", match: [dates-calendars]}
+  - id: ocaml-parallel-patterns
+    name: "Parallel and concurrent patterns"
+    source: "domainslib, Saturn documentation; OCaml manual ch.9"
+    match: [ocaml-parallel-patterns]
+    subtopics:
+      - {id: ocaml-parallel-patterns-domainslib-tasks, name: "Task pools and parallel_for with domainslib", match: [domainslib-tasks]}
+      - {id: ocaml-parallel-patterns-lockfree-saturn, name: "Lock-free queues and stacks with Saturn", match: [lockfree-saturn]}
+      - {id: ocaml-parallel-patterns-producer-consumer, name: "Producer/consumer with Mutex and Condition", match: [producer-consumer]}
+  - id: ocaml-functional-idioms
+    name: "Functional programming idioms"
+    source: "Real World OCaml; Okasaki-style idioms; OCaml manual"
+    match: [ocaml-functional-idioms]
+    subtopics:
+      - {id: ocaml-functional-idioms-folds-recursion, name: "Folds, structural recursion and accumulators", match: [folds-recursion]}
+      - {id: ocaml-functional-idioms-cps-continuations, name: "Continuation-passing style and defunctionalisation", match: [cps-continuations]}
+      - {id: ocaml-functional-idioms-monad-patterns, name: "Monads and applicatives in OCaml", match: [monad-patterns]}
+  - id: ocaml-compiler-inspection
+    name: "Inspecting compiler output"
+    source: "OCaml manual ch.13 batch compilation flags (-dsource, -dlambda, -S)"
+    match: [ocaml-compiler-inspection]
+    subtopics:
+      - {id: ocaml-compiler-inspection-dump-source-lambda, name: "-dsource, -dparsetree, -dtypedtree, -dlambda", match: [dump-source-lambda]}
+      - {id: ocaml-compiler-inspection-assembly-output, name: "ocamlopt -S assembly output", match: [assembly-output]}
+      - {id: ocaml-compiler-inspection-compiler-libs, name: "compiler-libs and ocamlobjinfo", match: [compiler-libs]}
+  - id: ocaml-runtime-bytecode
+    name: "Bytecode, runtime and linking"
+    source: "OCaml manual runtime and bytecode chapters (ocamlrun, ocamlc -custom, ocamlmklib)"
+    match: [ocaml-runtime-bytecode]
+    subtopics:
+      - {id: ocaml-runtime-bytecode-bytecode-executables, name: "Bytecode executables, ocamlrun and -custom", match: [bytecode-executables]}
+      - {id: ocaml-runtime-bytecode-runtime-variables, name: "Runtime environment variables", match: [runtime-variables]}

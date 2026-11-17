@@ -1,0 +1,385 @@
+# Canonical coverage spec: JavaScript language and web platform.
+# Topics come from external structures: ECMAScript (ECMA-262) clause structure, MDN JavaScript Guide/Reference
+# and Web APIs index, Google JavaScript Style Guide and ESLint core rule categories.
+# A topic is covered by a skill tag equal to a match keyword. Node-specific tooling lives in the typescript product.
+subject: javascript-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [javascript, typescript]
+sources:
+  - "ECMA-262 ECMAScript language specification (tc39.es/ecma262) - types, functions, objects, classes, iteration, promises, modules"
+  - "MDN Web Docs JavaScript Guide and Reference, and Web APIs (developer.mozilla.org)"
+  - "ESLint core rules and Google JavaScript Style Guide"
+topics:
+  - id: js-type-coercion
+    name: "Types equality and coercion"
+    source: "ECMA-262 clause 7 type conversion"
+    match: [type-coercion]
+    subtopics:
+      - {id: js-equality-algorithm, name: "Loose equality algorithm (==)", match: [loose-equality-algorithm]}
+      - {id: js-truthiness-toprimitive, name: "ToPrimitive and truthiness rules", match: [toprimitive]}
+  - id: js-numbers
+    name: "Numbers BigInt and Math"
+    source: "ECMA-262 Number and BigInt objects"
+    match: [js-numbers]
+    subtopics:
+      - {id: js-float-precision, name: "Floating point precision and safe integers", match: [float-precision]}
+      - {id: js-number-parsing, name: "Parsing and validating numbers", match: [number-parsing]}
+  - id: js-strings
+    name: "Strings and Unicode"
+    source: "ECMA-262 String objects; MDN String"
+    match: [js-strings]
+    subtopics:
+      - {id: js-string-normalization, name: "Unicode normalization and comparison", match: [string-normalize]}
+      - {id: js-grapheme-segmenter, name: "Grapheme-aware text with Intl.Segmenter", match: [intl-segmenter]}
+  - id: js-symbols
+    name: "Symbols and well-known symbols"
+    source: "ECMA-262 Symbol objects"
+    match: [js-symbols]
+    subtopics:
+      - {id: js-symbol-registry, name: "Global symbol registry and symbol keys", match: [symbol-for]}
+      - {id: js-symbol-hasinstance, name: "Customising operators with well-known symbols", match: [symbol-hasinstance]}
+  - id: js-scope
+    name: "Scope hoisting and the temporal dead zone"
+    source: "ECMA-262 environment records"
+    match: [js-scope]
+    subtopics:
+      - {id: js-closures-in-loops, name: "Closures captured in loops", match: [loop-closure-capture]}
+      - {id: js-module-pattern-iife, name: "IIFE and module-pattern encapsulation", match: [iife-pattern]}
+  - id: js-closures-this
+    name: "Closures and this binding"
+    source: "ECMA-262 function objects; MDN this"
+    match: [this-binding]
+    subtopics:
+      - {id: js-call-apply-bind, name: "call apply and bind", match: [function-bind]}
+      - {id: js-currying-composition, name: "Currying partial application and composition", match: [currying-composition]}
+  - id: js-functions
+    name: "Function parameters and arguments"
+    source: "ECMA-262 function definitions"
+    match: [js-functions]
+    subtopics:
+      - {id: js-default-rest-params, name: "Default and rest parameters", match: [rest-parameters]}
+      - {id: js-new-target-constructors, name: "Function kinds constructors and new.target", match: [new-target]}
+  - id: js-destructuring
+    name: "Destructuring and spread"
+    source: "ECMA-262 destructuring assignment"
+    match: [js-destructuring]
+    subtopics:
+      - {id: js-destructuring-patterns, name: "Nested destructuring patterns", match: [nested-destructuring]}
+      - {id: js-spread-copy-merge, name: "Spread for copying and merging", match: [spread-merge]}
+  - id: js-property-descriptors
+    name: "Property descriptors and freezing"
+    source: "ECMA-262 property attributes; MDN Object"
+    match: [js-property-descriptors]
+    subtopics:
+      - {id: js-getters-setters-defineproperty, name: "Accessors and Object.defineProperty", match: [object-defineproperty]}
+      - {id: js-seal-preventextensions, name: "Freeze seal and preventExtensions", match: [object-seal]}
+  - id: js-prototypes
+    name: "Prototypes and inheritance"
+    source: "ECMA-262 ordinary objects"
+    match: [prototype-chain]
+    subtopics:
+      - {id: js-object-create-setprototypeof, name: "Object.create and prototype manipulation", match: [object-create]}
+      - {id: js-class-inheritance-mixins, name: "Class inheritance super and mixins", match: [class-mixins]}
+  - id: js-class-fields
+    name: "Class fields private members and static"
+    source: "ECMA-262 class definitions"
+    match: [js-class-fields]
+    subtopics:
+      - {id: js-private-methods-brand-checks, name: "Private methods and brand checks", match: [private-in-check]}
+      - {id: js-static-blocks-accessors, name: "Static blocks and class accessors", match: [static-initialization-blocks]}
+  - id: js-proxy-reflect
+    name: "Proxy and Reflect"
+    source: "ECMA-262 Proxy and Reflect"
+    match: [js-proxy]
+    subtopics:
+      - {id: js-proxy-validation-observable, name: "Proxy traps for validation and observation", match: [proxy-traps]}
+      - {id: js-reflect-api, name: "Reflect API methods", match: [reflect-ownkeys]}
+  - id: js-arrays
+    name: "Array methods and sorting"
+    source: "ECMA-262 Array objects"
+    match: [js-arrays]
+    subtopics:
+      - {id: js-array-immutable-methods, name: "Non-mutating array methods", match: [array-tosorted]}
+      - {id: js-array-flat-reduce-group, name: "flat flatMap reduce and grouping", match: [array-flatmap]}
+  - id: js-typed-arrays
+    name: "Typed arrays ArrayBuffer and DataView"
+    source: "ECMA-262 indexed collections"
+    match: [js-typed-arrays]
+    subtopics:
+      - {id: js-dataview-endianness, name: "DataView and endianness", match: [dataview-endianness]}
+      - {id: js-buffer-slicing-transfer, name: "ArrayBuffer views resize and transfer", match: [arraybuffer-transfer]}
+  - id: js-collections
+    name: "Map Set WeakMap and WeakRef"
+    source: "ECMA-262 keyed collections"
+    match: [js-map-set]
+    subtopics:
+      - {id: js-weakmap-weakref, name: "WeakMap WeakSet and WeakRef", match: [weakref-finalization]}
+      - {id: js-set-operations, name: "Set algebra and Map patterns", match: [set-methods]}
+  - id: js-iteration
+    name: "Iterators and generators"
+    source: "ECMA-262 iteration protocols"
+    match: [js-generators]
+    subtopics:
+      - {id: js-iterator-helpers, name: "Iterator helpers", match: [iterator-helpers]}
+      - {id: js-custom-iterables, name: "Writing custom iterables and early exit", match: [custom-iterable]}
+  - id: js-promises
+    name: "Promises and async functions"
+    source: "ECMA-262 promise objects"
+    match: [promises]
+    subtopics:
+      - {id: js-promise-combinators, name: "Promise combinators", match: [promise-allsettled]}
+      - {id: js-unhandled-rejections, name: "Unhandled rejections and async error flow", match: [unhandled-rejection]}
+  - id: js-event-loop
+    name: "Event loop and microtasks"
+    source: "HTML Standard event loops; ECMA-262 jobs"
+    match: [js-event-loop]
+    subtopics:
+      - {id: js-microtask-queue-queuemicrotask, name: "Microtask queue and queueMicrotask", match: [queuemicrotask]}
+      - {id: js-long-tasks-yielding, name: "Long tasks and yielding to the main thread", match: [scheduler-yield]}
+  - id: js-modules
+    name: "ES modules"
+    source: "ECMA-262 modules"
+    match: [es-modules]
+    subtopics:
+      - {id: js-dynamic-import, name: "Dynamic import and top-level await", match: [dynamic-import]}
+      - {id: js-import-maps-bare-specifiers, name: "Import maps and bare specifiers", match: [import-maps]}
+  - id: js-error-handling
+    name: "Errors and exceptions"
+    source: "ECMA-262 Error objects"
+    match: [js-errors]
+    subtopics:
+      - {id: js-custom-error-classes, name: "Custom error classes", match: [custom-error-class]}
+      - {id: js-global-error-handlers, name: "Global error handlers and finally semantics", match: [window-onerror]}
+  - id: js-regex
+    name: "Regular expressions"
+    source: "ECMA-262 RegExp objects"
+    match: [js-regex]
+    subtopics:
+      - {id: js-regex-named-groups-lookbehind, name: "Named groups lookbehind and match APIs", match: [regex-named-groups]}
+      - {id: js-regex-redos, name: "Catastrophic backtracking (ReDoS)", match: [redos]}
+  - id: js-dates
+    name: "Dates time zones and Temporal"
+    source: "ECMA-262 Date; Temporal proposal"
+    match: [temporal-api]
+    subtopics:
+      - {id: js-date-parsing-pitfalls, name: "Date parsing and time zone pitfalls", match: [date-parsing]}
+      - {id: js-temporal-zoned, name: "Temporal ZonedDateTime and Duration", match: [temporal-zoneddatetime]}
+  - id: js-json
+    name: "JSON parse and stringify"
+    source: "ECMA-262 JSON object"
+    match: [js-json]
+    subtopics:
+      - {id: js-json-reviver-replacer, name: "JSON reviver replacer and toJSON", match: [json-reviver]}
+      - {id: js-json-safe-parsing, name: "Safe JSON parsing and prototype safety", match: [json-parse-errors]}
+  - id: js-copying
+    name: "Copying and immutability"
+    source: "HTML Standard structuredClone"
+    match: [structuredclone]
+    subtopics:
+      - {id: js-structuredclone-limits, name: "structuredClone limits and transfer", match: [structuredclone-transfer]}
+      - {id: js-deep-freeze-immutable-updates, name: "Immutable update patterns", match: [immutable-updates]}
+  - id: js-strict-mode
+    name: "Strict mode"
+    source: "ECMA-262 strict mode code"
+    match: [js-strict-mode]
+    subtopics:
+      - {id: js-sloppy-mode-this-globals, name: "Implicit globals and this in sloppy mode", match: [implicit-globals]}
+      - {id: js-eval-with-avoidance, name: "Avoiding eval new Function and with", match: [no-eval]}
+  - id: js-optional-chaining
+    name: "Optional chaining and nullish operators"
+    source: "ECMA-262 expressions"
+    match: [js-optional-chaining]
+    subtopics:
+      - {id: js-nullish-assignment, name: "Nullish coalescing and logical assignment", match: [logical-assignment]}
+      - {id: js-optional-chaining-pitfalls, name: "Optional chaining pitfalls", match: [optional-call]}
+  - id: js-template-literals
+    name: "Template literals and tagged templates"
+    source: "ECMA-262 template literals"
+    match: [js-template-literals]
+    subtopics:
+      - {id: js-tagged-template-safety, name: "Tagged templates for safe HTML and SQL", match: [tagged-template-escaping]}
+      - {id: js-string-raw-multiline, name: "String.raw and multiline strings", match: [string-raw]}
+  - id: js-control-flow
+    name: "Control flow and loops"
+    source: "ECMA-262 statements"
+    match: [js-control-flow]
+    subtopics:
+      - {id: js-switch-patterns, name: "switch statements and fall-through", match: [switch-fallthrough]}
+      - {id: js-loop-choice-forin-forof, name: "for...in vs for...of and loop choice", match: [for-in-vs-for-of]}
+  - id: js-memory
+    name: "Memory management and leaks"
+    source: "MDN memory management; DevTools memory docs"
+    match: [js-memory-leaks]
+    subtopics:
+      - {id: js-heap-snapshot-analysis, name: "Heap snapshots and allocation profiling", match: [heap-snapshot]}
+      - {id: js-leak-patterns-listeners, name: "Common leak sources", match: [detached-dom-nodes]}
+  - id: js-atomics
+    name: "SharedArrayBuffer and Atomics"
+    source: "ECMA-262 Atomics"
+    match: [js-atomics]
+    subtopics:
+      - {id: js-atomics-wait-notify, name: "Atomics.wait notify and locks", match: [atomics-wait]}
+      - {id: js-cross-origin-isolation, name: "Cross-origin isolation for SharedArrayBuffer", match: [cross-origin-isolation]}
+  - id: js-web-workers
+    name: "Web Workers"
+    source: "HTML Standard workers"
+    match: [js-web-workers]
+    subtopics:
+      - {id: js-shared-worker-channel, name: "SharedWorker MessageChannel and BroadcastChannel", match: [broadcastchannel]}
+      - {id: js-worker-offscreencanvas-pool, name: "OffscreenCanvas and worker pools", match: [offscreencanvas]}
+  - id: js-dom-manipulation
+    name: "DOM selection and manipulation"
+    source: "DOM Standard; MDN DOM"
+    match: [js-dom]
+    subtopics:
+      - {id: js-dom-fragment-batching, name: "Batch DOM updates and avoid layout thrash", match: [documentfragment]}
+      - {id: js-dom-safe-insertion, name: "Safe HTML insertion and traversal", match: [insertadjacenthtml]}
+  - id: js-dom-events
+    name: "DOM events and delegation"
+    source: "DOM Standard events"
+    match: [js-dom-events]
+    subtopics:
+      - {id: js-event-propagation-capture, name: "Event propagation and capture", match: [event-capture-phase]}
+      - {id: js-passive-listeners-custom-events, name: "Passive listeners and CustomEvent", match: [passive-listeners]}
+  - id: js-fetch
+    name: "Fetch API"
+    source: "Fetch Standard"
+    match: [js-fetch]
+    subtopics:
+      - {id: js-fetch-requests-headers, name: "Fetch requests: POST, headers and credentials", match: [fetch-post-json]}
+      - {id: js-fetch-streaming-retry, name: "Fetch retries timeouts and response streaming", match: [fetch-retry-backoff]}
+  - id: js-abort
+    name: "AbortController and cancellation"
+    source: "DOM Standard abort signals"
+    match: [abortcontroller]
+    subtopics:
+      - {id: js-abort-timeouts-any, name: "AbortSignal timeout and any", match: [abortsignal-any]}
+      - {id: js-abort-custom-apis, name: "Cancellation in your own APIs and listeners", match: [abort-listener-cleanup]}
+  - id: js-storage
+    name: "Web Storage and IndexedDB"
+    source: "HTML Standard web storage; IndexedDB spec"
+    match: [js-web-storage]
+    subtopics:
+      - {id: js-indexeddb-transactions, name: "IndexedDB transactions and versioning", match: [indexeddb-transaction]}
+      - {id: js-storage-quota-security, name: "Storage choices quota and security", match: [storage-quota]}
+  - id: js-url-blob
+    name: "URL FormData and Blob"
+    source: "URL Standard; File API"
+    match: [js-url-api]
+    subtopics:
+      - {id: js-file-api-blob-urls, name: "File Blob and object URLs", match: [createobjecturl]}
+      - {id: js-url-parsing-validation, name: "URL parsing and validation", match: [url-canparse]}
+  - id: js-observers
+    name: "Intersection Resize and Mutation observers"
+    source: "IntersectionObserver and ResizeObserver specs"
+    match: [js-observers]
+    subtopics:
+      - {id: js-intersection-observer-lazyload, name: "IntersectionObserver lazy loading and infinite scroll", match: [intersectionobserver-lazy]}
+      - {id: js-resize-mutation-observer-loops, name: "ResizeObserver and MutationObserver pitfalls", match: [resizeobserver-loop]}
+  - id: js-web-components
+    name: "Custom elements and Shadow DOM"
+    source: "HTML Standard custom elements; DOM shadow trees"
+    match: [js-custom-elements]
+    subtopics:
+      - {id: js-shadow-dom-slots-styling, name: "Shadow DOM slots and styling", match: [shadow-dom-slots]}
+      - {id: js-custom-element-lifecycle-forms, name: "Custom element lifecycle and form association", match: [form-associated-custom-elements]}
+  - id: js-service-workers
+    name: "Service workers and Cache API"
+    source: "Service Workers specification"
+    match: [js-service-workers]
+    subtopics:
+      - {id: js-sw-lifecycle-updates, name: "Service worker lifecycle and updates", match: [service-worker-update]}
+      - {id: js-sw-caching-strategies, name: "Service worker caching strategies and Workbox", match: [stale-while-revalidate]}
+  - id: js-security
+    name: "DOM XSS CSP and prototype pollution"
+    source: "OWASP DOM XSS cheat sheet; CSP spec"
+    match: [js-xss]
+    subtopics:
+      - {id: js-csp-trusted-types, name: "Content Security Policy and Trusted Types", match: [trusted-types]}
+      - {id: js-prototype-pollution-defence, name: "Prototype pollution defence", match: [prototype-pollution]}
+  - id: js-devtools
+    name: "Browser DevTools debugging"
+    source: "Chrome DevTools and Firefox DevTools docs"
+    match: [js-devtools]
+    subtopics:
+      - {id: js-devtools-breakpoints-watch, name: "Breakpoints logpoints and call stacks", match: [conditional-breakpoints]}
+      - {id: js-devtools-network-performance-panel, name: "DevTools Network and Performance panels", match: [devtools-network-throttling]}
+  - id: js-linting
+    name: "ESLint and style guides"
+    source: "ESLint docs; Google JavaScript Style Guide"
+    match: [js-eslint]
+    subtopics:
+      - {id: js-eslint-flat-config, name: "ESLint flat config", match: [eslint-flat-config]}
+      - {id: js-prettier-eslint-husky, name: "Prettier and pre-commit integration", match: [prettier-integration]}
+  - id: js-web-streams
+    name: "Web Streams"
+    source: "Streams Standard"
+    match: [js-web-streams]
+    subtopics:
+      - {id: js-readablestream-pipe, name: "ReadableStream pipeTo and backpressure", match: [readablestream-pipeto]}
+      - {id: js-transformstream-compression, name: "TransformStream CompressionStream and text decoding", match: [transformstream]}
+  - id: js-compat
+    name: "Browser compatibility and polyfills"
+    source: "Browserslist; MDN compatibility data"
+    match: [js-browser-compat]
+    subtopics:
+      - {id: js-browserslist-transpile, name: "Browserslist and transpilation targets", match: [browserslist]}
+      - {id: js-feature-detection, name: "Feature detection and progressive enhancement", match: [feature-detection]}
+  - id: js-timers
+    name: "Timers and scheduling"
+    source: "HTML Standard timers; requestAnimationFrame"
+    match: [js-timers]
+    subtopics:
+      - {id: js-raf-animation-loop, name: "requestAnimationFrame loops and timing", match: [requestanimationframe-loop]}
+      - {id: js-debounce-throttle, name: "Debounce throttle and timer drift", match: [debounce-throttle]}
+  - id: js-performance
+    name: "Performance API and Web Vitals"
+    source: "W3C Performance Timeline; web.dev vitals"
+    match: [js-performance-api]
+    subtopics:
+      - {id: js-web-vitals-measurement, name: "Core Web Vitals measurement", match: [web-vitals]}
+      - {id: js-user-timing-marks, name: "User Timing marks and measures", match: [performance-mark-measure]}
+  - id: js-versions
+    name: "ECMAScript editions and TC39 process"
+    source: "TC39 process document"
+    match: [js-ecmascript-versions]
+    subtopics:
+      - {id: js-baseline-feature-adoption, name: "Baseline status and adopting new features", match: [baseline-widely-available]}
+      - {id: js-tc39-proposal-tracking, name: "Tracking TC39 proposals and decorators", match: [tc39-proposals]}
+  - id: js-intl
+    name: "Intl formatting and locales"
+    source: "ECMA-402 Intl"
+    match: [intl]
+    subtopics:
+      - {id: js-intl-datetime-relative-list, name: "Intl DateTimeFormat RelativeTimeFormat and ListFormat", match: [intl-relativetimeformat]}
+      - {id: js-intl-number-plural-collator, name: "Intl NumberFormat PluralRules and Collator", match: [intl-pluralrules]}
+  - id: js-async-iteration
+    name: "Async iteration and for-await"
+    source: "ECMA-262 async iteration"
+    match: [async-iterators]
+    subtopics:
+      - {id: js-async-generators, name: "Async generators", match: [async-generator]}
+      - {id: js-for-await-concurrency, name: "for await with concurrency control", match: [for-await-pattern]}
+  - id: js-error-cause
+    name: "Error cause and AggregateError"
+    source: "ECMA-262 Error objects"
+    match: [error-cause]
+    subtopics:
+      - {id: js-aggregateerror-handling, name: "AggregateError and Promise.any failures", match: [aggregateerror]}
+      - {id: js-error-logging-serialization, name: "Error chaining logging and serialization", match: [error-serialization]}
+  - id: js-packages
+    name: "Package exports and publishing"
+    source: "Node.js package docs; npm docs"
+    match: [exports-field]
+    subtopics:
+      - {id: js-conditional-exports-dual, name: "Conditional exports and dual ESM/CJS packages", match: [conditional-exports]}
+      - {id: js-npm-publish-provenance, name: "Publishing to npm safely", match: [npm-provenance]}
+  - id: js-ts-interop
+    name: "JSDoc types and migrating to TypeScript"
+    source: "TypeScript handbook"
+    match: [js-to-ts-migration]
+    subtopics:
+      - {id: js-jsdoc-typecheck, name: "JSDoc types with checkJs", match: [jsdoc-typecheck]}
+      - {id: js-incremental-ts-migration, name: "Incremental TypeScript migration steps", match: [allowjs-migration]}

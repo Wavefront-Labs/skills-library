@@ -1,0 +1,854 @@
+# Canonical coverage spec for d-language, drawn from external sources listed below.
+subject: d-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products:
+  - d
+sources:
+- 'D language specification index (https://dlang.org/spec/spec.html): lexical, types, attributes, expressions, statements, declarations, templates, CTFE, memory, interop, traits and asm chapters'
+- 'Phobos library reference (https://dlang.org/phobos/index.html): std.algorithm, std.range, std.array, std.string, std.file, std.stdio, std.json, std.datetime, std.format, std.regex, std.conv, std.concurrency,
+  std.parallelism'
+- 'DUB package manager documentation (https://dub.pm/): dub.sdl and dub.json settings, commands, configurations, build types'
+- 'Programming in D by Ali Cehreli (https://ddili.org/ders/d.en/index.html): tutorial chapter order for fundamentals, ranges, templates, concurrency, memory'
+- 'dlang.org articles and tools (https://dlang.org/dmd-windows.html, https://dlang.org/articles.html): dmd switches, rdmd, DIP1000, betterC, C++ interop, code coverage'
+- 'code.dlang.org registry, vibe.d and Mir docs (https://vibed.org/, https://mir.dlang.io/): ecosystem libraries'
+topics:
+- id: lexical-structure
+  name: Lexical structure
+  source: 'Language spec: Lexical'
+  match:
+  - lexical-structure
+  subtopics:
+  - id: d-comments-and-ddoc
+    name: Comments and Ddoc documentation comments
+    match:
+    - d-comments-and-ddoc
+  - id: d-identifiers-keywords-literals
+    name: Identifiers, keywords and numeric literals
+    match:
+    - d-identifiers-keywords-literals
+  - id: d-string-and-char-literals
+    name: String, character and token-string literals
+    match:
+    - d-string-and-char-literals
+- id: types-and-conversions
+  name: Types, conversions and type deduction
+  source: 'Language spec: Types'
+  match:
+  - types-and-conversions
+  subtopics:
+  - id: d-basic-types-and-sizes
+    name: Basic types, sizes and initial values
+    match:
+    - d-basic-types-and-sizes
+  - id: d-implicit-conversions-promotion
+    name: Implicit conversions and integer promotion
+    match:
+    - d-implicit-conversions-promotion
+  - id: d-auto-typeof-type-deduction
+    name: auto, typeof, ReturnType and type deduction
+    match:
+    - d-auto-typeof-type-deduction
+- id: properties
+  name: Properties
+  source: 'Language spec: Properties'
+  match:
+  - properties
+  subtopics:
+  - id: d-type-and-array-properties
+    name: 'Type properties: .init .sizeof .stringof .mangleof'
+    match:
+    - d-type-and-array-properties
+  - id: d-user-defined-property-syntax
+    name: Property functions and @property
+    match:
+    - d-user-defined-property-syntax
+  - id: d-class-struct-tupleof-properties
+    name: Class and struct .tupleof, .classinfo, typeid
+    match:
+    - d-class-struct-tupleof-properties
+- id: attributes
+  name: Attributes
+  source: 'Language spec: Attributes'
+  match:
+  - attributes
+  subtopics:
+  - id: d-user-defined-attributes
+    name: User-defined attributes (UDAs)
+    match:
+    - d-user-defined-attributes
+  - id: d-visibility-linkage-attributes
+    name: Visibility, linkage and storage attributes
+    match:
+    - d-visibility-linkage-attributes
+  - id: d-thread-local-gshared-storage
+    name: Thread-local storage, __gshared, shared and static
+    match:
+    - d-thread-local-gshared-storage
+- id: pragmas
+  name: Pragmas
+  source: 'Language spec: Pragmas'
+  match:
+  - pragmas
+  subtopics:
+  - id: d-pragma-msg-lib-inline
+    name: pragma(msg), pragma(lib), pragma(inline)
+    match:
+    - d-pragma-msg-lib-inline
+  - id: d-pragma-mangle-crt-ldc
+    name: pragma(mangle), crt_constructor and LDC pragmas
+    match:
+    - d-pragma-mangle-crt-ldc
+  - id: d-version-debug-conditional-compilation
+    name: version, debug and static if conditional compilation
+    match:
+    - d-version-debug-conditional-compilation
+- id: expressions
+  name: Expressions and operators
+  source: 'Language spec: Expressions'
+  match:
+  - expressions
+  subtopics:
+  - id: d-operators-precedence-assignment
+    name: Operators, precedence and assignment expressions
+    match:
+    - d-operators-precedence-assignment
+  - id: d-is-expression-and-compile-time-checks
+    name: is() expressions and __traits(compiles) tests
+    match:
+    - d-is-expression-and-compile-time-checks
+  - id: d-new-cast-delete-assert-expressions
+    name: new, cast, assert and other special expressions
+    match:
+    - d-new-cast-delete-assert-expressions
+- id: statements
+  name: Statements and control flow
+  source: 'Language spec: Statements'
+  match:
+  - statements
+  subtopics:
+  - id: d-foreach-loops-and-opapply
+    name: foreach, ranges, opApply and loop control
+    match:
+    - d-foreach-loops-and-opapply
+  - id: d-switch-final-goto-statements
+    name: switch, final switch, goto case and mixin statements
+    match:
+    - d-switch-final-goto-statements
+  - id: d-scope-guard-statements
+    name: scope(exit), scope(success), scope(failure)
+    match:
+    - d-scope-guard-statements
+- id: arrays-and-slices
+  name: Arrays and slices
+  source: 'Language spec: Arrays'
+  match:
+  - arrays-and-slices
+  subtopics:
+  - id: d-dynamic-arrays-and-slices
+    name: Dynamic arrays and slice semantics
+    match:
+    - d-dynamic-arrays-and-slices
+  - id: d-slice-append-capacity-assumesafeappend
+    name: Append, capacity, reserve and assumeSafeAppend
+    match:
+    - d-slice-append-capacity-assumesafeappend
+  - id: d-static-arrays-and-array-operations
+    name: Static arrays, multidimensional arrays and array operations
+    match:
+    - d-static-arrays-and-array-operations
+- id: associative-arrays
+  name: Associative arrays
+  source: 'Language spec: Associative Arrays'
+  match:
+  - associative-arrays
+  subtopics:
+  - id: d-associative-array-basics
+    name: 'Associative array basics: declare, insert, lookup, remove'
+    match:
+    - d-associative-array-basics
+  - id: d-aa-iteration-bykeyvalue
+    name: Iterating associative arrays and sorted output
+    match:
+    - d-aa-iteration-bykeyvalue
+  - id: d-aa-custom-key-types-and-hash
+    name: Custom key types, toHash and opEquals
+    match:
+    - d-aa-custom-key-types-and-hash
+- id: structs-and-unions
+  name: Structs and unions
+  source: 'Language spec: Structs and Unions'
+  match:
+  - structs-and-unions
+  subtopics:
+  - id: d-struct-basics-and-initialization
+    name: Struct declaration, initialisers and value semantics
+    match:
+    - d-struct-basics-and-initialization
+  - id: d-struct-copy-constructor-postblit-destructor
+    name: Copy constructors, postblit, destructors and move
+    match:
+    - d-struct-copy-constructor-postblit-destructor
+  - id: d-unions-and-alias-this
+    name: Unions, tagged unions and alias this
+    match:
+    - d-unions-and-alias-this
+- id: classes
+  name: Classes
+  source: 'Language spec: Classes'
+  match:
+  - classes
+  subtopics:
+  - id: d-class-inheritance-and-virtual
+    name: Class inheritance, virtual methods, override and final
+    match:
+    - d-class-inheritance-and-virtual
+  - id: d-class-constructors-destructors-and-gc
+    name: Class constructors, destructors, and scope/RAII with classes
+    match:
+    - d-class-constructors-destructors-and-gc
+  - id: d-nested-inner-anonymous-classes-invariants
+    name: Nested, inner, anonymous classes and class invariants
+    match:
+    - d-nested-inner-anonymous-classes-invariants
+- id: interfaces
+  name: Interfaces
+  source: 'Language spec: Interfaces'
+  match:
+  - interfaces
+  subtopics:
+  - id: d-interface-declaration-and-implementation
+    name: Interface declaration, multiple implementation and final/static members
+    match:
+    - d-interface-declaration-and-implementation
+  - id: d-extern-cpp-com-interfaces
+    name: COM and C++ interfaces
+    match:
+    - d-extern-cpp-com-interfaces
+- id: enums
+  name: Enums
+  source: 'Language spec: Enums'
+  match:
+  - enums
+  subtopics:
+  - id: d-enum-basics-and-base-types
+    name: Named enums, base types, .min .max and conversions
+    match:
+    - d-enum-basics-and-base-types
+  - id: d-manifest-constants-and-anonymous-enums
+    name: Manifest constants and anonymous enums
+    match:
+    - d-manifest-constants-and-anonymous-enums
+- id: const-immutable
+  name: const, immutable, shared and inout
+  source: 'Language spec: Type qualifiers'
+  match:
+  - const-immutable
+  subtopics:
+  - id: d-const-immutable-transitivity
+    name: const vs immutable and transitive qualifiers
+    match:
+    - d-const-immutable-transitivity
+  - id: d-inout-and-qualifier-templates
+    name: inout parameters and qualifier-generic code
+    match:
+    - d-inout-and-qualifier-templates
+  - id: d-immutable-sharing-and-assumeunique
+    name: 'Building immutable data: assumeUnique, pure factories, immutable literals'
+    match:
+    - d-immutable-sharing-and-assumeunique
+- id: functions
+  name: Functions and parameters
+  source: 'Language spec: Functions'
+  match:
+  - functions
+  subtopics:
+  - id: d-parameter-storage-classes
+    name: 'Parameter storage classes: in, out, ref, lazy, scope, return'
+    match:
+    - d-parameter-storage-classes
+  - id: d-ref-returns-and-delegates-closures
+    name: ref returns, function pointers, delegates and closures
+    match:
+    - d-ref-returns-and-delegates-closures
+  - id: d-function-overloading-and-uniform-call
+    name: Function overloading, overload sets, and UFCS on functions
+    match:
+    - d-function-overloading-and-uniform-call
+- id: function-attributes
+  name: Function attributes
+  source: 'Language spec: Functions - attributes'
+  match:
+  - function-attributes
+  subtopics:
+  - id: d-pure-nothrow-functions
+    name: pure and nothrow functions
+    match:
+    - d-pure-nothrow-functions
+  - id: d-safe-trusted-system
+    name: '@safe, @trusted and @system memory safety'
+    match:
+    - d-safe-trusted-system
+  - id: d-nogc-and-attribute-inference
+    name: '@nogc, attribute inference and attribute-checking in CI'
+    match:
+    - d-nogc-and-attribute-inference
+- id: dip1000-scope
+  name: DIP1000 scope and return scope
+  source: 'dlang.org articles: Memory safety with DIP1000 / Spec: scope, return'
+  match:
+  - dip1000-scope
+  subtopics:
+  - id: d-dip1000-scope-parameters
+    name: scope parameters and -preview=dip1000
+    match:
+    - d-dip1000-scope-parameters
+  - id: d-dip1000-return-scope-ref
+    name: return scope, return ref and lifetime relations
+    match:
+    - d-dip1000-return-scope-ref
+  - id: d-dip1000-migration-workflow
+    name: Adopting DIP1000 in an existing codebase
+    match:
+    - d-dip1000-migration-workflow
+- id: templates
+  name: Templates
+  source: 'Language spec: Templates'
+  match:
+  - templates
+  subtopics:
+  - id: d-function-and-aggregate-templates
+    name: Function, struct and class templates
+    match:
+    - d-function-and-aggregate-templates
+  - id: d-template-constraints-and-concepts
+    name: Template constraints and compile-time concepts
+    match:
+    - d-template-constraints-and-concepts
+  - id: d-variadic-and-tuple-templates
+    name: Variadic templates, tuples and AliasSeq
+    match:
+    - d-variadic-and-tuple-templates
+  - id: d-template-mixins-and-alias-parameters
+    name: Template alias parameters, template this and template mixins
+    match:
+    - d-template-mixins-and-alias-parameters
+- id: mixins
+  name: Mixins and compile-time code generation
+  source: 'Language spec: Mixins'
+  match:
+  - mixins
+  subtopics:
+  - id: d-string-mixins
+    name: 'String mixins: mixin("...") and code generation'
+    match:
+    - d-string-mixins
+  - id: d-static-foreach-and-static-if-codegen
+    name: static foreach, static if and declaration generation
+    match:
+    - d-static-foreach-and-static-if-codegen
+- id: ctfe
+  name: Compile-time function execution (CTFE)
+  source: 'Language spec: Compile Time Function Execution'
+  match:
+  - ctfe
+  subtopics:
+  - id: d-ctfe-basics-and-limits
+    name: 'CTFE: what runs at compile time and its limits'
+    match:
+    - d-ctfe-basics-and-limits
+  - id: d-ctfe-lookup-tables-and-parsers
+    name: Build lookup tables and parse DSLs with CTFE and import()
+    match:
+    - d-ctfe-lookup-tables-and-parsers
+- id: contracts
+  name: Contract programming
+  source: 'Language spec: Contract Programming'
+  match:
+  - contracts
+  subtopics:
+  - id: d-in-out-contracts
+    name: in and out contracts, assert vs enforce
+    match:
+    - d-in-out-contracts
+  - id: d-invariants-and-assert-modes
+    name: Class and struct invariants, assert modes and -check/-release switches
+    match:
+    - d-invariants-and-assert-modes
+- id: unit-tests
+  name: Unit tests and coverage
+  source: 'Language spec: Unit Tests; dlang.org code coverage'
+  match:
+  - unit-tests
+  subtopics:
+  - id: d-unittest-blocks-and-dub-test
+    name: unittest blocks, -unittest and dub test
+    match:
+    - d-unittest-blocks-and-dub-test
+  - id: d-code-coverage-cov
+    name: Code coverage with -cov and .lst files
+    match:
+    - d-code-coverage-cov
+  - id: d-testing-practices-and-runners
+    name: Test organisation, fixtures and runners
+    match:
+    - d-testing-practices-and-runners
+- id: memory-management
+  name: 'Memory management: GC and manual'
+  source: 'Language spec: Garbage Collection; core.memory; std.experimental.allocator'
+  match:
+  - memory-management
+  subtopics:
+  - id: d-gc-behavior-and-tuning
+    name: How the D garbage collector works and tuning it
+    match:
+    - d-gc-behavior-and-tuning
+  - id: d-manual-memory-malloc-emplace
+    name: 'Manual memory: malloc, free, emplace and std.experimental.allocator'
+    match:
+    - d-manual-memory-malloc-emplace
+  - id: d-struct-raii-and-scope-lifetimes
+    name: RAII, destroy, scope and lifetime patterns in D
+    match:
+    - d-struct-raii-and-scope-lifetimes
+- id: betterc
+  name: BetterC mode
+  source: 'dlang.org: Better C'
+  match:
+  - betterc
+  subtopics:
+  - id: d-betterc-subset-and-switch
+    name: '-betterC: what is available and unavailable'
+    match:
+    - d-betterc-subset-and-switch
+  - id: d-betterc-embedding-and-library-use
+    name: Using BetterC for libraries, WebAssembly and embedded targets
+    match:
+    - d-betterc-embedding-and-library-use
+- id: ranges
+  name: Ranges
+  source: 'Programming in D: Ranges; std.range.primitives'
+  match:
+  - ranges
+  subtopics:
+  - id: d-range-primitives-and-categories
+    name: Range primitives and range categories
+    match:
+    - d-range-primitives-and-categories
+  - id: d-lazy-range-pipelines
+    name: Lazy range pipelines with UFCS chaining
+    match:
+    - d-lazy-range-pipelines
+  - id: d-output-ranges-and-custom-algorithms
+    name: Output ranges, Appender and writing range-generic algorithms
+    match:
+    - d-output-ranges-and-custom-algorithms
+- id: ufcs
+  name: Uniform Function Call Syntax
+  source: 'Language spec: Functions - UFCS; Programming in D: UFCS'
+  match:
+  - ufcs
+  subtopics:
+  - id: d-ufcs-method-chaining
+    name: 'UFCS: calling free functions as methods'
+    match:
+    - d-ufcs-method-chaining
+  - id: d-ufcs-design-guidelines
+    name: 'Designing APIs for UFCS: argument order, ranges and overloads'
+    match:
+    - d-ufcs-design-guidelines
+- id: concurrency-parallelism
+  name: Concurrency and parallelism
+  source: 'Language spec: Concurrency; Phobos: std.concurrency, core.atomic, core.thread, std.parallelism'
+  match:
+  - concurrency-parallelism
+  subtopics:
+  - id: d-std-concurrency-message-passing
+    name: 'std.concurrency: spawn, send, receive and Tid'
+    match:
+    - d-std-concurrency-message-passing
+  - id: d-shared-atomic-and-synchronized
+    name: shared, core.atomic and synchronized
+    match:
+    - d-shared-atomic-and-synchronized
+  - id: d-std-parallelism-taskpool
+    name: 'std.parallelism: parallel foreach, task, taskPool, parallel map/reduce'
+    match:
+    - d-std-parallelism-taskpool
+- id: interop
+  name: Interoperability with C, C++ and Objective-C
+  source: 'Language spec: Interfacing to C, C++, Objective-C; Application Binary Interface'
+  match:
+  - interop
+  subtopics:
+  - id: d-interop-c-extern-c
+    name: 'Calling and exposing C: extern(C), bindings, strings and structs'
+    match:
+    - d-interop-c-extern-c
+  - id: d-interop-cpp-extern-cpp
+    name: 'C++ interop: extern(C++), namespaces, classes and templates'
+    match:
+    - d-interop-cpp-extern-cpp
+  - id: d-interop-objc-and-abi
+    name: Objective-C interop and the D ABI (calling conventions, name mangling)
+    match:
+    - d-interop-objc-and-abi
+- id: modules-packages
+  name: Modules and packages
+  source: 'Language spec: Modules'
+  match:
+  - modules-packages
+  subtopics:
+  - id: d-module-declaration-imports
+    name: Module declarations, imports, selective and renamed imports
+    match:
+    - d-module-declaration-imports
+  - id: d-package-d-and-project-layout
+    name: package.d, project layout and dub source folders
+    match:
+    - d-package-d-and-project-layout
+- id: error-handling
+  name: Error handling
+  source: 'Language spec: Errors, Statements try/throw; std.exception'
+  match:
+  - error-handling
+  subtopics:
+  - id: d-exceptions-and-error-classes
+    name: 'Exceptions vs Errors: throw, catch, Throwable hierarchy'
+    match:
+    - d-exceptions-and-error-classes
+  - id: d-enforce-collectexception-and-result-patterns
+    name: enforce, collectException, nullable and error-as-value patterns
+    match:
+    - d-enforce-collectexception-and-result-patterns
+- id: traits
+  name: Traits and compile-time reflection
+  source: 'Language spec: Traits; std.traits; std.meta'
+  match:
+  - traits
+  subtopics:
+  - id: d-traits-keywords-core
+    name: '__traits: allMembers, getMember, identifier, hasMember, isSame'
+    match:
+    - d-traits-keywords-core
+  - id: d-std-traits-and-std-meta
+    name: std.traits and std.meta utilities
+    match:
+    - d-std-traits-and-std-meta
+- id: inline-asm
+  name: Inline assembler
+  source: 'Language spec: Inline Assembler'
+  match:
+  - inline-asm
+  subtopics:
+  - id: d-inline-asm-x86-syntax
+    name: asm blocks on x86 and x86-64 (dmd syntax)
+    match:
+    - d-inline-asm-x86-syntax
+  - id: d-ldc-gdc-extended-asm-and-simd
+    name: LDC/GDC extended asm and core.simd
+    match:
+    - d-ldc-gdc-extended-asm-and-simd
+- id: operator-overloading
+  name: Operator overloading
+  source: 'Language spec: Operator Overloading'
+  match:
+  - operator-overloading
+  subtopics:
+  - id: d-unary-binary-op-overloads
+    name: opUnary, opBinary, opBinaryRight and opOpAssign
+    match:
+    - d-unary-binary-op-overloads
+  - id: d-opequals-opcmp-opindex-opcall
+    name: opEquals, opCmp, opIndex, opSlice, opDollar, opCall and opCast
+    match:
+    - d-opequals-opcmp-opindex-opcall
+  - id: d-opdispatch-and-proxy-types
+    name: opDispatch, alias this and proxy/wrapper types
+    match:
+    - d-opdispatch-and-proxy-types
+- id: std-algorithm
+  name: std.algorithm
+  source: 'Phobos: std.algorithm (comparison, iteration, mutation, searching, setops, sorting)'
+  match:
+  - std-algorithm
+  subtopics:
+  - id: d-algorithm-iteration-map-filter-fold
+    name: 'std.algorithm.iteration: map, filter, fold, reduce, joiner, splitter, uniq, group'
+    match:
+    - d-algorithm-iteration-map-filter-fold
+  - id: d-algorithm-searching-find-canfind-count
+    name: 'std.algorithm.searching: find, canFind, count, startsWith, until, minElement'
+    match:
+    - d-algorithm-searching-find-canfind-count
+  - id: d-algorithm-sorting-and-set-operations
+    name: std.algorithm sorting, mutation and set operations
+    match:
+    - d-algorithm-sorting-and-set-operations
+- id: std-range
+  name: std.range
+  source: 'Phobos: std.range, std.range.primitives, std.range.interfaces'
+  match:
+  - std-range
+  subtopics:
+  - id: d-range-constructors-iota-chain-zip
+    name: 'std.range constructors: iota, chain, zip, repeat, generate, recurrence, only'
+    match:
+    - d-range-constructors-iota-chain-zip
+  - id: d-range-adaptors-take-drop-chunks-stride
+    name: 'std.range adaptors: take, drop, chunks, slide, stride, retro, tail, padRight'
+    match:
+    - d-range-adaptors-take-drop-chunks-stride
+  - id: d-range-auto-decoding-and-strings
+    name: 'Strings as ranges: auto-decoding, byCodeUnit, byChar, byGrapheme'
+    match:
+    - d-range-auto-decoding-and-strings
+- id: std-array
+  name: std.array
+  source: 'Phobos: std.array'
+  match:
+  - std-array
+  subtopics:
+  - id: d-array-conversion-and-building
+    name: 'std.array: array(), appender, assocArray, split, join, replicate, minimallyInitializedArray'
+    match:
+    - d-array-conversion-and-building
+  - id: d-array-insert-replace-slice
+    name: 'Inserting, replacing and slicing: insertInPlace, replace, replaceInPlace, popBack'
+    match:
+    - d-array-insert-replace-slice
+  - id: d-array-appender-performance
+    name: 'Array performance: reserve, appender and avoiding repeated concatenation'
+    match:
+    - d-array-appender-performance
+- id: std-string
+  name: std.string and std.uni
+  source: 'Phobos: std.string, std.uni, std.utf, std.ascii, std.algorithm.searching'
+  match:
+  - std-string
+  subtopics:
+  - id: d-string-search-and-transform
+    name: 'std.string: indexOf, strip, split, toUpper, replace, format helpers'
+    match:
+    - d-string-search-and-transform
+  - id: d-string-unicode-and-utf
+    name: 'Unicode in D: std.utf, std.uni, normalization and case'
+    match:
+    - d-string-unicode-and-utf
+  - id: d-string-parsing-and-formatting-helpers
+    name: 'String parsing helpers: parse, munch, split by delimiter, strip, csvReader'
+    match:
+    - d-string-parsing-and-formatting-helpers
+- id: std-file
+  name: std.file and std.path
+  source: 'Phobos: std.file, std.path, std.process'
+  match:
+  - std-file
+  subtopics:
+  - id: d-file-read-write-and-attributes
+    name: 'std.file: read, write, readText, append, exists, remove, rename, copy, stat'
+    match:
+    - d-file-read-write-and-attributes
+  - id: d-file-direntries-and-paths
+    name: Directory traversal with dirEntries and path manipulation (std.path)
+    match:
+    - d-file-direntries-and-paths
+  - id: d-process-spawn-and-execute
+    name: 'Running programs: std.process execute, pipeProcess, spawnProcess'
+    match:
+    - d-process-spawn-and-execute
+- id: std-stdio
+  name: std.stdio
+  source: 'Phobos: std.stdio'
+  match:
+  - std-stdio
+  subtopics:
+  - id: d-stdio-write-readln-and-file
+    name: writeln, writefln, readln, File open modes and byLine
+    match:
+    - d-stdio-write-readln-and-file
+  - id: d-stdio-binary-io-and-stdin-patterns
+    name: Binary I/O, stdin processing patterns and std.mmfile
+    match:
+    - d-stdio-binary-io-and-stdin-patterns
+- id: std-json
+  name: std.json
+  source: 'Phobos: std.json; code.dlang.org serialization packages'
+  match:
+  - std-json
+  subtopics:
+  - id: d-json-parse-and-navigate
+    name: parseJSON, JSONValue navigation and type checks
+    match:
+    - d-json-parse-and-navigate
+  - id: d-json-build-and-serialize
+    name: Building JSONValue and toJSON / toPrettyString output
+    match:
+    - d-json-build-and-serialize
+- id: std-datetime
+  name: std.datetime
+  source: 'Phobos: std.datetime (systime, date, timezone, interval, stopwatch), core.time'
+  match:
+  - std-datetime
+  subtopics:
+  - id: d-datetime-date-time-systime
+    name: Date, TimeOfDay, DateTime and SysTime
+    match:
+    - d-datetime-date-time-systime
+  - id: d-datetime-timezones-and-durations
+    name: Time zones, core.time Duration and StopWatch
+    match:
+    - d-datetime-timezones-and-durations
+  - id: d-datetime-parsing-and-formatting
+    name: Parsing and formatting dates (ISO 8601, custom formats, std.format)
+    match:
+    - d-datetime-parsing-and-formatting
+- id: std-format
+  name: std.format
+  source: 'Phobos: std.format'
+  match:
+  - std-format
+  subtopics:
+  - id: d-format-specifiers-and-writefln
+    name: 'format specifiers: %s %d %f %x %e %( %) and widths'
+    match:
+    - d-format-specifiers-and-writefln
+  - id: d-format-tostring-and-custom-formatters
+    name: Custom toString, formattedRead and text/to-string conversions
+    match:
+    - d-format-tostring-and-custom-formatters
+- id: std-regex
+  name: std.regex
+  source: 'Phobos: std.regex'
+  match:
+  - std-regex
+  subtopics:
+  - id: d-regex-match-and-captures
+    name: regex, matchFirst, matchAll, captures and flags
+    match:
+    - d-regex-match-and-captures
+  - id: d-regex-replace-split-and-performance
+    name: replace, split, splitter with regex and regex performance
+    match:
+    - d-regex-replace-split-and-performance
+- id: std-conv
+  name: std.conv
+  source: 'Phobos: std.conv'
+  match:
+  - std-conv
+  subtopics:
+  - id: d-conv-to-parse-and-text
+    name: to!T conversions, parse, text and safe numeric casts
+    match:
+    - d-conv-to-parse-and-text
+  - id: d-conv-emplace-and-castfrom-helpers
+    name: emplace, castFrom, roundTo and other std.conv helpers
+    match:
+    - d-conv-emplace-and-castfrom-helpers
+- id: dmd-compiler
+  name: The dmd compiler
+  source: 'dlang.org: DMD documentation (https://dlang.org/dmd-windows.html, dmd-linux.html)'
+  match:
+  - dmd-compiler
+  subtopics:
+  - id: d-dmd-common-switches
+    name: 'dmd command line: -of -od -c -i -O -release -inline -g -w -wi -I -L'
+    match:
+    - d-dmd-common-switches
+  - id: d-dmd-conf-and-install
+    name: Installing D, dmd.conf / sc.ini and DFLAGS
+    match:
+    - d-dmd-conf-and-install
+- id: ldc-gdc-compilers
+  name: LDC and GDC compilers
+  source: LDC wiki (https://wiki.dlang.org/LDC) and GDC (https://gdcproject.org/)
+  match:
+  - ldc-gdc-compilers
+  subtopics:
+  - id: d-ldc2-optimized-builds
+    name: 'ldc2: optimisation levels, LTO, PGO and cross compilation'
+    match:
+    - d-ldc2-optimized-builds
+  - id: d-gdc-and-compiler-differences
+    name: GDC and choosing between dmd, ldc2 and gdc
+    match:
+    - d-gdc-and-compiler-differences
+- id: dub-configuration
+  name: 'DUB: package recipes (dub.sdl and dub.json)'
+  source: DUB package format docs (https://dub.pm/dub-guide/recipe/)
+  match:
+  - dub-configuration
+  subtopics:
+  - id: d-dub-sdl-json-recipe-basics
+    name: 'dub.sdl and dub.json: name, targetType, sourcePaths, dependencies, versions'
+    match:
+    - d-dub-sdl-json-recipe-basics
+  - id: d-dub-configurations-and-build-types
+    name: DUB configurations, subConfigurations and build types
+    match:
+    - d-dub-configurations-and-build-types
+  - id: d-dub-selections-lock-and-versions
+    name: dub.selections.json, version ranges and lockfiles
+    match:
+    - d-dub-selections-lock-and-versions
+- id: dub-commands
+  name: DUB commands and registry
+  source: DUB command line reference and code.dlang.org
+  match:
+  - dub-commands
+  subtopics:
+  - id: d-dub-init-build-run-test
+    name: dub init, build, run, test, lint, describe and common options
+    match:
+    - d-dub-init-build-run-test
+  - id: d-dub-publish-registry-and-package-layout
+    name: 'Publishing to code.dlang.org: tags, semver, docs and the registry'
+    match:
+    - d-dub-publish-registry-and-package-layout
+- id: dev-tools
+  name: 'Developer tools: rdmd, dfmt, dscanner, serve-d, debuggers'
+  source: dlang.org tools page (https://wiki.dlang.org/Editors, https://github.com/dlang-community)
+  match:
+  - dev-tools
+  subtopics:
+  - id: d-rdmd-scripts-and-shebang
+    name: 'rdmd: running D files as scripts, --eval, --loop and shebang'
+    match:
+    - d-rdmd-scripts-and-shebang
+  - id: d-dfmt-dscanner-and-editor-tooling
+    name: dfmt, dscanner, serve-d and editorconfig
+    match:
+    - d-dfmt-dscanner-and-editor-tooling
+  - id: d-debugging-profiling-sanitizers
+    name: 'Debugging and profiling: gdb, lldb, -g, -profile, valgrind, sanitizers'
+    match:
+    - d-debugging-profiling-sanitizers
+- id: ecosystem-vibed
+  name: vibe.d web framework
+  source: vibe.d documentation (https://vibed.org/docs)
+  match:
+  - ecosystem-vibed
+  subtopics:
+  - id: d-vibed-http-server-and-router
+    name: 'vibe.d basics: listenHTTP, URLRouter, request/response and async I/O'
+    match:
+    - d-vibed-http-server-and-router
+  - id: d-vibed-rest-diet-and-mongo
+    name: vibe.d REST interfaces, Diet templates, sessions and database access
+    match:
+    - d-vibed-rest-diet-and-mongo
+- id: ecosystem-mir
+  name: Mir numerical and data libraries
+  source: Mir documentation (https://mir.dlang.io/, https://github.com/libmir)
+  match:
+  - ecosystem-mir
+  subtopics:
+  - id: d-mir-ndslice-basics
+    name: 'mir-algorithm ndslice: slice, iota, map, strides and views'
+    match:
+    - d-mir-ndslice-basics
+  - id: d-mir-ion-random-and-linalg
+    name: 'Mir ecosystem: mir-ion serialization, mir-random, lubeck linear algebra'
+    match:
+    - d-mir-ion-random-and-linalg

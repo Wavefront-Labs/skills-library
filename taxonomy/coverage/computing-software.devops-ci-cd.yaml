@@ -1,0 +1,1805 @@
+# Canonical coverage spec: DevOps / CI-CD (whole field).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (official docs tables of contents, the
+# DORA/Accelerate capability list, SLSA levels, the Continuous Delivery book), not from what we
+# happened to write, so the check measures the library against the subject.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (docs page
+# sub-headings, workflow-syntax keywords, the GitLab keyword reference, Jenkins step reference,
+# Argo CD docs sections, SLSA requirements, CD book sub-sections).
+# Depth round 2: every topic expanded to at least 8 subtopics from the next level of each source
+# (workflow-syntax keys and docs sub-pages, GitLab keyword entries, Jenkins steps, Argo CD/Flux
+# sub-pages, SLSA requirements, CD book sub-sections).
+subject: devops-ci-cd
+scope:
+  category: computing-software
+  field: devops-ci-cd
+  products: [github-actions, gitlab-ci, jenkins, argo-cd, ci-pipeline-design, release-engineering, deployment-strategies, build-systems, secrets-management]
+sources:
+  - "GitHub Actions docs ToC (docs.github.com/actions) - Writing workflows (syntax, triggers, expressions, contexts, concurrency), Using jobs (matrix, outputs, services), Managing workflow runs (artifacts, cache, debugging, re-runs), Sharing automations (reusable workflows, composite/JS/Docker actions, Marketplace), Security (GITHUB_TOKEN, OIDC, secrets, hardening, SHA pinning), Hosting runners (self-hosted, ARC, larger runners), Monitoring/usage limits, Publishing packages; subtopics from the Workflow syntax reference keyword list and each page's sub-headings"
+  - "GitLab CI/CD docs ToC (docs.gitlab.com/ee/ci) - .gitlab-ci.yml keyword reference, Pipelines (stages/needs, MR pipelines, merge trains, parent-child, multi-project, schedules, triggers), Jobs (rules, retry/timeout, artifacts reports, caching), Variables, Environments & deployments (review apps, protected environments, deployment safety, freeze periods, resource_group), Runners, Docker (dind, kaniko, registry), Services, Components/catalog, Security scanning (SAST/DAST/dependency/container/secret detection), Releases, Package registry, Auto DevOps, Agent for Kubernetes, Pipeline efficiency, Debugging; subtopics from the CI/CD YAML keyword reference sub-keywords"
+  - "Jenkins User Handbook (jenkins.io/doc/book) - Pipeline (getting started, Jenkinsfile, running pipelines, branches & PRs/multibranch, dev tools, shared libraries, pipeline syntax, Docker), Managing Jenkins (JCasC, plugins, security, credentials, system config), Securing Jenkins, Scaling Jenkins (controller tuning, agents, cloud agents), Managing nodes, Build triggers, Glossary; plus Kubernetes plugin, Job DSL, Blue Ocean, Pipeline durability docs; subtopics from the Pipeline Steps Reference and directive sections"
+  - "Argo CD docs ToC (argo-cd.readthedocs.io) - Core concepts, Getting started/Installation (HA), Operator manual (declarative setup, RBAC, SSO, cluster management, resource tracking/health/exclusions, sync windows, notifications, metrics, disaster recovery, ingress, high availability, config management plugins, ApplicationSet generators), User guide (sync options, sync waves/hooks, diffing, Helm/Kustomize/Jsonnet, private repos, orphaned resources, CLI), Argo Rollouts, Image Updater; Flux v2 docs (sources, Kustomization, HelmRelease, image automation); subtopics from each docs section's headings"
+  - "DORA / Accelerate (Forsgren, Humble, Kim) - four key metrics (deployment frequency, lead time, change failure rate, time to restore) + reliability; 24 capabilities incl. version control, deployment automation, continuous integration, trunk-based development, test automation, test data management, shift left on security, continuous delivery, loosely coupled architecture, monitoring, proactive notification, lightweight change approval, database change management"
+  - "SLSA v1.0 (slsa.dev) - Build track L0-L3 (provenance exists, hosted build platform, hardened build/isolation), provenance generation and verification, in-toto attestations; Sigstore cosign; SBOM (SPDX/CycloneDX); dependency pinning; subtopics from the SLSA requirements list and Sigstore/Syft docs"
+  - "Continuous Delivery (Humble & Farley) chapters - 2 Configuration Management, 3 Continuous Integration, 4 Testing Strategy, 5 Anatomy of the Deployment Pipeline, 6 Build and Deployment Scripting, 7 Commit Stage, 8 Automated Acceptance Testing, 9 Testing Nonfunctional Requirements, 10 Deploying and Releasing, 11 Managing Infrastructure and Environments, 12 Managing Data, 13 Managing Components and Dependencies, 14 Advanced Version Control, 15 Managing Continuous Delivery (maturity, compliance and auditing); subtopics from chapter sub-sections"
+topics:
+  # --- GitHub Actions (docs.github.com/actions ToC)
+  - id: gha-workflow-syntax
+    name: Workflow syntax (on/jobs/steps/runs-on)
+    source: GHA docs/Workflow syntax reference
+    match: [workflow-syntax, workflow, jobs-steps]
+    subtopics:
+      - {id: gha-ws-defaults-run, name: defaults.run shell and working-directory, match: [defaults-run, working-directory, shell-keyword]}
+      - {id: gha-ws-env, name: env at workflow/job/step and precedence, match: [env-precedence, env-keyword]}
+      - {id: gha-ws-timeout, name: timeout-minutes on jobs and steps, match: [timeout-minutes]}
+      - {id: gha-ws-runs-on, name: runs-on labels / groups and expressions, match: [runs-on, runs-on-group, runner-selection]}
+      - {id: gha-ws-continue-on-error, name: continue-on-error on steps and jobs, match: [continue-on-error]}
+      - {id: gha-ws-run-name, name: run-name dynamic run titles, match: [run-name]}
+      - {id: gha-ws-uses, name: uses forms (owner/repo@ref / ./local / docker://), match: [uses-keyword, local-action-uses, docker-uri-uses]}
+      - {id: gha-ws-shells, name: Shell choices and their fail-fast defaults (bash -eo pipefail / pwsh / python), match: [shell-options, bash-pipefail, pwsh-shell]}
+      - {id: gha-ws-yaml-anchors, name: YAML anchors and aliases in workflow files, match: [yaml-anchors-workflows]}
+  - id: gha-events-triggers
+    name: Events, triggers and filters (workflow_dispatch, repository_dispatch, schedule, paths/branches)
+    source: GHA docs/Events that trigger workflows
+    match: [workflow-triggers, workflow-dispatch, repository-dispatch, event-filters, path-filters, schedule-cron]
+    subtopics:
+      - {id: gha-ev-dispatch-inputs, name: workflow_dispatch inputs (choice / boolean / environment), match: [dispatch-inputs, workflow-dispatch-inputs]}
+      - {id: gha-ev-repo-dispatch-payload, name: repository_dispatch client_payload and API call, match: [client-payload, repository-dispatch-api]}
+      - {id: gha-ev-schedule-gotchas, name: Scheduled workflows (UTC / delays / auto-disable after 60 days), match: [cron-utc, schedule-drift, scheduled-workflow-disabled]}
+      - {id: gha-ev-paths-ignore, name: paths and paths-ignore filters and the dorny paths-filter pattern, match: [paths-ignore, paths-filter-dorny]}
+      - {id: gha-ev-activity-types, name: Activity types (opened / synchronize / labeled), match: [activity-types, pull-request-types]}
+      - {id: gha-ev-workflow-run, name: workflow_run chaining and reading the triggering run, match: [workflow-run, workflow-run-trigger]}
+      - {id: gha-ev-tags-releases, name: Tag pushes and release events, match: [tag-filters, release-event, tag-push-trigger]}
+      - {id: gha-ev-pr-vs-target, name: pull_request vs pull_request_target and forks, match: [pull-request-target, fork-pr-triggers]}
+      - {id: gha-ev-payload, name: Reading the event payload (github.event / GITHUB_EVENT_PATH), match: [event-payload, github-event-path]}
+      - {id: gha-ev-skip-ci, name: Skipping runs with skip-ci commit messages, match: [skip-ci, ci-skip]}
+  - id: gha-expressions-contexts
+    name: Expressions, contexts and functions
+    source: GHA docs/Evaluate expressions + Contexts reference
+    match: [expressions, contexts, github-context, expression-functions, tojson]
+    subtopics:
+      - {id: gha-ex-string-functions, name: contains/startsWith/endsWith/format/join, match: [startswith, format, string-functions]}
+      - {id: gha-ex-json-functions, name: toJSON/fromJSON for matrices and objects, match: [fromjson, json-functions]}
+      - {id: gha-ex-hashfiles, name: hashFiles for cache keys, match: [hashfiles]}
+      - {id: gha-ex-status-functions, name: success/failure/always/cancelled status functions, match: [cancelled, status-check-functions]}
+      - {id: gha-ex-context-availability, name: Which contexts are available where, match: [context-availability]}
+      - {id: gha-ex-operators, name: Operators / truthiness and type coercion, match: [truthiness, type-coercion]}
+      - {id: gha-ex-default-env, name: Default environment variables vs contexts, match: [default-environment-variables, env-vs-context]}
+      - {id: gha-ex-object-filters, name: Object filters and literals, match: [object-filter, wildcard-filter]}
+      - {id: gha-ex-needs-inputs-context, name: needs and inputs contexts, match: [needs-context, inputs-context]}
+  - id: gha-job-dependencies-outputs
+    name: Job dependencies, outputs and conditionals (needs, outputs, if)
+    source: GHA docs/Using jobs
+    match: [job-outputs, step-outputs, if-conditionals, needs-outputs, always-condition]
+    subtopics:
+      - {id: gha-jd-output-limits, name: Output size and empty-output pitfalls, match: [outputs-size-limit, outputs-empty]}
+      - {id: gha-jd-skipped-needs, name: Running after skipped dependencies (always / job results), match: [skipped-jobs, job-result]}
+      - {id: gha-jd-fan-out-in, name: Fan-out/fan-in and gate jobs, match: [fan-out-fan-in, gate-job]}
+      - {id: gha-jd-continue-on-error, name: continue-on-error and job conclusion, match: [continue-on-error]}
+      - {id: gha-jd-matrix-outputs, name: Collecting outputs from matrix jobs, match: [matrix-outputs]}
+      - {id: gha-jd-dynamic-plan, name: Plan job producing a dynamic plan, match: [dynamic-plan, plan-job]}
+      - {id: gha-jd-step-outcome, name: steps.<id>.outcome vs conclusion, match: [step-outcome, step-conclusion]}
+      - {id: gha-jd-job-if, name: Job-level vs step-level if and the implicit expression syntax, match: [job-level-if, if-expression-syntax]}
+  - id: gha-concurrency
+    name: Concurrency groups and cancel-in-progress
+    source: GHA docs/Control the concurrency of workflows and jobs
+    match: [concurrency, cancel-in-progress, concurrency-group]
+    subtopics:
+      - {id: gha-cc-group-expressions, name: Building concurrency group keys from expressions, match: [concurrency-expression, concurrency-group-key]}
+      - {id: gha-cc-conditional-cancel, name: Cancel only on branches / never on main, match: [conditional-cancel-in-progress]}
+      - {id: gha-cc-pending-queue, name: Pending-job behaviour (one pending / newest wins), match: [pending-job-cancelled, concurrency-queue]}
+      - {id: gha-cc-deploy-serialisation, name: Job-level concurrency to serialise deployments, match: [deployment-serialisation, job-level-concurrency]}
+      - {id: gha-cc-merge-group, name: merge_group event and merge-queue workflows, match: [merge-group-concurrency, merge-group-event]}
+      - {id: gha-cc-reusable, name: Concurrency in reusable workflows and caller/callee deadlocks, match: [reusable-workflow-concurrency, concurrency-deadlock]}
+      - {id: gha-cc-cancel-debug, name: Diagnosing runs cancelled by a higher priority waiting request, match: [higher-priority-waiting-request]}
+      - {id: gha-cc-head-ref, name: PR group keys with the head_ref or run_id fallback, match: [head-ref-fallback]}
+  - id: gha-matrix
+    name: Matrix strategies
+    source: GHA docs/Running variations of jobs using a matrix
+    match: [matrix, strategy-matrix, matrix-build]
+    subtopics:
+      - {id: gha-mx-include-exclude, name: include/exclude and expanding configurations, match: [include, exclude]}
+      - {id: gha-mx-fail-fast, name: fail-fast and max-parallel, match: [fail-fast, max-parallel]}
+      - {id: gha-mx-dynamic, name: Dynamic matrices from fromJSON, match: [dynamic-matrix]}
+      - {id: gha-mx-sharding, name: Test sharding with a matrix, match: [test-sharding, sharding]}
+      - {id: gha-mx-naming, name: Matrix job names and required checks, match: [matrix-job-names, matrix-required-checks]}
+      - {id: gha-mx-cross-os, name: Cross-OS matrices and runs-on from matrix, match: [matrix-os, cross-os-matrix]}
+      - {id: gha-mx-reusable, name: Matrix over reusable workflow calls, match: [matrix-reusable-workflow]}
+      - {id: gha-mx-context, name: matrix context and include-only matrices, match: [include-only-matrix, matrix-context]}
+  - id: gha-caching
+    name: Dependency caching with actions/cache
+    source: GHA docs/Caching dependencies to speed up workflows
+    match: [actions-cache, cache-restore, restore-keys]
+    subtopics:
+      - {id: gha-ca-restore-save, name: cache/restore and cache/save split, match: [cache-save, actions-cache-restore]}
+      - {id: gha-ca-scope, name: Cache scope across branches and PRs, match: [cache-scope]}
+      - {id: gha-ca-eviction, name: Eviction and the 10 GB limit, match: [cache-eviction, cache-size-limit]}
+      - {id: gha-ca-management, name: Managing caches with gh cache and the API, match: [gh-cache, cache-cleanup, cache-api]}
+      - {id: gha-ca-setup-actions, name: Built-in caching in setup-* actions, match: [setup-node-cache, setup-python-cache]}
+      - {id: gha-ca-key-design, name: Designing cache keys with hashFiles, match: [cache-key, hashfiles-cache-key]}
+      - {id: gha-ca-lookup-only, name: lookup-only and fail-on-cache-miss, match: [lookup-only, fail-on-cache-miss]}
+      - {id: gha-ca-poisoning, name: Cache poisoning risks, match: [cache-poisoning]}
+  - id: gha-artifacts
+    name: Workflow artifacts (upload/download-artifact v4)
+    source: GHA docs/Storing and sharing data from a workflow
+    match: [upload-artifact, download-artifact, workflow-artifacts, artifact-retention]
+    subtopics:
+      - {id: gha-ar-retention, name: retention-days and storage quota, match: [retention-days, artifact-storage-quota]}
+      - {id: gha-ar-merge-multiple, name: Merging matrix artifacts with pattern and merge-multiple, match: [merge-multiple, artifact-pattern]}
+      - {id: gha-ar-cross-run, name: Cross-run and cross-repo download, match: [cross-run-download, run-id]}
+      - {id: gha-ar-delete, name: Deleting artifacts via API and artifact ids, match: [artifact-id, artifact-deletion]}
+      - {id: gha-ar-immutability, name: Immutability and overwrite, match: [overwrite, artifact-immutability]}
+      - {id: gha-ar-upload-options, name: Upload options (compression / hidden files / if-no-files-found), match: [compression-level, include-hidden-files, if-no-files-found]}
+      - {id: gha-ar-untrusted, name: Treating fork artifacts as untrusted, match: [artifact-poisoning]}
+      - {id: gha-ar-v4-migration, name: Migrating from artifact v3 to v4 (breaking changes), match: [artifact-v4-migration]}
+      - {id: gha-ar-digest, name: Artifact digest output and attesting uploaded artifacts, match: [artifact-digest]}
+  - id: gha-reusable-workflows
+    name: Reusable workflows and composite actions
+    source: GHA docs/Reusing workflows + Creating a composite action
+    match: [reusable-workflows, workflow-call, composite-actions]
+    subtopics:
+      - {id: gha-rw-secrets-inherit, name: Passing secrets (inherit vs explicit), match: [secrets-inherit]}
+      - {id: gha-rw-inputs-outputs, name: workflow_call inputs and outputs, match: [workflow-inputs, workflow-outputs]}
+      - {id: gha-rw-nesting, name: Nesting limits and call depth, match: [nesting-limit]}
+      - {id: gha-rw-versioning, name: Versioning shared workflows with major tags, match: [major-tag, action-versioning]}
+      - {id: gha-rw-composite-runs, name: runs.using composite steps, match: [runs-using-composite]}
+      - {id: gha-rw-access-policy, name: Cross-repo access policy for private reusable workflows, match: [reusable-workflow-access, cross-repo-reusable]}
+      - {id: gha-rw-composite-outputs, name: Composite action outputs and github.action_path, match: [github-action-path, composite-outputs]}
+      - {id: gha-rw-limits, name: Reusable workflow limitations (env not inherited / 20 per run), match: [reusable-workflow-limitations, env-not-inherited]}
+  - id: gha-creating-actions
+    name: Creating JavaScript/Docker actions with the toolkit and publishing
+    source: GHA docs/Creating actions
+    match: [action-toolkit, actions-core, creating-actions, custom-action, marketplace]
+    subtopics:
+      - {id: gha-ca-action-yml, name: action.yml metadata (inputs / outputs / runs), match: [action-yml]}
+      - {id: gha-ca-javascript, name: JavaScript/TypeScript actions and ncc bundling, match: [javascript-action, ncc]}
+      - {id: gha-ca-docker, name: Docker container actions, match: [docker-container-action]}
+      - {id: gha-ca-pre-post, name: pre and post steps, match: [pre-post-steps]}
+      - {id: gha-ca-release, name: Releasing actions (semver and floating major tags), match: [semver-tags, major-tag]}
+      - {id: gha-ca-testing, name: Testing actions locally and in CI, match: [action-testing]}
+      - {id: gha-ca-marketplace, name: Marketplace listing and branding, match: [branding, marketplace-listing]}
+      - {id: gha-ca-toolkit-exec, name: toolkit exec and tool-cache packages, match: [actions-exec, actions-tool-cache]}
+      - {id: gha-ca-github-script, name: Inline scripting with actions/github-script, match: [github-script]}
+  - id: gha-service-containers
+    name: Service containers and container jobs
+    source: GHA docs/Using containerized services
+    match: [service-containers, container-jobs, services-postgres]
+    subtopics:
+      - {id: gha-sc-health, name: Health checks and waiting for readiness, match: [options-health-cmd, health-check]}
+      - {id: gha-sc-ports, name: Port mapping and localhost vs service hostname, match: [port-mapping, localhost-vs-hostname]}
+      - {id: gha-sc-job-container, name: Running the job itself in a container, match: [job-container, container-image]}
+      - {id: gha-sc-private-images, name: Private images and registry credentials, match: [container-credentials, ghcr-private-image]}
+      - {id: gha-sc-volumes-env, name: Volumes and env for services, match: [volumes, env-for-services]}
+      - {id: gha-sc-alternatives, name: docker compose and testcontainers alternatives, match: [docker-compose-in-ci, testcontainers]}
+      - {id: gha-sc-buildx, name: Docker builds on hosted runners with setup-buildx and setup-qemu, match: [setup-buildx-action, setup-qemu-action]}
+      - {id: gha-sc-linux-only, name: Service containers only on Linux runners and workarounds, match: [linux-only-services]}
+  - id: gha-permissions-github-token
+    name: GITHUB_TOKEN permissions
+    source: GHA docs/Automatic token authentication + Controlling permissions
+    match: [github-token, permissions, token-permissions]
+    subtopics:
+      - {id: gha-pt-permissions-keyword, name: permissions keyword at workflow and job level, match: [permissions-keyword, job-level-permissions]}
+      - {id: gha-pt-default-permissions, name: Default workflow permissions (read-only org default), match: [default-workflow-permissions]}
+      - {id: gha-pt-no-trigger, name: GITHUB_TOKEN pushes do not trigger workflows (GitHub App tokens), match: [token-no-trigger, github-app-token, create-github-app-token]}
+      - {id: gha-pt-forks, name: Token scope on fork pull requests, match: [fork-pull-requests]}
+      - {id: gha-pt-persist-credentials, name: Token lifetime and checkout persist-credentials, match: [persist-credentials, token-expiry]}
+      - {id: gha-pt-rate-limits, name: API rate limits for the token, match: [api-rate-limits]}
+      - {id: gha-pt-scopes, name: Individual permission scopes (contents / packages / checks / attestations), match: [permission-scopes, contents-write]}
+      - {id: gha-pt-403, name: Debugging Resource not accessible by integration (403), match: [resource-not-accessible-by-integration]}
+  - id: gha-environments-deployments
+    name: Environments, deployment protection rules and deployments API
+    source: GHA docs/Deploying with GitHub Actions + Managing environments
+    match: [deployment-protection-rules, deployment-environments, wait-timer, deployments-api, environment-branches]
+    subtopics:
+      - {id: gha-en-reviewers, name: Required reviewers and self-review prevention, match: [required-reviewers, prevent-self-review]}
+      - {id: gha-en-wait-timer, name: Wait timers, match: [wait-timer]}
+      - {id: gha-en-branch-policy, name: Deployment branch and tag policies, match: [deployment-branch-policy]}
+      - {id: gha-en-custom-rules, name: Custom protection rules via GitHub Apps, match: [custom-protection-rules, github-app-gate]}
+      - {id: gha-en-deployments-api, name: Deployments API and deployment status, match: [deployment-status]}
+      - {id: gha-en-env-secrets, name: Environment secrets and variables, match: [environment-secrets, environment-variables]}
+      - {id: gha-en-url-history, name: environment url and deployment history, match: [environment-url, deployment-history]}
+      - {id: gha-en-as-code, name: Creating environments via the REST API and Terraform, match: [environments-api-create, terraform-github-environment]}
+  - id: gha-oidc
+    name: OIDC federation to cloud providers
+    source: GHA docs/Security hardening with OpenID Connect
+    match: [oidc, openid-connect, workload-identity-federation]
+    subtopics:
+      - {id: gha-oi-aws, name: AWS IAM role via configure-aws-credentials, match: [configure-aws-credentials, assume-role-with-web-identity]}
+      - {id: gha-oi-azure, name: Azure federated credentials, match: [federated-credential, azure-login]}
+      - {id: gha-oi-gcp, name: GCP workload identity pool, match: [workload-identity-pool, google-github-actions-auth]}
+      - {id: gha-oi-sub-claim, name: Customising the subject claim, match: [sub-claim, customization-template]}
+      - {id: gha-oi-vault, name: Vault JWT auth, match: [vault-jwt]}
+      - {id: gha-oi-id-token-write, name: id-token write permission, match: [id-token-write]}
+      - {id: gha-oi-debug-claims, name: Inspecting and debugging token claims, match: [oidc-claims-debug, jwt-decode-oidc]}
+      - {id: gha-oi-reusable, name: Trusting job_workflow_ref for reusable workflows, match: [job-workflow-ref, oidc-reusable-workflows]}
+  - id: gha-secrets-variables
+    name: Secrets and configuration variables (repo/env/org)
+    source: GHA docs/Using secrets + Store information in variables
+    match: [github-actions-secrets, configuration-variables, vars-context]
+    subtopics:
+      - {id: gha-sv-org-secrets, name: Organization secrets and repository access policies, match: [organization-secrets, secret-access-policy]}
+      - {id: gha-sv-env-secrets, name: Environment secrets, match: [environment-secrets]}
+      - {id: gha-sv-variables, name: Repository and organization variables (vars), match: [repository-variables, org-variables]}
+      - {id: gha-sv-large-secrets, name: Large secrets (48 KB limit / gpg-encrypted files), match: [large-secrets, secret-size-limit, gpg-encrypted-secrets]}
+      - {id: gha-sv-cli-api, name: Managing secrets with gh secret and the REST API, match: [gh-secret-set, secrets-api, libsodium]}
+      - {id: gha-sv-dependabot, name: Dependabot secrets, match: [dependabot-secrets]}
+      - {id: gha-sv-masking, name: Secret masking in logs, match: [log-masking, add-mask]}
+      - {id: gha-sv-presence, name: Checking secret presence and using secrets in if conditions, match: [secret-presence-check, secrets-in-if]}
+  - id: gha-self-hosted-runners
+    name: Self-hosted runners and ARC
+    source: GHA docs/Hosting your own runners + ARC docs
+    match: [self-hosted-runner, actions-runner-controller, runner-scale-sets]
+    subtopics:
+      - {id: gha-sr-groups, name: Runner groups and access, match: [runner-groups]}
+      - {id: gha-sr-ephemeral, name: Ephemeral and JIT runners, match: [ephemeral-runner, jit-runner]}
+      - {id: gha-sr-arc-install, name: Installing ARC with Helm (gha-runner-scale-set), match: [arc-helm-install, gha-runner-scale-set-controller]}
+      - {id: gha-sr-arc-modes, name: ARC container modes (dind vs kubernetes), match: [arc-container-mode, kubernetes-mode-dind]}
+      - {id: gha-sr-security, name: Runner security and public repositories, match: [runner-security, public-repo-risk]}
+      - {id: gha-sr-larger, name: GitHub-hosted larger runners, match: [larger-runners]}
+      - {id: gha-sr-labels, name: Custom labels and autoscaling, match: [runner-labels, autoscaling]}
+      - {id: gha-sr-service, name: Running as a service and updates, match: [svc-sh, runner-auto-update]}
+      - {id: gha-sr-monitoring, name: Monitoring the runner fleet, match: [runner-monitoring, runner-queue-metrics]}
+  - id: gha-security-hardening
+    name: Hardening against third-party actions (SHA pinning, allowlists, pull_request_target)
+    source: GHA docs/Security hardening for GitHub Actions
+    match: [sha-pinning, actions-allowlist, pull-request-target-safety, untrusted-input, action-supply-chain]
+    subtopics:
+      - {id: gha-sh-pin-tools, name: Pinning tools (pinact / ratchet), match: [pinact, ratchet]}
+      - {id: gha-sh-linters, name: Static analysis of workflows (zizmor / actionlint), match: [zizmor, actionlint]}
+      - {id: gha-sh-injection, name: Script injection from untrusted input, match: [script-injection]}
+      - {id: gha-sh-allowlist, name: Allowed-actions policy, match: [allowed-actions-policy]}
+      - {id: gha-sh-egress, name: Egress filtering with harden-runner, match: [harden-runner, egress-filtering]}
+      - {id: gha-sh-poisoning, name: Cache and artifact poisoning, match: [cache-poisoning, artifact-poisoning]}
+      - {id: gha-sh-dependabot, name: Keeping actions updated with Dependabot, match: [dependabot-actions]}
+      - {id: gha-sh-fork-approval, name: Requiring approval for fork runs, match: [require-approval-for-fork]}
+      - {id: gha-sh-immutable-actions, name: Immutable actions and action attestations, match: [immutable-actions, action-attestations]}
+  - id: gha-workflow-commands
+    name: Workflow commands (GITHUB_OUTPUT, GITHUB_ENV, step summary, annotations, masking)
+    source: GHA docs/Workflow commands
+    match: [workflow-commands, github-output, github-env, step-summary, problem-matchers, add-mask]
+    subtopics:
+      - {id: gha-wc-multiline, name: Multiline values and heredoc delimiters, match: [multiline-values, heredoc-delimiter]}
+      - {id: gha-wc-path, name: GITHUB_PATH, match: [github-path]}
+      - {id: gha-wc-annotations, name: error/warning/notice annotations, match: [error-annotation, annotations]}
+      - {id: gha-wc-summary, name: Job summaries with markdown, match: [github-step-summary, job-summary-markdown]}
+      - {id: gha-wc-stop, name: Stop commands and debug messages, match: [stop-commands, debug-command]}
+      - {id: gha-wc-problem-matchers, name: Custom problem matchers, match: [problem-matcher-json, custom-problem-matcher]}
+      - {id: gha-wc-grouping, name: Log grouping, match: [group-endgroup, log-grouping]}
+      - {id: gha-wc-checks, name: Checks API annotations, match: [checks-api]}
+  - id: gha-debugging
+    name: Debugging workflows and usage limits (debug logging, re-runs, act, gh run, minutes)
+    source: GHA docs/Monitoring and troubleshooting + Usage limits
+    match: [debug-logging, actions-step-debug, act, re-run-failed-jobs, workflow-debugging, gh-run, usage-limits, actions-cost]
+    subtopics:
+      - {id: gha-db-debug-flags, name: Step and runner debug logging, match: [actions-runner-debug, re-run-with-debug]}
+      - {id: gha-db-act, name: Running workflows locally with act, match: [nektos-act]}
+      - {id: gha-db-gh-run, name: gh run view/watch/rerun, match: [gh-run-view, gh-run-watch]}
+      - {id: gha-db-ssh, name: SSH into a runner (tmate), match: [tmate, ssh-into-runner]}
+      - {id: gha-db-limits, name: Job and workflow time limits, match: [job-time-limit, workflow-run-time-limit]}
+      - {id: gha-db-billing, name: Billing minutes and multipliers, match: [billing-minutes, minute-multipliers]}
+      - {id: gha-db-metrics, name: Actions usage metrics and reports, match: [actions-metrics, usage-report]}
+      - {id: gha-db-logs, name: Downloading logs and runner diagnostics, match: [log-download, runner-diagnostic-logs]}
+      - {id: gha-db-runs-api, name: Managing runs via the API (cancel / delete / list), match: [workflow-runs-api, cancel-workflow-run]}
+  - id: gha-packages-publishing
+    name: Publishing packages and images (GHCR, GitHub Packages, release assets)
+    source: GHA docs/Publishing packages
+    match: [github-packages, ghcr, docker-build-push-action, metadata-action, publish-package]
+    subtopics:
+      - {id: gha-pp-ghcr, name: Logging in and pushing to GHCR, match: [ghcr-io, docker-login-action]}
+      - {id: gha-pp-npm, name: Publishing npm packages, match: [npm-publish]}
+      - {id: gha-pp-pypi, name: PyPI trusted publishing, match: [pypi-trusted-publishing]}
+      - {id: gha-pp-maven-nuget, name: Maven and NuGet publishing, match: [maven-publish, nuget-publish]}
+      - {id: gha-pp-tags, name: Image tagging with metadata-action, match: [image-tags]}
+      - {id: gha-pp-visibility, name: Package visibility and linking to repos, match: [package-visibility, link-package-to-repo]}
+      - {id: gha-pp-cleanup, name: Package retention and cleanup, match: [retention-cleanup]}
+      - {id: gha-pp-provenance, name: Provenance and SBOM attestations on images, match: [sbom-attestation]}
+      - {id: gha-pp-npm-provenance, name: npm publish --provenance, match: [npm-provenance]}
+      - {id: gha-pp-cargo-gems, name: Cargo and RubyGems trusted publishing, match: [cargo-publish, rubygems-trusted-publishing]}
+  - id: gha-rulesets-required-checks
+    name: Rulesets, required status checks, required workflows and two-person review
+    source: GHA docs/Required workflows + Rulesets docs
+    match: [required-workflows, rulesets, required-status-checks, two-person-review, branch-protection]
+    subtopics:
+      - {id: gha-rr-check-names, name: Required check naming with matrices and skipped checks, match: [required-checks-naming, skipped-checks]}
+      - {id: gha-rr-codeowners, name: CODEOWNERS review requirements, match: [codeowners, code-owner-review]}
+      - {id: gha-rr-merge-queue, name: Merge queue, match: [merge-queue]}
+      - {id: gha-rr-push-rules, name: Push rulesets (file paths / size), match: [push-rulesets]}
+      - {id: gha-rr-tag-rules, name: Tag rulesets, match: [tag-rulesets]}
+      - {id: gha-rr-bypass, name: Bypass lists, match: [bypass-list]}
+      - {id: gha-rr-commits, name: Signed commits and linear history, match: [signed-commits, linear-history]}
+      - {id: gha-rr-api, name: Rules API and evaluate enforcement, match: [repository-rules-api, enforcement-evaluate]}
+      - {id: gha-rr-org-rulesets, name: Organization rulesets and import/export, match: [organization-rulesets, ruleset-json-import]}
+  - id: gha-release-automation
+    name: Release automation (tags to GitHub Releases)
+    source: GHA docs/Publishing + Releases docs
+    match: [release-automation, github-release, release-drafter]
+    subtopics:
+      - {id: gha-ra-gh-release, name: Creating releases with gh release and action-gh-release, match: [action-gh-release, gh-release-create]}
+      - {id: gha-ra-notes, name: Automatic release notes and release.yml, match: [generate-release-notes, release-yml]}
+      - {id: gha-ra-tag-trigger, name: Tag-triggered release builds, match: [tag-push-trigger]}
+      - {id: gha-ra-release-please, name: release-please and semantic-release, match: [release-please, semantic-release]}
+      - {id: gha-ra-goreleaser, name: GoReleaser in Actions, match: [goreleaser]}
+      - {id: gha-ra-checksums, name: Checksums and asset attestations, match: [checksums, sha256sums]}
+      - {id: gha-ra-draft, name: Draft-then-publish and immutable releases, match: [draft-release-publish]}
+      - {id: gha-ra-assets, name: Uploading release assets and gh release upload --clobber, match: [gh-release-upload, release-assets]}
+  # --- GitLab CI/CD (docs.gitlab.com/ee/ci ToC)
+  - id: gl-yaml-keywords
+    name: .gitlab-ci.yml keyword reference
+    source: GitLab CI docs/CI-CD YAML syntax reference
+    match: [gitlab-ci-yml, ci-yaml-keywords]
+    subtopics:
+      - {id: gl-kw-default-inherit, name: default and inherit keywords, match: [default-keyword, inherit-default, inherit-variables]}
+      - {id: gl-kw-before-after, name: before_script and after_script, match: [before-script, after-script, after-script-timeout]}
+      - {id: gl-kw-image, name: image name/entrypoint/pull_policy/docker user, match: [image-entrypoint, pull-policy, image-docker-user]}
+      - {id: gl-kw-tags, name: tags keyword and runner selection, match: [runner-tags]}
+      - {id: gl-kw-when, name: when (manual / delayed / on_failure) and start_in, match: [when-delayed, start-in, when-on-failure]}
+      - {id: gl-kw-allow-failure, name: allow_failure and exit codes, match: [allow-failure, allow-failure-exit-codes]}
+      - {id: gl-kw-coverage, name: coverage keyword, match: [coverage-keyword, coverage-regex]}
+      - {id: gl-kw-release, name: release keyword and release-cli, match: [release-keyword, release-cli]}
+      - {id: gl-kw-pages, name: pages keyword, match: [gitlab-pages, pages-keyword]}
+      - {id: gl-kw-secrets, name: secrets keyword (Vault / Azure Key Vault / GCP), match: [secrets-keyword, vault-secrets-keyword]}
+      - {id: gl-kw-hooks, name: hooks pre_get_sources_script, match: [pre-get-sources-script, hooks-keyword]}
+      - {id: gl-kw-script-quoting, name: script YAML quoting and multiline blocks, match: [script-yaml-quoting, multiline-script]}
+  - id: gl-stages-needs-dag
+    name: Stages, needs and DAG pipelines
+    source: GitLab CI docs/Pipeline architecture + needs keyword
+    match: [needs, dag, stages]
+    subtopics:
+      - {id: gl-nd-optional, name: needs optional for jobs that may not exist, match: [needs-optional, optional-needs]}
+      - {id: gl-nd-artifacts-false, name: needs artifacts false, match: [needs-artifacts-false]}
+      - {id: gl-nd-parallel-matrix, name: needs on parallel matrix jobs, match: [needs-parallel-matrix]}
+      - {id: gl-nd-pre-post, name: .pre and .post stages, match: [pre-post-stages, dot-pre-dot-post]}
+      - {id: gl-nd-cross-pipeline, name: needs pipeline/project cross-pipeline artifacts, match: [needs-pipeline, needs-project]}
+      - {id: gl-nd-visualisation, name: DAG visualisation and needs limits, match: [dag-visualization, needs-limit]}
+      - {id: gl-nd-stageless, name: Stageless pipelines (needs without stages), match: [stageless-pipeline]}
+      - {id: gl-nd-manual-blocking, name: Blocking manual jobs and allow_failure interplay, match: [blocking-manual-jobs, manual-job-blocking]}
+  - id: gl-rules
+    name: rules and workflow rules
+    source: GitLab CI docs/Specify when jobs run with rules + workflow keyword
+    match: [rules, workflow-rules, rules-if]
+    subtopics:
+      - {id: gl-ru-changes, name: rules changes and compare_to, match: [rules-changes, compare-to]}
+      - {id: gl-ru-exists, name: rules exists, match: [rules-exists]}
+      - {id: gl-ru-variables, name: rules variables overrides, match: [rules-variables]}
+      - {id: gl-ru-when, name: rules when never/manual/delayed, match: [when-never, when-manual]}
+      - {id: gl-ru-auto-cancel, name: workflow auto_cancel, match: [auto-cancel, workflow-auto-cancel]}
+      - {id: gl-ru-workflow-name, name: workflow name and pipeline naming, match: [workflow-name, pipeline-name]}
+      - {id: gl-ru-needs, name: rules needs, match: [rules-needs]}
+      - {id: gl-ru-duplicates, name: Avoiding duplicate pipelines, match: [duplicate-pipelines, ci-pipeline-source]}
+  - id: gl-include-extends
+    name: include, extends and templates
+    source: GitLab CI docs/Use CI-CD configuration from other files
+    match: [include, extends, include-project]
+    subtopics:
+      - {id: gl-in-types, name: include local/remote/template, match: [include-local, include-remote, include-template]}
+      - {id: gl-in-rules, name: include with rules (conditional include), match: [include-rules, conditional-include]}
+      - {id: gl-in-inputs, name: include with inputs, match: [inputs]}
+      - {id: gl-in-hidden-anchors, name: Hidden jobs and YAML anchors, match: [hidden-jobs, yaml-anchors]}
+      - {id: gl-in-reference, name: The !reference tag, match: [reference-tag]}
+      - {id: gl-in-ref-pinning, name: Pinning include ref and nesting limits, match: [include-ref, include-nesting]}
+      - {id: gl-in-merge, name: extends and include deep-merge rules and array overrides, match: [extends-merge, include-merge-behavior]}
+      - {id: gl-in-integrity, name: include integrity hashes for remote files, match: [include-integrity]}
+  - id: gl-variables
+    name: CI/CD variables (precedence, predefined, expansion, file type)
+    source: GitLab CI docs/CI-CD variables
+    match: [variable-precedence, predefined-variables, ci-variables, variable-expansion, file-variables]
+    subtopics:
+      - {id: gl-va-protected-masked, name: Protected / masked and hidden variables, match: [protected-variables, masked-variables, masked-and-hidden]}
+      - {id: gl-va-group-instance, name: Group and instance variables, match: [group-variables, instance-variables]}
+      - {id: gl-va-env-scoped, name: Environment-scoped variables, match: [environment-scoped-variables]}
+      - {id: gl-va-expand-false, name: expand false and raw variables, match: [expand-false, raw-variables]}
+      - {id: gl-va-prefill, name: Run-pipeline prefill (description / options), match: [variables-description, variables-options]}
+      - {id: gl-va-dotenv, name: Passing variables with dotenv artifacts, match: [dotenv-artifacts]}
+      - {id: gl-va-api, name: Managing variables via API and glab, match: [variables-api, glab-variable]}
+      - {id: gl-va-job-token, name: CI_JOB_TOKEN scope and allowlist, match: [ci-job-token-allowlist]}
+  - id: gl-cache-artifacts
+    name: Cache vs artifacts
+    source: GitLab CI docs/Caching + Job artifacts + cache keyword
+    match: [gitlab-cache, cache-vs-artifacts, artifacts]
+    subtopics:
+      - {id: gl-ca-key-files, name: cache key files and prefix, match: [cache-key-files, cache-key-prefix]}
+      - {id: gl-ca-policy, name: cache policy pull/push/pull-push, match: [cache-policy, cache-pull-push]}
+      - {id: gl-ca-fallback, name: cache fallback_keys, match: [fallback-keys]}
+      - {id: gl-ca-when-untracked, name: cache when and untracked, match: [cache-when, cache-untracked]}
+      - {id: gl-ca-multiple, name: Multiple caches per job, match: [multiple-caches]}
+      - {id: gl-ca-distributed, name: Distributed cache on S3/GCS, match: [distributed-cache, s3-cache]}
+      - {id: gl-ca-artifact-options, name: artifacts expire_in/when/exclude, match: [artifacts-expire-in, artifacts-when, artifacts-exclude]}
+      - {id: gl-ca-dependencies, name: dependencies keyword and artifact download API, match: [dependencies-keyword, artifacts-api]}
+  - id: gl-artifact-reports
+    name: Artifact reports (junit, coverage, dotenv, terraform, sast)
+    source: GitLab CI docs/artifacts reports types
+    match: [artifacts-reports, junit-report, coverage-report, dotenv-report, cobertura]
+    subtopics:
+      - {id: gl-ar-junit, name: junit reports and test visualisation, match: [unit-test-reports, test-visualization]}
+      - {id: gl-ar-coverage, name: coverage_report cobertura/jacoco, match: [jacoco, coverage-badge]}
+      - {id: gl-ar-codequality, name: codequality reports, match: [codequality-report]}
+      - {id: gl-ar-terraform, name: terraform plan reports, match: [terraform-report]}
+      - {id: gl-ar-metrics, name: metrics reports, match: [metrics-report]}
+      - {id: gl-ar-annotations, name: annotations reports, match: [annotations-report]}
+      - {id: gl-ar-performance, name: browser_performance and load_performance reports, match: [browser-performance-report, load-performance-report]}
+      - {id: gl-ar-cyclonedx, name: cyclonedx reports and the dependency list, match: [cyclonedx-report, dependency-list]}
+  - id: gl-environments-review-apps
+    name: Environments and review apps
+    source: GitLab CI docs/Environments and deployments + Review apps
+    match: [environments, review-apps]
+    subtopics:
+      - {id: gl-en-url, name: Static and dynamic environment url, match: [environment-url, dynamic-environment-url]}
+      - {id: gl-en-stop, name: on_stop and auto_stop_in, match: [on-stop, auto-stop-in]}
+      - {id: gl-en-action, name: environment action (prepare / access / verify), match: [environment-action]}
+      - {id: gl-en-route-maps, name: Review app route maps, match: [route-maps, review-app-routes]}
+      - {id: gl-en-tier, name: Deployment tiers, match: [deployment-tier]}
+      - {id: gl-en-api, name: Environments API and stale cleanup, match: [environments-api, stale-environments]}
+      - {id: gl-en-k8s-namespace, name: Kubernetes namespace per environment, match: [environment-kubernetes-namespace]}
+      - {id: gl-en-slug, name: Environment naming / CI_ENVIRONMENT_SLUG and folders, match: [ci-environment-slug]}
+  - id: gl-deployment-safety
+    name: Deployment safety (protected environments, deployment tiers, freeze periods, resource_group)
+    source: GitLab CI docs/Deployment safety
+    match: [deployment-tier, freeze-periods, resource-group, deployment-safety, protected-environments, deploy-freeze]
+    subtopics:
+      - {id: gl-ds-approvals, name: Deployment approvals, match: [deployment-approvals, required-approvals]}
+      - {id: gl-ds-freeze, name: Freeze periods and CI_DEPLOY_FREEZE, match: [ci-deploy-freeze]}
+      - {id: gl-ds-process-mode, name: resource_group process modes, match: [process-mode, oldest-first]}
+      - {id: gl-ds-outdated, name: Skipping outdated deployment jobs, match: [skip-outdated-deployment-jobs, prevent-outdated-deployments]}
+      - {id: gl-ds-group-protected, name: Group-level protected environments, match: [group-protected-environments]}
+      - {id: gl-ds-rollback, name: Deployment rollback from the UI, match: [deployment-rollback]}
+      - {id: gl-ds-approval-rules, name: Multiple approval rules, match: [approval-rules, unified-approval]}
+      - {id: gl-ds-deploy-access, name: Protected environment deploy access levels, match: [deploy-access-levels]}
+  - id: gl-runners-executors
+    name: GitLab Runner and executors
+    source: GitLab Runner docs
+    match: [gitlab-runner, executor, docker-executor, kubernetes-executor]
+    subtopics:
+      - {id: gl-rn-concurrency, name: config.toml concurrent/limit/request_concurrency, match: [concurrent, request-concurrency]}
+      - {id: gl-rn-docker-options, name: Docker executor volumes / pull policy / allowed images, match: [docker-volumes, allowed-images, docker-pull-policy]}
+      - {id: gl-rn-k8s-options, name: Kubernetes executor pod spec / overwrites and resources, match: [kubernetes-executor-overwrites, pod-resources-limits, kubernetes-pod-spec]}
+      - {id: gl-rn-autoscaler, name: Docker autoscaler and fleeting, match: [docker-autoscaler, fleeting, instance-executor]}
+      - {id: gl-rn-registration, name: Runner authentication tokens (glrt), match: [runner-authentication-token, glrt]}
+      - {id: gl-rn-tags, name: Runner tags and run untagged, match: [run-untagged]}
+      - {id: gl-rn-helm, name: Runner Helm chart on Kubernetes, match: [helm-chart]}
+      - {id: gl-rn-monitoring, name: Runner metrics with Prometheus, match: [runner-metrics, runner-prometheus]}
+      - {id: gl-rn-upgrade, name: Runner upgrades and version compatibility, match: [runner-upgrade, runner-version-compatibility]}
+      - {id: gl-rn-shell, name: Shell executor risks, match: [shell-executor]}
+  - id: gl-mr-pipelines-merge-trains
+    name: Merge request pipelines, merged results and merge trains
+    source: GitLab CI docs/Merge request pipelines
+    match: [merge-request-pipelines, merge-trains, merged-results-pipelines]
+    subtopics:
+      - {id: gl-mr-trains-tuning, name: Merge train settings / fast-forward and skipping the train, match: [fast-forward-merge-trains, merge-train-skip]}
+      - {id: gl-mr-must-succeed, name: Pipelines must succeed and skipped pipelines, match: [pipeline-must-succeed]}
+      - {id: gl-mr-forks, name: Pipelines for fork MRs, match: [fork-pipelines]}
+      - {id: gl-mr-detached, name: Detached pipelines, match: [detached-pipeline]}
+      - {id: gl-mr-variables, name: MR predefined variables, match: [ci-merge-request-iid, ci-merge-request-target-branch-name]}
+      - {id: gl-mr-auto-merge, name: Auto-merge when pipeline succeeds, match: [merge-when-pipeline-succeeds, auto-merge]}
+      - {id: gl-mr-interruptible, name: Auto-cancel redundant pipelines, match: [interruptible]}
+      - {id: gl-mr-event-type, name: Merged results pipelines and CI_MERGE_REQUEST_EVENT_TYPE, match: [ci-merge-request-event-type]}
+  - id: gl-parent-child-multi-project
+    name: Parent-child, dynamic child and multi-project pipelines
+    source: GitLab CI docs/Downstream pipelines
+    match: [parent-child-pipelines, child-pipelines, dynamic-child-pipelines, multi-project-pipelines, downstream-pipelines, trigger-keyword]
+    subtopics:
+      - {id: gl-pc-generated, name: Generating child YAML dynamically, match: [generated-yaml]}
+      - {id: gl-pc-strategy, name: trigger strategy depend and mirror, match: [trigger-strategy-depend, strategy-mirror]}
+      - {id: gl-pc-forward, name: Forwarding variables to downstream, match: [trigger-forward, pipeline-variables-forward]}
+      - {id: gl-pc-artifacts, name: Cross-project artifacts, match: [cross-project-artifacts]}
+      - {id: gl-pc-job-token, name: Job token allowlist for downstream, match: [ci-job-token-allowlist]}
+      - {id: gl-pc-inputs, name: Inputs to child pipelines, match: [inputs-to-child]}
+      - {id: gl-pc-upstream, name: Upstream pipeline variables, match: [upstream-pipeline, ci-pipeline-source-pipeline]}
+      - {id: gl-pc-limits, name: Downstream pipeline depth and include limits, match: [downstream-limits]}
+  - id: gl-schedules-triggers
+    name: Scheduled pipelines and trigger tokens/API
+    source: GitLab CI docs/Scheduled pipelines + Trigger pipelines by API
+    match: [scheduled-pipelines, pipeline-schedules, pipeline-triggers, trigger-token, pipelines-api]
+    subtopics:
+      - {id: gl-st-cron, name: Cron and timezone, match: [schedule-timezone, cron]}
+      - {id: gl-st-variables, name: Schedule variables, match: [schedule-variables]}
+      - {id: gl-st-owner, name: Schedule ownership, match: [schedule-owner, take-ownership]}
+      - {id: gl-st-run-api, name: Running pipelines via API, match: [run-pipeline-api]}
+      - {id: gl-st-webhook, name: Webhook-triggered pipelines, match: [webhook-trigger]}
+      - {id: gl-st-rules, name: rules for schedules, match: [rules-schedule]}
+      - {id: gl-st-api-ops, name: Cancel / retry and delete pipelines via API, match: [pipelines-api-cancel, retry-pipeline-api]}
+      - {id: gl-st-tokens, name: Creating and rotating pipeline trigger tokens (glptt), match: [glptt, trigger-token-rotation]}
+  - id: gl-docker-image-build
+    name: Building container images in CI (dind, kaniko, buildah) and the container registry
+    source: GitLab CI docs/Use Docker to build Docker images + Container registry
+    match: [kaniko, buildah, container-registry, image-build-in-ci, dind-tls]
+    subtopics:
+      - {id: gl-di-dind-tls, name: dind with TLS and DOCKER_TLS_CERTDIR, match: [docker-tls-certdir]}
+      - {id: gl-di-kaniko, name: Kaniko executor args and cache, match: [kaniko-cache, kaniko-executor-args]}
+      - {id: gl-di-buildah, name: Rootless buildah builds, match: [buildah-rootless]}
+      - {id: gl-di-buildx, name: buildx/BuildKit with registry cache, match: [buildx-gitlab, buildkit-cache-registry]}
+      - {id: gl-di-registry-auth, name: Registry auth with CI_REGISTRY variables, match: [ci-registry-password, ci-registry-image]}
+      - {id: gl-di-cleanup, name: Registry cleanup policies, match: [cleanup-policy, container-registry-cleanup, tag-expiration]}
+      - {id: gl-di-socket, name: Docker socket binding vs dind, match: [docker-socket-binding]}
+      - {id: gl-di-dependency-proxy, name: Dependency proxy for Docker Hub, match: [dependency-proxy]}
+  - id: gl-services
+    name: services keyword (databases, dind) and aliases
+    source: GitLab CI docs/Services
+    match: [gitlab-services, services-keyword, service-alias, ci-debug-services]
+    subtopics:
+      - {id: gl-sv-alias-command, name: Service alias / command and entrypoint, match: [service-command, service-entrypoint]}
+      - {id: gl-sv-health, name: Service health checks and waiting, match: [service-health-check, wait-for-service]}
+      - {id: gl-sv-network, name: Network per build and network_mode, match: [feature-flag-network-per-build, network-mode]}
+      - {id: gl-sv-k8s, name: Services under the Kubernetes executor, match: [kubernetes-executor-services]}
+      - {id: gl-sv-databases, name: Postgres/MySQL/Redis service recipes, match: [postgres-service, mysql-service]}
+      - {id: gl-sv-pull, name: Service image pull policy and private registries, match: [service-pull-policy]}
+      - {id: gl-sv-variables, name: Service-specific variables, match: [service-variables]}
+      - {id: gl-sv-multi-alias, name: Running the same service image twice with aliases, match: [multiple-service-aliases]}
+  - id: gl-security-scanning
+    name: SAST, DAST, dependency, container scanning and secret detection
+    source: GitLab docs/Application security testing
+    match: [sast, dast, dependency-scanning, container-scanning, secret-detection, security-scanning]
+    subtopics:
+      - {id: gl-ss-sast-config, name: SAST analyzer variables and excluded paths, match: [sast-excluded-paths, analyzer-variables]}
+      - {id: gl-ss-dast, name: DAST website and API scans, match: [dast-website, dast-api-scan]}
+      - {id: gl-ss-dependency, name: Dependency scanning (gemnasium), match: [gemnasium]}
+      - {id: gl-ss-container, name: Container scanning (CS_IMAGE / trivy), match: [cs-image, trivy-gitlab]}
+      - {id: gl-ss-secret-detection, name: Secret detection historic scans and push protection, match: [secret-detection-historic, secret-push-protection]}
+      - {id: gl-ss-iac, name: IaC scanning, match: [iac-scanning]}
+      - {id: gl-ss-policies, name: Scan result and MR approval policies, match: [scan-result-policies, merge-request-approval-policy]}
+      - {id: gl-ss-report, name: Vulnerability report and dismissal, match: [vulnerability-report, vulnerability-dismissal]}
+      - {id: gl-ss-custom-rulesets, name: Custom SAST rulesets (ruleset.toml), match: [sast-custom-rulesets, ruleset-toml]}
+      - {id: gl-ss-offline, name: Offline analyzers and SECURE_ANALYZERS_PREFIX, match: [analyzer-offline, secure-analyzers-prefix]}
+      - {id: gl-ss-license, name: License scanning and license approval policies, match: [license-scanning, license-approval-policy]}
+  - id: gl-compliance-pipelines
+    name: Compliance pipelines and pipeline execution policies
+    source: GitLab docs/Compliance pipelines + Policies
+    match: [compliance-pipelines, pipeline-execution-policy]
+    subtopics:
+      - {id: gl-cp-frameworks, name: Compliance frameworks, match: [compliance-framework, compliance-frameworks]}
+      - {id: gl-cp-exec-policy, name: Pipeline execution policy inject_ci vs override, match: [inject-ci, override-project-ci]}
+      - {id: gl-cp-scan-exec, name: Scan execution policies, match: [scan-execution-policy]}
+      - {id: gl-cp-policy-project, name: Security policy project linking, match: [security-policies-project]}
+      - {id: gl-cp-audit, name: Audit events and the compliance center, match: [compliance-center, audit-events]}
+      - {id: gl-cp-skip-ci, name: Preventing skip-ci bypass of enforced pipelines, match: [policy-skip-ci]}
+      - {id: gl-cp-variables, name: Policy variable precedence and enforced variables, match: [policy-variables-override]}
+      - {id: gl-cp-migration, name: Migrating compliance pipelines to pipeline execution policies, match: [compliance-pipeline-migration]}
+  - id: gl-components-catalog
+    name: CI/CD components and the catalog
+    source: GitLab CI docs/CI-CD components
+    match: [ci-cd-components, ci-catalog, spec-inputs]
+    subtopics:
+      - {id: gl-cc-inputs-spec, name: spec inputs types / defaults and regex, match: [inputs-types, inputs-default, inputs-regex]}
+      - {id: gl-cc-publish, name: Publishing a component to the catalog, match: [publish-component, catalog-release]}
+      - {id: gl-cc-versioning, name: Component version refs and ~latest, match: [component-version-ref, latest-tag]}
+      - {id: gl-cc-testing, name: Testing components in their own pipeline, match: [component-testing]}
+      - {id: gl-cc-migrate, name: Converting templates to components, match: [template-to-component]}
+      - {id: gl-cc-include-component, name: include component syntax, match: [include-component]}
+      - {id: gl-cc-layout, name: Component project layout (templates directory / README), match: [component-project-structure]}
+      - {id: gl-cc-interpolation, name: Input interpolation functions (expand_vars / truncate), match: [inputs-interpolation, expand-vars]}
+  - id: gl-kubernetes-agent
+    name: GitLab agent for Kubernetes (agentk, CI access, GitOps)
+    source: GitLab docs/Agent for Kubernetes
+    match: [gitlab-agent, agentk, kubernetes-agent, gitlab-gitops]
+    subtopics:
+      - {id: gl-ka-install, name: Installing agentk and config.yaml, match: [agent-helm-install, agent-config-yaml]}
+      - {id: gl-ka-ci-access, name: CI access and kubecontext, match: [ci-access, kubecontext]}
+      - {id: gl-ka-flux, name: GitOps with Flux integration, match: [flux-integration]}
+      - {id: gl-ka-user-access, name: User access and the dashboard, match: [user-access, kubernetes-dashboard]}
+      - {id: gl-ka-impersonation, name: CI job impersonation and RBAC, match: [ci-job-impersonation, agent-rbac]}
+      - {id: gl-ka-token, name: Agent token rotation, match: [agent-token]}
+      - {id: gl-ka-authorization, name: Authorising other projects and groups, match: [agent-authorization]}
+      - {id: gl-ka-troubleshoot, name: Troubleshooting agentk and KAS connectivity, match: [kas-troubleshooting, agentk-logs]}
+  - id: gl-pipeline-efficiency
+    name: Pipeline efficiency and resilience (git depth, fastzip, interruptible, retry, timeout)
+    source: GitLab CI docs/Pipeline efficiency + retry/timeout keywords
+    match: [pipeline-efficiency, pipeline-duration, git-depth, fastzip, job-retry, job-timeout]
+    subtopics:
+      - {id: gl-pe-git, name: GIT_STRATEGY / depth and submodules, match: [git-strategy, git-submodule-strategy]}
+      - {id: gl-pe-compression, name: fastzip and compression levels, match: [artifact-compression-level, cache-compression-level]}
+      - {id: gl-pe-interruptible, name: interruptible and auto-cancel redundant, match: [auto-cancel-redundant]}
+      - {id: gl-pe-retry, name: retry when/max/exit_codes, match: [retry-when, retry-max, retry-exit-codes]}
+      - {id: gl-pe-timeout, name: Job and runner timeouts, match: [timeout-keyword, runner-timeout]}
+      - {id: gl-pe-parallel, name: parallel keyword, match: [parallel-keyword]}
+      - {id: gl-pe-analytics, name: Pipeline analytics and critical path, match: [pipeline-analytics, pipeline-critical-path]}
+      - {id: gl-pe-compute-minutes, name: Compute minutes quotas and cost factors, match: [ci-minutes-quota, cost-factor]}
+  - id: gl-debugging
+    name: Debugging pipelines (CI_DEBUG_TRACE, job logs, lint, pipeline editor)
+    source: GitLab CI docs/Debugging CI-CD pipelines
+    match: [ci-debug-trace, pipeline-debugging, job-log, glab-ci]
+    subtopics:
+      - {id: gl-db-sections, name: Collapsible log sections, match: [job-log-sections, collapsible-sections]}
+      - {id: gl-db-lint, name: CI lint and glab ci lint, match: [ci-lint, glab-ci-lint]}
+      - {id: gl-db-editor, name: Pipeline editor and merged YAML, match: [merged-yaml, full-configuration]}
+      - {id: gl-db-stuck, name: Stuck and pending jobs, match: [job-stuck-pending, runner-tags-mismatch]}
+      - {id: gl-db-rules, name: Debugging rules with simulate, match: [rules-debugging, simulate-pipeline]}
+      - {id: gl-db-jobs-api, name: Jobs API and failure reasons, match: [jobs-api, failure-reason]}
+      - {id: gl-db-trace, name: glab ci trace, match: [glab-ci-trace]}
+      - {id: gl-db-log-limits, name: Job log size limits and truncation, match: [job-log-limit, log-size-limit]}
+  - id: gl-id-tokens-oidc
+    name: ID tokens and OIDC to clouds/Vault
+    source: GitLab CI docs/OpenID Connect
+    match: [id-tokens, gitlab-oidc, id-token]
+    subtopics:
+      - {id: gl-id-aws, name: ID tokens to AWS, match: [gitlab-oidc-aws, assume-role-web-identity-gitlab]}
+      - {id: gl-id-gcp, name: ID tokens to GCP workload identity, match: [gitlab-gcp-workload-identity]}
+      - {id: gl-id-azure, name: ID tokens to Azure federated credentials, match: [gitlab-azure-federated]}
+      - {id: gl-id-vault, name: ID tokens to Vault with the secrets keyword, match: [vault-jwt-gitlab]}
+      - {id: gl-id-claims, name: Token claims / aud and bound claims, match: [id-token-claims, bound-claims]}
+      - {id: gl-id-multiple, name: Multiple id_tokens with different audiences, match: [multiple-id-tokens]}
+      - {id: gl-id-sigstore, name: Keyless cosign signing with SIGSTORE_ID_TOKEN, match: [sigstore-id-token]}
+      - {id: gl-id-jwt-migration, name: Migrating from CI_JOB_JWT to id_tokens, match: [ci-job-jwt-migration]}
+  # --- Jenkins (jenkins.io/doc/book ToC)
+  - id: jk-declarative-pipeline
+    name: Declarative pipeline syntax
+    source: Jenkins handbook/Pipeline syntax
+    match: [declarative-pipeline, jenkinsfile]
+    subtopics:
+      - {id: jk-dp-when, name: when conditions and beforeAgent, match: [when, beforeagent]}
+      - {id: jk-dp-matrix, name: matrix axes and excludes, match: [axes, excludes]}
+      - {id: jk-dp-parallel, name: parallel stages and failFast, match: [parallel, failfast]}
+      - {id: jk-dp-post, name: post conditions, match: [post-conditions, unstable]}
+      - {id: jk-dp-options, name: options directive, match: [options, skipdefaultcheckout]}
+      - {id: jk-dp-parameters, name: parameters directive, match: [parameters]}
+      - {id: jk-dp-stash, name: stash and unstash, match: [stash, unstash]}
+      - {id: jk-dp-tools, name: tools directive, match: [tools-directive]}
+      - {id: jk-dp-triggers, name: triggers directive, match: [triggers-directive]}
+      - {id: jk-dp-agent-none, name: agent none and per-stage agents, match: [agent-none, per-stage-agent]}
+  - id: jk-scripted-cps
+    name: Scripted pipeline and CPS/Groovy pitfalls
+    source: Jenkins handbook/Pipeline + CPS docs
+    match: [scripted-pipeline, cps, noncps]
+    subtopics:
+      - {id: jk-sc-serializable, name: Serialization and NonCPS, match: [serializable]}
+      - {id: jk-sc-sandbox, name: Groovy sandbox and script approval, match: [groovy-sandbox, in-process-script-approval]}
+      - {id: jk-sc-method-size, name: Method code too large, match: [method-code-too-large]}
+      - {id: jk-sc-closures, name: Closures and iteration under CPS, match: [cps-closures, cps-iteration]}
+      - {id: jk-sc-try-catch, name: try/catch/finally and error handling in scripted, match: [scripted-try-catch, error-step]}
+      - {id: jk-sc-node-parallel, name: node / stage / parallel in scripted pipelines, match: [scripted-parallel, node-block]}
+      - {id: jk-sc-load, name: load step and external Groovy files, match: [load-step]}
+      - {id: jk-sc-catcherror, name: catchError / warnError and stage results, match: [catcherror, warnerror]}
+  - id: jk-multibranch
+    name: Multibranch pipelines and organization folders
+    source: Jenkins handbook/Branches and pull requests
+    match: [multibranch-pipeline, organization-folders, branch-sources]
+    subtopics:
+      - {id: jk-mb-indexing, name: Branch indexing and periodic scans, match: [branch-indexing, periodic-scan]}
+      - {id: jk-mb-sources, name: GitHub and Bitbucket branch sources, match: [github-branch-source, bitbucket-branch-source]}
+      - {id: jk-mb-pr-discovery, name: PR discovery strategies, match: [pr-discovery-strategy, discover-pull-requests]}
+      - {id: jk-mb-orphans, name: Orphaned item strategy, match: [orphaned-item-strategy]}
+      - {id: jk-mb-build-strategies, name: Basic branch build strategies, match: [basic-branch-build-strategies]}
+      - {id: jk-mb-script-path, name: Jenkinsfile script path, match: [script-path]}
+      - {id: jk-mb-fork-trust, name: Trust policies for fork pull requests, match: [fork-pr-trust]}
+      - {id: jk-mb-change-request, name: changeRequest conditions and CHANGE_* variables, match: [changerequest, change-id]}
+  - id: jk-shared-libraries
+    name: Shared libraries
+    source: Jenkins handbook/Extending with shared libraries
+    match: [shared-libraries, pipeline-libraries]
+    subtopics:
+      - {id: jk-sl-vars, name: vars global variables and call, match: [vars, def-call]}
+      - {id: jk-sl-src, name: src classes, match: [src-classes]}
+      - {id: jk-sl-resources, name: resources and libraryResource, match: [libraryresource]}
+      - {id: jk-sl-trusted, name: Global trusted vs folder libraries, match: [global-trusted-library, folder-library]}
+      - {id: jk-sl-versioning, name: Library versioning and dynamic loading, match: [library-versioning, dynamic-library]}
+      - {id: jk-sl-testing, name: Unit testing with JenkinsPipelineUnit, match: [jenkinspipelineunit]}
+      - {id: jk-sl-annotation, name: Library annotation / implicit loading and the library step, match: [library-annotation, implicit-load]}
+      - {id: jk-sl-steps, name: Calling pipeline steps from src classes, match: [library-steps-reference]}
+  - id: jk-agents
+    name: Agents, executors and labels
+    source: Jenkins handbook/Managing nodes
+    match: [agents, executors, build-agents]
+    subtopics:
+      - {id: jk-ag-labels, name: Label expressions, match: [label-expressions]}
+      - {id: jk-ag-inbound, name: Inbound agents (JNLP / websocket), match: [inbound-agent, jnlp, websocket]}
+      - {id: jk-ag-ssh, name: SSH build agents, match: [ssh-build-agents]}
+      - {id: jk-ag-cloud, name: Cloud agents (EC2 plugin), match: [ec2-plugin, cloud-agents]}
+      - {id: jk-ag-retention, name: Retention strategies, match: [retention-strategy, idle-termination]}
+      - {id: jk-ag-isolation, name: Controller isolation (no builds on built-in node), match: [controller-isolation]}
+      - {id: jk-ag-workspace, name: Workspace cleanup, match: [ws-cleanup]}
+      - {id: jk-ag-throttle, name: Throttling concurrent builds, match: [throttle-concurrent-builds]}
+  - id: jk-kubernetes-plugin
+    name: Kubernetes plugin pod templates
+    source: Kubernetes plugin docs
+    match: [kubernetes-plugin, podtemplate]
+    subtopics:
+      - {id: jk-kp-yaml, name: Pod template YAML, match: [pod-template-yaml]}
+      - {id: jk-kp-container, name: container step, match: [container-step]}
+      - {id: jk-kp-retention, name: Pod retention and yamlMergeStrategy, match: [pod-retention, yaml-merge-strategy]}
+      - {id: jk-kp-workspace, name: Workspace volumes, match: [workspace-volume]}
+      - {id: jk-kp-jnlp, name: jnlp container resources, match: [jnlp-container-resources]}
+      - {id: jk-kp-inherit, name: Template inheritance, match: [inherit-from]}
+      - {id: jk-kp-jcasc, name: Kubernetes cloud in JCasC, match: [kubernetes-cloud-jcasc]}
+      - {id: jk-kp-troubleshoot, name: Pods stuck pending and agents not connecting, match: [pod-pending-agent-offline]}
+  - id: jk-docker-pipeline
+    name: Docker in pipelines (docker.image().inside, dockerfile agent)
+    source: Jenkins handbook/Using Docker with Pipeline
+    match: [docker-pipeline-plugin, docker-image-inside, dockerfile-agent, docker-withregistry]
+    subtopics:
+      - {id: jk-dk-args, name: Docker agent args and reuseNode, match: [agent-docker-args, reuse-node]}
+      - {id: jk-dk-build-push, name: docker.build and push, match: [docker-build, docker-push]}
+      - {id: jk-dk-kaniko, name: Kaniko in Jenkins, match: [kaniko-in-jenkins]}
+      - {id: jk-dk-user, name: UID/GID user mapping, match: [user-mapping]}
+      - {id: jk-dk-dind, name: dind sidecars, match: [dind-sidecar]}
+      - {id: jk-dk-cleanup, name: Image cleanup, match: [image-cleanup]}
+      - {id: jk-dk-ecr, name: Registry credentials and Amazon ECR, match: [amazon-ecr-plugin]}
+      - {id: jk-dk-withrun, name: withRun sidecar containers for tests, match: [withrun]}
+  - id: jk-credentials
+    name: Credentials and withCredentials
+    source: Jenkins handbook/Using credentials
+    match: [credentials, withcredentials]
+    subtopics:
+      - {id: jk-cr-types, name: Credential types and bindings, match: [credential-types, secret-file, ssh-user-private-key]}
+      - {id: jk-cr-scope, name: Folder-scoped credentials, match: [folder-credentials, credential-scope]}
+      - {id: jk-cr-helper, name: credentials helper in environment, match: [credentials-helper]}
+      - {id: jk-cr-masking, name: Masking and Groovy interpolation, match: [credentials-masking, groovy-interpolation]}
+      - {id: jk-cr-jcasc, name: Credentials from JCasC secret sources, match: [jcasc-credentials, jcasc-secret-source]}
+      - {id: jk-cr-api, name: Credentials API and rotation, match: [credentials-api]}
+      - {id: jk-cr-external, name: External credential providers (Vault / AWS Secrets Manager), match: [hashicorp-vault-plugin, aws-secrets-manager-credentials-provider]}
+      - {id: jk-cr-git, name: Git credentials and gitUsernamePassword binding, match: [gitusernamepassword]}
+  - id: jk-jcasc
+    name: Configuration as Code (JCasC)
+    source: JCasC plugin docs
+    match: [jcasc, configuration-as-code]
+    subtopics:
+      - {id: jk-jc-yaml, name: jenkins.yaml structure, match: [jcasc-yaml, jenkins-yaml]}
+      - {id: jk-jc-secrets, name: Secret sources, match: [jcasc-secret-source]}
+      - {id: jk-jc-export, name: Export and schema validation, match: [jcasc-export, jcasc-schema]}
+      - {id: jk-jc-reload, name: Reload and the reload token, match: [jcasc-reload, casc-reload-token]}
+      - {id: jk-jc-helm, name: JCasC with Docker and Helm, match: [jcasc-helm, jcasc-reproducible]}
+      - {id: jk-jc-jobs, name: Jobs via JCasC and Job DSL, match: [jcasc-jobs]}
+      - {id: jk-jc-multi, name: Multiple config files and CASC_JENKINS_CONFIG, match: [casc-jenkins-config, jcasc-multiple-files]}
+      - {id: jk-jc-troubleshoot, name: Troubleshooting JCasC load errors, match: [jcasc-troubleshooting]}
+  - id: jk-plugin-management
+    name: Plugin management and upgrades
+    source: Jenkins handbook/Managing plugins
+    match: [plugin-management, plugin-installation-manager, plugins-txt]
+    subtopics:
+      - {id: jk-pm-cli, name: jenkins-plugin-cli, match: [jenkins-plugin-cli]}
+      - {id: jk-pm-deps, name: Plugin dependencies and the update center, match: [plugin-dependencies, update-center]}
+      - {id: jk-pm-pinning, name: Pinning plugin versions, match: [plugin-pinning]}
+      - {id: jk-pm-advisories, name: Security advisories, match: [security-advisories]}
+      - {id: jk-pm-offline, name: Offline plugin mirrors, match: [plugin-mirror, offline-plugins]}
+      - {id: jk-pm-removal, name: Removing and deprecated plugins, match: [plugin-removal, deprecated-plugins]}
+      - {id: jk-pm-bom, name: Plugin BOM compatible version sets, match: [plugin-bom]}
+      - {id: jk-pm-health, name: Plugin health scores and adoption checks, match: [plugin-health-score]}
+  - id: jk-security
+    name: Securing Jenkins (authorization strategies, CSRF, agent security, hardening)
+    source: Jenkins handbook/Securing Jenkins
+    match: [matrix-authorization, authorization-strategy, csrf-crumb, jenkins-hardening, role-strategy, jenkins-security]
+    subtopics:
+      - {id: jk-se-realm, name: Security realms (LDAP / SAML), match: [security-realm, ldap, saml]}
+      - {id: jk-se-crumb, name: CSRF crumb issuer, match: [crumb-issuer]}
+      - {id: jk-se-script, name: Script security, match: [script-security]}
+      - {id: jk-se-tokens, name: API tokens, match: [api-tokens]}
+      - {id: jk-se-proxy, name: TLS behind a reverse proxy, match: [reverse-proxy-tls]}
+      - {id: jk-se-audit, name: Audit trail, match: [audit-trail-plugin]}
+      - {id: jk-se-build-auth, name: Build authorization, match: [build-authorization]}
+      - {id: jk-se-agent, name: Agent-to-controller security, match: [agent-to-controller-security]}
+      - {id: jk-se-csp, name: Markup formatter and CSP, match: [markup-formatter, content-security-policy]}
+  - id: jk-build-triggers
+    name: Build triggers (webhooks, SCM polling, cron, generic webhook)
+    source: Jenkins handbook/Build triggers
+    match: [build-triggers, scm-polling, pollscm, generic-webhook-trigger, cron-trigger, github-webhook]
+    subtopics:
+      - {id: jk-bt-gitlab, name: GitLab webhooks, match: [gitlab-webhook]}
+      - {id: jk-bt-hash, name: H hash syntax in cron, match: [h-hash-syntax]}
+      - {id: jk-bt-upstream, name: Upstream triggers, match: [upstream-trigger]}
+      - {id: jk-bt-remote, name: Remote trigger tokens, match: [remote-trigger-token]}
+      - {id: jk-bt-parameterized, name: Parameterized trigger, match: [parameterized-trigger]}
+      - {id: jk-bt-quiet, name: Quiet period, match: [quiet-period]}
+      - {id: jk-bt-secret, name: Webhook secrets, match: [webhook-secret]}
+      - {id: jk-bt-notifycommit, name: notifyCommit, match: [notifycommit]}
+  - id: jk-job-dsl
+    name: Job DSL and seed jobs
+    source: Job DSL plugin docs
+    match: [job-dsl, seed-job]
+    subtopics:
+      - {id: jk-jd-scripts, name: DSL scripts and folders, match: [dsl-script, folder-dsl]}
+      - {id: jk-jd-configure, name: configure blocks, match: [configure-block]}
+      - {id: jk-jd-removed, name: Removed job action, match: [removed-job-action]}
+      - {id: jk-jd-security, name: DSL script security, match: [dsl-script-security]}
+      - {id: jk-jd-api, name: API viewer and dynamic DSL, match: [job-dsl-api-viewer, dynamic-dsl]}
+      - {id: jk-jd-pipeline-jobs, name: pipelineJob and multibranchPipelineJob in DSL, match: [pipelinejob, multibranchpipelinejob]}
+      - {id: jk-jd-testing, name: Testing Job DSL scripts with Gradle, match: [job-dsl-testing]}
+      - {id: jk-jd-views, name: Views in Job DSL, match: [listview-dsl]}
+  - id: jk-test-reporting
+    name: Recording tests and artifacts (junit, warnings-ng, archiveArtifacts, fingerprints)
+    source: Jenkins handbook/Recording tests and artifacts
+    match: [junit-step, warnings-ng, test-results, coverage-plugin, test-reporting, archiveartifacts, fingerprint, copyartifact]
+    subtopics:
+      - {id: jk-tr-junit-options, name: junit step options, match: [allow-empty-results, skip-publishing-checks]}
+      - {id: jk-tr-issues, name: recordIssues and quality gates, match: [record-issues, quality-gates]}
+      - {id: jk-tr-coverage, name: recordCoverage, match: [record-coverage]}
+      - {id: jk-tr-html, name: HTML publisher, match: [publish-html]}
+      - {id: jk-tr-s3, name: Artifact manager S3, match: [artifact-manager-s3]}
+      - {id: jk-tr-flaky, name: Flaky test handling, match: [flaky-test-handler, test-result-trend]}
+      - {id: jk-tr-copy, name: copyArtifacts selectors between jobs, match: [copyartifacts-selector]}
+      - {id: jk-tr-checks, name: publishChecks and the Checks API, match: [publish-checks]}
+  - id: jk-notifications
+    name: Notifications (Slack, email-ext, post conditions)
+    source: Jenkins handbook/Pipeline post + plugins
+    match: [slack-notification, email-ext, notifications, mailer]
+    subtopics:
+      - {id: jk-no-slack, name: slackSend, match: [slacksend]}
+      - {id: jk-no-email, name: emailext and mail, match: [emailext, mail-step]}
+      - {id: jk-no-post, name: post always/fixed/regression, match: [post-always, post-fixed]}
+      - {id: jk-no-recipients, name: Culprits and recipient providers, match: [culprits]}
+      - {id: jk-no-teams, name: Teams notifications, match: [teams-notification]}
+      - {id: jk-no-checks, name: GitHub checks and commit status, match: [github-checks, commit-status]}
+      - {id: jk-no-badge, name: Embeddable build status badges, match: [embeddable-build-status]}
+      - {id: jk-no-http, name: Webhook notifications with httpRequest, match: [http-request-step]}
+  - id: jk-input-approval
+    name: input step, milestones and lockable resources
+    source: Jenkins handbook/Pipeline steps
+    match: [input-step, milestone, lockable-resources]
+    subtopics:
+      - {id: jk-ia-submitter, name: input submitter and parameters, match: [input-submitter, input-parameters]}
+      - {id: jk-ia-timeout, name: Timeouts on input, match: [input-timeout]}
+      - {id: jk-ia-lock, name: lock step quantity and labels, match: [lock-step, lock-quantity, lock-label]}
+      - {id: jk-ia-milestone, name: milestone ordering, match: [milestone-ordering]}
+      - {id: jk-ia-disable-concurrent, name: disableConcurrentBuilds, match: [disableconcurrentbuilds]}
+      - {id: jk-ia-no-executor, name: Waiting for input without holding an executor, match: [input-outside-agent]}
+      - {id: jk-ia-rest, name: Approving input via the REST API, match: [input-rest-api]}
+      - {id: jk-ia-waituntil, name: waitUntil and sleep steps, match: [waituntil]}
+  - id: jk-controller-scaling
+    name: Scaling the controller (JVM tuning, build discarders, durability, monitoring)
+    source: Jenkins handbook/Scaling Jenkins + Pipeline durability
+    match: [controller-tuning, jvm-tuning, jenkins-performance, build-discarder, pipeline-durability, prometheus-plugin]
+    subtopics:
+      - {id: jk-cs-gc, name: G1GC and heap sizing, match: [g1gc, heap-sizing]}
+      - {id: jk-cs-durability, name: Durability hints, match: [durability-hint, performance-optimized]}
+      - {id: jk-cs-log-rotation, name: Log rotation and build history, match: [log-rotation]}
+      - {id: jk-cs-disk, name: JENKINS_HOME disk and NFS, match: [nfs-latency]}
+      - {id: jk-cs-metrics, name: Metrics and monitoring plugins, match: [metrics-plugin]}
+      - {id: jk-cs-support, name: Support core and thread dumps, match: [support-core, thread-dump]}
+      - {id: jk-cs-sharding, name: Folder sharding and multiple controllers, match: [folder-sharding]}
+      - {id: jk-cs-queue, name: Build queue and load statistics, match: [load-statistics, jenkins-build-queue]}
+  - id: jk-backup-upgrade
+    name: Backup, restore, LTS upgrades and containerised install
+    source: Jenkins handbook/System administration + Installing
+    match: [jenkins-backup, lts-upgrade, jenkins-home, jenkins-helm, jenkins-upgrade]
+    subtopics:
+      - {id: jk-bu-master-key, name: master.key and secrets directory, match: [master-key]}
+      - {id: jk-bu-thinbackup, name: ThinBackup, match: [thinbackup]}
+      - {id: jk-bu-path, name: Upgrade path and plugin compatibility, match: [upgrade-path, plugin-compatibility]}
+      - {id: jk-bu-java, name: Java version upgrades, match: [java-version-upgrade]}
+      - {id: jk-bu-docker, name: Docker LTS image, match: [jenkins-docker]}
+      - {id: jk-bu-staging, name: Staging controller for rehearsals, match: [staging-controller]}
+      - {id: jk-bu-old-data, name: Old data monitor and rollback, match: [old-data-monitor, rollback-upgrade]}
+      - {id: jk-bu-systemd, name: Package installs and systemd overrides, match: [jenkins-systemd]}
+  - id: jk-pipeline-dev-tools
+    name: Pipeline dev tools (linter, snippet generator, replay, restart from stage)
+    source: Jenkins handbook/Pipeline development tools
+    match: [pipeline-linter, restart-from-stage, snippet-generator, replay]
+    subtopics:
+      - {id: jk-pd-linter-api, name: Linting via HTTP API and CLI, match: [linter-api, declarative-linter]}
+      - {id: jk-pd-replay, name: Replaying a run with edited script, match: [replay-pipeline]}
+      - {id: jk-pd-restart, name: Restart from stage, match: [restart-stage, preserve-stashes]}
+      - {id: jk-pd-generators, name: Snippet and directive generators, match: [directive-generator]}
+      - {id: jk-pd-cli, name: jenkins-cli and SSH interface, match: [jenkins-cli, jenkins-ssh-cli]}
+      - {id: jk-pd-editors, name: Editor integration (VS Code / IntelliJ GDSL), match: [jenkinsfile-vscode, intellij-gdsl]}
+      - {id: jk-pd-runner, name: Running Jenkinsfiles locally with jenkinsfile-runner, match: [jenkinsfile-runner]}
+      - {id: jk-pd-graph, name: Pipeline graph view and stage view, match: [pipeline-graph-view]}
+  # --- Argo CD and GitOps (argo-cd.readthedocs.io ToC; Flux docs)
+  - id: argo-application-project
+    name: Application and AppProject
+    source: Argo CD docs/Core concepts + Application spec + Projects
+    match: [application, appproject]
+    subtopics:
+      - {id: argo-ap-spec, name: Application spec (source / targetRevision / destination), match: [application-spec, source-targetrevision]}
+      - {id: argo-ap-multi-source, name: Multiple sources and ref sources, match: [multi-source-application, ref-sources]}
+      - {id: argo-ap-restrictions, name: AppProject source/destination restrictions and whitelists, match: [source-repos, destination-restrictions, cluster-resource-whitelist]}
+      - {id: argo-ap-roles, name: Project roles and tokens, match: [project-roles, argocd-proj-role]}
+      - {id: argo-ap-finalizers, name: Finalizers and cascade deletion, match: [finalizers, cascade-delete]}
+      - {id: argo-ap-any-namespace, name: Applications in any namespace, match: [applications-in-any-namespace]}
+      - {id: argo-ap-annotations, name: Application annotations (manifest-generate-paths / refresh), match: [manifest-generate-paths, manifest-generation-paths]}
+      - {id: argo-ap-cli, name: argocd app create / set from the CLI, match: [argocd-app-create]}
+  - id: argo-applicationset-generators
+    name: ApplicationSet generators (git, list, cluster, matrix, pull request, SCM)
+    source: Argo CD docs/ApplicationSet
+    match: [generators, git-generator, cluster-generator, matrix-generator, pull-request-generator, scm-provider-generator]
+    subtopics:
+      - {id: argo-as-list, name: List generator, match: [list-generator]}
+      - {id: argo-as-git-dir-file, name: Git directory and file generators, match: [git-directory-generator, git-file-generator]}
+      - {id: argo-as-merge, name: Merge generator, match: [merge-generator]}
+      - {id: argo-as-plugin, name: Plugin generator, match: [plugin-generator]}
+      - {id: argo-as-templates, name: Go templates and templatePatch, match: [go-template, template-patch]}
+      - {id: argo-as-policy, name: Sync policy and preserveResourcesOnDeletion, match: [applicationset-policy, preserve-resources-on-deletion]}
+      - {id: argo-as-progressive, name: Progressive syncs, match: [progressive-syncs, rolling-sync]}
+      - {id: argo-as-selectors, name: Generator post-selectors and requeue, match: [post-selector, generator-selector, generator-requeue-after]}
+      - {id: argo-as-any-namespace, name: ApplicationSets in any namespace, match: [applicationset-in-any-namespace]}
+  - id: argo-sync-policy
+    name: Sync policy (automated, self-heal, prune)
+    source: Argo CD docs/Automated sync policy
+    match: [sync-policy, automated-sync, self-heal]
+    subtopics:
+      - {id: argo-sp-prune, name: Automated pruning, match: [prune]}
+      - {id: argo-sp-allow-empty, name: allowEmpty guard, match: [allowempty, allow-empty]}
+      - {id: argo-sp-retry, name: Retry and backoff, match: [retry-backoff]}
+      - {id: argo-sp-polling, name: Polling interval vs webhooks, match: [timeout-reconciliation]}
+      - {id: argo-sp-compare-options, name: compare-options IgnoreExtraneous, match: [compare-options, ignoreextraneous]}
+      - {id: argo-sp-badge, name: Status badges, match: [status-badge]}
+      - {id: argo-sp-disable, name: Disabling auto-sync during incidents, match: [disable-auto-sync]}
+      - {id: argo-sp-self-heal-timeout, name: Self-heal timeout and backoff, match: [self-heal-timeout]}
+  - id: argo-sync-options
+    name: Sync options and sync windows (ServerSideApply, CreateNamespace, Replace, PruneLast)
+    source: Argo CD docs/Sync options + Sync windows
+    match: [sync-options, server-side-apply, createnamespace, prunelast, applyoutofsynconly, prune-propagation-policy, sync-windows]
+    subtopics:
+      - {id: argo-so-ssa, name: ServerSideApply, match: [serversideapply]}
+      - {id: argo-so-replace, name: Replace and Force, match: [replace, force]}
+      - {id: argo-so-namespace, name: CreateNamespace and managedNamespaceMetadata, match: [managed-namespace-metadata]}
+      - {id: argo-so-prune-policy, name: PrunePropagationPolicy, match: [prunepropagationpolicy]}
+      - {id: argo-so-validate, name: Validate false and SkipDryRun, match: [validate-false, skipdryrunonmissingresource]}
+      - {id: argo-so-respect-ignore, name: RespectIgnoreDifferences, match: [respectignoredifferences]}
+      - {id: argo-so-windows, name: Allow/deny windows and manual sync, match: [allow-deny-windows, manual-sync-window]}
+      - {id: argo-so-selective, name: Selective sync, match: [selective-sync]}
+  - id: argo-sync-waves-hooks
+    name: Sync waves, phases and resource hooks
+    source: Argo CD docs/Sync phases and waves + Resource hooks
+    match: [sync-waves, resource-hooks, presync]
+    subtopics:
+      - {id: argo-sw-delete-policy, name: hook-delete-policy, match: [hook-delete-policy, beforehookcreation]}
+      - {id: argo-sw-postdelete, name: PostDelete hooks, match: [postdelete]}
+      - {id: argo-sw-syncfail, name: SyncFail hooks, match: [syncfail]}
+      - {id: argo-sw-order, name: Wave ordering and kinds order, match: [sync-order]}
+      - {id: argo-sw-helm, name: Helm hooks mapping, match: [helm-hooks]}
+      - {id: argo-sw-migration, name: Migration jobs as PreSync, match: [migration-job]}
+      - {id: argo-sw-delay, name: Wave delay (ARGOCD_SYNC_WAVE_DELAY), match: [sync-wave-delay]}
+      - {id: argo-sw-generatename, name: Hooks with generateName vs fixed names, match: [hook-generatename]}
+  - id: argo-diffing
+    name: Diff customisation and ignoreDifferences
+    source: Argo CD docs/Diffing customization
+    match: [ignoredifferences, diff-customization, diffing]
+    subtopics:
+      - {id: argo-df-pointers, name: jsonPointers and jqPathExpressions, match: [json-pointers, jq-path-expressions]}
+      - {id: argo-df-managed-fields, name: managedFieldsManagers, match: [managed-fields-managers]}
+      - {id: argo-df-system, name: System-level ignore in argocd-cm, match: [resource-compare-options, system-level-diffing]}
+      - {id: argo-df-aggregated, name: ignoreAggregatedRoles, match: [ignore-aggregated-roles]}
+      - {id: argo-df-normalizer, name: Ignore normalizer jq timeout, match: [ignore-normalizer-jq-timeout]}
+      - {id: argo-df-respect, name: RespectIgnoreDifferences on sync, match: [respectignoredifferences]}
+      - {id: argo-df-server-side, name: Server-side diff and argocd app diff --local, match: [server-side-diff, app-diff-local]}
+      - {id: argo-df-hpa, name: Ignoring HPA-managed replicas, match: [hpa-replicas-diff]}
+  - id: argo-health
+    name: Health assessment and custom Lua health checks
+    source: Argo CD docs/Resource health
+    match: [health-assessment, custom-health-check, lua-health-check, resource-health]
+    subtopics:
+      - {id: argo-he-custom, name: resource.customizations.health Lua, match: [resource-customizations]}
+      - {id: argo-he-builtin, name: Built-in health checks per kind, match: [built-in-health-checks]}
+      - {id: argo-he-app-health, name: Application health and app-of-apps, match: [application-health]}
+      - {id: argo-he-states, name: Progressing/Degraded/Suspended semantics, match: [health-status-progressing, health-suspended]}
+      - {id: argo-he-ignore, name: Ignoring resource health, match: [job-health-ignore, ignore-healthcheck]}
+      - {id: argo-he-testing, name: Testing Lua health scripts, match: [lua-health-testing]}
+      - {id: argo-he-crd, name: Health for CRDs and operator resources, match: [crd-health]}
+      - {id: argo-he-ingress, name: Ingress and LoadBalancer stuck Progressing, match: [ingress-progressing]}
+  - id: argo-resource-tracking
+    name: Resource tracking, orphaned resources and exclusions
+    source: Argo CD docs/Resource tracking + Orphaned resources
+    match: [resource-tracking, tracking-method, orphaned-resources, resource-exclusions]
+    subtopics:
+      - {id: argo-rt-methods, name: Annotation vs label tracking, match: [annotation-tracking, label-tracking]}
+      - {id: argo-rt-install-id, name: installationID, match: [install-id]}
+      - {id: argo-rt-orphans, name: Orphaned resource warnings, match: [orphaned-resources-warning]}
+      - {id: argo-rt-inclusions, name: Resource inclusions, match: [resource-inclusions]}
+      - {id: argo-rt-label-limit, name: 63-char label limit, match: [63-char-label-limit]}
+      - {id: argo-rt-shared, name: Shared resource warnings, match: [sharedresourcewarning]}
+      - {id: argo-rt-cluster-scoped, name: Cluster-scoped resources, match: [cluster-scoped-resources]}
+      - {id: argo-rt-migrate, name: Migrating tracking method safely, match: [tracking-method-migration]}
+  - id: argo-helm-kustomize
+    name: Helm and Kustomize sources
+    source: Argo CD docs/Helm + Kustomize + Directory + Jsonnet
+    match: [helm, kustomize]
+    subtopics:
+      - {id: argo-hk-values, name: Helm values files and valuesObject, match: [helm-values-files, valuesobject]}
+      - {id: argo-hk-parameters, name: Helm parameters and file parameters, match: [helm-parameters, file-parameters]}
+      - {id: argo-hk-release, name: Helm release name / skipCrds and version, match: [helm-release-name, skip-crds]}
+      - {id: argo-hk-oci, name: OCI Helm repos, match: [oci-helm-repo]}
+      - {id: argo-hk-kustomize-images, name: Kustomize images / namePrefix and commonLabels, match: [kustomize-images, name-prefix]}
+      - {id: argo-hk-kustomize-options, name: Kustomize build options and version, match: [kustomize-build-options, kustomize-version]}
+      - {id: argo-hk-kustomize-helm, name: Kustomize with Helm charts (enable-helm), match: [kustomize-enable-helm]}
+      - {id: argo-hk-directory, name: Directory recurse and include/exclude, match: [directory-recurse, directory-include]}
+      - {id: argo-hk-jsonnet, name: Jsonnet TLAs and libs, match: [jsonnet-tla]}
+  - id: argo-cmp
+    name: Config management plugins (sidecar)
+    source: Argo CD docs/Config Management Plugins
+    match: [config-management-plugin, cmp, cmp-sidecar, plugin-sidecar]
+    subtopics:
+      - {id: argo-cm-plugin-yaml, name: plugin.yaml discover/init/generate, match: [plugin-yaml, discover]}
+      - {id: argo-cm-parameters, name: Parameters announcements, match: [parameters-announcements]}
+      - {id: argo-cm-env, name: Plugin env and ARGOCD_ENV, match: [plugin-env]}
+      - {id: argo-cm-avp, name: argocd-vault-plugin as CMP, match: [argocd-vault-plugin]}
+      - {id: argo-cm-server, name: cmp-server socket and security, match: [cmp-server, plugin-security]}
+      - {id: argo-cm-helmfile, name: Helmfile/ytt/tanka plugins, match: [helmfile]}
+      - {id: argo-cm-migration, name: Migrating argocd-cm plugins to sidecars, match: [cmp-migration]}
+      - {id: argo-cm-timeout, name: Debugging CMP timeouts and logs, match: [cmp-timeout, argocd-exec-timeout]}
+  - id: argo-multi-cluster
+    name: Multi-cluster management (cluster secrets, hub-spoke)
+    source: Argo CD docs/Declarative setup clusters
+    match: [multi-cluster, cluster-secrets, cluster-registration, hub-spoke]
+    subtopics:
+      - {id: argo-mc-add, name: argocd cluster add, match: [argocd-cluster-add]}
+      - {id: argo-mc-eks, name: EKS IAM auth, match: [eks-iam]}
+      - {id: argo-mc-gke-aks, name: GKE and AKS workload identity, match: [gke-workload-identity]}
+      - {id: argo-mc-labels, name: Cluster labels for generators, match: [cluster-labels]}
+      - {id: argo-mc-sharding, name: Cluster sharding, match: [cluster-sharding]}
+      - {id: argo-mc-sa, name: argocd-manager service account, match: [argocd-manager]}
+      - {id: argo-mc-agent, name: Agent-based GitOps for private clusters, match: [agent-based-gitops, argocd-agent]}
+      - {id: argo-mc-rotate, name: Rotating cluster credentials, match: [cluster-credential-rotation]}
+  - id: argo-rbac-sso
+    name: RBAC (policy.csv) and SSO (Dex/OIDC)
+    source: Argo CD docs/RBAC + SSO
+    match: [argocd-rbac, policy-csv, dex, argocd-sso, sso]
+    subtopics:
+      - {id: argo-rb-scopes, name: Scopes and groups claim, match: [scopes, groups-claim]}
+      - {id: argo-rb-dex, name: Dex connectors, match: [dex-connectors]}
+      - {id: argo-rb-oidc, name: Direct OIDC (Okta / Entra), match: [okta, entra-id]}
+      - {id: argo-rb-project-roles, name: Project roles and JWT tokens, match: [jwt-tokens]}
+      - {id: argo-rb-local, name: Local users and API keys, match: [local-users, api-keys]}
+      - {id: argo-rb-matchmode, name: policy.matchMode glob vs regex, match: [policy-matchmode]}
+      - {id: argo-rb-validate, name: Validating RBAC, match: [rbac-validation]}
+      - {id: argo-rb-default, name: policy.default, match: [policy-default]}
+  - id: argo-notifications
+    name: Argo CD Notifications triggers and templates
+    source: Argo CD docs/Notifications
+    match: [argocd-notifications, notification-triggers, notification-templates]
+    subtopics:
+      - {id: argo-nt-cm, name: argocd-notifications-cm and secret, match: [argocd-notifications-cm]}
+      - {id: argo-nt-subscriptions, name: Subscriptions and default subscriptions, match: [subscriptions, default-subscriptions]}
+      - {id: argo-nt-slack, name: Slack service, match: [slack-service]}
+      - {id: argo-nt-webhook, name: Webhook and GitHub services, match: [webhook-service, github-service]}
+      - {id: argo-nt-oncesync, name: oncePer and on-sync triggers, match: [oncesync]}
+      - {id: argo-nt-commit-status, name: Commit status via webhook, match: [commit-status-webhook]}
+      - {id: argo-nt-catalog, name: Notification catalog, match: [notification-catalog]}
+      - {id: argo-nt-email-teams, name: Email and Teams services, match: [email-service, teams-service]}
+  - id: argo-image-updater
+    name: Image Updater / Flux image automation
+    source: Argo CD Image Updater docs + Flux docs
+    match: [argocd-image-updater, image-updater, image-automation, flux-image-automation]
+    subtopics:
+      - {id: argo-iu-strategies, name: Update strategies (semver / digest / newest-build), match: [update-strategy, semver-strategy, digest-strategy]}
+      - {id: argo-iu-write-back, name: Write-back git vs argocd, match: [write-back-git, write-back-argocd]}
+      - {id: argo-iu-registries, name: registries.conf and credentials, match: [registries-conf, registry-credentials]}
+      - {id: argo-iu-ecr, name: ECR credentials scripts, match: [ecr-credentials]}
+      - {id: argo-iu-flux, name: Flux ImageRepository/ImagePolicy/ImageUpdateAutomation, match: [imagerepository, imagepolicy, imageupdateautomation]}
+      - {id: argo-iu-helm-kustomize, name: Helm image tag and kustomize image targets, match: [helm-image-tag, kustomize-image]}
+      - {id: argo-iu-tags, name: allow-tags / ignore-tags filters and platforms, match: [allow-tags, ignore-tags]}
+      - {id: argo-iu-troubleshoot, name: Troubleshooting Image Updater with the test command, match: [argocd-image-updater-test]}
+  - id: argo-ha-scaling
+    name: HA install, controller sharding, repo-server scaling and metrics
+    source: Argo CD docs/High availability + Metrics
+    match: [argocd-ha, controller-sharding, repo-server-scaling, argocd-performance, argocd-metrics, argocd-monitoring]
+    subtopics:
+      - {id: argo-ha-manifests, name: HA manifests and Redis HA, match: [ha-manifests, redis-ha]}
+      - {id: argo-ha-controller, name: Controller replicas and processors, match: [controller-replicas, status-processors]}
+      - {id: argo-ha-repo, name: Repo server replicas and parallelism, match: [repo-server-replicas, reposerver-parallelism]}
+      - {id: argo-ha-kubectl, name: kubectl parallelism limit, match: [kubectl-parallelism-limit]}
+      - {id: argo-ha-prometheus, name: Prometheus ServiceMonitors, match: [argocd-prometheus, servicemonitor]}
+      - {id: argo-ha-grafana, name: Grafana dashboards, match: [grafana-dashboard]}
+      - {id: argo-ha-cache, name: Repo server cache tuning, match: [repo-server-cache]}
+      - {id: argo-ha-api, name: API server replicas, match: [api-server-replicas]}
+  - id: argo-declarative-setup
+    name: Declarative setup (argocd-cm, argocd-cmd-params-cm, argocd-rbac-cm)
+    source: Argo CD docs/Declarative setup + Installation + Ingress
+    match: [argocd-cm, argocd-cmd-params-cm, declarative-setup]
+    subtopics:
+      - {id: argo-de-params, name: argocd-cmd-params-cm server/controller flags, match: [server-insecure, argocd-server-flags]}
+      - {id: argo-de-customizations, name: resource.customizations in argocd-cm, match: [resource-customizations]}
+      - {id: argo-de-admin, name: Admin password and argocd-secret, match: [admin-password, admin-password-reset]}
+      - {id: argo-de-known-hosts, name: SSH known hosts and TLS certs ConfigMaps, match: [argocd-ssh-known-hosts-cm, argocd-tls-certs-cm]}
+      - {id: argo-de-repos-clusters, name: Declarative repositories and clusters, match: [repository-secret]}
+      - {id: argo-de-ingress, name: Ingress (nginx / Traefik / gRPC-web), match: [argocd-ingress, grpc-web-ingress]}
+      - {id: argo-de-install, name: Installing with Helm chart or Kustomize, match: [argocd-helm-chart, argocd-kustomize-install]}
+      - {id: argo-de-exec, name: Web terminal (exec.enabled) and UI settings, match: [exec-enabled, web-terminal]}
+  - id: argo-disaster-recovery
+    name: Backup, restore and upgrades (argocd admin export/import)
+    source: Argo CD docs/Disaster recovery + Upgrading
+    match: [argocd-backup, argocd-admin-export, argocd-restore, argocd-upgrade]
+    subtopics:
+      - {id: argo-dr-import, name: argocd admin import, match: [argocd-admin-import]}
+      - {id: argo-dr-crds, name: CRD upgrades, match: [crd-upgrade]}
+      - {id: argo-dr-helm, name: Helm chart upgrades, match: [helm-chart-upgrade]}
+      - {id: argo-dr-redis, name: Redis cache rebuild, match: [redis-cache-rebuild]}
+      - {id: argo-dr-self, name: Argo manages Argo, match: [argo-manages-argo, bootstrap-from-git]}
+      - {id: argo-dr-skew, name: Version skew and downgrade, match: [version-skew]}
+      - {id: argo-dr-rto, name: RTO/RPO planning, match: [rto]}
+      - {id: argo-dr-velero, name: Velero backups vs argocd admin export, match: [velero-argocd]}
+  - id: argo-repo-credentials
+    name: Private repositories, credential templates and webhooks
+    source: Argo CD docs/Private repositories + Webhooks
+    match: [repo-credentials, private-repos, credential-templates, ssh-known-hosts, argocd-webhook]
+    subtopics:
+      - {id: argo-rc-templates, name: Credential templates (repo-creds), match: [repo-creds]}
+      - {id: argo-rc-github-app, name: GitHub App credentials, match: [github-app-credentials]}
+      - {id: argo-rc-deploy-key, name: Deploy keys, match: [deploy-key]}
+      - {id: argo-rc-helm, name: Helm repo credentials, match: [helm-repo-credentials]}
+      - {id: argo-rc-rotation, name: Credential rotation, match: [git-credentials-rotation]}
+      - {id: argo-rc-webhooks, name: GitHub/GitLab webhooks and secrets, match: [github-webhook, gitlab-webhook, webhook-secret]}
+      - {id: argo-rc-gpg, name: GPG signature verification, match: [gpg-signature-verification]}
+      - {id: argo-rc-tls, name: Self-signed TLS certs, match: [tls-certs]}
+  - id: argo-troubleshooting
+    name: Troubleshooting OutOfSync/refresh/reconciliation
+    source: Argo CD docs/FAQ + CLI
+    match: [outofsync, hard-refresh, reconciliation-timeout, argocd-cli, app-diff]
+    subtopics:
+      - {id: argo-ts-refresh, name: Refresh vs sync vs hard refresh, match: [refresh-vs-sync]}
+      - {id: argo-ts-cli, name: app get/manifests/diff/wait, match: [app-manifests, app-wait]}
+      - {id: argo-ts-history, name: app history and rollback, match: [app-history, app-rollback]}
+      - {id: argo-ts-comparison, name: ComparisonError, match: [comparison-error]}
+      - {id: argo-ts-stuck, name: Sync stuck and terminate operation, match: [sync-stuck, terminate-operation]}
+      - {id: argo-ts-progressing, name: Progressing forever, match: [progressing-forever]}
+      - {id: argo-ts-finalizer, name: Orphaned finalizers, match: [orphaned-finalizer]}
+      - {id: argo-ts-webhook-drift, name: Mutating webhook drift, match: [mutating-webhook-drift]}
+      - {id: argo-ts-logs, name: Reading controller and repo-server logs, match: [repo-server-logs, controller-logs]}
+  - id: argo-rollouts
+    name: Argo Rollouts progressive delivery
+    source: Argo Rollouts docs
+    match: [argo-rollouts, analysistemplate]
+    subtopics:
+      - {id: argo-ro-canary-steps, name: Canary steps setWeight/pause, match: [setweight, pause]}
+      - {id: argo-ro-bluegreen, name: BlueGreen strategy with preview/active services, match: [bluegreen-strategy, preview-service]}
+      - {id: argo-ro-analysis, name: AnalysisRuns with Prometheus, match: [analysisrun, prometheus]}
+      - {id: argo-ro-traffic, name: Traffic routing (Istio / NGINX / ALB / Gateway API), match: [istio, nginx-ingress, aws-alb, gateway-api]}
+      - {id: argo-ro-experiments, name: Experiments, match: [experiment-crd]}
+      - {id: argo-ro-kubectl, name: kubectl argo rollouts plugin, match: [kubectl-argo-rollouts]}
+      - {id: argo-ro-workloadref, name: workloadRef migration, match: [workloadref]}
+      - {id: argo-ro-hpa, name: Rollouts with HPA and metrics, match: [rollouts-hpa, rollouts-metrics]}
+      - {id: argo-ro-promote, name: Promote and abort, match: [promote, abort]}
+  - id: flux-v2
+    name: Flux v2 (Kustomization, HelmRelease, sources, bootstrap)
+    source: Flux docs
+    match: [flux-kustomization, helmrelease, flux-bootstrap, source-controller]
+    subtopics:
+      - {id: flux-sources, name: GitRepository/OCIRepository/HelmRepository, match: [gitrepository, ocirepository, helmrepository]}
+      - {id: flux-dependson, name: dependsOn and health checks, match: [dependson]}
+      - {id: flux-substitution, name: postBuild substitution, match: [postbuild-substitution]}
+      - {id: flux-suspend, name: Suspend/resume and reconcile, match: [flux-suspend, flux-reconcile]}
+      - {id: flux-diff, name: flux diff and trace, match: [flux-diff, flux-trace]}
+      - {id: flux-sops, name: SOPS decryption, match: [sops-decryption]}
+      - {id: flux-alerts, name: Alerts and receivers, match: [flux-alerts, flux-receiver]}
+      - {id: flux-tenancy, name: Multi-tenancy, match: [multi-tenancy]}
+      - {id: flux-helm-drift, name: HelmRelease drift detection and remediation, match: [helmrelease-drift-detection, helmrelease-remediation]}
+  - id: gitops-repo-structure
+    name: GitOps repo structure and environment promotion
+    source: Argo CD docs/Best practices + Kargo docs
+    match: [gitops-repo-structure, environment-promotion, config-repo, kargo, promotion]
+    subtopics:
+      - {id: gr-folders-branches, name: Environment folders vs branches, match: [environment-folders, environments-as-branches]}
+      - {id: gr-kargo, name: Kargo warehouses / stages and freight, match: [kargo-stages, kargo-warehouse, kargo-freight]}
+      - {id: gr-promotion-pr, name: Automated promotion pull requests, match: [promotion-pr-automation]}
+      - {id: gr-chart-versions, name: Promoting pinned chart versions, match: [chart-version-promotion]}
+      - {id: gr-app-of-apps, name: App-of-apps bootstrap layout, match: [app-of-apps, root-app]}
+      - {id: gr-mono-vs-poly, name: Mono vs multi config repos, match: [config-monorepo, config-polyrepo]}
+      - {id: gr-rendered, name: Rendered manifests pattern (hydration), match: [rendered-manifests, manifest-hydration]}
+      - {id: gr-cluster-dirs, name: Directory per cluster and cluster bootstrap layout, match: [cluster-directory-layout]}
+  # --- DORA / Accelerate capabilities and metrics
+  - id: dora-four-keys
+    name: Measuring the four key metrics
+    source: DORA/Accelerate
+    match: [four-keys, deployment-frequency, change-failure-rate, time-to-restore, measuring-dora]
+    subtopics:
+      - {id: dora-lead-time, name: Lead time for changes, match: [lead-time-for-changes]}
+      - {id: dora-reliability, name: Reliability fifth metric, match: [reliability]}
+      - {id: dora-instrument, name: Instrumenting deployment events, match: [deployment-events, incident-linking]}
+      - {id: dora-tools, name: Four Keys project and Grafana, match: [four-keys-project, grafana-dora]}
+      - {id: dora-gaming, name: Goodhart and metric gaming, match: [goodhart, metric-gaming]}
+      - {id: dora-quick-check, name: Survey-based measurement and performance clusters, match: [dora-quick-check, performance-clusters]}
+      - {id: dora-rework, name: Defining failures and deployment rework rate, match: [deployment-rework-rate]}
+      - {id: dora-recovery, name: Failed deployment recovery time, match: [failed-deployment-recovery-time]}
+  - id: continuous-integration
+    name: Continuous integration practice
+    source: DORA capability + CD ch3
+    match: [continuous-integration, ci]
+    subtopics:
+      - {id: ci-ten-minute, name: The ten-minute build, match: [ten-minute-build]}
+      - {id: ci-broken-build, name: Never leave the build broken, match: [main-is-red-policy, broken-build-policy]}
+      - {id: ci-pre-tested, name: Pre-commit checks and pre-tested commits, match: [pre-commit-hooks, pre-tested-commit]}
+      - {id: ci-flaky, name: Flaky tests and quarantine, match: [flaky-tests, quarantine]}
+      - {id: ci-merge-queue, name: Merge queues, match: [merge-queue]}
+      - {id: ci-build-once, name: Build once, match: [build-once]}
+      - {id: ci-daily-commits, name: Integrating to trunk at least daily, match: [daily-commits]}
+      - {id: ci-radiator, name: Build status visibility and radiators, match: [build-radiator]}
+  - id: trunk-based-development
+    name: Trunk-based development
+    source: DORA capability + CD ch14
+    match: [trunk-based-development, branching-strategy]
+    subtopics:
+      - {id: tbd-short-branches, name: Short-lived branches and small PRs, match: [short-lived-branches, small-prs]}
+      - {id: tbd-branch-by-abstraction, name: Branch by abstraction, match: [branch-by-abstraction]}
+      - {id: tbd-flags, name: Flags instead of branches, match: [feature-flags]}
+      - {id: tbd-release-branches, name: Release branches from trunk, match: [release-branches]}
+      - {id: tbd-code-freeze, name: Avoiding code freezes, match: [code-freeze]}
+      - {id: tbd-keystone, name: Keystone interfaces and dark launching, match: [keystone-interface]}
+      - {id: tbd-direct, name: Committing straight to trunk vs short PR flow, match: [commit-to-trunk]}
+      - {id: tbd-merge-strategy, name: Squash vs merge commits and rebase policy, match: [squash-vs-merge-commit, trunk-merge-policy]}
+  - id: test-automation
+    name: Test automation strategy (test pyramid)
+    source: DORA capability + CD ch4
+    match: [test-automation, test-pyramid, testing-strategy]
+    subtopics:
+      - {id: ta-contract, name: Contract tests, match: [contract-tests, pact]}
+      - {id: ta-mutation, name: Mutation testing, match: [mutation-testing]}
+      - {id: ta-coverage-gates, name: Coverage thresholds and gates, match: [coverage-thresholds, coverage-gate]}
+      - {id: ta-affected, name: Test impact analysis, match: [affected-tests, test-impact-analysis]}
+      - {id: ta-flaky, name: Flaky test management, match: [flaky-tests]}
+      - {id: ta-timing-split, name: Timing-based test splitting, match: [timing-based-splitting]}
+      - {id: ta-snapshot, name: Snapshot and golden-file tests, match: [snapshot-testing, golden-files]}
+      - {id: ta-property, name: Property-based testing in CI, match: [property-based-testing]}
+  - id: test-data-management
+    name: Test data management
+    source: DORA capability + CD ch12
+    match: [test-data-management, test-data, data-anonymisation, synthetic-test-data]
+    subtopics:
+      - {id: tdm-masking, name: Data masking, match: [data-masking]}
+      - {id: tdm-factories, name: Factories and builders, match: [factories, data-builders]}
+      - {id: tdm-seeds, name: Seed scripts, match: [seed-scripts]}
+      - {id: tdm-subsetting, name: Subsetting production data, match: [subsetting]}
+      - {id: tdm-isolation, name: Per-test isolation and rollback, match: [transaction-rollback, per-test-isolation]}
+      - {id: tdm-branch-db, name: Ephemeral and branch databases per CI job, match: [branch-databases, neon-branching]}
+      - {id: tdm-privacy, name: Privacy compliance for test data, match: [test-data-privacy]}
+      - {id: tdm-fixture-versioning, name: Fixture versioning and golden datasets, match: [fixture-versioning]}
+  - id: shift-left-security
+    name: Shift left on security (DevSecOps gates)
+    source: DORA capability
+    match: [devsecops, shift-left-security, security-gates, semgrep]
+    subtopics:
+      - {id: sls-codeql, name: CodeQL code scanning, match: [codeql, code-scanning]}
+      - {id: sls-dependency-review, name: Dependency review on PRs, match: [dependency-review-action, dependency-review]}
+      - {id: sls-iac, name: IaC scanning, match: [iac-scanning, checkov]}
+      - {id: sls-gates, name: Severity gates, match: [severity-gates]}
+      - {id: sls-secrets, name: Pre-commit secret scanning, match: [gitleaks]}
+      - {id: sls-sarif, name: SARIF upload and alert triage, match: [sarif, sarif-upload]}
+      - {id: sls-zap, name: DAST in the pipeline with ZAP baseline, match: [zap-baseline, owasp-zap]}
+      - {id: sls-threat-model, name: Threat modelling in the PR flow, match: [threat-modeling]}
+  - id: deployment-automation
+    name: Deployment automation and scripting
+    source: DORA capability + CD ch6
+    match: [deployment-automation, deployment-scripting, deploy-script, idempotent-deploy]
+    subtopics:
+      - {id: da-idempotency, name: Idempotency and convergence, match: [idempotency, convergence]}
+      - {id: da-dry-run, name: Dry runs, match: [dry-run]}
+      - {id: da-locks, name: Deploy locks, match: [deploy-locks, concurrency-lock]}
+      - {id: da-preflight, name: Preflight and health gates, match: [preflight-checks, health-gate]}
+      - {id: da-shell, name: Shell hygiene (set -euo pipefail / exit codes), match: [set-euo-pipefail, exit-codes]}
+      - {id: da-ansible, name: Ansible deploy playbooks, match: [ansible-deploy]}
+      - {id: da-verify, name: Post-deploy smoke tests and verification, match: [post-deploy-verification]}
+      - {id: da-symlink, name: Atomic symlink-switch deploys over SSH, match: [atomic-symlink-deploy]}
+  - id: component-pipelines
+    name: Component pipelines, dependency graphs and branch by abstraction
+    source: DORA loosely coupled architecture + CD ch13
+    match: [component-pipelines, integration-pipeline, branch-by-abstraction, dependency-graph-pipelines]
+    subtopics:
+      - {id: cp-contracts, name: Consumer-driven contracts and can-i-deploy, match: [consumer-driven-contracts, can-i-deploy]}
+      - {id: cp-versioning, name: Library versioning and internal packages, match: [library-versioning, internal-packages]}
+      - {id: cp-diamond, name: Diamond and circular dependencies, match: [diamond-dependency, circular-dependency]}
+      - {id: cp-build-order, name: Build order upstream/downstream, match: [build-order, upstream-downstream]}
+      - {id: cp-strangler, name: Strangler fig, match: [strangler-fig]}
+      - {id: cp-fan-in, name: Fan-in integration pipelines combining component versions, match: [fan-in-pipeline]}
+      - {id: cp-manifest, name: Version manifests (bill of materials), match: [version-manifest]}
+      - {id: cp-ranges, name: Dependency version range policies, match: [version-ranges]}
+  - id: pipeline-observability
+    name: Pipeline monitoring and proactive notification
+    source: DORA monitoring + proactive notification
+    match: [pipeline-observability, ci-metrics, pipeline-notifications, build-failure-alerts, ci-dashboards]
+    subtopics:
+      - {id: po-queue, name: Queue time and duration, match: [queue-time, pipeline-duration]}
+      - {id: po-rates, name: Failure/flaky/rerun rates, match: [failure-rate, flaky-rate]}
+      - {id: po-otel, name: OpenTelemetry traces per pipeline, match: [opentelemetry-ci, trace-per-pipeline]}
+      - {id: po-exporters, name: Prometheus exporters, match: [github-actions-exporter, gitlab-ci-pipelines-exporter]}
+      - {id: po-fatigue, name: Alert fatigue and CI SLOs, match: [alert-fatigue, ci-slo]}
+      - {id: po-cost, name: CI cost attribution per pipeline, match: [ci-cost-attribution]}
+      - {id: po-test-analytics, name: Test analytics and CI visibility tools, match: [test-analytics, ci-visibility]}
+      - {id: po-logs, name: Centralised CI log shipping, match: [ci-log-shipping]}
+  - id: database-change-management
+    name: Database change management
+    source: DORA capability + CD ch12
+    match: [database-migrations, schema-migration, expand-contract]
+    subtopics:
+      - {id: db-tools, name: Flyway and Liquibase in the pipeline, match: [flyway, liquibase]}
+      - {id: db-compat, name: Backward-compatible migrations, match: [backward-compatible-migrations, parallel-change]}
+      - {id: db-online, name: Online schema change for large tables, match: [online-schema-change, gh-ost]}
+      - {id: db-rollback, name: Migration rollback strategy, match: [rollback-migrations]}
+      - {id: db-presync, name: Migrations as PreSync jobs, match: [migration-job]}
+      - {id: db-declarative, name: Declarative schema tools (Atlas / sqitch), match: [atlas-schema, sqitch]}
+      - {id: db-lint, name: Migration linting in CI (squawk), match: [migration-linting, squawk]}
+      - {id: db-testing, name: Testing migrations against production-like data, match: [migration-testing]}
+  - id: feature-flags
+    name: Feature flags decoupling deploy from release
+    source: CD ch10 + DORA
+    match: [feature-flags, feature-toggles]
+    subtopics:
+      - {id: ff-kill-switch, name: Kill switches and ops flags, match: [kill-switch, ops-flags]}
+      - {id: ff-percentage, name: Percentage rollouts and sticky bucketing, match: [percentage-rollout, sticky-bucketing]}
+      - {id: ff-openfeature, name: OpenFeature and providers, match: [openfeature]}
+      - {id: ff-debt, name: Flag debt and cleanup, match: [flag-debt, flag-cleanup]}
+      - {id: ff-defaults, name: Flag defaults and failure modes, match: [flag-defaults]}
+      - {id: ff-targeting, name: Targeting rules and segments, match: [targeting-rules, user-segments]}
+      - {id: ff-testing, name: Testing both flag paths in CI, match: [flag-testing]}
+      - {id: ff-self-hosted, name: Self-hosted flag services (Unleash / Flagsmith), match: [unleash, flagsmith]}
+  # --- SLSA and supply chain
+  - id: slsa-levels
+    name: SLSA build levels and reaching L3
+    source: SLSA v1.0 Build track
+    match: [slsa-levels, slsa-build-l3, slsa-provenance, build-platform-hardening]
+    subtopics:
+      - {id: slsa-l1, name: L1 provenance exists, match: [slsa-build-l1]}
+      - {id: slsa-l2, name: L2 hosted build platform, match: [slsa-build-l2, hosted-build-platform]}
+      - {id: slsa-l3-isolation, name: L3 isolation and ephemeral builders, match: [ephemeral-builders, unforgeable-provenance]}
+      - {id: slsa-generators, name: Generators (slsa-github-generator / GitLab / Tekton Chains), match: [gitlab-slsa, tekton-chains]}
+      - {id: slsa-verifier, name: slsa-verifier, match: [slsa-verifier]}
+      - {id: slsa-checklist, name: L3 assessment checklist, match: [build-l3-checklist, slsa-assessment]}
+      - {id: slsa-source, name: SLSA source track, match: [slsa-source-track]}
+      - {id: slsa-threats, name: SLSA threat model, match: [slsa-threats]}
+  - id: provenance-attestations
+    name: Provenance and in-toto attestations (GitHub artifact attestations, slsa-github-generator)
+    source: SLSA provenance + in-toto
+    match: [in-toto, attestation, artifact-attestations, attest-build-provenance, slsa-github-generator, provenance-verification]
+    subtopics:
+      - {id: pa-dsse, name: DSSE envelopes and statements, match: [dsse-envelope, predicate-type]}
+      - {id: pa-gh-verify, name: gh attestation verify, match: [gh-attestation-verify]}
+      - {id: pa-cosign, name: cosign attest and verify-attestation, match: [cosign-attest, cosign-verify-attestation]}
+      - {id: pa-referrers, name: OCI referrers, match: [oci-referrers]}
+      - {id: pa-vsa, name: Verification summary attestations, match: [vsa, verification-summary-attestation]}
+      - {id: pa-policy, name: Policy at deploy time, match: [policy-at-deploy]}
+      - {id: pa-witness, name: witness and archivista, match: [witness, archivista]}
+      - {id: pa-pypi, name: PyPI PEP 740 and npm registry attestations, match: [pep-740, pypi-attestations]}
+  - id: artifact-signing
+    name: Artifact and image signing (cosign/Sigstore)
+    source: Sigstore docs
+    match: [cosign, sigstore, artifact-signing]
+    subtopics:
+      - {id: as-keyless, name: Keyless signing with Fulcio, match: [cosign-sign-keyless, keyless-signing]}
+      - {id: as-keys, name: Key-pair and KMS signing, match: [cosign-key-pair, cosign-kms]}
+      - {id: as-verify, name: cosign verify identities, match: [cosign-verify, certificate-identity]}
+      - {id: as-rekor, name: Rekor transparency log, match: [rekor]}
+      - {id: as-blob, name: Signing blobs and release files, match: [cosign-sign-blob]}
+      - {id: as-gitsign, name: gitsign commit signing, match: [gitsign]}
+      - {id: as-oci-charts, name: Signing Helm charts and OCI artifacts, match: [sign-oci-artifacts, helm-chart-signing]}
+      - {id: as-notation, name: Notation (Notary v2) signing, match: [notation, notary-v2]}
+  - id: sbom
+    name: SBOM generation and consumption
+    source: SPDX/CycloneDX
+    match: [sbom, syft, cyclondx, cyclonedx, spdx]
+    subtopics:
+      - {id: sbom-generate, name: Generating with syft, match: [syft-generate, sbom-formats]}
+      - {id: sbom-attest, name: Attaching SBOMs as attestations, match: [sbom-attestation, attest-sbom]}
+      - {id: sbom-dependency-track, name: Dependency-Track ingestion, match: [dependency-track]}
+      - {id: sbom-scan, name: Scanning SBOMs with grype, match: [sbom-scan, grype-sbom]}
+      - {id: sbom-diff, name: SBOM diff and merge, match: [sbom-diff, sbom-merge]}
+      - {id: sbom-ecosystem, name: Ecosystem SBOM generators (cdxgen / npm sbom), match: [cdxgen, npm-sbom]}
+      - {id: sbom-buildkit, name: BuildKit SBOM attestations, match: [buildkit-sbom]}
+      - {id: sbom-quality, name: SBOM quality and NTIA minimum elements, match: [ntia-minimum-elements, sbom-quality]}
+  - id: dependency-pinning
+    name: Dependency pinning and automated updates
+    source: SLSA dependencies + Dependabot/Renovate
+    match: [dependency-pinning, lockfiles, renovate, dependabot]
+    subtopics:
+      - {id: dp-renovate-config, name: Renovate configuration and presets, match: [renovate-config, renovate-presets]}
+      - {id: dp-dependabot-config, name: dependabot.yml groups and schedules, match: [dependabot-config, dependabot-groups]}
+      - {id: dp-lockfile-ci, name: Lockfile enforcement in CI, match: [lockfile-enforcement, frozen-lockfile]}
+      - {id: dp-automerge, name: Auto-merging minor updates, match: [automerge-minor]}
+      - {id: dp-digests, name: Pinning image digests, match: [image-digest-pinning]}
+      - {id: dp-custom-managers, name: Renovate custom regex managers, match: [renovate-custom-manager, regex-manager]}
+      - {id: dp-cooldown, name: Minimum release age cool-down, match: [minimum-release-age, cooldown]}
+      - {id: dp-security-updates, name: Dependabot security updates and alerts, match: [dependabot-security-updates]}
+  - id: admission-policy
+    name: Enforcing signed/attested images at admission (Kyverno, policy-controller)
+    source: Sigstore policy-controller + Kyverno docs
+    match: [kyverno, policy-controller, admission-control, verify-signatures, image-policy]
+    subtopics:
+      - {id: ap-verifyimages, name: Kyverno verifyImages, match: [verifyimages]}
+      - {id: ap-clusterimagepolicy, name: ClusterImagePolicy, match: [clusterimagepolicy]}
+      - {id: ap-identity, name: Keyless identity matching, match: [keyless-identity, oidc-issuer]}
+      - {id: ap-attestation, name: Attestation policies, match: [attestation-policy, slsa-provenance-check]}
+      - {id: ap-digest, name: Digest mutation and pinning, match: [digest-mutation]}
+      - {id: ap-modes, name: Audit vs enforce and exceptions, match: [audit-mode, policy-exceptions]}
+      - {id: ap-vap, name: ValidatingAdmissionPolicy with CEL, match: [validatingadmissionpolicy, cel-admission]}
+      - {id: ap-ratify, name: OPA Gatekeeper with Ratify, match: [ratify, gatekeeper]}
+  - id: secret-scanning
+    name: Secret scanning and push protection
+    source: GitHub/GitLab secret scanning docs
+    match: [secret-scanning, gitleaks, trufflehog, push-protection]
+    subtopics:
+      - {id: ss-gitleaks-config, name: gitleaks config and pre-commit, match: [gitleaks-config, gitleaks-pre-commit]}
+      - {id: ss-trufflehog-verify, name: trufflehog verified secrets, match: [trufflehog-verify]}
+      - {id: ss-github-push, name: GitHub push protection and custom patterns, match: [github-push-protection, custom-patterns]}
+      - {id: ss-remediation, name: Remediating a leaked secret, match: [secret-remediation, revoke-leaked]}
+      - {id: ss-history, name: Scanning git history, match: [history-scan, git-history-secrets]}
+      - {id: ss-ggshield, name: GitGuardian ggshield, match: [ggshield]}
+      - {id: ss-baseline, name: Baselines and false-positive allowlists, match: [gitleaks-baseline, secret-allowlist]}
+      - {id: ss-diff, name: Scanning PR diffs in CI, match: [diff-scan]}
+  - id: vulnerability-scanning
+    name: Image/dependency vulnerability scanning and CVE triage (VEX)
+    source: OpenVEX + Trivy/Grype docs
+    match: [image-scanning, cve-triage, vex, grype, vulnerability-scanning]
+    subtopics:
+      - {id: vs-trivy, name: Trivy image and fs scans, match: [trivy]}
+      - {id: vs-vex, name: OpenVEX statements, match: [openvex, vex-statements]}
+      - {id: vs-prioritise, name: EPSS / KEV and reachability, match: [epss, kev-catalog, reachability-analysis]}
+      - {id: vs-gates, name: Severity gates and ignore files, match: [severity-gates, trivyignore]}
+      - {id: vs-base-images, name: Base image updates and distroless, match: [base-image-updates, distroless]}
+      - {id: vs-rescan, name: Rescan schedules and registry scanning, match: [rescan-schedule, registry-scanning]}
+      - {id: vs-osv, name: osv-scanner for dependencies, match: [osv-scanner]}
+      - {id: vs-language, name: pip-audit / govulncheck / cargo audit, match: [pip-audit, govulncheck, cargo-audit]}
+  - id: hermetic-builds
+    name: Hermetic and isolated builds
+    source: SLSA L3 isolation
+    match: [hermetic-builds, isolated-builds, reproducible-builds]
+    subtopics:
+      - {id: hb-network, name: Network-isolated builds, match: [network-isolation-builds, no-network-sandbox]}
+      - {id: hb-bazel, name: Bazel sandboxing, match: [bazel-sandbox]}
+      - {id: hb-epoch, name: SOURCE_DATE_EPOCH, match: [source-date-epoch]}
+      - {id: hb-diffoscope, name: diffoscope and reprotest, match: [diffoscope, reprotest]}
+      - {id: hb-vendoring, name: Vendoring dependencies, match: [vendoring]}
+      - {id: hb-nix, name: Nix sandboxed builds, match: [nix-sandbox]}
+      - {id: hb-snapshot, name: Pinned base images and package snapshots, match: [snapshot-debian, apt-pinning]}
+      - {id: hb-rebuild, name: Independent rebuild verification, match: [independent-rebuild, rebuilderd]}
+  - id: ci-secrets
+    name: Secrets in CI (masking, forks, exfiltration)
+    source: GHA/GitLab/Jenkins security docs
+    match: [ci-secrets, pipeline-secrets, secret-exfiltration]
+    subtopics:
+      - {id: cs-masking, name: Log masking and set -x, match: [log-masking, set-x]}
+      - {id: cs-forks, name: Secrets and fork PRs, match: [fork-pull-requests]}
+      - {id: cs-buildkit, name: BuildKit secret mounts vs build args, match: [buildkit-secret-mount, build-args]}
+      - {id: cs-artifacts, name: Leaks through artifacts, match: [artifacts-leak]}
+      - {id: cs-threat-model, name: CI threat model, match: [ci-threat-model]}
+      - {id: cs-long-lived, name: Replacing long-lived CI credentials with OIDC, match: [long-lived-credentials]}
+      - {id: cs-printenv, name: env dumps and debug output leaking secrets, match: [printenv-leak]}
+      - {id: cs-residue, name: Secret residue on shared and persistent runners, match: [runner-residue]}
+  - id: secret-stores
+    name: Secret stores and dynamic secrets (Vault, ESO)
+    source: HashiCorp Vault docs + ESO docs
+    match: [vault, hashicorp-vault, dynamic-secrets, external-secrets-operator]
+    subtopics:
+      - {id: st-eso, name: ESO SecretStore and ExternalSecret, match: [externalsecret, clustersecretstore]}
+      - {id: st-database, name: Vault database secrets engine, match: [database-secrets-engine]}
+      - {id: st-leases, name: Leases / TTLs and revocation, match: [leases, lease-renewal]}
+      - {id: st-agent, name: Vault Agent and injector, match: [vault-agent, vault-agent-injector]}
+      - {id: st-vso, name: Vault Secrets Operator, match: [vault-secrets-operator]}
+      - {id: st-sops, name: SOPS and sealed secrets, match: [sops, sealed-secrets]}
+      - {id: st-k8s-auth, name: Kubernetes auth method, match: [kubernetes-auth]}
+      - {id: st-aws, name: AWS Secrets Manager and SSM Parameter Store, match: [aws-secrets-manager, ssm-parameter-store]}
+  - id: secret-rotation
+    name: Secret rotation and lifecycle
+    source: NIST + AWS Secrets Manager docs
+    match: [secret-rotation, credential-rotation]
+    subtopics:
+      - {id: sr-dual, name: Dual secrets and overlap, match: [dual-secret, overlapping-credentials]}
+      - {id: sr-aws, name: AWS Secrets Manager rotation lambdas, match: [rotation-lambda, awspending]}
+      - {id: sr-reload, name: Hot reload with ESO and Reloader, match: [stakater-reloader, hot-reload]}
+      - {id: sr-signing, name: Signing key rotation and JWKS, match: [jwks, signing-key-rotation]}
+      - {id: sr-tls, name: TLS certificate rotation, match: [cert-manager, tls-certificates]}
+      - {id: sr-emergency, name: Emergency rotation, match: [emergency-rotation]}
+      - {id: sr-db, name: Database password rotation without downtime, match: [database-password-rotation]}
+      - {id: sr-inventory, name: Secret inventory and expiry monitoring, match: [secret-inventory, expiry-monitoring]}
+  # --- Continuous Delivery (Humble & Farley) chapters
+  - id: deployment-pipeline-anatomy
+    name: Anatomy of the deployment pipeline (commit stage, acceptance stage, manual stages, release)
+    source: CD ch5 + ch7
+    match: [deployment-pipeline, commit-stage, acceptance-stage, pipeline-stages, manual-test-stage]
+    subtopics:
+      - {id: dpa-commit-tests, name: Commit stage tests and static analysis, match: [commit-stage-tests, static-analysis-stage]}
+      - {id: dpa-artifact-repo, name: Artifact repository and binary promotion, match: [artifact-repository, binary-promotion]}
+      - {id: dpa-gates, name: Pipeline gates and feedback time, match: [pipeline-gates, feedback-time]}
+      - {id: dpa-visualisation, name: Pipeline visualisation, match: [pipeline-visualisation]}
+      - {id: dpa-release-stage, name: Release stage, match: [release-stage]}
+      - {id: dpa-fail-fast, name: Ordering stages to fail fast, match: [fail-fast-ordering]}
+      - {id: dpa-as-code, name: Pipeline as code and versioned pipeline config, match: [pipeline-as-code]}
+      - {id: dpa-parallel, name: Parallel test stages, match: [parallel-test-stages]}
+  - id: acceptance-testing
+    name: Automated acceptance testing in the pipeline
+    source: CD ch8
+    match: [acceptance-tests, automated-acceptance-testing, e2e-in-pipeline, end-to-end-tests, ephemeral-test-environments]
+    subtopics:
+      - {id: at-driver, name: Application driver layer and page objects, match: [application-driver-layer, page-objects]}
+      - {id: at-isolation, name: Test isolation and seeding, match: [test-isolation, test-data-seeding]}
+      - {id: at-tools, name: Playwright/Cypress in CI, match: [playwright, cypress]}
+      - {id: at-flaky, name: Flaky E2E handling, match: [flaky-e2e]}
+      - {id: at-ownership, name: Test ownership, match: [test-ownership]}
+      - {id: at-bdd, name: BDD and executable specifications, match: [bdd, gherkin]}
+      - {id: at-parallel, name: Parallelising acceptance suites, match: [acceptance-parallelisation]}
+      - {id: at-artifacts, name: Traces / videos and screenshots on failure, match: [playwright-trace, test-failure-artifacts]}
+  - id: nonfunctional-testing
+    name: Capacity and nonfunctional testing in the pipeline
+    source: CD ch9
+    match: [capacity-testing, performance-testing-in-ci, load-testing-pipeline, k6, benchmark-regression]
+    subtopics:
+      - {id: nf-thresholds, name: Thresholds and SLO gates, match: [thresholds, slo-gates]}
+      - {id: nf-types, name: Soak / stress and spike tests, match: [soak-test, stress-test]}
+      - {id: nf-micro, name: Microbenchmarks and continuous benchmarking, match: [microbenchmarks, continuous-benchmarking]}
+      - {id: nf-noise, name: Noise control and dedicated runners, match: [noise-control, dedicated-runners]}
+      - {id: nf-lighthouse, name: Lighthouse CI, match: [lighthouse-ci]}
+      - {id: nf-tools, name: JMeter / Gatling and Locust in pipelines, match: [jmeter, gatling, locust]}
+      - {id: nf-baseline, name: Comparing against baseline runs, match: [performance-baseline]}
+      - {id: nf-chaos, name: Resilience and chaos tests in the pipeline, match: [chaos-testing]}
+  - id: environment-configuration
+    name: Configuration management (build once, configure per environment)
+    source: CD ch2
+    match: [environment-configuration, externalised-config, config-injection, twelve-factor-config]
+    subtopics:
+      - {id: ec-helm-kustomize, name: Helm values and Kustomize overlays per env, match: [helm-values-per-env, kustomize-overlays]}
+      - {id: ec-validation, name: Config schema and startup validation, match: [config-schema, startup-validation]}
+      - {id: ec-secrets, name: Secrets vs config, match: [secrets-vs-config]}
+      - {id: ec-drift, name: Config drift, match: [config-drift]}
+      - {id: ec-dotenv, name: dotenv and runtime config, match: [dotenv, runtime-config]}
+      - {id: ec-config-stores, name: Config stores (AWS AppConfig / Consul), match: [appconfig, consul-kv]}
+      - {id: ec-reload, name: Config reload without redeploy, match: [config-reload]}
+      - {id: ec-conftest, name: Testing config with conftest, match: [conftest]}
+  - id: environments-management
+    name: Managing environments (ephemeral, parity, provisioning)
+    source: CD ch11
+    match: [ephemeral-environments, environment-parity, environment-provisioning, preview-environments]
+    subtopics:
+      - {id: em-namespace, name: Namespace per PR and vcluster, match: [namespace-per-pr, vcluster]}
+      - {id: em-ttl, name: TTL controllers and cleanup, match: [ttl-controller, environment-cleanup]}
+      - {id: em-dns, name: Wildcard DNS and ingress per env, match: [dns-wildcard, ingress-per-env]}
+      - {id: em-data, name: Data for ephemeral envs, match: [data-for-ephemeral-envs]}
+      - {id: em-iac, name: IaC and Terraform workspaces, match: [terraform-workspaces]}
+      - {id: em-booking, name: Booking and locking shared environments, match: [environment-booking]}
+      - {id: em-scale-zero, name: Ephemeral environment cost control (scale to zero), match: [scale-to-zero]}
+      - {id: em-packer, name: Golden images with Packer, match: [packer, golden-image]}
+  - id: release-planning
+    name: Release planning, readiness and runbooks
+    source: CD ch10 Creating a release strategy
+    match: [release-plan, release-checklist, release-readiness, go-no-go, release-runbook]
+    subtopics:
+      - {id: rp-rollback-plan, name: Rollback plan, match: [rollback-plan]}
+      - {id: rp-captain, name: Release captain, match: [release-captain]}
+      - {id: rp-comms, name: Stakeholder communication and status page, match: [stakeholder-communication, status-page]}
+      - {id: rp-rehearsal, name: Dress rehearsals and cutover plans, match: [dress-rehearsal, cutover-plan]}
+      - {id: rp-retro, name: Post-release verification and retrospective, match: [post-release-verification, release-retrospective]}
+      - {id: rp-calendar, name: Release calendar and freeze windows, match: [release-calendar]}
+      - {id: rp-risk, name: Release risk assessment, match: [release-risk-assessment]}
+      - {id: rp-notes, name: Writing user-facing release notes, match: [user-facing-release-notes]}
+  - id: versioning-changelogs
+    name: Versioning and changelogs
+    source: CD ch2 + semver.org
+    match: [semver, semantic-versioning, changelog, calver]
+    subtopics:
+      - {id: vc-conventional, name: Conventional commits and commitlint, match: [conventional-commits, commitlint]}
+      - {id: vc-tools, name: release-please/semantic-release/changesets, match: [release-please, changesets]}
+      - {id: vc-prerelease, name: Pre-releases and candidates, match: [pre-release, release-candidate]}
+      - {id: vc-api-diff, name: API diff tools for semver, match: [cargo-semver-checks, api-diff]}
+      - {id: vc-monorepo, name: Monorepo versioning, match: [monorepo-versioning]}
+      - {id: vc-keepachangelog, name: Keep a Changelog format, match: [keep-a-changelog]}
+      - {id: vc-git-cliff, name: git-cliff changelog generation, match: [git-cliff]}
+      - {id: vc-deprecation, name: Deprecation policy and breaking-change communication, match: [deprecation-policy]}
+  - id: artifact-promotion
+    name: Build once, promote artifacts through environments
+    source: CD ch5 + ch13
+    match: [artifact-promotion, build-once-deploy-many, immutable-artifacts]
+    subtopics:
+      - {id: ap-digest, name: Promoting by image digest, match: [image-digest]}
+      - {id: ap-registry, name: Registry promotion paths, match: [container-registry]}
+      - {id: ap-tags, name: Git tags as promotion markers, match: [git-tags]}
+      - {id: ap-cherry-pick, name: Hotfix cherry-picks, match: [cherry-pick, hotfix]}
+      - {id: ap-crane, name: Re-tagging and copying images with crane / skopeo, match: [crane, skopeo]}
+      - {id: ap-repo-promotion, name: Artifactory / Nexus repository promotion, match: [repository-promotion]}
+      - {id: ap-gated, name: Promotion gated on attestations, match: [promotion-attestation]}
+      - {id: ap-retention, name: Artifact retention across stages, match: [artifact-retention-policy]}
+  - id: release-cadence
+    name: Release trains, branches and hotfixes
+    source: CD ch14
+    match: [release-train, release-branches, hotfix]
+    subtopics:
+      - {id: rc-cut, name: Branch cut and stabilisation, match: [branch-cut, stabilisation]}
+      - {id: rc-backport, name: Backports, match: [backport]}
+      - {id: rc-mobile, name: Mobile app store phased rollout, match: [mobile-releases, phased-rollout]}
+      - {id: rc-lts, name: LTS and supported versions, match: [lts, supported-versions]}
+      - {id: rc-gitflow, name: Gitflow trade-offs, match: [gitflow]}
+      - {id: rc-branch-protection, name: Release branch naming and protection, match: [release-branch-protection]}
+      - {id: rc-hotfix-flow, name: Hotfix flow from release branch to main, match: [hotfix-flow]}
+      - {id: rc-train-schedule, name: Fixed release train schedules, match: [train-schedule]}
+  - id: compliance-auditing
+    name: Lightweight change approval, audit trails and separation of duties
+    source: CD ch15 + DORA change approval
+    match: [audit-trail, compliance-evidence, separation-of-duties, sox, change-evidence, change-approval, change-management, cab]
+    subtopics:
+      - {id: ca-itil, name: Standard/normal/emergency changes, match: [standard-change, emergency-change]}
+      - {id: ca-peer-review, name: Peer review as approval, match: [peer-review-approval, four-eyes]}
+      - {id: ca-evidence, name: Evidence automation, match: [evidence-automation, deployment-records]}
+      - {id: ca-integration, name: ServiceNow/Jira integration, match: [servicenow-integration, jira-change]}
+      - {id: ca-break-glass, name: Break glass, match: [break-glass]}
+      - {id: ca-soc2, name: SOC 2 change management evidence, match: [soc2-change-management]}
+      - {id: ca-pci, name: PCI DSS change control, match: [pci-dss-change]}
+      - {id: ca-audit-stream, name: Audit log streaming and retention, match: [audit-log-streaming]}
+  - id: blue-green
+    name: Blue-green deployment
+    source: CD ch10
+    match: [blue-green, blue-green-deployment]
+    subtopics:
+      - {id: bg-alb, name: ALB target group switch, match: [target-groups, weighted-target-groups]}
+      - {id: bg-k8s, name: Kubernetes service selector switch, match: [kubernetes-service-selector]}
+      - {id: bg-dns, name: DNS cutover and TTL, match: [dns-cutover, dns-ttl]}
+      - {id: bg-state, name: Session state and workers, match: [session-state, background-workers]}
+      - {id: bg-warmup, name: Warm-up and smoke tests, match: [warm-up, smoke-test]}
+      - {id: bg-database, name: Databases during blue-green, match: [blue-green-database]}
+      - {id: bg-codedeploy, name: ECS blue/green with CodeDeploy, match: [codedeploy-ecs]}
+      - {id: bg-capacity, name: Capacity and cost of doubled fleets, match: [double-capacity]}
+  - id: canary
+    name: Canary releases and automated analysis
+    source: CD ch10
+    match: [canary, canary-release, canary-analysis]
+    subtopics:
+      - {id: cn-baseline, name: Canary vs baseline, match: [baseline, canary-vs-baseline]}
+      - {id: cn-kayenta, name: Kayenta/Spinnaker, match: [kayenta, spinnaker]}
+      - {id: cn-stats, name: Statistical significance, match: [statistical-significance, mann-whitney]}
+      - {id: cn-abort, name: Abort criteria, match: [abort-criteria]}
+      - {id: cn-flagger, name: Flagger, match: [flagger]}
+      - {id: cn-replica-ratio, name: Replica-ratio canaries without a mesh, match: [replica-ratio-canary]}
+      - {id: cn-header, name: Header and cookie canary routing, match: [header-based-routing]}
+      - {id: cn-metrics, name: Choosing canary metrics, match: [canary-metrics]}
+  - id: rolling-updates
+    name: Rolling updates
+    source: CD ch10 + Kubernetes docs
+    match: [rolling-update, rolling-deploy]
+    subtopics:
+      - {id: ru-surge, name: maxSurge/maxUnavailable, match: [maxsurge, maxunavailable]}
+      - {id: ru-ready, name: minReadySeconds and progressDeadline, match: [minreadyseconds, progressdeadlineseconds]}
+      - {id: ru-pdb, name: PodDisruptionBudgets, match: [poddisruptionbudget]}
+      - {id: ru-statefulset, name: StatefulSet partitions, match: [statefulset-partition]}
+      - {id: ru-ecs, name: ECS and ASG rolling, match: [aws-ecs, asg-instance-refresh]}
+      - {id: ru-daemonset, name: DaemonSet rolling updates, match: [daemonset-rolling-update]}
+      - {id: ru-stuck, name: Diagnosing stuck rollouts, match: [kubectl-rollout-status]}
+      - {id: ru-ansible, name: VM fleet rolling with Ansible serial, match: [ansible-serial]}
+  - id: rollback
+    name: Rollback and roll-forward
+    source: CD ch10
+    match: [rollback, roll-forward, automated-rollback]
+    subtopics:
+      - {id: rb-kubectl-helm, name: kubectl rollout undo and helm rollback, match: [kubectl-rollout-undo, helm-rollback]}
+      - {id: rb-argo, name: Argo CD app rollback, match: [app-rollback]}
+      - {id: rb-db, name: Database rollback constraints, match: [rollback-migrations, expand-contract]}
+      - {id: rb-flags, name: Rollback by flag, match: [kill-switch]}
+      - {id: rb-auto, name: Alarm-triggered auto rollback, match: [auto-rollback, cloudwatch-alarms-rollback]}
+      - {id: rb-decision, name: Rollback vs roll-forward decision, match: [rollback-decision]}
+      - {id: rb-traffic, name: Serverless traffic rollback, match: [traffic-rollback]}
+      - {id: rb-drill, name: Rollback drills, match: [rollback-drill]}
+  - id: traffic-mirroring
+    name: Shadow/dark traffic and traffic mirroring
+    source: CD ch10 dark launching
+    match: [traffic-mirroring, shadow-deployment, shadow-traffic, dark-traffic]
+    subtopics:
+      - {id: tm-istio, name: Istio mirror, match: [istio-mirror]}
+      - {id: tm-nginx, name: NGINX mirror, match: [nginx-mirror]}
+      - {id: tm-replay, name: GoReplay, match: [goreplay]}
+      - {id: tm-diff, name: Response diffing, match: [diffy, response-diffing]}
+      - {id: tm-side-effects, name: Side effects and write suppression, match: [side-effects, write-suppression]}
+      - {id: tm-envoy, name: Envoy request mirror policies, match: [envoy-mirror]}
+      - {id: tm-percentage, name: Mirror sampling percentage and capacity, match: [mirror-percentage]}
+      - {id: tm-vpc, name: AWS VPC Traffic Mirroring, match: [vpc-traffic-mirroring]}
+  - id: serverless-deploy
+    name: Serverless and function deployments (aliases, weighted traffic)
+    source: AWS Lambda deployment docs
+    match: [lambda-aliases, serverless-deploy, weighted-alias, codedeploy-lambda]
+    subtopics:
+      - {id: sd-sam, name: SAM DeploymentPreference, match: [sam-deploy, deploymentpreference]}
+      - {id: sd-hooks, name: Pre/post traffic hooks, match: [pre-traffic-hook, post-traffic-hook]}
+      - {id: sd-alarms, name: Alarm rollback, match: [cloudwatch-alarms-rollback]}
+      - {id: sd-cloud-run, name: Cloud Run revisions, match: [cloud-run-revisions]}
+      - {id: sd-slots, name: Azure Functions slots, match: [deployment-slots]}
+      - {id: sd-versions, name: Lambda versions and publishing, match: [lambda-versions]}
+      - {id: sd-provisioned, name: Provisioned concurrency during deploys, match: [provisioned-concurrency]}
+      - {id: sd-gcloud, name: Cloud Run traffic splitting with gcloud, match: [traffic-splitting-gcloud]}
+  - id: ring-deployment
+    name: Ring/wave and multi-region rollouts
+    source: Safe deployment practices (Azure/Google SRE)
+    match: [ring-deployment, multi-region-rollout, wave-deployment, staged-rollout, bake-time]
+    subtopics:
+      - {id: rd-one-box, name: One-box and pilot region, match: [one-box, pilot-region]}
+      - {id: rd-cells, name: Cell-based architecture, match: [cell-based-architecture]}
+      - {id: rd-halt, name: Automatic halt and health gates, match: [automatic-halt, health-gates]}
+      - {id: rd-regions, name: Region concurrency and time zones, match: [concurrency-of-regions, time-zone-aware-rollouts]}
+      - {id: rd-blast, name: Blast radius, match: [blast-radius]}
+      - {id: rd-flag-rings, name: Rings via feature flags vs infrastructure, match: [flag-rings]}
+      - {id: rd-sdp, name: Safe deployment practices orchestration, match: [safe-deployment-practices]}
+      - {id: rd-pause, name: Pausing and resuming staged rollouts, match: [rollout-pause-resume]}
+  - id: zero-downtime
+    name: Zero-downtime deploys (draining, graceful shutdown)
+    source: CD ch10
+    match: [zero-downtime, connection-draining, graceful-shutdown]
+    subtopics:
+      - {id: zd-sigterm, name: SIGTERM handling and preStop, match: [sigterm, prestop]}
+      - {id: zd-grace, name: terminationGracePeriodSeconds, match: [terminationgraceperiodseconds]}
+      - {id: zd-readiness, name: Readiness and startup probes, match: [readiness-probe, startup-probe]}
+      - {id: zd-lb, name: Load balancer deregistration delay, match: [load-balancer-deregistration-delay, deregistration-delay]}
+      - {id: zd-websockets, name: Long-lived connections and websockets, match: [websockets]}
+      - {id: zd-keepalive, name: Keep-alive and idle timeout alignment, match: [keep-alive-timeout]}
+      - {id: zd-consumers, name: Graceful queue consumer shutdown, match: [queue-consumer-shutdown]}
+      - {id: zd-assets, name: Static asset versioning across deploys, match: [asset-versioning]}
+  # --- Build systems
+  - id: incremental-builds
+    name: Incremental builds and build graphs
+    source: Bazel/Gradle docs
+    match: [incremental-builds, build-graph, build-cache]
+    subtopics:
+      - {id: ib-gradle, name: Gradle build cache, match: [gradle-build-cache]}
+      - {id: ib-bazel, name: Bazel targets and actions, match: [bazel]}
+      - {id: ib-make, name: Make and file timestamps, match: [make]}
+      - {id: ib-cache-mounts, name: BuildKit cache mounts, match: [cache-mounts]}
+      - {id: ib-ninja, name: Ninja and CMake incremental builds, match: [ninja, cmake-incremental]}
+      - {id: ib-tsc, name: TypeScript incremental builds and project references, match: [tsbuildinfo, project-references]}
+      - {id: ib-cargo, name: Cargo incremental and target directory caching, match: [cargo-incremental]}
+      - {id: ib-gradle-cc, name: Gradle configuration cache, match: [configuration-cache]}
+  - id: remote-cache-execution
+    name: Remote cache and remote execution
+    source: Bazel docs
+    match: [remote-cache, remote-execution]
+    subtopics:
+      - {id: rc-bazel-remote, name: Bazel remote cache backends, match: [bazel-remote-cache, buildbarn]}
+      - {id: rc-gradle-remote, name: Gradle remote cache, match: [gradle-remote-cache]}
+      - {id: rc-nx-turbo, name: Nx and Turborepo remote cache, match: [nx-cloud, turborepo-remote-cache]}
+      - {id: rc-sccache-s3, name: sccache with S3, match: [sccache]}
+      - {id: rc-rbe, name: Remote execution services (BuildBuddy / EngFlow), match: [buildbuddy, remote-build-execution]}
+      - {id: rc-security, name: Remote cache write permissions and poisoning, match: [remote-cache-security]}
+      - {id: rc-miss-debug, name: Debugging remote cache misses, match: [cache-miss-debugging]}
+      - {id: rc-disk, name: Bazel disk cache in CI, match: [disk-cache]}
+  - id: monorepo-tooling
+    name: Monorepo build tooling and affected targets
+    source: Nx/Turborepo/Bazel docs
+    match: [monorepo, affected-targets, nx, turborepo]
+    subtopics:
+      - {id: mt-affected, name: nx affected and turbo filter, match: [nx-affected, turbo-filter]}
+      - {id: mt-workspaces, name: pnpm/yarn workspaces, match: [pnpm-workspaces, yarn-workspaces]}
+      - {id: mt-boundaries, name: Module boundaries and CODEOWNERS, match: [module-boundaries]}
+      - {id: mt-sparse, name: Sparse checkout and partial clone, match: [sparse-checkout, partial-clone]}
+      - {id: mt-dynamic-matrix, name: Dynamic matrix from change detection, match: [dynamic-matrix, change-detection]}
+      - {id: mt-pants-buck, name: Pants and Buck2, match: [pants, buck2]}
+      - {id: mt-graph, name: Project graph inspection, match: [project-graph]}
+      - {id: mt-git-perf, name: Large repo git performance (scalar / fsmonitor), match: [scalar, fsmonitor]}
+  - id: compiler-caches
+    name: Compiler caches (ccache/sccache) and Docker layer caching
+    source: ccache/sccache/BuildKit docs
+    match: [ccache, sccache, docker-layer-caching, buildkit]
+    subtopics:
+      - {id: cc-registry-cache, name: BuildKit registry cache export, match: [registry-cache, type-gha]}
+      - {id: cc-cache-mounts, name: Cache mounts, match: [cache-mounts]}
+      - {id: cc-gradle, name: Gradle build cache, match: [gradle-build-cache]}
+      - {id: cc-warm, name: Warm caches on ephemeral runners, match: [warm-cache, ephemeral-runners]}
+      - {id: cc-ccache-config, name: ccache configuration and stats, match: [ccache-config]}
+      - {id: cc-sccache-dist, name: sccache-dist distributed compilation, match: [sccache-dist]}
+      - {id: cc-ci-persist, name: Persisting compiler caches in CI, match: [ccache-ci]}
+      - {id: cc-cache-from, name: Docker --cache-from and inline cache, match: [cache-from, inline-cache]}
+  - id: cross-compilation-multiarch
+    name: Cross-compilation and multi-arch images
+    source: Docker buildx docs
+    match: [cross-compilation, multi-arch, qemu, buildx-platforms]
+    subtopics:
+      - {id: cm-manifest, name: Manifest lists and imagetools, match: [manifest-list, imagetools]}
+      - {id: cm-native, name: Native ARM runners vs emulation, match: [native-arm-runners, cross-compilation-vs-emulation]}
+      - {id: cm-go-rust, name: Go and Rust cross targets, match: [goos-goarch, cargo-zigbuild]}
+      - {id: cm-platform-args, name: TARGETPLATFORM/BUILDPLATFORM, match: [targetplatform, buildplatform]}
+      - {id: cm-errors, name: exec format errors, match: [exec-format-error]}
+      - {id: cm-binfmt, name: binfmt_misc and qemu-user-static setup, match: [binfmt, qemu-user-static]}
+      - {id: cm-sysroot, name: C/C++ cross toolchains and sysroots, match: [sysroot, cross-toolchain]}
+      - {id: cm-cross-rs, name: cross-rs for Rust, match: [cross-rs]}
+  - id: toolchain-pinning
+    name: Toolchain pinning and hermetic dev environments (Nix, devcontainers)
+    source: Nix docs + SLSA
+    match: [nix, toolchain-pinning, devcontainers, asdf, mise]
+    subtopics:
+      - {id: tp-flakes, name: Nix flakes and flake.lock, match: [nix-flakes, flake-lock]}
+      - {id: tp-devbox, name: devenv/devbox, match: [devenv, devbox]}
+      - {id: tp-tool-versions, name: .tool-versions and mise, match: [tool-versions]}
+      - {id: tp-language, name: rust-toolchain.toml and go toolchain, match: [rust-toolchain-toml, go-toolchain-directive]}
+      - {id: tp-direnv, name: direnv, match: [direnv]}
+      - {id: tp-devcontainer, name: devcontainer.json and features, match: [devcontainer-json, devcontainer-features]}
+      - {id: tp-corepack, name: Corepack and the packageManager field, match: [corepack]}
+      - {id: tp-ci-parity, name: Same toolchain in CI via devcontainers/ci, match: [devcontainers-ci]}
+  - id: build-metadata
+    name: Build metadata and version stamping (git describe, build info)
+    source: CD ch6 + semver build metadata
+    match: [build-metadata, git-describe, version-stamping, build-info, ldflags]
+    subtopics:
+      - {id: bm-go, name: Go ldflags and debug.BuildInfo, match: [go-ldflags, debug-buildinfo]}
+      - {id: bm-rust, name: Rust built/vergen, match: [vergen]}
+      - {id: bm-jvm, name: Maven/Gradle build info, match: [maven-git-commit-id-plugin, gradle-buildinfo]}
+      - {id: bm-oci, name: OCI image labels, match: [oci-labels, image-labels]}
+      - {id: bm-endpoint, name: Version endpoints and crash reporting, match: [version-endpoint, sentry-release]}
+      - {id: bm-js, name: Embedding version in JS bundles, match: [vite-define]}
+      - {id: bm-python, name: setuptools-scm versioning, match: [setuptools-scm]}
+      - {id: bm-dotnet, name: GitVersion and MinVer, match: [gitversion, minver]}
+  - id: dependency-proxy
+    name: Dependency proxies and offline builds
+    source: GitLab dependency proxy + Artifactory docs
+    match: [dependency-proxy, pull-through-cache, offline-builds, artifactory]
+    subtopics:
+      - {id: dpx-registries, name: Nexus/Verdaccio/devpi mirrors, match: [nexus, verdaccio, devpi]}
+      - {id: dpx-go, name: GOPROXY and Athens, match: [goproxy, athens]}
+      - {id: dpx-vendor, name: go mod vendor and cargo vendor, match: [go-mod-vendor, cargo-vendor]}
+      - {id: dpx-airgap, name: Air-gapped builds, match: [air-gapped]}
+      - {id: dpx-integrity, name: Lockfile integrity and require-hashes, match: [lockfile-integrity, require-hashes]}
+      - {id: dpx-docker-mirror, name: Docker Hub rate limits and registry mirrors, match: [registry-mirror, docker-hub-rate-limit]}
+      - {id: dpx-confusion, name: extra-index-url and dependency confusion, match: [dependency-confusion, extra-index-url]}
+      - {id: dpx-maven, name: Maven settings.xml mirrors, match: [maven-mirror]}

@@ -1,0 +1,767 @@
+# Canonical coverage spec for itam-licence-compliance, drawn from external sources listed below.
+subject: itam-licence-compliance
+scope:
+  category: computing-software
+  field: it-governance-risk-compliance
+  products:
+  - itam-licence-compliance
+sources:
+- 'ISO/IEC 19770-1 ITAM management system, -2 SWID tags, -3 entitlement schema, -5 overview (https://www.iso.org/standard/68291.html): process areas, tag and entitlement topics'
+- 'IAITAM CITAM / CSAM bodies of knowledge (https://iaitam.org/): lifecycle, financial, risk, audit and vendor topics'
+- 'ITIL 4 IT asset management practice (https://www.axelos.com/): practice scope, lifecycle, CMDB relation'
+- 'SPDX specification 2.3 / 3.0 table of contents (https://spdx.github.io/spdx-spec/): documents, packages, files, relationships, licence expressions, licence list'
+- 'CycloneDX specification overview (https://cyclonedx.org/specification/overview/): BOM types, components, services, VEX, formulation'
+- 'NTIA SBOM minimum elements and CISA SBOM guidance (https://www.ntia.gov/page/software-bill-materials): data fields, automation, practices'
+- 'OpenChain ISO/IEC 5230 and 18974 (https://openchainproject.org/): programme requirements'
+- 'REUSE specification (https://reuse.software/spec/): licensing metadata in source trees'
+- 'OSI approved licence families and FSF licence list / GPL FAQ (https://opensource.org/licenses, https://www.gnu.org/licenses/): licence categories and obligations'
+- 'Vendor licensing models: Microsoft, Oracle, IBM PVU, SAP, Adobe, VMware, SaaS (vendor licensing guides)'
+- NIST SP 800-88 Rev.1 media sanitisation and hardware lifecycle practice (https://csrc.nist.gov/pubs/sp/800/88/r1/final)
+- FinOps Foundation framework, SaaS management (https://www.finops.org/framework/)
+topics:
+- id: itam-programme-governance
+  name: ITAM programme and governance
+  source: ISO/IEC 19770-1 organisational context, leadership; IAITAM CITAM governance
+  match:
+  - itam-programme-governance
+  subtopics:
+  - id: itam-policy-and-charter
+    name: ITAM policy, charter and scope
+    match:
+    - itam-policy-and-charter
+  - id: itam-roles-raci
+    name: ITAM roles and RACI
+    match:
+    - itam-roles-raci
+  - id: itam-maturity-assessment
+    name: ITAM maturity assessment and roadmap
+    match:
+    - itam-maturity-assessment
+- id: asset-lifecycle-management
+  name: IT asset lifecycle
+  source: ISO/IEC 19770-1 lifecycle processes; ITIL 4 IT asset management practice; IAITAM lifecycle
+  match:
+  - asset-lifecycle-management
+  subtopics:
+  - id: lifecycle-stages-model
+    name: Asset lifecycle stages and state model
+    match:
+    - lifecycle-stages-model
+  - id: acquisition-and-receiving
+    name: Acquisition, receiving and tagging
+    match:
+    - acquisition-and-receiving
+  - id: change-and-move-tracking
+    name: Moves, adds, changes and reclamation
+    match:
+    - change-and-move-tracking
+- id: asset-inventory-discovery
+  name: Inventory and discovery
+  source: ISO/IEC 19770-1 inventory management; IAITAM asset identification and discovery
+  match:
+  - asset-inventory-discovery
+  subtopics:
+  - id: discovery-methods-agent-agentless
+    name: 'Discovery methods: agent, agentless, API'
+    match:
+    - discovery-methods-agent-agentless
+  - id: inventory-reconciliation
+    name: Inventory reconciliation and data quality
+    match:
+    - inventory-reconciliation
+  - id: physical-audit-and-stocktake
+    name: Physical audit and stocktake
+    match:
+    - physical-audit-and-stocktake
+- id: configuration-management-cmdb
+  name: CMDB and configuration items
+  source: ITIL 4 service configuration management; ISO/IEC 19770-1 relation to CMDB
+  match:
+  - configuration-management-cmdb
+  subtopics:
+  - id: cmdb-vs-asset-register
+    name: CMDB versus asset register
+    match:
+    - cmdb-vs-asset-register
+  - id: ci-relationships-and-dependencies
+    name: CI relationships and service mapping
+    match:
+    - ci-relationships-and-dependencies
+  - id: cmdb-governance-and-audit
+    name: CMDB governance and integrity audits
+    match:
+    - cmdb-governance-and-audit
+- id: hardware-procurement-and-sourcing
+  name: Hardware procurement and vendor management
+  source: IAITAM CITAM acquisition and vendor management; ITIL 4 supplier management
+  match:
+  - hardware-procurement-and-sourcing
+  subtopics:
+  - id: standards-and-catalogue
+    name: Hardware standards and catalogue
+    match:
+    - standards-and-catalogue
+  - id: procurement-contracts-and-leasing
+    name: Procurement contracts, leasing and buy-versus-lease
+    match:
+    - procurement-contracts-and-leasing
+  - id: warranty-and-support-contracts
+    name: Warranty, maintenance and support contracts
+    match:
+    - warranty-and-support-contracts
+- id: media-sanitisation-nist-800-88
+  name: Media sanitisation (NIST SP 800-88)
+  source: NIST SP 800-88 Rev.1 sanitisation methods and verification
+  match:
+  - media-sanitisation-nist-800-88
+  subtopics:
+  - id: clear-purge-destroy-selection
+    name: Choosing clear, purge or destroy
+    match:
+    - clear-purge-destroy-selection
+  - id: ssd-flash-and-mobile-erase
+    name: SSD, flash and mobile device erasure
+    match:
+    - ssd-flash-and-mobile-erase
+  - id: sanitisation-verification-records
+    name: Sanitisation verification and certificates
+    match:
+    - sanitisation-verification-records
+- id: itad-and-disposal
+  name: ITAD, disposal and e-waste
+  source: IAITAM disposal; NIST 800-88 chain of custody; R2/e-Stewards ITAD practice
+  match:
+  - itad-and-disposal
+  subtopics:
+  - id: itad-vendor-selection
+    name: Selecting and auditing an ITAD vendor
+    match:
+    - itad-vendor-selection
+  - id: chain-of-custody-and-onsite-destruction
+    name: Chain of custody and on-site destruction
+    match:
+    - chain-of-custody-and-onsite-destruction
+  - id: remarketing-donation-and-reuse
+    name: Remarketing, donation and reuse
+    match:
+    - remarketing-donation-and-reuse
+- id: asset-financial-management
+  name: Asset financial management
+  source: IAITAM financial asset management; ISO/IEC 19770-1 financial processes; ITIL 4 financial management
+  match:
+  - asset-financial-management
+  subtopics:
+  - id: capitalisation-and-depreciation
+    name: Capitalisation and depreciation of IT assets
+    match:
+    - capitalisation-and-depreciation
+  - id: tco-and-chargeback
+    name: TCO, showback and chargeback
+    match:
+    - tco-and-chargeback
+  - id: budgeting-and-refresh-planning
+    name: Budgeting and refresh planning
+    match:
+    - budgeting-and-refresh-planning
+- id: mobile-byod-asset-management
+  name: Mobile, BYOD and endpoint assets
+  source: IAITAM mobile asset management; MDM/UEM operational practice
+  match:
+  - mobile-byod-asset-management
+  subtopics:
+  - id: mdm-enrolment-and-inventory
+    name: MDM enrolment and mobile inventory
+    match:
+    - mdm-enrolment-and-inventory
+  - id: byod-policy-and-stipends
+    name: BYOD policy, stipends and ownership
+    match:
+    - byod-policy-and-stipends
+  - id: telecom-and-line-management
+    name: Telecom lines, SIMs and carrier contracts
+    match:
+    - telecom-and-line-management
+- id: cloud-and-virtual-asset-management
+  name: Cloud and virtual asset management
+  source: FinOps Foundation framework inform phase; ISO/IEC 19770-1 virtual assets; CSP tagging guidance
+  match:
+  - cloud-and-virtual-asset-management
+  subtopics:
+  - id: cloud-resource-tagging
+    name: Cloud resource tagging and ownership
+    match:
+    - cloud-resource-tagging
+  - id: virtual-machine-sprawl
+    name: VM sprawl, orphaned resources and rightsizing
+    match:
+    - virtual-machine-sprawl
+  - id: container-and-serverless-assets
+    name: Containers, Kubernetes and serverless as assets
+    match:
+    - container-and-serverless-assets
+- id: swid-tags-iso-19770-2
+  name: Software identification tags (ISO/IEC 19770-2 SWID)
+  source: ISO/IEC 19770-2 software identification tag; NIST IR 8060 tag guidance
+  match:
+  - swid-tags-iso-19770-2
+  subtopics:
+  - id: swid-tag-types-and-structure
+    name: SWID tag types and structure
+    match:
+    - swid-tag-types-and-structure
+  - id: swid-deployment-and-tooling
+    name: Deploying and consuming SWID tags
+    match:
+    - swid-deployment-and-tooling
+- id: entitlement-schema-iso-19770-3
+  name: Software entitlement schema (ISO/IEC 19770-3)
+  source: ISO/IEC 19770-3 entitlement schema
+  match:
+  - entitlement-schema-iso-19770-3
+  subtopics:
+  - id: entitlement-record-structure
+    name: Entitlement record structure
+    match:
+    - entitlement-record-structure
+  - id: entitlement-data-collection
+    name: Collecting entitlement data from vendors
+    match:
+    - entitlement-data-collection
+- id: sam-process-and-licence-position
+  name: Software asset management process and licence position
+  source: ISO/IEC 19770-1 software asset management processes; IAITAM CSAM; Microsoft SAM optimisation model
+  match:
+  - sam-process-and-licence-position
+  subtopics:
+  - id: effective-licence-position
+    name: Effective licence position (ELP)
+    match:
+    - effective-licence-position
+  - id: software-recognition-normalisation
+    name: Software recognition and normalisation
+    match:
+    - software-recognition-normalisation
+  - id: sam-reporting-and-renewals
+    name: SAM reporting, renewals and true-up planning
+    match:
+    - sam-reporting-and-renewals
+- id: licence-audit-defence
+  name: Licence audit preparation and response
+  source: IAITAM CSAM audit management; vendor audit clauses (BSA, vendor LMS programmes)
+  match:
+  - licence-audit-defence
+  subtopics:
+  - id: audit-clause-and-rights
+    name: Reading audit clauses and rights
+    match:
+    - audit-clause-and-rights
+  - id: audit-response-playbook
+    name: Audit response playbook
+    match:
+    - audit-response-playbook
+  - id: audit-readiness-programme
+    name: Continuous audit readiness
+    match:
+    - audit-readiness-programme
+- id: licence-metrics-and-rights
+  name: Licence metrics and usage rights
+  source: ISO/IEC 19770-3 metrics; vendor licensing terms; IAITAM licence models
+  match:
+  - licence-metrics-and-rights
+  subtopics:
+  - id: user-device-core-metrics
+    name: User, device, core and processor metrics
+    match:
+    - user-device-core-metrics
+  - id: perpetual-subscription-and-support
+    name: Perpetual, subscription and maintenance licences
+    match:
+    - perpetual-subscription-and-support
+  - id: virtualisation-and-failover-rights
+    name: Virtualisation, failover and disaster recovery rights
+    match:
+    - virtualisation-and-failover-rights
+- id: microsoft-licensing
+  name: Microsoft licensing
+  source: Microsoft Licensing Product Terms and licensing briefs; Microsoft SAM optimisation
+  match:
+  - microsoft-licensing
+  subtopics:
+  - id: microsoft-agreement-types
+    name: Microsoft agreement types (EA, MPSA, CSP)
+    match:
+    - microsoft-agreement-types
+  - id: windows-server-sql-licensing
+    name: Windows Server and SQL Server licensing
+    match:
+    - windows-server-sql-licensing
+  - id: microsoft-365-licence-management
+    name: Microsoft 365 licence management
+    match:
+    - microsoft-365-licence-management
+  - id: microsoft-remote-desktop-and-other-rights
+    name: Microsoft RDS CALs, Visual Studio and special rights
+    match:
+    - microsoft-remote-desktop-and-other-rights
+- id: oracle-licensing
+  name: Oracle licensing
+  source: Oracle licensing documents (Software Investment Guide, Database licensing information); Oracle licensing practice
+  match:
+  - oracle-licensing
+  subtopics:
+  - id: oracle-database-metrics-and-options
+    name: Oracle Database metrics, editions and options
+    match:
+    - oracle-database-metrics-and-options
+  - id: oracle-virtualisation-and-cloud
+    name: Oracle on virtualised and cloud platforms
+    match:
+    - oracle-virtualisation-and-cloud
+  - id: oracle-java-licensing
+    name: Oracle Java SE licensing
+    match:
+    - oracle-java-licensing
+- id: ibm-licensing
+  name: IBM licensing (PVU, ILMT, sub-capacity)
+  source: IBM Passport Advantage licensing terms; IBM License Metric Tool documentation
+  match:
+  - ibm-licensing
+  subtopics:
+  - id: ibm-pvu-metric
+    name: IBM PVU metric and processor values
+    match:
+    - ibm-pvu-metric
+  - id: ilmt-operations
+    name: Operating IBM License Metric Tool
+    match:
+    - ilmt-operations
+  - id: ibm-eligible-products-and-bundles
+    name: IBM bundles, entitlements and Cloud Pak licensing
+    match:
+    - ibm-eligible-products-and-bundles
+- id: sap-licensing
+  name: SAP licensing
+  source: SAP price list and licensing documentation; SAP LAW and USMM measurement
+  match:
+  - sap-licensing
+  subtopics:
+  - id: sap-named-user-types
+    name: SAP named user types and engines
+    match:
+    - sap-named-user-types
+  - id: sap-usmm-and-law
+    name: SAP USMM and LAW measurement
+    match:
+    - sap-usmm-and-law
+  - id: sap-indirect-and-cloud-licensing
+    name: SAP indirect access and cloud licensing
+    match:
+    - sap-indirect-and-cloud-licensing
+- id: adobe-licensing
+  name: Adobe licensing
+  source: Adobe Value Incentive Plan and Enterprise Term Licence Agreement guides
+  match:
+  - adobe-licensing
+  subtopics:
+  - id: adobe-vip-etla
+    name: Adobe VIP and ETLA models
+    match:
+    - adobe-vip-etla
+  - id: adobe-reduction-and-audit-risk
+    name: Adobe usage review and audit risk
+    match:
+    - adobe-reduction-and-audit-risk
+- id: vmware-broadcom-licensing
+  name: VMware and Broadcom licensing
+  source: VMware/Broadcom product licensing documentation (VMware Cloud Foundation, vSphere Foundation)
+  match:
+  - vmware-broadcom-licensing
+  subtopics:
+  - id: vmware-subscription-model
+    name: VMware subscription model after Broadcom
+    match:
+    - vmware-subscription-model
+  - id: vmware-alternatives-and-exit
+    name: Planning a hypervisor exit or consolidation
+    match:
+    - vmware-alternatives-and-exit
+- id: saas-licence-management
+  name: SaaS licence management
+  source: IAITAM SaaS asset management; FinOps SaaS management guidance
+  match:
+  - saas-licence-management
+  subtopics:
+  - id: saas-discovery
+    name: SaaS discovery and shadow IT
+    match:
+    - saas-discovery
+  - id: saas-seat-rightsizing
+    name: SaaS seat reclamation and rightsizing
+    match:
+    - saas-seat-rightsizing
+  - id: saas-contract-and-security-review
+    name: SaaS contract, exit and security review
+    match:
+    - saas-contract-and-security-review
+- id: finops-for-software-and-cloud-spend
+  name: FinOps for software and SaaS spend
+  source: FinOps Foundation framework (Understand usage and cost, Quantify business value, Optimise usage and cost, Manage the FinOps practice)
+  match:
+  - finops-for-software-and-cloud-spend
+  subtopics:
+  - id: finops-inform-allocation
+    name: 'FinOps inform: allocation and showback'
+    match:
+    - finops-inform-allocation
+  - id: finops-optimise-commitments
+    name: 'FinOps optimise: commitments and discounts'
+    match:
+    - finops-optimise-commitments
+  - id: finops-operate-governance
+    name: 'FinOps operate: governance, forecasting and anomalies'
+    match:
+    - finops-operate-governance
+- id: software-vendor-negotiation
+  name: Vendor negotiation and contract management
+  source: IAITAM vendor management and contract management
+  match:
+  - software-vendor-negotiation
+  subtopics:
+  - id: negotiation-strategy-and-leverage
+    name: Negotiation strategy and leverage
+    match:
+    - negotiation-strategy-and-leverage
+  - id: contract-repository-and-obligations
+    name: Contract repository and obligation tracking
+    match:
+    - contract-repository-and-obligations
+  - id: m-and-a-and-divestiture-licensing
+    name: Mergers, divestitures and licence transfer
+    match:
+    - m-and-a-and-divestiture-licensing
+- id: open-source-licence-families
+  name: Open-source licence families
+  source: OSI approved licence list and categories; FSF licence list; choosealicense.com categories
+  match:
+  - open-source-licence-families
+  subtopics:
+  - id: permissive-licences-overview
+    name: 'Permissive licences: MIT, BSD, Apache, ISC'
+    match:
+    - permissive-licences-overview
+  - id: weak-copyleft-licences-overview
+    name: 'Weak copyleft: LGPL, MPL, EPL, CDDL'
+    match:
+    - weak-copyleft-licences-overview
+  - id: strong-and-network-copyleft-overview
+    name: 'Strong and network copyleft: GPL, AGPL, SSPL'
+    match:
+    - strong-and-network-copyleft-overview
+- id: licence-classification-osi-fsf
+  name: 'Licence classification: OSI, FSF and non-open licences'
+  source: OSI Open Source Definition and approved list; FSF Free Software Definition and licence list; source-available licences
+  match:
+  - licence-classification-osi-fsf
+  subtopics:
+  - id: osi-definition-and-approval
+    name: Open Source Definition and OSI approval
+    match:
+    - osi-definition-and-approval
+  - id: fsf-free-software-and-compatibility
+    name: FSF free software classification and GPL compatibility
+    match:
+    - fsf-free-software-and-compatibility
+  - id: source-available-and-fair-code-licences
+    name: Source-available, BSL and non-open licences
+    match:
+    - source-available-and-fair-code-licences
+- id: gpl-obligations-and-faq
+  name: GPL obligations and FAQ scenarios
+  source: FSF GNU GPL FAQ; GPL-2.0 and GPL-3.0 texts
+  match:
+  - gpl-obligations-and-faq
+  subtopics:
+  - id: gpl-source-offer-and-distribution
+    name: GPL source offer and distribution compliance
+    match:
+    - gpl-source-offer-and-distribution
+  - id: gpl-linking-and-derivative-works
+    name: Linking, plugins and derivative works under the GPL
+    match:
+    - gpl-linking-and-derivative-works
+  - id: gpl-enforcement-and-remediation
+    name: GPL violation response and remediation
+    match:
+    - gpl-enforcement-and-remediation
+- id: agpl-and-network-use
+  name: AGPL and network-use obligations
+  source: AGPL-3.0 section 13; FSF guidance; vendor policies on AGPL
+  match:
+  - agpl-and-network-use
+  subtopics:
+  - id: agpl-section-13
+    name: AGPL section 13 remote network interaction
+    match:
+    - agpl-section-13
+  - id: agpl-policy-and-alternatives
+    name: AGPL policy, commercial licences and alternatives
+    match:
+    - agpl-policy-and-alternatives
+- id: permissive-compliance-practice
+  name: Attribution and notices practice
+  source: REUSE spec; OpenChain; Apache NOTICE conventions; licence texts
+  match:
+  - permissive-compliance-practice
+  subtopics:
+  - id: third-party-notices-file
+    name: Building a third-party notices file
+    match:
+    - third-party-notices-file
+  - id: copyright-notice-and-header-hygiene
+    name: Copyright notices and file headers
+    match:
+    - copyright-notice-and-header-hygiene
+  - id: snippet-and-code-copy-risk
+    name: Snippets, copy-paste and AI-generated code
+    match:
+    - snippet-and-code-copy-risk
+- id: licence-compatibility-analysis
+  name: Licence compatibility analysis
+  source: FSF compatibility list; SPDX licence expressions; OpenChain licence compliance
+  match:
+  - licence-compatibility-analysis
+  subtopics:
+  - id: compatibility-matrix
+    name: Compatibility matrix and combination rules
+    match:
+    - compatibility-matrix
+  - id: spdx-licence-expressions-in-practice
+    name: Evaluating SPDX licence expressions (AND, OR, WITH)
+    match:
+    - spdx-licence-expressions-in-practice
+  - id: licence-risk-tiering-policy
+    name: Licence risk tiering and approval policy
+    match:
+    - licence-risk-tiering-policy
+- id: contribution-and-relicensing
+  name: Contributions, CLAs and relicensing
+  source: Developer Certificate of Origin; Apache ICLA/CCLA; OpenChain contribution policy
+  match:
+  - contribution-and-relicensing
+  subtopics:
+  - id: outbound-contribution-policy
+    name: Outbound contribution policy and DCO/CLA
+    match:
+    - outbound-contribution-policy
+  - id: dual-licensing-and-relicensing
+    name: Dual licensing and relicensing a project
+    match:
+    - dual-licensing-and-relicensing
+- id: spdx-document-structure
+  name: SPDX document, package and file information
+  source: 'SPDX specification 2.3 sections: document creation information, package, file information'
+  match:
+  - spdx-document-structure
+  subtopics:
+  - id: spdx-document-creation-info
+    name: SPDX document creation information
+    match:
+    - spdx-document-creation-info
+  - id: spdx-package-information
+    name: SPDX package information
+    match:
+    - spdx-package-information
+  - id: spdx-file-information
+    name: SPDX file information and snippets
+    match:
+    - spdx-file-information
+- id: spdx-relationships-and-licences
+  name: SPDX relationships, licence data and 3.0 model
+  source: SPDX specification 2.3 relationships between SPDX elements, other licensing information, SPDX 3.0 profiles
+  match:
+  - spdx-relationships-and-licences
+  subtopics:
+  - id: spdx-relationship-types
+    name: SPDX relationship types
+    match:
+    - spdx-relationship-types
+  - id: spdx-licence-list-and-licenseref
+    name: SPDX Licence List, LicenseRef and exceptions
+    match:
+    - spdx-licence-list-and-licenseref
+  - id: spdx-3-model-and-profiles
+    name: SPDX 3.0 model and profiles
+    match:
+    - spdx-3-model-and-profiles
+- id: cyclonedx-bom
+  name: CycloneDX BOM
+  source: CycloneDX specification overview and object model (components, services, dependencies, vulnerabilities, formulation)
+  match:
+  - cyclonedx-bom
+  subtopics:
+  - id: cyclonedx-components
+    name: CycloneDX components and metadata
+    match:
+    - cyclonedx-components
+  - id: cyclonedx-dependencies-and-services
+    name: CycloneDX dependency graph and services
+    match:
+    - cyclonedx-dependencies-and-services
+  - id: cyclonedx-bom-types-and-extensions
+    name: 'CycloneDX BOM types: HBOM, MLBOM, CBOM, OBOM'
+    match:
+    - cyclonedx-bom-types-and-extensions
+- id: sbom-minimum-elements
+  name: SBOM minimum elements and government guidance
+  source: NTIA The Minimum Elements For a SBOM (2021); CISA SBOM guidance and 2025 minimum elements draft; EO 14028; EU Cyber Resilience Act
+  match:
+  - sbom-minimum-elements
+  subtopics:
+  - id: ntia-minimum-elements
+    name: NTIA minimum elements
+    match:
+    - ntia-minimum-elements
+  - id: sbom-regulatory-drivers
+    name: 'SBOM regulatory drivers: EO 14028, CRA, FDA'
+    match:
+    - sbom-regulatory-drivers
+  - id: sbom-quality-scoring
+    name: SBOM quality and completeness scoring
+    match:
+    - sbom-quality-scoring
+- id: sbom-generation
+  name: SBOM generation and tooling
+  source: CISA SBOM sharing and generation guidance; CycloneDX tool centre; SPDX tools
+  match:
+  - sbom-generation
+  subtopics:
+  - id: sbom-generation-from-source-and-build
+    name: Generating SBOMs from source and build
+    match:
+    - sbom-generation-from-source-and-build
+  - id: sbom-container-image-scanning
+    name: SBOMs for container images and operating systems
+    match:
+    - sbom-container-image-scanning
+  - id: sbom-binary-and-firmware-analysis
+    name: SBOMs from binaries, firmware and third-party software
+    match:
+    - sbom-binary-and-firmware-analysis
+- id: vex-and-vulnerability-linkage
+  name: VEX and vulnerability linkage
+  source: CISA VEX use cases and minimum requirements; CycloneDX VEX; OpenVEX; CSAF 2.0; OSV and NVD
+  match:
+  - vex-and-vulnerability-linkage
+  subtopics:
+  - id: purl-cpe-identifiers
+    name: Package URL and CPE identifiers
+    match:
+    - purl-cpe-identifiers
+  - id: vex-documents
+    name: VEX statements and status values
+    match:
+    - vex-documents
+  - id: sbom-vulnerability-matching-workflow
+    name: Matching SBOMs to vulnerabilities continuously
+    match:
+    - sbom-vulnerability-matching-workflow
+- id: sbom-distribution-and-integrity
+  name: SBOM distribution, signing and lifecycle
+  source: CISA SBOM sharing lifecycle; SLSA; in-toto; Sigstore
+  match:
+  - sbom-distribution-and-integrity
+  subtopics:
+  - id: sbom-signing-and-attestation
+    name: Signing SBOMs and attestations
+    match:
+    - sbom-signing-and-attestation
+  - id: sbom-sharing-and-storage
+    name: SBOM sharing, access control and repositories
+    match:
+    - sbom-sharing-and-storage
+  - id: sbom-lifecycle-and-governance
+    name: SBOM programme governance and lifecycle
+    match:
+    - sbom-lifecycle-and-governance
+- id: openchain-iso-5230
+  name: OpenChain ISO/IEC 5230 open-source compliance programme
+  source: OpenChain Specification 2.1 / ISO/IEC 5230:2020 requirements
+  match:
+  - openchain-iso-5230
+  subtopics:
+  - id: openchain-programme-foundation
+    name: OpenChain programme foundation
+    match:
+    - openchain-programme-foundation
+  - id: openchain-bill-of-materials-and-obligations
+    name: OpenChain bill of materials and obligation process
+    match:
+    - openchain-bill-of-materials-and-obligations
+  - id: openchain-contributions-and-conformance
+    name: OpenChain contributions, communication and conformance
+    match:
+    - openchain-contributions-and-conformance
+- id: openchain-iso-18974
+  name: OpenChain ISO/IEC 18974 security assurance
+  source: OpenChain Security Assurance Specification 1.1 / ISO/IEC 18974:2023
+  match:
+  - openchain-iso-18974
+  subtopics:
+  - id: openchain-security-programme
+    name: OpenChain security assurance programme requirements
+    match:
+    - openchain-security-programme
+  - id: openchain-security-verification
+    name: OpenChain security verification and disclosure
+    match:
+    - openchain-security-verification
+- id: reuse-specification
+  name: REUSE specification
+  source: REUSE Specification 3.x (FSFE) and reuse-tool documentation
+  match:
+  - reuse-specification
+  subtopics:
+  - id: reuse-licensing-metadata
+    name: REUSE licensing metadata in a repository
+    match:
+    - reuse-licensing-metadata
+  - id: reuse-in-ci-and-spdx-export
+    name: REUSE in CI and SPDX export
+    match:
+    - reuse-in-ci-and-spdx-export
+  - id: reuse-migrating-legacy-repos
+    name: Migrating a legacy repository to REUSE
+    match:
+    - reuse-migrating-legacy-repos
+- id: software-composition-analysis
+  name: Software composition analysis and licence scanning
+  source: OpenChain tooling guides; ORT, ScanCode, FOSSology, SCA product documentation
+  match:
+  - software-composition-analysis
+  subtopics:
+  - id: sca-tool-selection-and-pipeline
+    name: SCA tool selection and CI pipeline
+    match:
+    - sca-tool-selection-and-pipeline
+  - id: licence-curation-and-review
+    name: Licence findings review and curation
+    match:
+    - licence-curation-and-review
+  - id: dependency-update-and-licence-drift
+    name: Dependency updates and licence drift monitoring
+    match:
+    - dependency-update-and-licence-drift
+- id: ospo-and-open-source-governance
+  name: Open-source programme office (OSPO) and governance
+  source: TODO Group OSPO guides; OpenChain; Linux Foundation OSPO resources
+  match:
+  - ospo-and-open-source-governance
+  subtopics:
+  - id: ospo-setup-and-roles
+    name: Setting up an OSPO
+    match:
+    - ospo-setup-and-roles
+  - id: open-source-release-process
+    name: Releasing your own code as open source
+    match:
+    - open-source-release-process

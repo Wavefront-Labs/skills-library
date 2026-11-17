@@ -1,0 +1,334 @@
+# Canonical coverage spec: Haskell language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: haskell-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [haskell]
+sources:
+  - "Haskell 2010 Language Report (haskell.org/onlinereport/haskell2010)"
+  - "GHC User's Guide (downloads.haskell.org/ghc) - language extensions, flags, RTS, profiling, FFI"
+  - "base, containers, text, bytestring, mtl, transformers library docs on Hackage"
+  - "Cabal user guide, Stack docs, GHCup, Haskell Language Server docs"
+  - "Tasty, HUnit, QuickCheck docs; HLint, Ormolu, Fourmolu docs; community style guides"
+topics:
+  - id: haskell-syntax
+    name: "Lexical structure and layout"
+    source: "Haskell 2010 Report ch2-3"
+    match: [haskell-syntax]
+    subtopics:
+      - {id: haskell-syntax-layout-rule-offside, name: "Layout rule and offside indentation", match: [layout-rule-offside]}
+      - {id: haskell-syntax-operators-fixity-sections, name: "Operators fixity declarations and sections", match: [operators-fixity-sections]}
+      - {id: haskell-syntax-comments-and-pragmas, name: "Comments literate Haskell and pragmas", match: [comments-and-pragmas]}
+  - id: haskell-expressions
+    name: "Expressions and pattern matching"
+    source: "Haskell 2010 Report ch3-4"
+    match: [haskell-expressions]
+    subtopics:
+      - {id: haskell-expressions-guards-where-let, name: "Guards where and let bindings", match: [guards-where-let]}
+      - {id: haskell-expressions-case-and-pattern-matching, name: "Case expressions and pattern matching", match: [case-and-pattern-matching]}
+      - {id: haskell-expressions-lambdacase-multiwayif-viewpatterns, name: "LambdaCase MultiWayIf and ViewPatterns", match: [lambdacase-multiwayif-viewpatterns]}
+  - id: haskell-functions
+    name: "Functions and higher-order programming"
+    source: "Haskell 2010 Report ch3, Prelude"
+    match: [haskell-functions]
+    subtopics:
+      - {id: haskell-functions-currying-and-partial-application, name: "Currying and partial application", match: [currying-and-partial-application]}
+      - {id: haskell-functions-point-free-and-composition, name: "Function composition and point-free style", match: [point-free-and-composition]}
+      - {id: haskell-functions-folds-and-higher-order-functions, name: "Folds map filter and higher-order functions", match: [folds-and-higher-order-functions]}
+  - id: haskell-lists
+    name: "Lists and Data.List"
+    source: "Haskell 2010 Report ch6 Prelude, base Data.List"
+    match: [haskell-lists]
+    subtopics:
+      - {id: haskell-lists-list-comprehensions, name: "List comprehensions and ranges", match: [list-comprehensions]}
+      - {id: haskell-lists-data-list-functions, name: "Data.List library functions", match: [data-list-functions]}
+      - {id: haskell-lists-laziness-and-infinite-lists, name: "Infinite lists and lazy evaluation patterns", match: [laziness-and-infinite-lists]}
+  - id: haskell-laziness
+    name: "Evaluation strictness and space"
+    source: "GHC User's Guide, base Prelude seq, deepseq package"
+    match: [haskell-laziness]
+    subtopics:
+      - {id: haskell-laziness-bang-patterns-and-seq, name: "Strictness with seq bang patterns and strict fields", match: [bang-patterns-and-seq]}
+      - {id: haskell-laziness-space-leaks-diagnosis, name: "Diagnosing space leaks", match: [space-leaks-diagnosis]}
+      - {id: haskell-laziness-deepseq-and-nf, name: "deepseq NFData and normal form", match: [deepseq-and-nf]}
+  - id: haskell-types-basic
+    name: "Types type synonyms and algebraic data"
+    source: "Haskell 2010 Report ch4"
+    match: [haskell-types-basic]
+    subtopics:
+      - {id: haskell-types-basic-type-signatures-and-inference, name: "Type signatures inference and the monomorphism restriction", match: [type-signatures-and-inference]}
+      - {id: haskell-types-basic-newtype-and-type-synonyms, name: "newtype versus type and data", match: [newtype-and-type-synonyms]}
+      - {id: haskell-types-basic-algebraic-data-types, name: "Algebraic data types and recursive types", match: [algebraic-data-types]}
+      - {id: haskell-types-basic-records-and-field-access, name: "Records field selectors and update syntax", match: [records-and-field-access]}
+  - id: haskell-typeclasses
+    name: "Type classes and instances"
+    source: "Haskell 2010 Report ch4.3, GHC User's Guide deriving"
+    match: [haskell-typeclasses]
+    subtopics:
+      - {id: haskell-typeclasses-defining-classes-and-instances, name: "Defining type classes and instances", match: [defining-classes-and-instances]}
+      - {id: haskell-typeclasses-deriving-strategies-and-via, name: "Deriving strategies anyclass newtype and via", match: [deriving-strategies-and-via]}
+  - id: haskell-stdclasses
+    name: "Standard library classes"
+    source: "base Prelude, Data.Semigroup, Data.Foldable"
+    match: [haskell-stdclasses]
+    subtopics:
+      - {id: haskell-stdclasses-eq-ord-show-read, name: "Eq Ord Show and Read", match: [eq-ord-show-read]}
+      - {id: haskell-stdclasses-numeric-tower, name: "Numeric types and the Num hierarchy", match: [numeric-tower]}
+      - {id: haskell-stdclasses-semigroup-and-monoid, name: "Semigroup and Monoid", match: [semigroup-and-monoid]}
+      - {id: haskell-stdclasses-foldable-and-traversable, name: "Foldable and Traversable", match: [foldable-and-traversable]}
+  - id: haskell-functor-monad
+    name: "Functor Applicative and Monad"
+    source: "Haskell 2010 Report Prelude, base Control.Monad"
+    match: [haskell-functor-monad]
+    subtopics:
+      - {id: haskell-functor-monad-functor-and-applicative, name: "Functor and Applicative", match: [functor-and-applicative]}
+      - {id: haskell-functor-monad-monads-and-do-notation, name: "Monads and do notation", match: [monads-and-do-notation]}
+  - id: haskell-transformers
+    name: "Monad transformers and mtl"
+    source: "transformers and mtl docs on Hackage"
+    match: [haskell-transformers]
+    subtopics:
+      - {id: haskell-transformers-mtl-state-reader-writer, name: "State Reader and Writer with mtl", match: [mtl-state-reader-writer]}
+      - {id: haskell-transformers-transformer-stacks-and-except, name: "Transformer stacks ExceptT and lifting", match: [transformer-stacks-and-except]}
+  - id: haskell-io
+    name: "Input and output"
+    source: "Haskell 2010 Report ch7 System.IO, base System.IO and System.Directory"
+    match: [haskell-io]
+    subtopics:
+      - {id: haskell-io-io-monad-and-main, name: "The IO monad main and sequencing", match: [io-monad-and-main]}
+      - {id: haskell-io-files-handles-and-paths, name: "Files handles and paths", match: [files-handles-and-paths]}
+  - id: haskell-errors
+    name: "Error handling"
+    source: "base Control.Exception, Data.Either, Data.Maybe"
+    match: [haskell-errors]
+    subtopics:
+      - {id: haskell-errors-maybe-either-error-values, name: "Maybe and Either for errors", match: [maybe-either-error-values]}
+      - {id: haskell-errors-exceptions-control-exception, name: "Exceptions with Control.Exception", match: [exceptions-control-exception]}
+      - {id: haskell-errors-bottom-error-undefined-callstacks, name: "error undefined and HasCallStack", match: [bottom-error-undefined-callstacks]}
+  - id: haskell-advtypes
+    name: "Advanced type system features"
+    source: "GHC User's Guide type system extensions"
+    match: [haskell-advtypes]
+    subtopics:
+      - {id: haskell-advtypes-gadts-and-existentials, name: "GADTs and existential types", match: [gadts-and-existentials]}
+      - {id: haskell-advtypes-rankn-and-scoped-type-variables, name: "RankNTypes ScopedTypeVariables and TypeApplications", match: [rankn-and-scoped-type-variables]}
+      - {id: haskell-advtypes-type-families-and-datakinds, name: "Type families DataKinds and type-level programming", match: [type-families-and-datakinds]}
+  - id: haskell-extensions
+    name: "Language extensions and editions"
+    source: "GHC User's Guide language extensions"
+    match: [haskell-extensions]
+    subtopics:
+      - {id: haskell-extensions-ghc2021-and-language-editions, name: "GHC2021 Haskell2010 and default-extensions", match: [ghc2021-and-language-editions]}
+      - {id: haskell-extensions-overloadedstrings-and-literals, name: "OverloadedStrings and literal extensions", match: [overloadedstrings-and-literals]}
+  - id: haskell-text
+    name: "Text and Unicode"
+    source: "text package on Hackage"
+    match: [haskell-text]
+    subtopics:
+      - {id: haskell-text-string-vs-text, name: "String versus Text", match: [string-vs-text]}
+      - {id: haskell-text-text-formatting-and-printf, name: "Text formatting printf and show", match: [text-formatting-and-printf]}
+  - id: haskell-bytestring
+    name: "ByteString and binary data"
+    source: "bytestring package on Hackage"
+    match: [haskell-bytestring]
+    subtopics:
+      - {id: haskell-bytestring-bytestring-strict-lazy-char8, name: "ByteString strict lazy and Char8", match: [bytestring-strict-lazy-char8]}
+  - id: haskell-containers
+    name: "Containers and data structures"
+    source: "containers package on Hackage"
+    match: [haskell-containers]
+    subtopics:
+      - {id: haskell-containers-data-map-and-set, name: "Data.Map and Data.Set", match: [data-map-and-set]}
+      - {id: haskell-containers-intmap-seq-and-others, name: "IntMap Seq and Data.Tree", match: [intmap-seq-and-others]}
+  - id: haskell-arrays
+    name: "Arrays and vectors"
+    source: "array and vector packages"
+    match: [haskell-arrays]
+    subtopics:
+      - {id: haskell-arrays-vector-package, name: "Data.Vector boxed unboxed and fusion", match: [vector-package]}
+      - {id: haskell-arrays-array-and-st-arrays, name: "Data.Array STUArray and IORef", match: [array-and-st-arrays]}
+  - id: haskell-concurrency
+    name: "Concurrency and STM"
+    source: "base Control.Concurrent, stm, async packages"
+    match: [haskell-concurrency]
+    subtopics:
+      - {id: haskell-concurrency-forkio-and-mvar, name: "forkIO threads and MVar", match: [forkio-and-mvar]}
+      - {id: haskell-concurrency-stm-transactions, name: "Software Transactional Memory", match: [stm-transactions]}
+      - {id: haskell-concurrency-async-and-structured-concurrency, name: "The async package", match: [async-and-structured-concurrency]}
+  - id: haskell-parallel
+    name: "Parallelism and the RTS"
+    source: "GHC User's Guide using-concurrent and RTS options, parallel package"
+    match: [haskell-parallel]
+    subtopics:
+      - {id: haskell-parallel-parallel-strategies-par, name: "Parallel strategies with par and parMap", match: [parallel-strategies-par]}
+      - {id: haskell-parallel-rts-options-and-tuning, name: "RTS options and GC tuning", match: [rts-options-and-tuning]}
+  - id: haskell-modules
+    name: "Modules and imports"
+    source: "Haskell 2010 Report ch5"
+    match: [haskell-modules]
+    subtopics:
+      - {id: haskell-modules-module-exports-imports, name: "Module headers export lists and qualified imports", match: [module-exports-imports]}
+  - id: haskell-cabal
+    name: "Cabal build tool"
+    source: "Cabal User Guide (cabal.readthedocs.io)"
+    match: [haskell-cabal]
+    subtopics:
+      - {id: haskell-cabal-cabal-file-anatomy, name: "The .cabal package file", match: [cabal-file-anatomy]}
+      - {id: haskell-cabal-cabal-commands-and-projects, name: "cabal build run test and cabal.project", match: [cabal-commands-and-projects]}
+      - {id: haskell-cabal-cabal-flags-and-conditionals, name: "Cabal flags conditionals and multi-GHC testing", match: [cabal-flags-and-conditionals]}
+      - {id: haskell-cabal-hackage-publishing-and-pvp, name: "Publishing to Hackage and the PVP", match: [hackage-publishing-and-pvp]}
+  - id: haskell-stack
+    name: "Stack build tool"
+    source: "Stack documentation (docs.haskellstack.org)"
+    match: [haskell-stack]
+    subtopics:
+      - {id: haskell-stack-stack-yaml-and-resolvers, name: "stack.yaml snapshots and extra-deps", match: [stack-yaml-and-resolvers]}
+      - {id: haskell-stack-stack-commands-and-scripts, name: "Stack commands scripts and docker", match: [stack-commands-and-scripts]}
+  - id: haskell-toolchain
+    name: "Toolchain management GHCup and HLS"
+    source: "GHCup and Haskell Language Server documentation"
+    match: [haskell-toolchain]
+    subtopics:
+      - {id: haskell-toolchain-ghcup-install-and-manage, name: "GHCup installing GHC cabal and HLS", match: [ghcup-install-and-manage]}
+      - {id: haskell-toolchain-hls-editor-setup, name: "Haskell Language Server editor setup and hie.yaml", match: [hls-editor-setup]}
+      - {id: haskell-toolchain-haskell-toolchain-versions, name: "Choosing GHC versions and base compatibility", match: [haskell-toolchain-versions]}
+  - id: haskell-ecosystem
+    name: "Package ecosystem and discovery"
+    source: "Hackage, Stackage and Hoogle documentation"
+    match: [haskell-ecosystem]
+    subtopics:
+      - {id: haskell-ecosystem-hackage-hoogle-stackage-discovery, name: "Finding packages with Hackage Hoogle and Stackage", match: [hackage-hoogle-stackage-discovery]}
+      - {id: haskell-ecosystem-nix-and-reproducible-builds, name: "Nix haskell.nix and reproducible builds", match: [nix-and-reproducible-builds]}
+  - id: haskell-testing
+    name: "Testing"
+    source: "Tasty, HUnit, QuickCheck, Hspec documentation on Hackage"
+    match: [haskell-testing]
+    subtopics:
+      - {id: haskell-testing-hunit-unit-tests, name: "HUnit unit tests", match: [hunit-unit-tests]}
+      - {id: haskell-testing-quickcheck-properties, name: "QuickCheck property testing", match: [quickcheck-properties]}
+      - {id: haskell-testing-tasty-and-hspec-frameworks, name: "Tasty and Hspec test frameworks", match: [tasty-and-hspec-frameworks]}
+      - {id: haskell-testing-doctest-and-coverage, name: "doctest and HPC coverage", match: [doctest-and-coverage]}
+  - id: haskell-lintfmt
+    name: "Formatting linting and style"
+    source: "HLint, Ormolu, Fourmolu documentation and community style guides"
+    match: [haskell-lintfmt]
+    subtopics:
+      - {id: haskell-lintfmt-ormolu-fourmolu-formatting, name: "Ormolu and Fourmolu formatters", match: [ormolu-fourmolu-formatting]}
+      - {id: haskell-lintfmt-hlint-static-analysis, name: "HLint suggestions and configuration", match: [hlint-static-analysis]}
+      - {id: haskell-lintfmt-haskell-style-guides, name: "Community style guides and API conventions", match: [haskell-style-guides]}
+  - id: haskell-debugging
+    name: "Debugging"
+    source: "GHC User's Guide ghci, Debug.Trace"
+    match: [haskell-debugging]
+    subtopics:
+      - {id: haskell-debugging-ghci-workflow-and-commands, name: "GHCi commands and workflow", match: [ghci-workflow-and-commands]}
+      - {id: haskell-debugging-ghci-debugger-and-trace, name: "GHCi debugger and Debug.Trace", match: [ghci-debugger-and-trace]}
+  - id: haskell-profiling
+    name: "Profiling"
+    source: "GHC User's Guide profiling, ThreadScope"
+    match: [haskell-profiling]
+    subtopics:
+      - {id: haskell-profiling-time-and-alloc-profiling, name: "Time and allocation profiling with cost centres", match: [time-and-alloc-profiling]}
+      - {id: haskell-profiling-eventlog-threadscope-and-benchmarking, name: "Eventlog ThreadScope and benchmarking", match: [eventlog-threadscope-and-benchmarking]}
+  - id: haskell-optimisation
+    name: "Compiler optimisation"
+    source: "GHC User's Guide using-optimisation and pragmas"
+    match: [haskell-optimisation]
+    subtopics:
+      - {id: haskell-optimisation-ghc-optimisation-levels-and-flags, name: "GHC -O levels and optimisation flags", match: [ghc-optimisation-levels-and-flags]}
+      - {id: haskell-optimisation-inlining-specialisation-pragmas, name: "INLINE SPECIALIZE and rewrite pragmas", match: [inlining-specialisation-pragmas]}
+      - {id: haskell-optimisation-core-and-strictness-reading, name: "Reading GHC Core and strictness", match: [core-and-strictness-reading]}
+  - id: haskell-warnings
+    name: "Compiler warnings and diagnostics"
+    source: "GHC User's Guide warnings and sanity-checking"
+    match: [haskell-warnings]
+    subtopics:
+      - {id: haskell-warnings-ghc-warnings-wall-and-werror, name: "-Wall -Wcompat -Werror and warning groups", match: [ghc-warnings-wall-and-werror]}
+  - id: haskell-ffi
+    name: "Foreign function interface"
+    source: "Haskell 2010 Report FFI addendum, GHC User's Guide FFI"
+    match: [haskell-ffi]
+    subtopics:
+      - {id: haskell-ffi-ffi-ccall-and-marshalling, name: "foreign import ccall and marshalling", match: [ffi-ccall-and-marshalling]}
+      - {id: haskell-ffi-c-bindings-with-cabal, name: "Cabal C sources and linking system libraries", match: [c-bindings-with-cabal]}
+  - id: haskell-deployment
+    name: "Deployment and packaging"
+    source: "GHC User's Guide linking, Docker documentation, cabal install"
+    match: [haskell-deployment]
+    subtopics:
+      - {id: haskell-deployment-static-linking-and-docker, name: "Static binaries and Docker images", match: [static-linking-and-docker]}
+      - {id: haskell-deployment-cross-compilation-and-releases, name: "Cross compilation and release artifacts", match: [cross-compilation-and-releases]}
+  - id: haskell-security
+    name: "Security"
+    source: "Safe Haskell chapter, OWASP guidance, Hackage security"
+    match: [haskell-security]
+    subtopics:
+      - {id: haskell-security-safe-haskell-and-unsafe-functions, name: "Safe Haskell and unsafe primitives", match: [safe-haskell-and-unsafe-functions]}
+      - {id: haskell-security-dependency-and-input-security, name: "Dependency supply chain and input validation", match: [dependency-and-input-security]}
+  - id: haskell-web
+    name: "Web frameworks and HTTP"
+    source: "servant, scotty, wai, warp, http-client documentation on Hackage"
+    match: [haskell-web]
+    subtopics:
+      - {id: haskell-web-wai-warp-scotty-servers, name: "WAI Warp and Scotty web servers", match: [wai-warp-scotty-servers]}
+      - {id: haskell-web-servant-typed-apis, name: "Servant type-level API definitions", match: [servant-typed-apis]}
+  - id: haskell-database
+    name: "Databases"
+    source: "persistent, postgresql-simple, sqlite-simple, hasql documentation"
+    match: [haskell-database]
+    subtopics:
+      - {id: haskell-database-postgresql-simple-and-persistent, name: "Database access with postgresql-simple and persistent", match: [postgresql-simple-and-persistent]}
+  - id: haskell-parsing
+    name: "Parsing and serialisation"
+    source: "aeson, megaparsec, attoparsec documentation"
+    match: [haskell-parsing]
+    subtopics:
+      - {id: haskell-parsing-aeson-json-encoding, name: "JSON with aeson", match: [aeson-json-encoding]}
+      - {id: haskell-parsing-megaparsec-parser-combinators, name: "Parser combinators with megaparsec and attoparsec", match: [megaparsec-parser-combinators]}
+      - {id: haskell-parsing-regex-and-text-search, name: "Regular expressions and text search in Haskell", match: [regex-and-text-search]}
+  - id: haskell-optics
+    name: "Optics and records"
+    source: "lens, optics, generic-lens documentation"
+    match: [haskell-optics]
+    subtopics:
+      - {id: haskell-optics-lens-and-optics-basics, name: "lens and optics libraries", match: [lens-and-optics-basics]}
+  - id: haskell-cli
+    name: "Command-line applications"
+    source: "optparse-applicative and process package documentation"
+    match: [haskell-cli]
+    subtopics:
+      - {id: haskell-cli-optparse-applicative-clis, name: "Command-line parsing with optparse-applicative", match: [optparse-applicative-clis]}
+  - id: haskell-generics
+    name: "Generic programming and Template Haskell"
+    source: "GHC.Generics and Template Haskell chapters"
+    match: [haskell-generics]
+    subtopics:
+      - {id: haskell-generics-ghc-generics-datatype-generic, name: "GHC.Generics and generic programming", match: [ghc-generics-datatype-generic]}
+      - {id: haskell-generics-template-haskell-basics, name: "Template Haskell splices quotes and QuasiQuotes", match: [template-haskell-basics]}
+  - id: haskell-documentation
+    name: "Documentation"
+    source: "Haddock documentation"
+    match: [haskell-documentation]
+    subtopics:
+      - {id: haskell-documentation-haddock-documentation, name: "Writing Haddock documentation", match: [haddock-documentation]}
+  - id: haskell-datetime
+    name: "Date, time and randomness"
+    source: "time and random packages on Hackage"
+    match: [haskell-datetime]
+    subtopics:
+      - {id: haskell-datetime-time-library-usage, name: "The time library", match: [time-library-usage]}
+      - {id: haskell-datetime-random-and-reproducibility, name: "Random numbers with random and splitmix", match: [random-and-reproducibility]}
+  - id: haskell-logging
+    name: "Logging and configuration"
+    source: "monad-logger, katip, co-log, dotenv documentation"
+    match: [haskell-logging]
+    subtopics:
+      - {id: haskell-logging-logging-libraries-and-config, name: "Structured logging and configuration loading", match: [logging-libraries-and-config]}
+  - id: haskell-streaming
+    name: "Streaming and effects"
+    source: "conduit, streaming, effectful, free monads"
+    match: [haskell-streaming]
+    subtopics:
+      - {id: haskell-streaming-conduit-and-streaming-io, name: "Streaming data with conduit and streamly", match: [conduit-and-streaming-io]}
+      - {id: haskell-streaming-effect-systems-and-free-monads, name: "Effect systems and the handle pattern", match: [effect-systems-and-free-monads]}

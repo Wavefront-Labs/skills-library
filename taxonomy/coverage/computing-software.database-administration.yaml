@@ -1,0 +1,1423 @@
+# Canonical coverage spec: Database Administration (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (official manual tables of contents,
+# certification skills outlines), not from what the library happened to hold.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (manual chapter
+# sections, exam objective bullets, docs page headings).
+subject: database-administration
+scope:
+  category: computing-software
+  field: database-administration
+  products: [postgresql, mysql, sql-server, oracle-database, mongodb, redis, elasticsearch, sqlite, query-optimisation, schema-design, replication-high-availability, database-backup-recovery]
+sources:
+  - "PostgreSQL 17 documentation Part III Server Administration (postgresql.org/docs/current/admin.html) - 18 Server Setup and Operation, 19 Server Configuration, 20 Client Authentication, 21 Database Roles, 22 Managing Databases, 23 Localization, 24 Routine Database Maintenance Tasks, 25 Backup and Restore, 26 High Availability Load Balancing and Replication, 27 Monitoring Database Activity, 28 Reliability and the Write-Ahead Log, 29 Logical Replication; Part II chapters 5.12 Table Partitioning, 11 Indexes, 13 Concurrency Control, 14 Performance Tips; Appendix F Additional Supplied Modules; PgBouncer docs (config, usage)"
+  - "MySQL 8.4 Reference Manual ToC (dev.mysql.com/doc/refman/8.4/en) - 3 Upgrading MySQL, 7 MySQL Server Administration (configuring the server, option files, server logs), 8 Security (access control and account management, encrypted connections, authentication plugins, keyring), 9 Backup and Recovery (mysqldump, point-in-time recovery using binary log), 10 Optimization (EXPLAIN, optimizer hints, histograms, invisible indexes), 17 The InnoDB Storage Engine (buffer pool, redo/undo logs, locking, online DDL, crash recovery), 19 Replication (GTID, filters, multithreaded and delayed replicas, semisynchronous), 20 Group Replication, MySQL Shell AdminAPI InnoDB Cluster and MySQL Router docs; gh-ost and Percona Toolkit docs"
+  - "Microsoft Exam DP-300 Administering Microsoft Azure SQL Solutions skills outline - Plan and implement data platform resources; Implement a secure environment (authentication, authorization, TDE, Always Encrypted, auditing, dynamic data masking); Monitor configure and optimize database resources (wait stats, Extended Events, Query Store, DMVs, index and statistics maintenance, intelligent query processing); Configure and manage automation of tasks (SQL Server Agent, alerts, elastic jobs); Plan and configure a high availability and disaster recovery environment (backup/restore, log shipping, FCI, availability groups, geo-replication, failover groups); plus SQL Server docs Backup and Restore, DBCC CHECKDB, Server configuration options, tempdb"
+  - "Oracle Database Administration certification topics (1Z0-082 Administration I, 1Z0-083 Administration II, 1Z0-1093 Oracle Database Administration 2019+ exam topics) and Oracle 19c Administrator's Guide ToC - instance startup/shutdown and parameter files, ADR and alert log, memory management, multitenant CDB/PDB, users roles profiles and unified auditing, tablespaces undo and temp, ASM, Oracle Net (listener, tnsnames, services), Data Pump and SQL*Loader, RMAN (duplicate, recovery catalog, flashback, block media recovery), performance (AWR, SQL Tuning Advisor, SQL plan management, optimizer statistics), Data Guard, patching (OPatch, datapatch, AutoUpgrade), RAC (srvctl, services, Application Continuity)"
+  - "MongoDB Manual ToC (mongodb.com/docs/manual) - Aggregation, Indexes (compound, wildcard, text, geospatial, TTL, hidden, index builds on populated collections), Data Modeling, Replication (read preference, member configuration, oplog, initial sync), Sharding (shard keys, resharding, balancer, jumbo chunks), Security (authentication SCRAM/x.509, RBAC, TLS, CSFLE/Queryable Encryption, auditing), Administration and Production Notes (WiredTiger, profiler, mongostat/mongotop, FCV), Transactions, Change Streams"
+  - "Redis documentation ToC (redis.io/docs) - Data types (strings, hashes, lists, sets, sorted sets, streams, bitmaps, HyperLogLog, pub/sub), Management - Persistence, Replication, Sentinel, Scaling with Cluster, Security (ACL, TLS, protected mode), Optimization (memory optimization, latency monitor and diagnosis, slowlog), Programmability (Lua EVAL, Functions, transactions, pipelining), Distributed locks"
+  - "Elasticsearch Guide ToC (elastic.co/guide) - Set up Elasticsearch (important settings, discovery and cluster formation, node roles, important system configuration), Secure the Elastic Stack (TLS, users and roles, API keys, document/field level security, audit logging), Query DSL, Aggregations, Ingest pipelines, Index lifecycle and data tiers, Snapshot and restore, Cross-cluster replication, Monitoring, Upgrade, Circuit breakers, Slow logs"
+  - "SQLite documentation (sqlite.org/docs.html) - Command Line Shell, ALTER TABLE and the 12-step generalized schema change, Datatypes and type affinity, Query Planner and EXPLAIN QUERY PLAN, ANALYZE, FTS5, JSON functions, WAL, Pragmas, Backup API, Recovering data"
+  - "Use The Index Luke / SQL Performance Explained (Winand) ToC - anatomy of an index, the where clause, performance and scalability, the join operation, clustering data, sorting and grouping, partial results (pagination), insert/delete/update; PostgreSQL docs 7 Queries (window functions, WITH queries, LATERAL, grouping sets)"
+  - "Database Design for Mere Mortals (Hernandez) and Refactoring Databases (Ambler and Sadalage) chapter structure - keys, field specifications/data types, relationships, business rules, views, integrity; refactoring categories (structural, data quality, referential integrity, architectural) and transition periods; SQL Antipatterns (Karwin) - EAV, polymorphic associations, naive trees"
+  - "Designing Data-Intensive Applications (Kleppmann) ch.5 Replication and ch.7 Transactions; NIST SP 800-34 contingency planning and backup verification guidance"
+topics:
+  # ---------------- PostgreSQL (Server Administration part)
+  - id: pg-server-setup
+    name: Server setup and operation
+    source: PostgreSQL docs 18 Server Setup and Operation
+    match: [initdb, pg-ctl, postgres-server-setup]
+    subtopics:
+      - {id: pg-ss-initdb, name: Creating a cluster with initdb (locale / encoding / data checksums), match: [initdb-options, data-checksums]}
+      - {id: pg-ss-shutdown, name: Shutting down the server (smart / fast / immediate), match: [shutdown-modes, pg-ctl-stop]}
+      - {id: pg-ss-kernel, name: Managing kernel resources (shared memory / huge pages / overcommit), match: [huge-pages, vm-overcommit-postgres, kernel-resources]}
+      - {id: pg-ss-systemd, name: Starting the server under systemd, match: [postgres-systemd, systemd-unit-postgres]}
+      - {id: pg-ss-startup-failures, name: Diagnosing server start-up failures (port in use / stale postmaster.pid / shared memory), match: [postgres-startup-failure, postmaster-pid]}
+      - {id: pg-ss-removeipc, name: systemd-logind RemoveIPC removing shared memory and semaphores, match: [removeipc]}
+      - {id: pg-ss-spoofing, name: Preventing server spoofing (unix_socket_directories / requirepeer / verify-full), match: [server-spoofing, unix-socket-directories]}
+      - {id: pg-ss-ssh-tunnel, name: Secure TCP/IP connections with SSH tunnels, match: [ssh-tunnel-postgres]}
+  - id: pg-configuration
+    name: Server configuration (postgresql.conf / GUCs)
+    source: PostgreSQL docs 19 Server Configuration
+    match: [postgresql-conf, alter-system]
+    subtopics:
+      - {id: pg-cf-contexts, name: Parameter contexts / reload vs restart / pending_restart, match: [pending-restart, pg-reload-conf, parameter-context]}
+      - {id: pg-cf-logging, name: Error reporting and logging (log_line_prefix / log_min_duration_statement / jsonlog), match: [log-line-prefix, log-min-duration-statement, jsonlog]}
+      - {id: pg-cf-connections, name: Connections and timeouts (max_connections / statement_timeout / idle timeouts), match: [max-connections, statement-timeout, idle-session-timeout]}
+      - {id: pg-cf-memory, name: Resource consumption - memory (shared_buffers / work_mem), match: [shared-buffers, work-mem]}
+      - {id: pg-cf-planner, name: Query planning cost constants, match: [random-page-cost, effective-io-concurrency]}
+      - {id: pg-cf-include, name: Configuration file includes (include_dir / conf.d), match: [include-dir]}
+      - {id: pg-cf-pg-settings, name: Inspecting settings with pg_settings and pg_file_settings, match: [pg-settings, pg-file-settings]}
+      - {id: pg-cf-parallel, name: Parallel query workers (max_worker_processes / max_parallel_workers_per_gather), match: [max-parallel-workers, parallel-query]}
+      - {id: pg-cf-maintenance-mem, name: maintenance_work_mem and autovacuum_work_mem, match: [maintenance-work-mem]}
+      - {id: pg-cf-jit, name: JIT compilation settings (jit / jit_above_cost), match: [postgres-jit]}
+      - {id: pg-cf-locks, name: Lock management (deadlock_timeout / max_locks_per_transaction), match: [max-locks-per-transaction, deadlock-timeout]}
+  - id: pg-client-auth
+    name: Client authentication (pg_hba.conf)
+    source: PostgreSQL docs 20 Client Authentication
+    match: [pg-hba-conf, client-authentication]
+    subtopics:
+      - {id: pg-ca-scram, name: Password authentication with SCRAM-SHA-256, match: [scram-sha-256, password-encryption]}
+      - {id: pg-ca-ssl, name: Secure TCP/IP connections with SSL (hostssl / sslmode), match: [postgres-ssl, sslmode, hostssl]}
+      - {id: pg-ca-cert, name: Certificate authentication, match: [cert-authentication, clientcert]}
+      - {id: pg-ca-ident-ldap, name: User name maps and LDAP authentication, match: [pg-ident-conf, ldap-authentication]}
+      - {id: pg-ca-hba-order, name: pg_hba.conf record matching order and pg_hba_file_rules, match: [pg-hba-file-rules]}
+      - {id: pg-ca-peer, name: Peer and ident authentication for local connections, match: [peer-authentication]}
+      - {id: pg-ca-gssapi, name: GSSAPI / Kerberos authentication, match: [gssapi-authentication, kerberos]}
+      - {id: pg-ca-problems, name: Troubleshooting authentication failures (no pg_hba.conf entry / password authentication failed), match: [no-pg-hba-entry, authentication-failed]}
+      - {id: pg-ca-pam-radius, name: PAM and RADIUS authentication, match: [pam-authentication]}
+      - {id: pg-ca-md5-migration, name: Migrating stored passwords from md5 to SCRAM, match: [md5-to-scram]}
+  - id: pg-roles
+    name: Database roles and privileges
+    source: PostgreSQL docs 21 Database Roles + 5.8 Privileges
+    match: [database-roles, role-privileges]
+    subtopics:
+      - {id: pg-ro-membership, name: Role membership / INHERIT / SET ROLE, match: [role-membership, set-role]}
+      - {id: pg-ro-default-privs, name: ALTER DEFAULT PRIVILEGES, match: [alter-default-privileges]}
+      - {id: pg-ro-predefined, name: Predefined roles (pg_read_all_data / pg_monitor), match: [predefined-roles, pg-monitor-role]}
+      - {id: pg-ro-rls, name: Row security policies, match: [row-level-security]}
+      - {id: pg-ro-attributes, name: Role attributes (LOGIN / CREATEROLE / BYPASSRLS / CONNECTION LIMIT / VALID UNTIL), match: [role-attributes, connection-limit]}
+      - {id: pg-ro-drop, name: Dropping roles with REASSIGN OWNED and DROP OWNED, match: [reassign-owned, drop-owned]}
+      - {id: pg-ro-secdef, name: SECURITY DEFINER functions and safe search_path, match: [security-definer]}
+      - {id: pg-ro-column, name: Column-level privileges, match: [column-privileges]}
+      - {id: pg-ro-public-schema, name: Public schema privileges and revoking CREATE from PUBLIC, match: [public-schema]}
+      - {id: pg-ro-pgaudit, name: Session and object audit logging with pgAudit, match: [pgaudit]}
+  - id: pg-databases-locale
+    name: Managing databases and localization
+    source: PostgreSQL docs 22 Managing Databases + 23 Localization
+    match: [managing-databases, postgres-tablespaces]
+    subtopics:
+      - {id: pg-db-templates, name: Template databases and createdb, match: [template-databases, createdb]}
+      - {id: pg-db-tablespaces, name: Tablespaces, match: [tablespace]}
+      - {id: pg-db-search-path, name: Schemas and search_path, match: [search-path]}
+      - {id: pg-db-collation, name: Collation support / ICU / glibc collation-version changes, match: [icu-collation, collation-version, glibc-collation]}
+      - {id: pg-db-config, name: Per-database and per-role settings (ALTER DATABASE SET / ALTER ROLE SET), match: [alter-database-set, alter-role-set]}
+      - {id: pg-db-drop, name: Dropping a database with active connections (DROP DATABASE WITH FORCE), match: [drop-database-force]}
+      - {id: pg-db-encoding, name: Character set encodings and client_encoding conversion, match: [client-encoding, server-encoding]}
+      - {id: pg-db-nondeterministic, name: Nondeterministic collations for case-insensitive comparison, match: [nondeterministic-collation]}
+      - {id: pg-db-locale-provider, name: Locale providers (libc / icu / builtin) and LC_COLLATE / LC_CTYPE, match: [locale-provider]}
+  - id: pg-routine-maintenance
+    name: Routine maintenance (vacuum / reindex / log files)
+    source: PostgreSQL docs 24 Routine Database Maintenance Tasks
+    match: [autovacuum, vacuum]
+    subtopics:
+      - {id: pg-rm-autovac-tuning, name: Per-table autovacuum tuning, match: [autovacuum-vacuum-scale-factor]}
+      - {id: pg-rm-wraparound, name: Preventing transaction ID wraparound failures, match: [xid-wraparound]}
+      - {id: pg-rm-reindex, name: Routine reindexing and index bloat, match: [reindex-concurrently, index-bloat]}
+      - {id: pg-rm-repack, name: Removing table bloat online (pg_repack), match: [pg-repack, table-bloat]}
+      - {id: pg-rm-logfiles, name: Log file maintenance (logging_collector / rotation), match: [logging-collector, log-rotation]}
+      - {id: pg-rm-vacuum-full, name: VACUUM FULL and recovering disk space, match: [vacuum-full]}
+      - {id: pg-rm-multixact, name: Multixacts and multixact wraparound, match: [multixact]}
+      - {id: pg-rm-visibility-map, name: The visibility map and index-only scan freshness, match: [visibility-map]}
+      - {id: pg-rm-analyze, name: Updating planner statistics (ANALYZE / autovacuum_analyze_scale_factor), match: [autovacuum-analyze, postgres-analyze]}
+      - {id: pg-rm-autovac-workers, name: Autovacuum workers and cost limits / diagnosing autovacuum that never finishes, match: [autovacuum-vacuum-cost-limit, autovacuum-max-workers]}
+  - id: pg-backup-restore
+    name: Backup and restore
+    source: PostgreSQL docs 25 Backup and Restore
+    match: [pg-dump, pg-basebackup, continuous-archiving]
+    subtopics:
+      - {id: pg-br-dump-formats, name: SQL dump formats and parallel pg_restore, match: [pg-dump-custom-format, pg-restore-parallel]}
+      - {id: pg-br-dumpall, name: Dumping globals with pg_dumpall, match: [pg-dumpall]}
+      - {id: pg-br-basebackup, name: Base backups with pg_basebackup, match: [pg-basebackup-options]}
+      - {id: pg-br-archiving, name: Setting up WAL archiving (archive_command / archive_library), match: [archive-command, wal-archiving]}
+      - {id: pg-br-pitr, name: Recovery targets and recovery.signal, match: [recovery-target-time, recovery-signal]}
+      - {id: pg-br-pgbackrest, name: pgBackRest repositories and stanzas, match: [pgbackrest]}
+      - {id: pg-br-incremental, name: Incremental base backups with pg_combinebackup (PG17), match: [pg-combinebackup, incremental-backup-postgres]}
+      - {id: pg-br-timelines, name: Timelines and timeline history files, match: [timeline-history]}
+      - {id: pg-br-low-level, name: Low-level base backup API (pg_backup_start / pg_backup_stop), match: [pg-backup-start]}
+      - {id: pg-br-verify, name: Verifying base backups with pg_verifybackup, match: [pg-verifybackup]}
+      - {id: pg-br-selective-restore, name: Selective restore with pg_restore --list / -t / -n, match: [pg-restore-list]}
+      - {id: pg-br-barman-walg, name: Barman and WAL-G backup managers, match: [barman-backup-server, wal-g-backup-push]}
+  - id: pg-high-availability
+    name: High availability / streaming replication
+    source: PostgreSQL docs 26 High Availability Load Balancing and Replication
+    match: [streaming-replication, hot-standby]
+    subtopics:
+      - {id: pg-ha-sync, name: Synchronous replication (synchronous_standby_names), match: [synchronous-standby-names]}
+      - {id: pg-ha-promote, name: Failover and standby promotion, match: [pg-promote, standby-promotion]}
+      - {id: pg-ha-rewind, name: Re-syncing an old primary with pg_rewind, match: [pg-rewind]}
+      - {id: pg-ha-conflicts, name: Hot standby query conflicts, match: [hot-standby-feedback, max-standby-streaming-delay]}
+      - {id: pg-ha-slots, name: Physical replication slots and cascading replication, match: [physical-replication-slots, cascading-replication]}
+      - {id: pg-ha-patroni, name: Patroni-managed clusters, match: [patroni]}
+      - {id: pg-ha-standby-setup, name: Setting up a streaming standby (primary_conninfo / standby.signal / pg_basebackup -R), match: [primary-conninfo, standby-signal]}
+      - {id: pg-ha-monitor, name: Monitoring replication lag (pg_stat_replication / pg_stat_wal_receiver), match: [pg-stat-replication]}
+      - {id: pg-ha-archive-always, name: Archiving from a standby (archive_mode = always) and restore_command fallback, match: [archive-mode-always]}
+      - {id: pg-ha-delayed, name: Delayed standbys (recovery_min_apply_delay), match: [recovery-min-apply-delay]}
+      - {id: pg-ha-repmgr, name: repmgr-managed replication clusters, match: [repmgr]}
+  - id: pg-monitoring
+    name: Monitoring database activity
+    source: PostgreSQL docs 27 Monitoring Database Activity
+    match: [pg-stat-activity, pg-stat-statements]
+    subtopics:
+      - {id: pg-mo-wait-events, name: Wait events, match: [pg-wait-events]}
+      - {id: pg-mo-progress, name: Progress reporting views, match: [pg-stat-progress]}
+      - {id: pg-mo-disk, name: Monitoring disk usage, match: [pg-database-size, pg-relation-size]}
+      - {id: pg-mo-io, name: I/O and checkpointer statistics (pg_stat_io / pg_stat_bgwriter), match: [pg-stat-io, pg-stat-bgwriter]}
+      - {id: pg-mo-auto-explain, name: Logging slow plans with auto_explain, match: [auto-explain]}
+      - {id: pg-mo-locks, name: Viewing locks with pg_locks and pg_blocking_pids, match: [pg-locks, pg-blocking-pids]}
+      - {id: pg-mo-table-stats, name: Table and index usage statistics (pg_stat_user_tables / pg_stat_user_indexes), match: [pg-stat-user-indexes]}
+      - {id: pg-mo-database-stats, name: Database-wide statistics (pg_stat_database / cache hit ratio / temp files), match: [pg-stat-database, cache-hit-ratio]}
+      - {id: pg-mo-archiver, name: WAL archiver monitoring (pg_stat_archiver / failed_count), match: [pg-stat-archiver]}
+      - {id: pg-mo-ps, name: Process titles with ps and top, match: [postgres-process-title]}
+      - {id: pg-mo-exporter, name: Prometheus postgres_exporter metrics and alerts, match: [postgres-exporter]}
+  - id: pg-wal
+    name: Reliability and the write-ahead log
+    source: PostgreSQL docs 28 Reliability and the Write-Ahead Log
+    match: [wal-configuration, postgres-checkpoints]
+    subtopics:
+      - {id: pg-wal-checkpoints, name: Checkpoint tuning, match: [checkpoint-timeout]}
+      - {id: pg-wal-level, name: wal_level and wal_compression, match: [wal-level, wal-compression]}
+      - {id: pg-wal-fpw, name: Full page writes and fsync safety, match: [full-page-writes, fsync-safety]}
+      - {id: pg-wal-async, name: Asynchronous commit, match: [asynchronous-commit]}
+      - {id: pg-wal-waldump, name: Inspecting WAL with pg_waldump, match: [pg-waldump]}
+      - {id: pg-wal-size, name: max_wal_size / min_wal_size and WAL disk usage, match: [min-wal-size, wal-disk-usage]}
+      - {id: pg-wal-test-fsync, name: Benchmarking wal_sync_method with pg_test_fsync, match: [pg-test-fsync, wal-sync-method]}
+      - {id: pg-wal-commit-delay, name: Group commit (commit_delay / commit_siblings / wal_buffers), match: [commit-delay]}
+      - {id: pg-wal-disk-full, name: Recovering when pg_wal fills the disk, match: [pg-wal-full]}
+      - {id: pg-wal-write-cache, name: Disk write caches and power-loss protection, match: [write-cache]}
+      - {id: pg-wal-checksums-enable, name: Enabling data checksums on an existing cluster (pg_checksums), match: [pg-checksums]}
+  - id: pg-logical-replication
+    name: Logical replication
+    source: PostgreSQL docs 29 Logical Replication
+    match: [logical-replication]
+    subtopics:
+      - {id: pg-lr-filters, name: Row filters and column lists, match: [publication-row-filter, column-lists]}
+      - {id: pg-lr-conflicts, name: Conflicts and resolving a stuck subscription, match: [logical-replication-conflicts]}
+      - {id: pg-lr-slot-lag, name: Slot retention limits (max_slot_wal_keep_size), match: [max-slot-wal-keep-size, inactive-replication-slot]}
+      - {id: pg-lr-decoding, name: Logical decoding for CDC (pgoutput / wal2json / Debezium), match: [logical-decoding, wal2json]}
+      - {id: pg-lr-setup, name: Creating publications and subscriptions, match: [create-subscription]}
+      - {id: pg-lr-initial-sync, name: Initial table synchronization (copy_data / tablesync workers), match: [copy-data, tablesync]}
+      - {id: pg-lr-monitor, name: Monitoring logical replication (pg_stat_subscription / slot lag), match: [pg-stat-subscription]}
+      - {id: pg-lr-restrictions, name: Restrictions (DDL / sequences / large objects) and REPLICA IDENTITY, match: [logical-replication-restrictions]}
+      - {id: pg-lr-createsubscriber, name: Converting a physical standby with pg_createsubscriber, match: [pg-createsubscriber]}
+      - {id: pg-lr-failover-slots, name: Failover slots synchronized to standbys (PG17), match: [failover-slots, sync-replication-slots]}
+  - id: pg-index-types
+    name: Index types (B-tree / GIN / GiST / BRIN / expression / partial)
+    source: PostgreSQL docs 11 Indexes
+    match: [postgres-index-types]
+    subtopics:
+      - {id: pg-ix-gin, name: GIN indexes for jsonb and arrays, match: [gin-index, jsonb-index]}
+      - {id: pg-ix-gist, name: GiST indexes and exclusion constraints, match: [gist-index, exclusion-constraint]}
+      - {id: pg-ix-brin, name: BRIN indexes, match: [brin-index]}
+      - {id: pg-ix-expression, name: Indexes on expressions, match: [expression-index]}
+      - {id: pg-ix-partial, name: Partial indexes, match: [partial-index]}
+      - {id: pg-ix-hash, name: Hash indexes, match: [hash-index]}
+      - {id: pg-ix-spgist, name: SP-GiST indexes, match: [sp-gist]}
+      - {id: pg-ix-include, name: Covering indexes with INCLUDE and index-only scans, match: [index-include, index-only-scan]}
+      - {id: pg-ix-opclass, name: Operator classes (text_pattern_ops / jsonb_path_ops), match: [operator-class, text-pattern-ops]}
+      - {id: pg-ix-concurrently, name: CREATE INDEX CONCURRENTLY and invalid indexes, match: [create-index-concurrently, invalid-index]}
+      - {id: pg-ix-bitmap, name: Combining multiple indexes with bitmap scans, match: [bitmap-scan]}
+      - {id: pg-ix-unique, name: Unique indexes and NULLS NOT DISTINCT, match: [nulls-not-distinct]}
+      - {id: pg-ix-pgvector, name: Vector indexes with pgvector (HNSW / IVFFlat), match: [pgvector, hnsw]}
+  - id: pg-concurrency
+    name: Concurrency control (MVCC / isolation / locking)
+    source: PostgreSQL docs 13 Concurrency Control
+    match: [mvcc, locking]
+    subtopics:
+      - {id: pg-cc-isolation, name: Transaction isolation and serialization failures, match: [transaction-isolation, serialization-failure]}
+      - {id: pg-cc-skip-locked, name: Row locks and SKIP LOCKED queues, match: [skip-locked]}
+      - {id: pg-cc-advisory, name: Advisory locks, match: [advisory-locks]}
+      - {id: pg-cc-lock-timeout, name: lock_timeout and blocking chains, match: [lock-timeout]}
+      - {id: pg-cc-table-locks, name: Table-level lock modes and the conflict matrix, match: [table-lock-modes, access-exclusive-lock]}
+      - {id: pg-cc-row-locks, name: Row-level locks (FOR UPDATE / FOR NO KEY UPDATE / FOR SHARE), match: [select-for-update, for-no-key-update]}
+      - {id: pg-cc-deadlocks, name: Diagnosing deadlocks (log_lock_waits / deadlock detected), match: [deadlock-detected, log-lock-waits]}
+      - {id: pg-cc-idle-in-tx, name: Idle-in-transaction sessions holding back xmin, match: [idle-in-transaction]}
+      - {id: pg-cc-safe-ddl, name: NOWAIT and safe DDL lock acquisition with retries, match: [safe-ddl-locking]}
+  - id: pg-extensions
+    name: Extensions and supplied modules
+    source: PostgreSQL docs Appendix F + CREATE EXTENSION
+    match: [postgres-extensions, create-extension]
+    subtopics:
+      - {id: pg-ex-cron, name: Scheduling jobs with pg_cron, match: [pg-cron]}
+      - {id: pg-ex-partman, name: Partition management with pg_partman, match: [pg-partman]}
+      - {id: pg-ex-trgm, name: Fuzzy search with pg_trgm, match: [pg-trgm]}
+      - {id: pg-ex-upgrade, name: Upgrading extensions (ALTER EXTENSION UPDATE), match: [alter-extension-update]}
+      - {id: pg-ex-fdw, name: Foreign data wrappers (postgres_fdw / file_fdw), match: [postgres-fdw, foreign-data-wrapper]}
+      - {id: pg-ex-pgcrypto, name: pgcrypto hashing and encryption functions, match: [pgcrypto]}
+      - {id: pg-ex-amcheck, name: Detecting index and heap corruption with amcheck / pg_amcheck, match: [amcheck, pg-amcheck]}
+      - {id: pg-ex-buffercache, name: Inspecting and warming the buffer cache (pg_buffercache / pg_prewarm), match: [pg-buffercache, pg-prewarm]}
+      - {id: pg-ex-pgstattuple, name: Measuring bloat with pgstattuple and pageinspect, match: [pgstattuple, pageinspect]}
+      - {id: pg-ex-postgis, name: PostGIS installation and spatial indexing, match: [postgis]}
+      - {id: pg-ex-timescale, name: TimescaleDB hypertables and compression, match: [timescaledb]}
+  - id: pg-partitioning
+    name: Declarative table partitioning
+    source: PostgreSQL docs 5.12 Table Partitioning
+    match: [declarative-partitioning, table-partitioning]
+    subtopics:
+      - {id: pg-pt-create, name: Range / list / hash partitioned tables, match: [partition-by-range]}
+      - {id: pg-pt-attach-detach, name: Attaching and detaching partitions concurrently, match: [detach-partition-concurrently, attach-partition]}
+      - {id: pg-pt-pruning, name: Partition pruning, match: [partition-pruning]}
+      - {id: pg-pt-default, name: Default partitions and partitioned indexes, match: [default-partition, partitioned-index]}
+      - {id: pg-pt-migrate, name: Converting an existing large table to partitioned, match: [convert-to-partitioned]}
+      - {id: pg-pt-wise, name: Partition-wise join and aggregate, match: [partitionwise-join, enable-partitionwise-aggregate]}
+      - {id: pg-pt-limitations, name: Partitioning limitations (unique keys must include partition key / row movement), match: [partition-key-unique-constraint]}
+      - {id: pg-pt-inheritance, name: Inheritance-based partitioning and constraint exclusion, match: [constraint-exclusion, table-inheritance]}
+      - {id: pg-pt-retention, name: Retention by detaching and dropping old partitions, match: [partition-retention]}
+      - {id: pg-pt-sizing, name: Choosing the partition key and partition count, match: [partition-count]}
+  - id: pg-upgrades
+    name: Upgrading a PostgreSQL cluster
+    source: PostgreSQL docs 18.6 Upgrading a PostgreSQL Cluster
+    match: [pg-upgrade, major-version-upgrade]
+    subtopics:
+      - {id: pg-up-link, name: pg_upgrade --check and --link, match: [pg-upgrade-link, pg-upgrade-check]}
+      - {id: pg-up-minor, name: Minor version updates, match: [minor-version-update]}
+      - {id: pg-up-stats, name: Rebuilding statistics after upgrade (vacuumdb --analyze-in-stages), match: [analyze-in-stages]}
+      - {id: pg-up-logical, name: Near-zero-downtime upgrade via logical replication, match: [zero-downtime-migration]}
+      - {id: pg-up-standbys, name: Upgrading streaming standbys after pg_upgrade (rsync --hard-links), match: [upgrade-standby-rsync]}
+      - {id: pg-up-dump-restore, name: Upgrading via pg_dumpall and the newer client, match: [dump-restore-upgrade]}
+      - {id: pg-up-clone, name: pg_upgrade --clone / --jobs and reverting to the old cluster, match: [pg-upgrade-clone]}
+      - {id: pg-up-debian, name: Debian and Ubuntu pg_upgradecluster / pg_lsclusters, match: [pg-upgradecluster]}
+      - {id: pg-up-extensions, name: Extension compatibility and update_extensions.sql, match: [update-extensions-sql]}
+  - id: pg-connection-pooling
+    name: Connection pooling with PgBouncer
+    source: PgBouncer docs (config / usage)
+    match: [pgbouncer]
+    subtopics:
+      - {id: pg-cp-modes, name: Pool modes (session / transaction / statement), match: [pgbouncer-pool-mode, transaction-pooling]}
+      - {id: pg-cp-prepared, name: Prepared statements in transaction mode, match: [pgbouncer-prepared-statements]}
+      - {id: pg-cp-auth, name: PgBouncer authentication (auth_query / userlist), match: [pgbouncer-auth-query]}
+      - {id: pg-cp-sizing, name: Pool sizing (default_pool_size / max_client_conn), match: [pool-sizing]}
+      - {id: pg-cp-admin, name: PgBouncer admin console (SHOW POOLS / SHOW STATS / cl_waiting), match: [pgbouncer-show-pools, pgbouncer-admin-console]}
+      - {id: pg-cp-pause, name: PAUSE / RESUME for maintenance and switchover, match: [pgbouncer-pause]}
+      - {id: pg-cp-tls, name: PgBouncer TLS (client_tls / server_tls), match: [pgbouncer-tls]}
+      - {id: pg-cp-timeouts, name: PgBouncer timeouts (query_wait_timeout / server_lifetime / server_idle_timeout), match: [query-wait-timeout, pgbouncer-timeouts]}
+      - {id: pg-cp-scaling, name: Running multiple PgBouncer processes (so_reuseport) and online restart, match: [so-reuseport]}
+      - {id: pg-cp-databases, name: Databases section routing and per-database limits (max_db_connections), match: [pgbouncer-databases-section, max-db-connections]}
+  # ---------------- MySQL / MariaDB (Reference Manual)
+  - id: my-server-config
+    name: Configuring the MySQL server
+    source: MySQL 8.4 Ref 7.1 The MySQL Server + 6.2.2 Option Files
+    match: [my-cnf, mysqld-options]
+    subtopics:
+      - {id: my-cf-option-files, name: Option file precedence and --print-defaults, match: [option-file-precedence]}
+      - {id: my-cf-persist, name: SET PERSIST and mysqld-auto.cnf, match: [set-persist]}
+      - {id: my-cf-sql-mode, name: Server SQL modes, match: [sql-mode]}
+      - {id: my-cf-charset, name: Character sets and utf8mb4 collations, match: [utf8mb4]}
+      - {id: my-cf-sysvars, name: System variables (global vs session / dynamic) and status variables, match: [show-global-status, system-variables-mysql]}
+      - {id: my-cf-connections, name: Connection management (max_connections / thread_cache_size / Too many connections), match: [too-many-connections, thread-cache-size]}
+      - {id: my-cf-timezone, name: Time zone support and loading time zone tables, match: [mysql-time-zone, mysql-tzinfo-to-sql]}
+      - {id: my-cf-systemd, name: Running mysqld under systemd and multiple instances, match: [mysqld-systemd, mysqld-multi]}
+      - {id: my-cf-timeouts, name: Timeouts (wait_timeout / interactive_timeout / max_execution_time), match: [wait-timeout, max-execution-time]}
+      - {id: my-cf-table-cache, name: Table open cache and open_files_limit, match: [table-open-cache, open-files-limit]}
+  - id: my-server-logs
+    name: MySQL server logs
+    source: MySQL 8.4 Ref 7.4 MySQL Server Logs
+    match: [mysql-server-logs]
+    subtopics:
+      - {id: my-lg-error, name: The error log, match: [mysql-error-log]}
+      - {id: my-lg-general, name: The general query log, match: [general-query-log]}
+      - {id: my-lg-slow, name: The slow query log, match: [slow-query-log]}
+      - {id: my-lg-binlog-expiry, name: Binary log expiry and purging, match: [binlog-expire-logs-seconds, purge-binary-logs]}
+      - {id: my-lg-binlog-format, name: Binary logging formats (ROW / STATEMENT / MIXED / binlog_row_image), match: [binlog-format, binlog-row-image]}
+      - {id: my-lg-digest, name: Analysing the slow log with pt-query-digest and mysqldumpslow, match: [mysqldumpslow, slow-log-analysis]}
+      - {id: my-lg-rotation, name: Server log maintenance with FLUSH LOGS and logrotate, match: [flush-logs, mysql-logrotate]}
+      - {id: my-lg-output, name: Selecting log destinations (log_output TABLE vs FILE), match: [log-output]}
+      - {id: my-lg-mysqlbinlog, name: Reading binary logs with mysqlbinlog (--verbose / --base64-output), match: [mysqlbinlog-decode]}
+  - id: my-security
+    name: MySQL security and account management
+    source: MySQL 8.4 Ref 8 Security
+    match: [mysql-security, mysql-accounts]
+    subtopics:
+      - {id: my-se-accounts-roles, name: Accounts and roles, match: [mysql-roles, create-user-mysql]}
+      - {id: my-se-auth-plugin, name: caching_sha2_password and authentication plugins, match: [caching-sha2-password]}
+      - {id: my-se-tls, name: Encrypted connections, match: [mysql-tls, require-secure-transport]}
+      - {id: my-se-password-policy, name: Password management and validate_password, match: [validate-password]}
+      - {id: my-se-encryption-at-rest, name: InnoDB data-at-rest encryption and keyring, match: [innodb-tablespace-encryption, mysql-keyring]}
+      - {id: my-se-privileges, name: Privileges / dynamic privileges / partial revokes, match: [dynamic-privileges, partial-revokes]}
+      - {id: my-se-locking-limits, name: Account locking and resource limits (MAX_USER_CONNECTIONS), match: [account-locking, max-user-connections]}
+      - {id: my-se-connection-control, name: Failed-login tracking and connection-control, match: [connection-control, failed-login-attempts]}
+      - {id: my-se-audit, name: Audit logging (audit_log plugin / Percona audit log), match: [mysql-audit-log]}
+      - {id: my-se-hardening, name: Post-install hardening (mysql_secure_installation / secure_file_priv / local_infile), match: [mysql-secure-installation, secure-file-priv]}
+      - {id: my-se-access-denied, name: Troubleshooting access denied (ERROR 1045 / account host matching), match: [access-denied-1045]}
+      - {id: my-se-proxy, name: Proxy users and pluggable LDAP / PAM authentication, match: [proxy-users]}
+  - id: my-backup
+    name: MySQL backup and recovery
+    source: MySQL 8.4 Ref 9 Backup and Recovery
+    match: [xtrabackup, mysqldump]
+    subtopics:
+      - {id: my-bk-single-transaction, name: Consistent logical backups with mysqldump --single-transaction, match: [single-transaction]}
+      - {id: my-bk-pitr, name: Point-in-time recovery from the binary log, match: [mysqlbinlog-pitr]}
+      - {id: my-bk-shell-dump, name: MySQL Shell dump and load utilities, match: [mysqlsh-dump]}
+      - {id: my-bk-clone, name: The clone plugin, match: [clone-plugin]}
+      - {id: my-bk-xb-incremental, name: XtraBackup incremental backups and prepare, match: [xtrabackup-incremental]}
+      - {id: my-bk-single-table, name: Restoring a single table from a physical backup (IMPORT TABLESPACE), match: [import-tablespace]}
+      - {id: my-bk-routines, name: Dumping routines / triggers / events and schema-only dumps, match: [mysqldump-routines]}
+      - {id: my-bk-mydumper, name: Parallel logical backup with mydumper / myloader, match: [mydumper-myloader]}
+      - {id: my-bk-snapshot, name: Filesystem snapshot backups (FLUSH TABLES WITH READ LOCK / LOCK INSTANCE FOR BACKUP), match: [flush-tables-with-read-lock, lock-instance-for-backup]}
+      - {id: my-bk-binlog-stream, name: Streaming binary log backups (mysqlbinlog --read-from-remote-server --raw), match: [mysqlbinlog-raw-backup]}
+      - {id: my-bk-check-table, name: Table maintenance and repair (CHECK TABLE / mysqlcheck / myisamchk), match: [mysqlcheck, check-table]}
+  - id: my-optimization
+    name: MySQL query optimization
+    source: MySQL 8.4 Ref 10 Optimization
+    match: [mysql-optimization]
+    subtopics:
+      - {id: my-op-explain, name: EXPLAIN FORMAT=TREE and EXPLAIN ANALYZE, match: [explain-format-tree]}
+      - {id: my-op-hints, name: Optimizer hints and optimizer_switch, match: [optimizer-hints, optimizer-switch]}
+      - {id: my-op-histograms, name: Index statistics and histograms, match: [mysql-histograms]}
+      - {id: my-op-invisible, name: Invisible indexes, match: [invisible-indexes]}
+      - {id: my-op-sys, name: Performance Schema and sys schema statement analysis, match: [sys-schema]}
+      - {id: my-op-trace, name: The optimizer trace, match: [optimizer-trace]}
+      - {id: my-op-functional, name: Functional key parts and descending indexes, match: [functional-key-parts, descending-index]}
+      - {id: my-op-join-range, name: Hash joins / index merge / range optimization, match: [index-merge, hash-join-mysql]}
+      - {id: my-op-subquery, name: Subquery semijoin and derived table optimization, match: [semijoin]}
+      - {id: my-op-orderby, name: ORDER BY / GROUP BY optimization and filesort, match: [filesort, using-temporary]}
+      - {id: my-op-bulk-load, name: Bulk data loading for InnoDB (LOAD DATA / unique_checks), match: [load-data-infile]}
+      - {id: my-op-processlist, name: Examining thread states with SHOW PROCESSLIST and KILL, match: [show-processlist]}
+  - id: my-innodb
+    name: InnoDB storage engine
+    source: MySQL 8.4 Ref 17 The InnoDB Storage Engine
+    match: [innodb]
+    subtopics:
+      - {id: my-in-buffer-pool, name: Buffer pool configuration, match: [innodb-buffer-pool-size]}
+      - {id: my-in-undo, name: Undo logs and purge lag (history list length), match: [history-list-length, undo-tablespace]}
+      - {id: my-in-locking, name: InnoDB locking and deadlocks, match: [innodb-deadlock, innodb-lock-wait-timeout]}
+      - {id: my-in-recovery, name: Crash recovery and innodb_force_recovery, match: [innodb-force-recovery]}
+      - {id: my-in-redo, name: Redo log sizing (innodb_redo_log_capacity), match: [innodb-redo-log-capacity]}
+      - {id: my-in-status, name: Reading SHOW ENGINE INNODB STATUS, match: [innodb-status]}
+      - {id: my-in-flushing, name: Flushing and durability (innodb_io_capacity / innodb_flush_method / flush_log_at_trx_commit), match: [innodb-io-capacity, innodb-flush-log-at-trx-commit]}
+      - {id: my-in-tablespaces, name: File-per-table and general tablespaces / reclaiming space with OPTIMIZE TABLE, match: [innodb-file-per-table, optimize-table]}
+      - {id: my-in-row-format, name: Row formats and table compression, match: [row-format, innodb-compression]}
+      - {id: my-in-doublewrite, name: The doublewrite buffer, match: [doublewrite-buffer]}
+      - {id: my-in-ahi, name: Adaptive hash index and change buffer, match: [adaptive-hash-index, change-buffer]}
+      - {id: my-in-isolation, name: Isolation levels / consistent reads / gap and next-key locks, match: [gap-locks, next-key-locks]}
+  - id: my-replication
+    name: MySQL replication
+    source: MySQL 8.4 Ref 19 Replication
+    match: [gtid, binlog]
+    subtopics:
+      - {id: my-rp-setup, name: Setting up a GTID replica (CHANGE REPLICATION SOURCE TO), match: [change-replication-source]}
+      - {id: my-rp-filters, name: Replication filters, match: [replication-filters]}
+      - {id: my-rp-mts, name: Multithreaded replicas, match: [replica-parallel-workers]}
+      - {id: my-rp-delayed, name: Delayed replication, match: [delayed-replication]}
+      - {id: my-rp-semisync, name: Semisynchronous replication, match: [semi-sync]}
+      - {id: my-rp-errant, name: Errant GTID transactions, match: [errant-transaction]}
+      - {id: my-rp-status, name: Monitoring with SHOW REPLICA STATUS and performance_schema replication tables, match: [show-replica-status, seconds-behind-source]}
+      - {id: my-rp-errors, name: Troubleshooting replication errors (1062 / 1032) and skipping transactions, match: [replication-error-1062, skip-transaction]}
+      - {id: my-rp-gtid-online, name: Enabling GTID mode online, match: [gtid-mode-online]}
+      - {id: my-rp-multi-source, name: Multi-source replication channels, match: [multi-source-replication]}
+      - {id: my-rp-crash-safe, name: Crash-safe replicas (relay_log_recovery), match: [relay-log-recovery]}
+      - {id: my-rp-failover, name: Switching sources during failover (Orchestrator / manual promotion), match: [orchestrator-mysql]}
+      - {id: my-rp-consistency, name: Checking replica consistency with pt-table-checksum / pt-table-sync, match: [pt-table-checksum]}
+  - id: my-group-replication
+    name: Group Replication and InnoDB Cluster
+    source: MySQL 8.4 Ref 20 Group Replication + MySQL Shell AdminAPI
+    match: [mysql-group-replication, innodb-cluster]
+    subtopics:
+      - {id: my-gr-modes, name: Single-primary vs multi-primary mode, match: [single-primary-mode]}
+      - {id: my-gr-router, name: MySQL Router, match: [mysql-router]}
+      - {id: my-gr-outage, name: Recovering a cluster from complete outage, match: [reboot-cluster-from-complete-outage]}
+      - {id: my-gr-flow-control, name: Flow control and member expulsion, match: [group-replication-flow-control]}
+      - {id: my-gr-deploy, name: Deploying InnoDB Cluster (dba.createCluster / addInstance), match: [dba-create-cluster, add-instance]}
+      - {id: my-gr-monitor, name: Monitoring members (replication_group_members / cluster.status), match: [replication-group-members, cluster-status]}
+      - {id: my-gr-consistency, name: Transaction consistency guarantees (group_replication_consistency), match: [group-replication-consistency]}
+      - {id: my-gr-clusterset, name: InnoDB ClusterSet for cross-site DR, match: [clusterset-dr]}
+      - {id: my-gr-replicaset, name: InnoDB ReplicaSet, match: [innodb-replicaset]}
+      - {id: my-gr-rejoin, name: Rejoining members and switching primary (rejoinInstance / setPrimaryInstance), match: [rejoin-instance, set-primary-instance]}
+      - {id: my-gr-limitations, name: Group Replication requirements and limitations, match: [group-replication-limitations]}
+  - id: my-online-schema-change
+    name: Online schema change
+    source: MySQL 8.4 Ref 17.12 InnoDB and Online DDL + gh-ost / pt-osc docs
+    match: [online-schema-change]
+    subtopics:
+      - {id: my-osc-online-ddl, name: Online DDL ALGORITHM=INSTANT/INPLACE, match: [algorithm-instant, innodb-online-ddl]}
+      - {id: my-osc-gh-ost, name: gh-ost, match: [gh-ost]}
+      - {id: my-osc-pt-osc, name: pt-online-schema-change, match: [pt-online-schema-change]}
+      - {id: my-osc-mdl, name: Metadata locks blocking DDL, match: [metadata-lock]}
+      - {id: my-osc-lock-clause, name: LOCK clause and concurrency during online DDL, match: [lock-none]}
+      - {id: my-osc-space, name: Online DDL space and log limits (innodb_online_alter_log_max_size / tmpdir), match: [innodb-online-alter-log-max-size]}
+      - {id: my-osc-throttle, name: Throttling migrations on replica lag and load, match: [migration-throttling]}
+      - {id: my-osc-cutover, name: Cut-over and rollback for gh-ost / pt-osc, match: [cut-over]}
+      - {id: my-osc-fk, name: Foreign keys and triggers during online schema change, match: [alter-foreign-keys-method]}
+      - {id: my-osc-instant-limits, name: INSTANT ADD / DROP COLUMN limits and row versions, match: [instant-add-column]}
+  - id: my-upgrade
+    name: Upgrading MySQL
+    source: MySQL 8.4 Ref 3 Upgrading MySQL
+    match: [mysql-upgrade]
+    subtopics:
+      - {id: my-up-checker, name: Upgrade checker utility, match: [upgrade-checker]}
+      - {id: my-up-inplace, name: In-place vs logical upgrade and LTS release model, match: [in-place-upgrade-mysql]}
+      - {id: my-up-mariadb, name: MySQL vs MariaDB divergence and migration, match: [mariadb-migration]}
+      - {id: my-up-replica-first, name: Rolling upgrade replicas first, match: [rolling-upgrade-mysql]}
+      - {id: my-up-paths, name: Upgrade paths and LTS-to-LTS rules, match: [upgrade-path-mysql]}
+      - {id: my-up-native-password, name: Handling mysql_native_password being disabled in 8.4, match: [mysql-native-password]}
+      - {id: my-up-dd, name: Data dictionary and system table upgrade (--upgrade option), match: [data-dictionary-upgrade]}
+      - {id: my-up-troubleshoot, name: Troubleshooting failed upgrades and downgrade limits, match: [mysql-downgrade]}
+      - {id: my-up-packages, name: Upgrading via APT / Yum repositories and Docker images, match: [mysql-apt-repository]}
+      - {id: my-up-replication-compat, name: Replication compatibility between versions, match: [replication-version-compatibility]}
+  # ---------------- SQL Server / Azure SQL (DP-300)
+  - id: ss-instance-config
+    name: Instance and database configuration
+    source: DP-300 Plan and implement data platform resources + SQL Server Server configuration options
+    match: [sp-configure, sql-server-configuration]
+    subtopics:
+      - {id: ss-ic-parallelism, name: MAXDOP and cost threshold for parallelism, match: [maxdop, cost-threshold-for-parallelism]}
+      - {id: ss-ic-memory, name: max server memory, match: [max-server-memory]}
+      - {id: ss-ic-tempdb, name: tempdb configuration and contention, match: [tempdb]}
+      - {id: ss-ic-ifi, name: Instant file initialization and lock pages in memory, match: [instant-file-initialization]}
+      - {id: ss-ic-dsc, name: Database scoped configuration, match: [database-scoped-configuration]}
+      - {id: ss-ic-files, name: Data and log file autogrowth and VLF counts, match: [vlf-count, log-autogrowth]}
+      - {id: ss-ic-compat, name: Database compatibility level changes, match: [compatibility-level]}
+      - {id: ss-ic-dac, name: Dedicated admin connection, match: [dedicated-admin-connection]}
+      - {id: ss-ic-trace-flags, name: Trace flags and startup parameters, match: [trace-flags, startup-parameters]}
+      - {id: ss-ic-network, name: Network configuration (TCP port / SQL Browser / Configuration Manager), match: [sql-server-configuration-manager, tcp-port-1433]}
+      - {id: ss-ic-db-options, name: Database options (AUTO_SHRINK / AUTO_CLOSE / PAGE_VERIFY), match: [auto-shrink]}
+      - {id: ss-ic-install, name: Unattended installation and service accounts (ConfigurationFile.ini), match: [configurationfile-ini, sql-service-accounts]}
+      - {id: ss-ic-linux, name: SQL Server on Linux and containers (mssql-conf), match: [mssql-conf]}
+  - id: ss-security
+    name: SQL Server security
+    source: DP-300 Implement a secure environment
+    match: [sql-server-security]
+    subtopics:
+      - {id: ss-se-logins, name: Logins / users / orphaned and contained users, match: [orphaned-users, contained-database-users]}
+      - {id: ss-se-roles, name: Server and database roles / GRANT DENY REVOKE, match: [server-roles, grant-deny]}
+      - {id: ss-se-tde, name: Transparent data encryption, match: [transparent-data-encryption]}
+      - {id: ss-se-always-encrypted, name: Always Encrypted, match: [always-encrypted]}
+      - {id: ss-se-audit, name: SQL Server Audit, match: [sql-server-audit]}
+      - {id: ss-se-ddm-rls, name: Dynamic data masking and row-level security, match: [dynamic-data-masking]}
+      - {id: ss-se-tls, name: Force encryption and TLS certificates for connections, match: [force-encryption, tls-sql-server]}
+      - {id: ss-se-keys, name: Encryption hierarchy (service master key / database master key / certificate backups), match: [database-master-key, service-master-key]}
+      - {id: ss-se-cell-encryption, name: Column-level encryption with symmetric keys (EncryptByKey), match: [encryptbykey]}
+      - {id: ss-se-module-signing, name: Ownership chaining / EXECUTE AS / module signing, match: [module-signing]}
+      - {id: ss-se-classification, name: Data discovery and classification, match: [data-classification]}
+      - {id: ss-se-ledger, name: Ledger tables, match: [ledger-tables]}
+      - {id: ss-se-defender, name: Microsoft Defender for SQL and vulnerability assessment, match: [defender-for-sql, vulnerability-assessment]}
+      - {id: ss-se-firewall, name: Azure SQL firewall rules and private endpoints, match: [azure-sql-firewall]}
+  - id: ss-backup-restore
+    name: SQL Server backup and restore
+    source: DP-300 Plan and configure HA/DR + SQL Server docs Back Up and Restore
+    match: [sql-server-backup]
+    subtopics:
+      - {id: ss-br-recovery-model, name: Recovery models, match: [recovery-model]}
+      - {id: ss-br-log-chain, name: Transaction log backups and the log chain, match: [log-chain]}
+      - {id: ss-br-restore-sequence, name: Restore sequences (NORECOVERY / STOPAT), match: [restore-stopat, norecovery]}
+      - {id: ss-br-url, name: Backup to URL (Azure Blob / S3), match: [backup-to-url]}
+      - {id: ss-br-verify, name: Backup CHECKSUM and RESTORE VERIFYONLY, match: [restore-verifyonly]}
+      - {id: ss-br-diff-copy-only, name: Differential and COPY_ONLY backups, match: [differential-backup, copy-only]}
+      - {id: ss-br-tail-log, name: Tail-log backups, match: [tail-log-backup]}
+      - {id: ss-br-encryption, name: Backup compression and encryption, match: [backup-encryption-certificate]}
+      - {id: ss-br-move, name: Restoring to a new location or server (WITH MOVE / REPLACE), match: [restore-with-move]}
+      - {id: ss-br-system-dbs, name: Restoring system databases (master / msdb / model), match: [restore-master]}
+      - {id: ss-br-piecemeal, name: File / filegroup and piecemeal restore, match: [piecemeal-restore, filegroup-backup]}
+      - {id: ss-br-history, name: Backup history in msdb and building restore scripts, match: [msdb-backupset]}
+      - {id: ss-br-performance, name: Backup throughput tuning (striping / BUFFERCOUNT / MAXTRANSFERSIZE), match: [buffercount, backup-striping]}
+  - id: ss-integrity
+    name: Database integrity (DBCC CHECKDB)
+    source: SQL Server docs DBCC CHECKDB + Manage the suspect_pages table
+    match: [dbcc-checkdb]
+    subtopics:
+      - {id: ss-in-physical-only, name: CHECKDB scheduling and PHYSICAL_ONLY, match: [physical-only]}
+      - {id: ss-in-page-restore, name: Page restore, match: [page-restore]}
+      - {id: ss-in-repair, name: REPAIR_ALLOW_DATA_LOSS and emergency mode, match: [repair-allow-data-loss]}
+      - {id: ss-in-suspect, name: suspect_pages and error 823/824, match: [suspect-pages]}
+      - {id: ss-in-offload, name: Offloading CHECKDB to a restored copy, match: [offload-checkdb]}
+      - {id: ss-in-interpret, name: Interpreting CHECKDB output and the minimum repair level, match: [minimum-repair-level, checkdb-errors]}
+      - {id: ss-in-checktable, name: CHECKTABLE / CHECKFILEGROUP / CHECKALLOC for very large databases, match: [dbcc-checktable, checkfilegroup]}
+      - {id: ss-in-auto-page-repair, name: Automatic page repair in availability groups, match: [automatic-page-repair]}
+      - {id: ss-in-825, name: Error 825 read-retry and storage root cause, match: [error-825]}
+      - {id: ss-in-dbcc-page, name: Examining pages with DBCC PAGE / DBCC IND, match: [dbcc-page]}
+      - {id: ss-in-data-purity, name: DATA_PURITY and EXTENDED_LOGICAL_CHECKS, match: [data-purity]}
+  - id: ss-monitoring
+    name: Monitoring SQL Server activity
+    source: DP-300 Monitor database resources
+    match: [wait-stats, dmv]
+    subtopics:
+      - {id: ss-mo-waits, name: Wait statistics (sys.dm_os_wait_stats), match: [sys-dm-os-wait-stats]}
+      - {id: ss-mo-xevents, name: Extended Events sessions, match: [extended-events]}
+      - {id: ss-mo-blocking, name: Blocking and deadlock graphs, match: [deadlock-graph, blocked-process-report]}
+      - {id: ss-mo-whoisactive, name: Live activity with sp_WhoIsActive, match: [sp-whoisactive]}
+      - {id: ss-mo-baseline, name: Performance baselines with perfmon counters (sys.dm_os_performance_counters), match: [performance-baseline, perfmon-counters]}
+      - {id: ss-mo-file-io, name: File I/O latency (sys.dm_io_virtual_file_stats), match: [virtual-file-stats]}
+      - {id: ss-mo-requests, name: Current requests and sessions (sys.dm_exec_requests / sys.dm_exec_sessions), match: [dm-exec-requests]}
+      - {id: ss-mo-system-health, name: The system_health session and default trace, match: [system-health-session, default-trace]}
+      - {id: ss-mo-blitz, name: First Responder Kit (sp_Blitz / sp_BlitzFirst / sp_BlitzCache), match: [sp-blitz, first-responder-kit]}
+      - {id: ss-mo-errorlog, name: Reading and cycling the SQL Server error log, match: [sql-server-error-log, xp-readerrorlog]}
+      - {id: ss-mo-memory, name: Memory pressure diagnosis (memory clerks / RESOURCE_SEMAPHORE / page life expectancy), match: [memory-clerks, resource-semaphore]}
+      - {id: ss-mo-azure, name: Azure SQL monitoring (sys.dm_db_resource_stats / Query Performance Insight / database watcher), match: [dm-db-resource-stats, database-watcher]}
+  - id: ss-query-tuning
+    name: Query performance tuning
+    source: DP-300 Optimize query performance
+    match: [query-store, execution-plan]
+    subtopics:
+      - {id: ss-qt-sniffing, name: Parameter sniffing, match: [parameter-sniffing]}
+      - {id: ss-qt-iqp, name: Intelligent query processing, match: [intelligent-query-processing]}
+      - {id: ss-qt-plan-cache, name: Plan cache and optimize for ad hoc workloads, match: [plan-cache]}
+      - {id: ss-qt-columnstore, name: Columnstore indexes, match: [columnstore-index]}
+      - {id: ss-qt-missing-index, name: Missing index DMVs, match: [missing-index-dmv]}
+      - {id: ss-qt-qs-config, name: Query Store configuration and forcing plans, match: [query-store-configuration, force-plan]}
+      - {id: ss-qt-qs-hints, name: Query Store hints and plan guides, match: [query-store-hints, plan-guides]}
+      - {id: ss-qt-auto-tuning, name: Automatic tuning (FORCE_LAST_GOOD_PLAN / automatic index management), match: [automatic-tuning, force-last-good-plan]}
+      - {id: ss-qt-ce, name: Cardinality estimator versions and LEGACY_CARDINALITY_ESTIMATION, match: [legacy-cardinality-estimation]}
+      - {id: ss-qt-implicit, name: Implicit conversions and non-sargable predicates, match: [implicit-conversion]}
+      - {id: ss-qt-memory-grants, name: Memory grants and tempdb spills, match: [memory-grant, tempdb-spill]}
+      - {id: ss-qt-hints, name: Query hints (OPTION RECOMPILE / OPTIMIZE FOR / MAXDOP), match: [query-hints, optimize-for-unknown]}
+      - {id: ss-qt-in-memory, name: In-Memory OLTP memory-optimized tables, match: [in-memory-oltp, memory-optimized-tables]}
+      - {id: ss-qt-resource-governor, name: Resource Governor workload groups and pools, match: [resource-governor]}
+  - id: ss-index-maintenance
+    name: Index and statistics maintenance
+    source: DP-300 Optimize database resources (index and statistics maintenance)
+    match: [index-fragmentation, ola-hallengren]
+    subtopics:
+      - {id: ss-im-fragmentation, name: Rebuild vs reorganize, match: [rebuild]}
+      - {id: ss-im-stats, name: Statistics auto-update settings, match: [auto-update-statistics]}
+      - {id: ss-im-filtered, name: Filtered indexes, match: [filtered-index]}
+      - {id: ss-im-resumable, name: Resumable online index operations, match: [resumable-index]}
+      - {id: ss-im-fillfactor, name: Fill factor and page splits, match: [fill-factor, page-splits]}
+      - {id: ss-im-update-stats, name: UPDATE STATISTICS sampling / FULLSCAN / incremental statistics, match: [update-statistics, incremental-statistics]}
+      - {id: ss-im-clustered, name: Clustered index key design and heaps (forwarded records), match: [clustered-index, forwarded-records]}
+      - {id: ss-im-included, name: Included columns and covering nonclustered indexes, match: [included-columns]}
+      - {id: ss-im-compression, name: Row and page data compression, match: [data-compression, page-compression]}
+      - {id: ss-im-partitioned, name: Partitioned tables and sliding-window partition switching, match: [partition-switch, sliding-window]}
+      - {id: ss-im-unused, name: Index usage statistics and removing unused indexes, match: [index-usage-stats]}
+      - {id: ss-im-online, name: Online index options (WAIT_AT_LOW_PRIORITY / SORT_IN_TEMPDB), match: [wait-at-low-priority, sort-in-tempdb]}
+  - id: ss-automation
+    name: Automation of tasks
+    source: DP-300 Configure and manage automation of tasks
+    match: [sql-server-agent]
+    subtopics:
+      - {id: ss-au-jobs, name: Agent jobs and schedules, match: [agent-jobs]}
+      - {id: ss-au-alerts, name: Alerts / operators / Database Mail, match: [database-mail, agent-alerts]}
+      - {id: ss-au-dbatools, name: Automation with dbatools PowerShell, match: [dbatools]}
+      - {id: ss-au-elastic-jobs, name: Elastic jobs for Azure SQL Database, match: [elastic-jobs]}
+      - {id: ss-au-troubleshoot, name: Troubleshooting failed Agent jobs (job history / sysjobhistory), match: [job-history, sysjobhistory]}
+      - {id: ss-au-proxies, name: Agent proxies and credentials, match: [agent-proxy, sql-credential]}
+      - {id: ss-au-msx, name: Multiserver administration (master and target servers), match: [multi-server-jobs]}
+      - {id: ss-au-maintenance-plans, name: Maintenance plans vs scripted maintenance, match: [maintenance-plans]}
+      - {id: ss-au-iac, name: Deploying Azure SQL with Bicep / ARM / Azure CLI, match: [bicep-azure-sql, az-sql]}
+      - {id: ss-au-runbooks, name: Azure Automation runbooks for database tasks, match: [azure-automation-runbook]}
+      - {id: ss-au-pbm, name: Policy-Based Management, match: [policy-based-management]}
+      - {id: ss-au-dbachecks, name: Environment validation with dbachecks, match: [dbachecks]}
+  - id: ss-hadr
+    name: High availability and disaster recovery
+    source: DP-300 Plan and configure a HA/DR environment
+    match: [always-on, availability-group]
+    subtopics:
+      - {id: ss-hd-log-shipping, name: Log shipping, match: [log-shipping]}
+      - {id: ss-hd-fci, name: Failover cluster instances, match: [failover-cluster-instance]}
+      - {id: ss-hd-read-routing, name: Readable secondaries and read-only routing, match: [read-only-routing]}
+      - {id: ss-hd-seeding, name: Automatic seeding and adding databases to an AG, match: [automatic-seeding]}
+      - {id: ss-hd-distributed, name: Distributed availability groups, match: [distributed-availability-group]}
+      - {id: ss-hd-quorum, name: WSFC quorum and witness configuration, match: [wsfc-quorum, cloud-witness]}
+      - {id: ss-hd-listener, name: AG listeners / MultiSubnetFailover / Azure load balancer, match: [ag-listener, multisubnetfailover]}
+      - {id: ss-hd-failover, name: AG failover modes and forced failover with possible data loss, match: [forced-failover]}
+      - {id: ss-hd-monitor, name: Monitoring AG synchronization (log send and redo queues), match: [dm-hadr-database-replica-states, redo-queue]}
+      - {id: ss-hd-contained, name: Contained availability groups, match: [contained-availability-group]}
+      - {id: ss-hd-linux, name: AGs on Linux with Pacemaker and clusterless read-scale AGs, match: [pacemaker-ag, read-scale-availability-group]}
+      - {id: ss-hd-replication, name: Transactional replication, match: [transactional-replication]}
+      - {id: ss-hd-basic, name: Basic availability groups on Standard edition, match: [basic-availability-group]}
+  - id: ss-azure-sql
+    name: Azure SQL Database and Managed Instance
+    source: DP-300 Plan and implement data platform resources (Azure SQL)
+    match: [azure-sql-database, azure-sql-managed-instance]
+    subtopics:
+      - {id: ss-az-tiers, name: Purchasing models and service tiers (vCore / DTU / Hyperscale), match: [vcore-dtu, service-tier]}
+      - {id: ss-az-failover-groups, name: Active geo-replication and failover groups, match: [auto-failover-group, active-geo-replication]}
+      - {id: ss-az-migration, name: Migrating to Azure SQL, match: [azure-sql-migration]}
+      - {id: ss-az-entra, name: Microsoft Entra authentication, match: [entra-authentication-sql]}
+      - {id: ss-az-elastic-pools, name: Elastic pools, match: [elastic-pool]}
+      - {id: ss-az-serverless, name: Serverless compute tier and auto-pause, match: [serverless-azure-sql, auto-pause]}
+      - {id: ss-az-backups, name: Automated backups / point-in-time restore / long-term retention, match: [long-term-retention, azure-sql-pitr]}
+      - {id: ss-az-hyperscale, name: Hyperscale architecture and named replicas, match: [hyperscale-named-replica]}
+      - {id: ss-az-vm, name: SQL Server on Azure VMs (SQL IaaS Agent extension / storage configuration), match: [sql-iaas-agent, sql-server-azure-vm]}
+      - {id: ss-az-mi-link, name: Managed Instance link and networking, match: [managed-instance-link]}
+      - {id: ss-az-connectivity, name: Connection policy (redirect vs proxy) and connectivity troubleshooting, match: [connection-policy-redirect]}
+      - {id: ss-az-governance, name: Maintenance windows and resource governance limits (log rate / workers), match: [maintenance-window, log-rate-governance]}
+  # ---------------- Oracle Database (OCP DBA topics)
+  - id: or-instance
+    name: Managing the database instance
+    source: 1Z0-082 Managing Database Instances + Admin Guide 2-3
+    match: [oracle-instance, spfile]
+    subtopics:
+      - {id: or-in-startup, name: Startup and shutdown stages and modes, match: [startup-nomount, shutdown-immediate]}
+      - {id: or-in-adr, name: Alert log and ADR (adrci), match: [alert-log, adrci]}
+      - {id: or-in-memory, name: Memory management (SGA_TARGET / PGA_AGGREGATE_LIMIT), match: [sga-target, pga-aggregate-limit]}
+      - {id: or-in-params, name: Initialization parameter files, match: [init-parameters]}
+      - {id: or-in-dbca, name: Creating a database with DBCA silent mode, match: [dbca]}
+      - {id: or-in-controlfile, name: Multiplexing and backing up control files, match: [controlfile-multiplexing]}
+      - {id: or-in-redo, name: Online redo log groups / members / sizing, match: [online-redo-logs, redo-log-groups]}
+      - {id: or-in-archivelog, name: Enabling ARCHIVELOG mode and archive destinations, match: [archivelog-mode, log-archive-dest]}
+      - {id: or-in-pwfile, name: Password file and administrative privileges (orapwd / SYSDBA / SYSBACKUP), match: [orapwd, password-file]}
+      - {id: or-in-dictionary, name: Data dictionary and dynamic performance views, match: [dynamic-performance-views]}
+      - {id: or-in-incidents, name: Incident packaging with IPS for Oracle Support, match: [incident-packaging]}
+      - {id: or-in-sessions, name: Restricted session / quiesce / killing sessions, match: [kill-session]}
+  - id: or-multitenant
+    name: Multitenant container and pluggable databases
+    source: 1Z0-083 Multitenant + Multitenant Administrator's Guide
+    match: [multitenant, pluggable-database]
+    subtopics:
+      - {id: or-mt-create-clone, name: Creating and cloning PDBs, match: [create-pluggable-database, pdb-clone]}
+      - {id: or-mt-plug, name: Unplugging and plugging PDBs, match: [unplug-pdb]}
+      - {id: or-mt-lockdown, name: PDB lockdown profiles and resource limits, match: [pdb-lockdown]}
+      - {id: or-mt-common-users, name: Common vs local users, match: [common-users]}
+      - {id: or-mt-open-modes, name: PDB open modes and SAVE STATE, match: [pdb-save-state, alter-pluggable-database]}
+      - {id: or-mt-relocate, name: Relocating PDBs and refreshable clones, match: [refreshable-clone, pdb-relocate]}
+      - {id: or-mt-noncdb, name: Converting a non-CDB to a PDB, match: [non-cdb-to-pdb]}
+      - {id: or-mt-resource-plans, name: CDB resource plans and PDB shares, match: [cdb-resource-plan]}
+      - {id: or-mt-app-containers, name: Application containers, match: [application-container]}
+      - {id: or-mt-snapshots, name: PDB snapshot carousel and snapshot copies, match: [pdb-snapshot]}
+      - {id: or-mt-proxy, name: Proxy PDBs, match: [proxy-pdb]}
+  - id: or-security
+    name: Users / privileges / auditing
+    source: 1Z0-082 Managing Users Roles and Privileges + Security Guide
+    match: [oracle-security, oracle-users]
+    subtopics:
+      - {id: or-se-profiles, name: Profiles and password policies, match: [oracle-profiles]}
+      - {id: or-se-privileges, name: System and object privileges / roles, match: [system-privileges]}
+      - {id: or-se-auditing, name: Unified auditing, match: [unified-auditing]}
+      - {id: or-se-tde, name: TDE and the keystore, match: [oracle-tde]}
+      - {id: or-se-users, name: Creating users / quotas / schema-only accounts, match: [schema-only-account, tablespace-quota]}
+      - {id: or-se-priv-analysis, name: Privilege analysis (DBMS_PRIVILEGE_CAPTURE), match: [privilege-analysis]}
+      - {id: or-se-vpd, name: Virtual Private Database policies (DBMS_RLS), match: [virtual-private-database, dbms-rls]}
+      - {id: or-se-redaction, name: Oracle Data Redaction, match: [data-redaction]}
+      - {id: or-se-fga, name: Fine-grained auditing, match: [fine-grained-auditing]}
+      - {id: or-se-cmu, name: Centrally managed users with Active Directory, match: [centrally-managed-users]}
+      - {id: or-se-vault, name: Database Vault realms and command rules, match: [database-vault]}
+      - {id: or-se-dbsat, name: Security assessment with DBSAT, match: [dbsat]}
+  - id: or-storage
+    name: Storage structures (tablespaces / undo / temp / ASM)
+    source: 1Z0-082 Managing Storage + Managing Undo
+    match: [oracle-tablespaces, datafiles]
+    subtopics:
+      - {id: or-st-tablespaces, name: Creating and resizing tablespaces (bigfile / autoextend), match: [bigfile-tablespace, autoextend]}
+      - {id: or-st-undo, name: Undo management and ORA-01555, match: [undo-retention, ora-01555]}
+      - {id: or-st-temp, name: Temporary tablespaces, match: [temporary-tablespace]}
+      - {id: or-st-space, name: Segment Advisor and shrinking segments, match: [segment-advisor, shrink-space]}
+      - {id: or-st-asm, name: ASM disk groups, match: [asm-diskgroup]}
+      - {id: or-st-move-datafile, name: Moving and renaming datafiles online, match: [move-datafile]}
+      - {id: or-st-omf, name: Oracle Managed Files (DB_CREATE_FILE_DEST), match: [oracle-managed-files]}
+      - {id: or-st-monitoring, name: Tablespace usage monitoring and space alerts, match: [tablespace-usage-metrics, space-alert-thresholds]}
+      - {id: or-st-resumable, name: Resumable space allocation, match: [resumable-space-allocation]}
+      - {id: or-st-compression, name: Table compression (basic / advanced row / hybrid columnar), match: [table-compression-oracle, advanced-compression]}
+      - {id: or-st-asmcmd, name: asmcmd and ASM rebalance / disk replacement, match: [asmcmd, asm-rebalance]}
+      - {id: or-st-partitioning, name: Oracle partitioning (interval / reference / partition maintenance), match: [interval-partitioning, oracle-partitioning]}
+      - {id: or-st-securefiles, name: SecureFiles LOB storage, match: [securefiles]}
+  - id: or-net
+    name: Oracle Net services
+    source: 1Z0-082 Configuring Oracle Net Services
+    match: [oracle-net, listener]
+    subtopics:
+      - {id: or-nt-lsnrctl, name: Listener configuration and lsnrctl, match: [lsnrctl]}
+      - {id: or-nt-naming, name: tnsnames.ora and Easy Connect naming, match: [tnsnames-ora, easy-connect]}
+      - {id: or-nt-services, name: Database services and dynamic registration, match: [service-registration]}
+      - {id: or-nt-encryption, name: Native network encryption in sqlnet.ora, match: [sqlnet-encryption]}
+      - {id: or-nt-troubleshoot, name: Troubleshooting connection errors (ORA-12514 / ORA-12541 / tnsping / tracing), match: [ora-12514, tnsping]}
+      - {id: or-nt-tcps, name: TLS (TCPS) with Oracle wallets, match: [tcps, oracle-wallet]}
+      - {id: or-nt-failover, name: Connect-time failover and load balancing in connect descriptors, match: [connect-time-failover]}
+      - {id: or-nt-shared-server, name: Shared server and DRCP connection pooling, match: [shared-server, drcp]}
+      - {id: or-nt-cman, name: Oracle Connection Manager, match: [connection-manager-cman]}
+      - {id: or-nt-timeouts, name: Dead connection detection and connect timeouts (SQLNET.EXPIRE_TIME), match: [sqlnet-expire-time, inbound-connect-timeout]}
+      - {id: or-nt-valid-node, name: Listener security and valid node checking, match: [valid-node-checking]}
+  - id: or-data-movement
+    name: Moving data (Data Pump / SQL*Loader / transportable)
+    source: 1Z0-082 Moving Data + Utilities Guide
+    match: [data-pump]
+    subtopics:
+      - {id: or-dm-expdp, name: Data Pump export and import, match: [expdp, impdp]}
+      - {id: or-dm-remap, name: Remapping schemas and tablespaces, match: [remap-schema]}
+      - {id: or-dm-tts, name: Transportable tablespaces, match: [transportable-tablespaces]}
+      - {id: or-dm-sqlldr, name: SQL*Loader and external tables, match: [sql-loader, external-tables]}
+      - {id: or-dm-filters, name: Data Pump filtering (INCLUDE / EXCLUDE / QUERY) and SQLFILE, match: [data-pump-exclude, sqlfile]}
+      - {id: or-dm-network-link, name: Data Pump over NETWORK_LINK, match: [network-link]}
+      - {id: or-dm-parallel, name: Data Pump parallelism / job monitoring / ATTACH, match: [data-pump-parallel, data-pump-attach]}
+      - {id: or-dm-consistent, name: Consistent exports with FLASHBACK_SCN / FLASHBACK_TIME, match: [flashback-scn]}
+      - {id: or-dm-full-transportable, name: Full transportable export/import and cross-platform migration, match: [full-transportable]}
+      - {id: or-dm-dblinks, name: Database links, match: [database-link]}
+      - {id: or-dm-direct-path, name: Direct-path inserts (APPEND / NOLOGGING) and CTAS, match: [direct-path-insert, nologging]}
+      - {id: or-dm-goldengate, name: Oracle GoldenGate replication basics, match: [goldengate]}
+  - id: or-rman
+    name: RMAN backup and recovery
+    source: 1Z0-083 Backup and Recovery
+    match: [rman]
+    subtopics:
+      - {id: or-rm-incremental, name: Incremental backup strategy, match: [level-0]}
+      - {id: or-rm-duplicate, name: Duplicating a database, match: [rman-duplicate]}
+      - {id: or-rm-catalog, name: Recovery catalog, match: [recovery-catalog]}
+      - {id: or-rm-flashback, name: Flashback database and table, match: [flashback-database]}
+      - {id: or-rm-bmr, name: Block media recovery, match: [block-media-recovery]}
+      - {id: or-rm-configure, name: RMAN configuration (retention policy / controlfile autobackup / channels), match: [rman-configure, retention-policy]}
+      - {id: or-rm-fra, name: Fast recovery area sizing and space pressure, match: [fast-recovery-area]}
+      - {id: or-rm-bct, name: Block change tracking and incrementally updated image copies, match: [incrementally-updated-backup]}
+      - {id: or-rm-maintenance, name: CROSSCHECK / DELETE OBSOLETE / REPORT NEED BACKUP, match: [delete-obsolete, report-need-backup]}
+      - {id: or-rm-validate, name: Validating backups (BACKUP VALIDATE / RESTORE VALIDATE), match: [rman-validate]}
+      - {id: or-rm-controlfile-loss, name: Recovering lost control files and spfile from autobackup, match: [restore-controlfile]}
+      - {id: or-rm-recover-table, name: Recovering a table from RMAN backups (RECOVER TABLE), match: [rman-recover-table]}
+      - {id: or-rm-pitr, name: Database and tablespace point-in-time recovery (DBPITR / TSPITR), match: [tspitr, dbpitr]}
+      - {id: or-rm-encryption, name: Encrypted / compressed / multisection RMAN backups, match: [rman-encryption, section-size]}
+  - id: or-performance
+    name: Performance tuning
+    source: 1Z0-083 Tuning + SQL Tuning Guide
+    match: [awr, ash]
+    subtopics:
+      - {id: or-pf-sta, name: SQL Tuning Advisor, match: [sql-tuning-advisor]}
+      - {id: or-pf-spm, name: SQL plan management baselines, match: [sql-plan-baselines]}
+      - {id: or-pf-stats, name: Optimizer statistics with DBMS_STATS, match: [dbms-stats]}
+      - {id: or-pf-xplan, name: DBMS_XPLAN and real-time SQL monitoring, match: [dbms-xplan, sql-monitor]}
+      - {id: or-pf-addm, name: ADDM findings, match: [addm]}
+      - {id: or-pf-awr-compare, name: AWR baselines and compare-period reports, match: [awr-baseline, awr-diff]}
+      - {id: or-pf-10046, name: SQL trace (event 10046) and tkprof, match: [sql-trace-10046, tkprof]}
+      - {id: or-pf-wait-events, name: Common wait events (log file sync / db file sequential read / enq TX), match: [log-file-sync, db-file-sequential-read]}
+      - {id: or-pf-sql-profiles, name: SQL profiles and hints, match: [sql-profile]}
+      - {id: or-pf-acs, name: Bind peeking and adaptive cursor sharing, match: [adaptive-cursor-sharing, bind-peeking]}
+      - {id: or-pf-resource-manager, name: Database Resource Manager plans, match: [resource-manager-plan]}
+      - {id: or-pf-auto-index, name: Automatic indexing (DBMS_AUTO_INDEX), match: [automatic-indexing]}
+      - {id: or-pf-spa, name: SQL Performance Analyzer for upgrade regression testing, match: [sql-performance-analyzer]}
+  - id: or-data-guard
+    name: Data Guard
+    source: Data Guard Concepts and Administration ToC
+    match: [data-guard]
+    subtopics:
+      - {id: or-dg-broker, name: Broker configuration (DGMGRL), match: [dgmgrl]}
+      - {id: or-dg-fsfo, name: Fast-start failover, match: [fast-start-failover]}
+      - {id: or-dg-snapshot, name: Snapshot standby and Active Data Guard, match: [snapshot-standby]}
+      - {id: or-dg-create, name: Creating a physical standby, match: [standby-creation]}
+      - {id: or-dg-protection, name: Protection modes and redo transport (SYNC / ASYNC / AFFIRM), match: [protection-mode, redo-transport]}
+      - {id: or-dg-switchover, name: Switchover / failover / reinstate, match: [switchover, reinstate-database]}
+      - {id: or-dg-gap, name: Archive gap resolution and FAL_SERVER, match: [archive-gap, fal-server]}
+      - {id: or-dg-monitor, name: Monitoring apply and transport lag (V$DATAGUARD_STATS), match: [apply-lag, dataguard-stats]}
+      - {id: or-dg-srl, name: Standby redo logs and real-time apply, match: [standby-redo-logs, real-time-apply]}
+      - {id: or-dg-far-sync, name: Far Sync instances, match: [far-sync]}
+      - {id: or-dg-file-mgmt, name: STANDBY_FILE_MANAGEMENT / adding datafiles / NOLOGGING repairs, match: [standby-file-management]}
+      - {id: or-dg-backup-offload, name: Offloading backups to the standby, match: [standby-backup-offload]}
+  - id: or-patching
+    name: Patching and upgrading
+    source: 1Z0-083 Upgrading and patching + AutoUpgrade docs
+    match: [oracle-patching, opatch]
+    subtopics:
+      - {id: or-pa-ru, name: Applying Release Updates with OPatch, match: [release-update]}
+      - {id: or-pa-datapatch, name: datapatch and SQL patch registry, match: [datapatch]}
+      - {id: or-pa-autoupgrade, name: AutoUpgrade, match: [autoupgrade]}
+      - {id: or-pa-out-of-place, name: Out-of-place patching, match: [out-of-place-patching]}
+      - {id: or-pa-lsinventory, name: OPatch inventory / conflict checks / rollback, match: [lsinventory, opatch-rollback]}
+      - {id: or-pa-opatchauto, name: Patching Grid Infrastructure with opatchauto, match: [opatchauto]}
+      - {id: or-pa-timezone, name: Time zone file (DST) upgrades, match: [timezone-file-upgrade]}
+      - {id: or-pa-invalid, name: Recompiling invalid objects (utlrp) and post-upgrade checks, match: [utlrp, invalid-objects]}
+      - {id: or-pa-fallback, name: COMPATIBLE parameter and fallback with guaranteed restore points, match: [compatible-parameter, guaranteed-restore-point]}
+      - {id: or-pa-gold-images, name: Gold images and Fleet Patching and Provisioning, match: [gold-image, fleet-patching]}
+      - {id: or-pa-one-off, name: One-off and merge patches / Monthly Recommended Patches, match: [one-off-patch]}
+  - id: or-rac
+    name: Real Application Clusters
+    source: RAC Administration and Deployment Guide ToC
+    match: [rac, real-application-clusters]
+    subtopics:
+      - {id: or-rc-srvctl, name: srvctl and crsctl, match: [srvctl, crsctl]}
+      - {id: or-rc-services, name: Services and Application Continuity, match: [application-continuity]}
+      - {id: or-rc-gc, name: Global cache waits and interconnect, match: [gc-waits]}
+      - {id: or-rc-rolling, name: Rolling patching in RAC, match: [rolling-patch]}
+      - {id: or-rc-ocr-voting, name: OCR and voting disk management, match: [ocr-backup, voting-disk]}
+      - {id: or-rc-scan, name: SCAN listeners and client connectivity, match: [scan-listener]}
+      - {id: or-rc-eviction, name: Node eviction diagnosis (CSS misscount / ocssd log), match: [node-eviction]}
+      - {id: or-rc-cluvfy, name: Cluster verification (cluvfy) and ORAchk / AHF, match: [cluvfy, ahf]}
+      - {id: or-rc-add-node, name: Adding and deleting cluster nodes, match: [add-node-rac]}
+      - {id: or-rc-fan-taf, name: FAN and TAF, match: [fast-application-notification, taf]}
+      - {id: or-rc-sequences, name: Sequences and hot blocks in RAC (CACHE / NOORDER), match: [sequence-cache-rac]}
+      - {id: or-rc-one-node, name: RAC One Node and online relocation, match: [rac-one-node]}
+  # ---------------- MongoDB (Manual ToC)
+  - id: mg-aggregation
+    name: Aggregation pipelines
+    source: MongoDB Manual Aggregation
+    match: [aggregation-pipeline]
+    subtopics:
+      - {id: mg-ag-lookup, name: $lookup and $unwind joins, match: [aggregation-lookup]}
+      - {id: mg-ag-group, name: $group and $facet, match: [group-stage, facet-stage]}
+      - {id: mg-ag-perf, name: Pipeline optimization and allowDiskUse, match: [allowdiskuse, aggregation-optimization]}
+      - {id: mg-ag-merge, name: $merge / $out materialized views, match: [merge-stage, on-demand-materialized-view]}
+      - {id: mg-ag-window, name: $setWindowFields, match: [setwindowfields]}
+      - {id: mg-ag-graph, name: $graphLookup recursive traversal, match: [graphlookup]}
+      - {id: mg-ag-bucket, name: $bucket / $bucketAuto histograms, match: [bucket-stage]}
+      - {id: mg-ag-union, name: $unionWith combining collections, match: [unionwith]}
+      - {id: mg-ag-array-exprs, name: Array expressions ($map / $filter / $reduce), match: [filter-expression, map-expression]}
+      - {id: mg-ag-dates, name: Date operators and time-zone bucketing ($dateTrunc), match: [datetrunc]}
+      - {id: mg-ag-views, name: Standard views, match: [mongodb-views]}
+      - {id: mg-ag-explain, name: Explaining aggregation pipelines, match: [aggregation-explain]}
+      - {id: mg-ag-timeseries, name: Time series collections, match: [time-series-collection]}
+  - id: mg-indexes
+    name: MongoDB indexes
+    source: MongoDB Manual Indexes
+    match: [compound-index, esr-rule]
+    subtopics:
+      - {id: mg-ix-wildcard, name: Wildcard indexes, match: [wildcard-index]}
+      - {id: mg-ix-text-geo, name: Text and 2dsphere indexes, match: [text-index, 2dsphere]}
+      - {id: mg-ix-builds, name: Index builds on populated collections / rolling builds, match: [rolling-index-build]}
+      - {id: mg-ix-hidden, name: Hidden indexes, match: [hidden-index]}
+      - {id: mg-ix-ttl, name: TTL indexes, match: [ttl-index]}
+      - {id: mg-ix-partial, name: Partial and sparse indexes, match: [partial-index-mongodb, sparse-index]}
+      - {id: mg-ix-unique, name: Unique indexes and E11000 duplicate key errors, match: [unique-index-mongodb, e11000]}
+      - {id: mg-ix-multikey, name: Multikey indexes on arrays, match: [multikey-index]}
+      - {id: mg-ix-hashed, name: Hashed indexes, match: [hashed-index]}
+      - {id: mg-ix-collation, name: Case-insensitive indexes with collation, match: [collation-index]}
+      - {id: mg-ix-indexstats, name: Measuring index use with $indexStats, match: [indexstats]}
+      - {id: mg-ix-explain, name: Reading explain output (IXSCAN / COLLSCAN / keys examined), match: [mongodb-explain, collscan]}
+      - {id: mg-ix-covered, name: Covered queries, match: [covered-query]}
+      - {id: mg-ix-clustered, name: Clustered collections, match: [clustered-collection]}
+  - id: mg-replication
+    name: MongoDB replication
+    source: MongoDB Manual Replication
+    match: [replica-set]
+    subtopics:
+      - {id: mg-rp-read-pref, name: Read preference, match: [read-preference]}
+      - {id: mg-rp-members, name: Member configuration (priority / hidden / delayed / arbiter), match: [hidden-member, delayed-member]}
+      - {id: mg-rp-oplog, name: Oplog sizing and replication window, match: [oplog-size, replication-window]}
+      - {id: mg-rp-initial-sync, name: Resyncing a member (initial sync), match: [initial-sync]}
+      - {id: mg-rp-write-concern, name: Write concern, match: [write-concern]}
+      - {id: mg-rp-deploy, name: Deploying a replica set (rs.initiate / rs.add / converting a standalone), match: [rs-initiate]}
+      - {id: mg-rp-elections, name: Elections / stepDown / priority takeover, match: [rs-stepdown, replica-set-elections]}
+      - {id: mg-rp-rollback, name: Rollbacks during failover, match: [mongodb-rollback]}
+      - {id: mg-rp-read-concern, name: Read concern levels (local / majority / linearizable / snapshot), match: [read-concern]}
+      - {id: mg-rp-force-reconfig, name: Reconfiguring with unavailable members (force reconfig), match: [force-reconfig]}
+      - {id: mg-rp-lag, name: Troubleshooting replication lag and flow control, match: [replication-lag-mongodb, flow-control-mongodb]}
+      - {id: mg-rp-maintenance, name: Rolling maintenance on replica set members, match: [rolling-maintenance]}
+      - {id: mg-rp-chaining, name: Chained replication and sync source selection, match: [chained-replication]}
+  - id: mg-sharding
+    name: MongoDB sharding
+    source: MongoDB Manual Sharding
+    match: [sharding, mongos]
+    subtopics:
+      - {id: mg-sh-key, name: Choosing a shard key, match: [shard-key]}
+      - {id: mg-sh-reshard, name: Resharding a collection, match: [reshardcollection]}
+      - {id: mg-sh-balancer, name: Balancer windows, match: [balancer-window]}
+      - {id: mg-sh-jumbo, name: Jumbo chunks, match: [jumbo-chunk]}
+      - {id: mg-sh-deploy, name: Deploying a sharded cluster (config server replica set / sh.addShard), match: [sh-addshard]}
+      - {id: mg-sh-zones, name: Zone sharding, match: [zone-ranges]}
+      - {id: mg-sh-remove-shard, name: Removing and draining a shard, match: [remove-shard]}
+      - {id: mg-sh-targeted, name: Targeted vs scatter-gather queries, match: [scatter-gather]}
+      - {id: mg-sh-refine, name: Refining a shard key, match: [refine-shard-key]}
+      - {id: mg-sh-hashed, name: Hashed vs ranged sharding and pre-splitting, match: [hashed-sharding]}
+      - {id: mg-sh-move-collection, name: Moving and unsharding collections (moveCollection / unshardCollection), match: [movecollection]}
+      - {id: mg-sh-backup, name: Backing up a sharded cluster consistently, match: [sharded-cluster-backup]}
+  - id: mg-security
+    name: MongoDB security
+    source: MongoDB Manual Security
+    match: [mongodb-security]
+    subtopics:
+      - {id: mg-se-auth, name: SCRAM and x.509 authentication, match: [mongodb-authentication, x509-authentication]}
+      - {id: mg-se-rbac, name: Role-based access control and custom roles, match: [mongodb-rbac]}
+      - {id: mg-se-tls, name: TLS/SSL configuration, match: [mongodb-tls]}
+      - {id: mg-se-csfle, name: Client-side field level and Queryable Encryption, match: [client-side-field-level-encryption, queryable-encryption]}
+      - {id: mg-se-audit, name: Auditing, match: [mongodb-auditing]}
+      - {id: mg-se-enable-auth, name: Enabling access control on an existing deployment (localhost exception), match: [enable-access-control, localhost-exception]}
+      - {id: mg-se-keyfile, name: Internal membership authentication (keyFile / x.509), match: [keyfile, internal-authentication]}
+      - {id: mg-se-ldap, name: LDAP and Kerberos authentication, match: [mongodb-ldap]}
+      - {id: mg-se-encryption-at-rest, name: Encryption at rest with KMIP, match: [encryption-at-rest-mongodb, kmip]}
+      - {id: mg-se-network, name: Network hardening (bindIp / IP allowlists), match: [bindip]}
+      - {id: mg-se-builtin-roles, name: Built-in roles and least-privilege users, match: [mongodb-built-in-roles]}
+      - {id: mg-se-redaction, name: Log redaction, match: [log-redaction]}
+  - id: mg-operations
+    name: Administration and production operations
+    source: MongoDB Manual Administration + Production Notes
+    match: [mongodb-production-notes, mongodb-administration]
+    subtopics:
+      - {id: mg-op-wiredtiger, name: WiredTiger cache sizing, match: [wiredtiger-cache]}
+      - {id: mg-op-profiler, name: Database profiler and currentOp, match: [database-profiler, currentop]}
+      - {id: mg-op-tools, name: mongostat / mongotop / serverStatus, match: [mongostat, serverstatus]}
+      - {id: mg-op-fcv, name: Upgrades and featureCompatibilityVersion, match: [feature-compatibility-version]}
+      - {id: mg-op-prod-os, name: OS tuning per the production notes (THP / NUMA / ulimit / XFS / readahead), match: [numa-mongodb, mongodb-ulimit]}
+      - {id: mg-op-mongodump, name: mongodump and mongorestore logical backups, match: [mongodump, mongorestore]}
+      - {id: mg-op-compact, name: Reclaiming disk space (compact / resync), match: [compact-command]}
+      - {id: mg-op-validate, name: Validating collections, match: [validate-collection]}
+      - {id: mg-op-logs, name: Log rotation and slow operation logging (logRotate / slowms), match: [logrotate-mongodb, slowms]}
+      - {id: mg-op-killop, name: Killing long operations (killOp / maxTimeMS), match: [killop, maxtimems]}
+      - {id: mg-op-config, name: mongod configuration file options, match: [mongod-conf]}
+      - {id: mg-op-connections, name: Connection storms and driver pool sizing, match: [connection-pool-mongodb]}
+      - {id: mg-op-ftdc, name: Full-time diagnostic data capture (FTDC), match: [ftdc]}
+  - id: mg-transactions
+    name: Transactions and change streams
+    source: MongoDB Manual Transactions + Change Streams
+    match: [mongodb-transactions, change-streams]
+    subtopics:
+      - {id: mg-tx-retry, name: Transaction error labels and retry, match: [transient-transaction-error]}
+      - {id: mg-tx-change-streams, name: Opening and resuming change streams, match: [resume-token]}
+      - {id: mg-tx-causal, name: Causal consistency sessions, match: [causal-consistency]}
+      - {id: mg-tx-limits, name: Transaction limits and performance, match: [transaction-lifetime-limit]}
+      - {id: mg-tx-callback, name: Callback API (withTransaction) vs core API, match: [withtransaction]}
+      - {id: mg-tx-retryable-writes, name: Retryable writes and retryable reads, match: [retryable-writes]}
+      - {id: mg-tx-preimages, name: Change stream pre- and post-images / fullDocument, match: [pre-and-post-images, fulldocument]}
+      - {id: mg-tx-cs-filter, name: Filtering change streams and scaling consumers, match: [change-stream-filter]}
+      - {id: mg-tx-sharded, name: Distributed transactions across shards, match: [distributed-transactions]}
+      - {id: mg-tx-concerns, name: Read and write concern inside transactions, match: [transaction-read-concern]}
+  # ---------------- Redis (redis.io docs)
+  - id: rd-data-types
+    name: Redis data types
+    source: Redis docs Data types
+    match: [redis-data-types]
+    subtopics:
+      - {id: rd-dt-hashes, name: Hashes and compact encodings (listpack), match: [listpack]}
+      - {id: rd-dt-sorted-sets, name: Sorted sets (leaderboards / rate limits), match: [sorted-set]}
+      - {id: rd-dt-streams, name: Streams and consumer groups, match: [redis-streams, consumer-groups]}
+      - {id: rd-dt-probabilistic, name: Bitmaps and HyperLogLog, match: [hyperloglog, bitmaps]}
+      - {id: rd-dt-pubsub, name: Pub/Sub, match: [pub-sub]}
+      - {id: rd-dt-strings, name: Strings and atomic counters (INCR / SET EX NX), match: [redis-strings, incr]}
+      - {id: rd-dt-lists, name: Lists and reliable queues (LMOVE / BLMOVE), match: [redis-lists, blmove]}
+      - {id: rd-dt-sets, name: Sets and set operations, match: [redis-sets, sinterstore]}
+      - {id: rd-dt-geo, name: Geospatial indexes (GEOADD / GEOSEARCH), match: [geosearch]}
+      - {id: rd-dt-expire, name: Key expiration and keyspace notifications, match: [key-expiration]}
+      - {id: rd-dt-scan, name: Iterating the keyspace with SCAN instead of KEYS, match: [scan-cursor]}
+      - {id: rd-dt-json, name: JSON documents (JSON.SET / JSONPath), match: [redis-json]}
+      - {id: rd-dt-bloom, name: Bloom and cuckoo filters, match: [bloom-filter]}
+      - {id: rd-dt-search, name: Redis Query Engine indexes and vector search (FT.CREATE), match: [ft-create, redis-search]}
+  - id: rd-persistence
+    name: Redis persistence
+    source: Redis docs Management - Persistence
+    match: [rdb, aof]
+    subtopics:
+      - {id: rd-ps-bgsave, name: RDB snapshots (BGSAVE / save points), match: [bgsave]}
+      - {id: rd-ps-aof-rewrite, name: AOF rewrite and fsync policies, match: [aof-rewrite]}
+      - {id: rd-ps-overcommit, name: Fork and memory overcommit, match: [memory-overcommit]}
+      - {id: rd-ps-backup, name: Backing up Redis data, match: [redis-backup]}
+      - {id: rd-ps-corrupt-aof, name: Repairing truncated or corrupted AOF (redis-check-aof), match: [redis-check-aof]}
+      - {id: rd-ps-switch, name: Switching from RDB to AOF at runtime, match: [appendonly-runtime]}
+      - {id: rd-ps-multipart, name: Multi-part AOF and the RDB preamble, match: [multi-part-aof]}
+      - {id: rd-ps-cache-only, name: Running without persistence (cache-only) safely, match: [no-persistence]}
+      - {id: rd-ps-check-rdb, name: Inspecting RDB files (redis-check-rdb), match: [redis-check-rdb]}
+  - id: rd-replication-ha
+    name: Replication / Sentinel / Cluster
+    source: Redis docs Replication + Sentinel + Scaling with Cluster
+    match: [redis-sentinel, redis-cluster]
+    subtopics:
+      - {id: rd-ha-replication, name: Replication config / diskless sync / backlog, match: [diskless-replication, repl-backlog]}
+      - {id: rd-ha-min-replicas, name: min-replicas-to-write, match: [min-replicas-to-write]}
+      - {id: rd-ha-cluster-create, name: Creating and managing a cluster with redis-cli --cluster, match: [redis-cli-cluster]}
+      - {id: rd-ha-resharding, name: Resharding hash slots, match: [resharding]}
+      - {id: rd-ha-sentinel-deploy, name: Deploying Sentinel (quorum / down-after-milliseconds / announce-ip), match: [sentinel-quorum, sentinel-monitor]}
+      - {id: rd-ha-sentinel-clients, name: Sentinel-aware clients and failover notification, match: [sentinel-clients]}
+      - {id: rd-ha-hash-tags, name: Hash tags and redirections (CROSSSLOT / MOVED / ASK), match: [hash-tags, crossslot]}
+      - {id: rd-ha-manual-failover, name: Cluster manual failover and replica migration, match: [cluster-failover]}
+      - {id: rd-ha-add-remove-node, name: Adding and removing cluster nodes, match: [cluster-add-node]}
+      - {id: rd-ha-full-coverage, name: cluster-node-timeout and cluster-require-full-coverage, match: [cluster-require-full-coverage]}
+      - {id: rd-ha-psync, name: Partial resync / replication ID / full sync storms, match: [psync]}
+  - id: rd-security
+    name: Redis security
+    source: Redis docs Security
+    match: [redis-security]
+    subtopics:
+      - {id: rd-se-acl, name: ACL users and categories, match: [redis-acl, acl-setuser]}
+      - {id: rd-se-tls, name: TLS, match: [redis-tls]}
+      - {id: rd-se-protected, name: Protected mode / bind / renaming dangerous commands, match: [protected-mode, rename-command]}
+      - {id: rd-se-requirepass, name: requirepass and default user hardening, match: [requirepass]}
+      - {id: rd-se-aclfile, name: ACL files (aclfile / ACL SAVE / ACL LOAD), match: [aclfile]}
+      - {id: rd-se-acl-log, name: Auditing denials with ACL LOG, match: [acl-log]}
+      - {id: rd-se-key-perms, name: Key and channel permissions and selectors, match: [acl-key-patterns, acl-selectors]}
+      - {id: rd-se-masterauth, name: Replication and Sentinel authentication (masteruser / masterauth), match: [masterauth]}
+      - {id: rd-se-exposed, name: Responding to an exposed Redis instance, match: [exposed-redis]}
+  - id: rd-memory-latency
+    name: Memory and latency optimization
+    source: Redis docs Optimization (memory / latency monitor / latency diagnosis)
+    match: [redis-memory-optimization, redis-latency]
+    subtopics:
+      - {id: rd-ml-memory, name: INFO memory and MEMORY DOCTOR, match: [memory-doctor]}
+      - {id: rd-ml-defrag, name: Fragmentation and active defrag, match: [activedefrag, mem-fragmentation-ratio]}
+      - {id: rd-ml-latency, name: Latency monitor and latency doctor, match: [latency-monitor]}
+      - {id: rd-ml-slowlog, name: SLOWLOG, match: [slowlog]}
+      - {id: rd-ml-bigkeys, name: Finding big and hot keys, match: [bigkeys]}
+      - {id: rd-ml-eviction, name: maxmemory and eviction policies (LRU / LFU), match: [maxmemory-policy, eviction-policy]}
+      - {id: rd-ml-intrinsic, name: Measuring intrinsic and network latency (redis-cli --latency / --intrinsic-latency), match: [intrinsic-latency]}
+      - {id: rd-ml-fork-latency, name: Fork latency / transparent huge pages / swapping, match: [fork-latency]}
+      - {id: rd-ml-output-buffers, name: Client output buffer limits and CLIENT LIST, match: [client-list, output-buffer-limits]}
+      - {id: rd-ml-lazyfree, name: Lazy freeing (UNLINK / lazyfree-lazy-eviction), match: [lazyfree]}
+      - {id: rd-ml-io-threads, name: I/O threads and CPU profiling, match: [io-threads]}
+      - {id: rd-ml-expire-cycle, name: Active expire cycle latency and mass expiry, match: [active-expire]}
+  - id: rd-programmability
+    name: Programmability / transactions / locks
+    source: Redis docs Programmability + Transactions + Pipelining + Distributed locks
+    match: [lua-scripting, redis-functions]
+    subtopics:
+      - {id: rd-pg-eval, name: EVAL / EVALSHA scripts, match: [evalsha]}
+      - {id: rd-pg-functions, name: FUNCTION LOAD libraries, match: [function-load]}
+      - {id: rd-pg-multi, name: MULTI / EXEC / WATCH transactions, match: [multi-exec, watch-optimistic-locking]}
+      - {id: rd-pg-pipelining, name: Pipelining, match: [pipelining]}
+      - {id: rd-pg-locks, name: Distributed locks (SET NX PX / Redlock), match: [redlock, distributed-lock]}
+      - {id: rd-pg-busy-script, name: Long-running scripts (busy-reply-threshold / SCRIPT KILL / FUNCTION KILL), match: [script-kill, busy-script]}
+      - {id: rd-pg-ldb, name: Debugging Lua with redis-cli --ldb, match: [redis-ldb]}
+      - {id: rd-pg-client-cache, name: Client-side caching (CLIENT TRACKING), match: [client-tracking]}
+      - {id: rd-pg-cluster-scripts, name: Scripts and functions in cluster mode (declared keys / same slot), match: [script-keys-cluster]}
+      - {id: rd-pg-modules, name: Loading modules (MODULE LOAD / loadmodule), match: [redis-modules]}
+      - {id: rd-pg-ratelimit, name: Rate limiter patterns (fixed window / sliding window / token bucket), match: [rate-limiter]}
+  # ---------------- Elasticsearch / OpenSearch
+  - id: es-setup
+    name: Cluster setup and important settings
+    source: Elasticsearch Guide Set up Elasticsearch
+    match: [elasticsearch-yml, elasticsearch-setup]
+    subtopics:
+      - {id: es-su-discovery, name: Discovery and cluster formation, match: [discovery-seed-hosts, cluster-initial-master-nodes]}
+      - {id: es-su-roles, name: Node roles, match: [node-roles]}
+      - {id: es-su-heap, name: JVM heap size, match: [heap-size]}
+      - {id: es-su-system, name: Important system configuration (vm.max_map_count / memlock / file descriptors), match: [vm-max-map-count, bootstrap-memory-lock]}
+      - {id: es-su-bootstrap, name: Bootstrap checks and production mode, match: [bootstrap-checks]}
+      - {id: es-su-keystore, name: Secure settings with elasticsearch-keystore, match: [elasticsearch-keystore]}
+      - {id: es-su-voting, name: Voting configuration exclusions and removing master-eligible nodes, match: [voting-config-exclusions]}
+      - {id: es-su-network, name: Network settings (network.host / http.port / transport.port / publish_host), match: [network-host]}
+      - {id: es-su-paths, name: path.data / path.repo / path.logs, match: [path-data]}
+      - {id: es-su-docker, name: Running Elasticsearch in Docker, match: [elasticsearch-docker]}
+      - {id: es-su-eck, name: Elastic Cloud on Kubernetes (ECK), match: [eck]}
+      - {id: es-su-swap, name: Disabling swapping and TCP retransmission timeout, match: [disable-swapping, tcp-retransmission-timeout]}
+  - id: es-security
+    name: Securing the cluster
+    source: Elasticsearch Guide Secure the Elastic Stack
+    match: [elasticsearch-security]
+    subtopics:
+      - {id: es-se-tls, name: TLS with elasticsearch-certutil, match: [elasticsearch-certutil]}
+      - {id: es-se-rbac, name: Roles / users / API keys, match: [elasticsearch-api-keys, elasticsearch-roles]}
+      - {id: es-se-dls, name: Document and field level security, match: [document-level-security]}
+      - {id: es-se-audit, name: Audit logging, match: [elasticsearch-audit-logging]}
+      - {id: es-se-reset-password, name: Built-in users and elasticsearch-reset-password, match: [elasticsearch-reset-password, built-in-users]}
+      - {id: es-se-realms, name: Realms (native / file / LDAP / Active Directory), match: [ldap-realm, native-realm]}
+      - {id: es-se-saml, name: SAML and OIDC single sign-on, match: [saml-realm]}
+      - {id: es-se-role-mapping, name: Role mappings, match: [role-mapping]}
+      - {id: es-se-service-accounts, name: Service accounts and tokens, match: [service-account-token]}
+      - {id: es-se-ip-filter, name: IP filtering, match: [ip-filtering]}
+      - {id: es-se-enrollment, name: Enrollment tokens and adding nodes securely, match: [enrollment-token]}
+      - {id: es-se-run-as, name: Run-as impersonation and _has_privileges checks, match: [run-as]}
+  - id: es-query-dsl
+    name: Query DSL and aggregations
+    source: Elasticsearch Guide Query DSL + Aggregations + Paginate search results
+    match: [query-dsl]
+    subtopics:
+      - {id: es-qd-bool, name: Bool query and filter context, match: [bool-query, filter-context]}
+      - {id: es-qd-relevance, name: Relevance tuning (multi_match / function_score), match: [function-score, relevance-tuning]}
+      - {id: es-qd-pagination, name: Deep pagination (search_after / point in time), match: [search-after]}
+      - {id: es-qd-aggs, name: Bucket and metric aggregations, match: [elasticsearch-aggregations, terms-aggregation]}
+      - {id: es-qd-fulltext, name: Full-text queries (match / match_phrase / query_string), match: [match-phrase, query-string-query]}
+      - {id: es-qd-term-level, name: Term-level queries and keyword vs text fields, match: [term-query, range-query]}
+      - {id: es-qd-nested, name: Nested and join queries, match: [nested-query, has-child]}
+      - {id: es-qd-knn, name: kNN vector search and hybrid ranking (RRF), match: [knn-search, dense-vector]}
+      - {id: es-qd-profile, name: Profiling slow searches (profile API / explain), match: [profile-api]}
+      - {id: es-qd-composite, name: Composite aggregation pagination and pipeline aggregations, match: [composite-aggregation, pipeline-aggregation]}
+      - {id: es-qd-highlight, name: Highlighting / suggesters / field collapsing, match: [highlighting, field-collapsing]}
+      - {id: es-qd-runtime, name: Runtime fields, match: [runtime-fields]}
+      - {id: es-qd-esql, name: ES-QL piped queries, match: [esql]}
+  - id: es-ingest
+    name: Ingest pipelines
+    source: Elasticsearch Guide Ingest pipelines
+    match: [ingest-pipeline]
+    subtopics:
+      - {id: es-ig-grok, name: Grok and dissect processors, match: [grok-processor, dissect-processor]}
+      - {id: es-ig-simulate, name: Simulating pipelines, match: [simulate-pipeline]}
+      - {id: es-ig-failure, name: Handling pipeline failures (on_failure), match: [on-failure]}
+      - {id: es-ig-enrich, name: Enrich processor, match: [enrich-processor]}
+      - {id: es-ig-conditional, name: Conditional processors (if) and pipeline processor chaining, match: [conditional-processor]}
+      - {id: es-ig-default, name: default_pipeline and final_pipeline index settings, match: [final-pipeline]}
+      - {id: es-ig-script, name: Painless script processor, match: [painless-script]}
+      - {id: es-ig-date, name: Date / convert / rename processors for normalization, match: [date-processor]}
+      - {id: es-ig-geoip, name: GeoIP and user_agent enrichment, match: [geoip-processor, user-agent-processor]}
+      - {id: es-ig-stats, name: Ingest pipeline performance stats, match: [ingest-stats]}
+      - {id: es-ig-data-streams, name: Data streams and index templates, match: [data-stream]}
+      - {id: es-ig-reroute, name: Reroute processor, match: [reroute-processor]}
+      - {id: es-ig-logstash, name: Logstash pipelines vs ingest pipelines, match: [logstash]}
+  - id: es-operations
+    name: Cluster operations and troubleshooting
+    source: Elasticsearch Guide Monitor a cluster + Upgrade + Circuit breaker settings + Slow log
+    match: [cluster-health, elasticsearch-operations]
+    subtopics:
+      - {id: es-op-slowlog, name: Search and indexing slow logs, match: [search-slow-log]}
+      - {id: es-op-hot-threads, name: Hot threads and node stats, match: [hot-threads]}
+      - {id: es-op-rolling, name: Rolling restarts and upgrades, match: [rolling-upgrade-elasticsearch]}
+      - {id: es-op-breakers, name: Circuit breakers, match: [circuit-breaker]}
+      - {id: es-op-allocation, name: Shard allocation explain, match: [allocation-explain]}
+      - {id: es-op-disk-watermarks, name: Disk watermarks and flood-stage read-only blocks, match: [disk-watermark, flood-stage]}
+      - {id: es-op-unassigned, name: Red or yellow cluster and unassigned shards, match: [unassigned-shards, red-cluster]}
+      - {id: es-op-jvm-pressure, name: High JVM memory pressure and GC, match: [jvm-memory-pressure]}
+      - {id: es-op-thread-pool, name: Thread pool rejections (429) and indexing pressure, match: [thread-pool-rejections]}
+      - {id: es-op-cat, name: Triage with the _cat APIs, match: [cat-api]}
+      - {id: es-op-tasks, name: Task management API (list / cancel long-running tasks), match: [task-management-api]}
+      - {id: es-op-reindex, name: Reindex and aliases for zero-downtime mapping changes, match: [reindex-api, index-alias]}
+      - {id: es-op-mapping-explosion, name: Mapping explosion and field limits, match: [mapping-explosion, total-fields-limit]}
+      - {id: es-op-stack-monitoring, name: Stack Monitoring with Metricbeat / Elastic Agent, match: [stack-monitoring]}
+  - id: es-lifecycle
+    name: Index lifecycle / snapshots / replication
+    source: Elasticsearch Guide ILM + Snapshot and restore + CCR
+    match: [ilm, snapshot]
+    subtopics:
+      - {id: es-lc-slm, name: Snapshot lifecycle management, match: [slm]}
+      - {id: es-lc-searchable, name: Searchable snapshots, match: [searchable-snapshots]}
+      - {id: es-lc-ccr, name: Cross-cluster replication, match: [cross-cluster-replication]}
+      - {id: es-lc-forcemerge, name: Force merge and shrink, match: [force-merge]}
+      - {id: es-lc-repos, name: Snapshot repositories (S3 / GCS / Azure / fs) and repository analysis, match: [snapshot-repository, repository-analysis]}
+      - {id: es-lc-restore, name: Restoring snapshots (rename / feature states / partial), match: [snapshot-restore]}
+      - {id: es-lc-rollover, name: Rollover conditions and write aliases, match: [rollover]}
+      - {id: es-lc-tiers, name: Data tiers and tier preference, match: [data-tiers]}
+      - {id: es-lc-ilm-errors, name: Troubleshooting ILM (_ilm/explain / retry), match: [ilm-explain]}
+      - {id: es-lc-dlm, name: Data stream lifecycle and downsampling, match: [data-stream-lifecycle, downsampling]}
+      - {id: es-lc-ccs, name: Cross-cluster search, match: [cross-cluster-search]}
+      - {id: es-lc-allocation, name: Shard allocation filtering and awareness, match: [allocation-awareness, allocation-filtering]}
+  # ---------------- SQLite
+  - id: sl-cli
+    name: The sqlite3 command-line shell
+    source: SQLite docs Command Line Shell For SQLite
+    match: [sqlite3-cli]
+    subtopics:
+      - {id: sl-cl-import, name: Importing and exporting CSV, match: [sqlite-import-csv]}
+      - {id: sl-cl-dump, name: .dump and .recover, match: [dot-dump]}
+      - {id: sl-cl-expert, name: .expert index suggestions, match: [sqlite-expert]}
+      - {id: sl-cl-analyzer, name: sqlite3_analyzer space reports, match: [sqlite3-analyzer]}
+      - {id: sl-cl-modes, name: Output formats (.mode box / json / markdown / .headers), match: [sqlite-output-mode]}
+      - {id: sl-cl-schema, name: Querying the schema (.schema / .tables / sqlite_schema / pragma table_info), match: [sqlite-schema-inspection]}
+      - {id: sl-cl-scripting, name: Scripting the shell non-interactively (.parameter / -cmd / -bail), match: [sqlite-parameter]}
+      - {id: sl-cl-timer, name: Profiling with .timer / .eqp / .scanstats, match: [sqlite-timer]}
+      - {id: sl-cl-archive, name: SQLite archives (.archive / sqlar) and zip files, match: [sqlar]}
+      - {id: sl-cl-extensions, name: Loading extensions (.load / load_extension), match: [load-extension]}
+      - {id: sl-cl-attach, name: ATTACH DATABASE and cross-database queries, match: [attach-database]}
+      - {id: sl-cl-uri, name: Safe mode / read-only / immutable opens and URI filenames, match: [sqlite-uri-filename]}
+  - id: sl-schema
+    name: Schema changes and datatypes
+    source: SQLite docs ALTER TABLE + Datatypes In SQLite + STRICT Tables
+    match: [sqlite-alter-table]
+    subtopics:
+      - {id: sl-sc-rebuild, name: The 12-step generalized table rebuild, match: [table-rebuild-procedure]}
+      - {id: sl-sc-user-version, name: Migrations with PRAGMA user_version, match: [user-version]}
+      - {id: sl-sc-strict, name: STRICT tables, match: [strict-tables]}
+      - {id: sl-sc-affinity, name: Type affinity, match: [type-affinity]}
+      - {id: sl-sc-fk, name: Enabling and checking foreign keys (PRAGMA foreign_keys / foreign_key_check), match: [pragma-foreign-keys, foreign-key-check]}
+      - {id: sl-sc-rowid, name: rowid / INTEGER PRIMARY KEY / AUTOINCREMENT, match: [integer-primary-key, autoincrement]}
+      - {id: sl-sc-without-rowid, name: WITHOUT ROWID tables, match: [without-rowid]}
+      - {id: sl-sc-drop-column, name: ALTER TABLE DROP COLUMN and RENAME COLUMN limits, match: [drop-column-sqlite]}
+      - {id: sl-sc-dates, name: Date and time storage and functions, match: [sqlite-date-functions]}
+      - {id: sl-sc-triggers, name: Triggers and views in SQLite, match: [sqlite-triggers]}
+      - {id: sl-sc-partial, name: Partial indexes and indexes on expressions in SQLite, match: [sqlite-partial-index]}
+      - {id: sl-sc-collation, name: Collating sequences (NOCASE / RTRIM / custom), match: [nocase]}
+  - id: sl-query-planner
+    name: Query planning and indexing in SQLite
+    source: SQLite docs Query Planner + EXPLAIN QUERY PLAN + ANALYZE
+    match: [sqlite-query-planner]
+    subtopics:
+      - {id: sl-qp-eqp, name: EXPLAIN QUERY PLAN, match: [explain-query-plan]}
+      - {id: sl-qp-analyze, name: ANALYZE / sqlite_stat1 / PRAGMA optimize, match: [sqlite-stat1]}
+      - {id: sl-qp-fts5, name: Full-text search with FTS5, match: [fts5]}
+      - {id: sl-qp-json, name: JSON functions and generated columns, match: [sqlite-json]}
+      - {id: sl-qp-like-opt, name: LIKE / GLOB optimization and case_sensitive_like, match: [like-optimization]}
+      - {id: sl-qp-join-order, name: Controlling the planner (CROSS JOIN order / INDEXED BY / likelihood), match: [indexed-by, cross-join-hint]}
+      - {id: sl-qp-auto-index, name: Automatic indexes and covering indexes, match: [automatic-index]}
+      - {id: sl-qp-skip-scan, name: Skip-scan and OR optimizations, match: [skip-scan]}
+      - {id: sl-qp-rtree, name: R*Tree spatial index, match: [rtree]}
+      - {id: sl-qp-explain, name: EXPLAIN bytecode and scan status, match: [sqlite-explain-bytecode]}
+      - {id: sl-qp-stability, name: Query planner stability and PRAGMA analysis_limit, match: [analysis-limit]}
+      - {id: sl-qp-vtab, name: Virtual tables (csv / generate_series / dbstat), match: [virtual-table]}
+  - id: sl-wal-concurrency
+    name: WAL / concurrency / busy handling
+    source: SQLite docs Write-Ahead Logging + File Locking And Concurrency
+    match: [wal-mode, sqlite-busy]
+    subtopics:
+      - {id: sl-wc-checkpoint, name: WAL checkpoints, match: [wal-checkpoint]}
+      - {id: sl-wc-busy, name: busy_timeout and BEGIN IMMEDIATE, match: [busy-timeout]}
+      - {id: sl-wc-replication, name: Streaming replication with Litestream, match: [litestream]}
+      - {id: sl-wc-nfs, name: Network filesystem hazards, match: [network-filesystem]}
+      - {id: sl-wc-synchronous, name: PRAGMA synchronous and durability trade-offs, match: [pragma-synchronous]}
+      - {id: sl-wc-journal, name: Rollback journal modes and hot journals, match: [journal-mode, hot-journal]}
+      - {id: sl-wc-checkpoint-starvation, name: Large WAL files and checkpoint starvation, match: [checkpoint-starvation]}
+      - {id: sl-wc-threading, name: Threading modes and connection-per-thread patterns, match: [sqlite-threading-mode]}
+      - {id: sl-wc-performance-pragmas, name: Performance pragmas (cache_size / mmap_size / temp_store), match: [mmap-size, cache-size]}
+      - {id: sl-wc-distributed, name: Distributed SQLite (LiteFS / rqlite / libSQL), match: [litefs, rqlite]}
+      - {id: sl-wc-bulk-insert, name: Fast bulk inserts (transactions / prepared statements), match: [sqlite-bulk-insert]}
+      - {id: sl-wc-corruption, name: How databases get corrupted and how to avoid it, match: [howtocorrupt]}
+  - id: sl-backup
+    name: SQLite backup and recovery
+    source: SQLite docs Backup API + VACUUM INTO + Recovering Data From A Corrupt Database
+    match: [backup-api]
+    subtopics:
+      - {id: sl-bk-vacuum-into, name: VACUUM INTO, match: [vacuum-into]}
+      - {id: sl-bk-integrity, name: integrity_check and quick_check, match: [integrity-check]}
+      - {id: sl-bk-recover, name: Recovering a corrupt database, match: [recover]}
+      - {id: sl-bk-online, name: Online backup API from application code, match: [sqlite-online-backup]}
+      - {id: sl-bk-dot-backup, name: .backup and .restore in the shell, match: [dot-backup]}
+      - {id: sl-bk-rsync, name: sqlite3_rsync for live database copies, match: [sqlite3-rsync]}
+      - {id: sl-bk-vacuum, name: VACUUM / auto_vacuum / incremental_vacuum space reclamation, match: [auto-vacuum, incremental-vacuum]}
+      - {id: sl-bk-sqldiff, name: Comparing databases with sqldiff, match: [sqldiff]}
+      - {id: sl-bk-session, name: Session extension changesets, match: [session-extension, changeset]}
+      - {id: sl-bk-file-copy, name: Safe file-level copies (-wal / -shm files and locking), match: [sqlite-file-copy]}
+      - {id: sl-bk-serialize, name: In-memory databases and sqlite3_serialize / deserialize, match: [sqlite3-serialize]}
+  # ---------------- Query optimisation (craft)
+  - id: qo-sql-fluency
+    name: Advanced SQL
+    source: PostgreSQL docs 7 Queries + SQL Performance Explained
+    match: [advanced-sql]
+    subtopics:
+      - {id: qo-sf-window, name: Window functions, match: [window-functions]}
+      - {id: qo-sf-cte, name: Common table expressions and recursive queries, match: [recursive-cte]}
+      - {id: qo-sf-lateral, name: LATERAL joins and top-N per group, match: [lateral-join]}
+      - {id: qo-sf-grouping, name: Grouping sets / ROLLUP / CUBE, match: [grouping-sets]}
+      - {id: qo-sf-upsert, name: Upsert and MERGE, match: [upsert, merge-statement]}
+      - {id: qo-sf-joins, name: Join types and outer join pitfalls (ON vs WHERE), match: [outer-join]}
+      - {id: qo-sf-set-ops, name: Set operations (UNION / INTERSECT / EXCEPT), match: [union-all, set-operations]}
+      - {id: qo-sf-subqueries, name: EXISTS / IN / the NOT IN null trap and anti-joins, match: [anti-join, not-in-null]}
+      - {id: qo-sf-distinct-on, name: DISTINCT ON and deduplicating rows, match: [distinct-on, deduplication]}
+      - {id: qo-sf-filter, name: Conditional aggregation and pivoting (FILTER / CASE), match: [conditional-aggregation, pivot]}
+      - {id: qo-sf-gaps-islands, name: Gaps and islands, match: [gaps-and-islands]}
+      - {id: qo-sf-generate-series, name: Set-returning functions (generate_series / unnest) and calendar tables, match: [generate-series]}
+      - {id: qo-sf-writable-cte, name: Data-modifying CTEs and RETURNING, match: [writable-cte, returning-clause]}
+      - {id: qo-sf-null, name: NULL semantics and three-valued logic (IS DISTINCT FROM / COALESCE), match: [three-valued-logic, is-distinct-from]}
+  - id: qo-plans
+    name: Reading execution plans
+    source: Use The Index Luke - Execution plans appendix
+    match: [execution-plan, explain-analyze]
+    subtopics:
+      - {id: qo-pl-joins, name: Join algorithms, match: [nested-loop]}
+      - {id: qo-pl-estimates, name: Estimated vs actual rows, match: [estimated-vs-actual-rows]}
+      - {id: qo-pl-sargable, name: Sargable predicates, match: [sargability]}
+      - {id: qo-pl-sorting, name: Sorting and grouping with indexes (pipelined order by), match: [indexed-order-by]}
+      - {id: qo-pl-access-filter, name: Access vs filter predicates, match: [access-predicate, filter-predicate]}
+      - {id: qo-pl-buffers, name: EXPLAIN (ANALYZE / BUFFERS) I/O analysis, match: [explain-buffers]}
+      - {id: qo-pl-visualizers, name: Plan visualizers (explain.depesz / explain.dalibo / Plan Explorer), match: [plan-visualizer]}
+      - {id: qo-pl-spills, name: Hash and sort spills to disk (work_mem / batches), match: [hash-batches, work-mem-spill]}
+      - {id: qo-pl-generic, name: Generic vs custom plans for prepared statements (plan_cache_mode), match: [generic-plan, plan-cache-mode]}
+      - {id: qo-pl-parallel, name: Reading parallel plans (Gather / workers launched), match: [parallel-plan]}
+      - {id: qo-pl-top-n, name: Top-N and LIMIT plans, match: [top-n-query]}
+      - {id: qo-pl-scans, name: Scan types (seq / index / index-only / bitmap heap), match: [scan-types]}
+      - {id: qo-pl-cost, name: Cost units and how the planner chooses a plan, match: [planner-cost-model]}
+  - id: qo-indexing
+    name: Index design
+    source: Use The Index Luke - Anatomy of an index / The where clause
+    match: [composite-index, covering-index]
+    subtopics:
+      - {id: qo-ix-order, name: Column order and leftmost prefix, match: [index-column-order]}
+      - {id: qo-ix-overindexing, name: Over-indexing and write cost, match: [over-indexing]}
+      - {id: qo-ix-unused, name: Finding unused and duplicate indexes, match: [unused-indexes]}
+      - {id: qo-ix-like, name: LIKE / functions / case-insensitive search, match: [like-prefix-search]}
+      - {id: qo-ix-ranges, name: Indexing range conditions (equality first / range last), match: [range-condition-index]}
+      - {id: qo-ix-obfuscated, name: Obfuscated conditions (dates / numeric strings / smart logic), match: [obfuscated-conditions, smart-logic]}
+      - {id: qo-ix-clustering, name: Clustering factor and clustered / index-organized tables, match: [clustering-factor]}
+      - {id: qo-ix-join-indexes, name: Indexing for joins (nested loops / hash join / merge join), match: [join-indexing]}
+      - {id: qo-ix-null, name: Indexing NULL and IS NULL queries, match: [index-null]}
+      - {id: qo-ix-desc, name: ASC / DESC and NULLS FIRST in multi-column indexes, match: [descending-index-order]}
+      - {id: qo-ix-index-merge, name: Combining single-column indexes vs one composite index, match: [index-combine]}
+  - id: qo-patterns
+    name: Query patterns and anti-patterns
+    source: Use The Index Luke - Partial results + Insert/Delete/Update
+    match: [query-anti-patterns]
+    subtopics:
+      - {id: qo-pa-keyset, name: Keyset pagination, match: [keyset-pagination]}
+      - {id: qo-pa-n-plus-one, name: The N+1 query problem, match: [n-plus-one]}
+      - {id: qo-pa-batching, name: Batching large updates and deletes, match: [batched-deletes]}
+      - {id: qo-pa-count, name: Fast approximate counts, match: [approximate-count]}
+      - {id: qo-pa-offset, name: OFFSET pagination pitfalls, match: [offset-pagination]}
+      - {id: qo-pa-in-list, name: Large IN lists vs ANY(array) / temp tables / VALUES joins, match: [large-in-list]}
+      - {id: qo-pa-or, name: OR conditions and UNION ALL rewrites, match: [or-to-union]}
+      - {id: qo-pa-hot-rows, name: Hot rows and counter contention, match: [hot-row-contention]}
+      - {id: qo-pa-bulk-load, name: Bulk loading (COPY / LOAD DATA / BULK INSERT), match: [bulk-loading]}
+      - {id: qo-pa-correlated, name: Correlated subqueries and rewrites, match: [correlated-subquery]}
+      - {id: qo-pa-select-star, name: SELECT * and ORM-generated query problems, match: [select-star, orm-queries]}
+      - {id: qo-pa-exists-count, name: EXISTS vs COUNT(*) for existence checks, match: [exists-vs-count]}
+  - id: qo-statistics
+    name: Statistics and cardinality estimation
+    source: SQL Performance Explained - The optimizer
+    match: [cardinality-estimation]
+    subtopics:
+      - {id: qo-st-histograms, name: Histograms and selectivity, match: [histogram]}
+      - {id: qo-st-correlated, name: Correlated columns and extended statistics, match: [extended-statistics]}
+      - {id: qo-st-skew, name: Skewed data and parameter-sensitive plans, match: [skewed-data]}
+      - {id: qo-st-stale, name: Stale statistics after bulk loads, match: [stale-statistics]}
+      - {id: qo-st-target, name: Statistics target and sample size, match: [statistics-target]}
+      - {id: qo-st-ndistinct, name: n_distinct overrides and most-common-value lists, match: [n-distinct, most-common-values]}
+      - {id: qo-st-join-estimates, name: Join cardinality misestimates, match: [join-cardinality]}
+      - {id: qo-st-expression-stats, name: Statistics on expressions and functions, match: [expression-statistics]}
+      - {id: qo-st-temp-tables, name: Statistics for temp tables and table variables, match: [temp-table-statistics]}
+      - {id: qo-st-lock-stats, name: Locking or pinning statistics to stabilize plans, match: [lock-statistics]}
+      - {id: qo-st-dynamic-sampling, name: Dynamic sampling and adaptive estimation, match: [dynamic-sampling]}
+      - {id: qo-st-partition-stats, name: Statistics on partitioned tables, match: [partition-statistics]}
+  # ---------------- Schema design (craft)
+  - id: sd-keys-normalisation
+    name: Normalisation / keys / constraints
+    source: Database Design for Mere Mortals - keys / relationships / integrity
+    match: [normalisation, primary-key]
+    subtopics:
+      - {id: sd-kn-forms, name: Normal forms through BCNF, match: [bcnf]}
+      - {id: sd-kn-surrogate, name: Surrogate vs natural keys / UUIDv7, match: [surrogate-key]}
+      - {id: sd-kn-constraints, name: Check / unique / foreign key constraints, match: [check-constraint]}
+      - {id: sd-kn-denormalise, name: Deliberate denormalisation, match: [denormalisation]}
+      - {id: sd-kn-relationships, name: Relationship types and junction tables, match: [junction-table, many-to-many]}
+      - {id: sd-kn-deletion-rules, name: Deletion rules (ON DELETE CASCADE / RESTRICT / SET NULL), match: [on-delete-cascade]}
+      - {id: sd-kn-candidate, name: Candidate and alternate keys, match: [candidate-key, alternate-key]}
+      - {id: sd-kn-composite, name: Composite primary keys, match: [composite-primary-key]}
+      - {id: sd-kn-self-ref, name: Self-referencing relationships, match: [self-referencing]}
+      - {id: sd-kn-er-modeling, name: Conceptual and logical ER modeling, match: [er-diagram, data-modeling]}
+      - {id: sd-kn-business-rules, name: Enforcing business rules in the database, match: [business-rules]}
+      - {id: sd-kn-higher-nf, name: 4NF / 5NF and multivalued dependencies, match: [fourth-normal-form]}
+  - id: sd-data-types
+    name: Field specifications and data types
+    source: Database Design for Mere Mortals - field specifications
+    match: [data-type-selection]
+    subtopics:
+      - {id: sd-dt-money, name: Money and exact numerics, match: [decimal-money]}
+      - {id: sd-dt-time, name: Timestamps and time zones, match: [timestamptz]}
+      - {id: sd-dt-json, name: JSON columns vs relational columns, match: [json-columns]}
+      - {id: sd-dt-enum, name: Enums vs lookup tables, match: [enum-vs-lookup-table]}
+      - {id: sd-dt-text, name: Text length limits (varchar(n) vs text) and Unicode, match: [varchar-length]}
+      - {id: sd-dt-uuid, name: UUID storage and generation, match: [uuid-storage]}
+      - {id: sd-dt-nullability, name: NULL vs NOT NULL and defaults, match: [nullability]}
+      - {id: sd-dt-identity, name: Identity columns vs sequences and serial, match: [identity-column]}
+      - {id: sd-dt-boolean, name: Booleans and status flags, match: [boolean-columns]}
+      - {id: sd-dt-arrays, name: Array columns vs child tables, match: [array-columns]}
+      - {id: sd-dt-binary, name: Binary data and files (BLOBs vs object storage), match: [blob-storage]}
+      - {id: sd-dt-ranges, name: Range types and temporal validity periods, match: [range-types, temporal-tables]}
+  - id: sd-patterns
+    name: Schema patterns and antipatterns
+    source: SQL Antipatterns (Karwin) + Mere Mortals business rules
+    match: [schema-patterns]
+    subtopics:
+      - {id: sd-pa-audit, name: Audit and history tables, match: [audit-table]}
+      - {id: sd-pa-tenancy, name: Multi-tenant schema models, match: [multi-tenant-schema]}
+      - {id: sd-pa-eav, name: Entity-attribute-value antipattern, match: [eav]}
+      - {id: sd-pa-polymorphic, name: Polymorphic associations, match: [polymorphic-association]}
+      - {id: sd-pa-trees, name: Hierarchies (adjacency list / closure table / ltree), match: [closure-table]}
+      - {id: sd-pa-soft-delete, name: Soft delete, match: [soft-delete]}
+      - {id: sd-pa-jaywalking, name: Jaywalking (comma-separated lists), match: [jaywalking]}
+      - {id: sd-pa-multicolumn, name: Multicolumn attributes (tag1 / tag2 / tag3), match: [multicolumn-attributes]}
+      - {id: sd-pa-tribbles, name: Metadata tribbles (table per year / column per period), match: [metadata-tribbles]}
+      - {id: sd-pa-event-sourcing, name: Append-only event tables and event sourcing, match: [event-sourcing]}
+      - {id: sd-pa-queue, name: Queue tables in a relational database, match: [queue-table]}
+      - {id: sd-pa-tagging, name: Tagging schemas, match: [tagging-schema]}
+      - {id: sd-pa-versioning, name: Versioned rows and slowly changing dimensions, match: [slowly-changing-dimension]}
+      - {id: sd-pa-random, name: Random row selection, match: [random-selection]}
+  - id: sd-migrations
+    name: Schema evolution and migrations
+    source: Refactoring Databases - transition periods and refactoring categories
+    match: [schema-migration, expand-contract]
+    subtopics:
+      - {id: sd-mg-tools, name: Migration tools (Flyway / Liquibase), match: [flyway]}
+      - {id: sd-mg-backfill, name: Data backfills, match: [data-backfill]}
+      - {id: sd-mg-rollback, name: Migration rollback and forward-fix, match: [migration-rollback]}
+      - {id: sd-mg-partitioning, name: Partitioning and sharding strategy, match: [hash-partition]}
+      - {id: sd-mg-rename, name: Renaming a column or table with a transition period, match: [rename-column]}
+      - {id: sd-mg-split, name: Splitting and merging tables, match: [split-table]}
+      - {id: sd-mg-add-constraint, name: Adding NOT NULL / FK constraints safely (NOT VALID / VALIDATE), match: [not-valid-constraint, validate-constraint]}
+      - {id: sd-mg-view-encapsulation, name: Encapsulating tables behind views during refactoring, match: [encapsulate-table-with-view]}
+      - {id: sd-mg-ci, name: Testing migrations in CI/CD, match: [migration-testing]}
+      - {id: sd-mg-drift, name: Schema drift detection, match: [schema-drift]}
+      - {id: sd-mg-liquibase, name: Liquibase changelogs, match: [liquibase-changelog]}
+      - {id: sd-mg-orm, name: ORM migration frameworks (Alembic / Django / Rails / Prisma), match: [alembic, django-migrations]}
+      - {id: sd-mg-declarative, name: Declarative and reversible schema tools (Atlas / sqitch / pgroll), match: [atlas-schema, sqitch]}
+  # ---------------- Replication & HA (craft)
+  - id: ha-design
+    name: Replication and failover design
+    source: DDIA ch.5 Replication
+    match: [high-availability, failover]
+    subtopics:
+      - {id: ha-ds-split-brain, name: Split brain / quorum / fencing, match: [split-brain]}
+      - {id: ha-ds-lag, name: Replica lag and read-your-writes, match: [replica-lag]}
+      - {id: ha-ds-routing, name: Connection routing and health checks (HAProxy / ProxySQL), match: [haproxy-health-check]}
+      - {id: ha-ds-multi-region, name: Multi-region topologies and conflict resolution, match: [conflict-resolution]}
+      - {id: ha-ds-drills, name: Failover drills and measured RTO, match: [failover-drill]}
+      - {id: ha-ds-sync-async, name: Synchronous vs asynchronous vs semi-synchronous trade-offs, match: [sync-vs-async-replication]}
+      - {id: ha-ds-log-types, name: Replication log types (statement / WAL / logical / trigger-based), match: [replication-log-types]}
+      - {id: ha-ds-monotonic, name: Monotonic reads and consistent prefix reads, match: [monotonic-reads, consistent-prefix]}
+      - {id: ha-ds-leaderless, name: Leaderless replication (quorums / read repair / anti-entropy), match: [leaderless-replication, read-repair]}
+      - {id: ha-ds-consensus, name: Consensus-based leader election (Raft / etcd / ZooKeeper), match: [raft, leader-election]}
+      - {id: ha-ds-vip, name: Virtual IPs and DNS failover (keepalived / TTL), match: [keepalived, virtual-ip]}
+      - {id: ha-ds-proxysql, name: ProxySQL query routing for MySQL, match: [proxysql]}
+      - {id: ha-ds-new-replica, name: Adding a new replica without downtime, match: [new-replica]}
+  # ---------------- Backup & recovery (craft)
+  - id: br-strategy
+    name: Backup strategy and verification
+    source: NIST SP 800-34 + vendor backup guides
+    match: [backup-strategy, point-in-time-recovery]
+    subtopics:
+      - {id: br-st-rpo, name: RPO / RTO and retention design, match: [rpo]}
+      - {id: br-st-immutable, name: Immutable and offsite copies, match: [immutable-backup]}
+      - {id: br-st-drills, name: Restore drills, match: [restore-drill]}
+      - {id: br-st-monitoring, name: Backup job monitoring and alerting, match: [backup-monitoring]}
+      - {id: br-st-snapshots, name: Storage snapshots and crash consistency, match: [crash-consistent-snapshot]}
+      - {id: br-st-types, name: Full / incremental / differential backup schedules, match: [incremental-backup, differential-backups]}
+      - {id: br-st-logical-physical, name: Logical vs physical backups, match: [logical-vs-physical-backup]}
+      - {id: br-st-encryption, name: Backup encryption and key escrow, match: [backup-key-management]}
+      - {id: br-st-321, name: The 3-2-1 rule and cross-region copies, match: [3-2-1-backup, cross-region-backup]}
+      - {id: br-st-ransomware, name: Ransomware recovery planning, match: [ransomware-recovery]}
+      - {id: br-st-legal, name: Deletion obligations and legal hold in backups, match: [legal-hold, gdpr-backups]}
+      - {id: br-st-managed, name: Managed cloud database backups (RDS / Cloud SQL / Azure), match: [rds-snapshots, managed-database-backup]}
+      - {id: br-st-catalog, name: Backup catalogs and inventory, match: [backup-catalog]}

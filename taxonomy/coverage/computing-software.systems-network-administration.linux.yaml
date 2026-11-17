@@ -1,0 +1,1456 @@
+# Canonical coverage spec: Linux administration.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (LFCS, RHCSA/RHCE, LPIC-1/2 objectives),
+# not from what we happened to write.
+subject: linux
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [linux, bash]
+sources:
+  - "LFCS domains (Linux Foundation): Operations Deployment 25%, Networking 25%, Storage 20%, Essential Commands 20%, Users and Groups 10%"
+  - "RHCSA (EX200) objectives: essential tools, shell scripts, running systems, local storage, file systems, deploy/configure/maintain, networking, users/groups, security, containers"
+  - "RHCE (EX294) objectives: Ansible automation of RHEL tasks"
+  - "LPIC-1 objectives: system architecture, installation and package management, GNU/Unix commands, devices/filesystems/FHS, shells/scripting, UI/desktops, admin tasks, essential services, networking fundamentals, security"
+  - "LPIC-2 objectives: capacity planning, kernel, system startup, filesystems/devices, advanced storage, network configuration, system maintenance, DNS, web services, file sharing, network client management, email, system security"
+topics:
+  # --- Boot, kernel, init (LPIC-1 101, LPIC-2 201/202; RHCSA running systems)
+  - id: boot-process-grub
+    name: Boot sequence, GRUB2 configuration and rescue
+    source: LPIC-1/System Architecture
+    match: [grub, grub2, boot-process, bootloader, rescue-mode]
+    subtopics:
+      - {id: grub-mkconfig, name: Regenerate grub.cfg from /etc/default/grub, match: [grub-mkconfig, etc-default-grub]}
+      - {id: grub-rescue-shell, name: Boot by hand from the GRUB rescue/command shell, match: [grub-rescue, grub-shell]}
+      - {id: kernel-cmdline, name: Edit kernel command-line parameters at boot, match: [kernel-cmdline, kernel-command-line]}
+      - {id: grub-install, name: Reinstall the bootloader to MBR or EFI system partition, match: [grub-install, bootloader-reinstall]}
+      - {id: grub-default-entry, name: Pick the default boot entry with grubby/GRUB_DEFAULT, match: [grubby, grub-default, saved-entry]}
+      - {id: boot-timing, name: Analyse boot time with systemd-analyze, match: [systemd-analyze, boot-timing]}
+      - {id: grub-custom-entries, name: Custom menu entries via /etc/grub.d/40_custom, match: [grub-d-40-custom, grub-custom-entry]}
+      - {id: grub-serial-console, name: Serial console for GRUB and the kernel (console=ttyS0), match: [serial-console, grub-serial]}
+      - {id: bootloader-spec, name: BootLoaderSpec entries in /boot/loader/entries (blscfg), match: [bootloader-spec, blscfg]}
+      - {id: systemd-boot, name: systemd-boot and bootctl on UEFI, match: [bootctl]}
+      - {id: grub-menu-timeout, name: GRUB_TIMEOUT_STYLE hidden menus and reaching the menu, match: [grub-timeout, grub-timeout-style]}
+  - id: initramfs-dracut
+    name: initramfs/dracut and early userspace
+    source: LPIC-2/System Startup
+    match: [initramfs, dracut, initrd]
+    subtopics:
+      - {id: dracut-conf, name: Configure dracut via dracut.conf.d and module lists, match: [dracut-conf, dracut-modules]}
+      - {id: update-initramfs, name: Rebuild initramfs on Debian/Ubuntu and Arch, match: [update-initramfs, mkinitcpio]}
+      - {id: lsinitrd, name: Inspect initramfs contents, match: [lsinitrd, initramfs-inspection]}
+      - {id: rd-break, name: Drop to the initramfs emergency shell, match: [rd-break, initramfs-shell]}
+      - {id: dracut-hostonly, name: Host-only vs generic images and driver inclusion, match: [hostonly, dracut-hostonly]}
+      - {id: dracut-cmdline, name: rd.* kernel parameters for early boot (rd.lvm.lv/rd.luks.uuid), match: [rd-cmdline, dracut-cmdline]}
+      - {id: dracut-custom-module, name: Write a custom dracut module (module-setup.sh), match: [dracut-custom-module, module-setup-sh]}
+      - {id: rdsosreport, name: Debug early boot with rd.debug and rdsosreport.txt, match: [rdsosreport, rd-debug]}
+      - {id: dracut-extra-files, name: Add drivers and files to the image (add_drivers/install_items), match: [install-items, add-drivers]}
+      - {id: mkinitcpio-hooks, name: mkinitcpio HOOKS ordering (udev vs systemd/sd-encrypt), match: [mkinitcpio-hooks, sd-encrypt]}
+      - {id: initramfs-tools-hooks, name: Debian initramfs-tools hooks/scripts and MODULES=, match: [initramfs-tools, initramfs-tools-hooks]}
+  - id: kernel-modules-params
+    name: Kernel modules, modprobe and kernel parameters
+    source: LPIC-2/Kernel
+    match: [kernel-module, kernel-modules, modprobe, kernel-parameters]
+    subtopics:
+      - {id: modprobe-d, name: Set module options in modprobe.d, match: [modprobe-d, module-options]}
+      - {id: module-blacklist, name: Blacklist modules, match: [blacklist, module-blacklist]}
+      - {id: dkms, name: Build out-of-tree modules with DKMS, match: [dkms, out-of-tree-module]}
+      - {id: depmod, name: Dependency maps with depmod/modules.dep, match: [depmod, modules-dep]}
+      - {id: modules-load-d, name: Autoload modules at boot, match: [modules-load-d, module-autoload]}
+      - {id: modinfo-lsmod, name: Inspect loaded modules and live parameters (lsmod/modinfo/sys/module), match: [modinfo, lsmod]}
+      - {id: module-sig-enforce, name: Module signature enforcement and unsigned module errors, match: [module-sig-enforce, module-signing]}
+      - {id: kernel-taint, name: Read kernel taint flags, match: [kernel-taint, tainted-kernel]}
+      - {id: firmware-loading, name: Firmware files and failed firmware loads (linux-firmware), match: [linux-firmware, firmware-loading]}
+      - {id: module-unload, name: Unload modules and resolve module in use errors (modprobe -r/rmmod), match: [modprobe-r, rmmod]}
+      - {id: kernel-compile, name: Configure and compile a custom kernel (menuconfig/localmodconfig), match: [kernel-compile, menuconfig, localmodconfig]}
+  - id: sysctl-tuning
+    name: sysctl and kernel runtime tuning
+    source: LPIC-2/Kernel
+    match: [sysctl, kernel-tuning, sysctl-tuning]
+    subtopics:
+      - {id: sysctl-d, name: Persist settings in sysctl.d with correct precedence, match: [sysctl-d, sysctl-system]}
+      - {id: vm-tuning, name: Virtual memory knobs (swappiness/overcommit/dirty ratio), match: [vm-swappiness, vm-dirty-ratio]}
+      - {id: network-sysctl, name: TCP/IP stack tuning, match: [network-sysctl, tcp-tuning, somaxconn]}
+      - {id: kernel-hardening-sysctl, name: Kernel hardening sysctls, match: [kernel-hardening, kptr-restrict]}
+      - {id: file-limits, name: File handle and inotify limits, match: [fs-file-max, inotify-limits]}
+      - {id: ip-forwarding-rp-filter, name: ip_forward and rp_filter routing sysctls, match: [ip-forward, rp-filter]}
+      - {id: sysrq-panic, name: Magic SysRq and panic/panic_on_oops behaviour, match: [kernel-sysrq, panic-on-oops]}
+      - {id: ipv6-sysctl, name: Per-interface IPv6 sysctls (disable_ipv6/accept_ra), match: [disable-ipv6]}
+      - {id: pid-max, name: Process and thread limits (pid_max/threads-max), match: [pid-max, threads-max]}
+      - {id: tcp-congestion, name: TCP congestion control and BBR, match: [tcp-bbr, congestion-control]}
+  - id: kernel-upgrade-rollback
+    name: Kernel upgrades and rollback
+    source: LPIC-2/Kernel
+    match: [kernel-upgrade, kernel-rollback, kernel-update]
+    subtopics:
+      - {id: kernel-install, name: Install kernels and bootloader entries (kernel-install), match: [kernel-install, installkernel]}
+      - {id: boot-previous-kernel, name: Boot a previous kernel after a bad update, match: [boot-previous-kernel, grub-default-kernel]}
+      - {id: kernel-retention, name: Keep N kernels (installonly_limit/apt autoremove), match: [installonly-limit, kernel-retention]}
+      - {id: old-kernel-removal, name: Remove old kernels safely, match: [old-kernels, kernel-removal]}
+      - {id: alternative-kernels, name: Mainline/ELRepo/HWE kernels, match: [mainline-kernel, elrepo, hwe-kernel]}
+      - {id: kexec, name: Fast reboot into a new kernel with kexec, match: [kexec-reboot, kexec-load]}
+      - {id: kernel-headers, name: Matching kernel headers/devel packages for module builds, match: [kernel-headers, kernel-devel]}
+      - {id: kernel-pin, name: Pin or hold a kernel version, match: [kernel-pin, kernel-hold]}
+      - {id: kernel-rt, name: Real-time kernels (PREEMPT_RT/kernel-rt), match: [kernel-rt, preempt-rt]}
+  - id: systemd-units
+    name: systemd units, dependencies and ordering
+    source: RHCSA/Running systems
+    match: [systemd, systemd-unit, systemd-units, unit-file, unit-files]
+    subtopics:
+      - {id: unit-dependencies, name: Wants/Requires/BindsTo dependency types, match: [wants, requires, bindsto]}
+      - {id: unit-ordering, name: Before/After ordering vs dependency, match: [before-after, ordering]}
+      - {id: drop-in, name: Override units with drop-ins, match: [drop-in, systemctl-edit]}
+      - {id: service-type, name: Service Type= semantics (simple/forking/notify/oneshot), match: [service-type, type-notify, type-forking]}
+      - {id: exec-directives, name: ExecStart/ExecStartPre/ExecReload and specifiers, match: [execstart, execstartpre, unit-specifiers]}
+      - {id: unit-conditions, name: ConditionPathExists and friends, match: [unit-conditions, conditionpathexists]}
+      - {id: service-sandboxing, name: Hardening services with sandboxing directives, match: [sandboxing, protectsystem]}
+      - {id: user-units, name: Per-user systemd units, match: [user-units, systemd-user]}
+      - {id: restart-policy, name: Restart=/RestartSec/StartLimitBurst crash-loop policy, match: [restart-policy, startlimitburst]}
+      - {id: socket-activation, name: Socket activation with .socket units, match: [socket-activation, socket-unit]}
+      - {id: path-units, name: Trigger services on file changes with .path units, match: [path-unit, pathchanged]}
+      - {id: template-units, name: Template and instantiated @ units, match: [template-unit, instantiated-units]}
+  - id: systemd-timers-journal
+    name: systemd timers and journald
+    source: RHCSA/Running systems
+    match: [systemd-timer, systemd-timers, journald, journalctl]
+    subtopics:
+      - {id: oncalendar, name: OnCalendar calendar expressions, match: [oncalendar, calendar-events]}
+      - {id: timer-accuracy, name: Persistent/AccuracySec/RandomizedDelaySec, match: [persistent-timer, accuracysec, randomizeddelaysec]}
+      - {id: journalctl-filtering, name: Filter journal by unit/time/priority, match: [journalctl-filtering, since-until, journal-priority]}
+      - {id: journald-persistent, name: Persistent journal storage, match: [journald-persistent, storage-persistent]}
+      - {id: journal-vacuum, name: Vacuum and size limits, match: [vacuum, systemmaxuse]}
+      - {id: journal-remote, name: Ship journals with systemd-journal-remote/upload, match: [journal-remote, systemd-journal-remote]}
+      - {id: journal-boots, name: Per-boot journals and list-boots, match: [list-boots, journal-boots]}
+      - {id: monotonic-timers, name: Monotonic timers (OnBootSec/OnUnitActiveSec), match: [onbootsec, onunitactivesec]}
+      - {id: transient-timers, name: Transient timers with systemd-run --on-calendar, match: [transient-timer, systemd-run-timer]}
+      - {id: journal-fss, name: Forward Secure Sealing and journalctl --verify, match: [forward-secure-sealing, journal-verify]}
+      - {id: journal-rate-limit, name: journald rate limiting (RateLimitBurst), match: [journald-rate-limit, ratelimitburst]}
+      - {id: journal-output, name: journalctl output formats and --grep (json/cat/short-precise), match: [journalctl-output, journal-json]}
+  - id: systemd-targets-rescue
+    name: systemd targets, boot into rescue/emergency
+    source: RHCSA/Running systems
+    match: [systemd-target, targets, emergency-mode, rescue-target]
+    subtopics:
+      - {id: default-target, name: Get/set the default target, match: [default-target, set-default]}
+      - {id: isolate, name: Switch targets with systemctl isolate, match: [isolate, systemctl-isolate]}
+      - {id: standard-targets, name: multi-user vs graphical targets, match: [multi-user-target, graphical-target]}
+      - {id: emergency-mode, name: Emergency vs rescue mode, match: [emergency-mode, rescue-mode]}
+      - {id: custom-target, name: Write a custom target unit, match: [custom-target, target-unit]}
+      - {id: debug-shell, name: Early root shell with debug-shell.service, match: [debug-shell]}
+      - {id: systemd-kernel-args, name: systemd.unit= and systemd.log_level kernel arguments, match: [systemd-unit-kernel-param, systemd-log-level]}
+      - {id: shutdown-scheduling, name: Scheduled shutdown/reboot and reboot to firmware setup, match: [shutdown-schedule, firmware-setup]}
+      - {id: list-dependencies, name: Inspect target trees with systemctl list-dependencies, match: [list-dependencies]}
+  - id: root-password-recovery
+    name: Root password recovery
+    source: RHCSA/Running systems
+    match: [root-password-recovery, password-reset, lost-root]
+    subtopics:
+      - {id: rd-break-recovery, name: rd.break on RHEL-family, match: [rd-break, switch-root]}
+      - {id: init-bin-bash, name: init=/bin/bash on Debian/Ubuntu, match: [init-bin-bash]}
+      - {id: chroot-recovery, name: Recovery from live media with chroot, match: [chroot, live-usb]}
+      - {id: selinux-relabel, name: Relabel after recovery, match: [selinux-relabel, autorelabel]}
+      - {id: grub-password, name: Protect GRUB editing with a password, match: [grub-password, grub-pbkdf2]}
+      - {id: sulogin, name: sulogin and locked root in rescue mode, match: [sulogin]}
+      - {id: cloud-root-recovery, name: Recover root on a cloud VM via rescue instance or serial console, match: [cloud-root-recovery, rescue-instance]}
+      - {id: encrypted-root-chroot, name: Chroot into LUKS/LVM root from live media, match: [chroot-luks, vgchange-ay]}
+      - {id: sudoers-recovery, name: Recover from a broken sudoers file, match: [sudoers-recovery, broken-sudoers]}
+  # --- Essential commands and shell (LFCS 20%; LPIC-1 103)
+  - id: text-processing
+    name: grep/sed/awk text processing
+    source: LFCS/Essential Commands
+    match: [grep, sed, awk, text-processing, regex]
+    subtopics:
+      - {id: grep-recursive, name: Recursive and context grep, match: [grep-recursive, grep-context]}
+      - {id: sed-in-place, name: In-place edits with sed, match: [sed-in-place]}
+      - {id: awk-aggregation, name: awk reports and aggregation, match: [awk-aggregation, awk-report]}
+      - {id: sort-uniq, name: sort/uniq/comm pipelines, match: [sort-uniq, sort-k]}
+      - {id: ere-bre, name: BRE vs ERE vs PCRE, match: [ere, bre, pcre]}
+      - {id: jq, name: JSON with jq, match: [jq]}
+      - {id: cut-tr, name: cut/tr/paste field extraction, match: [cut, tr]}
+      - {id: yq, name: YAML editing with yq, match: [yq]}
+      - {id: diff-patch, name: diff -u and patch, match: [diff-patch, unified-diff]}
+      - {id: column-fmt-nl, name: Formatting with column/fmt/fold/nl/pr, match: [column-t, fmt-fold, nl-command]}
+      - {id: split-join, name: split/csplit/join file splitting and joining, match: [split-command, csplit, join-command]}
+      - {id: od-xxd, name: Binary inspection with od/xxd/hexdump, match: [xxd, hexdump]}
+  - id: file-management-find
+    name: find, xargs, file management and archives
+    source: LFCS/Essential Commands
+    match: [find, xargs, tar, archives, file-management]
+    subtopics:
+      - {id: find-exec, name: find -exec/-delete actions, match: [find-exec, find-delete]}
+      - {id: find-tests, name: find by time/size/perm/owner, match: [find-mtime, find-size, find-newer]}
+      - {id: xargs-null, name: xargs -0 and parallelism, match: [xargs-0, xargs-null]}
+      - {id: tar-usage, name: tar create/extract/compress/incremental, match: [tar-compression, tar-incremental]}
+      - {id: cpio-dd, name: cpio and dd for archives and images, match: [cpio, dd]}
+      - {id: locate, name: locate/plocate and updatedb, match: [locate, plocate, updatedb]}
+      - {id: links, name: Hard and symbolic links, match: [hardlinks, symlinks, ln]}
+      - {id: file-stat, name: file/stat metadata inspection, match: [file-command, stat]}
+      - {id: batch-rename, name: Batch renaming with rename/mmv, match: [batch-rename, rename-command]}
+      - {id: cp-preserve, name: cp -a/--reflink/--sparse and preserving attributes, match: [cp-reflink, cp-archive]}
+      - {id: compression-tools, name: gzip/xz/zstd/pigz compression trade-offs, match: [pigz, compression-levels]}
+  - id: streams-redirection
+    name: Streams, pipes and redirection
+    source: LPIC-1/GNU and Unix Commands
+    match: [redirection, pipes, stdout, stderr, streams]
+    subtopics:
+      - {id: here-doc, name: Here-docs and here-strings, match: [here-doc, here-string]}
+      - {id: process-substitution, name: Process substitution, match: [process-substitution]}
+      - {id: tee, name: tee and splitting output, match: [tee]}
+      - {id: file-descriptors, name: Custom file descriptors and exec, match: [file-descriptors, exec-redirect]}
+      - {id: named-pipes, name: Named pipes (mkfifo), match: [named-pipes, mkfifo, fifo]}
+      - {id: buffering, name: Pipeline buffering and stdbuf, match: [stdbuf, buffering]}
+      - {id: pipestatus, name: PIPESTATUS and per-stage exit codes, match: [pipestatus]}
+      - {id: pv, name: Progress and rate limiting with pv, match: [pv-command, pipe-viewer]}
+      - {id: coproc, name: Coprocesses with coproc, match: [coproc]}
+      - {id: script-recording, name: Session recording with script/scriptreplay, match: [script-command, scriptreplay]}
+      - {id: dev-tcp, name: Bash /dev/tcp network redirection, match: [dev-tcp]}
+  - id: bash-scripting
+    name: Bash scripting with strict mode and exit codes
+    source: RHCSA/Shell scripts
+    match: [bash-scripting, shell-scripting, set-e, exit-codes, exit-code-discipline]
+    subtopics:
+      - {id: strict-mode, name: set -euo pipefail strict mode, match: [strict-mode, errexit]}
+      - {id: trap, name: trap and cleanup, match: [trap, cleanup]}
+      - {id: getopts, name: Argument parsing with getopts, match: [getopts, argument-parsing]}
+      - {id: shellcheck, name: Linting with shellcheck, match: [shellcheck]}
+      - {id: flock, name: Locking with flock, match: [flock, locking]}
+      - {id: bats, name: Testing with bats, match: [bats, testing]}
+      - {id: bash-debugging, name: Debug with set -x and PS4, match: [set-x, bash-xtrace, ps4]}
+      - {id: conditionals, name: test and double-bracket conditionals, match: [double-bracket, test-brackets, conditionals]}
+      - {id: loops, name: for/while/read loops, match: [while-read, for-loop, loops]}
+      - {id: case-select, name: case and select menus, match: [case-statement, select-menu]}
+      - {id: mktemp, name: Safe temporary files and directories with mktemp, match: [mktemp]}
+      - {id: posix-sh, name: POSIX sh portability and checkbashisms, match: [checkbashisms, dash-portability]}
+      - {id: timeout-retry, name: timeout and retry loops with backoff, match: [timeout-command, retry-loop]}
+  - id: bash-functions-arrays
+    name: Bash functions, arrays and parameter expansion
+    source: LPIC-1/Shells and Shell Scripting
+    match: [parameter-expansion, bash-arrays, bash-functions, bash-variables]
+    subtopics:
+      - {id: associative-arrays, name: Associative arrays, match: [associative-arrays]}
+      - {id: mapfile, name: mapfile/readarray, match: [mapfile, readarray]}
+      - {id: nameref, name: Namerefs and indirect expansion, match: [nameref, indirect-expansion]}
+      - {id: pattern-substitution, name: Pattern substitution expansions, match: [pattern-substitution, substring]}
+      - {id: bash-regex, name: =~ and BASH_REMATCH, match: [bash-rematch, bash-regex]}
+      - {id: arithmetic, name: Arithmetic expansion and let, match: [arithmetic-expansion, bash-arithmetic]}
+      - {id: printf, name: printf formatting, match: [bash-printf, printf]}
+      - {id: globbing, name: Globbing/extglob/brace expansion, match: [globbing, extglob, brace-expansion]}
+      - {id: local-scope, name: local variables and returning values from functions, match: [local-variables, function-return]}
+      - {id: declare-attributes, name: declare/readonly/export -f attributes, match: [declare-builtin, readonly]}
+      - {id: case-modification, name: Case modification and @Q/@P transformations, match: [case-modification, parameter-transformation]}
+      - {id: default-values, name: Default/alternate/error expansions, match: [default-values, parameter-default]}
+  - id: shell-environment-profile
+    name: Shell environment, profiles and PATH
+    source: LPIC-1/Shells and Shell Scripting
+    match: [environment-variables, bashrc, profile, path, shell-environment]
+    subtopics:
+      - {id: bashrc, name: bashrc vs profile load order, match: [bashrc, login-shell]}
+      - {id: path, name: PATH management, match: [path]}
+      - {id: aliases, name: Aliases and functions in rc files, match: [bash-aliases, aliases]}
+      - {id: profile-d, name: System-wide /etc/profile.d, match: [profile-d, etc-profile-d]}
+      - {id: environment-d, name: environment.d/pam_env/system env, match: [environment-d, pam-env, etc-environment]}
+      - {id: bash-history, name: History control (HISTSIZE/HISTCONTROL/timestamps), match: [bash-history, histcontrol]}
+      - {id: readline, name: readline and inputrc, match: [readline, inputrc]}
+      - {id: prompt, name: PS1 prompt customisation, match: [ps1, prompt]}
+      - {id: shopt, name: shopt and set options, match: [shopt]}
+      - {id: export-subshell, name: export/env and subshell scoping, match: [env-command, subshell]}
+      - {id: dotfiles, name: Managing dotfiles across machines (chezmoi/stow/yadm), match: [dotfiles, chezmoi]}
+      - {id: chsh, name: Changing login shells and /etc/shells, match: [chsh, etc-shells]}
+  - id: documentation-man
+    name: man/info and locating documentation
+    source: RHCSA/Essential tools
+    match: [man-pages, documentation, info-pages]
+    subtopics:
+      - {id: apropos, name: apropos/whatis search, match: [apropos, whatis]}
+      - {id: man-sections, name: Man page sections, match: [man-sections]}
+      - {id: mandb, name: mandb/manpath maintenance, match: [mandb, manpath]}
+      - {id: usr-share-doc, name: /usr/share/doc and package docs, match: [usr-share-doc]}
+      - {id: tldr, name: tldr/cheat sheets, match: [tldr]}
+      - {id: help-builtin, name: help for shell builtins, match: [help-builtin, bash-help]}
+      - {id: type-which, name: type/which/command -v, match: [type-command, which]}
+      - {id: man-full-text, name: Full-text man search and MANPAGER/less navigation, match: [man-k, manpager]}
+      - {id: info-navigation, name: Navigating info documents, match: [info-navigation, pinfo]}
+      - {id: writing-man-pages, name: Writing man pages (groff/pandoc), match: [writing-man-pages, groff]}
+  - id: terminal-multiplexers
+    name: tmux/screen and session persistence
+    source: LFCS/Essential Commands
+    match: [tmux, screen, terminal-multiplexer]
+    subtopics:
+      - {id: tmux-conf, name: tmux.conf configuration, match: [tmux-conf]}
+      - {id: panes, name: Panes and windows, match: [panes, windows]}
+      - {id: copy-mode, name: Scrollback and copy mode, match: [copy-mode, scrollback]}
+      - {id: tmux-scripting, name: Scripting tmux (send-keys/new-session), match: [tmux-scripting, send-keys]}
+      - {id: screen-serial, name: screen for serial consoles and logging, match: [screen-serial, screen-logging]}
+      - {id: nohup, name: nohup/disown alternatives, match: [nohup]}
+      - {id: tmux-plugins, name: tmux plugins and session restore, match: [tmux-plugins, tmux-resurrect]}
+      - {id: tmux-shared-session, name: Shared and paired tmux sessions, match: [tmux-shared-session, tmux-pairing]}
+      - {id: synchronize-panes, name: Run commands across panes with synchronize-panes, match: [synchronize-panes]}
+      - {id: screenrc, name: screenrc configuration, match: [screenrc]}
+      - {id: zellij, name: zellij multiplexer, match: [zellij]}
+  - id: editors
+    name: vim/nano editing
+    source: LPIC-1/GNU and Unix Commands
+    match: [vim, vi, nano, editor]
+    subtopics:
+      - {id: vimrc, name: vimrc configuration, match: [vimrc]}
+      - {id: search-replace, name: Search and replace, match: [search-replace]}
+      - {id: visual-mode, name: Visual and visual-block mode, match: [visual-mode, visual-block]}
+      - {id: registers-macros, name: Registers and macros, match: [vim-registers, vim-macros]}
+      - {id: buffers-splits, name: Buffers/windows/splits, match: [vim-buffers, vim-splits]}
+      - {id: nanorc, name: nanorc configuration, match: [nanorc]}
+      - {id: vimdiff, name: vimdiff, match: [vimdiff]}
+      - {id: swap-recovery, name: Recover from swap files, match: [recovery, swap-file]}
+      - {id: vim-motions, name: Vim motions and text objects, match: [vim-motions, text-objects]}
+      - {id: vim-plugins, name: Vim packages and plugin managers, match: [vim-plugins, vim-packages]}
+      - {id: vim-global, name: Ex global and normal batch edits, match: [vim-global-command, ex-commands]}
+      - {id: sudoedit, name: Editing root-owned files safely (sudoedit), match: [sudoedit]}
+  # --- Processes, scheduling, performance (LFCS Operations; LPIC-2 capacity planning)
+  - id: process-management-signals
+    name: Process management, signals, nice and jobs
+    source: LPIC-1/GNU and Unix Commands
+    match: [process-management, signals, kill, nice, renice, jobs]
+    subtopics:
+      - {id: ps-options, name: ps column selection and sorting, match: [ps-options, ps-aux, ps-ef]}
+      - {id: signal-semantics, name: SIGTERM/SIGKILL/SIGHUP semantics, match: [sigterm, sigkill, sighup]}
+      - {id: nice-ionice, name: nice/renice/ionice, match: [nice-renice, ionice]}
+      - {id: job-control, name: jobs/fg/bg/Ctrl-Z, match: [job-control, bg-fg]}
+      - {id: pgrep-pkill, name: pgrep/pkill/killall, match: [pgrep, pkill, killall]}
+      - {id: disown, name: nohup/disown/setsid, match: [disown, setsid]}
+      - {id: procfs, name: proc pid inspection, match: [procfs, proc-pid]}
+      - {id: zombies, name: Zombie and orphan processes, match: [zombie]}
+      - {id: lsof-fuser, name: Find who holds files/ports with lsof and fuser, match: [fuser, lsof-usage]}
+      - {id: pstree, name: Process trees with pstree, match: [pstree]}
+      - {id: watch, name: Repeat commands with watch, match: [watch-command]}
+      - {id: taskset-chrt, name: CPU affinity and real-time scheduling (taskset/chrt), match: [taskset, chrt]}
+  - id: performance-triage
+    name: Performance triage with top/vmstat/iostat/sar
+    source: LPIC-2/Capacity Planning
+    match: [performance-triage, performance, vmstat, iostat, sar, top, load-average]
+    subtopics:
+      - {id: use-method, name: USE method, match: [use-method]}
+      - {id: vmstat, name: vmstat reading, match: [vmstat]}
+      - {id: iostat, name: iostat and disk latency, match: [iostat]}
+      - {id: sar, name: sar historical data, match: [sar, sysstat]}
+      - {id: mpstat, name: Per-CPU with mpstat, match: [mpstat]}
+      - {id: psi, name: Pressure stall information, match: [psi, pressure-stall]}
+      - {id: htop, name: top/htop columns, match: [htop]}
+      - {id: free-reading, name: Reading free/buff-cache, match: [buff-cache, free-memory]}
+      - {id: load-interpretation, name: Load average interpretation, match: [uptime, d-state]}
+      - {id: pidstat, name: Per-process stats with pidstat, match: [pidstat]}
+      - {id: atop, name: Historical per-process recording with atop, match: [atop]}
+      - {id: fio, name: Disk benchmarking with fio/ioping, match: [fio, ioping]}
+  - id: memory-oom
+    name: Memory, swap and OOM killer
+    source: LPIC-2/Capacity Planning
+    match: [memory, swap, oom, oom-killer, out-of-memory]
+    subtopics:
+      - {id: oom-score-adj, name: oom_score_adj protection, match: [oom-score-adj]}
+      - {id: swappiness, name: swappiness, match: [swappiness]}
+      - {id: userspace-oom, name: earlyoom/systemd-oomd, match: [earlyoom, systemd-oomd]}
+      - {id: overcommit, name: Overcommit policy, match: [vm-overcommit-memory, overcommit]}
+      - {id: hugepages, name: Huge pages and THP, match: [hugepages, transparent-hugepages]}
+      - {id: memory-leak, name: Find leaking processes (RSS/PSS/smem), match: [memory-leak, smem, pss]}
+      - {id: slab, name: Kernel slab memory, match: [slab, slabtop]}
+      - {id: page-cache, name: Page cache and drop_caches, match: [drop-caches, page-cache]}
+      - {id: oom-report, name: Read an OOM killer report in dmesg, match: [oom-report, oom-kill-log]}
+      - {id: meminfo, name: Read /proc/meminfo, match: [meminfo]}
+      - {id: ksm, name: Kernel samepage merging (KSM), match: [ksm, kernel-samepage-merging]}
+      - {id: numa, name: NUMA placement with numactl/numastat, match: [numactl, numastat]}
+  - id: cpu-io-tracing
+    name: strace/ltrace/perf/bpftrace tracing
+    source: LPIC-2/Capacity Planning
+    match: [strace, perf, bpftrace, ebpf, tracing, ltrace]
+    subtopics:
+      - {id: strace-filtering, name: strace -e/-f/-p filtering, match: [strace-e, strace-follow]}
+      - {id: ltrace, name: ltrace library calls, match: [ltrace]}
+      - {id: perf-record, name: perf record/report, match: [perf-record, perf-stat]}
+      - {id: flame-graph, name: Flame graphs, match: [flame-graph]}
+      - {id: bpftrace, name: bpftrace one-liners, match: [bpftrace]}
+      - {id: bcc-tools, name: BCC tools (execsnoop/opensnoop), match: [bcc-tools, execsnoop, opensnoop]}
+      - {id: ftrace, name: ftrace/trace-cmd, match: [ftrace, trace-cmd]}
+      - {id: blktrace, name: Block I/O tracing, match: [blktrace, biosnoop]}
+      - {id: coredump, name: Core dumps and coredumpctl, match: [coredumpctl, core-dump, gdb]}
+      - {id: perf-top-trace, name: Live profiling with perf top and perf trace, match: [perf-top, perf-trace]}
+      - {id: gdb-attach, name: Attach gdb to a live process and grab stacks, match: [gdb-attach, pstack]}
+      - {id: valgrind, name: Memory error checking with valgrind, match: [valgrind]}
+  - id: cron-at
+    name: cron, anacron and at scheduling
+    source: LPIC-1/Administrative Tasks
+    match: [cron, crontab, anacron, at, scheduling]
+    subtopics:
+      - {id: crontab-syntax, name: crontab field syntax, match: [crontab-syntax, crontab-format]}
+      - {id: cron-d, name: /etc/cron.d and cron.daily, match: [cron-d, cron-daily]}
+      - {id: anacron, name: anacron, match: [anacron]}
+      - {id: at-batch, name: at/atq/batch, match: [atq, atd, batch]}
+      - {id: cron-allow, name: cron.allow/cron.deny, match: [cron-allow, cron-deny]}
+      - {id: run-parts, name: run-parts, match: [run-parts]}
+      - {id: flock-cron, name: Preventing overlap with flock, match: [flock, overlapping-jobs]}
+      - {id: cron-mail, name: MAILTO and output handling, match: [mailto, cron-mail]}
+      - {id: cron-environment, name: Debugging cron environment and PATH failures, match: [cron-path, cron-debugging]}
+      - {id: cron-to-timer, name: Migrate cron jobs to systemd timers, match: [cron-to-timer]}
+      - {id: cron-tz, name: CRON_TZ and DST behaviour, match: [cron-tz]}
+  - id: cgroups-limits
+    name: cgroups and resource limits (ulimit, systemd slices)
+    source: LPIC-2/Capacity Planning
+    match: [cgroups, cgroup, ulimit, resource-limits, slices]
+    subtopics:
+      - {id: cgroup-v2, name: cgroup v2 hierarchy, match: [cgroup-v2]}
+      - {id: cpu-limit, name: CPU limits, match: [cpu-limit, cpuquota]}
+      - {id: memory-limit, name: Memory limits, match: [memory-limit, memorymax]}
+      - {id: systemd-run, name: Transient units with systemd-run, match: [systemd-run]}
+      - {id: limits-conf, name: ulimit/limits.conf/pam_limits, match: [limits-conf, pam-limits]}
+      - {id: slice-units, name: Slice units, match: [systemd-slice, slice-units]}
+      - {id: tasksmax, name: TasksMax/pids limits, match: [tasksmax, pids-limit]}
+      - {id: io-weight, name: IO weight/limits, match: [io-weight, iomax]}
+      - {id: cgroup-inspection, name: systemd-cgls/cgtop, match: [systemd-cgls, systemd-cgtop]}
+      - {id: cpuset, name: CPU and NUMA pinning with AllowedCPUs/cpuset, match: [allowedcpus, allowedmemorynodes]}
+      - {id: memory-high, name: MemoryHigh and MemorySwapMax throttling, match: [memoryhigh, memoryswapmax]}
+      - {id: set-property, name: Runtime limits with systemctl set-property and prlimit, match: [set-property, prlimit]}
+  - id: tuned-profiles
+    name: tuned profiles and CPU governors
+    source: RHCSA/Running systems
+    match: [tuned, cpu-governor, tuned-profile]
+    subtopics:
+      - {id: tuned-adm, name: tuned-adm profiles, match: [tuned-adm]}
+      - {id: custom-tuned-profile, name: Custom tuned profile, match: [custom-tuned-profile, tuned-conf]}
+      - {id: cpupower, name: cpupower/cpufreq governors, match: [cpupower, cpufreq]}
+      - {id: power-profiles, name: power-profiles-daemon/tuned-ppd, match: [power-profiles-daemon, tuned-ppd]}
+      - {id: irq-affinity, name: irqbalance and IRQ affinity, match: [irqbalance, irq-affinity]}
+      - {id: tuned-verify, name: tuned-adm recommend/verify drift checks, match: [tuned-adm-verify, tuned-recommend]}
+      - {id: tuned-plugins, name: tuned plugin sections (sysctl/disk/vm/scheduler), match: [tuned-plugins]}
+      - {id: cpu-partitioning, name: cpu-partitioning profile and isolcpus, match: [cpu-partitioning, isolcpus]}
+      - {id: powertop, name: powertop analysis and auto-tune, match: [powertop]}
+      - {id: tlp, name: Laptop power management with TLP, match: [tlp]}
+      - {id: intel-pstate, name: intel_pstate/amd-pstate drivers and C-states, match: [intel-pstate, c-states]}
+  # --- Package management and installation (LPIC-1 102; RHCSA deploy/configure)
+  - id: apt-dpkg
+    name: apt/dpkg package management and pinning
+    source: LPIC-1/Package Management
+    match: [apt, dpkg, apt-pinning, debian-packages]
+    subtopics:
+      - {id: apt-pinning, name: Pinning and preferences, match: [apt-pinning]}
+      - {id: apt-mark, name: Holds with apt-mark, match: [apt-mark, held-packages]}
+      - {id: dpkg-query, name: dpkg -l/-L/-S queries, match: [dpkg-query, dpkg-l]}
+      - {id: apt-policy, name: apt-cache policy, match: [apt-policy, policy]}
+      - {id: dpkg-reconfigure, name: dpkg-reconfigure/debconf, match: [dpkg-reconfigure, debconf]}
+      - {id: apt-source, name: Source packages and build-dep, match: [apt-source, apt-build-dep]}
+      - {id: apt-cleanup, name: autoremove/clean, match: [apt-autoremove, apt-clean]}
+      - {id: dpkg-divert, name: dpkg-divert/statoverride, match: [dpkg-divert, dpkg-statoverride]}
+      - {id: apt-history, name: apt logs/history, match: [apt-history, apt-logs]}
+      - {id: apt-fix-broken, name: Repair broken installs (apt --fix-broken/dpkg --configure -a), match: [apt-fix-broken, dpkg-configure-a]}
+      - {id: apt-conf, name: apt.conf.d options and proxies, match: [apt-conf, apt-proxy]}
+      - {id: apt-file-dpkg-deb, name: Find package files with apt-file and inspect .debs with dpkg-deb, match: [apt-file, dpkg-deb]}
+  - id: dnf-rpm
+    name: dnf/yum/rpm package management and modules
+    source: RHCSA/Deploy and configure
+    match: [dnf, yum, rpm, rhel-packages]
+    subtopics:
+      - {id: module-streams, name: Module streams, match: [module-streams]}
+      - {id: dnf-history, name: dnf history/undo, match: [dnf-history]}
+      - {id: rpm-query, name: rpm -q/-V queries, match: [rpm-query, rpm-verify]}
+      - {id: versionlock, name: dnf versionlock, match: [dnf-versionlock, versionlock]}
+      - {id: package-groups, name: Package groups, match: [dnf-groups, package-groups]}
+      - {id: rpm-checksig, name: Signature verification, match: [rpm-checksig, gpgcheck]}
+      - {id: dnf-provides, name: dnf provides/download, match: [dnf-provides, dnf-download]}
+      - {id: dnf-conf, name: dnf.conf options, match: [dnf-conf, dnf-config]}
+      - {id: rpm-scriptlets, name: RPM scriptlets, match: [rpm-scriptlets]}
+      - {id: rpmdb-rebuild, name: Repair a corrupt RPM database, match: [rpmdb-rebuild, rpm-rebuilddb]}
+      - {id: repoquery, name: dnf repoquery dependency questions, match: [repoquery]}
+      - {id: rpm2cpio, name: Extract RPM contents with rpm2cpio, match: [rpm2cpio]}
+      - {id: zypper, name: SUSE package management with zypper, match: [zypper]}
+  - id: repositories-mirrors
+    name: Repository configuration, GPG keys and local mirrors
+    source: LPIC-1/Package Management
+    match: [repository, repositories, local-mirror, gpg-key, package-mirror]
+    subtopics:
+      - {id: deb822, name: deb822 sources, match: [deb822, sources-list]}
+      - {id: signed-by, name: Signed-By keyrings, match: [signed-by, keyrings]}
+      - {id: yum-repos-d, name: .repo files, match: [yum-repos-d, dnf-config-manager]}
+      - {id: createrepo, name: createrepo, match: [createrepo]}
+      - {id: reposync, name: reposync, match: [reposync]}
+      - {id: apt-mirror, name: apt-mirror/aptly, match: [apt-mirror, aptly]}
+      - {id: epel, name: EPEL and extra repos, match: [epel]}
+      - {id: ppa, name: PPAs, match: [ppa, add-apt-repository]}
+      - {id: metadata-cache, name: Metadata cache refresh, match: [dnf-makecache, metadata-cache]}
+      - {id: copr, name: COPR, match: [copr]}
+      - {id: apt-cacher-ng, name: Caching proxies for packages (apt-cacher-ng), match: [apt-cacher-ng]}
+      - {id: backports, name: Debian/Ubuntu backports, match: [backports]}
+  - id: building-packages
+    name: Building .deb/.rpm packages and source builds
+    source: LPIC-2/System Maintenance
+    match: [package-building, rpmbuild, debuild, build-from-source, make-install]
+    subtopics:
+      - {id: rpm-spec, name: spec files, match: [rpm-spec, spec-file]}
+      - {id: debian-rules, name: debian/ directory, match: [debian-rules]}
+      - {id: mock, name: mock, match: [mock]}
+      - {id: pbuilder, name: pbuilder/sbuild, match: [pbuilder, sbuild]}
+      - {id: fpm, name: fpm/nfpm, match: [fpm, nfpm]}
+      - {id: configure-make, name: configure/make/DESTDIR, match: [configure-make, destdir]}
+      - {id: stow, name: stow, match: [stow]}
+      - {id: checkinstall, name: checkinstall, match: [checkinstall]}
+      - {id: rpmlint, name: rpmlint/lintian, match: [rpmlint, lintian]}
+      - {id: quilt, name: Patching sources with quilt, match: [quilt, source-patches]}
+      - {id: rpm-macros, name: RPM macros, match: [rpm-macros, rpmmacros]}
+      - {id: srpm-rebuild, name: Rebuild a source RPM (rpmbuild --rebuild), match: [srpm-rebuild]}
+      - {id: debian-changelog, name: debian/changelog versioning with dch, match: [dch, debian-changelog]}
+  - id: unattended-upgrades
+    name: Automatic security updates and patch cadence
+    source: LPIC-1/Package Management
+    match: [unattended-upgrades, dnf-automatic, patching, patch-management, security-updates]
+    subtopics:
+      - {id: unattended-upgrades-conf, name: 50unattended-upgrades configuration, match: [unattended-upgrades-conf, 50unattended-upgrades]}
+      - {id: dnf-automatic, name: dnf-automatic, match: [dnf-automatic]}
+      - {id: needrestart, name: needrestart, match: [needrestart]}
+      - {id: livepatch, name: Livepatch, match: [livepatch]}
+      - {id: kpatch, name: kpatch, match: [kpatch]}
+      - {id: updateinfo, name: dnf updateinfo, match: [dnf-updateinfo]}
+      - {id: maintenance-window, name: Maintenance windows, match: [maintenance-window]}
+      - {id: apt-listchanges, name: apt-listchanges, match: [apt-listchanges]}
+      - {id: reboot-required, name: Reboot handling, match: [reboot-required]}
+      - {id: package-blacklist, name: Excluding packages from auto updates, match: [package-blacklist, unattended-upgrades-blacklist]}
+      - {id: patch-compliance, name: Patch compliance reporting across a fleet, match: [patch-compliance-report]}
+      - {id: staged-rollout, name: Staged/canary patch rollout, match: [staged-rollout, canary-patching]}
+  - id: automated-install
+    name: Kickstart/preseed/autoinstall and PXE
+    source: LPIC-2/System Startup
+    match: [kickstart, preseed, autoinstall, pxe, pxe-boot, unattended-install]
+    subtopics:
+      - {id: ks-cfg, name: ks.cfg authoring, match: [ks-cfg]}
+      - {id: ksvalidator, name: ksvalidator, match: [ksvalidator]}
+      - {id: preseed-cfg, name: preseed.cfg, match: [preseed-cfg, debconf-preseed]}
+      - {id: subiquity, name: subiquity, match: [subiquity]}
+      - {id: tftp, name: TFTP server, match: [tftp]}
+      - {id: ipxe, name: iPXE, match: [ipxe]}
+      - {id: proxy-dhcp, name: dnsmasq proxy DHCP, match: [proxy-dhcp, dnsmasq-proxy-dhcp]}
+      - {id: ks-post, name: kickstart post and pre scripts, match: [ks-post, ks-pre]}
+      - {id: autoinstall-yaml, name: autoinstall YAML, match: [autoinstall-yaml, user-data-autoinstall]}
+      - {id: uefi-pxe, name: UEFI PXE, match: [grub-efi, uefi-pxe]}
+      - {id: anaconda-boot-options, name: Anaconda boot options (inst.ks/inst.repo/inst.text), match: [anaconda-boot-options, inst-ks]}
+      - {id: ks-partitioning, name: Kickstart storage (autopart/part/logvol/clearpart), match: [ks-partitioning, autopart]}
+  - id: flatpak-snap-appimage
+    name: Flatpak/Snap/AppImage
+    source: LPIC-1/Package Management
+    match: [flatpak, snap, appimage]
+    subtopics:
+      - {id: flatpak-override, name: flatpak override, match: [flatpak-override]}
+      - {id: flatseal, name: Flatseal, match: [flatseal]}
+      - {id: snap-channels, name: snap channels, match: [snap-channels]}
+      - {id: snap-confinement, name: snap confinement, match: [snap-confinement]}
+      - {id: flathub, name: Remotes/Flathub, match: [flathub, flatpak-remotes]}
+      - {id: appimagelauncher, name: AppImageLauncher, match: [appimagelauncher]}
+      - {id: snap-interfaces, name: snap interfaces/connect, match: [snap-interfaces, snap-connect]}
+      - {id: snap-revert, name: snap revert/revisions, match: [snap-revert, snap-revisions]}
+      - {id: flatpak-runtimes, name: Runtimes and updates, match: [flatpak-runtimes, flatpak-update]}
+      - {id: flatpak-builder, name: Build flatpaks with flatpak-builder manifests, match: [flatpak-builder]}
+      - {id: snap-refresh, name: Control snap refresh timing and holds, match: [snap-refresh, snap-refresh-hold]}
+  # --- Storage and filesystems (LFCS 20%; RHCSA local storage; LPIC-2 advanced storage)
+  - id: partitioning
+    name: Partitioning with fdisk/parted/gdisk (MBR/GPT)
+    source: RHCSA/Local storage
+    match: [partitioning, fdisk, parted, gdisk, gpt, mbr]
+    subtopics:
+      - {id: fdisk-mbr, name: fdisk/MBR, match: [fdisk-mbr, dos-label]}
+      - {id: parted-gpt, name: parted/GPT, match: [parted-gpt, mklabel]}
+      - {id: sgdisk, name: gdisk/sgdisk, match: [sgdisk]}
+      - {id: partprobe, name: partprobe/rescan, match: [partprobe, partition-rescan]}
+      - {id: growpart, name: growpart, match: [growpart]}
+      - {id: partition-types, name: Partition type codes, match: [partition-types, partition-type-codes]}
+      - {id: wipefs, name: wipefs, match: [wipefs]}
+      - {id: sfdisk, name: sfdisk dump/restore, match: [sfdisk, sfdisk-dump]}
+      - {id: alignment, name: Alignment, match: [partition-alignment]}
+      - {id: resizepart, name: Grow or shrink partitions with parted resizepart, match: [resizepart, partition-resize]}
+      - {id: esp, name: Create and repair the EFI system partition, match: [efi-system-partition, esp]}
+      - {id: nvme-cli, name: NVMe drives with nvme-cli (namespaces/format/smart-log), match: [nvme-cli]}
+  - id: lvm
+    name: LVM volumes, extend/shrink and snapshots
+    source: RHCSA/Local storage
+    match: [lvm, logical-volume, logical-volumes, lvm-snapshot, pvcreate]
+    subtopics:
+      - {id: lvextend, name: lvextend, match: [lvextend]}
+      - {id: lvresize, name: lvresize/lvreduce, match: [lvresize, lvreduce]}
+      - {id: thin-provisioning, name: Thin provisioning, match: [thin-provisioning]}
+      - {id: pvmove, name: pvmove/vgreduce, match: [pvmove, vgreduce]}
+      - {id: vgextend, name: vgextend, match: [vgextend]}
+      - {id: lvm-cache, name: LVM cache, match: [lvm-cache, dm-cache]}
+      - {id: lvm-raid, name: LVM RAID/mirror, match: [lvm-raid, lv-mirror]}
+      - {id: vgcfgbackup, name: vgcfgbackup/restore, match: [vgcfgbackup, vgcfgrestore]}
+      - {id: lvm-filter, name: lvm.conf filters, match: [lvm-filter, lvm-conf]}
+      - {id: lvm-striping, name: Striped LVs, match: [lvm-striping, striped-lv]}
+      - {id: snapshot-merge, name: Roll back with lvconvert --merge, match: [lvconvert-merge, snapshot-merge]}
+      - {id: vgexport-import, name: Move or rename VGs (vgexport/vgimport/vgrename), match: [vgexport, vgimport, vgrename]}
+  - id: filesystems-mkfs-fstab
+    name: ext4/XFS creation, fstab and mount options
+    source: RHCSA/File systems
+    match: [fstab, mkfs, ext4, xfs, mount-options, filesystem]
+    subtopics:
+      - {id: mkfs-ext4, name: mkfs.ext4 options, match: [mkfs-ext4]}
+      - {id: mkfs-xfs, name: mkfs.xfs options, match: [mkfs-xfs]}
+      - {id: tune2fs, name: tune2fs/xfs_admin, match: [tune2fs, xfs-admin]}
+      - {id: fstab-uuid, name: UUID/LABEL entries, match: [uuid, label]}
+      - {id: nofail, name: nofail/x-systemd options, match: [nofail, x-systemd]}
+      - {id: resize2fs, name: resize2fs, match: [resize2fs]}
+      - {id: xfs-growfs, name: xfs_growfs, match: [xfs-growfs]}
+      - {id: findmnt, name: findmnt, match: [findmnt]}
+      - {id: bind-mount, name: Bind mounts, match: [bind-mount]}
+      - {id: tmpfs, name: tmpfs, match: [tmpfs]}
+      - {id: mount-unit, name: systemd mount units, match: [mount-unit, systemd-mount]}
+      - {id: noexec, name: noexec/nosuid/nodev, match: [noexec, nosuid]}
+      - {id: fstrim, name: TRIM with fstrim.timer vs discard, match: [fstrim, discard]}
+      - {id: overlayfs, name: overlayfs lower/upper/work mounts, match: [overlayfs]}
+  - id: fsck-repair
+    name: Filesystem check and repair
+    source: LPIC-1/Devices and Filesystems
+    match: [fsck, xfs-repair, filesystem-repair]
+    subtopics:
+      - {id: e2fsck, name: e2fsck, match: [e2fsck]}
+      - {id: xfs-metadump, name: xfs_metadump, match: [xfs-metadump]}
+      - {id: superblock, name: Backup superblocks, match: [superblock]}
+      - {id: lost-found, name: lost+found, match: [lost-found]}
+      - {id: ddrescue, name: ddrescue, match: [ddrescue]}
+      - {id: fsck-boot, name: Forcing fsck at boot, match: [forcefsck, fsck-mode]}
+      - {id: badblocks, name: badblocks/SMART self-test, match: [badblocks, smartctl-selftest]}
+      - {id: btrfs-check, name: btrfs check, match: [btrfs-check]}
+      - {id: journal-replay, name: Journal replay, match: [journal-replay]}
+      - {id: debugfs, name: ext4 forensics and undelete with debugfs, match: [debugfs]}
+      - {id: testdisk, name: Recover partitions/files with testdisk/photorec, match: [testdisk, photorec]}
+  - id: software-raid
+    name: Software RAID with mdadm
+    source: LPIC-2/Advanced Storage
+    match: [mdadm, raid, software-raid]
+    subtopics:
+      - {id: raid1, name: RAID1, match: [raid1]}
+      - {id: raid5, name: RAID5/6, match: [raid5]}
+      - {id: raid10, name: RAID10, match: [raid10]}
+      - {id: mdstat, name: /proc/mdstat, match: [mdstat]}
+      - {id: degraded-array, name: Degraded arrays, match: [degraded-array]}
+      - {id: mdadm-conf, name: mdadm.conf/assemble, match: [mdadm-conf, mdadm-assemble]}
+      - {id: hot-spare, name: Hot spares/rebuild, match: [hot-spare, raid-rebuild]}
+      - {id: mdadm-grow, name: Grow/reshape, match: [mdadm-grow, raid-grow]}
+      - {id: raid-check, name: Scrub/check, match: [raid-check, mdadm-scrub]}
+      - {id: raid-replace, name: Replace a failed disk, match: [raid-replace, raid-disk-replacement]}
+      - {id: write-intent-bitmap, name: Write-intent bitmaps for fast resync, match: [write-intent-bitmap, mdadm-bitmap]}
+      - {id: mdadm-monitor, name: Array alerting with mdadm --monitor, match: [mdadm-monitor]}
+  - id: luks-encryption
+    name: LUKS disk encryption
+    source: RHCSA/Local storage
+    match: [luks, disk-encryption, cryptsetup]
+    subtopics:
+      - {id: luks2, name: LUKS2, match: [luks2]}
+      - {id: crypttab, name: crypttab, match: [crypttab]}
+      - {id: keyfile, name: Keyfiles, match: [keyfile]}
+      - {id: header-backup, name: Header backup, match: [header-backup]}
+      - {id: clevis, name: Clevis, match: [clevis]}
+      - {id: tang, name: Tang, match: [tang]}
+      - {id: systemd-cryptenroll, name: systemd-cryptenroll, match: [systemd-cryptenroll]}
+      - {id: luks-keyslots, name: Key slots/passphrase change, match: [luks-keyslots, luksaddkey]}
+      - {id: luks-resize, name: Resize LUKS, match: [luks-resize, cryptsetup-resize]}
+      - {id: luks-convert, name: LUKS1 to LUKS2, match: [luks-convert]}
+      - {id: detached-header, name: Detached headers, match: [detached-header]}
+      - {id: luks-reencrypt, name: Encrypt in place or rotate the volume key (cryptsetup reencrypt), match: [cryptsetup-reencrypt, luks-reencrypt]}
+      - {id: cryptsetup-benchmark, name: Cipher choice with cryptsetup benchmark, match: [cryptsetup-benchmark]}
+  - id: stratis-vdo-btrfs-zfs
+    name: Stratis/VDO/Btrfs/ZFS
+    source: RHCSA/Local storage
+    match: [stratis, vdo, btrfs, zfs]
+    subtopics:
+      - {id: btrfs-subvolume, name: Btrfs subvolumes, match: [btrfs-subvolume]}
+      - {id: btrfs-snapshot, name: Btrfs snapshots, match: [btrfs-snapshot]}
+      - {id: zpool, name: zpool, match: [zpool]}
+      - {id: zfs-snapshot, name: ZFS snapshots, match: [zfs-snapshot]}
+      - {id: stratis-pool, name: Stratis pools, match: [stratis-pool, stratis-filesystem]}
+      - {id: vdo-volume, name: VDO, match: [vdo-volume, vdo-dedup]}
+      - {id: btrfs-maintenance, name: Btrfs balance/scrub/RAID, match: [btrfs-balance, btrfs-scrub, btrfs-raid]}
+      - {id: zfs-send, name: zfs send/receive, match: [zfs-send, zfs-replication]}
+      - {id: zfs-properties, name: ZFS dataset properties, match: [zfs-properties, zfs-dataset]}
+      - {id: btrfs-send, name: btrfs send/receive, match: [btrfs-send]}
+      - {id: zfs-arc, name: ZFS ARC sizing, match: [zfs-arc]}
+      - {id: zfs-scrub-replace, name: zpool scrub and disk replacement/resilver, match: [zfs-scrub, zpool-replace]}
+      - {id: snapper, name: Snapshot management with snapper, match: [snapper]}
+      - {id: btrfs-compression, name: Btrfs transparent compression, match: [btrfs-compression]}
+  - id: swap-management
+    name: Swap files and partitions
+    source: RHCSA/Local storage
+    match: [swap-file, swap-partition, swapon, swap-management]
+    subtopics:
+      - {id: mkswap, name: mkswap, match: [mkswap]}
+      - {id: zram, name: zram, match: [zram]}
+      - {id: zswap, name: zswap, match: [zswap]}
+      - {id: swappiness-swap, name: swappiness, match: [swappiness]}
+      - {id: hibernation, name: Hibernation/resume, match: [hibernation]}
+      - {id: swap-priority, name: Swap priority, match: [swap-priority, swapon-priority]}
+      - {id: btrfs-swap, name: Btrfs swap, match: [btrfs-swap]}
+      - {id: encrypted-swap, name: Encrypted swap with random keys, match: [encrypted-swap]}
+      - {id: swap-usage, name: Find which processes are using swap (VmSwap), match: [vmswap, swap-usage]}
+      - {id: swap-unit, name: systemd .swap units, match: [swap-unit]}
+      - {id: swapoff, name: Removing swap safely with swapoff, match: [swapoff]}
+  - id: disk-usage-quotas
+    name: Disk usage analysis and quotas
+    source: LPIC-1/Devices and Filesystems
+    match: [disk-usage, du, df, quotas, disk-quotas]
+    subtopics:
+      - {id: ncdu, name: ncdu/du sorting, match: [ncdu, du-sort]}
+      - {id: inodes, name: Inode exhaustion, match: [inodes, inode-exhaustion]}
+      - {id: deleted-open-files, name: Deleted open files, match: [deleted-open-files]}
+      - {id: quota-setup, name: quotacheck/edquota, match: [quota-setup, edquota, quotacheck]}
+      - {id: xfs-quota, name: XFS/project quotas, match: [xfs-quota, project-quota]}
+      - {id: repquota, name: repquota reporting, match: [repquota]}
+      - {id: grace-period, name: Soft/hard limits and grace, match: [grace-period, soft-hard-limits]}
+      - {id: tmp-cleanup, name: tmpfiles cleanup, match: [systemd-tmpfiles, tmp-cleanup]}
+      - {id: df-du-discrepancy, name: df vs du discrepancies (files hidden under mounts), match: [df-du-discrepancy, hidden-under-mount]}
+      - {id: reserved-blocks, name: ext4 reserved blocks (tune2fs -m), match: [reserved-blocks]}
+      - {id: btrfs-space, name: Btrfs space accounting and qgroups, match: [btrfs-qgroups, btrfs-filesystem-usage]}
+  - id: iscsi-san
+    name: iSCSI initiators and multipath
+    source: LPIC-2/Advanced Storage
+    match: [iscsi, multipath, san]
+    subtopics:
+      - {id: iscsiadm, name: iscsiadm initiator, match: [iscsiadm, iscsi-initiator]}
+      - {id: targetcli, name: targetcli LIO target, match: [targetcli, iscsi-target]}
+      - {id: multipath-conf, name: multipath.conf/multipathd, match: [multipath-conf, multipathd]}
+      - {id: iscsi-chap, name: CHAP authentication, match: [iscsi-chap, chap]}
+      - {id: fibre-channel, name: FC HBAs and WWNs, match: [fibre-channel, wwn]}
+      - {id: iscsi-session, name: Session recovery/iscsid, match: [iscsid, iscsi-session]}
+      - {id: multipath-blacklist, name: multipath blacklist/wwids and friendly names, match: [multipath-blacklist, wwids]}
+      - {id: nvme-of, name: NVMe over Fabrics (nvme-tcp) initiator, match: [nvme-of, nvme-tcp]}
+      - {id: lun-rescan, name: Add and resize LUNs online (SCSI rescan), match: [lun-rescan, rescan-scsi-bus]}
+      - {id: iscsi-iface, name: iSCSI iface binding for multipath, match: [iscsi-iface, iface-binding]}
+      - {id: multipath-ll, name: Read multipath -ll path states and failover, match: [multipath-ll, path-failover]}
+  - id: nfs-smb-mounts
+    name: NFS and SMB client mounts and autofs
+    source: RHCSA/File systems
+    match: [nfs, nfs-mount, smb, cifs, autofs]
+    subtopics:
+      - {id: nfsv4, name: NFSv4, match: [nfsv4]}
+      - {id: cifs-utils, name: cifs-utils, match: [cifs-utils]}
+      - {id: automount, name: systemd automount, match: [systemd-automount, automount]}
+      - {id: credentials-file, name: Credentials files, match: [credentials-file]}
+      - {id: kerberos-nfs, name: Kerberos NFS, match: [kerberos-nfs]}
+      - {id: nfs-mount-options, name: hard/soft/timeo options, match: [hard-soft, nfs-timeo, nfs-mount-options]}
+      - {id: showmount, name: showmount/rpcinfo, match: [showmount, rpcinfo]}
+      - {id: autofs-maps, name: autofs maps, match: [autofs-maps, auto-master]}
+      - {id: cifs-permissions, name: uid/gid/file_mode on CIFS, match: [cifs-permissions, uid-gid-mount]}
+      - {id: stale-handle, name: Stale file handles, match: [stale-file-handle]}
+      - {id: nfs-client-debug, name: NFS client diagnostics (nfsstat/mountstats/rpcdebug), match: [mountstats, rpcdebug]}
+      - {id: nfs-idmapd, name: NFSv4 idmapd domain and nobody ownership, match: [idmapd, nfsidmap]}
+  - id: udev-devices
+    name: udev rules and block device naming
+    source: LPIC-1/Devices and Filesystems
+    match: [udev, udev-rules, device-naming, lsblk]
+    subtopics:
+      - {id: udevadm, name: udevadm info/monitor/test, match: [udevadm, udevadm-monitor]}
+      - {id: udev-rule-writing, name: Writing match/assign rules, match: [udev-rule-writing, udev-match-keys]}
+      - {id: persistent-names, name: by-id/by-path names, match: [persistent-device-names, by-id]}
+      - {id: interface-naming, name: Predictable NIC names, match: [predictable-interface-names, net-naming]}
+      - {id: hardware-inventory, name: lspci/lsusb/lshw/dmidecode, match: [lspci, lsusb, lshw, dmidecode]}
+      - {id: sysfs, name: sysfs, match: [sysfs]}
+      - {id: hotplug, name: Hotplug RUN actions, match: [hotplug, udev-run]}
+      - {id: dmsetup, name: Inspect device-mapper with dmsetup, match: [dmsetup]}
+      - {id: blkid, name: Identify block devices with blkid/lsblk -f, match: [blkid]}
+      - {id: serial-device-permissions, name: Device permissions for serial/USB devices (dialout), match: [dialout, serial-device-permissions]}
+      - {id: udev-trigger, name: Replay events with udevadm trigger/settle, match: [udevadm-trigger, udevadm-settle]}
+      - {id: systemd-link-files, name: Rename and tune NICs with systemd .link files, match: [systemd-link-file, link-file]}
+  - id: fhs-layout
+    name: Filesystem Hierarchy Standard
+    source: LPIC-1/Devices and Filesystems
+    match: [fhs, filesystem-hierarchy, directory-layout]
+    subtopics:
+      - {id: usr-merge, name: usr merge, match: [usr-merge]}
+      - {id: var-lib, name: var/lib and var/log, match: [var-lib, var-log]}
+      - {id: usr-local, name: usr/local vs opt, match: [usr-local, opt]}
+      - {id: tmpfiles, name: systemd-tmpfiles, match: [systemd-tmpfiles]}
+      - {id: separate-partitions, name: Separate partitions, match: [separate-partitions]}
+      - {id: xdg, name: XDG dirs, match: [xdg]}
+      - {id: pseudo-filesystems, name: proc/sys/dev/run pseudo filesystems, match: [pseudo-filesystems, run-directory]}
+      - {id: vendor-config, name: Vendor defaults in /usr/lib vs admin overrides in /etc, match: [vendor-config, usr-lib-defaults]}
+      - {id: os-release, name: Identify the distribution (/etc/os-release), match: [os-release]}
+  # --- Users, groups, permissions (LFCS 10%; RHCSA users and groups)
+  - id: users-groups
+    name: User and group management, defaults and skel
+    source: RHCSA/Users and groups
+    match: [users, groups, useradd, user-management, group-management]
+    subtopics:
+      - {id: useradd-defaults, name: /etc/default/useradd, match: [useradd-defaults, etc-default-useradd]}
+      - {id: skel, name: /etc/skel, match: [skel, etc-skel]}
+      - {id: usermod, name: usermod, match: [usermod]}
+      - {id: groupadd, name: groupadd/groupmod, match: [groupadd]}
+      - {id: system-account, name: System accounts, match: [system-account, nologin]}
+      - {id: userdel, name: userdel and cleanup, match: [userdel, user-removal]}
+      - {id: passwd-shadow, name: passwd/shadow/group files, match: [etc-passwd, etc-shadow, shadow-file]}
+      - {id: login-defs, name: login.defs, match: [login-defs]}
+      - {id: gpasswd, name: gpasswd/newgrp, match: [gpasswd, newgrp, group-membership]}
+      - {id: id-getent, name: id/getent/who/last, match: [id-command, last, who]}
+      - {id: bulk-users, name: Bulk account creation with newusers/chpasswd, match: [newusers, chpasswd]}
+      - {id: sysusers-d, name: Declarative system users with sysusers.d, match: [sysusers-d, systemd-sysusers]}
+  - id: password-aging-policy
+    name: Password aging, lockout and PAM policies
+    source: RHCSA/Users and groups
+    match: [password-aging, chage, pam, pam-policy, account-lockout]
+    subtopics:
+      - {id: pwquality, name: pam_pwquality, match: [pwquality, pam-pwquality]}
+      - {id: faillock, name: pam_faillock, match: [faillock, pam-faillock]}
+      - {id: password-expiry, name: PASS_MAX_DAYS/expiry, match: [password-expiry, pass-max-days]}
+      - {id: pam-stack, name: PAM stack and control flags, match: [pam-stack, pam-d, pam-control-flags]}
+      - {id: authselect, name: authselect/pam-auth-update, match: [authselect, pam-auth-update]}
+      - {id: pam-access, name: pam_access/pam_time, match: [pam-access, pam-time, access-conf]}
+      - {id: login-banner, name: issue/motd banners, match: [login-banner, issue, motd]}
+      - {id: yescrypt, name: Password hash algorithm (yescrypt/SHA512 ENCRYPT_METHOD), match: [yescrypt, encrypt-method]}
+      - {id: pwhistory, name: Password reuse history with pam_pwhistory, match: [pwhistory, password-history]}
+      - {id: pam-wheel, name: Restrict su with pam_wheel, match: [pam-wheel, su-restriction]}
+      - {id: pam-debugging, name: Debugging PAM authentication failures, match: [pam-debugging]}
+  - id: sudo
+    name: sudo and sudoers design
+    source: RHCSA/Security
+    match: [sudo, sudoers]
+    subtopics:
+      - {id: visudo, name: visudo, match: [visudo]}
+      - {id: sudoers-d, name: sudoers.d, match: [sudoers-d]}
+      - {id: sudo-aliases, name: Cmnd/User aliases, match: [cmnd-alias, user-alias, sudo-aliases]}
+      - {id: nopasswd, name: NOPASSWD, match: [nopasswd]}
+      - {id: sudo-logging, name: sudo I/O logging, match: [sudo-logging, sudoreplay, sudo-io-log]}
+      - {id: sudo-defaults, name: Defaults (env_keep/secure_path), match: [sudo-defaults, env-keep, secure-path]}
+      - {id: sudo-ldap, name: sudo via LDAP, match: [sudo-ldap]}
+      - {id: sudo-timeout, name: timestamp_timeout, match: [timestamp-timeout, sudo-timeout]}
+      - {id: sudo-wildcards, name: Command restrictions and wildcard pitfalls in sudoers, match: [sudo-wildcards, sudo-command-restriction]}
+      - {id: sudo-l, name: Listing and testing privileges (sudo -l/-U), match: [sudo-l]}
+      - {id: polkit, name: polkit rules and pkexec, match: [polkit, pkexec]}
+      - {id: doas, name: doas as a minimal sudo alternative, match: [doas]}
+  - id: permissions-special-bits
+    name: Permissions, umask, setuid/setgid/sticky
+    source: RHCSA/Security
+    match: [permissions, umask, setuid, setgid, sticky-bit, chmod]
+    subtopics:
+      - {id: chown, name: chown/chgrp, match: [chown, chgrp]}
+      - {id: symbolic-mode, name: Octal vs symbolic, match: [symbolic-mode, octal-mode]}
+      - {id: shared-directory, name: Shared group directories, match: [shared-directory]}
+      - {id: suid-audit, name: Find SUID/world-writable files, match: [find-perm, suid-audit]}
+      - {id: directory-execute, name: Directory x bit semantics, match: [directory-execute, executable-bit]}
+      - {id: chmod-recursive, name: Recursive chmod with X, match: [chmod-recursive, capital-x]}
+      - {id: umask-config, name: Setting umask per user/service (UMask=/login.defs/pam_umask), match: [umask-config, pam-umask]}
+      - {id: namei, name: Trace path permissions with namei, match: [namei]}
+      - {id: permission-denied, name: Permission denied triage, match: [permission-denied]}
+      - {id: file-capabilities, name: File capabilities with setcap/getcap, match: [setcap, getcap]}
+  - id: acls-attributes
+    name: POSIX ACLs and file attributes
+    source: RHCSA/Security
+    match: [acl, acls, setfacl, chattr, file-attributes]
+    subtopics:
+      - {id: getfacl, name: getfacl, match: [getfacl]}
+      - {id: default-acl, name: Default ACLs, match: [default-acl]}
+      - {id: acl-mask, name: ACL mask/effective rights, match: [acl-mask, effective-rights]}
+      - {id: acl-backup, name: ACL backup/restore, match: [acl-backup, getfacl-r]}
+      - {id: immutable, name: Immutable/append-only, match: [immutable, append-only]}
+      - {id: lsattr, name: lsattr, match: [lsattr]}
+      - {id: xattr, name: Extended attributes, match: [xattr, getfattr, setfattr]}
+      - {id: nfs4-acl, name: NFSv4 ACLs (nfs4_setfacl), match: [nfs4-acl, nfs4-setfacl]}
+      - {id: acl-preserving-copy, name: Preserve ACLs/xattrs in cp/tar/rsync, match: [tar-acls, rsync-acls]}
+  - id: central-auth-sssd
+    name: SSSD/LDAP/Kerberos central authentication
+    source: LPIC-2/Network Client Management
+    match: [sssd, ldap, kerberos, realmd, central-authentication]
+    subtopics:
+      - {id: domain-join, name: Domain join, match: [domain-join, adcli]}
+      - {id: freeipa, name: FreeIPA, match: [freeipa]}
+      - {id: keytab, name: Keytabs, match: [keytab]}
+      - {id: id-mapping, name: ID mapping, match: [id-mapping]}
+      - {id: sssd-conf, name: sssd.conf/debug/cache, match: [sssd-conf, sssd-debug, sssd-cache]}
+      - {id: ldap-client, name: ldapsearch/LDAP client, match: [ldap-client, ldapsearch]}
+      - {id: kinit, name: kinit/klist, match: [kinit, klist]}
+      - {id: mkhomedir, name: Home dir creation, match: [oddjob-mkhomedir, mkhomedir]}
+      - {id: access-provider, name: Access control (simple_allow_groups), match: [access-provider, simple-allow-groups]}
+      - {id: krb5-conf, name: krb5.conf, match: [krb5-conf]}
+      - {id: ldap-ssh-keys, name: SSH public keys from LDAP/IPA (sss_ssh_authorizedkeys), match: [sss-ssh-authorizedkeys, ldap-ssh-keys]}
+      - {id: openldap-server, name: OpenLDAP server slapd and cn=config, match: [slapd, openldap-server]}
+  # --- Networking (LFCS 25%; LPIC-1 109; LPIC-2 205)
+  - id: network-configuration
+    name: NetworkManager/netplan/systemd-networkd configuration
+    source: RHCSA/Networking
+    match: [networkmanager, nmcli, netplan, systemd-networkd, network-configuration]
+    subtopics:
+      - {id: nmcli-connection, name: nmcli connection add/modify, match: [nmcli-connection, nmcli-con-mod]}
+      - {id: netplan-yaml, name: netplan YAML, match: [netplan-yaml, netplan-apply]}
+      - {id: networkd-files, name: systemd-networkd .network files, match: [network-file, networkd-network-file]}
+      - {id: nmtui, name: nmtui, match: [nmtui]}
+      - {id: nm-keyfile, name: keyfile/ifcfg profiles, match: [nm-keyfile, ifcfg]}
+      - {id: static-ip, name: Static vs DHCP, match: [static-ip, dhcp-client]}
+      - {id: ipv6-config, name: IPv6 addressing/SLAAC, match: [ipv6-configuration, slaac]}
+      - {id: dispatcher, name: NM dispatcher scripts, match: [nm-dispatcher, dispatcher-scripts]}
+      - {id: wifi, name: Wi-Fi with nmcli/wpa_supplicant, match: [nmcli-wifi, wpa-supplicant, wifi]}
+      - {id: nmcli-device, name: nmcli device/general troubleshooting and unmanaged devices, match: [nmcli-device, nm-unmanaged]}
+      - {id: ifupdown, name: ifupdown /etc/network/interfaces, match: [ifupdown, etc-network-interfaces]}
+      - {id: mac-mtu, name: MAC address and MTU settings (cloned-mac-address), match: [cloned-mac-address, mtu-setting]}
+  - id: ip-routing
+    name: ip/ss tooling, routing tables and policy routing
+    source: LPIC-2/Network Configuration
+    match: [ip-route, routing, static-routes, policy-routing, ss]
+    subtopics:
+      - {id: ip-rule, name: ip rule, match: [ip-rule]}
+      - {id: multi-homed, name: Multi-homed hosts, match: [multi-homed]}
+      - {id: route-metrics, name: Route metrics, match: [route-metrics]}
+      - {id: rt-tables, name: rt_tables, match: [rt-tables]}
+      - {id: fwmark, name: fwmark routing, match: [fwmark]}
+      - {id: ip-link-addr, name: ip link/addr, match: [ip-link, ip-addr]}
+      - {id: ss-filters, name: ss filters, match: [ss-filters, ss-listening]}
+      - {id: ip-neigh, name: ip neigh/ARP, match: [ip-neigh, arp-table]}
+      - {id: default-gateway, name: Default gateway, match: [default-gateway]}
+      - {id: ecmp, name: ECMP routes, match: [ecmp, multipath]}
+      - {id: ip-netns, name: Network namespaces with ip netns and veth, match: [ip-netns, network-namespace]}
+      - {id: ip-tunnels, name: GRE/IPIP/VXLAN tunnels with ip link, match: [gre-tunnel, vxlan]}
+  - id: hostname-resolution
+    name: Hostname, /etc/hosts and resolv.conf/systemd-resolved
+    source: LPIC-1/Networking Fundamentals
+    match: [hostname, resolv-conf, systemd-resolved, name-resolution, hosts-file]
+    subtopics:
+      - {id: hostnamectl, name: hostnamectl, match: [hostnamectl]}
+      - {id: etc-hosts, name: /etc/hosts, match: [etc-hosts]}
+      - {id: nsswitch, name: nsswitch.conf, match: [nsswitch]}
+      - {id: resolvectl, name: resolvectl, match: [resolvectl]}
+      - {id: search-domain, name: Search domains, match: [search-domain]}
+      - {id: split-dns, name: Split DNS, match: [split-dns]}
+      - {id: getent, name: getent, match: [getent]}
+      - {id: mdns, name: mDNS/Avahi, match: [mdns]}
+      - {id: dns-over-tls, name: DNS over TLS, match: [dns-over-tls, dnsovertls]}
+      - {id: dhcp-dns, name: DHCP DNS overrides, match: [dhcp-dns]}
+      - {id: resolv-conf-options, name: resolv.conf options (ndots/timeout/rotate/edns0), match: [ndots, resolv-conf-options]}
+      - {id: dns-cache, name: Local DNS caching (nscd/dnsmasq/resolved cache), match: [nscd, dns-cache]}
+  - id: bonding-vlans-bridges
+    name: Bonding/teaming, VLANs and bridges
+    source: LPIC-2/Network Configuration
+    match: [bonding, teaming, vlan, vlans, bridge, bridges]
+    subtopics:
+      - {id: lacp, name: LACP, match: [lacp]}
+      - {id: active-backup, name: active-backup, match: [active-backup]}
+      - {id: miimon, name: miimon, match: [miimon]}
+      - {id: vlan-interface, name: 802.1q VLAN interfaces, match: [vlan-interface, 8021q, vlan-tagging]}
+      - {id: bridge-interface, name: Linux bridges, match: [bridge-interface, bridge-utils]}
+      - {id: macvlan, name: macvlan/ipvlan, match: [macvlan, ipvlan]}
+      - {id: teamd, name: teamd, match: [teamd, team-driver]}
+      - {id: bridge-vlan, name: Bridge VLAN filtering/STP, match: [bridge-vlan-filtering, bridge-stp]}
+      - {id: bond-modes, name: Bond modes and xmit_hash_policy, match: [xmit-hash-policy, bond-modes]}
+      - {id: veth, name: veth pairs, match: [veth]}
+      - {id: openvswitch, name: Open vSwitch bridges with ovs-vsctl, match: [openvswitch, ovs-vsctl]}
+  - id: firewalld-nftables
+    name: firewalld/nftables/iptables host firewall
+    source: RHCSA/Security
+    match: [firewalld, nftables, iptables, host-firewall, firewall]
+    subtopics:
+      - {id: firewall-cmd, name: firewall-cmd zones, match: [firewall-cmd, firewalld-zones]}
+      - {id: rich-rules, name: Rich rules, match: [rich-rule, firewalld-rich-rules]}
+      - {id: firewalld-services, name: Service definitions, match: [firewalld-services, service-definitions]}
+      - {id: nft-ruleset, name: nft tables/chains/sets, match: [nft, nft-sets, nft-ruleset]}
+      - {id: nftables-conf, name: nftables.conf persistence, match: [nftables-conf, nftables-persistence]}
+      - {id: iptables-save, name: iptables-save/restore, match: [iptables-save, iptables-restore, iptables-persistent]}
+      - {id: ufw, name: ufw, match: [ufw]}
+      - {id: ipset, name: ipset, match: [ipset]}
+      - {id: firewall-logging, name: Logging dropped packets, match: [firewall-logging, nflog]}
+      - {id: dnat, name: DNAT/port forwarding, match: [dnat, port-forward]}
+      - {id: masquerade, name: Masquerade/SNAT for a Linux router, match: [masquerade, snat]}
+      - {id: conntrack, name: Connection tracking table inspection and tuning, match: [conntrack]}
+  - id: ssh-server-hardening
+    name: SSH server configuration and hardening
+    source: RHCSA/Security
+    match: [sshd, ssh-hardening, ssh-server, ssh]
+    subtopics:
+      - {id: sshd-config, name: sshd_config essentials, match: [sshd-config]}
+      - {id: match-block, name: Match blocks, match: [match-block]}
+      - {id: ssh-ca, name: SSH CA, match: [ssh-ca]}
+      - {id: sftp-chroot, name: SFTP chroot, match: [sftp-chroot]}
+      - {id: 2fa, name: 2FA, match: [2fa]}
+      - {id: kexalgorithms, name: Ciphers/KEX, match: [kexalgorithms]}
+      - {id: sshd-t, name: sshd -t/-T testing, match: [sshd-t, sshd-test]}
+      - {id: sshd-config-d, name: sshd_config.d Include, match: [sshd-config-d, include-directive]}
+      - {id: login-grace, name: LoginGraceTime/MaxAuthTries, match: [login-grace-time, maxauthtries]}
+      - {id: listenaddress, name: Port/ListenAddress, match: [listenaddress, ssh-port]}
+      - {id: allowusers, name: AllowUsers/AllowGroups/DenyUsers access lists, match: [allowusers, allowgroups]}
+      - {id: authorizedkeyscommand, name: AuthorizedKeysCommand and AuthorizedPrincipalsFile, match: [authorizedkeyscommand, authorizedprincipalsfile]}
+  - id: ssh-client-keys
+    name: SSH keys, agent, config and tunnels
+    source: LPIC-1/Security
+    match: [ssh-keys, ssh-config, ssh-agent, ssh-tunnel, port-forwarding]
+    subtopics:
+      - {id: ssh-keygen, name: ssh-keygen/ed25519, match: [ssh-keygen, ed25519]}
+      - {id: ssh-copy-id, name: ssh-copy-id/authorized_keys, match: [ssh-copy-id, authorized-keys]}
+      - {id: agent-forwarding, name: Agent forwarding, match: [agent-forwarding, ssh-agent-forwarding]}
+      - {id: ssh-config-file, name: ssh config file and ProxyJump, match: [proxyjump, host-aliases, ssh-config-file]}
+      - {id: forwarding, name: -L/-R/-D forwarding, match: [local-forwarding, remote-forwarding, dynamic-forwarding]}
+      - {id: known-hosts, name: known_hosts, match: [known-hosts, host-key-verification]}
+      - {id: controlmaster, name: Multiplexing, match: [controlmaster, ssh-multiplexing]}
+      - {id: scp-sftp, name: scp/sftp/rsync over ssh, match: [scp, sftp-client]}
+      - {id: keepalive, name: Keepalive/escape, match: [serveraliveinterval, ssh-keepalive]}
+      - {id: fido2-ssh, name: FIDO2 security-key SSH keys (ed25519-sk), match: [ed25519-sk, fido2-ssh]}
+      - {id: ssh-debugging, name: Debug client auth failures with ssh -v, match: [ssh-verbose, ssh-debugging]}
+      - {id: autossh, name: Persistent tunnels with autossh/sshuttle, match: [autossh, sshuttle]}
+  - id: network-troubleshooting
+    name: Network troubleshooting with tcpdump/mtr/nc
+    source: LPIC-2/Network Troubleshooting
+    match: [tcpdump, mtr, netcat, network-troubleshooting, packet-capture]
+    subtopics:
+      - {id: tcpdump-filters, name: tcpdump BPF filters, match: [tcpdump-filters, bpf-filter]}
+      - {id: traceroute, name: traceroute/mtr reading, match: [traceroute]}
+      - {id: nmap, name: nmap, match: [nmap]}
+      - {id: ethtool, name: ethtool, match: [ethtool]}
+      - {id: path-mtu, name: MTU problems, match: [path-mtu, mtu]}
+      - {id: dig, name: dig/nslookup, match: [dig, nslookup]}
+      - {id: curl-debug, name: curl -v/openssl s_client, match: [curl-debug, openssl-s-client]}
+      - {id: arping, name: arping/duplicate IP, match: [arping, duplicate-ip]}
+      - {id: iperf, name: iperf3, match: [iperf3, bandwidth-test]}
+      - {id: nc-port-check, name: nc port checks, match: [nc-port-check, port-scan]}
+      - {id: nstat, name: Kernel network counters and retransmits (nstat/netstat -s), match: [nstat, tcp-retransmits]}
+      - {id: socat, name: Relays and test endpoints with socat, match: [socat]}
+  - id: time-sync-chrony
+    name: chrony/NTP time synchronisation
+    source: RHCSA/Deploy and configure
+    match: [chrony, ntp, time-sync, timesync]
+    subtopics:
+      - {id: chronyc, name: chronyc, match: [chronyc]}
+      - {id: nts, name: NTS, match: [nts]}
+      - {id: makestep, name: makestep, match: [makestep]}
+      - {id: hwclock, name: hwclock, match: [hwclock]}
+      - {id: leap-second, name: Leap seconds, match: [leap-second]}
+      - {id: pps, name: PPS/GPS, match: [pps]}
+      - {id: ntp-server, name: Serving NTP, match: [ntp-server]}
+      - {id: chrony-conf, name: chrony.conf sources/pool, match: [chrony-conf, pool-directive]}
+      - {id: chrony-allow, name: allow/client access, match: [chrony-allow]}
+      - {id: timesyncd, name: systemd-timesyncd, match: [systemd-timesyncd]}
+      - {id: ptp, name: Precision Time Protocol with linuxptp (ptp4l/phc2sys), match: [ptp4l, linuxptp]}
+      - {id: clock-drift, name: Diagnose clock drift and offset, match: [clock-drift]}
+  - id: wireguard-openvpn
+    name: WireGuard/OpenVPN on Linux
+    source: LPIC-2/System Security
+    match: [wireguard, openvpn, vpn]
+    subtopics:
+      - {id: wg-quick, name: wg-quick, match: [wg-quick]}
+      - {id: allowedips, name: AllowedIPs, match: [allowedips]}
+      - {id: road-warrior, name: Road warrior, match: [road-warrior]}
+      - {id: site-to-site, name: Site to site, match: [site-to-site]}
+      - {id: easy-rsa, name: easy-rsa, match: [easy-rsa]}
+      - {id: split-tunnel, name: Split tunnel, match: [split-tunnel]}
+      - {id: wg-keygen, name: WireGuard keys, match: [wg-keygen, wireguard-keys]}
+      - {id: openvpn-server, name: server.conf/push, match: [openvpn-server, push-route]}
+      - {id: nm-vpn, name: NetworkManager VPN, match: [networkmanager-vpn]}
+      - {id: networkd-wg, name: systemd-networkd WireGuard, match: [systemd-networkd-wireguard]}
+      - {id: wg-troubleshooting, name: WireGuard handshake and MTU troubleshooting, match: [wg-show, wireguard-handshake]}
+      - {id: ipsec, name: IPsec with strongSwan/libreswan, match: [strongswan, libreswan]}
+  # --- Services (LPIC-2 207-212; LFCS operations)
+  - id: dns-server-bind
+    name: BIND/unbound DNS server
+    source: LPIC-2/DNS
+    match: [bind, bind9, unbound, dns-server]
+    subtopics:
+      - {id: zone-file, name: Zone files, match: [zone-file]}
+      - {id: soa, name: SOA/serial, match: [soa]}
+      - {id: axfr, name: Zone transfers, match: [axfr]}
+      - {id: tsig, name: TSIG, match: [tsig]}
+      - {id: dnssec, name: DNSSEC, match: [dnssec]}
+      - {id: rndc, name: rndc, match: [rndc]}
+      - {id: reverse-zone, name: Reverse zones/PTR, match: [reverse-zone, ptr-records, in-addr-arpa]}
+      - {id: unbound-conf, name: unbound.conf, match: [unbound-conf, local-zone, unbound-control]}
+      - {id: named-logging, name: Query logging, match: [named-logging, query-log]}
+      - {id: allow-recursion, name: allow-recursion/allow-query ACLs, match: [allow-recursion, allow-query]}
+      - {id: bind-views, name: Split-horizon DNS with BIND views, match: [bind-views, split-horizon]}
+      - {id: named-checkzone, name: Validate config and zones (named-checkconf/named-checkzone), match: [named-checkzone, named-checkconf]}
+  - id: web-server-nginx-apache
+    name: nginx/Apache serving, vhosts and TLS
+    source: LPIC-2/Web Services
+    match: [nginx, apache, httpd, vhost, reverse-proxy]
+    subtopics:
+      - {id: server-block, name: Server blocks/vhosts, match: [server-block, virtual-host]}
+      - {id: proxy-pass, name: proxy_pass, match: [proxy-pass]}
+      - {id: php-fpm, name: PHP-FPM, match: [php-fpm]}
+      - {id: htaccess, name: .htaccess, match: [htaccess]}
+      - {id: nginx-t, name: Config testing, match: [nginx-t, apachectl]}
+      - {id: location-blocks, name: location/try_files, match: [location-blocks, try-files]}
+      - {id: htpasswd, name: Basic auth, match: [htpasswd, basic-auth]}
+      - {id: log-format, name: Access/error logs, match: [log-format, access-log]}
+      - {id: limit-req, name: Rate limiting, match: [limit-req, rate-limiting]}
+      - {id: mod-rewrite, name: Rewrites/redirects, match: [mod-rewrite, rewrite-rules]}
+      - {id: web-tls-hardening, name: TLS protocols/HSTS/OCSP stapling on nginx and Apache, match: [hsts, ocsp-stapling]}
+      - {id: upstream-load-balancing, name: Upstream load balancing and health, match: [upstream-load-balancing, nginx-upstream]}
+  - id: file-sharing-samba-nfs-server
+    name: Samba and NFS server exports
+    source: LPIC-2/File Sharing
+    match: [samba, nfs-server, exports, smb-server]
+    subtopics:
+      - {id: smb-conf, name: smb.conf, match: [smb-conf]}
+      - {id: testparm, name: testparm, match: [testparm]}
+      - {id: smbpasswd, name: smbpasswd, match: [smbpasswd]}
+      - {id: exportfs, name: exportfs, match: [exportfs]}
+      - {id: root-squash, name: root_squash, match: [root-squash]}
+      - {id: pseudo-root, name: NFSv4 pseudo root, match: [pseudo-root]}
+      - {id: share-definition, name: Share definitions, match: [share-definition, valid-users]}
+      - {id: winbind, name: AD member/winbind, match: [winbind, idmap]}
+      - {id: nfsd-threads, name: nfsd tuning, match: [nfsd-threads, nfs-server-tuning]}
+      - {id: firewalld-nfs, name: Firewall for NFS/SMB, match: [firewalld-nfs]}
+      - {id: smbclient, name: Test and inspect Samba with smbclient/smbstatus, match: [smbclient, smbstatus]}
+      - {id: vsftpd, name: FTP server with vsftpd, match: [vsftpd]}
+  - id: dhcp-server
+    name: DHCP server
+    source: LPIC-2/Network Client Management
+    match: [dhcp-server, dhcpd, kea]
+    subtopics:
+      - {id: kea-dhcp4, name: Kea, match: [kea-dhcp4]}
+      - {id: dnsmasq, name: dnsmasq, match: [dnsmasq]}
+      - {id: dhcp-relay, name: Relay, match: [dhcp-relay]}
+      - {id: host-reservation, name: Reservations, match: [host-reservation]}
+      - {id: lease-database, name: Leases, match: [lease-database]}
+      - {id: pxe-options, name: PXE options, match: [pxe-options]}
+      - {id: dhcpv6, name: DHCPv6, match: [dhcpv6]}
+      - {id: radvd, name: radvd, match: [radvd]}
+      - {id: ddns, name: DDNS, match: [ddns]}
+      - {id: subnet-declaration, name: Pools and options, match: [subnet-declaration, dhcp-pool, dhcp-options]}
+      - {id: dhcp-ha, name: DHCP failover and Kea high availability, match: [dhcp-failover, kea-ha]}
+      - {id: isc-to-kea, name: Migrate ISC dhcpd to Kea (keama), match: [keama, dhcp-migration]}
+  - id: mail-postfix
+    name: Postfix/Dovecot and mail relay
+    source: LPIC-2/Email Services
+    match: [postfix, dovecot, mail-relay, smtp]
+    subtopics:
+      - {id: relayhost, name: relayhost, match: [relayhost]}
+      - {id: main-cf, name: main.cf, match: [main-cf]}
+      - {id: postqueue, name: Queue management, match: [postqueue]}
+      - {id: imap, name: Dovecot IMAP, match: [imap]}
+      - {id: spf, name: SPF, match: [spf]}
+      - {id: dkim, name: DKIM, match: [dkim]}
+      - {id: null-client, name: Null client, match: [null-client]}
+      - {id: sasl, name: SASL, match: [sasl]}
+      - {id: virtual-aliases, name: aliases/virtual, match: [aliases, virtual-alias]}
+      - {id: smtpd-tls, name: TLS for SMTP, match: [tls-smtp, smtpd-tls]}
+      - {id: smtpd-restrictions, name: smtpd recipient restrictions and open relay tests, match: [smtpd-recipient-restrictions, open-relay]}
+      - {id: maillog-tracing, name: Trace a message through mail logs, match: [maillog, postfix-logs]}
+  - id: logging-rsyslog
+    name: rsyslog, logrotate and remote logging
+    source: LPIC-1/Essential System Services
+    match: [rsyslog, syslog, logrotate, log-rotation, remote-logging]
+    subtopics:
+      - {id: rsyslog-conf, name: rsyslog.conf selectors, match: [rsyslog-conf, rsyslog-selectors]}
+      - {id: rsyslog-forwarding, name: Forwarding (omfwd/TLS), match: [rsyslog-forwarding, omfwd]}
+      - {id: rsyslog-receiver, name: Receiving (imudp/imtcp), match: [rsyslog-receiver, imudp, imtcp]}
+      - {id: logrotate-conf, name: logrotate.d config, match: [logrotate-d, logrotate-conf]}
+      - {id: copytruncate, name: copytruncate vs create, match: [copytruncate]}
+      - {id: logger, name: logger command, match: [logger]}
+      - {id: rsyslog-templates, name: Templates/dynafiles, match: [rsyslog-templates, dynafile]}
+      - {id: imjournal, name: journald integration, match: [imjournal, journald-to-rsyslog]}
+      - {id: log-retention, name: Retention, match: [retention]}
+      - {id: rsyslog-queues, name: Reliable forwarding with action queues, match: [rsyslog-queue, action-queue]}
+      - {id: rainerscript, name: RainerScript and property-based filters, match: [rainerscript, property-filter]}
+      - {id: log-shipping-agents, name: Ship logs with fluent-bit/vector, match: [fluent-bit, vector-agent]}
+  - id: printing-cups
+    name: CUPS printing
+    source: LPIC-1/Essential System Services
+    match: [cups, printing]
+    subtopics:
+      - {id: lpadmin, name: lpadmin, match: [lpadmin]}
+      - {id: lpstat, name: lpstat, match: [lpstat]}
+      - {id: ipp-everywhere, name: IPP Everywhere, match: [ipp-everywhere]}
+      - {id: ppd, name: PPDs, match: [ppd]}
+      - {id: cupsd-conf, name: cupsd.conf, match: [cupsd-conf]}
+      - {id: lpoptions, name: lpoptions, match: [lpoptions]}
+      - {id: print-queue, name: Queues, match: [print-queue]}
+      - {id: cups-sharing, name: Sharing/web admin, match: [cups-sharing, cups-web-interface]}
+      - {id: cups-troubleshooting, name: Troubleshooting, match: [cups-troubleshooting, cups-error-log]}
+      - {id: lpinfo, name: Discover printers and drivers with lpinfo, match: [lpinfo, printer-discovery]}
+      - {id: lp-command, name: Submit and cancel jobs with lp/lpr/cancel, match: [lp-command, lpr]}
+  - id: database-service-basics
+    name: Running MariaDB/PostgreSQL as a service
+    source: LFCS/Operations Deployment
+    match: [mariadb, postgresql-service, database-service]
+    subtopics:
+      - {id: initdb, name: initdb, match: [initdb]}
+      - {id: pg-hba, name: pg_hba.conf, match: [pg-hba]}
+      - {id: mysql-secure-installation, name: mysql_secure_installation, match: [mysql-secure-installation]}
+      - {id: listen-addresses, name: Listen addresses, match: [listen-addresses]}
+      - {id: data-directory, name: Data directory, match: [data-directory]}
+      - {id: pg-basebackup, name: pg_basebackup, match: [pg-basebackup]}
+      - {id: selinux-database, name: SELinux for DBs, match: [selinux-database]}
+      - {id: grants, name: Users and grants, match: [create-user, grant, mysql-grants]}
+      - {id: pg-upgrade, name: pg_upgrade, match: [pg-upgrade, postgresql-upgrade]}
+      - {id: logical-dumps, name: Logical backups with mysqldump/pg_dump, match: [mysqldump, pg-dump]}
+      - {id: db-memory-tuning, name: Memory tuning (innodb_buffer_pool_size/shared_buffers), match: [innodb-buffer-pool, shared-buffers]}
+      - {id: slow-query-log, name: Slow query logging, match: [slow-query-log]}
+  # --- Security (RHCSA security; LPIC-1 110; LPIC-2 212)
+  - id: selinux
+    name: SELinux modes, contexts, booleans and troubleshooting
+    source: RHCSA/Security
+    match: [selinux, selinux-context, selinux-boolean, audit2allow]
+    subtopics:
+      - {id: semanage, name: semanage, match: [semanage]}
+      - {id: restorecon, name: restorecon, match: [restorecon]}
+      - {id: booleans, name: Booleans, match: [booleans]}
+      - {id: avc-denial, name: AVC denials, match: [avc-denial]}
+      - {id: semanage-port, name: Port labels, match: [semanage-port, port-labeling]}
+      - {id: semanage-fcontext, name: File context rules, match: [semanage-fcontext, file-context]}
+      - {id: selinux-modes, name: Modes/setenforce, match: [setenforce, permissive-mode, selinux-modes]}
+      - {id: semodule, name: Custom policy modules, match: [semodule, custom-policy-module]}
+      - {id: selinux-users, name: Confined users, match: [selinux-users, semanage-login]}
+      - {id: autorelabel, name: Relabel filesystem, match: [selinux-relabel, autorelabel]}
+      - {id: sealert, name: setroubleshoot and sealert analysis, match: [sealert, setroubleshoot]}
+      - {id: container-selinux, name: SELinux for containers and volume relabel, match: [container-selinux, volume-relabel]}
+  - id: apparmor
+    name: AppArmor profiles
+    source: LPIC-2/System Security
+    match: [apparmor, apparmor-profile]
+    subtopics:
+      - {id: aa-genprof, name: aa-genprof, match: [aa-genprof]}
+      - {id: aa-logprof, name: aa-logprof, match: [aa-logprof]}
+      - {id: enforce-mode, name: Enforce, match: [enforce-mode]}
+      - {id: complain-mode, name: Complain, match: [complain-mode]}
+      - {id: profile-syntax, name: Profile syntax/abstractions, match: [apparmor-profile-syntax, apparmor-abstractions]}
+      - {id: aa-disable, name: Disable/unload profiles, match: [aa-disable, profile-unload]}
+      - {id: local-overrides, name: local/ overrides and tunables, match: [apparmor-local-overrides, apparmor-tunables]}
+      - {id: aa-status, name: Read aa-status output, match: [aa-status]}
+      - {id: apparmor-denied, name: Troubleshoot apparmor DENIED messages, match: [apparmor-denied]}
+      - {id: apparmor-containers, name: AppArmor for containers and snaps, match: [apparmor-containers]}
+  - id: hardening-baselines
+    name: CIS/STIG hardening and OpenSCAP
+    source: LPIC-2/System Security
+    match: [hardening, cis-benchmark, stig, openscap, security-baseline]
+    subtopics:
+      - {id: oscap, name: oscap scan, match: [oscap, scap-security-guide]}
+      - {id: cis-remediation, name: CIS remediation, match: [cis-remediation, hardening-playbook]}
+      - {id: stig-profile, name: DISA STIG profile, match: [disa-stig, stig-profile]}
+      - {id: lynis, name: Lynis, match: [lynis]}
+      - {id: usbguard, name: USBGuard, match: [usbguard]}
+      - {id: service-minimisation, name: Remove unneeded services, match: [service-minimisation, attack-surface]}
+      - {id: oscap-report, name: Compliance reports, match: [oscap-report, compliance-report]}
+      - {id: crypto-policies, name: System-wide crypto policies (update-crypto-policies), match: [crypto-policies, update-crypto-policies]}
+      - {id: fapolicyd, name: Application allowlisting with fapolicyd, match: [fapolicyd]}
+      - {id: yama-ptrace, name: ptrace scope and core dump restrictions (Yama), match: [ptrace-scope, yama]}
+      - {id: systemd-analyze-security, name: Score service exposure with systemd-analyze security, match: [systemd-analyze-security]}
+  - id: auditd
+    name: auditd rules and audit log review
+    source: LPIC-2/System Security
+    match: [auditd, audit-rules, audit-log]
+    subtopics:
+      - {id: auditctl, name: auditctl, match: [auditctl]}
+      - {id: ausearch, name: ausearch, match: [ausearch]}
+      - {id: aureport, name: aureport, match: [aureport]}
+      - {id: audit-rules-d, name: rules.d, match: [audit-rules-d]}
+      - {id: syscall-audit, name: Syscall rules, match: [syscall-audit]}
+      - {id: file-watch, name: File watches, match: [file-watch]}
+      - {id: immutable-rules, name: Immutable, match: [immutable-rules]}
+      - {id: audit-key, name: Keys, match: [audit-key]}
+      - {id: audisp-remote, name: Remote audit, match: [audisp-remote, audit-remote]}
+      - {id: auditd-conf, name: auditd.conf rotation, match: [auditd-conf, max-log-file]}
+      - {id: pam-tty-audit, name: Command and TTY auditing (pam_tty_audit/execve rules), match: [pam-tty-audit, execve-audit]}
+      - {id: audit-backlog, name: Audit backlog and lost events, match: [audit-backlog, backlog-limit]}
+  - id: fail2ban-intrusion
+    name: fail2ban and intrusion detection (AIDE)
+    source: LPIC-2/System Security
+    match: [fail2ban, aide, intrusion-detection, rootkit]
+    subtopics:
+      - {id: jail-local, name: jail.local, match: [jail-local]}
+      - {id: banaction, name: banaction, match: [banaction]}
+      - {id: sshd-jail, name: sshd jail, match: [sshd-jail]}
+      - {id: recidive, name: recidive, match: [recidive]}
+      - {id: aide-init, name: aide init, match: [aide-init]}
+      - {id: aide-check, name: aide check, match: [aide-check]}
+      - {id: rkhunter, name: rkhunter, match: [rkhunter]}
+      - {id: failregex, name: Custom filters, match: [failregex, fail2ban-filter]}
+      - {id: fail2ban-client, name: fail2ban-client/unban, match: [fail2ban-client, unban]}
+      - {id: aide-conf, name: aide.conf rules, match: [aide-conf, aide-rules]}
+      - {id: crowdsec, name: Collaborative blocking with CrowdSec, match: [crowdsec]}
+      - {id: clamav, name: Malware scanning with ClamAV, match: [clamav]}
+  - id: tls-certificates-ca
+    name: Managing TLS certificates and system CA trust
+    source: LPIC-2/System Security
+    match: [tls, certificates, ca-certificates, openssl, lets-encrypt, certbot]
+    subtopics:
+      - {id: csr, name: CSRs, match: [csr]}
+      - {id: san, name: SANs, match: [san]}
+      - {id: private-ca, name: Private CA, match: [private-ca]}
+      - {id: update-ca-trust, name: CA trust store, match: [update-ca-trust]}
+      - {id: pkcs12, name: PKCS12, match: [pkcs12]}
+      - {id: renewal-hook, name: Renewal hooks, match: [renewal-hook]}
+      - {id: openssl-verify, name: openssl verify/x509, match: [openssl-verify, openssl-x509]}
+      - {id: self-signed, name: Self-signed, match: [self-signed]}
+      - {id: dns-01, name: DNS-01 challenge, match: [dns-01, certbot-dns]}
+      - {id: expiry, name: Expiry monitoring, match: [expiry]}
+      - {id: certificate-chain, name: Fix incomplete chains and key/cert mismatches, match: [certificate-chain, intermediate-certificate]}
+      - {id: acme-sh, name: ACME with acme.sh and HTTP-01 webroot, match: [acme-sh, http-01]}
+  - id: gpg-signing
+    name: GPG keys, signing and verification
+    source: LPIC-1/Security
+    match: [gpg, gnupg, signing, key-verification]
+    subtopics:
+      - {id: detached-signature, name: Detached signatures, match: [detached-signature]}
+      - {id: keyserver, name: Keyservers, match: [keyserver]}
+      - {id: fingerprint, name: Fingerprints, match: [fingerprint]}
+      - {id: revocation-certificate, name: Revocation, match: [revocation-certificate]}
+      - {id: subkeys, name: Subkeys, match: [subkeys]}
+      - {id: gpg-agent, name: gpg-agent, match: [gpg-agent]}
+      - {id: symmetric-encryption, name: Symmetric, match: [symmetric-encryption]}
+      - {id: key-generation, name: Key generation, match: [gpg-key-generation, full-gen-key]}
+      - {id: key-export, name: Export/import/backup, match: [gpg-export, key-backup]}
+      - {id: git-signing, name: Git commit signing, match: [git-signing, signed-commits]}
+      - {id: gpg-smartcard, name: GPG keys on smartcards/YubiKey, match: [gpg-smartcard, yubikey]}
+      - {id: web-of-trust, name: Key signing and trust levels, match: [web-of-trust, key-signing]}
+  - id: secure-boot-tpm
+    name: Secure Boot, TPM and measured boot
+    source: LPIC-2/System Startup
+    match: [secure-boot, tpm, measured-boot, mokutil]
+    subtopics:
+      - {id: mok, name: MOK, match: [mok]}
+      - {id: shim, name: shim, match: [shim]}
+      - {id: dkms-signing, name: DKMS signing, match: [dkms-signing]}
+      - {id: sbctl, name: sbctl, match: [sbctl]}
+      - {id: efivars, name: efivars, match: [efivars]}
+      - {id: pcr, name: PCRs, match: [pcr]}
+      - {id: uki, name: UKI, match: [uki]}
+      - {id: lockdown, name: Lockdown, match: [lockdown]}
+      - {id: efibootmgr, name: efibootmgr, match: [efibootmgr, boot-entries]}
+      - {id: tpm2-tools, name: tpm2-tools, match: [tpm2-tools]}
+      - {id: ima-evm, name: Integrity Measurement Architecture (IMA/EVM), match: [ima, evm]}
+      - {id: fwupd, name: Firmware updates with fwupd/LVFS, match: [fwupd, lvfs]}
+  # --- Containers and virtualisation (RHCSA containers; LPIC-1 102.6)
+  - id: podman-rootless
+    name: Podman rootless containers and systemd integration
+    source: RHCSA/Containers
+    match: [podman, rootless, rootless-containers, quadlet]
+    subtopics:
+      - {id: subuid, name: subuid/subgid, match: [subuid]}
+      - {id: linger, name: loginctl linger, match: [loginctl-linger]}
+      - {id: generate-systemd, name: podman generate systemd, match: [podman-generate-systemd]}
+      - {id: skopeo, name: skopeo, match: [skopeo]}
+      - {id: podman-pod, name: Pods, match: [podman-pod]}
+      - {id: auto-update, name: auto-update, match: [podman-auto-update]}
+      - {id: pasta, name: pasta/slirp4netns, match: [pasta]}
+      - {id: podman-volumes, name: Volumes, match: [podman-volumes, container-volumes]}
+      - {id: containerfile, name: Containerfile builds, match: [containerfile, podman-build]}
+      - {id: podman-network, name: Networks, match: [podman-network, container-network]}
+      - {id: podman-secrets, name: Secrets with podman secret, match: [podman-secrets]}
+      - {id: registries-conf, name: registries.conf mirrors and short-name policy, match: [registries-conf, short-name-aliases]}
+  - id: kvm-libvirt
+    name: KVM/libvirt virtual machines
+    source: LPIC-1/Virtualization
+    match: [kvm, libvirt, virsh, qemu, virtual-machines]
+    subtopics:
+      - {id: virt-install, name: virt-install, match: [virt-install]}
+      - {id: libvirt-network, name: Networks, match: [libvirt-network]}
+      - {id: qemu-img, name: qemu-img, match: [qemu-img]}
+      - {id: virtio, name: virtio, match: [virtio]}
+      - {id: live-migration, name: Migration, match: [live-migration]}
+      - {id: storage-pool, name: Storage pools, match: [storage-pool]}
+      - {id: virsh-console, name: Console, match: [virsh-console]}
+      - {id: nested, name: Nested virt, match: [nested-virtualization]}
+      - {id: vfio, name: PCI/GPU passthrough, match: [vfio, pci-passthrough]}
+      - {id: virsh-edit, name: Domain XML editing, match: [virsh-edit, domain-xml]}
+      - {id: virsh-snapshot, name: VM snapshots (internal/external) and blockcommit, match: [virsh-snapshot, blockcommit]}
+      - {id: guestfish, name: Offline guest repair with libguestfs (guestfish/virt-rescue), match: [guestfish, libguestfs]}
+  - id: cloud-init-images
+    name: cloud-init and cloud image customisation
+    source: LPIC-1/Virtualization
+    match: [cloud-init, cloud-images, image-customisation, virt-customize]
+    subtopics:
+      - {id: user-data, name: user-data, match: [user-data]}
+      - {id: nocloud, name: NoCloud, match: [nocloud]}
+      - {id: cloud-localds, name: cloud-localds, match: [cloud-localds]}
+      - {id: virt-sysprep, name: virt-sysprep, match: [virt-sysprep]}
+      - {id: packer, name: Packer, match: [packer]}
+      - {id: machine-id, name: machine-id, match: [machine-id]}
+      - {id: cloud-init-modules, name: runcmd/write_files modules, match: [runcmd, write-files, cloud-init-modules]}
+      - {id: cloud-init-debug, name: cloud-init status/clean/logs, match: [cloud-init-status, cloud-init-clean]}
+      - {id: network-config, name: network-config, match: [network-config]}
+      - {id: image-builder, name: image-builder, match: [image-builder]}
+      - {id: datasource, name: Datasource detection (datasource_list/ds-identify), match: [datasource, ds-identify]}
+      - {id: cloud-init-schema, name: Validate user-data with cloud-init schema, match: [cloud-init-schema]}
+  # --- Maintenance, backup, automation (LPIC-2 206; RHCE)
+  - id: backup-restore
+    name: Backup and restore with rsync/borg/restic
+    source: LPIC-2/System Maintenance
+    match: [backup, rsync, borg, restic, restore]
+    subtopics:
+      - {id: borgbackup, name: borg, match: [borgbackup]}
+      - {id: prune, name: forget/prune, match: [prune]}
+      - {id: snapshot-backup, name: Snapshot backups, match: [snapshot-backup]}
+      - {id: retention, name: Retention, match: [retention]}
+      - {id: restore-test, name: Restore tests, match: [restore-test]}
+      - {id: s3-backup, name: S3, match: [s3-backup]}
+      - {id: rsync-options, name: rsync flags (--delete/--link-dest), match: [rsync-options, link-dest]}
+      - {id: bare-metal-restore, name: Bare-metal/DR, match: [bare-metal-restore, disaster-recovery, rear]}
+      - {id: dump-restore, name: tar/dump full backups, match: [dump-restore, tar-backup]}
+      - {id: etckeeper, name: etckeeper/config backup, match: [etckeeper, config-backup]}
+      - {id: fsfreeze, name: Application-consistent backups (fsfreeze/pre-hooks), match: [fsfreeze, application-consistent]}
+      - {id: bareos, name: Enterprise backup with Bareos/Bacula, match: [bareos, bacula]}
+  - id: ansible-automation
+    name: Ansible automation of Linux administration
+    source: RHCE
+    match: [ansible, ansible-playbook, configuration-management]
+    subtopics:
+      - {id: inventory, name: Inventory, match: [inventory]}
+      - {id: ansible-vault, name: Vault, match: [ansible-vault]}
+      - {id: roles, name: Roles, match: [roles]}
+      - {id: handlers, name: Handlers, match: [handlers]}
+      - {id: jinja2, name: Templates, match: [jinja2]}
+      - {id: ansible-lint, name: Lint, match: [ansible-lint]}
+      - {id: system-roles, name: RHEL system roles, match: [system-roles]}
+      - {id: ad-hoc, name: Ad-hoc commands, match: [ad-hoc-commands, ansible-adhoc]}
+      - {id: facts, name: Facts, match: [ansible-facts, gather-facts]}
+      - {id: loops-conditionals, name: Loops/conditionals, match: [ansible-loops, ansible-conditionals]}
+      - {id: ansible-galaxy, name: Collections and requirements.yml, match: [ansible-galaxy, ansible-collections]}
+      - {id: block-rescue, name: Error handling with block/rescue/always, match: [block-rescue]}
+      - {id: rolling-update, name: Rolling updates with serial/max_fail_percentage, match: [rolling-update, ansible-serial]}
+  - id: monitoring-agents
+    name: Host monitoring agents and health checks
+    source: LPIC-2/Capacity Planning
+    match: [node-exporter, monitoring, monitoring-agent, health-checks, collectd]
+    subtopics:
+      - {id: textfile-collector, name: textfile collector, match: [textfile-collector]}
+      - {id: smartmon, name: SMART, match: [smartmon]}
+      - {id: blackbox, name: blackbox, match: [blackbox-exporter]}
+      - {id: zabbix-agent, name: Zabbix agent, match: [zabbix-agent]}
+      - {id: netdata, name: netdata, match: [netdata]}
+      - {id: dead-mans-switch, name: Dead man switch, match: [dead-mans-switch]}
+      - {id: disk-full-alert, name: Disk alerts, match: [disk-full-alert]}
+      - {id: snmpd, name: SNMP, match: [snmpd, net-snmp, snmp]}
+      - {id: process-monitoring, name: Process/systemd watchdog, match: [process-exporter, systemd-watchdog, process-monitoring]}
+      - {id: alert-rules, name: Host alert rules in Prometheus/Alertmanager, match: [alertmanager, host-alert-rules]}
+      - {id: nrpe, name: Nagios-style checks with NRPE, match: [nrpe, nagios-plugins]}
+  - id: localisation-timezone
+    name: Locale, time zone and keyboard configuration
+    source: LPIC-1/Administrative Tasks
+    match: [locale, timezone, timedatectl, localectl]
+    subtopics:
+      - {id: locale-gen, name: locale-gen/LANG, match: [locale-gen, lang]}
+      - {id: tzdata, name: tzdata/localtime, match: [tzdata, etc-localtime, zoneinfo]}
+      - {id: keyboard, name: Keyboard/vconsole, match: [keyboard-layout, vconsole, xkb]}
+      - {id: lc-variables, name: LC_* precedence, match: [lc-all, lc-variables]}
+      - {id: rtc-local, name: RTC local vs UTC, match: [rtc-local, utc-vs-local]}
+      - {id: iconv, name: Encoding conversion, match: [iconv, character-encoding]}
+      - {id: console-font, name: Console fonts with setfont, match: [setfont, console-font]}
+      - {id: locale-errors, name: Fix setlocale/locale warnings, match: [locale-errors, setlocale]}
+      - {id: localedef, name: Compile custom locales with localedef, match: [localedef]}
+      - {id: input-method, name: Input methods (ibus/fcitx5), match: [input-method, ibus]}
+  - id: system-upgrade-distro
+    name: Major distribution version upgrades (leapp, do-release-upgrade)
+    source: LPIC-2/System Maintenance
+    match: [distro-upgrade, leapp, release-upgrade, in-place-upgrade]
+    subtopics:
+      - {id: do-release-upgrade, name: do-release-upgrade, match: [do-release-upgrade]}
+      - {id: dnf-system-upgrade, name: dnf system-upgrade, match: [dnf-system-upgrade]}
+      - {id: debian-dist-upgrade, name: Debian dist-upgrade, match: [debian-dist-upgrade]}
+      - {id: elevate, name: ELevate, match: [elevate]}
+      - {id: pre-upgrade-checklist, name: Checklist, match: [pre-upgrade-checklist]}
+      - {id: snapshot-rollback, name: Rollback, match: [lvm-snapshot-rollback]}
+      - {id: third-party-repos, name: Third-party repos, match: [third-party-repos]}
+      - {id: leapp-preupgrade, name: leapp preupgrade/answers, match: [leapp-preupgrade, leapp-answers]}
+      - {id: post-upgrade-cleanup, name: Post-upgrade cleanup, match: [post-upgrade-cleanup, obsolete-packages]}
+      - {id: convert2rhel, name: Distribution conversion (convert2rhel/migrate2rocky), match: [convert2rhel, migrate2rocky]}
+      - {id: pacman-rolling, name: Rolling release upgrades with pacman, match: [pacman, archlinux-keyring]}
+  - id: troubleshooting-methodology
+    name: Systematic troubleshooting of a broken system
+    source: LFCS/Operations Deployment
+    match: [troubleshooting, troubleshooting-methodology, diagnosis, dmesg]
+    subtopics:
+      - {id: boot-failure, name: Boot failure diagnosis, match: [boot-failure, boot-log-analysis]}
+      - {id: disk-full, name: Disk full, match: [disk-full]}
+      - {id: kernel-panic, name: Kernel panic, match: [kernel-panic]}
+      - {id: failed-units, name: Failed units triage, match: [failed-units, systemctl-status]}
+      - {id: hung-process, name: Hung processes, match: [hung-process]}
+      - {id: no-connectivity, name: No network connectivity, match: [no-connectivity, network-unreachable]}
+      - {id: high-load, name: High load triage, match: [high-load]}
+      - {id: kdump, name: kdump/crash, match: [kdump, vmcore, crash-utility]}
+      - {id: read-only-remount, name: Read-only remount, match: [read-only-remount]}
+      - {id: sosreport, name: sos report, match: [sosreport, sos]}
+      - {id: ssh-login-failure, name: SSH login failure triage, match: [ssh-login-failure]}
+      - {id: port-in-use, name: Address already in use triage, match: [port-in-use, address-already-in-use]}
+      - {id: hardware-errors, name: Hardware errors (MCE/EDAC/rasdaemon), match: [rasdaemon, edac]}

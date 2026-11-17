@@ -1,0 +1,1051 @@
+# Canonical coverage spec: QA / Testing Engineering (whole field).
+# Checked by tools/coverage_check.py: a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (ISTQB syllabi chapter and learning-objective
+# lists, the official documentation tables of contents of each tool), not from what we happened to
+# write, so the check measures the library against the subject.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (syllabus learning
+# objectives and sub-sections, docs page sub-headings, API/CLI reference groups).
+subject: qa-testing-engineering
+scope:
+  category: computing-software
+  field: qa-testing-engineering
+  products: [selenium, playwright, cypress, jest-pytest, jmeter-k6, test-automation, test-case-design, exploratory-testing, performance-testing]
+sources:
+  - "ISTQB Certified Tester Foundation Level (CTFL) syllabus v4.0 - 1 Fundamentals of Testing (objectives, testing vs debugging, seven principles, test activities/testware/roles, traceability, independence), 2 Testing Throughout the SDLC (test-first TDD/ATDD/BDD, DevOps, shift-left, retrospectives, test levels, test types, confirmation and regression testing, maintenance testing), 3 Static Testing (work products, review process, review types, success factors), 4 Test Analysis and Design (EP, BVA, decision tables, state transition, statement/branch coverage, error guessing, exploratory, checklist-based, collaborative user story writing, acceptance criteria, ATDD), 5 Managing Test Activities (test plan, entry/exit criteria, estimation, prioritisation, test pyramid, testing quadrants, risk analysis/control, monitoring/control/metrics, reporting, configuration management, defect management), 6 Test Tools"
+  - "ISTQB Advanced Level Test Analyst (CTAL-TA) syllabus v4.0 - test analysis/design/implementation/execution tasks, risk-based testing contribution, domain testing, combinatorial testing (pairwise, classification tree), random testing, scenario-based/use-case testing, experience-based techniques, quality characteristics (functional suitability, usability, compatibility/interoperability), defect prevention, reviewing test basis, keyword-driven automation"
+  - "ISTQB Advanced Level Technical Test Analyst (CTAL-TTA) syllabus v4.0 - white-box techniques (statement, decision, MC/DC, multiple condition, basis path, API testing), static analysis (control flow, data flow, maintainability metrics), dynamic analysis (memory leaks, wild pointers, performance), technical quality characteristics (security, reliability, performance efficiency, maintainability, portability), code/architecture review checklists, test automation (keyword-driven, model-based, tool selection, fault seeding)"
+  - "Playwright docs ToC (playwright.dev/docs) - Writing tests, Locators, Assertions, Auto-waiting/Actionability, Fixtures, Configuration, Projects, Parallelism and sharding, Retries, Annotations, Test generator, Trace viewer, UI mode, Debugging, Authentication, Network/mock APIs, API testing, Visual comparisons, Components, Emulation, Clock, Aria snapshots, Accessibility testing, Reporters, Global setup/teardown, Continuous Integration, Page object models"
+  - "Cypress docs ToC (docs.cypress.io) - Core concepts (Introduction, Querying elements, Retry-ability, Interacting with elements, Variables and aliases, Conditional testing, Test isolation), Guides (Network requests/cy.intercept, Authentication/cy.session, cy.origin cross-origin, Environment variables, Configuration, Custom commands, Plugins/cy.task, Screenshots and videos, Debugging, Component testing), Cypress Cloud (Smart orchestration/parallelization, Flake detection, Test Replay), Best practices"
+  - "Selenium docs ToC (selenium.dev/documentation) - WebDriver (Getting started, Drivers/Selenium Manager, Browser options, Elements - locators/finders/interactions/information, Waits, Actions API, BiDi, Interactions - windows/frames/alerts/cookies/print), Grid (getting started, roles, configuration, Docker, observability), Test practices (encouraged - page object models, domain specific language, generating application state, mock external services, avoid sharing state, test independence; discouraged - captchas, file downloads, HTTP response codes, link spidering, two factor)"
+  - "pytest docs (docs.pytest.org) How-to guides - assert, fixtures (scope, yield teardown, conftest, parametrized fixtures, autouse, factories), parametrize, markers (skip/xfail/custom), monkeypatch, tmp_path, capsys/caplog, warnings, plugins and hooks, configuration ini/pyproject, pytest-xdist, pytest-cov; Jest docs (Matchers, Asynchronous code, Setup and teardown, Mock functions, Manual mocks, Timer mocks, Snapshot testing, Configuration/coverage, ES modules); JUnit 5 User Guide (annotations, assertions, assumptions, nested tests, display names, parameterized tests, dynamic tests, extension model, tagging/filtering, parallel execution); Mockito docs"
+  - "Grafana k6 docs ToC (grafana.com/docs/k6) - Get started, Using k6 (HTTP requests, metrics, checks, thresholds, test lifecycle, options, scenarios and executors, tags and groups, environment variables, modules), Test types (smoke, average-load, stress, soak, spike, breakpoint), Testing guides (API load testing, browser testing, data parameterization with SharedArray, correlation), Results output (end-of-test summary, real-time outputs Prometheus/InfluxDB/JSON/CSV), Extensions (xk6); Apache JMeter User Manual (Building a test plan, Elements of a test plan, Thread groups, Samplers, Logic controllers, Config elements, Timers, Assertions, Pre/post processors, Listeners, Non-GUI mode, Remote/distributed testing, HTML dashboard report, HTTP(S) Test Script Recorder, Best practices, Functions and variables); Locust docs (Writing a locustfile, tasks and wait_time, Configuration, Distributed load generation, Custom load shapes, Running headless)"
+topics:
+  # --- ISTQB CTFL ch1-2: fundamentals and testing in the SDLC
+  - id: test-process-activities
+    name: Test process activities and testware
+    source: CTFL v4.0 1.4
+    match: [test-process, testware, test-activities]
+    subtopics:
+      - {id: tpa-test-planning-doc, name: "Writing a test plan (scope, approach, resources, schedule)", match: [test-plan, test-planning]}
+      - {id: tpa-test-analysis-basis, name: "Test analysis of the test basis and test conditions", match: [test-analysis, test-conditions, test-basis]}
+      - {id: tpa-test-implementation, name: "Test implementation (procedures, suites, test data, environment readiness)", match: [test-implementation, test-procedures]}
+      - {id: tpa-test-completion, name: "Test completion activities and completion report", match: [test-completion, test-completion-report]}
+      - {id: tpa-traceability, name: "Traceability between test basis, tests and results", match: [traceability-matrix, requirements-traceability]}
+      - {id: tpa-test-design-activity, name: "Test design deriving test cases and coverage items from conditions", match: [test-design-activity]}
+      - {id: tpa-test-execution-logging, name: "Test execution, logging results and comparing actual vs expected", match: [test-execution-log, test-run-logging]}
+      - {id: tpa-testware-archiving, name: "Archiving and handing over testware at completion", match: [testware-handover]}
+      - {id: tpa-test-strategy-doc, name: "Organisational test policy and test strategy", match: [test-strategy-document, test-policy]}
+      - {id: tpa-roles, name: "Test management and testing roles and responsibilities", match: [test-manager-role, testing-roles]}
+  - id: testing-principles-objectives
+    name: Testing principles, objectives and testing vs debugging
+    source: CTFL v4.0 1.1-1.3, 1.5
+    match: [testing-principles, testing-objectives]
+    subtopics:
+      - {id: tp-seven-principles, name: "Applying the seven testing principles to scope decisions", match: [seven-testing-principles, pesticide-paradox, defect-clustering]}
+      - {id: tp-independence, name: "Independence of testing and tester roles", match: [independence-of-testing, tester-independence]}
+      - {id: tp-whole-team, name: "Whole-team approach and tester role in agile teams", match: [whole-team-approach, agile-tester]}
+      - {id: tp-root-cause-debugging, name: "Testing vs debugging hand-off and root cause analysis", match: [testing-vs-debugging, defect-root-cause-analysis]}
+      - {id: tp-errors-defects-failures, name: "Errors, defects, failures and root causes terminology", match: [error-defect-failure, failure-causes]}
+      - {id: tp-qa-vs-qc, name: "Quality assurance vs quality control responsibilities", match: [qa-vs-qc, quality-control]}
+      - {id: tp-tester-skills, name: "Tester skills and constructive communication of defects", match: [tester-skills, constructive-defect-communication]}
+      - {id: tp-context-driven, name: "Context-driven testing and choosing practices by context", match: [context-driven-testing]}
+      - {id: tp-cost-of-quality, name: "Explaining value and cost of testing (cost of quality)", match: [cost-of-quality, cost-of-defects]}
+  - id: test-first-approaches
+    name: Test-first approaches (TDD, ATDD, BDD)
+    source: CTFL v4.0 2.1.3, 4.5.3
+    match: [tdd, atdd, bdd, test-first]
+    subtopics:
+      - {id: tf-tdd-cycle, name: "TDD red-green-refactor cycle", match: [red-green-refactor, test-driven-development]}
+      - {id: tf-atdd-workshop, name: "ATDD acceptance test workshops", match: [acceptance-test-driven-development, specification-workshop]}
+      - {id: tf-bdd-gherkin, name: "BDD scenarios in Gherkin (Given-When-Then)", match: [gherkin, given-when-then]}
+      - {id: tf-cucumber-steps, name: "Cucumber/behave step definitions and glue code", match: [cucumber, step-definitions, behave]}
+      - {id: tf-example-mapping, name: "Example mapping and three amigos", match: [example-mapping, three-amigos]}
+      - {id: tf-outside-in, name: "Outside-in double-loop TDD with acceptance tests", match: [outside-in-tdd, double-loop-tdd]}
+      - {id: tf-reqnroll, name: "Reqnroll/SpecFlow BDD in .NET", match: [reqnroll, specflow]}
+      - {id: tf-living-docs, name: "Living documentation from executable specifications", match: [living-documentation]}
+      - {id: tf-scenario-outlines, name: "Scenario outlines, backgrounds and data tables", match: [gherkin-data-tables]}
+      - {id: tf-characterization, name: "Characterization tests before changing legacy code", match: [legacy-code-tests]}
+  - id: test-levels
+    name: Test levels (component, integration, system, acceptance)
+    source: CTFL v4.0 2.2.1
+    match: [test-levels]
+    subtopics:
+      - {id: tl-component-integration, name: "Component integration testing strategy (big-bang, incremental, top-down, bottom-up)", match: [component-integration-testing, incremental-integration]}
+      - {id: tl-system-integration, name: "System integration testing with external systems", match: [system-integration-testing]}
+      - {id: tl-system-testing, name: "System testing end-to-end against requirements", match: [system-testing]}
+      - {id: tl-uat, name: "User acceptance testing (UAT) planning and sign-off", match: [user-acceptance-testing, uat]}
+      - {id: tl-oat, name: "Operational acceptance testing (backup, recovery, install)", match: [operational-acceptance-testing]}
+      - {id: tl-alpha-beta, name: "Alpha and beta testing programmes", match: [alpha-testing, beta-testing]}
+      - {id: tl-component-scope, name: "Component (unit) test level scope and isolation", match: [unit-test-scope, component-test-level]}
+      - {id: tl-contract-acceptance, name: "Contractual and regulatory acceptance testing", match: [contractual-acceptance-testing, regulatory-acceptance-testing]}
+      - {id: tl-environment-tiers, name: "Test environments per level (dev, SIT, staging, UAT)", match: [test-environment-strategy, environment-tiers]}
+      - {id: tl-stubs-drivers, name: "Stubs and drivers for incremental integration", match: [test-stubs-drivers]}
+  - id: test-types-regression
+    name: Test types, confirmation, regression and maintenance testing
+    source: CTFL v4.0 2.2.2-2.3
+    match: [regression-testing, confirmation-testing, maintenance-testing]
+    subtopics:
+      - {id: tt-regression-selection, name: "Regression test selection and suite minimisation", match: [regression-test-selection, regression-suite]}
+      - {id: tt-smoke-sanity, name: "Smoke and sanity test suites", match: [smoke-testing, sanity-testing]}
+      - {id: tt-impact-analysis, name: "Impact analysis for maintenance changes", match: [impact-analysis, change-impact-analysis]}
+      - {id: tt-retest-fixes, name: "Confirmation testing of defect fixes", match: [retesting, fix-verification]}
+      - {id: tt-migration-testing, name: "Data migration and retirement testing", match: [migration-testing, data-migration-testing]}
+      - {id: tt-test-types, name: "Functional, non-functional, black-box and white-box test types", match: [test-types]}
+      - {id: tt-regression-pack, name: "Automating and scheduling the regression pack", match: [regression-pack, nightly-regression]}
+      - {id: tt-hotfix, name: "Hotfix and emergency change testing", match: [hotfix-testing, emergency-change-testing]}
+      - {id: tt-maintenance-triggers, name: "Maintenance testing triggers (modification, upgrade, retirement)", match: [maintenance-triggers]}
+      - {id: tt-dependency-upgrade, name: "Platform, OS and dependency upgrade regression", match: [dependency-upgrade-testing, platform-upgrade-testing]}
+  # --- CTFL ch3: static testing
+  - id: static-testing-reviews
+    name: Static testing and reviews
+    source: CTFL v4.0 3.1-3.2
+    match: [static-testing, reviews, review-process]
+    subtopics:
+      - {id: st-requirements-review, name: "Reviewing requirements and user stories for testability", match: [requirements-review, testability-review]}
+      - {id: st-inspection, name: "Formal inspection with roles and metrics", match: [inspection, formal-review]}
+      - {id: st-walkthrough-technical, name: "Walkthroughs and technical reviews", match: [walkthrough, technical-review]}
+      - {id: st-code-review-checklist, name: "Code review checklists for testers", match: [code-review-checklist]}
+      - {id: st-review-success, name: "Review success factors and anti-patterns", match: [review-success-factors]}
+      - {id: st-review-roles, name: "Review roles (author, moderator, scribe, reviewer, review leader)", match: [review-moderator]}
+      - {id: st-informal-review, name: "Informal reviews and desk checks", match: [desk-check]}
+      - {id: st-reading-techniques, name: "Perspective-based and checklist-based reading", match: [perspective-based-reading, checklist-based-review]}
+      - {id: st-review-metrics, name: "Review metrics (defects found, preparation rate, effectiveness)", match: [review-effectiveness-metrics]}
+      - {id: st-test-case-review, name: "Peer review of test cases and automation code", match: [test-case-review]}
+  - id: static-analysis
+    name: Static analysis (control flow, data flow, maintainability)
+    source: CTAL-TTA v4.0 ch3
+    match: [static-analysis]
+    subtopics:
+      - {id: sa-linters-sast, name: "Running linters and SAST in the pipeline", match: [linters, sast]}
+      - {id: sa-data-flow, name: "Data flow anomalies (define-use, use before define)", match: [data-flow-analysis, define-use]}
+      - {id: sa-cyclomatic, name: "Cyclomatic complexity and control-flow metrics", match: [cyclomatic-complexity, control-flow-analysis]}
+      - {id: sa-maintainability-metrics, name: "Maintainability metrics and code smells (SonarQube)", match: [maintainability-metrics, sonarqube, code-smells]}
+      - {id: sa-type-checking, name: "Static type checking as defect detection (mypy, tsc strict)", match: [static-type-checking, mypy]}
+      - {id: sa-semgrep-rules, name: "Writing custom static analysis rules (Semgrep, ESLint)", match: [custom-lint-rules]}
+      - {id: sa-secret-scanning, name: "Secret scanning in repositories (gitleaks)", match: [secret-scanning, gitleaks]}
+      - {id: sa-dead-code, name: "Dead and unreachable code detection", match: [dead-code-detection, unreachable-code]}
+      - {id: sa-architecture-rules, name: "Architecture conformance checks (ArchUnit, dependency-cruiser)", match: [archunit, architecture-conformance]}
+  # --- CTFL ch4 / CTAL-TA ch3: black-box techniques
+  - id: equivalence-partitioning
+    name: Equivalence partitioning
+    source: CTFL v4.0 4.2.1
+    match: [equivalence-partitioning, equivalence-classes]
+    subtopics:
+      - {id: ep-valid-invalid, name: "Valid and invalid partitions and one-invalid-per-test rule", match: [invalid-partitions, each-choice-coverage]}
+      - {id: ep-output-partitions, name: "Partitioning outputs and internal values", match: [output-partitioning]}
+      - {id: ep-multi-input, name: "Combining partitions across multiple inputs", match: [multi-parameter-partitions]}
+      - {id: ep-domain-testing, name: "Domain testing (on/off/in/out points)", match: [domain-testing, on-off-points]}
+      - {id: ep-partition-identification, name: "Identifying partitions from specs (ranges, sets, must-be rules)", match: [partition-identification]}
+      - {id: ep-coverage-measure, name: "Measuring equivalence partition coverage", match: [ep-coverage]}
+      - {id: ep-form-fields, name: "Applying EP to form field validation", match: [form-field-validation, input-field-testing]}
+      - {id: ep-api-parameters, name: "Applying EP to API parameters and enums", match: [api-parameter-partitions, enum-partitions]}
+      - {id: ep-time-based, name: "Partitions over time and state-dependent values", match: [time-based-partitions]}
+  - id: boundary-value-analysis
+    name: Boundary value analysis
+    source: CTFL v4.0 4.2.2
+    match: [boundary-value-analysis, bva]
+    subtopics:
+      - {id: bva-two-three-value, name: "2-value vs 3-value boundary coverage", match: [two-value-bva, three-value-bva]}
+      - {id: bva-non-numeric, name: "Boundaries on strings, dates, collections and sizes", match: [string-length-boundaries, date-boundaries]}
+      - {id: bva-floating-point, name: "Floating-point and currency precision boundaries", match: [floating-point-boundaries, precision-boundaries]}
+      - {id: bva-hidden, name: "Hidden boundaries (buffer, page size, type limits)", match: [hidden-boundaries, integer-overflow-boundaries]}
+      - {id: bva-robustness, name: "Robustness and worst-case boundary testing", match: [robustness-testing, worst-case-boundaries]}
+      - {id: bva-open-boundaries, name: "Open-ended and undefined boundaries", match: [open-boundaries]}
+      - {id: bva-corners, name: "Boundaries across multiple variables (corner cases)", match: [corner-cases, multi-variable-boundaries]}
+      - {id: bva-off-by-one, name: "Finding off-by-one defects in code and SQL ranges", match: [off-by-one, inclusive-exclusive-ranges]}
+      - {id: bva-parametrized, name: "Implementing boundary tests as parametrized data", match: [boundary-parametrized-tests]}
+  - id: decision-table-testing
+    name: Decision table and cause-effect testing
+    source: CTFL v4.0 4.2.3
+    match: [decision-tables, cause-effect-graphing]
+    subtopics:
+      - {id: dt-collapse, name: "Collapsing decision tables with dont-care entries", match: [collapsed-decision-table]}
+      - {id: dt-extended-entry, name: "Extended-entry decision tables", match: [extended-entry-decision-table]}
+      - {id: dt-rules-from-requirements, name: "Deriving rules from business requirements", match: [business-rules-extraction]}
+      - {id: dt-data-driven-impl, name: "Implementing decision tables as data-driven tests", match: [decision-table-parametrized-tests]}
+      - {id: dt-cause-effect-constraints, name: "Cause-effect graph constraints (exclusive, inclusive, requires, masks)", match: [cause-effect-constraints]}
+      - {id: dt-infeasible-rules, name: "Infeasible combinations and table completeness checks", match: [infeasible-rules, decision-table-completeness]}
+      - {id: dt-coverage, name: "Decision table coverage measurement", match: [decision-table-coverage]}
+      - {id: dt-decision-tree, name: "Decision trees vs tables for nested rules", match: [decision-tree-testing]}
+      - {id: dt-dmn, name: "Testing DMN and rules-engine decision tables", match: [dmn-testing, rules-engine-testing]}
+  - id: state-transition-testing
+    name: State transition testing
+    source: CTFL v4.0 4.2.4
+    match: [state-transition-testing, state-transition-diagram]
+    subtopics:
+      - {id: stt-all-states, name: "All-states and valid-transitions coverage", match: [all-states-coverage, valid-transitions-coverage]}
+      - {id: stt-invalid-transitions, name: "Invalid transitions and state tables", match: [invalid-transitions, state-table]}
+      - {id: stt-n-switch, name: "N-switch (transition pair) coverage", match: [n-switch-coverage, transition-pairs]}
+      - {id: stt-model-based, name: "Model-based testing from state machines", match: [model-based-testing, graphwalker]}
+      - {id: stt-model-building, name: "Building a state model from requirements (events, guards, actions)", match: [state-model-building, guard-conditions]}
+      - {id: stt-xstate, name: "Testing statecharts in code (XState model-based paths)", match: [xstate, statechart-testing]}
+      - {id: stt-workflow-lifecycle, name: "Testing workflow and order status lifecycles", match: [workflow-state-testing, status-lifecycle]}
+      - {id: stt-screen-flow, name: "UI navigation and screen-flow state models", match: [screen-flow-model]}
+      - {id: stt-concurrent, name: "Concurrent events and racing transitions", match: [concurrent-transitions]}
+  - id: combinatorial-testing
+    name: Combinatorial testing
+    source: CTAL-TA v4.0 3.2
+    match: [combinatorial-testing, pairwise-testing]
+    subtopics:
+      - {id: ct-pict, name: "Generating pairwise sets with PICT", match: [pict, all-pairs-generation]}
+      - {id: ct-constraints, name: "Constraints and invalid combinations in combinatorial models", match: [combinatorial-constraints]}
+      - {id: ct-classification-tree, name: "Classification tree method", match: [classification-tree-method]}
+      - {id: ct-orthogonal, name: "Orthogonal arrays and t-way strength choice", match: [orthogonal-arrays, t-way-testing]}
+      - {id: ct-config-matrix, name: "Configuration matrix testing (browsers, OS, devices)", match: [configuration-matrix, compatibility-matrix]}
+      - {id: ct-base-choice, name: "Each-choice and base-choice coverage", match: [base-choice-testing]}
+      - {id: ct-acts, name: "NIST ACTS covering array generation", match: [acts-tool]}
+      - {id: ct-pairwise-code, name: "Pairwise generation in code (allpairspy)", match: [pairwise-in-code]}
+      - {id: ct-seeding-mixed, name: "Seeding required combinations and mixed strength", match: [seeded-combinations, mixed-strength]}
+  - id: use-case-scenario-testing
+    name: Use case and scenario-based testing
+    source: CTAL-TA v4.0 3.2
+    match: [use-case-testing, scenario-based-testing]
+    subtopics:
+      - {id: uc-main-alt-flows, name: "Main, alternative and exception flows", match: [alternative-flows, exception-flows]}
+      - {id: uc-user-journeys, name: "End-to-end user journey design", match: [user-journeys, critical-user-journeys]}
+      - {id: uc-acceptance-criteria, name: "Writing testable acceptance criteria", match: [acceptance-criteria]}
+      - {id: uc-story-splitting, name: "Collaborative user story writing (INVEST, 3 Cs)", match: [invest-criteria, user-story-testing]}
+      - {id: uc-business-process, name: "Business process testing across systems", match: [business-process-testing]}
+      - {id: uc-personas, name: "Persona-based scenario design", match: [persona-testing]}
+      - {id: uc-soap-opera, name: "Soap opera testing", match: [soap-opera-testing]}
+      - {id: uc-coverage, name: "Use case coverage and traceability", match: [use-case-coverage]}
+      - {id: uc-story-mapping, name: "User story mapping for test scope", match: [user-story-mapping]}
+  - id: white-box-coverage
+    name: White-box test techniques and code coverage
+    source: CTFL v4.0 4.3, CTAL-TTA v4.0 ch2
+    match: [white-box-testing, statement-coverage, branch-coverage]
+    subtopics:
+      - {id: wb-mcdc, name: "MC/DC coverage for safety-critical code", match: [mcdc, modified-condition-decision-coverage]}
+      - {id: wb-multiple-condition, name: "Multiple condition coverage", match: [multiple-condition-coverage, condition-coverage]}
+      - {id: wb-basis-path, name: "Basis path testing", match: [basis-path-testing]}
+      - {id: wb-coverage-gaps, name: "Using coverage reports to find untested logic", match: [coverage-gap-analysis]}
+      - {id: wb-api-testing, name: "API testing as white-box (TTA)", match: [api-test-design]}
+      - {id: wb-branch-design, name: "Deriving tests for full branch coverage", match: [branch-coverage-design]}
+      - {id: wb-loop-testing, name: "Loop testing (zero, one, many iterations)", match: [loop-testing]}
+      - {id: wb-path-coverage, name: "Path coverage and infeasible paths", match: [path-coverage, infeasible-paths]}
+      - {id: wb-coverage-limits, name: "Limits of coverage metrics and coverage target anti-patterns", match: [coverage-misuse]}
+      - {id: wb-data-flow-coverage, name: "Data-flow coverage (all-defs, all-uses)", match: [all-defs-coverage, all-uses-coverage]}
+  - id: experience-based-techniques
+    name: Experience-based techniques
+    source: CTFL v4.0 4.4
+    match: [error-guessing, checklist-based-testing, experience-based-testing]
+    subtopics:
+      - {id: eb-fault-attacks, name: "Fault attacks (Whittaker attack patterns)", match: [fault-attacks, software-attacks]}
+      - {id: eb-checklists, name: "Building and maintaining test checklists", match: [test-checklists]}
+      - {id: eb-defect-taxonomies, name: "Defect taxonomies to drive test ideas", match: [defect-taxonomy]}
+      - {id: eb-random-testing, name: "Random and monkey testing", match: [random-testing, monkey-testing]}
+      - {id: eb-fault-lists, name: "Building error guessing fault lists", match: [fault-lists]}
+      - {id: eb-bug-bash, name: "Bug bashes and bug hunts", match: [bug-bash, bug-hunt]}
+      - {id: eb-crowdtesting, name: "Crowdsourced testing programmes", match: [crowdtesting]}
+      - {id: eb-data-type-attacks, name: "Data type attacks (dates, numbers, strings, unicode)", match: [data-type-attacks, unicode-testing]}
+  - id: test-oracles
+    name: Test oracles and expected results
+    source: CTAL-TA v4.0 3.1
+    match: [test-oracles, expected-results]
+    subtopics:
+      - {id: to-metamorphic, name: "Metamorphic testing when no oracle exists", match: [metamorphic-testing]}
+      - {id: to-golden-master, name: "Golden master / approval testing", match: [golden-master, approval-testing]}
+      - {id: to-differential, name: "Differential testing against a reference implementation", match: [differential-testing]}
+      - {id: to-heuristic-oracles, name: "Heuristic oracles (consistency, HICCUPPS)", match: [hiccupps, heuristic-oracles]}
+      - {id: to-specification-oracle, name: "Specification and model-based oracles", match: [specification-oracle]}
+      - {id: to-invariants, name: "Invariant oracles in automated checks", match: [invariant-oracles]}
+      - {id: to-snapshot-review, name: "Reviewing snapshot diffs as an oracle", match: [snapshot-review]}
+      - {id: to-oracle-problem, name: "The oracle problem and partial oracles", match: [partial-oracles]}
+      - {id: to-tolerance, name: "Tolerances for numeric and fuzzy comparisons", match: [approximate-assertions, pytest-approx]}
+  - id: test-data-management
+    name: Test data management
+    source: CTAL-TA v4.0 1.5, Selenium docs/Test practices
+    match: [test-data-management, test-data]
+    subtopics:
+      - {id: td-factories, name: "Test data factories and builders", match: [test-data-builders, factory-boy]}
+      - {id: td-synthetic, name: "Synthetic data generation (Faker)", match: [synthetic-test-data, faker]}
+      - {id: td-masking, name: "Masking and subsetting production data", match: [data-masking, data-subsetting]}
+      - {id: td-db-reset, name: "Database seeding and reset between tests", match: [database-seeding, database-reset]}
+      - {id: td-testcontainers, name: "Ephemeral dependencies with Testcontainers", match: [testcontainers]}
+      - {id: td-privacy, name: "Privacy compliance for test data (GDPR, PII)", match: [test-data-privacy, pii-in-test-data]}
+      - {id: td-data-driven-files, name: "External data-driven test files (CSV, JSON, YAML)", match: [external-test-data]}
+      - {id: td-transactional, name: "Transactional rollback and database snapshots per test", match: [transactional-tests, db-snapshot-restore]}
+      - {id: td-provisioning, name: "Test data provisioning and isolation in shared environments", match: [test-data-provisioning, data-isolation]}
+      - {id: td-reference-datasets, name: "Versioned reference datasets", match: [reference-datasets]}
+  # --- Quality characteristics (CTAL-TA ch4, CTAL-TTA ch4)
+  - id: functional-suitability
+    name: Functional suitability testing
+    source: CTAL-TA v4.0 4.2
+    match: [functional-suitability]
+    subtopics:
+      - {id: fs-correctness, name: "Functional correctness verification", match: [functional-correctness]}
+      - {id: fs-appropriateness, name: "Functional appropriateness against user goals", match: [functional-appropriateness]}
+      - {id: fs-completeness, name: "Functional completeness and requirements coverage", match: [functional-completeness]}
+      - {id: fs-iso25010, name: "Mapping tests to ISO 25010 quality characteristics", match: [iso-25010]}
+      - {id: fs-calculations, name: "Business rule and calculation verification", match: [business-rule-testing]}
+      - {id: fs-crud, name: "CRUD matrix testing", match: [crud-matrix]}
+      - {id: fs-interfaces, name: "End-to-end data flow and interface verification", match: [interface-data-flow-testing]}
+      - {id: fs-error-handling, name: "Error handling and validation message testing", match: [error-handling-testing, error-messages]}
+      - {id: fs-reports-exports, name: "Reports, exports and file output verification", match: [report-testing, export-verification]}
+  - id: usability-accessibility
+    name: Usability and accessibility testing
+    source: CTAL-TA v4.0 4.3
+    match: [usability-testing, accessibility-testing]
+    subtopics:
+      - {id: ua-axe-automation, name: "Automated accessibility scans (axe-core, Lighthouse)", match: [axe-core, lighthouse-accessibility]}
+      - {id: ua-screen-reader, name: "Screen reader testing", match: [screen-reader]}
+      - {id: ua-keyboard, name: "Keyboard-only navigation testing", match: [keyboard-navigation]}
+      - {id: ua-wcag-audit, name: "WCAG conformance audit", match: [wcag-audit, wcag]}
+      - {id: ua-think-aloud, name: "Moderated think-aloud usability sessions", match: [think-aloud-protocol]}
+      - {id: ua-color-contrast, name: "Colour contrast and visual accessibility checks", match: [contrast-ratio-testing]}
+      - {id: ua-sus, name: "Usability questionnaires (SUS) and usability metrics", match: [system-usability-scale, usability-metrics]}
+      - {id: ua-heuristic-evaluation, name: "Heuristic evaluation (Nielsen heuristics)", match: [usability-heuristic-review]}
+      - {id: ua-mobile-a11y, name: "Mobile accessibility (VoiceOver, TalkBack)", match: [talkback]}
+      - {id: ua-focus-aria, name: "Focus management and ARIA usage review", match: [focus-management, aria-review]}
+  - id: compatibility-interop
+    name: Compatibility and interoperability testing
+    source: CTAL-TA v4.0 4.4
+    match: [compatibility-testing, interoperability-testing]
+    subtopics:
+      - {id: ci-cross-browser, name: "Cross-browser test strategy and browser matrix", match: [cross-browser-testing]}
+      - {id: ci-mobile-responsive, name: "Responsive and mobile viewport testing", match: [responsive-testing, mobile-web-testing]}
+      - {id: ci-api-versions, name: "API backward compatibility testing", match: [backward-compatibility]}
+      - {id: ci-i18n, name: "Localisation and internationalisation testing", match: [localization-testing, i18n-testing]}
+      - {id: ci-coexistence, name: "Co-existence testing on shared environments", match: [co-existence-testing]}
+      - {id: ci-device-farms, name: "Cloud browser and device farms (BrowserStack, Sauce Labs)", match: [cloud-device-farm]}
+      - {id: ci-data-exchange, name: "Data exchange format interoperability (CSV, XML, EDI)", match: [data-exchange-testing]}
+      - {id: ci-browserslist, name: "Browser feature support and polyfill testing", match: [polyfill-testing]}
+      - {id: ci-version-matrix, name: "Runtime and database version compatibility matrix in CI", match: [ci-version-matrix]}
+  - id: security-testing
+    name: Security testing (tester perspective)
+    source: CTAL-TTA v4.0 4.2
+    match: [security-testing]
+    subtopics:
+      - {id: sec-dast-zap, name: "DAST scans with OWASP ZAP", match: [owasp-zap, dast]}
+      - {id: sec-input-attacks, name: "Injection and input validation test cases", match: [injection-testing, input-validation-testing]}
+      - {id: sec-authz, name: "Authorization and access-control testing", match: [authorization-testing, idor]}
+      - {id: sec-dependency-scan, name: "Dependency vulnerability scanning in CI", match: [dependency-scanning]}
+      - {id: sec-session, name: "Authentication and session management testing", match: [session-management-testing, authentication-testing]}
+      - {id: sec-xss-csrf, name: "XSS and CSRF test cases", match: [xss-testing, csrf-testing]}
+      - {id: sec-burp, name: "Manual security testing with Burp Suite", match: [burp-suite]}
+      - {id: sec-fuzzing, name: "Fuzz testing inputs and APIs", match: [fuzz-testing]}
+      - {id: sec-headers-tls, name: "Security headers and TLS configuration checks", match: [security-headers, tls-testing]}
+      - {id: sec-asvs-wstg, name: "Using OWASP ASVS and WSTG as a test basis", match: [owasp-asvs]}
+  - id: reliability-testing
+    name: Reliability, recoverability and fault-tolerance testing
+    source: CTAL-TTA v4.0 4.3
+    match: [reliability-testing]
+    subtopics:
+      - {id: rel-fault-injection, name: "Fault injection and chaos experiments", match: [fault-injection, chaos-testing]}
+      - {id: rel-failover, name: "Failover and recovery testing", match: [failover-testing, recoverability-testing]}
+      - {id: rel-backup-restore, name: "Backup and restore verification", match: [backup-restore-testing]}
+      - {id: rel-mtbf, name: "Reliability growth and MTBF measurement", match: [mtbf, reliability-growth]}
+      - {id: rel-toxiproxy, name: "Network fault simulation with Toxiproxy", match: [toxiproxy-toxics]}
+      - {id: rel-retry-timeout, name: "Testing retries, timeouts and circuit breakers", match: [circuit-breaker-testing, retry-testing]}
+      - {id: rel-availability, name: "Availability measurement during tests", match: [availability-testing]}
+      - {id: rel-gamedays, name: "Game days and disaster recovery drills", match: [game-day, dr-drill]}
+      - {id: rel-idempotency, name: "Idempotency and duplicate message testing", match: [idempotency-testing]}
+  - id: maintainability-portability
+    name: Maintainability and portability testing
+    source: CTAL-TTA v4.0 4.5-4.6
+    match: [maintainability-testing, portability-testing]
+    subtopics:
+      - {id: mp-installability, name: "Installability and upgrade testing", match: [installability-testing, upgrade-testing]}
+      - {id: mp-adaptability, name: "Adaptability across environments and containers", match: [adaptability-testing]}
+      - {id: mp-replaceability, name: "Replaceability of components", match: [replaceability-testing]}
+      - {id: mp-analysability, name: "Analysability and testability assessment", match: [testability-assessment]}
+      - {id: mp-modularity, name: "Modifiability and modularity assessment", match: [modularity-assessment]}
+      - {id: mp-uninstall-rollback, name: "Uninstall and rollback testing", match: [rollback-testing]}
+      - {id: mp-configuration, name: "Configuration and environment portability testing", match: [environment-portability]}
+      - {id: mp-reusability, name: "Reusability of components and libraries", match: [reusability-assessment]}
+      - {id: mp-schema-migrations, name: "Database schema migration script testing", match: [schema-migration-testing]}
+  - id: dynamic-analysis
+    name: Dynamic analysis
+    source: CTAL-TTA v4.0 3.3
+    match: [dynamic-analysis]
+    subtopics:
+      - {id: da-memory-leaks, name: "Detecting memory leaks (Valgrind, heap snapshots)", match: [valgrind, heap-snapshot]}
+      - {id: da-sanitizers, name: "Sanitizers (ASan, UBSan, TSan) in test runs", match: [addresssanitizer, sanitizers]}
+      - {id: da-wild-pointers, name: "Wild pointers and race detection", match: [race-detection, data-race]}
+      - {id: da-browser-leaks, name: "Browser memory leak testing (DevTools, memlab)", match: [memlab, browser-memory-leak]}
+      - {id: da-cpu-profiling, name: "CPU profiling during tests (py-spy, async-profiler)", match: [profiling-in-tests]}
+      - {id: da-jvm-heap, name: "JVM heap dumps and leak analysis (Eclipse MAT)", match: [jvm-heap-dump, eclipse-mat]}
+      - {id: da-node-leaks, name: "Node.js memory leak detection (inspector, clinic)", match: [node-memory-leak, clinic-js]}
+      - {id: da-resource-leaks, name: "File handle and connection leak detection", match: [resource-leaks, connection-leaks]}
+  # --- CTFL ch5: managing testing
+  - id: test-estimation
+    name: Test estimation
+    source: CTFL v4.0 5.1.4
+    match: [test-estimation]
+    subtopics:
+      - {id: te-wideband-delphi, name: "Wideband Delphi and planning poker", match: [wideband-delphi, planning-poker]}
+      - {id: te-three-point, name: "Three-point estimation", match: [three-point-estimation]}
+      - {id: te-ratios, name: "Ratio and extrapolation estimation", match: [ratio-based-estimation, extrapolation-estimation]}
+      - {id: te-wbs, name: "Test work breakdown structure", match: [test-work-breakdown]}
+      - {id: te-test-points, name: "Test point analysis estimation", match: [test-point-analysis]}
+      - {id: te-expert, name: "Expert-based estimation and estimate ranges", match: [expert-estimation]}
+      - {id: te-factors, name: "Factors affecting test effort", match: [test-effort-factors]}
+      - {id: te-sprint-capacity, name: "Testing effort in sprint capacity planning", match: [sprint-test-capacity]}
+      - {id: te-tracking, name: "Tracking actuals and re-estimating", match: [estimate-tracking]}
+  - id: risk-based-testing
+    name: Risk-based testing
+    source: CTFL v4.0 5.2, CTAL-TA v4.0 2
+    match: [risk-based-testing]
+    subtopics:
+      - {id: rbt-risk-identification, name: "Product risk identification workshops", match: [product-risk-identification, risk-workshop]}
+      - {id: rbt-risk-matrix, name: "Risk assessment (likelihood x impact matrix)", match: [risk-matrix, risk-assessment]}
+      - {id: rbt-mitigation, name: "Mapping risk levels to test depth and techniques", match: [risk-mitigation, test-depth-by-risk]}
+      - {id: rbt-prioritization, name: "Test case prioritisation (risk, coverage, requirements based)", match: [test-prioritization, test-case-prioritization]}
+      - {id: rbt-residual-risk, name: "Reporting residual risk", match: [residual-risk]}
+      - {id: rbt-project-risks, name: "Project risk management for testing", match: [project-risks]}
+      - {id: rbt-fmea, name: "FMEA for product risk analysis", match: [fmea, failure-mode-effects-analysis]}
+      - {id: rbt-risk-register, name: "Risk register linked to tests", match: [risk-register-tests]}
+      - {id: rbt-risk-monitoring, name: "Risk monitoring and re-assessment", match: [risk-monitoring]}
+  - id: entry-exit-criteria
+    name: Entry and exit criteria, definition of done
+    source: CTFL v4.0 5.1.3
+    match: [entry-criteria, exit-criteria]
+    subtopics:
+      - {id: ee-definition-of-ready, name: "Definition of ready for testing", match: [definition-of-ready]}
+      - {id: ee-definition-of-done, name: "Definition of done quality criteria", match: [definition-of-done]}
+      - {id: ee-release-readiness, name: "Release readiness / go-no-go assessment", match: [release-readiness, go-no-go]}
+      - {id: ee-suspension, name: "Suspension and resumption criteria", match: [suspension-criteria]}
+      - {id: ee-thresholds, name: "Coverage and defect thresholds as exit criteria", match: [exit-thresholds]}
+      - {id: ee-quality-gates, name: "Automated quality gates in pipelines", match: [pipeline-quality-gates]}
+      - {id: ee-build-acceptance, name: "Build acceptance test and environment readiness", match: [build-acceptance-test, environment-readiness]}
+      - {id: ee-known-issues, name: "Known issues list and release notes sign-off", match: [known-issues-list]}
+      - {id: ee-waivers, name: "Exit criteria waivers and risk acceptance", match: [criteria-waiver]}
+  - id: test-monitoring-reporting
+    name: Test monitoring, control and reporting
+    source: CTFL v4.0 5.3
+    match: [test-monitoring, test-reporting]
+    subtopics:
+      - {id: tm-metrics, name: "Test metrics (pass rate, coverage, defect density, escape rate)", match: [test-metrics, defect-escape-rate]}
+      - {id: tm-progress-report, name: "Test progress reports", match: [test-progress-report]}
+      - {id: tm-dashboards, name: "Quality dashboards", match: [quality-dashboard]}
+      - {id: tm-control-actions, name: "Test control actions when off track", match: [test-control]}
+      - {id: tm-dora-quality, name: "Change failure rate and escaped defects as quality signals", match: [change-failure-rate, escaped-defects]}
+      - {id: tm-burndown, name: "Test execution burndown and S-curves", match: [test-burndown]}
+      - {id: tm-defect-trends, name: "Defect arrival and closure trend analysis", match: [defect-trend-analysis]}
+      - {id: tm-coverage-reporting, name: "Requirements and risk coverage reporting", match: [coverage-reporting]}
+      - {id: tm-stakeholder, name: "Tailoring test reports to stakeholders", match: [stakeholder-reporting]}
+  - id: testing-quadrants-pyramid
+    name: Test pyramid and agile testing quadrants
+    source: CTFL v4.0 5.1.6-5.1.7
+    match: [test-pyramid, testing-quadrants]
+    subtopics:
+      - {id: tq-quadrants, name: "Planning with the agile testing quadrants", match: [agile-testing-quadrants]}
+      - {id: tq-trophy, name: "Testing trophy vs pyramid trade-offs", match: [testing-trophy]}
+      - {id: tq-ice-cream-cone, name: "Fixing an inverted pyramid (ice-cream cone)", match: [ice-cream-cone]}
+      - {id: tq-test-sizes, name: "Test sizes (small/medium/large) classification", match: [test-sizes]}
+      - {id: tq-layer-selection, name: "Deciding the unit, integration or E2E layer for a test", match: [test-layer-selection]}
+      - {id: tq-honeycomb, name: "Testing honeycomb for microservices", match: [testing-honeycomb]}
+      - {id: tq-suite-audit, name: "Auditing suite distribution and runtime by layer", match: [suite-distribution-audit]}
+      - {id: tq-shift-right, name: "Shift-right testing in production (canary, synthetic monitoring)", match: [shift-right]}
+      - {id: tq-shift-left, name: "Shift-left testing practices", match: [shift-left-testing]}
+  - id: defect-management
+    name: Defect management
+    source: CTFL v4.0 5.5
+    match: [defect-management, bug-reports]
+    subtopics:
+      - {id: dm-bug-report-writing, name: "Writing a defect report", match: [defect-report, bug-report-writing]}
+      - {id: dm-lifecycle-workflow, name: "Defect lifecycle workflow design", match: [defect-lifecycle, bug-lifecycle]}
+      - {id: dm-triage, name: "Defect triage meetings", match: [defect-triage, bug-triage]}
+      - {id: dm-rca-prevention, name: "Defect prevention and RCA (5 whys, fishbone)", match: [defect-prevention, five-whys]}
+      - {id: dm-odc, name: "Orthogonal defect classification", match: [orthogonal-defect-classification]}
+      - {id: dm-severity-priority, name: "Severity vs priority classification", match: [severity-priority]}
+      - {id: dm-metrics, name: "Defect metrics (density, age, reopen rate)", match: [defect-age]}
+      - {id: dm-jira-workflow, name: "Configuring a Jira bug workflow and fields", match: [jira-bug-workflow]}
+      - {id: dm-duplicates, name: "Duplicate, cannot-reproduce and won't-fix handling", match: [duplicate-defects, cannot-reproduce]}
+      - {id: dm-bug-advocacy, name: "Bug advocacy and influencing fix decisions", match: [bug-advocacy]}
+  - id: test-management-tools
+    name: Test management tools and configuration management
+    source: CTFL v4.0 5.4, 6
+    match: [test-management-tools, test-case-management]
+    subtopics:
+      - {id: tmt-testrail, name: "Organising suites and runs in TestRail", match: [testrail]}
+      - {id: tmt-xray-zephyr, name: "Jira-native test management (Xray, Zephyr)", match: [xray, zephyr]}
+      - {id: tmt-testware-cm, name: "Configuration management of testware", match: [testware-configuration-management]}
+      - {id: tmt-tool-selection, name: "Test tool evaluation and selection", match: [test-tool-selection]}
+      - {id: tmt-results-import, name: "Importing automated results into test management tools", match: [results-import]}
+      - {id: tmt-case-structure, name: "Test case structure and naming conventions", match: [test-case-structure]}
+      - {id: tmt-environment-mgmt, name: "Test environment booking and management", match: [test-environment-management]}
+      - {id: tmt-migration, name: "Migrating test cases between tools", match: [test-case-migration]}
+      - {id: tmt-tests-as-code, name: "Tests-as-code in version control vs tool storage", match: [tests-as-code]}
+  # --- Exploratory and manual testing craft
+  - id: exploratory-session
+    name: Session-based exploratory testing
+    source: CTFL v4.0 4.4.2, CTAL-TA v4.0 3.3
+    match: [exploratory-testing, session-based-test-management]
+    subtopics:
+      - {id: ex-charters, name: "Writing exploratory test charters", match: [test-charters, charter-writing]}
+      - {id: ex-tours, name: "Exploratory tours (Whittaker tours)", match: [exploratory-tours]}
+      - {id: ex-note-taking, name: "Session note taking and debrief (PROOF)", match: [session-notes, session-debrief]}
+      - {id: ex-heuristics-sfdipot, name: "Product coverage heuristics (SFDIPOT)", match: [sfdipot]}
+      - {id: ex-pair-testing, name: "Pair and mob exploratory testing", match: [pair-testing, mob-testing]}
+      - {id: ex-sbtm-metrics, name: "SBTM metrics and session sheets (TBS)", match: [sbtm-metrics, session-sheets]}
+      - {id: ex-thread-based, name: "Thread-based exploratory testing", match: [thread-based-testing]}
+      - {id: ex-mind-maps, name: "Mind maps for test ideas and coverage", match: [test-mind-maps]}
+      - {id: ex-session-recording, name: "Capturing sessions with recording and annotation tools", match: [session-recording]}
+      - {id: ex-test-ideas, name: "Test idea heuristics (Goldilocks, zero-one-many, CRUD)", match: [test-ideas-heuristics]}
+  - id: bug-investigation
+    name: Bug investigation and reproduction
+    source: Rapid Software Testing, CTFL v4.0 5.5
+    match: [bug-reproduction, bug-isolation]
+    subtopics:
+      - {id: bi-intermittent, name: "Reproducing intermittent bugs", match: [intermittent-bugs]}
+      - {id: bi-devtools-evidence, name: "Capturing evidence with browser DevTools and HAR", match: [har-capture, devtools-evidence]}
+      - {id: bi-git-bisect, name: "Isolating regressions with git bisect", match: [git-bisect]}
+      - {id: bi-minimal-repro, name: "Reducing to a minimal reproduction", match: [minimal-repro, test-case-reduction]}
+      - {id: bi-log-analysis, name: "Reading server logs and traces for bug evidence", match: [log-analysis-for-testers]}
+      - {id: bi-mobile-logs, name: "Collecting mobile logs (adb logcat, Xcode console)", match: [adb-logcat, mobile-logs]}
+      - {id: bi-debug-proxy, name: "Inspecting traffic with a debugging proxy (mitmproxy, Charles)", match: [mitmproxy, charles-proxy]}
+      - {id: bi-environment-diff, name: "Isolating environment, data and configuration differences", match: [environment-diff]}
+      - {id: bi-sql-evidence, name: "Querying the database to confirm state", match: [sql-for-testers]}
+      - {id: bi-crash-reports, name: "Crash reports and stack traces (Sentry, crash logs)", match: [crash-reports, stack-trace-reading]}
+  - id: mobile-manual-testing
+    name: Mobile app manual testing
+    source: ISTQB Mobile Application Testing syllabus
+    match: [mobile-testing]
+    subtopics:
+      - {id: mm-interruptions, name: "Interrupt testing (calls, notifications, backgrounding)", match: [interrupt-testing]}
+      - {id: mm-network-conditions, name: "Network condition testing (offline, throttled)", match: [network-throttling, offline-testing]}
+      - {id: mm-device-matrix, name: "Device and OS version coverage", match: [device-coverage-matrix]}
+      - {id: mm-permissions, name: "Permission and lifecycle testing", match: [app-permissions-testing]}
+      - {id: mm-gestures-orientation, name: "Gestures, orientation and screen-size testing", match: [gesture-testing, orientation-testing]}
+      - {id: mm-battery, name: "Battery, CPU and memory usage testing on device", match: [battery-testing]}
+      - {id: mm-app-update, name: "App install, update and data migration testing", match: [app-update-testing]}
+      - {id: mm-beta-distribution, name: "Beta distribution (TestFlight, Play internal testing)", match: [testflight, play-internal-testing]}
+      - {id: mm-emulators, name: "Emulators and simulators vs real devices", match: [emulator-testing, simulator-testing]}
+      - {id: mm-deep-links-push, name: "Deep links and push notification testing", match: [deep-link-testing, push-notification-testing]}
+  # --- Test automation strategy
+  - id: automation-strategy
+    name: Test automation strategy and ROI
+    source: ISTQB CTAL-TAE v2.0
+    match: [test-automation-strategy, automation-roi]
+    subtopics:
+      - {id: as-what-to-automate, name: "Choosing what to automate", match: [automation-candidates]}
+      - {id: as-taa, name: "Test automation architecture (generic TAA layers)", match: [test-automation-architecture]}
+      - {id: as-keyword-driven, name: "Keyword-driven testing (Robot Framework)", match: [keyword-driven-testing, robot-framework]}
+      - {id: as-maintenance-cost, name: "Automation maintenance cost and suite health", match: [suite-health, automation-maintenance]}
+      - {id: as-roi-calc, name: "Calculating automation ROI and payback", match: [automation-payback]}
+      - {id: as-framework-selection, name: "Choosing a UI automation framework", match: [framework-selection]}
+      - {id: as-code-standards, name: "Test code standards and review guidelines", match: [test-code-standards]}
+      - {id: as-data-driven-framework, name: "Data-driven framework design", match: [data-driven-framework]}
+      - {id: as-test-observability, name: "Automation result reporting and test observability", match: [test-observability]}
+      - {id: as-self-healing, name: "AI-assisted test generation and self-healing locators", match: [self-healing-tests, ai-test-generation]}
+  - id: flaky-test-control
+    name: Flaky test control
+    source: Google Testing Blog, Playwright/Cypress retry docs
+    match: [flaky-tests, flakiness]
+    subtopics:
+      - {id: fl-detection, name: "Detecting flaky tests (rerun, history)", match: [flaky-test-detection]}
+      - {id: fl-quarantine, name: "Quarantining flaky tests", match: [quarantine]}
+      - {id: fl-root-causes, name: "Flakiness root causes (timing, order, shared state)", match: [test-order-dependence, async-timing]}
+      - {id: fl-randomized-order, name: "Randomised test order to expose dependence", match: [pytest-randomly, random-test-order]}
+      - {id: fl-retry-policy, name: "Retry policy without masking defects", match: [retry-policy]}
+      - {id: fl-sync-waits, name: "Replacing sleeps with synchronization", match: [hard-coded-sleeps, synchronization-waits]}
+      - {id: fl-env-flakiness, name: "Infrastructure and environment-induced flakiness", match: [environment-flakiness]}
+      - {id: fl-repeat-runs, name: "Stress-repeating a test to reproduce flakiness", match: [repeat-each, pytest-repeat]}
+      - {id: fl-flake-rate, name: "Flake rate metrics and ownership SLAs", match: [flake-rate]}
+  - id: ci-integration
+    name: CI integration and test reporting
+    source: CTFL v4.0 2.1.4, tool CI docs
+    match: [ci-integration, pipeline-gating]
+    subtopics:
+      - {id: ci-junit-xml, name: "JUnit XML reports in CI", match: [junit-xml]}
+      - {id: ci-allure, name: "Allure reporting", match: [allure-report]}
+      - {id: ci-test-impact, name: "Test impact analysis / selective runs", match: [test-impact-analysis]}
+      - {id: ci-sharding-balance, name: "Sharding and balancing suites by timing", match: [test-sharding, timing-based-splitting]}
+      - {id: ci-ephemeral-env, name: "Ephemeral test environments per PR", match: [ephemeral-environments, preview-environments]}
+      - {id: ci-gha-matrix, name: "Test matrix jobs in GitHub Actions", match: [github-actions-matrix]}
+      - {id: ci-caching, name: "Caching dependencies and browsers to speed CI tests", match: [ci-caching]}
+      - {id: ci-artifacts, name: "Publishing test artifacts (screenshots, traces, logs)", match: [test-artifacts]}
+      - {id: ci-pr-annotations, name: "Annotating pull requests with test failures", match: [pr-test-annotations]}
+      - {id: ci-gitlab, name: "GitLab CI test jobs and JUnit reports", match: [gitlab-ci-tests]}
+      - {id: ci-fail-fast, name: "Fail-fast ordering and staged test pipelines", match: [staged-pipeline]}
+  - id: contract-api-testing
+    name: API and contract testing
+    source: Pact docs, CTAL-TTA v4.0 2.6
+    match: [contract-testing, api-testing]
+    subtopics:
+      - {id: ca-pact-consumer, name: "Writing Pact consumer tests", match: [pact-consumer-test]}
+      - {id: ca-provider-states, name: "Provider verification and provider states", match: [provider-states]}
+      - {id: ca-openapi-schema, name: "Schema-based API testing from OpenAPI (Schemathesis)", match: [schemathesis, openapi-testing]}
+      - {id: ca-postman-newman, name: "API collections with Postman and Newman", match: [postman, newman]}
+      - {id: ca-rest-assured, name: "REST Assured API tests in Java", match: [rest-assured]}
+      - {id: ca-pact-broker, name: "Pact Broker, can-i-deploy and webhooks", match: [pact-broker-webhooks, pact-pending-wip]}
+      - {id: ca-graphql, name: "GraphQL API testing", match: [graphql-testing]}
+      - {id: ca-json-schema, name: "JSON Schema response validation", match: [json-schema-assertions]}
+      - {id: ca-bidirectional, name: "Bi-directional contract testing with OpenAPI", match: [bi-directional-contracts]}
+      - {id: ca-grpc, name: "gRPC API testing (grpcurl, ghz)", match: [grpc-testing, grpcurl]}
+      - {id: ca-python-http, name: "API tests in Python with requests or httpx and pytest", match: [httpx-tests, requests-api-tests]}
+  - id: page-objects-patterns
+    name: UI automation design patterns
+    source: Selenium docs/Test practices, Playwright docs/POM
+    match: [page-object-model]
+    subtopics:
+      - {id: po-screenplay, name: "Screenplay pattern", match: [screenplay-pattern]}
+      - {id: po-component-objects, name: "Component (page fragment) objects", match: [page-components, page-fragments]}
+      - {id: po-dsl, name: "Domain-specific language layer for tests", match: [test-dsl]}
+      - {id: po-app-state, name: "Generating application state via API instead of UI", match: [app-state-via-api]}
+      - {id: po-locator-strategy, name: "Locator strategy and data-testid conventions", match: [data-testid, locator-strategy]}
+      - {id: po-fluent, name: "Fluent page objects and navigation returns", match: [fluent-page-objects]}
+      - {id: po-loadable, name: "LoadableComponent and page readiness checks", match: [loadable-component]}
+      - {id: po-anti-patterns, name: "Page object anti-patterns", match: [page-object-anti-patterns]}
+      - {id: po-app-actions, name: "App actions vs page objects", match: [app-actions]}
+  - id: service-virtualization
+    name: Service virtualisation and mocking external services
+    source: Selenium docs/Mock external services, WireMock docs
+    match: [service-virtualization]
+    subtopics:
+      - {id: sv-wiremock, name: "Stubbing HTTP dependencies with WireMock", match: [wiremock]}
+      - {id: sv-mockserver-prism, name: "OpenAPI mock servers (Prism)", match: [prism-mock, mock-server]}
+      - {id: sv-msw, name: "Mock Service Worker for front-end tests", match: [msw, mock-service-worker]}
+      - {id: sv-record-replay, name: "Record and replay of HTTP traffic (VCR)", match: [vcr-cassettes, record-replay]}
+      - {id: sv-hoverfly-mountebank, name: "Hoverfly and Mountebank virtual services", match: [hoverfly, mountebank]}
+      - {id: sv-stateful, name: "Stateful stub scenarios", match: [stateful-stubs, wiremock-scenarios]}
+      - {id: sv-faults, name: "Simulating latency and faults in stubs", match: [stub-fault-injection]}
+      - {id: sv-in-process, name: "In-process HTTP mocking (nock, responses, respx)", match: [nock, responses-library]}
+      - {id: sv-stub-drift, name: "Keeping stubs in sync with real services", match: [stub-drift]}
+  # --- Playwright (playwright.dev/docs ToC)
+  - id: pw-locators-assertions
+    name: Playwright locators and assertions
+    source: Playwright docs/Locators, Assertions
+    match: [playwright-locators, web-first-assertions]
+    subtopics:
+      - {id: pw-la-filter-chain, name: "Filtering and chaining locators", match: [locator-filter, locator-chaining]}
+      - {id: pw-la-strictness, name: "Strictness violations and nth/first", match: [locator-strictness]}
+      - {id: pw-la-soft, name: "Soft assertions and expect.poll", match: [soft-assertions, expect-poll]}
+      - {id: pw-la-custom-matchers, name: "Custom matchers with expect.extend", match: [expect-extend]}
+      - {id: pw-la-aria-snapshot, name: "ARIA snapshot assertions", match: [aria-snapshot]}
+      - {id: pw-la-get-by-role, name: "Role, label, placeholder and text locator priority", match: [user-facing-locators]}
+      - {id: pw-la-testid-attr, name: "Configuring testIdAttribute and getByTestId", match: [testidattribute]}
+      - {id: pw-la-actions, name: "Input actions (fill, check, selectOption, setInputFiles, dragTo)", match: [playwright-actions, setinputfiles]}
+      - {id: pw-la-actionability, name: "Auto-waiting and actionability checks (force, trial)", match: [actionability]}
+      - {id: pw-la-topass, name: "Assertion timeouts, negation and toPass retries", match: [topass, expect-timeout]}
+      - {id: pw-la-frames, name: "frameLocator and iframes", match: [framelocator]}
+  - id: pw-fixtures-config
+    name: Playwright fixtures and configuration
+    source: Playwright docs/Fixtures, Configuration, Projects
+    match: [playwright-fixtures, playwright-config]
+    subtopics:
+      - {id: pw-fc-custom-fixtures, name: "Custom test and worker fixtures", match: [worker-fixtures, test-extend]}
+      - {id: pw-fc-projects, name: "Projects for browsers, environments and dependencies", match: [playwright-projects]}
+      - {id: pw-fc-global-setup, name: "Global setup and teardown", match: [global-setup]}
+      - {id: pw-fc-annotations, name: "Annotations, tags and grep filtering", match: [test-annotations, test-tags]}
+      - {id: pw-fc-parameterize, name: "Parameterized tests and options fixtures", match: [playwright-parameterize]}
+      - {id: pw-fc-timeouts, name: "Test, expect, action and navigation timeouts", match: [playwright-timeouts]}
+      - {id: pw-fc-webserver, name: "webServer config to start the app under test", match: [webserver-config]}
+      - {id: pw-fc-hooks, name: "Hooks and describe.configure", match: [playwright-hooks]}
+      - {id: pw-fc-baseurl-env, name: "Environment-specific config and baseURL", match: [playwright-env]}
+      - {id: pw-fc-auto-fixtures, name: "Automatic fixtures and fixture timeouts", match: [fixture-timeout]}
+  - id: pw-debugging-tracing
+    name: Playwright debugging, tracing and codegen
+    source: Playwright docs/Debugging, Trace viewer, Test generator, UI mode
+    match: [trace-viewer, playwright-debugging]
+    subtopics:
+      - {id: pw-dt-inspector, name: "Playwright Inspector and PWDEBUG", match: [playwright-inspector, pwdebug]}
+      - {id: pw-dt-trace-ci, name: "Collecting and reading traces from CI", match: [trace-on-first-retry]}
+      - {id: pw-dt-codegen, name: "Recording tests with codegen", match: [codegen]}
+      - {id: pw-dt-ui-mode, name: "UI mode watch and time-travel debugging", match: [ui-mode]}
+      - {id: pw-dt-vscode, name: "Debugging with the VS Code extension", match: [playwright-vscode]}
+      - {id: pw-dt-tracing-api, name: "Recording traces programmatically (context.tracing)", match: [context-tracing]}
+      - {id: pw-dt-console-errors, name: "Capturing console messages, page errors and network logs", match: [page-console-events, pageerror]}
+      - {id: pw-dt-video, name: "Screenshots and video on failure", match: [playwright-video]}
+      - {id: pw-dt-html-report, name: "HTML report and show-report triage", match: [html-reporter, show-report]}
+  - id: pw-parallel-ci
+    name: Playwright parallelism, sharding, retries and reporters
+    source: Playwright docs/Parallelism, Sharding, Retries, Reporters, CI
+    match: [playwright-sharding, playwright-reporters]
+    subtopics:
+      - {id: pw-pc-merge-reports, name: "Merging blob reports from shards", match: [merge-reports, blob-reporter]}
+      - {id: pw-pc-serial-mode, name: "Serial mode and fullyParallel", match: [serial-mode, fully-parallel]}
+      - {id: pw-pc-docker-ci, name: "Running Playwright in Docker and GitHub Actions", match: [playwright-docker, playwright-github-actions]}
+      - {id: pw-pc-custom-reporter, name: "Writing a custom reporter", match: [custom-reporter]}
+      - {id: pw-pc-workers, name: "Worker count, workerIndex and parallelIndex isolation", match: [playwright-workers, parallelindex]}
+      - {id: pw-pc-retries, name: "Retries and flaky classification in Playwright", match: [playwright-retries]}
+      - {id: pw-pc-only-changed, name: "Running only changed and last-failed tests", match: [only-changed, last-failed]}
+      - {id: pw-pc-builtin-reporters, name: "Built-in reporters (list, dot, junit, json, github)", match: [junit-reporter, github-reporter]}
+      - {id: pw-pc-ci-guards, name: "maxFailures and forbidOnly CI guards", match: [max-failures, forbidonly]}
+  - id: pw-auth-network
+    name: Playwright authentication, network and emulation
+    source: Playwright docs/Authentication, Network, Emulation, Clock
+    match: [storage-state, playwright-network]
+    subtopics:
+      - {id: pw-an-multi-role, name: "Multiple authenticated roles", match: [multi-role-auth]}
+      - {id: pw-an-har, name: "Mocking with HAR files", match: [har-replay]}
+      - {id: pw-an-emulation, name: "Device, locale, timezone and geolocation emulation", match: [device-emulation, geolocation-emulation]}
+      - {id: pw-an-clock, name: "Controlling time with page.clock", match: [page-clock, fake-timers-browser]}
+      - {id: pw-an-websockets, name: "Inspecting and mocking WebSockets", match: [websocket-mocking]}
+      - {id: pw-an-route-fulfill, name: "route.fulfill, route.continue and modifying responses", match: [route-fulfill]}
+      - {id: pw-an-wait-for-response, name: "Waiting for requests and responses", match: [waitforresponse]}
+      - {id: pw-an-request-context, name: "APIRequestContext for setup and API tests", match: [apirequestcontext]}
+      - {id: pw-an-permissions, name: "Permissions, offline mode and HTTP credentials", match: [grant-permissions, http-credentials]}
+      - {id: pw-an-downloads-dialogs, name: "Downloads, dialogs and popups", match: [playwright-downloads, playwright-dialogs]}
+  - id: pw-visual-components
+    name: Playwright visual comparisons, components and accessibility
+    source: Playwright docs/Visual comparisons, Components, Accessibility testing
+    match: [tohavescreenshot, playwright-ct]
+    subtopics:
+      - {id: pw-vc-snapshot-update, name: "Managing snapshot baselines across platforms", match: [update-snapshots, snapshot-path-template]}
+      - {id: pw-vc-axe, name: "Accessibility scans with @axe-core/playwright", match: [axe-playwright]}
+      - {id: pw-vc-mobile, name: "Android and Electron automation", match: [playwright-electron, playwright-android]}
+      - {id: pw-vc-python, name: "Playwright for Python with pytest-playwright", match: [pytest-playwright]}
+      - {id: pw-vc-masking, name: "Masking dynamic content and diff thresholds in screenshots", match: [screenshot-mask, maxdiffpixels]}
+      - {id: pw-vc-ct-mount, name: "Mounting React and Vue components with hooksConfig", match: [ct-mount, hooksconfig]}
+      - {id: pw-vc-extensions, name: "Testing Chrome extensions with a persistent context", match: [chrome-extension-testing, persistent-context]}
+      - {id: pw-vc-java-dotnet, name: "Playwright for Java and .NET", match: [playwright-java, playwright-dotnet]}
+      - {id: pw-vc-stylepath, name: "Full-page and element screenshots, stylePath and animations", match: [stylepath, full-page-screenshot]}
+  # --- Cypress (docs.cypress.io ToC)
+  - id: cy-core-concepts
+    name: Cypress core concepts
+    source: Cypress docs/Core concepts
+    match: [retry-ability, command-chaining]
+    subtopics:
+      - {id: cy-cc-aliases, name: "Variables and aliases (as, then, wrap)", match: [cypress-aliases, cy-wrap]}
+      - {id: cy-cc-conditional, name: "Conditional testing safely", match: [conditional-testing]}
+      - {id: cy-cc-isolation, name: "Test isolation and state reset", match: [test-isolation]}
+      - {id: cy-cc-within-shadow, name: "within, shadow DOM and iframes in Cypress", match: [cypress-iframe, includeshadowdom]}
+      - {id: cy-cc-assertions, name: "Implicit vs explicit assertions (should, expect)", match: [cypress-should]}
+      - {id: cy-cc-querying, name: "Querying elements (get, find, contains, data-cy)", match: [cy-get]}
+      - {id: cy-cc-actionability, name: "Interacting with elements and actionability (force, scrollBehavior)", match: [cypress-actionability]}
+      - {id: cy-cc-timeouts, name: "Timeouts and retry tuning (defaultCommandTimeout)", match: [defaultcommandtimeout]}
+      - {id: cy-cc-command-queue, name: "Command queue asynchrony and avoiding async/await", match: [command-queue]}
+      - {id: cy-cc-hooks, name: "Test structure, hooks, only and skip", match: [cypress-hooks]}
+  - id: cy-network-auth
+    name: Cypress network control and authentication
+    source: Cypress docs/Network requests, cy.session, cy.origin
+    match: [cy-intercept, cy-session]
+    subtopics:
+      - {id: cy-na-wait-alias, name: "Waiting on aliased routes", match: [cy-wait-alias]}
+      - {id: cy-na-modify-response, name: "Modifying requests and responses in intercept handlers", match: [intercept-handler]}
+      - {id: cy-na-origin, name: "Cross-origin flows with cy.origin", match: [cy-origin]}
+      - {id: cy-na-sso, name: "Programmatic SSO/OAuth login", match: [programmatic-login]}
+      - {id: cy-na-fixtures, name: "Stubbing responses with fixture files", match: [cypress-fixtures]}
+      - {id: cy-na-cy-request, name: "cy.request for API calls and setup", match: [cy-request]}
+      - {id: cy-na-session-validate, name: "cy.session validate and cacheAcrossSpecs", match: [cacheacrossspecs]}
+      - {id: cy-na-network-errors, name: "Simulating network errors and delays", match: [forcenetworkerror]}
+      - {id: cy-na-cookies, name: "Cookies and localStorage handling", match: [cy-setcookie]}
+  - id: cy-config-extend
+    name: Cypress configuration, custom commands and plugins
+    source: Cypress docs/Configuration, Custom commands, Plugins, Environment variables
+    match: [cypress-config, custom-commands]
+    subtopics:
+      - {id: cy-ce-task, name: "cy.task for Node-side work (DB seeding)", match: [cy-task]}
+      - {id: cy-ce-env, name: "Environment variables and multiple environments", match: [cypress-env]}
+      - {id: cy-ce-typescript, name: "Typing custom commands in TypeScript", match: [cypress-typescript]}
+      - {id: cy-ce-file-download, name: "File upload and download testing (selectFile, readFile)", match: [selectfile, cypress-downloads]}
+      - {id: cy-ce-node-events, name: "setupNodeEvents and run events (before:run, after:spec)", match: [cypress-run-events]}
+      - {id: cy-ce-overwrite, name: "Overwriting commands and queries", match: [overwrite-command]}
+      - {id: cy-ce-retries, name: "Test retries configuration (runMode, openMode)", match: [cypress-retries]}
+      - {id: cy-ce-viewport-browser, name: "Viewports and browser launch options", match: [cy-viewport, before-browser-launch]}
+      - {id: cy-ce-cli-run, name: "cypress run CLI flags (spec, browser, record, tag)", match: [cypress-cli-flags]}
+  - id: cy-component-cloud
+    name: Cypress component testing, Cloud and debugging
+    source: Cypress docs/Component testing, Cypress Cloud, Debugging
+    match: [component-testing, cypress-cloud]
+    subtopics:
+      - {id: cy-cc-mount, name: "Mounting components with providers and stubs", match: [cy-mount]}
+      - {id: cy-cc-flake-detection, name: "Cloud flake detection and Test Replay", match: [test-replay]}
+      - {id: cy-cc-debug, name: "Debugging with cy.pause, debugger and the command log", match: [cy-pause, command-log]}
+      - {id: cy-cc-screenshots-video, name: "Screenshots and video configuration", match: [cypress-video]}
+      - {id: cy-cc-parallelization, name: "Cypress Cloud parallelization and load balancing", match: [cypress-parallelization]}
+      - {id: cy-cc-github-action, name: "Running Cypress in GitHub Actions", match: [cypress-github-action]}
+      - {id: cy-cc-docker, name: "Cypress Docker images (cypress/included, factory)", match: [cypress-docker]}
+      - {id: cy-cc-reporters, name: "Reporters (mochawesome, junit) and merging", match: [mochawesome]}
+      - {id: cy-cc-migration, name: "Migrating Cypress versions and configuration", match: [cypress-migration]}
+  # --- Selenium (selenium.dev/documentation ToC)
+  - id: se-webdriver-elements
+    name: Selenium WebDriver elements, locators and waits
+    source: Selenium docs/WebDriver/Elements, Waits
+    match: [selenium-webdriver, explicit-wait]
+    subtopics:
+      - {id: se-we-relative-locators, name: "Relative locators", match: [relative-locators]}
+      - {id: se-we-fluent-wait, name: "FluentWait and custom conditions", match: [fluentwait]}
+      - {id: se-we-actions, name: "Actions API (keyboard, mouse, wheel)", match: [actions-api]}
+      - {id: se-we-windows-frames-alerts, name: "Windows, tabs, frames and alerts", match: [switch-to-window, alerts-handling]}
+      - {id: se-we-shadow-root, name: "Shadow DOM with getShadowRoot", match: [shadow-root]}
+      - {id: se-we-locators, name: "Locator strategies (By.id, CSS, XPath) and finders", match: [by-locators, xpath-locators]}
+      - {id: se-we-interactions, name: "Element interactions (click, send_keys, clear, Select)", match: [select-class, send-keys]}
+      - {id: se-we-element-info, name: "Element information (displayed, attributes, properties)", match: [element-information]}
+      - {id: se-we-stale, name: "StaleElementReference and NoSuchElement handling", match: [stale-element-reference]}
+      - {id: se-we-cookies-js, name: "Cookies and JavaScript execution", match: [selenium-cookies, execute-script]}
+  - id: se-drivers-options
+    name: Selenium drivers, browser options and BiDi
+    source: Selenium docs/Drivers, Browser options, BiDi
+    match: [selenium-manager, browser-options]
+    subtopics:
+      - {id: se-do-chrome-options, name: "Chrome/Edge/Firefox options (headless, prefs, arguments)", match: [chromeoptions]}
+      - {id: se-do-bidi, name: "WebDriver BiDi (console logs, network interception)", match: [webdriver-bidi]}
+      - {id: se-do-cdp, name: "Chrome DevTools Protocol from Selenium", match: [selenium-cdp]}
+      - {id: se-do-screenshots-print, name: "Screenshots and print-to-PDF", match: [print-page]}
+      - {id: se-do-driver-service, name: "Driver service, logs and RemoteWebDriver", match: [driver-service]}
+      - {id: se-do-page-load, name: "Page load strategy and timeouts", match: [page-load-strategy]}
+      - {id: se-do-file-upload, name: "File upload and download configuration", match: [selenium-file-upload]}
+      - {id: se-do-virtual-authenticator, name: "Virtual authenticator for WebAuthn", match: [virtual-authenticator]}
+      - {id: se-do-safari-ie, name: "Safari and IE mode drivers", match: [safaridriver, ie-mode]}
+  - id: se-grid
+    name: Selenium Grid
+    source: Selenium docs/Grid
+    match: [selenium-grid]
+    subtopics:
+      - {id: se-g-toml-config, name: "Grid TOML configuration and node stereotypes", match: [grid-toml]}
+      - {id: se-g-kubernetes, name: "Grid on Kubernetes with autoscaling (KEDA)", match: [grid-kubernetes, keda]}
+      - {id: se-g-observability, name: "Grid observability (tracing, GraphQL status)", match: [grid-graphql]}
+      - {id: se-g-roles, name: "Grid roles (router, distributor, session map, event bus)", match: [grid-components]}
+      - {id: se-g-modes, name: "Standalone, hub-and-node and distributed modes", match: [hub-and-node]}
+      - {id: se-g-docker-selenium, name: "docker-selenium images and docker compose", match: [docker-selenium]}
+      - {id: se-g-dynamic, name: "Dynamic Grid with Docker", match: [dynamic-grid]}
+      - {id: se-g-troubleshoot, name: "Grid troubleshooting (session queue, timeouts, registration)", match: [session-queue]}
+      - {id: se-g-video, name: "Video recording and VNC on Grid nodes", match: [grid-video-recording]}
+  - id: se-frameworks
+    name: Selenium test frameworks and language bindings
+    source: Selenium docs/Test practices, TestNG/JUnit docs
+    match: [selenium-framework]
+    subtopics:
+      - {id: se-f-testng, name: "TestNG suites, groups and data providers", match: [testng]}
+      - {id: se-f-pytest-selenium, name: "pytest fixtures for WebDriver", match: [pytest-selenium]}
+      - {id: se-f-webdriverio, name: "WebdriverIO test runner", match: [webdriverio]}
+      - {id: se-f-appium, name: "Appium mobile automation", match: [appium]}
+      - {id: se-f-jupiter, name: "JUnit 5 with Selenium-Jupiter", match: [selenium-jupiter]}
+      - {id: se-f-nunit, name: "Selenium with NUnit in C#", match: [nunit, selenium-csharp]}
+      - {id: se-f-serenity, name: "Serenity BDD", match: [serenity-bdd]}
+      - {id: se-f-selenide, name: "Selenide concise UI tests", match: [selenide]}
+      - {id: se-f-robot, name: "Robot Framework SeleniumLibrary", match: [seleniumlibrary]}
+  # --- Unit test frameworks (pytest, Jest, JUnit)
+  - id: pytest-fixtures-params
+    name: pytest fixtures and parametrisation
+    source: pytest docs/How to use fixtures, parametrize
+    match: [pytest-fixtures, parametrize]
+    subtopics:
+      - {id: py-fp-scopes, name: "Fixture scopes and yield teardown", match: [fixture-scope, yield-fixtures]}
+      - {id: py-fp-factory, name: "Factory-as-fixture pattern", match: [fixture-factory]}
+      - {id: py-fp-indirect, name: "Parametrized and indirect fixtures", match: [indirect-parametrization]}
+      - {id: py-fp-ids, name: "Test ids and pytest.param marks", match: [pytest-param]}
+      - {id: py-fp-request, name: "The request fixture and finalizers", match: [request-fixture]}
+      - {id: py-fp-conftest, name: "conftest.py layering and fixture overriding", match: [conftest-layering, fixture-override]}
+      - {id: py-fp-autouse, name: "autouse fixtures", match: [autouse]}
+      - {id: py-fp-usefixtures, name: "usefixtures and fixture availability", match: [usefixtures]}
+      - {id: py-fp-dynamic-scope, name: "Dynamic fixture scope and teardown ordering", match: [dynamic-fixture-scope]}
+      - {id: py-fp-stacked, name: "Stacked parametrize and cartesian products", match: [stacked-parametrize]}
+  - id: pytest-builtins-plugins
+    name: pytest built-in fixtures, markers and plugins
+    source: pytest docs/How-to guides, Writing plugins
+    match: [pytest-plugins, pytest-markers]
+    subtopics:
+      - {id: py-bp-capture, name: "capsys, capfd and caplog", match: [capsys, caplog]}
+      - {id: py-bp-skip-xfail, name: "skip, skipif and xfail strict", match: [xfail, skipif]}
+      - {id: py-bp-xdist, name: "Parallel runs with pytest-xdist", match: [pytest-xdist]}
+      - {id: py-bp-hooks, name: "Writing conftest hooks and local plugins", match: [pytest-hooks]}
+      - {id: py-bp-config, name: "pytest configuration (pyproject, addopts, testpaths)", match: [pytest-ini, addopts]}
+      - {id: py-bp-asyncio, name: "Testing async code with pytest-asyncio", match: [pytest-asyncio]}
+      - {id: py-bp-monkeypatch, name: "monkeypatch for env vars, attributes and dict items", match: [monkeypatch-setenv]}
+      - {id: py-bp-tmp-path, name: "tmp_path and tmp_path_factory", match: [tmp-path-factory]}
+      - {id: py-bp-warnings, name: "Asserting warnings and filterwarnings", match: [pytest-warns]}
+      - {id: py-bp-raises, name: "pytest.raises and exception matching", match: [pytest-raises]}
+      - {id: py-bp-selection, name: "Selecting tests (-k, -m, --lf, --sw, node ids)", match: [pytest-k, pytest-lf]}
+      - {id: py-bp-doctest, name: "Doctests with pytest", match: [doctest]}
+  - id: jest-testing
+    name: Jest and Vitest
+    source: Jest docs (Getting started, Using matchers, Async, Mock functions, Timer mocks, Snapshot, Config)
+    match: [jest, vitest]
+    subtopics:
+      - {id: js-jt-async, name: "Testing async code (promises, async/await, resolves/rejects)", match: [async-testing]}
+      - {id: js-jt-module-mocks, name: "Module mocks (jest.mock, manual mocks, spyOn)", match: [jest-mock-modules, spyon]}
+      - {id: js-jt-timers, name: "Fake timers", match: [fake-timers]}
+      - {id: js-jt-snapshot, name: "Snapshot and inline snapshot testing", match: [snapshot-testing]}
+      - {id: js-jt-rtl, name: "React Testing Library queries and user-event", match: [react-testing-library, user-event]}
+      - {id: js-jt-esm-ts, name: "Jest with ESM and TypeScript (ts-jest, babel)", match: [ts-jest]}
+      - {id: js-jt-setup-teardown, name: "Setup and teardown hooks and describe scoping", match: [jest-setup-teardown]}
+      - {id: js-jt-matchers, name: "Matchers (toEqual vs toBe, toMatchObject, asymmetric)", match: [jest-matchers, asymmetric-matchers]}
+      - {id: js-jt-config, name: "Jest config, testEnvironment and projects", match: [testenvironment, jest-projects]}
+      - {id: js-jt-vitest, name: "Vitest configuration and migrating from Jest", match: [vitest-config]}
+      - {id: js-jt-each, name: "test.each tables", match: [jest-each]}
+  - id: junit-testing
+    name: JUnit 5 and Mockito
+    source: JUnit 5 User Guide, Mockito docs
+    match: [junit5]
+    subtopics:
+      - {id: ju-parameterized, name: "Parameterized tests (ValueSource, CsvSource, MethodSource)", match: [parameterizedtest]}
+      - {id: ju-extensions, name: "Extension model (ExtendWith, custom extensions)", match: [junit-extensions]}
+      - {id: ju-nested-lifecycle, name: "Nested tests, lifecycle and display names", match: [nested-tests]}
+      - {id: ju-mockito, name: "Mockito stubbing, verification and captors", match: [mockito-verify, argumentcaptor]}
+      - {id: ju-assertj, name: "Fluent assertions with AssertJ", match: [assertj]}
+      - {id: ju-dynamic-tags, name: "Dynamic tests, tags and parallel execution", match: [dynamic-tests, junit-parallel]}
+      - {id: ju-assumptions, name: "Assumptions and conditional execution", match: [assumptions, conditional-test-execution]}
+      - {id: ju-surefire, name: "Running JUnit with Maven Surefire/Failsafe and Gradle", match: [maven-surefire, failsafe]}
+      - {id: ju-tempdir-repeated, name: "Timeouts, TempDir and repeated tests", match: [tempdir, repeatedtest]}
+      - {id: ju-spring-boot, name: "Spring Boot test slices (WebMvcTest, DataJpaTest)", match: [spring-boot-test]}
+  - id: coverage-tools
+    name: Code coverage tooling
+    source: coverage.py, Istanbul/nyc, JaCoCo docs
+    match: [code-coverage]
+    subtopics:
+      - {id: cov-coverage-py, name: "coverage.py branch coverage and config", match: [coverage-py]}
+      - {id: cov-istanbul, name: "Istanbul/V8 coverage in JS", match: [istanbul, v8-coverage]}
+      - {id: cov-jacoco, name: "JaCoCo coverage and thresholds", match: [jacoco]}
+      - {id: cov-diff-coverage, name: "Diff/patch coverage gates", match: [diff-coverage, patch-coverage]}
+      - {id: cov-go, name: "Go test coverage (-cover, coverprofile)", match: [go-coverage]}
+      - {id: cov-codecov, name: "Uploading coverage to Codecov", match: [codecov-upload]}
+      - {id: cov-combine, name: "Combining coverage from parallel and subprocess runs", match: [coverage-combine]}
+      - {id: cov-exclusions, name: "Coverage exclusions and pragmas", match: [coverage-exclusions]}
+      - {id: cov-e2e, name: "Collecting coverage from E2E tests (instrumented builds)", match: [e2e-coverage]}
+  - id: mocking-property-mutation
+    name: Mocking, property-based and mutation testing
+    source: Hypothesis, Stryker, unittest.mock docs
+    match: [mocking, property-based-testing, mutation-testing]
+    subtopics:
+      - {id: mpm-patch-target, name: "Patching where looked up (unittest.mock.patch)", match: [mock-patch]}
+      - {id: mpm-autospec, name: "autospec and spec_set to keep mocks honest", match: [autospec]}
+      - {id: mpm-hypothesis-strategies, name: "Hypothesis strategies and stateful testing", match: [hypothesis-strategies, stateful-testing]}
+      - {id: mpm-stryker, name: "Mutation testing with Stryker", match: [stryker]}
+      - {id: mpm-mutmut-pit, name: "Mutation testing with mutmut and PIT", match: [mutmut, pitest]}
+      - {id: mpm-sinon, name: "Sinon spies, stubs and fakes", match: [sinon-fakes]}
+      - {id: mpm-fast-check, name: "Property-based testing in JS with fast-check", match: [fast-check-arbitraries]}
+      - {id: mpm-jqwik, name: "Property-based testing in Java (jqwik)", match: [jqwik]}
+      - {id: mpm-mutation-score, name: "Interpreting mutation score and surviving mutants", match: [mutation-score, surviving-mutants]}
+      - {id: mpm-pytest-mock, name: "pytest-mock mocker fixture", match: [pytest-mock]}
+  # --- Load tools (k6, JMeter, Locust)
+  - id: k6-scripting
+    name: k6 scripting, checks and thresholds
+    source: k6 docs/Using k6
+    match: [k6-checks, k6-thresholds]
+    subtopics:
+      - {id: k6-s-lifecycle, name: "Test lifecycle (init, setup, VU code, teardown)", match: [k6-lifecycle]}
+      - {id: k6-s-custom-metrics, name: "Custom metrics (Counter, Gauge, Rate, Trend)", match: [k6-custom-metrics]}
+      - {id: k6-s-tags-groups, name: "Tags and groups for result slicing", match: [k6-tags]}
+      - {id: k6-s-env, name: "Environment variables and config files", match: [k6-env]}
+      - {id: k6-s-abort, name: "abortOnFail thresholds and test abort", match: [abortonfail]}
+      - {id: k6-s-http, name: "HTTP requests, batch and params", match: [k6-http, http-batch]}
+      - {id: k6-s-sharedarray, name: "Data parameterization with SharedArray", match: [sharedarray]}
+      - {id: k6-s-modules, name: "Modules, remote modules and jslib", match: [k6-modules, jslib]}
+      - {id: k6-s-auth-cookies, name: "Authentication and cookie jar handling", match: [k6-cookies, k6-auth]}
+      - {id: k6-s-typescript, name: "Writing k6 scripts in TypeScript", match: [k6-typescript]}
+  - id: k6-scenarios-executors
+    name: k6 scenarios and executors
+    source: k6 docs/Scenarios
+    match: [scenarios, executors]
+    subtopics:
+      - {id: k6-se-constant-arrival, name: "constant-arrival-rate and ramping-arrival-rate", match: [constant-arrival-rate, ramping-arrival-rate]}
+      - {id: k6-se-vus-executors, name: "ramping-vus, constant-vus and per-vu-iterations", match: [ramping-vus]}
+      - {id: k6-se-multi-scenario, name: "Multiple concurrent scenarios with exec functions", match: [k6-multiple-scenarios]}
+      - {id: k6-se-dropped, name: "Dropped iterations and preAllocatedVUs sizing", match: [dropped-iterations]}
+      - {id: k6-se-shared-iterations, name: "shared-iterations executor", match: [shared-iterations]}
+      - {id: k6-se-externally-controlled, name: "externally-controlled executor and the k6 REST API", match: [externally-controlled]}
+      - {id: k6-se-graceful-stop, name: "gracefulStop and gracefulRampDown", match: [gracefulstop]}
+      - {id: k6-se-start-time, name: "Scheduling scenarios with startTime and per-scenario env and tags", match: [starttime]}
+      - {id: k6-se-open-closed, name: "Open vs closed workload models", match: [open-model, closed-model]}
+  - id: k6-protocols-outputs
+    name: k6 protocols, browser module, outputs and extensions
+    source: k6 docs/Using k6 browser, Results output, Extensions
+    match: [k6-browser, k6-outputs]
+    subtopics:
+      - {id: k6-po-websocket-grpc, name: "WebSocket and gRPC load tests", match: [k6-grpc, k6-websockets]}
+      - {id: k6-po-prometheus, name: "Streaming results to Prometheus/Grafana", match: [k6-prometheus]}
+      - {id: k6-po-xk6, name: "Building custom k6 with xk6 extensions", match: [xk6]}
+      - {id: k6-po-summary, name: "handleSummary custom end-of-test report", match: [handlesummary]}
+      - {id: k6-po-cloud, name: "Grafana Cloud k6 distributed runs", match: [k6-cloud]}
+      - {id: k6-po-json-csv, name: "JSON and CSV result outputs", match: [k6-json-output, k6-csv-output]}
+      - {id: k6-po-influx, name: "InfluxDB output and Grafana dashboards", match: [k6-influxdb]}
+      - {id: k6-po-operator, name: "k6 Operator on Kubernetes", match: [k6-operator-testrun]}
+      - {id: k6-po-web-dashboard, name: "k6 web dashboard and HTML report export", match: [k6-web-dashboard]}
+      - {id: k6-po-hybrid, name: "Hybrid tests with browser Web Vitals and protocol load", match: [hybrid-load-test]}
+  - id: jmeter-test-plans
+    name: JMeter test plan elements
+    source: JMeter User Manual/Elements of a test plan, Component reference
+    match: [jmeter-test-plan]
+    subtopics:
+      - {id: jm-tp-thread-groups, name: "Thread groups and concurrency/arrivals thread groups", match: [thread-groups]}
+      - {id: jm-tp-logic-controllers, name: "Logic controllers (transaction, if, loop, throughput)", match: [logic-controllers, transaction-controller]}
+      - {id: jm-tp-assertions, name: "JMeter assertions (response, duration, JSON)", match: [jmeter-assertions]}
+      - {id: jm-tp-jsr223, name: "JSR223 Groovy pre/post processors", match: [jsr223, groovy-scripting]}
+      - {id: jm-tp-recorder, name: "HTTP(S) Test Script Recorder", match: [jmeter-recorder]}
+      - {id: jm-tp-functions, name: "Functions, variables and properties", match: [jmeter-properties]}
+      - {id: jm-tp-config-elements, name: "Config elements (HTTP Request Defaults, managers, CSV Data Set)", match: [http-request-defaults]}
+      - {id: jm-tp-extractors, name: "Post-processor extractors (JSON, regex, boundary) for correlation", match: [json-extractor, regex-extractor]}
+      - {id: jm-tp-timers, name: "Timers (constant throughput, precise throughput, random)", match: [constant-throughput-timer]}
+      - {id: jm-tp-scoping, name: "Element scoping and execution order rules", match: [jmeter-scoping]}
+      - {id: jm-tp-plugins, name: "JMeter Plugins Manager", match: [jmeter-plugins]}
+  - id: jmeter-execution
+    name: JMeter execution, distributed testing and reporting
+    source: JMeter User Manual/Non-GUI, Remote testing, Dashboard, Best practices
+    match: [jmeter-distributed, jmeter-reporting]
+    subtopics:
+      - {id: jm-ex-distributed, name: "Distributed (controller/worker) testing", match: [remote-testing]}
+      - {id: jm-ex-tuning, name: "JMeter heap and load-generator tuning", match: [jmeter-tuning]}
+      - {id: jm-ex-backend-listener, name: "Real-time results with Backend Listener", match: [backend-listener]}
+      - {id: jm-ex-taurus, name: "Running JMeter from CI with Taurus", match: [taurus]}
+      - {id: jm-ex-cli, name: "Non-GUI CLI flags (-n -t -l -e -o -J)", match: [jmeter-cli]}
+      - {id: jm-ex-dashboard, name: "Generating and customizing the HTML dashboard", match: [jmeter-dashboard]}
+      - {id: jm-ex-docker, name: "Running JMeter in Docker and Kubernetes", match: [jmeter-docker]}
+      - {id: jm-ex-listeners, name: "Listener overhead and JTL results configuration", match: [jmeter-listeners, jtl]}
+      - {id: jm-ex-keystore, name: "Client certificates and keystore configuration", match: [jmeter-keystore]}
+  - id: locust-testing
+    name: Locust load testing
+    source: Locust docs
+    match: [locust]
+    subtopics:
+      - {id: lo-locustfile, name: "Writing a locustfile (HttpUser, tasks, wait_time)", match: [locustfile]}
+      - {id: lo-distributed, name: "Distributed Locust (master/workers, Kubernetes)", match: [locust-distributed]}
+      - {id: lo-load-shape, name: "Custom load shapes", match: [loadtestshape]}
+      - {id: lo-headless-ci, name: "Headless runs and CSV stats in CI", match: [locust-headless]}
+      - {id: lo-config, name: "Configuration (locust.conf, env vars, CLI)", match: [locust-conf]}
+      - {id: lo-events, name: "Event hooks and custom listeners", match: [locust-events]}
+      - {id: lo-fasthttp, name: "FastHttpUser for high throughput", match: [fasthttpuser]}
+      - {id: lo-custom-client, name: "Testing non-HTTP systems with custom User clients", match: [locust-custom-client]}
+      - {id: lo-tasksets, name: "TaskSets, SequentialTaskSet and task weights", match: [taskset, sequentialtaskset]}
+      - {id: lo-tags, name: "Tags and per-user test data", match: [locust-tags]}
+  # --- Performance testing craft
+  - id: perf-test-types
+    name: Performance test types
+    source: k6 docs/Test types, CTAL-TTA v4.0 4.4
+    match: [load-testing, stress-testing, soak-testing, spike-testing]
+    subtopics:
+      - {id: ptt-smoke, name: "Smoke performance test as a script sanity gate", match: [performance-smoke-test]}
+      - {id: ptt-breakpoint, name: "Breakpoint testing to find the limit", match: [breakpoint-testing]}
+      - {id: ptt-scalability, name: "Scalability testing across instance counts", match: [scalability-testing]}
+      - {id: ptt-volume, name: "Volume testing with large data sets", match: [volume-testing]}
+      - {id: ptt-average-load, name: "Average-load test design", match: [average-load-test]}
+      - {id: ptt-endurance, name: "Endurance test execution and leak detection", match: [endurance-testing]}
+      - {id: ptt-autoscaling, name: "Spike test design and autoscaling verification", match: [autoscaling-test]}
+      - {id: ptt-concurrency, name: "Concurrency testing for contention and locking", match: [lock-contention-testing]}
+      - {id: ptt-capacity, name: "Capacity testing", match: [capacity-test-design]}
+  - id: perf-workload-modelling
+    name: Workload modelling and performance requirements
+    source: ISTQB Performance Testing syllabus ch4
+    match: [workload-modelling, workload-model]
+    subtopics:
+      - {id: pwm-from-logs, name: "Deriving workload mix from production logs/analytics", match: [workload-from-logs]}
+      - {id: pwm-littles-law, name: "Little's Law sizing of virtual users", match: [littles-law]}
+      - {id: pwm-nfr, name: "Writing measurable performance requirements and SLOs", match: [performance-requirements]}
+      - {id: pwm-think-time-pacing, name: "Think time and pacing design", match: [pacing]}
+      - {id: pwm-arrival-rate, name: "Arrival rate vs concurrency modelling", match: [arrival-rate-model]}
+      - {id: pwm-transaction-mix, name: "Transaction mix and journey weighting", match: [transaction-mix]}
+      - {id: pwm-peak-forecast, name: "Peak and growth forecasting", match: [peak-load-forecast]}
+      - {id: pwm-load-test-data, name: "Test data volume and uniqueness for load tests", match: [load-test-data]}
+      - {id: pwm-warmup, name: "Cache warm-up and ramp design", match: [cache-warmup, ramp-up-design]}
+  - id: perf-environment-monitoring
+    name: Performance test environment and monitoring
+    source: ISTQB Performance Testing syllabus ch3-4
+    match: [performance-test-environment, performance-monitoring]
+    subtopics:
+      - {id: pem-prod-like, name: "Production-like environment and scaling down results", match: [production-like-environment]}
+      - {id: pem-load-generator-health, name: "Load generator saturation checks", match: [load-generator-saturation]}
+      - {id: pem-server-metrics, name: "Server-side resource monitoring during tests (USE)", match: [use-method]}
+      - {id: pem-db-profiling, name: "Database bottleneck analysis under load", match: [slow-query-analysis, database-bottlenecks]}
+      - {id: pem-gc, name: "JVM GC and thread monitoring under load", match: [gc-analysis]}
+      - {id: pem-latency-emulation, name: "Network latency and bandwidth emulation", match: [latency-emulation]}
+      - {id: pem-apm-correlation, name: "Correlating load tests with APM traces", match: [load-test-correlation]}
+      - {id: pem-k8s-throttling, name: "Kubernetes resource monitoring under load (CPU throttling)", match: [cpu-throttling]}
+      - {id: pem-perf-stubs, name: "Stubbing third parties in performance environments", match: [performance-stubs]}
+  - id: perf-analysis-reporting
+    name: Performance results analysis and reporting
+    source: ISTQB Performance Testing syllabus ch4.3-4.4
+    match: [performance-report, bottleneck-analysis]
+    subtopics:
+      - {id: par-percentiles, name: "Reading percentile distributions and histograms", match: [latency-histogram, hdrhistogram]}
+      - {id: par-baseline-compare, name: "Baseline comparison and regression detection", match: [performance-baseline]}
+      - {id: par-coordinated-omission, name: "Coordinated omission correction", match: [coordinated-omission]}
+      - {id: par-front-end, name: "Front-end performance (Core Web Vitals, Lighthouse CI)", match: [core-web-vitals, lighthouse-ci]}
+      - {id: par-knee-point, name: "Throughput vs latency curves and the knee point", match: [knee-point, throughput-curve]}
+      - {id: par-error-analysis, name: "Error rate analysis under load", match: [load-error-analysis]}
+      - {id: par-ci-gates, name: "Automated performance regression gates in CI", match: [perf-regression-gate]}
+      - {id: par-report, name: "Writing the performance test report and recommendations", match: [performance-test-report]}
+      - {id: par-variance, name: "Run-to-run variance and statistical comparison", match: [run-variance]}

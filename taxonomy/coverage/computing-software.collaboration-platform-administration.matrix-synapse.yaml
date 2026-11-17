@@ -1,0 +1,218 @@
+# Coverage spec: matrix-synapse. Topics from the Synapse documentation (element-hq.github.io/synapse/latest).
+subject: matrix-synapse
+scope:
+  category: computing-software
+  field: collaboration-platform-administration
+  products: [matrix-synapse]
+sources:
+  - "Synapse documentation (element-hq.github.io/synapse/latest)"
+topics:
+  # --- Install and upgrade ---
+  - id: synapse-install-methods
+    name: "Install methods: packages, PyPI, virtualenv and platform notes"
+    source: "https://element-hq.github.io/synapse/latest/setup/installation.html"
+    match: [install,debian,ubuntu,docker,pypi,virtualenv,python,rhel,packages]
+  - id: synapse-server-name-and-config
+    name: "Choosing server_name and generating homeserver.yaml and signing key"
+    source: "https://element-hq.github.io/synapse/latest/setup/installation.html"
+    match: [server-name,generate-config,signing-key,homeserver-yaml,report-stats]
+  - id: synapse-upgrade-rollback
+    name: "Upgrading Synapse, upgrade notes and rollback limits"
+    source: "https://element-hq.github.io/synapse/latest/upgrade.html"
+    match: [upgrade,rollback,pip,poetry,synctl,schema-versions,server-version]
+  # --- Networking and federation ---
+  - id: synapse-delegation
+    name: "Server delegation with .well-known/matrix/server and SRV"
+    source: "https://element-hq.github.io/synapse/latest/delegate.html"
+    match: [delegation,well-known,federation,server-name,port-8448]
+  - id: synapse-federation-troubleshooting
+    name: "Federation troubleshooting: federation tester, 401 and redirect failures"
+    source: "https://element-hq.github.io/synapse/latest/federate.html"
+    match: [federation,troubleshooting,federation-tester,401,308-redirect]
+  - id: synapse-reverse-proxy
+    name: "Reverse proxy rules: forwarded headers, no URI normalisation, listeners"
+    source: "https://element-hq.github.io/synapse/latest/reverse_proxy.html"
+    match: [reverse-proxy,x-forwarded-for,x-forwarded-proto,x-forwarded,listeners,nocanon,health-check]
+  - id: synapse-tls-and-client-well-known
+    name: "TLS certificates, listeners and client well-known"
+    source: "https://element-hq.github.io/synapse/latest/setup/installation.html"
+    match: [tls,certificate,listeners,public-baseurl,well-known,client,cors,fullchain]
+  - id: synapse-security-hardening
+    name: "Security hardening: separate domain for content, firewall ports"
+    source: "https://element-hq.github.io/synapse/latest/setup/installation.html"
+    match: [security,xss,content-repository,firewall,ports,registered-domain]
+  - id: synapse-federation-destinations
+    name: "Federation destinations admin API: retry intervals and reset"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/admin_api/federation.html"
+    match: [federation,destinations,retry-interval,reset-connection,backoff,remote-server]
+  - id: synapse-turn
+    name: "TURN server integration and VoIP troubleshooting"
+    source: "https://element-hq.github.io/synapse/latest/turn-howto.html"
+    match: [turn,voip,coturn,eturnal,webrtc,turn-uris,turn-shared-secret,nat]
+  # --- Database ---
+  - id: synapse-postgres-setup
+    name: "PostgreSQL setup, psycopg2 and connection pool"
+    source: "https://element-hq.github.io/synapse/latest/postgres.html"
+    match: [postgresql,psycopg2,database,createdb,connection-pool,keepalives]
+  - id: synapse-sqlite-port
+    name: "Porting SQLite to PostgreSQL with synapse_port_db"
+    source: "https://element-hq.github.io/synapse/latest/postgres.html"
+    match: [sqlite,postgresql,synapse-port-db,migration,vacuum,homeserver-db]
+  - id: synapse-postgres-auth-locale
+    name: "PostgreSQL authentication and collation or locale troubleshooting"
+    source: "https://element-hq.github.io/synapse/latest/postgres.html"
+    match: [postgresql,pg-hba,ident,collate,ctype,allow-unsafe-locale,reindex]
+  - id: synapse-state-groups
+    name: "State groups, database growth and compression tools"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/state_groups.html"
+    match: [state-groups,state-groups-state,synapse-compress-state,database-size,maintenance]
+  - id: synapse-backups
+    name: "What to back up and how to restore"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/backups.html"
+    match: [backup,restore,pg-dump,pg-restore,media-store,one-time-keys]
+  - id: synapse-background-updates
+    name: "Background updates admin API and rerunning jobs"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/admin_api/background_updates.html"
+    match: [background-updates,event-resign,regenerate-directory,populate-stats,pause]
+  - id: synapse-admin-faq-sql
+    name: "Admin FAQ: SQL queries and bootstrapping an admin"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/admin_faq.html"
+    match: [admin-faq,sql,make-admin,destinations,room-alias,delete-database]
+  # --- Workers and scaling ---
+  - id: synapse-workers-redis
+    name: "Worker architecture: Redis replication and shared config"
+    source: "https://element-hq.github.io/synapse/latest/workers.html"
+    match: [workers,redis,replication,instance-map,worker-replication-secret,scaling]
+  - id: synapse-generic-worker
+    name: "Generic worker configuration and endpoint routing"
+    source: "https://element-hq.github.io/synapse/latest/workers.html"
+    match: [workers,generic-worker,worker-app,worker-name,worker-listeners,routing]
+  - id: synapse-worker-load-balancing
+    name: "Load balancing sync and federation across workers"
+    source: "https://element-hq.github.io/synapse/latest/workers.html"
+    match: [workers,load-balancing,nginx,sync,initial-sync,federation,hash,access-token]
+  - id: synapse-stream-writers
+    name: "Stream writers and event persisters"
+    source: "https://element-hq.github.io/synapse/latest/workers.html"
+    match: [workers,stream-writers,event-persister,event-creator,typing,receipts,presence]
+  - id: synapse-federation-sender-pushers
+    name: "Federation sender, pushers and outbound federation restriction"
+    source: "https://element-hq.github.io/synapse/latest/workers.html"
+    match: [workers,federation-sender,pusher-instances,send-federation,outbound-federation-restricted-to]
+  - id: synapse-worker-media-and-background
+    name: "Media repository worker and background task placement"
+    source: "https://element-hq.github.io/synapse/latest/workers.html"
+    match: [workers,media-repository,enable-media-repo,run-background-tasks-on,user-directory,appservices]
+  - id: synapse-worker-systemd
+    name: "Managing workers with systemd and synctl"
+    source: "https://element-hq.github.io/synapse/latest/systemd-with-workers/"
+    match: [workers,systemd,synctl,matrix-synapse-target,hardening,pid-file]
+  - id: synapse-performance-tuning
+    name: "RAM, CPU and file handle tuning"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/understanding_synapse_through_grafana_graphs.html"
+    match: [performance,ram,synapse-cache-factor,jemalloc,file-descriptors,presence,limits-conf,cpu]
+  # --- Monitoring and logs ---
+  - id: synapse-prometheus-metrics
+    name: "Prometheus metrics endpoint, workers and Grafana"
+    source: "https://element-hq.github.io/synapse/latest/metrics-howto.html"
+    match: [prometheus,metrics,enable-metrics,grafana,listeners,scrape]
+  - id: synapse-request-logs
+    name: "Request log format and slow request diagnosis"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/request_log.html"
+    match: [logging,request-log,access-log,processed-request,db-time,499,troubleshooting]
+  # --- Media and retention ---
+  - id: synapse-media-layout
+    name: "Media repository storage layout and mxc URIs"
+    source: "https://element-hq.github.io/synapse/latest/media_repository.html"
+    match: [media-repository,mxc,local-content,remote-content,thumbnails,url-cache,filesystem-id]
+  - id: synapse-media-quarantine
+    name: "Quarantining, protecting and querying media"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/media_admin_api.html"
+    match: [media,quarantine,protect-media,room-media,quarantine-changes,sha256]
+  - id: synapse-media-delete-purge
+    name: "Deleting local media and purging the remote media cache"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/media_admin_api.html"
+    match: [media,delete-media,purge-media-cache,before-ts,size-gt,keep-profiles,disk-space]
+  - id: synapse-retention-policy
+    name: "Message retention policy, lifetime limits and purge jobs"
+    source: "https://element-hq.github.io/synapse/latest/message_retention_policies.html"
+    match: [retention,message-retention,max-lifetime,default-policy,allowed-lifetime,m-room-retention,purge-jobs,longest-max-lifetime,shortest-max-lifetime,vacuum-full]
+  - id: synapse-purge-history
+    name: "Purge history API"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/purge_history_api.html"
+    match: [purge-history,purge-up-to-ts,delete-local-events,vacuum-full,admin-api]
+  # --- Registration and authentication ---
+  - id: synapse-registration-captcha
+    name: "Registration with reCAPTCHA"
+    source: "https://element-hq.github.io/synapse/latest/CAPTCHA_SETUP.html"
+    match: [captcha,recaptcha,registration,bots,enable-registration-captcha]
+  - id: synapse-registration-tokens
+    name: "Registration tokens admin API"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/admin_api/registration_tokens.html"
+    match: [registration-tokens,admin-api,registration-requires-token,invite-only]
+  - id: synapse-shared-secret-registration
+    name: "Shared-secret registration and creating the first admin"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/register_api.html"
+    match: [registration-shared-secret,register-new-matrix-user,admin,hmac,nonce,bootstrap]
+  - id: synapse-oidc-setup
+    name: "OpenID Connect provider setup, callback URL and provider quirks"
+    source: "https://element-hq.github.io/synapse/latest/openid.html"
+    match: [oidc,openid-connect,sso,oidc-providers,callback,public-baseurl,backchannel-logout,keycloak,azure-ad,github,auth0,authentik,subject-claim,client-auth-method]
+  - id: synapse-sso-mapping
+    name: "SSO user mapping providers and attribute templates"
+    source: "https://element-hq.github.io/synapse/latest/sso_mapping_providers.html"
+    match: [sso,mapping-provider,localpart,display-name,module-api,failures]
+  - id: synapse-jwt-login
+    name: "JWT login type"
+    source: "https://element-hq.github.io/synapse/latest/jwt.html"
+    match: [jwt,json-web-token,login,org-matrix-login-jwt,jwt-config,authlib]
+  - id: synapse-mau-limits
+    name: "Monthly active user limits"
+    source: "https://element-hq.github.io/synapse/latest/usage/administration/monthly_active_users.html"
+    match: [mau,monthly-active-users,limit-usage-by-mau,max-mau-value,resource-limit-exceeded]
+  # --- Users, rooms and compliance ---
+  - id: synapse-user-admin-lifecycle
+    name: "User admin API: deactivate, suspend and reset password"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/user_admin_api.html"
+    match: [admin-api,users,deactivate,erase,suspend,reset-password,logout-devices]
+  - id: synapse-user-moderation
+    name: "User moderation: shadow ban and rate limit overrides"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/user_admin_api.html"
+    match: [shadow-ban,ratelimit,override-ratelimit,messages-per-second,burst-count,moderation]
+  - id: synapse-rooms-list
+    name: "Room list and search admin API"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/rooms.html"
+    match: [rooms,list-rooms,search-term,order-by,pagination,state-events,empty-rooms]
+  - id: synapse-rooms-delete
+    name: "Deleting and blocking rooms"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/rooms.html"
+    match: [delete-room,block-room,purge,new-room-user-id,delete-status,shutdown]
+  - id: synapse-user-directory
+    name: "User directory visibility, ranking and regeneration"
+    source: "https://element-hq.github.io/synapse/latest/user_directory.html"
+    match: [user-directory,search-all-users,show-locked-users,prefer-local-users,regenerate-directory]
+  - id: synapse-server-notices
+    name: "Server notices room and sending notices"
+    source: "https://element-hq.github.io/synapse/latest/server_notices.html"
+    match: [server-notices,send-server-notice,motd,system-mxid-localpart,auto-join]
+  - id: synapse-consent-tracking
+    name: "Consent tracking and terms acceptance"
+    source: "https://element-hq.github.io/synapse/latest/consent_tracking.html"
+    match: [consent,user-consent,privacy-policy,terms,form-secret,block-events-error]
+  - id: synapse-data-export
+    name: "Exporting a user's data with admin_cmd"
+    source: "https://element-hq.github.io/synapse/latest/admin_api/user_admin_api.html"
+    match: [export-data,admin-cmd,gdpr,user-data,media-ids]
+  # --- Extensibility ---
+  - id: synapse-appservices
+    name: "Application service registration for bridges and bots"
+    source: "https://element-hq.github.io/synapse/latest/application_services.html"
+    match: [application-service,appservice,bridge,app-service-config-files,as-token,hs-token,namespaces]
+  - id: synapse-module-development
+    name: "Writing a Synapse module"
+    source: "https://element-hq.github.io/synapse/latest/modules/writing_a_module.html"
+    match: [modules,module-api,parse-config,web-resource,callbacks,caching,python]
+  - id: synapse-spam-checker
+    name: "Spam checker callbacks for events, joins and invites"
+    source: "https://element-hq.github.io/synapse/latest/modules/spam_checker_callbacks.html"
+    match: [spam-checker,check-event-for-spam,user-may-invite,user-may-join-room,not-spam,codes-forbidden]

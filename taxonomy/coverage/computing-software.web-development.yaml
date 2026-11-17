@@ -1,0 +1,1537 @@
+# Canonical coverage spec: Web development (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (MDN Learn and reference tables of contents,
+# web.dev Learn courses, WCAG 2.2 success criteria, OWASP Top 10 2021 / ASVS 4, and each
+# framework's official documentation ToC), not from what the library already has.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (MDN page headings,
+# web.dev module lists, WCAG guideline -> success criteria, OWASP category -> CWE groups / ASVS
+# requirement sections, framework guide chapter sub-headings).
+# NOTE: never use a bare product or path word (react, vue, django, web, development) as a match
+# keyword - the id/name whole-word rule would make it hit every skill in the field.
+subject: web-development
+scope:
+  category: computing-software
+  field: web-development
+  products: [react, nextjs, vue, django, rails, node-express, wordpress, tailwind-css, frontend-development, web-accessibility, web-performance, responsive-design]
+sources:
+  - "MDN Learn web development + HTML reference ToC (developer.mozilla.org/docs/Web/HTML) - document structure and metadata, content sectioning, text content, tables, forms and constraint validation, multimedia and embedding, responsive images, iframes"
+  - "MDN CSS reference and guides ToC (developer.mozilla.org/docs/Web/CSS) - cascade/specificity/layers, box model, flexbox, grid, positioning and stacking context, custom properties, fonts and text, colour, transitions/animations, selectors and nesting, media and container queries, logical properties"
+  - "MDN JavaScript Guide + reference (developer.mozilla.org/docs/Web/JavaScript) - modules, classes and prototypes, iterators/generators, keyed and indexed collections, promises/async, error handling, Intl"
+  - "MDN Web APIs index (developer.mozilla.org/docs/Web/API) - DOM, Fetch, Streams, WebSocket, Server-sent events, Web Storage, IndexedDB, Cache, Web Workers, Service Worker, Push, Notifications, Canvas, Web Animations, History/Navigation, Intersection/Resize/Mutation observers, Web Components (custom elements, shadow DOM, templates), Clipboard, Geolocation, Media Capture, Permissions, Web Share"
+  - "web.dev Learn courses (web.dev/learn) - Learn Performance (critical path, resource hints, images, fonts, JavaScript, code splitting, lazy loading, prefetch/prerender, web workers), Learn Accessibility, Learn PWA (manifest, service workers, caching, offline, installation, updates, Workbox), Learn Forms, Learn CSS, Learn Responsive Design, Core Web Vitals articles (LCP, INP, CLS, TTFB) and measurement (RUM, CrUX, Lighthouse)"
+  - "WCAG 2.2 (w3.org/TR/WCAG22) - principles, guidelines 1.1-4.1 and every success criterion incl. 2.2 additions (2.4.11 focus not obscured, 2.5.7 dragging movements, 2.5.8 target size minimum, 3.2.6 consistent help, 3.3.7 redundant entry, 3.3.8 accessible authentication); WAI-ARIA Authoring Practices Guide patterns"
+  - "OWASP Top 10 2021 (A01-A10) and OWASP ASVS 4.0.3 chapters (V2 authentication, V3 session management, V4 access control, V5 validation/sanitisation/encoding, V12 files, V13 API, V14 configuration); OWASP Cheat Sheet Series (XSS, CSRF, CSP, SSRF, injection, HTTP headers)"
+  - "React docs ToC (react.dev/learn and react.dev/reference) - Describing the UI, Adding interactivity, Managing state, Escape hatches; hooks/components/APIs reference, react-dom APIs, Server Components and Actions, Rules of React"
+  - "Next.js App Router docs ToC (nextjs.org/docs/app) - routing (layouts, dynamic, groups, parallel/intercepting, loading/error), data fetching and caching, server actions, rendering (server/client components, streaming, PPR), route handlers, middleware, optimisation (images, fonts, scripts, metadata), authentication, deploying/self-hosting, configuration, testing, instrumentation"
+  - "Vue guide ToC (vuejs.org/guide) - Essentials, Components in-depth, Reusability, Built-in components, Scaling up (SFC, tooling, routing, state, testing, SSR), Best practices, TypeScript; Pinia and Vue Router docs; Nuxt docs"
+  - "Django documentation ToC (docs.djangoproject.com) - models/migrations/querysets, URL dispatcher, views and CBVs, templates, forms, admin, auth, middleware, sessions, caching, signals, testing, i18n, async, static files, deployment checklist, management commands, file storage; Django REST framework API guide"
+  - "Ruby on Rails Guides ToC (guides.rubyonrails.org) - Active Record basics/migrations/validations/callbacks/associations/querying, Action Controller, routing, Action View and form helpers, Active Job, Action Mailer, Active Storage, Action Cable, caching, security, testing, asset pipeline, credentials, upgrading, API-only apps; Hotwire (Turbo, Stimulus) handbooks; Kamal docs"
+  - "Node.js docs (nodejs.org/api, nodejs.org/learn) and Express guide ToC (expressjs.com) - routing, middleware, error handling, template engines, static files, behind proxies, production best practices (performance, security); Node modules (ESM/CJS), fs, streams, process/child_process, worker_threads, cluster, test runner, debugging/diagnostics"
+  - "WordPress developer handbooks (developer.wordpress.org) - Theme Handbook (template hierarchy, block themes, theme.json, classic themes), Plugin Handbook (hooks, settings API, shortcodes, cron, security, i18n), Block Editor Handbook (block.json, create-block, dynamic blocks, InnerBlocks, patterns, Interactivity API), REST API Handbook, Common APIs (WP_Query, metadata, options, transients), WP-CLI, multisite"
+  - "Tailwind CSS docs ToC (tailwindcss.com/docs) - installation, utility-first core concepts, hover/focus and other states, responsive design, dark mode, theme variables and @theme, adding custom styles, functions and directives, detecting classes in source files, upgrade guide v3 to v4"
+topics:
+  # --- HTML (MDN HTML reference)
+  - id: html-document-structure
+    name: Semantic HTML document structure and metadata
+    source: MDN HTML reference/Document metadata + Content sectioning
+    match: [semantic-html, html-document-structure]
+    subtopics:
+      - {id: html-head-metadata, name: head metadata (charset / viewport / title / meta description / canonical), match: [html-head-metadata, meta-viewport]}
+      - {id: html-landmarks, name: Sectioning and landmark elements (header / nav / main / aside / footer), match: [landmark-elements, html-sectioning]}
+      - {id: html-heading-outline, name: Heading hierarchy and document outline, match: [heading-hierarchy, document-outline]}
+      - {id: html-tables, name: Data tables (caption / th scope / thead / colgroup), match: [html-tables, table-headers-scope]}
+      - {id: html-media, name: Video and audio elements with tracks and sources, match: [html-video-audio, media-tracks]}
+      - {id: html-iframes, name: Embedding with iframe (sandbox / allow / loading / title), match: [iframe-sandbox, html-iframes]}
+      - {id: html-dialog-details, name: Native interactive elements (dialog / details / popover), match: [html-dialog-element, popover-api, details-summary]}
+      - {id: html-open-graph, name: Open Graph and social card metadata, match: [open-graph-meta, twitter-card-meta]}
+      - {id: html-favicons-icons, name: Favicon / apple-touch-icon / theme-color link set, match: [favicon-set, theme-color-meta]}
+      - {id: html-json-ld, name: Structured data with JSON-LD and schema.org, match: [json-ld-structured-data, schema-org-markup]}
+      - {id: html-validation, name: HTML validation with the Nu checker and common parse errors, match: [nu-html-checker, html-validator]}
+  - id: html-forms
+    name: HTML forms and constraint validation
+    source: MDN Learn Forms + web.dev Learn Forms
+    match: [html-forms, form-validation]
+    subtopics:
+      - {id: forms-input-types, name: Input types and inputmode / enterkeyhint for mobile keyboards, match: [input-types, inputmode]}
+      - {id: forms-constraint-validation, name: Constraint Validation API (validity / setCustomValidity / user-invalid), match: [constraint-validation-api, setcustomvalidity]}
+      - {id: forms-autocomplete, name: autocomplete tokens for addresses / passwords / one-time codes, match: [autocomplete-attribute, autofill-tokens]}
+      - {id: forms-formdata, name: Submitting with FormData and progressive enhancement, match: [formdata, form-submission]}
+      - {id: forms-file-upload, name: File inputs (accept / multiple / drag-drop / preview), match: [file-input, file-upload-client]}
+      - {id: forms-fieldset-labels, name: Labels / fieldset / legend and grouping controls, match: [fieldset-legend, form-labels]}
+      - {id: forms-select-datalist, name: select / datalist / optgroup choice controls, match: [datalist-element, select-optgroup]}
+      - {id: forms-styling-controls, name: Styling form controls (appearance / accent-color / customizable select), match: [accent-color, customizable-select]}
+      - {id: forms-multi-step, name: Multi-step forms and saving progress, match: [multi-step-form, form-wizard]}
+      - {id: forms-spam-protection, name: Form spam protection (honeypot / rate limit / Turnstile), match: [honeypot-field, form-spam-protection]}
+  # --- JavaScript (MDN JS Guide)
+  - id: js-modules
+    name: JavaScript modules
+    source: MDN JS Guide/Modules
+    match: [es-modules, javascript-modules]
+    subtopics:
+      - {id: js-mod-import-export, name: Named vs default exports and re-exports, match: [named-exports, re-exports]}
+      - {id: js-mod-dynamic-import, name: Dynamic import() and lazy loading code, match: [dynamic-import]}
+      - {id: js-mod-import-maps, name: Import maps and bare specifiers in the browser, match: [import-maps]}
+      - {id: js-mod-top-level-await, name: Top-level await and module evaluation order, match: [top-level-await]}
+      - {id: js-mod-esm-cjs, name: ESM vs CommonJS interop (Node package exports / type module), match: [esm-cjs-interop, package-exports]}
+      - {id: js-mod-circular-deps, name: Circular import diagnosis and TDZ errors, match: [circular-imports, module-cycles]}
+      - {id: js-mod-dual-package, name: Publishing dual ESM and CJS packages (exports conditions / types), match: [dual-package, exports-conditions]}
+      - {id: js-mod-modulepreload, name: modulepreload and module script loading order, match: [modulepreload]}
+      - {id: js-mod-import-attributes, name: Import attributes for JSON and CSS module scripts, match: [import-attributes, css-module-scripts]}
+  - id: js-objects-classes
+    name: Objects, classes and prototypes
+    source: MDN JS Guide/Working with objects + Using classes + Inheritance and the prototype chain
+    match: [javascript-classes, prototype-chain]
+    subtopics:
+      - {id: js-private-fields, name: Private fields / static blocks / accessors, match: [private-class-fields, class-static-blocks]}
+      - {id: js-this-binding, name: this binding rules / arrow functions / bind, match: [this-binding]}
+      - {id: js-immutability, name: Copying and freezing objects (structuredClone / spread / Object.freeze), match: [structuredclone, object-freeze]}
+      - {id: js-proxy-reflect, name: Proxy and Reflect metaprogramming, match: [proxy-reflect]}
+      - {id: js-closures, name: Closures and lexical scope, match: [closures, lexical-scope]}
+      - {id: js-property-descriptors, name: Property descriptors / defineProperty / enumerability, match: [property-descriptors, object-defineproperty]}
+      - {id: js-symbols, name: Symbols and well-known symbols (Symbol.iterator / toPrimitive), match: [javascript-symbols, well-known-symbols]}
+      - {id: js-mixins, name: Mixins and composition over inheritance, match: [class-mixins, composition-over-inheritance]}
+      - {id: js-equality-coercion, name: Equality / type coercion / Object.is pitfalls, match: [type-coercion, object-is]}
+  - id: js-collections-iteration
+    name: Collections, iterators and generators
+    source: MDN JS Guide/Keyed collections + Indexed collections + Iterators and generators
+    match: [iterators-generators, keyed-collections]
+    subtopics:
+      - {id: js-map-set, name: Map / Set / WeakMap / WeakRef choice, match: [map-set, weakmap]}
+      - {id: js-array-methods, name: Modern array methods (toSorted / findLast / groupBy / at), match: [array-methods, object-groupby]}
+      - {id: js-iterator-protocol, name: Iterator protocol and custom iterables, match: [iterator-protocol]}
+      - {id: js-async-iterators, name: Async iterators and for await, match: [async-iterators, for-await]}
+      - {id: js-typed-arrays, name: Typed arrays / ArrayBuffer / DataView for binary data, match: [typed-arrays, arraybuffer]}
+      - {id: js-generators, name: Generator functions / yield / yield* delegation, match: [generator-functions, yield-delegation]}
+      - {id: js-iterator-helpers, name: Iterator helpers (map / filter / take / Iterator.from), match: [iterator-helpers]}
+      - {id: js-set-methods, name: Set composition methods (union / intersection / difference), match: [set-methods, set-union-intersection]}
+      - {id: js-array-sorting, name: Sorting with comparators / stability / localeCompare, match: [array-sort-comparator, stable-sort]}
+  - id: js-async
+    name: Asynchronous JavaScript (promises, async/await, event loop)
+    source: MDN Learn Asynchronous JavaScript + Using promises
+    match: [promises, async-await, event-loop]
+    subtopics:
+      - {id: js-promise-combinators, name: Promise.all / allSettled / any / race, match: [promise-combinators, promise-allsettled]}
+      - {id: js-abortcontroller, name: Cancellation with AbortController / AbortSignal.timeout, match: [abortcontroller, abortsignal]}
+      - {id: js-microtasks, name: Microtasks vs macrotasks and ordering, match: [microtasks, task-queue]}
+      - {id: js-unhandled-rejections, name: Unhandled rejections and async error handling, match: [unhandled-rejection, async-error-handling]}
+      - {id: js-concurrency-limit, name: Limiting concurrency and retry with backoff, match: [concurrency-limit, retry-backoff]}
+      - {id: js-promise-withresolvers, name: Promise.withResolvers and promisifying callback APIs, match: [promise-withresolvers, promisify]}
+      - {id: js-timers, name: Timers (setTimeout / setInterval drift / clamping in background tabs), match: [settimeout-drift, timer-throttling]}
+      - {id: js-async-mutex, name: Serialising async work (mutex / queue / single-flight), match: [async-mutex, single-flight]}
+      - {id: js-debounce-throttle, name: Debounce and throttle utilities, match: [throttle-function, debounce-function]}
+  - id: js-intl
+    name: Internationalisation with Intl
+    source: MDN JS reference/Intl
+    match: [intl-api, internationalization]
+    subtopics:
+      - {id: intl-datetime, name: Intl.DateTimeFormat and time zones, match: [intl-datetimeformat, time-zones]}
+      - {id: intl-number, name: Intl.NumberFormat currencies / units / compact, match: [intl-numberformat, currency-formatting]}
+      - {id: intl-plural-relative, name: PluralRules and RelativeTimeFormat, match: [intl-pluralrules, relative-time-format]}
+      - {id: intl-rtl, name: lang / dir attributes and right-to-left layouts, match: [rtl-layout, dir-attribute]}
+      - {id: intl-collator-segmenter, name: Collator sorting and Segmenter, match: [intl-collator, intl-segmenter]}
+      - {id: intl-listformat, name: Intl.ListFormat and Intl.DisplayNames, match: [intl-listformat, intl-displaynames]}
+      - {id: intl-temporal, name: Temporal API for dates / times / durations, match: [temporal-api]}
+      - {id: intl-message-format, name: Translation message workflow (ICU MessageFormat / i18next / FormatJS), match: [icu-messageformat, i18next]}
+      - {id: intl-locale-negotiation, name: Locale negotiation (Accept-Language / navigator.languages / Intl.Locale), match: [locale-negotiation, intl-locale]}
+  # --- Web APIs (MDN Web APIs)
+  - id: dom-manipulation
+    name: DOM manipulation and events
+    source: MDN Web APIs/DOM + Learn/Manipulating documents + Events
+    match: [dom-manipulation, dom-events]
+    subtopics:
+      - {id: dom-event-delegation, name: Event delegation and listener options (passive / once / capture), match: [event-delegation, passive-listeners]}
+      - {id: dom-custom-events, name: CustomEvent and EventTarget for component messaging, match: [customevent, eventtarget]}
+      - {id: dom-mutation-observer, name: MutationObserver, match: [mutationobserver]}
+      - {id: dom-intersection-observer, name: IntersectionObserver (lazy load / infinite scroll / visibility), match: [intersectionobserver]}
+      - {id: dom-resize-observer, name: ResizeObserver, match: [resizeobserver]}
+      - {id: dom-template-fragments, name: template element and DocumentFragment batching, match: [template-element, documentfragment]}
+      - {id: dom-layout-thrashing, name: Avoiding forced synchronous layout (read/write batching), match: [layout-thrashing, forced-reflow]}
+      - {id: dom-traversal, name: querySelector / closest / matches and DOM traversal, match: [dom-traversal, queryselector]}
+      - {id: dom-pointer-events, name: Pointer events and pointer capture, match: [pointer-events, setpointercapture]}
+      - {id: dom-keyboard-events, name: Keyboard events (key vs code / IME composition), match: [keyboard-events, ime-composition]}
+      - {id: dom-html-insertion, name: Writing DOM safely (replaceChildren / insertAdjacentHTML / setHTML), match: [replacechildren, insertadjacenthtml]}
+  - id: web-components
+    name: Web Components
+    source: MDN Web APIs/Web Components
+    match: [web-components, custom-elements]
+    subtopics:
+      - {id: wc-custom-element-lifecycle, name: Custom element lifecycle callbacks and observed attributes, match: [custom-element-lifecycle, observedattributes]}
+      - {id: wc-shadow-dom, name: Shadow DOM encapsulation and styling (part / host), match: [shadow-dom, css-parts]}
+      - {id: wc-slots, name: Slots and slotchange, match: [shadow-dom-slots]}
+      - {id: wc-declarative-shadow, name: Declarative shadow DOM for SSR, match: [declarative-shadow-dom]}
+      - {id: wc-form-associated, name: Form-associated custom elements (ElementInternals), match: [form-associated-custom-elements, elementinternals]}
+      - {id: wc-styling-parts, name: Styling shadow DOM (::part / :host / ::slotted / custom properties), match: [css-shadow-parts, host-selector]}
+      - {id: wc-lit, name: Building components with Lit (reactive properties / templates), match: [lit-element]}
+      - {id: wc-framework-interop, name: Using custom elements inside React / Vue / Angular, match: [custom-elements-interop]}
+      - {id: wc-element-a11y, name: Custom element accessibility (ElementInternals ARIA / delegatesFocus), match: [elementinternals-aria, delegatesfocus]}
+      - {id: wc-upgrade-timing, name: Definition and upgrade timing (whenDefined / :defined / scoped registries), match: [customelements-whendefined, scoped-custom-element-registry]}
+  - id: fetch-networking
+    name: Fetch and network APIs
+    source: MDN Web APIs/Fetch + Streams + WebSockets + Server-sent events
+    match: [fetch-api, browser-networking]
+    subtopics:
+      - {id: fetch-errors, name: Fetch error handling (response.ok / network errors / timeouts), match: [fetch-error-handling]}
+      - {id: fetch-streams, name: Streaming responses with ReadableStream, match: [readablestream, streaming-fetch]}
+      - {id: fetch-websockets, name: WebSocket client (reconnect / heartbeat / backpressure), match: [websocket-client]}
+      - {id: fetch-sse, name: Server-sent events with EventSource, match: [server-sent-events, eventsource]}
+      - {id: fetch-upload-progress, name: Upload progress and large uploads (XHR progress / chunking), match: [upload-progress, chunked-upload]}
+      - {id: fetch-beacon, name: sendBeacon / keepalive for analytics on unload, match: [sendbeacon, fetch-keepalive]}
+      - {id: fetch-request-options, name: Request options (credentials / mode / cache / keepalive / priority), match: [fetch-cache-mode, fetch-request-options]}
+      - {id: fetch-timeout-retry, name: Timeouts and retries for fetch, match: [fetch-timeout, fetch-retry]}
+      - {id: fetch-webtransport, name: WebTransport and WebRTC data channels, match: [webtransport, webrtc-datachannel]}
+      - {id: fetch-graphql-client, name: GraphQL over fetch (queries / persisted queries / error shape), match: [graphql-client]}
+  - id: client-storage
+    name: Client-side storage
+    source: MDN Web APIs/Web Storage + IndexedDB + Storage API
+    match: [client-side-storage, web-storage]
+    subtopics:
+      - {id: storage-local-session, name: localStorage / sessionStorage limits and pitfalls, match: [localstorage, sessionstorage]}
+      - {id: storage-indexeddb, name: IndexedDB transactions / indexes / versions (idb wrapper), match: [indexeddb]}
+      - {id: storage-quota, name: Storage quota / persist() / eviction, match: [storage-quota, storage-persistence]}
+      - {id: storage-cookies-js, name: document.cookie and cookieStore from script, match: [document-cookie, cookiestore]}
+      - {id: storage-broadcast, name: Cross-tab sync (storage event / BroadcastChannel), match: [broadcastchannel, cross-tab-sync]}
+      - {id: storage-opfs, name: Origin private file system (OPFS), match: [opfs, origin-private-file-system]}
+      - {id: storage-cache-api, name: Cache API from page scripts, match: [cache-api]}
+      - {id: storage-persist, name: Persistent storage and eviction (navigator.storage.persist), match: [storage-persist, storage-eviction]}
+      - {id: storage-idb-upgrades, name: IndexedDB schema upgrades and versioning (idb library), match: [indexeddb-upgrade, idb-library]}
+      - {id: storage-web-crypto, name: Encrypting and hashing client data with Web Crypto, match: [web-crypto-api, subtlecrypto]}
+  - id: web-workers
+    name: Web Workers and off-main-thread work
+    source: MDN Web APIs/Web Workers + web.dev Learn Performance/Web workers
+    match: [web-workers, off-main-thread]
+    subtopics:
+      - {id: worker-dedicated, name: Dedicated worker setup with module workers, match: [dedicated-worker, module-worker]}
+      - {id: worker-transferables, name: postMessage / structured clone / transferable objects, match: [transferable-objects, postmessage]}
+      - {id: worker-shared, name: SharedWorker and SharedArrayBuffer with cross-origin isolation, match: [sharedworker, sharedarraybuffer]}
+      - {id: worker-comlink, name: RPC wrappers (Comlink) and worker pools, match: [comlink, worker-pool]}
+      - {id: worker-offscreen-canvas, name: OffscreenCanvas rendering in a worker, match: [offscreencanvas]}
+      - {id: worker-module, name: Module workers and bundler worker imports, match: [module-workers]}
+      - {id: worker-pool, name: Worker pools / errors / termination, match: [worker-pool, worker-termination]}
+      - {id: worker-sab-atomics, name: SharedArrayBuffer and Atomics under cross-origin isolation, match: [sharedarraybuffer, atomics]}
+      - {id: worker-wasm, name: WebAssembly in the browser (instantiateStreaming / wasm-bindgen), match: [webassembly, wasm-instantiate]}
+  - id: pwa
+    name: Progressive Web Apps
+    source: web.dev Learn PWA ToC
+    match: [progressive-web-app, pwa]
+    subtopics:
+      - {id: pwa-manifest, name: Web app manifest (icons / display / start_url / shortcuts), match: [web-app-manifest]}
+      - {id: pwa-sw-lifecycle, name: Service worker registration / lifecycle / scope, match: [service-worker-lifecycle, service-worker-registration]}
+      - {id: pwa-caching-strategies, name: Caching strategies (cache-first / stale-while-revalidate / network-first), match: [service-worker-caching, caching-strategies]}
+      - {id: pwa-workbox, name: Workbox precaching and routing, match: [workbox]}
+      - {id: pwa-offline, name: Offline fallback pages and offline UX, match: [offline-fallback, offline-first]}
+      - {id: pwa-install, name: Installation prompt (beforeinstallprompt) and install criteria, match: [beforeinstallprompt, pwa-install]}
+      - {id: pwa-update, name: Updating the service worker and prompting reload (skipWaiting), match: [service-worker-update, skipwaiting]}
+      - {id: pwa-push, name: Web Push notifications (VAPID / PushManager), match: [web-push, push-notifications]}
+      - {id: pwa-background-sync, name: Background Sync and periodic sync, match: [background-sync]}
+      - {id: pwa-share-target, name: Share target / file handling / protocol handlers, match: [web-share-target, file-handling-api]}
+      - {id: pwa-badging-shortcuts, name: App badging / manifest shortcuts / window controls overlay, match: [app-badging, manifest-shortcuts]}
+      - {id: pwa-sw-debugging, name: Debugging service workers (Application panel / unregister / bypass), match: [service-worker-debugging]}
+  - id: graphics-animation-apis
+    name: Canvas, SVG and animation APIs
+    source: MDN Web APIs/Canvas API + Web Animations API + SVG
+    match: [canvas-api, web-animations-api]
+    subtopics:
+      - {id: canvas-2d-hidpi, name: Canvas 2D drawing and devicePixelRatio scaling, match: [canvas-2d, device-pixel-ratio]}
+      - {id: raf-loop, name: requestAnimationFrame render loops, match: [requestanimationframe]}
+      - {id: waapi, name: element.animate() and animation control, match: [element-animate, waapi]}
+      - {id: svg-inline, name: Inline SVG / icons / sprites and accessible SVG, match: [inline-svg, svg-sprites]}
+      - {id: view-transitions, name: View Transitions API (same-document and cross-document), match: [view-transitions]}
+      - {id: gfx-webgl-three, name: WebGL and Three.js scene basics, match: [webgl, threejs]}
+      - {id: gfx-canvas-pixels, name: Canvas pixel manipulation / toBlob / client-side image resizing, match: [canvas-toblob, canvas-pixel-manipulation]}
+      - {id: gfx-svg-sprites, name: SVG sprites (symbol / use) and icon systems, match: [svg-sprite, svg-symbol-use]}
+      - {id: gfx-d3, name: Data visualisation with D3 and SVG, match: [d3-js]}
+      - {id: gfx-webgpu, name: WebGPU rendering and compute basics, match: [webgpu]}
+  - id: device-media-apis
+    name: Device, media and permission APIs
+    source: MDN Web APIs/Clipboard + Geolocation + Media Capture + Permissions + Web Share + Notifications
+    match: [device-apis, permissions-api]
+    subtopics:
+      - {id: api-clipboard, name: Async Clipboard API, match: [clipboard-api]}
+      - {id: api-geolocation, name: Geolocation API, match: [geolocation-api]}
+      - {id: api-getusermedia, name: getUserMedia camera/microphone and MediaRecorder, match: [getusermedia, mediarecorder]}
+      - {id: api-web-share, name: Web Share API, match: [web-share-api]}
+      - {id: api-notifications, name: Notifications API and permission UX, match: [notifications-api, permission-prompts]}
+      - {id: api-page-visibility, name: Page Visibility and page lifecycle events, match: [page-visibility, page-lifecycle]}
+      - {id: api-mediarecorder, name: Recording audio and video with MediaRecorder, match: [mediarecorder]}
+      - {id: api-web-audio, name: Web Audio API graphs and autoplay unlock, match: [web-audio-api]}
+      - {id: api-fullscreen-wakelock, name: Fullscreen / Screen Wake Lock / screen orientation, match: [fullscreen-api, screen-wake-lock]}
+      - {id: api-webrtc, name: WebRTC peer connections (signalling / ICE / STUN / TURN), match: [rtcpeerconnection, webrtc-peer-connection]}
+  - id: history-routing
+    name: History, URL and client-side routing
+    source: MDN Web APIs/History API + URL API + Navigation API
+    match: [history-api, client-side-routing]
+    subtopics:
+      - {id: route-pushstate, name: pushState / replaceState / popstate, match: [pushstate, popstate]}
+      - {id: route-urlsearchparams, name: URL and URLSearchParams for query state, match: [urlsearchparams, url-state]}
+      - {id: route-navigation-api, name: Navigation API interception, match: [navigation-api]}
+      - {id: route-scroll-restoration, name: Scroll restoration and focus on route change, match: [scroll-restoration]}
+      - {id: route-spa-fallback, name: Hash vs history routing and server fallback configuration, match: [spa-fallback, hash-routing]}
+      - {id: route-urlpattern, name: URL pattern matching and URL-held state (URLPattern), match: [urlpattern]}
+      - {id: route-soft-404, name: Soft 404s / status codes / SEO for single-page apps, match: [soft-404, spa-seo]}
+      - {id: route-unsaved-guard, name: Unsaved-changes guards (beforeunload / navigate intercept), match: [beforeunload, unsaved-changes-guard]}
+  # --- Front-end engineering (MDN Learn tools and testing)
+  - id: build-tooling
+    name: Build tooling and bundling
+    source: MDN Learn/Understanding client-side tools + Vite docs
+    match: [build-tooling, bundlers]
+    subtopics:
+      - {id: build-vite-config, name: Vite config / plugins / dev proxy, match: [vite-config, vite]}
+      - {id: build-env-vars, name: Build-time environment variables and secrets leakage, match: [build-env-vars, import-meta-env]}
+      - {id: build-code-splitting, name: Code splitting and chunking strategy, match: [code-splitting, manual-chunks]}
+      - {id: build-source-maps, name: Source maps in production and error tracking, match: [source-maps]}
+      - {id: build-browserslist, name: Browserslist targets / transpiling / polyfills, match: [browserslist, polyfills]}
+      - {id: build-monorepo, name: Monorepo workspaces (pnpm / npm workspaces / Turborepo), match: [pnpm-workspaces, turborepo]}
+      - {id: build-linting, name: ESLint flat config and Prettier, match: [eslint-flat-config, prettier]}
+      - {id: build-esbuild-rollup, name: Library builds with esbuild / Rollup / tsup, match: [tsup, library-bundling]}
+      - {id: build-postcss, name: PostCSS / Lightning CSS pipelines and autoprefixing, match: [postcss, lightningcss]}
+      - {id: build-tsconfig, name: tsconfig for front-end apps (moduleResolution bundler / isolatedModules), match: [tsconfig, module-resolution-bundler]}
+      - {id: build-assets, name: Static assets / public directory / hashing / base path, match: [asset-hashing, vite-base-path]}
+  - id: cross-browser
+    name: Cross-browser compatibility and progressive enhancement
+    source: MDN Learn/Cross browser testing
+    match: [cross-browser, progressive-enhancement]
+    subtopics:
+      - {id: xb-feature-detection, name: Feature detection (@supports / in-checks) and Baseline, match: [feature-detection, baseline-compat]}
+      - {id: xb-testing-matrix, name: Cross-browser test matrix and real-device testing, match: [browser-test-matrix, real-device-testing]}
+      - {id: xb-safari-quirks, name: Common WebKit/iOS Safari quirks (100vh / input zoom / date input), match: [ios-safari-quirks, webkit-quirks]}
+      - {id: xb-no-js, name: Working without JavaScript and graceful degradation, match: [no-javascript-fallback, graceful-degradation]}
+      - {id: xb-polyfills, name: Polyfills and Baseline targeting, match: [polyfills, baseline-web-features]}
+      - {id: xb-css-supports, name: "@supports and CSS fallbacks", match: [css-supports-query]}
+      - {id: xb-remote-devices, name: Remote debugging real iOS and Android devices, match: [remote-debugging-ios, android-remote-debugging]}
+      - {id: xb-device-cloud, name: Cloud device labs (BrowserStack / Sauce Labs / LambdaTest), match: [browserstack]}
+  - id: frontend-testing
+    name: Front-end testing
+    source: MDN Learn/Testing + Playwright and Vitest docs
+    match: [frontend-testing, e2e-testing]
+    subtopics:
+      - {id: test-vitest, name: Unit testing with Vitest / Jest and jsdom, match: [vitest, jest]}
+      - {id: test-playwright, name: End-to-end tests with Playwright (locators / auto-wait / traces), match: [playwright]}
+      - {id: test-msw, name: Network mocking with Mock Service Worker, match: [msw, network-mocking]}
+      - {id: test-visual-regression, name: Visual regression testing (screenshots), match: [visual-regression]}
+      - {id: test-flaky, name: Diagnosing flaky UI tests, match: [flaky-tests]}
+      - {id: test-a11y-automation, name: Automated accessibility checks in tests (axe), match: [axe-core, automated-accessibility-testing]}
+      - {id: test-testing-library, name: Testing Library queries and user-event, match: [testing-library, user-event]}
+      - {id: test-storybook, name: Storybook stories and interaction tests, match: [storybook-interaction-tests]}
+      - {id: test-coverage, name: Coverage with v8 / istanbul and thresholds, match: [code-coverage, istanbul]}
+      - {id: test-e2e-ci, name: Running E2E in CI (sharding / traces / retries), match: [playwright-sharding, playwright-trace]}
+      - {id: test-fake-timers, name: Fake timers and module mocking in Vitest, match: [fake-timers, vi-mock]}
+  - id: devtools-debugging
+    name: Browser DevTools debugging and profiling
+    source: Chrome DevTools docs + MDN Firefox DevTools
+    match: [devtools, browser-debugging]
+    subtopics:
+      - {id: dt-breakpoints, name: Breakpoints (conditional / DOM / XHR / logpoints), match: [conditional-breakpoints, logpoints]}
+      - {id: dt-network-panel, name: Network panel (throttling / blocking / HAR), match: [network-panel, har-file]}
+      - {id: dt-performance-panel, name: Performance panel flame charts and long tasks, match: [performance-panel, flame-chart]}
+      - {id: dt-memory-leaks, name: Memory leaks with heap snapshots, match: [memory-leaks, heap-snapshot]}
+      - {id: dt-overrides, name: Local overrides and remote debugging mobile devices, match: [local-overrides, remote-debugging]}
+      - {id: dt-console, name: Console API / logpoints / live expressions, match: [console-api, live-expressions]}
+      - {id: dt-css-debugging, name: Elements and Styles panel CSS debugging (computed / grid and flex overlays), match: [css-debugging, grid-overlay]}
+      - {id: dt-coverage, name: Coverage panel and unused CSS / JS, match: [coverage-panel]}
+      - {id: dt-throttling, name: CPU / network throttling and device emulation, match: [cpu-throttling, device-emulation]}
+  # --- Web security (OWASP Top 10 2021 / ASVS / Cheat Sheets)
+  - id: sec-xss
+    name: Cross-site scripting prevention (A03 injection - XSS)
+    source: OWASP Top 10 A03 + XSS Prevention and DOM-based XSS cheat sheets
+    match: [xss, cross-site-scripting]
+    subtopics:
+      - {id: xss-output-encoding, name: Context-aware output encoding and auto-escaping templates, match: [output-encoding, auto-escaping]}
+      - {id: xss-dom-sinks, name: DOM XSS sinks (innerHTML / eval / javascript URLs), match: [dom-xss, dangerous-sinks]}
+      - {id: xss-sanitize, name: Sanitising user HTML (DOMPurify / Sanitizer API), match: [dompurify, html-sanitization]}
+      - {id: xss-trusted-types, name: Trusted Types enforcement, match: [trusted-types]}
+      - {id: xss-framework-escapes, name: Framework escape hatches (dangerouslySetInnerHTML / v-html / mark_safe / html_safe), match: [dangerouslysetinnerhtml, v-html, mark-safe]}
+      - {id: xss-url-schemes, name: javascript URLs and URL attribute validation, match: [javascript-url-scheme, href-sanitization]}
+      - {id: xss-markdown, name: Rendering user Markdown and rich text safely, match: [markdown-sanitization]}
+      - {id: xss-json-in-script, name: Embedding JSON in script tags safely, match: [json-script-embedding]}
+      - {id: xss-testing, name: Testing for stored / reflected / DOM XSS, match: [stored-xss, reflected-xss]}
+  - id: sec-csp
+    name: Content Security Policy
+    source: OWASP CSP cheat sheet + MDN CSP + web.dev strict CSP
+    match: [content-security-policy, csp]
+    subtopics:
+      - {id: csp-nonce, name: Nonce-based strict CSP with strict-dynamic, match: [csp-nonce, strict-dynamic]}
+      - {id: csp-hash, name: Hash-based CSP for static sites, match: [csp-hash]}
+      - {id: csp-report-only, name: Report-Only rollout and violation reporting, match: [csp-report-only, csp-reporting]}
+      - {id: csp-frame-ancestors, name: frame-ancestors and clickjacking defence, match: [frame-ancestors, clickjacking]}
+      - {id: csp-strict-dynamic, name: strict-dynamic and nonce propagation to loaded scripts, match: [strict-dynamic]}
+      - {id: csp-reporting, name: Reporting API endpoints and violation triage, match: [report-to, csp-violation-reports]}
+      - {id: csp-framework-nonces, name: CSP nonces in Next.js / Django / Rails / Express, match: [csp-nonce-middleware]}
+      - {id: csp-mixed-content, name: upgrade-insecure-requests and mixed content, match: [upgrade-insecure-requests, mixed-content]}
+  - id: sec-csrf
+    name: Cross-site request forgery
+    source: OWASP CSRF Prevention cheat sheet
+    match: [csrf, cross-site-request-forgery]
+    subtopics:
+      - {id: csrf-tokens, name: Synchroniser tokens in forms and SPAs, match: [csrf-token, synchronizer-token]}
+      - {id: csrf-samesite, name: SameSite cookies as defence in depth, match: [samesite-cookies]}
+      - {id: csrf-fetch-metadata, name: Origin / Sec-Fetch-Site header verification, match: [fetch-metadata, origin-check]}
+      - {id: csrf-double-submit, name: Signed double-submit cookie pattern, match: [double-submit-cookie]}
+      - {id: csrf-login, name: Login CSRF and pre-session tokens, match: [login-csrf]}
+      - {id: csrf-json-api, name: CSRF for SPAs and JSON APIs (custom headers / content-type checks), match: [csrf-custom-header, csrf-json-api]}
+      - {id: csrf-framework-config, name: Framework CSRF configuration (CSRF_TRUSTED_ORIGINS / protect_from_forgery), match: [csrf-trusted-origins, protect-from-forgery]}
+      - {id: csrf-origin-check, name: Verifying Origin and Referer headers, match: [origin-header-check]}
+      - {id: csrf-websocket, name: Cross-site WebSocket hijacking, match: [cross-site-websocket-hijacking]}
+  - id: sec-cors
+    name: CORS and the same-origin policy
+    source: MDN CORS + OWASP HTML5 security cheat sheet
+    match: [cors, same-origin-policy]
+    subtopics:
+      - {id: cors-preflight, name: Preflight requests and allowed methods/headers, match: [cors-preflight]}
+      - {id: cors-credentials, name: Credentialed requests and the wildcard rule, match: [cors-credentials]}
+      - {id: cors-origin-reflection, name: Origin allowlists and the reflection vulnerability (Vary Origin), match: [cors-origin-allowlist, vary-origin]}
+      - {id: cors-debugging, name: Debugging CORS errors, match: [cors-errors]}
+      - {id: cors-null-origin, name: null origin and wildcard pitfalls, match: [cors-null-origin]}
+      - {id: cors-private-network, name: Private Network Access preflights, match: [private-network-access]}
+      - {id: cors-vary-origin, name: Vary Origin and CDN caching of CORS responses, match: [vary-origin]}
+      - {id: cors-framework-config, name: CORS configuration in Express / Django / Rails / Next.js, match: [cors-middleware, django-cors-headers]}
+      - {id: cors-postmessage, name: postMessage origin validation, match: [postmessage-origin]}
+  - id: sec-headers
+    name: Security headers and transport security
+    source: OWASP HTTP Headers cheat sheet + Top 10 A05/A02
+    match: [security-headers, http-security-headers]
+    subtopics:
+      - {id: hdr-hsts, name: HTTPS everywhere and HSTS preload, match: [hsts, https-redirect]}
+      - {id: hdr-nosniff-referrer, name: X-Content-Type-Options / Referrer-Policy / Permissions-Policy, match: [referrer-policy, permissions-policy]}
+      - {id: hdr-coop-coep, name: COOP / COEP / CORP cross-origin isolation, match: [coop-coep, cross-origin-isolation]}
+      - {id: hdr-cookie-flags, name: Cookie flags (Secure / HttpOnly / SameSite / __Host- prefix), match: [cookie-flags, cookie-prefixes]}
+      - {id: hdr-sri, name: Subresource Integrity for third-party scripts, match: [subresource-integrity, sri]}
+      - {id: hdr-permissions-policy, name: Permissions-Policy, match: [permissions-policy]}
+      - {id: hdr-tls-config, name: TLS configuration (Mozilla profiles / certificate renewal), match: [tls-configuration, mozilla-ssl-config]}
+      - {id: hdr-no-store, name: Cache-Control for sensitive responses, match: [no-store-sensitive]}
+      - {id: hdr-scanning, name: Header scanning (Observatory / ZAP baseline), match: [mozilla-observatory, zap-baseline]}
+  - id: sec-access-control
+    name: Broken access control (A01)
+    source: OWASP Top 10 A01 + ASVS V4 + Authorization cheat sheet
+    match: [broken-access-control, authorization]
+    subtopics:
+      - {id: ac-idor, name: Insecure direct object references and object-level checks, match: [idor, object-level-authorization]}
+      - {id: ac-mass-assignment, name: Mass assignment protection, match: [mass-assignment]}
+      - {id: ac-path-traversal, name: Path traversal in file access, match: [path-traversal]}
+      - {id: ac-rbac, name: Role / permission models enforced server-side, match: [rbac, deny-by-default]}
+      - {id: ac-open-redirect, name: Open redirects, match: [open-redirect]}
+      - {id: ac-policy-engines, name: Policy engines (ABAC / OPA / Cedar / Casbin), match: [opa-policy, policy-engine]}
+      - {id: ac-tenant-isolation, name: Tenant isolation (row-level security / tenant scoping), match: [row-level-security, multi-tenant-authorization]}
+      - {id: ac-jwt-validation, name: JWT validation pitfalls (alg / audience / expiry / key rotation), match: [jwt-validation]}
+      - {id: ac-function-level, name: Function-level authorization on APIs (BFLA / admin endpoints), match: [function-level-authorization, bfla]}
+      - {id: ac-authz-testing, name: Authorization test matrix and automated checks, match: [authorization-testing]}
+  - id: sec-injection
+    name: Injection (A03) - SQL, command, template
+    source: OWASP Top 10 A03 + Injection Prevention + SQL Injection cheat sheets
+    match: [injection, sql-injection]
+    subtopics:
+      - {id: inj-parameterized, name: Parameterised queries and ORM raw-SQL pitfalls, match: [parameterized-queries, raw-sql]}
+      - {id: inj-command, name: OS command injection (execFile / subprocess arg lists), match: [command-injection]}
+      - {id: inj-nosql, name: NoSQL operator injection, match: [nosql-injection]}
+      - {id: inj-ssti, name: Server-side template injection, match: [ssti, template-injection]}
+      - {id: inj-input-validation, name: Schema validation at trust boundaries (zod / pydantic / strong params), match: [input-validation, schema-validation]}
+      - {id: inj-orm-raw, name: Raw SQL inside ORMs safely (Django raw / Rails where / Knex), match: [orm-raw-sql]}
+      - {id: inj-crlf-ldap, name: Header / CRLF / LDAP injection, match: [header-injection, ldap-injection]}
+      - {id: inj-xxe-deserialization, name: XXE and insecure deserialization, match: [xxe, insecure-deserialization]}
+      - {id: inj-prototype-pollution, name: Prototype pollution in JavaScript, match: [prototype-pollution]}
+      - {id: inj-redos, name: Regular expression denial of service, match: [redos]}
+  - id: sec-ssrf
+    name: Server-side request forgery (A10)
+    source: OWASP Top 10 A10 + SSRF Prevention cheat sheet
+    match: [ssrf, server-side-request-forgery]
+    subtopics:
+      - {id: ssrf-allowlist, name: URL allowlisting and DNS rebinding, match: [url-allowlist, dns-rebinding]}
+      - {id: ssrf-metadata, name: Blocking cloud metadata and private ranges, match: [cloud-metadata-endpoint, private-ip-blocking]}
+      - {id: ssrf-redirects, name: Redirect and URL-parser confusion, match: [url-parser-confusion]}
+      - {id: ssrf-webhooks, name: Safe outbound webhooks and URL previews, match: [outbound-webhooks, link-preview]}
+      - {id: ssrf-dns-rebinding, name: DNS rebinding and resolved-IP pinning, match: [dns-rebinding]}
+      - {id: ssrf-url-parsing, name: URL parser differentials and IP encoding bypasses, match: [url-parser-confusion]}
+      - {id: ssrf-egress-proxy, name: Egress proxies and network segmentation (Smokescreen), match: [egress-proxy, smokescreen]}
+      - {id: ssrf-renderers, name: SSRF via HTML-to-PDF renderers / image fetchers / headless browsers, match: [html-to-pdf-ssrf]}
+  - id: sec-auth
+    name: Identification and authentication failures (A07)
+    source: OWASP Top 10 A07 + ASVS V2/V3 + Authentication / Password Storage / Session Management cheat sheets
+    match: [authentication-failures, web-authentication]
+    subtopics:
+      - {id: auth-password-hashing, name: Password hashing (argon2id / bcrypt) and breached-password checks, match: [password-hashing, argon2]}
+      - {id: auth-session-management, name: Session lifecycle (rotation / fixation / idle and absolute timeouts), match: [session-management, session-fixation]}
+      - {id: auth-mfa, name: MFA (TOTP / recovery codes), match: [mfa, totp]}
+      - {id: auth-passkeys, name: Passkeys / WebAuthn, match: [passkeys, webauthn]}
+      - {id: auth-brute-force, name: Login rate limiting and account enumeration, match: [brute-force-protection, account-enumeration]}
+      - {id: auth-oauth-oidc, name: OAuth 2 / OIDC login with PKCE, match: [oauth-pkce, openid-connect]}
+      - {id: auth-password-reset, name: Password reset flows, match: [password-reset]}
+      - {id: auth-refresh-tokens, name: Token sessions vs server sessions and refresh token rotation, match: [refresh-token-rotation]}
+      - {id: auth-enumeration, name: Preventing account enumeration, match: [account-enumeration]}
+      - {id: auth-magic-links, name: Passwordless email links and one-time codes, match: [magic-link-login]}
+      - {id: auth-saml, name: SAML single sign-on integration, match: [saml-sso]}
+  - id: sec-supply-chain
+    name: Vulnerable and outdated components (A06) and supply chain
+    source: OWASP Top 10 A06/A08 + npm docs
+    match: [vulnerable-dependencies, dependency-scanning]
+    subtopics:
+      - {id: sc-npm-audit, name: npm audit / pip-audit / bundler-audit triage, match: [npm-audit, pip-audit]}
+      - {id: sc-lockfiles, name: Lockfiles and reproducible installs (npm ci), match: [lockfiles, npm-ci]}
+      - {id: sc-dependabot, name: Automated updates (Dependabot / Renovate), match: [dependabot, renovate]}
+      - {id: sc-install-scripts, name: Install-script and typosquat risk, match: [install-scripts, typosquatting]}
+      - {id: sc-sbom, name: SBOM generation (CycloneDX / syft), match: [sbom, cyclonedx]}
+      - {id: sc-provenance, name: npm provenance / Sigstore / trusted publishing, match: [npm-provenance, trusted-publishing]}
+      - {id: sc-dependency-confusion, name: Typosquatting and dependency confusion defences, match: [dependency-confusion]}
+      - {id: sc-scanners, name: Dependency scanners (OSV-Scanner / Socket), match: [osv-scanner, socket-dev]}
+      - {id: sc-renovate, name: Renovate configuration and grouping, match: [renovate]}
+  - id: sec-logging
+    name: Security logging and monitoring failures (A09)
+    source: OWASP Top 10 A09 + Logging cheat sheet
+    match: [security-logging, audit-logging]
+    subtopics:
+      - {id: log-auth-events, name: Logging auth and access-control events, match: [auth-event-logging]}
+      - {id: log-no-secrets, name: Keeping secrets and PII out of logs, match: [log-redaction, pii-in-logs]}
+      - {id: log-log-injection, name: Log injection / forging, match: [log-injection]}
+      - {id: log-alerting, name: Alerting on attack patterns, match: [security-alerting]}
+      - {id: log-audit-trail, name: Audit trail design (who / what / when / tamper evidence), match: [audit-trail]}
+      - {id: log-siem, name: Shipping logs to a SIEM and detection rules, match: [siem-integration]}
+      - {id: log-incident-response, name: Web application incident response runbook, match: [incident-response-web]}
+      - {id: log-error-tracking, name: Error tracking with Sentry (PII scrubbing / source maps), match: [sentry]}
+  - id: sec-file-uploads
+    name: Secure file upload handling
+    source: OWASP File Upload cheat sheet + ASVS V12
+    match: [file-upload-security, secure-file-upload]
+    subtopics:
+      - {id: up-type-validation, name: Content-type sniffing and extension allowlists, match: [file-type-validation, magic-bytes]}
+      - {id: up-storage, name: Storing uploads outside webroot / object storage presigned URLs, match: [presigned-urls, upload-storage]}
+      - {id: up-size-limits, name: Size limits and decompression bombs, match: [upload-size-limits, zip-bomb]}
+      - {id: up-image-reencode, name: Re-encoding images and stripping metadata, match: [image-reencoding, exif-stripping]}
+      - {id: up-malware-scan, name: Malware scanning uploads (ClamAV), match: [clamav, malware-scanning]}
+      - {id: up-presigned, name: Direct-to-object-storage presigned uploads, match: [presigned-url, s3-presigned-upload]}
+      - {id: up-filenames, name: Filename sanitisation and Content-Disposition, match: [content-disposition, filename-sanitization]}
+      - {id: up-user-content-domain, name: Serving user content from a separate domain / SVG XSS, match: [user-content-domain, svg-xss]}
+      - {id: up-resumable, name: Resumable chunked uploads (tus), match: [tus-protocol, resumable-upload]}
+  # --- CSS (MDN CSS) and Tailwind
+  - id: css-cascade
+    name: Cascade, specificity and layers
+    source: MDN CSS/Cascade, specificity, inheritance + Cascade layers
+    match: [css-cascade, specificity]
+    subtopics:
+      - {id: cascade-layers, name: Cascade layers (@layer) for ordering resets / libraries / utilities, match: [cascade-layers, css-layer]}
+      - {id: cascade-where-is, name: where() / is() for specificity control, match: [where-selector, is-selector]}
+      - {id: cascade-scope, name: at-scope rules and proximity, match: [css-scope]}
+      - {id: cascade-inheritance, name: Inheritance keywords (inherit / initial / unset / revert-layer), match: [css-inheritance, revert-layer]}
+      - {id: cascade-css-architecture, name: CSS architecture (BEM / CSS Modules / CSS-in-JS trade-offs), match: [css-modules, bem]}
+      - {id: cascade-important-revert, name: "!important / origin order / revert / revert-layer", match: [css-important, revert-layer]}
+      - {id: cascade-css-modules, name: CSS Modules scoping, match: [css-modules]}
+      - {id: cascade-css-in-js, name: CSS-in-JS trade-offs and zero-runtime options, match: [css-in-js, styled-components]}
+      - {id: cascade-reset, name: Modern CSS resets and normalize, match: [modern-css-reset, normalize-css]}
+  - id: css-box-layout
+    name: Box model, sizing and positioning
+    source: MDN CSS/Box model + Positioning + Overflow + Logical properties
+    match: [box-model, css-positioning]
+    subtopics:
+      - {id: box-sizing-margins, name: box-sizing and margin collapsing, match: [box-sizing, margin-collapse]}
+      - {id: box-stacking-context, name: z-index and stacking contexts, match: [stacking-context, z-index]}
+      - {id: box-sticky, name: position sticky and its failure modes, match: [position-sticky]}
+      - {id: box-logical-props, name: Logical properties (inline / block), match: [logical-properties]}
+      - {id: box-aspect-ratio, name: aspect-ratio and object-fit, match: [aspect-ratio, object-fit]}
+      - {id: box-anchor-positioning, name: CSS anchor positioning for popovers/tooltips, match: [anchor-positioning]}
+      - {id: box-overflow, name: Overflow / scroll containers / scroll snap, match: [scroll-snap, overflow]}
+      - {id: box-margin-collapse, name: Margin collapsing and block formatting contexts, match: [margin-collapsing, block-formatting-context]}
+      - {id: box-containment, name: CSS containment and content-visibility, match: [css-containment, contain-property]}
+      - {id: box-multicol-floats, name: Multi-column layout and floats, match: [multi-column-layout, css-floats]}
+      - {id: box-scroll-snap, name: Scroll snap and overscroll-behavior, match: [scroll-snap, overscroll-behavior]}
+  - id: css-flexbox
+    name: Flexbox layout
+    source: MDN CSS/Flexible box layout guide
+    match: [flexbox]
+    subtopics:
+      - {id: flex-sizing, name: flex-grow / shrink / basis and min-width auto overflow bug, match: [flex-basis, min-width-zero]}
+      - {id: flex-alignment, name: Alignment (justify-content / align-items / align-self / margin auto), match: [flex-alignment]}
+      - {id: flex-wrap-gap, name: Wrapping and gap, match: [flex-wrap]}
+      - {id: flex-patterns, name: Common flex patterns (sticky footer / media object / holy grail), match: [sticky-footer, flex-patterns]}
+      - {id: flex-order-direction, name: flex-direction / order and visual reordering accessibility, match: [flex-order, flex-direction]}
+      - {id: flex-min-width, name: min-width auto overflow and text truncation in flex items, match: [flex-min-width, flex-text-truncation]}
+      - {id: flex-align-content, name: align-content / place-content multi-line alignment, match: [align-content, place-content]}
+      - {id: flex-shorthand, name: flex shorthand values and flex-basis vs width, match: [flex-shorthand, flex-basis]}
+  - id: css-grid
+    name: CSS Grid layout
+    source: MDN CSS/Grid layout guide
+    match: [css-grid]
+    subtopics:
+      - {id: grid-template-areas, name: grid-template-areas and named lines, match: [grid-template-areas]}
+      - {id: grid-auto-fit, name: repeat(auto-fit / auto-fill, minmax()) card grids, match: [auto-fit-minmax]}
+      - {id: grid-subgrid, name: Subgrid alignment, match: [subgrid]}
+      - {id: grid-implicit, name: Implicit grid / auto-flow dense / placement, match: [grid-auto-flow, implicit-grid]}
+      - {id: grid-vs-flex, name: Choosing grid vs flexbox, match: [grid-vs-flexbox]}
+      - {id: grid-line-placement, name: Line-based placement / named lines / span, match: [grid-line-placement, grid-named-lines]}
+      - {id: grid-masonry, name: Masonry layouts, match: [css-masonry]}
+      - {id: grid-dense, name: grid-auto-flow dense and source-order accessibility, match: [grid-auto-flow-dense]}
+      - {id: grid-alignment, name: Grid alignment (justify-items / align-self / place-items), match: [grid-alignment, justify-items]}
+      - {id: grid-track-sizing, name: Track sizing (minmax / fr / fit-content / auto), match: [grid-track-sizing, minmax-function]}
+  - id: css-custom-properties
+    name: Custom properties and CSS functions
+    source: MDN CSS/Using custom properties + @property + calc/min/max/clamp
+    match: [css-custom-properties, css-variables]
+    subtopics:
+      - {id: cp-property-rule, name: at-property typed custom properties and animating them, match: [at-property, registered-properties]}
+      - {id: cp-math, name: calc / min / max / clamp maths, match: [css-clamp, css-math-functions]}
+      - {id: cp-theming, name: Theming with custom properties, match: [css-theming]}
+      - {id: cp-fallbacks, name: var() fallbacks and invalid-at-computed-value-time, match: [var-fallback]}
+      - {id: cp-js-interop, name: Reading and writing custom properties from JavaScript, match: [custom-properties-javascript]}
+      - {id: cp-design-tokens, name: Design token pipelines (Style Dictionary / DTCG format), match: [design-tokens, style-dictionary]}
+      - {id: cp-style-queries, name: Style queries and the CSS if() function, match: [css-style-queries, css-if-function]}
+      - {id: cp-animating, name: Animating registered custom properties, match: [animating-custom-properties]}
+  - id: css-typography
+    name: Web fonts and typography
+    source: MDN CSS/Fonts + web.dev Learn CSS/Typography + Learn Performance/Fonts
+    match: [web-fonts, typography]
+    subtopics:
+      - {id: font-face-display, name: at-font-face / font-display / fallback metrics (size-adjust), match: [font-face, font-display]}
+      - {id: font-variable, name: Variable fonts, match: [variable-fonts]}
+      - {id: font-fluid-type, name: Fluid type scales with clamp(), match: [fluid-typography]}
+      - {id: font-text-wrap, name: text-wrap balance/pretty / hyphens / line clamp, match: [text-wrap-balance, line-clamp]}
+      - {id: font-subsetting, name: Subsetting and self-hosting fonts, match: [font-subsetting, self-hosted-fonts]}
+      - {id: font-preload, name: Font loading (preload / Font Loading API / FOUT control), match: [font-preload, font-loading-api]}
+      - {id: font-metric-overrides, name: Fallback font metric overrides (size-adjust / ascent-override), match: [size-adjust, font-metric-overrides]}
+      - {id: font-system-stack, name: System font stacks, match: [system-font-stack]}
+      - {id: font-opentype, name: OpenType features (font-feature-settings / font-variant-numeric), match: [font-feature-settings, font-variant-numeric]}
+      - {id: font-line-clamp, name: Overflowing text (text-overflow / line-clamp / hyphens), match: [line-clamp, css-hyphens]}
+  - id: css-color
+    name: Colour in CSS
+    source: MDN CSS/Color + color-mix + relative colors
+    match: [css-color]
+    subtopics:
+      - {id: color-oklch, name: OKLCH and wide-gamut colour, match: [oklch, wide-gamut]}
+      - {id: color-mix, name: color-mix() and relative colour syntax, match: [color-mix, relative-color]}
+      - {id: color-dark-mode, name: prefers-color-scheme / color-scheme / light-dark(), match: [prefers-color-scheme, light-dark]}
+      - {id: color-forced-colors, name: forced-colors (Windows high contrast) mode, match: [forced-colors]}
+      - {id: color-gradients, name: Gradients (linear / radial / conic / colour interpolation), match: [css-gradients, conic-gradient]}
+      - {id: color-relative, name: Relative colour syntax, match: [relative-color-syntax]}
+      - {id: color-wide-gamut, name: Display-P3 wide gamut colour and fallbacks, match: [display-p3, wide-gamut]}
+      - {id: color-filters-blend, name: filter / backdrop-filter / mix-blend-mode, match: [backdrop-filter, mix-blend-mode]}
+  - id: css-animation
+    name: Transitions and animations
+    source: MDN CSS/Transitions + Animations + Scroll-driven animations
+    match: [css-animations, css-transitions]
+    subtopics:
+      - {id: anim-keyframes, name: at-keyframes and animation properties, match: [keyframes]}
+      - {id: anim-compositor, name: Compositor-only properties (transform / opacity / will-change), match: [compositor-animations, will-change]}
+      - {id: anim-reduced-motion, name: prefers-reduced-motion, match: [prefers-reduced-motion]}
+      - {id: anim-scroll-driven, name: Scroll-driven animations (scroll() / view() timelines), match: [scroll-driven-animations]}
+      - {id: anim-starting-style, name: Entry/exit animations (@starting-style / allow-discrete), match: [starting-style, allow-discrete]}
+      - {id: anim-easing, name: Easing functions (linear() / cubic-bezier / steps), match: [easing-functions, linear-easing]}
+      - {id: anim-3d-transforms, name: Individual transform properties and 3D transforms, match: [css-3d-transforms, individual-transform-properties]}
+      - {id: anim-libraries, name: Animation libraries (Motion / GSAP), match: [gsap, framer-motion]}
+      - {id: anim-height-auto, name: Animating to height auto (interpolate-size / calc-size), match: [interpolate-size, animate-height-auto]}
+  - id: css-selectors
+    name: Selectors, pseudo-classes and nesting
+    source: MDN CSS/Selectors + CSS nesting
+    match: [css-selectors, pseudo-classes]
+    subtopics:
+      - {id: sel-has, name: has() parent and relational selection, match: [has-selector]}
+      - {id: sel-focus-visible, name: focus-visible / focus-within, match: [focus-visible, focus-within]}
+      - {id: sel-nesting, name: Native CSS nesting, match: [css-nesting]}
+      - {id: sel-pseudo-elements, name: Pseudo-elements (before / marker / backdrop / placeholder), match: [pseudo-elements]}
+      - {id: sel-state, name: Form state pseudo-classes (user-invalid / checked / placeholder-shown), match: [form-pseudo-classes, user-invalid]}
+      - {id: sel-nth-child, name: ":nth-child(An+B of S) and structural pseudo-classes", match: [nth-child-of-selector]}
+      - {id: sel-attribute, name: Attribute selectors, match: [attribute-selectors]}
+      - {id: sel-performance, name: Selector performance and style recalculation, match: [selector-performance, style-recalculation]}
+      - {id: sel-target, name: ":target and scroll-margin for anchors", match: [target-pseudo-class, scroll-margin]}
+      - {id: sel-highlight, name: "::selection and the CSS Custom Highlight API", match: [custom-highlight-api]}
+  - id: tw-setup-config
+    name: Tailwind installation, theme and configuration
+    source: Tailwind docs/Installation + Theme variables + Functions and directives
+    match: [tailwind-config, tailwind-theme]
+    subtopics:
+      - {id: tw-v4-theme, name: at-theme variables and CSS-first config (v4), match: [tailwind-v4, at-theme]}
+      - {id: tw-source-detection, name: Class detection (@source / safelisting / dynamic class names), match: [tailwind-source-detection, safelist]}
+      - {id: tw-upgrade, name: Upgrading v3 to v4, match: [tailwind-upgrade]}
+      - {id: tw-plugins, name: Plugins / @utility / @variant custom additions, match: [tailwind-plugins, at-utility]}
+      - {id: tw-prefix-integration, name: Integrating with frameworks and existing CSS (prefix / preflight), match: [tailwind-preflight, tailwind-prefix]}
+      - {id: tw-install-routes, name: Install routes (Vite plugin / PostCSS / CLI / Play CDN), match: [tailwind-vite-plugin, tailwind-cli]}
+      - {id: tw-custom-utilities, name: "@utility and @custom-variant directives", match: [tailwind-utility-directive, tailwind-variant-directive]}
+      - {id: tw-preflight, name: Preflight base styles and @layer base overrides, match: [tailwind-preflight]}
+      - {id: tw-tooling, name: Prettier class sorting and IntelliSense, match: [prettier-plugin-tailwindcss, tailwind-intellisense]}
+  - id: tw-utility-workflow
+    name: Utility-first workflow and states
+    source: Tailwind docs/Styling with utility classes + Hover, focus and other states + Responsive design
+    match: [utility-first, tailwind-variants]
+    subtopics:
+      - {id: tw-states, name: State variants (hover / focus-visible / group / peer / has / data-*), match: [group-peer, data-attribute-variants]}
+      - {id: tw-arbitrary, name: Arbitrary values and properties, match: [arbitrary-values]}
+      - {id: tw-components, name: Extracting components vs @apply, match: [tailwind-apply, component-extraction]}
+      - {id: tw-class-merging, name: Conditional class composition (clsx / tailwind-merge / cva), match: [tailwind-merge, cva]}
+      - {id: tw-responsive, name: Responsive and container-query variants in Tailwind, match: [tailwind-responsive, tailwind-container-queries]}
+      - {id: tw-dark-mode, name: Dark mode strategies (media / class / data attribute), match: [tailwind-dark-mode]}
+      - {id: tw-group-peer, name: group / peer / has-* variants, match: [group-hover, peer-variant]}
+      - {id: tw-container-queries, name: "@container variants in Tailwind", match: [tailwind-container-queries]}
+      - {id: tw-motion, name: Transition / animation utilities and motion-safe, match: [tailwind-animation, motion-safe]}
+      - {id: tw-typography-plugin, name: "@tailwindcss/typography prose and the forms plugin", match: [tailwind-typography-plugin, prose-classes]}
+      - {id: tw-dynamic-classes, name: Dynamic class names and safelisting, match: [tailwind-safelist, dynamic-class-names]}
+      - {id: tw-shadcn, name: shadcn/ui and headless component libraries, match: [shadcn-ui, headless-ui]}
+  # --- Responsive design (web.dev Learn Responsive Design)
+  - id: rwd-foundations
+    name: Responsive foundations (viewport, media queries, mobile-first)
+    source: web.dev Learn Responsive Design/Media queries + Macro layouts
+    match: [responsive-design-foundations, media-queries]
+    subtopics:
+      - {id: rwd-media-range, name: Media query range syntax and choosing breakpoints by content, match: [media-query-range-syntax, content-breakpoints]}
+      - {id: rwd-input-media, name: hover / pointer media features for touch vs mouse, match: [pointer-media-query, any-hover]}
+      - {id: rwd-viewport-units, name: Dynamic viewport units (dvh / svh / lvh) and safe areas, match: [viewport-units, safe-area-insets]}
+      - {id: rwd-container-queries, name: Container queries and container units, match: [container-queries]}
+      - {id: rwd-fluid-layout, name: Intrinsic and fluid layouts without breakpoints, match: [intrinsic-layout, fluid-layout]}
+      - {id: rwd-breakpoints, name: Choosing breakpoints (content-based / em media queries), match: [breakpoint-strategy]}
+      - {id: rwd-safe-area, name: Notches and safe-area-inset / viewport-fit, match: [viewport-fit, env-safe-area]}
+      - {id: rwd-virtual-keyboard, name: On-screen keyboards (VirtualKeyboard API / interactive-widget), match: [virtual-keyboard-api, interactive-widget]}
+      - {id: rwd-intrinsic, name: Intrinsic layouts without media queries, match: [intrinsic-layout]}
+      - {id: rwd-user-prefs, name: User preference media features (prefers-contrast / prefers-reduced-data), match: [prefers-contrast, user-preference-media]}
+  - id: rwd-components
+    name: Responsive components and content
+    source: web.dev Learn Responsive Design/Images + Interaction + UI patterns
+    match: [responsive-components, adaptive-content]
+    subtopics:
+      - {id: rwd-images, name: srcset / sizes / picture art direction, match: [srcset, art-direction]}
+      - {id: rwd-tables, name: Responsive data tables, match: [responsive-tables]}
+      - {id: rwd-navigation, name: Responsive navigation patterns (priority+ / disclosure menu), match: [responsive-navigation]}
+      - {id: rwd-touch-targets, name: Touch targets and spacing, match: [touch-targets]}
+      - {id: rwd-print, name: Print stylesheets, match: [print-styles]}
+      - {id: rwd-testing, name: Testing responsive layouts (device mode / real devices / zoom), match: [responsive-testing]}
+      - {id: rwd-bottom-sheet, name: Responsive dialogs and bottom sheets, match: [bottom-sheet]}
+      - {id: rwd-svg-charts, name: Responsive SVG and charts (viewBox scaling), match: [responsive-svg, responsive-charts]}
+      - {id: rwd-embeds, name: Responsive video and iframe embeds, match: [responsive-embed]}
+      - {id: rwd-email, name: Responsive HTML email, match: [html-email, responsive-email]}
+      - {id: rwd-sidebar, name: Responsive sidebars and off-canvas drawers, match: [off-canvas-drawer, responsive-sidebar]}
+  # --- Accessibility (WCAG 2.2 + APG)
+  - id: wcag-text-alternatives
+    name: WCAG 1.1 Text alternatives
+    source: WCAG 2.2 Guideline 1.1 (SC 1.1.1)
+    match: [text-alternatives, alt-text]
+    subtopics:
+      - {id: alt-informative, name: Writing alt text for informative images, match: [informative-images]}
+      - {id: alt-decorative, name: Decorative images (alt="" / aria-hidden), match: [decorative-images]}
+      - {id: alt-complex, name: Complex images (charts / diagrams long descriptions), match: [complex-images, long-description]}
+      - {id: alt-icons, name: Icon buttons and SVG accessible names, match: [icon-buttons, accessible-svg]}
+      - {id: alt-captcha, name: CAPTCHA and non-text controls, match: [accessible-captcha]}
+      - {id: alt-svg, name: Accessible inline SVG (role img / title / aria-labelledby), match: [accessible-svg]}
+      - {id: alt-charts, name: Accessible charts and data visualisations, match: [accessible-charts]}
+      - {id: alt-cms-workflow, name: Alt text workflow in a CMS and reviewing generated alt text, match: [alt-text-workflow]}
+      - {id: alt-css-backgrounds, name: CSS background images and text alternatives, match: [css-background-image-alt]}
+  - id: wcag-time-based-media
+    name: WCAG 1.2 Time-based media
+    source: WCAG 2.2 Guideline 1.2 (SC 1.2.1-1.2.5)
+    match: [time-based-media, captions]
+    subtopics:
+      - {id: media-captions, name: Captions (WebVTT) for prerecorded and live video, match: [webvtt, closed-captions]}
+      - {id: media-transcripts, name: Transcripts for audio-only and video-only, match: [transcripts]}
+      - {id: media-audio-description, name: Audio description, match: [audio-description]}
+      - {id: media-accessible-player, name: Accessible media player controls and autoplay, match: [accessible-media-player, autoplay-audio]}
+      - {id: media-webvtt, name: Authoring WebVTT caption files (cues / positioning / styling), match: [webvtt]}
+      - {id: media-live-captions, name: Live captions for streams and meetings, match: [live-captions]}
+      - {id: media-sign-language, name: Sign language and extended audio description (AAA), match: [sign-language-interpretation]}
+      - {id: media-audio-control, name: Audio control and autoplay (1.4.2), match: [audio-control, autoplay-policy]}
+  - id: wcag-adaptable
+    name: WCAG 1.3 Adaptable
+    source: WCAG 2.2 Guideline 1.3 (SC 1.3.1-1.3.5)
+    match: [info-and-relationships, adaptable-content]
+    subtopics:
+      - {id: adapt-semantic-structure, name: Programmatic structure (headings / lists / tables) matching visual, match: [programmatic-structure]}
+      - {id: adapt-meaningful-sequence, name: Meaningful sequence and DOM order vs visual order, match: [meaningful-sequence, dom-order]}
+      - {id: adapt-sensory, name: Sensory characteristics (not shape/position only), match: [sensory-characteristics]}
+      - {id: adapt-orientation, name: Orientation (no portrait/landscape lock), match: [orientation-lock]}
+      - {id: adapt-input-purpose, name: Identify input purpose (autocomplete), match: [input-purpose]}
+      - {id: adapt-info-relationships, name: Info and relationships exposed programmatically (1.3.1), match: [info-and-relationships]}
+      - {id: adapt-identify-purpose, name: Identify purpose (1.3.6) and personalization semantics, match: [identify-purpose]}
+      - {id: adapt-dom-order, name: DOM order vs visual order, match: [dom-order, visual-order]}
+      - {id: adapt-lists, name: List and description list semantics, match: [list-semantics]}
+  - id: wcag-distinguishable
+    name: WCAG 1.4 Distinguishable
+    source: WCAG 2.2 Guideline 1.4 (SC 1.4.1-1.4.13)
+    match: [distinguishable, color-contrast]
+    subtopics:
+      - {id: dist-use-of-color, name: Use of colour (not colour alone), match: [use-of-color]}
+      - {id: dist-contrast-minimum, name: Text contrast 4.5 to 1 and 3 to 1 and measuring it, match: [contrast-ratio, contrast-minimum]}
+      - {id: dist-non-text-contrast, name: Non-text contrast for UI components and focus, match: [non-text-contrast]}
+      - {id: dist-resize-reflow, name: Resize text 200% and reflow at 320 CSS px, match: [reflow, resize-text]}
+      - {id: dist-text-spacing, name: Text spacing overrides, match: [text-spacing]}
+      - {id: dist-hover-focus-content, name: Content on hover or focus (tooltips dismissible / hoverable / persistent), match: [content-on-hover-focus, accessible-tooltips]}
+      - {id: dist-images-of-text, name: Images of text, match: [images-of-text]}
+      - {id: dist-resize-text, name: Resize text to 200 percent (1.4.4) and browser zoom, match: [resize-text, browser-zoom]}
+      - {id: dist-focus-appearance, name: Focus indicator contrast and focus appearance (2.4.13), match: [focus-appearance]}
+      - {id: dist-contrast-tools, name: Measuring contrast (tools / computing ratios / overlays), match: [contrast-checker]}
+  - id: wcag-keyboard
+    name: WCAG 2.1 Keyboard accessible
+    source: WCAG 2.2 Guideline 2.1 (SC 2.1.1-2.1.4)
+    match: [keyboard-accessibility, keyboard-navigation]
+    subtopics:
+      - {id: kb-no-trap, name: No keyboard trap, match: [keyboard-trap]}
+      - {id: kb-shortcuts, name: Character key shortcuts, match: [character-key-shortcuts]}
+      - {id: kb-roving-tabindex, name: Roving tabindex and aria-activedescendant composite widgets, match: [roving-tabindex, aria-activedescendant]}
+      - {id: kb-tabindex, name: tabindex values and natural tab order, match: [tabindex]}
+      - {id: kb-inert, name: inert and hiding background content, match: [inert-attribute]}
+      - {id: kb-focus-management, name: Programmatic focus management (focus() / preventScroll / return focus), match: [focus-management]}
+      - {id: kb-widget-keys, name: Keyboard interaction conventions for custom widgets, match: [keyboard-interaction]}
+      - {id: kb-hover-only, name: Hover-only interactions and keyboard equivalents, match: [hover-only-interactions]}
+      - {id: kb-manual-testing, name: Manual keyboard testing procedure, match: [keyboard-testing]}
+      - {id: kb-drag-drop, name: Keyboard alternatives for drag and drop, match: [keyboard-drag-drop]}
+  - id: wcag-enough-time-seizures
+    name: WCAG 2.2 Enough time and 2.3 Seizures
+    source: WCAG 2.2 Guidelines 2.2 and 2.3
+    match: [enough-time, seizure-safety]
+    subtopics:
+      - {id: time-adjustable, name: Timing adjustable / session timeout warnings, match: [timing-adjustable, session-timeout-warning]}
+      - {id: time-pause-stop-hide, name: Pause / stop / hide moving and auto-updating content, match: [pause-stop-hide, carousel-autoplay]}
+      - {id: time-flashes, name: Three flashes threshold, match: [three-flashes]}
+      - {id: time-animation-interactions, name: Animation from interactions, match: [animation-from-interactions]}
+      - {id: time-session-timeout, name: Session timeout warnings and data preservation (2.2.1 / 2.2.5), match: [session-timeout-warning]}
+      - {id: time-auto-updating, name: Auto-updating content and live feeds, match: [auto-updating-content]}
+      - {id: time-peat, name: Flash analysis (PEAT / three flashes thresholds), match: [peat-tool, three-flashes]}
+      - {id: time-vestibular, name: Parallax and vestibular disorders, match: [vestibular-disorders, parallax-motion]}
+  - id: wcag-navigable
+    name: WCAG 2.4 Navigable
+    source: WCAG 2.2 Guideline 2.4 (SC 2.4.1-2.4.11)
+    match: [navigable, wcag-navigable]
+    subtopics:
+      - {id: nav-skip-links, name: Bypass blocks / skip links, match: [skip-link, bypass-blocks]}
+      - {id: nav-page-title, name: Page titles and SPA title updates, match: [page-title]}
+      - {id: nav-focus-order, name: Focus order, match: [focus-order]}
+      - {id: nav-link-purpose, name: Link purpose in context, match: [link-purpose, link-text]}
+      - {id: nav-focus-visible, name: Focus visible indicators, match: [focus-indicator]}
+      - {id: nav-focus-not-obscured, name: Focus not obscured by sticky headers (2.4.11), match: [focus-not-obscured]}
+      - {id: nav-multiple-ways, name: Multiple ways / headings and labels, match: [multiple-ways, headings-and-labels]}
+      - {id: nav-headings-labels, name: Descriptive headings and labels (2.4.6), match: [headings-and-labels]}
+      - {id: nav-breadcrumbs, name: Breadcrumbs and location (2.4.8), match: [breadcrumb-navigation]}
+      - {id: nav-bypass-blocks, name: Bypass blocks with landmarks and screen reader navigation (2.4.1), match: [bypass-blocks]}
+  - id: wcag-input-modalities
+    name: WCAG 2.5 Input modalities
+    source: WCAG 2.2 Guideline 2.5 (SC 2.5.1-2.5.8)
+    match: [input-modalities, pointer-accessibility]
+    subtopics:
+      - {id: im-pointer-gestures, name: Pointer gestures (single-pointer alternatives), match: [pointer-gestures]}
+      - {id: im-pointer-cancellation, name: Pointer cancellation (activate on up-event), match: [pointer-cancellation]}
+      - {id: im-label-in-name, name: Label in name for voice control, match: [label-in-name]}
+      - {id: im-motion-actuation, name: Motion actuation, match: [motion-actuation]}
+      - {id: im-target-size, name: Target size minimum 24x24 (2.5.8), match: [target-size]}
+      - {id: im-dragging, name: Dragging movements alternatives (2.5.7), match: [dragging-movements]}
+      - {id: im-concurrent-input, name: Concurrent input mechanisms (2.5.6), match: [concurrent-input-mechanisms]}
+      - {id: im-touch-screen-reader, name: Touch gestures with mobile screen readers running, match: [touch-screen-reader]}
+      - {id: im-voice-control, name: Voice control users (Dragon / Voice Control / Voice Access), match: [voice-control, speech-input]}
+  - id: wcag-understandable
+    name: WCAG 3.1 Readable and 3.2 Predictable
+    source: WCAG 2.2 Guidelines 3.1 and 3.2
+    match: [readable, predictable]
+    subtopics:
+      - {id: und-language, name: Language of page and parts (lang), match: [lang-attribute, language-of-page]}
+      - {id: und-on-focus-input, name: On focus / on input no unexpected context change, match: [on-input, change-of-context]}
+      - {id: und-consistent-nav, name: Consistent navigation and identification, match: [consistent-navigation]}
+      - {id: und-consistent-help, name: Consistent help (3.2.6), match: [consistent-help]}
+      - {id: und-plain-language, name: Plain language and reading level, match: [plain-language]}
+      - {id: und-language-of-parts, name: Language of parts (3.1.2), match: [language-of-parts]}
+      - {id: und-change-of-context, name: Change of context on request and new windows (3.2.5), match: [change-of-context, new-window-links]}
+      - {id: und-abbreviations, name: Abbreviations / unusual words / reading level (AAA), match: [abbreviations, reading-level]}
+      - {id: und-consistent-identification, name: Consistent identification (3.2.4), match: [consistent-identification]}
+  - id: wcag-input-assistance
+    name: WCAG 3.3 Input assistance
+    source: WCAG 2.2 Guideline 3.3 (SC 3.3.1-3.3.8)
+    match: [input-assistance, accessible-forms]
+    subtopics:
+      - {id: ia-error-identification, name: Error identification and suggestions (aria-invalid / aria-describedby), match: [error-identification, error-suggestion]}
+      - {id: ia-labels-instructions, name: Labels or instructions and required fields, match: [labels-or-instructions, required-fields]}
+      - {id: ia-error-prevention, name: Error prevention for legal/financial submissions, match: [error-prevention]}
+      - {id: ia-redundant-entry, name: Redundant entry (3.3.7), match: [redundant-entry]}
+      - {id: ia-accessible-auth, name: Accessible authentication without cognitive tests (3.3.8), match: [accessible-authentication]}
+      - {id: ia-error-summary, name: Error summary and focus management on submit, match: [error-summary]}
+      - {id: ia-inline-validation, name: Inline validation timing with aria-invalid / aria-describedby, match: [aria-invalid, inline-validation]}
+      - {id: ia-required-fields, name: Indicating required fields, match: [required-fields]}
+      - {id: ia-context-help, name: Context-sensitive help (3.3.5), match: [context-sensitive-help]}
+  - id: wcag-robust
+    name: WCAG 4.1 Compatible (name, role, value and status messages)
+    source: WCAG 2.2 Guideline 4.1 (SC 4.1.2-4.1.3)
+    match: [name-role-value, wcag-robust]
+    subtopics:
+      - {id: rob-accessible-name, name: Accessible name computation, match: [accessible-name, aria-label]}
+      - {id: rob-status-messages, name: Status messages and live regions, match: [live-regions, status-messages]}
+      - {id: rob-custom-controls, name: Custom controls exposing state (aria-expanded / aria-pressed / aria-checked), match: [aria-states]}
+      - {id: rob-first-rule-aria, name: First rule of ARIA and redundant / conflicting roles, match: [first-rule-of-aria, aria-misuse]}
+      - {id: rob-aria-states, name: ARIA states (expanded / pressed / selected / current), match: [aria-states, aria-expanded]}
+      - {id: rob-accessibility-tree, name: Inspecting the accessibility tree, match: [accessibility-tree]}
+      - {id: rob-aria-hidden, name: aria-hidden pitfalls and visually-hidden text, match: [aria-hidden, visually-hidden]}
+      - {id: rob-id-references, name: Duplicate ids and broken ARIA id references, match: [duplicate-ids, aria-references]}
+  - id: aria-apg-patterns
+    name: WAI-ARIA Authoring Practices patterns
+    source: WAI-ARIA APG patterns index
+    match: [aria-patterns, apg]
+    subtopics:
+      - {id: apg-dialog, name: Modal dialog pattern, match: [accessible-modal, dialog-pattern]}
+      - {id: apg-disclosure-accordion, name: Disclosure and accordion, match: [accordion-pattern, disclosure-pattern]}
+      - {id: apg-tabs, name: Tabs pattern, match: [tabs-pattern]}
+      - {id: apg-menu, name: Menu button and navigation menus, match: [menu-button-pattern]}
+      - {id: apg-combobox, name: Combobox / autocomplete, match: [combobox-pattern]}
+      - {id: apg-carousel, name: Carousel pattern, match: [carousel-pattern]}
+      - {id: apg-grid-table, name: Sortable tables and data grid, match: [sortable-table, data-grid-pattern]}
+      - {id: apg-toast, name: Toast / alert notifications, match: [toast-notifications, alert-pattern]}
+      - {id: apg-listbox, name: Listbox pattern, match: [aria-listbox]}
+      - {id: apg-treeview, name: Tree view pattern, match: [aria-treeview]}
+      - {id: apg-slider, name: Slider and spinbutton patterns, match: [aria-slider]}
+      - {id: apg-switch, name: Switch and toggle button patterns, match: [aria-switch, toggle-button]}
+      - {id: apg-tooltip, name: Tooltip pattern, match: [aria-tooltip]}
+  - id: a11y-testing
+    name: Accessibility testing and conformance
+    source: WCAG-EM methodology + W3C Easy Checks + web.dev Learn Accessibility/Test
+    match: [accessibility-testing, accessibility-audit]
+    subtopics:
+      - {id: a11y-screen-readers, name: Screen reader testing (NVDA / VoiceOver / TalkBack), match: [screen-reader-testing, nvda, voiceover]}
+      - {id: a11y-automated-tools, name: Automated scanners (axe / Lighthouse / WAVE) and their limits, match: [axe-devtools, wave-tool]}
+      - {id: a11y-wcag-em, name: WCAG-EM sampling and audit reports, match: [wcag-em, audit-report]}
+      - {id: a11y-vpat, name: VPAT / ACR and accessibility statements, match: [vpat, accessibility-statement]}
+      - {id: a11y-spa, name: SPA route-change announcements and focus, match: [spa-accessibility, route-announcements]}
+      - {id: a11y-user-testing, name: Testing with disabled users and assistive tech beyond screen readers, match: [assistive-technology-testing, voice-control-testing]}
+      - {id: a11y-ci-axe, name: axe-core in CI (Playwright / jest-axe / pa11y-ci), match: [jest-axe, pa11y]}
+      - {id: a11y-audit-report, name: Writing an accessibility audit report and remediation plan, match: [accessibility-audit-report]}
+      - {id: a11y-design-annotations, name: Accessibility annotations in design handoff, match: [accessibility-annotations]}
+      - {id: a11y-legal, name: Legal requirements (ADA / European Accessibility Act / Section 508), match: [european-accessibility-act, ada-title-iii]}
+      - {id: a11y-statement, name: Accessibility statements, match: [accessibility-statement]}
+  # --- Performance (web.dev Learn Performance + Core Web Vitals)
+  - id: perf-lcp
+    name: Largest Contentful Paint
+    source: web.dev Optimize LCP
+    match: [lcp, largest-contentful-paint]
+    subtopics:
+      - {id: lcp-breakdown, name: LCP sub-parts (TTFB / load delay / load time / render delay), match: [lcp-subparts]}
+      - {id: lcp-discovery, name: Making the LCP resource discoverable (no lazy / preload), match: [lcp-preload, lcp-discovery]}
+      - {id: lcp-fetchpriority, name: fetchpriority and priority hints, match: [fetchpriority, priority-hints]}
+      - {id: lcp-render-delay, name: Render-blocking CSS/JS and client-rendered LCP, match: [render-blocking-resources]}
+      - {id: lcp-attribution, name: Identifying the LCP element and sub-part attribution, match: [lcp-attribution]}
+      - {id: lcp-text, name: Text LCP and web fonts, match: [text-lcp]}
+      - {id: lcp-csr, name: LCP in client-rendered single-page apps, match: [client-side-rendering-lcp]}
+      - {id: lcp-background-image, name: CSS background image as LCP, match: [background-image-lcp]}
+  - id: perf-inp
+    name: Interaction to Next Paint
+    source: web.dev Optimize INP + Optimize long tasks
+    match: [inp, interaction-to-next-paint]
+    subtopics:
+      - {id: inp-long-tasks, name: Breaking up long tasks (scheduler.yield / setTimeout), match: [long-tasks, scheduler-yield]}
+      - {id: inp-input-delay, name: Input delay from third parties and hydration, match: [input-delay]}
+      - {id: inp-presentation-delay, name: Presentation delay and DOM size, match: [presentation-delay, dom-size]}
+      - {id: inp-loaf, name: Long Animation Frames API attribution, match: [long-animation-frames, loaf]}
+      - {id: inp-debounce, name: Debouncing / throttling input handlers, match: [debounce, throttle]}
+      - {id: inp-yield, name: Yielding to the main thread (scheduler.yield / postTask), match: [scheduler-yield, yield-to-main]}
+      - {id: inp-attribution, name: INP attribution with the web-vitals library, match: [inp-attribution]}
+      - {id: inp-dom-size, name: Reducing DOM size and rendering work, match: [dom-size-reduction]}
+      - {id: inp-partytown, name: Third-party script impact on INP and Partytown, match: [partytown]}
+  - id: perf-cls
+    name: Cumulative Layout Shift
+    source: web.dev Optimize CLS
+    match: [cls, cumulative-layout-shift]
+    subtopics:
+      - {id: cls-dimensions, name: Image / video / iframe dimensions and aspect-ratio, match: [image-dimensions]}
+      - {id: cls-dynamic-content, name: Ads / embeds / late content reserved space, match: [reserved-space]}
+      - {id: cls-fonts, name: Font swap shifts and fallback metrics, match: [font-layout-shift]}
+      - {id: cls-bfcache, name: Back/forward cache eligibility, match: [bfcache]}
+      - {id: cls-ads-embeds, name: Ads / embeds / iframes reserved space, match: [ad-slot-sizing]}
+      - {id: cls-animations, name: Non-composited animations causing layout shifts, match: [layout-shift-animations]}
+      - {id: cls-debugging, name: Finding shift sources (Layout Instability API / DevTools), match: [layout-instability-api, cls-debugging]}
+      - {id: cls-late-ui, name: Cookie banners and late-injected UI, match: [cookie-banner-cls]}
+  - id: perf-critical-path
+    name: Critical rendering path and resource loading
+    source: web.dev Learn Performance/Critical rendering path + Resource hints + Lazy loading + Prefetch
+    match: [critical-rendering-path, resource-hints]
+    subtopics:
+      - {id: crp-preconnect, name: preconnect / dns-prefetch / preload / modulepreload, match: [preconnect, preload]}
+      - {id: crp-critical-css, name: Critical CSS and deferring non-critical CSS, match: [critical-css]}
+      - {id: crp-script-loading, name: async / defer / module script loading, match: [async-defer-scripts]}
+      - {id: crp-lazy-loading, name: Native lazy loading of images and iframes, match: [lazy-loading]}
+      - {id: crp-speculation, name: Speculation Rules prefetch / prerender, match: [speculation-rules, prerender]}
+      - {id: crp-ttfb, name: Reducing TTFB (server timing / early hints / CDN), match: [ttfb, early-hints, server-timing]}
+      - {id: crp-render-blocking, name: Render-blocking resources and blocking=render, match: [render-blocking]}
+      - {id: crp-early-hints, name: 103 Early Hints, match: [early-hints]}
+      - {id: crp-preload, name: rel=preload vs prefetch and preload pitfalls, match: [rel-preload]}
+      - {id: crp-html-streaming, name: Streaming HTML and flushing the head early, match: [html-streaming]}
+  - id: perf-javascript
+    name: JavaScript performance and bundle size
+    source: web.dev Learn Performance/Optimize JavaScript + Code splitting
+    match: [javascript-performance, bundle-size]
+    subtopics:
+      - {id: js-bundle-analysis, name: Bundle analysis and dependency diet, match: [bundle-analysis]}
+      - {id: js-tree-shaking, name: Tree shaking and sideEffects, match: [tree-shaking]}
+      - {id: js-third-party, name: Third-party script management (facades / Partytown), match: [third-party-scripts, facades]}
+      - {id: js-hydration-cost, name: Hydration cost and islands / partial hydration, match: [islands-architecture, partial-hydration]}
+      - {id: js-compression, name: Brotli / gzip compression and minification, match: [brotli, compression]}
+      - {id: js-differential, name: Differential serving and dropping legacy polyfills, match: [differential-serving, legacy-polyfills]}
+      - {id: js-dependency-diet, name: Replacing heavy dependencies, match: [dependency-diet]}
+      - {id: js-islands, name: Islands architecture and partial hydration (Astro), match: [islands-architecture, astro]}
+      - {id: js-parse-compile, name: Script evaluation / parse / compile cost, match: [parse-compile-cost]}
+  - id: perf-measurement
+    name: Measuring performance (lab and field)
+    source: web.dev Vitals measurement + Lighthouse + CrUX docs
+    match: [performance-measurement, web-vitals]
+    subtopics:
+      - {id: meas-rum, name: Field data with the web-vitals library and RUM, match: [rum, web-vitals-library]}
+      - {id: meas-crux, name: CrUX / PageSpeed Insights / Search Console, match: [crux, pagespeed-insights]}
+      - {id: meas-lighthouse-ci, name: Lighthouse and Lighthouse CI, match: [lighthouse, lighthouse-ci]}
+      - {id: meas-budgets, name: Performance budgets in CI, match: [performance-budgets]}
+      - {id: meas-user-timing, name: PerformanceObserver / User Timing marks, match: [performanceobserver, user-timing]}
+      - {id: meas-webpagetest, name: WebPageTest and filmstrips, match: [webpagetest]}
+      - {id: meas-web-vitals-lib, name: Integrating the web-vitals library and the attribution build, match: [web-vitals-library]}
+      - {id: meas-search-console, name: Search Console Core Web Vitals report, match: [search-console-cwv]}
+      - {id: meas-perf-observer, name: PerformanceObserver with Navigation and Resource Timing, match: [performanceobserver, resource-timing]}
+  - id: perf-caching-delivery
+    name: Caching and content delivery
+    source: web.dev HTTP cache + MDN HTTP caching
+    match: [http-caching, cache-control]
+    subtopics:
+      - {id: cache-immutable-assets, name: Hashed filenames with immutable max-age, match: [immutable-caching, cache-busting]}
+      - {id: cache-validation, name: ETag / Last-Modified revalidation, match: [etag, conditional-requests]}
+      - {id: cache-swr, name: stale-while-revalidate and CDN cache keys, match: [stale-while-revalidate, cdn-cache-keys]}
+      - {id: cache-http2-3, name: HTTP/2 and HTTP/3 delivery, match: [http2, http3]}
+      - {id: cache-cdn-purge, name: CDN invalidation and surrogate keys, match: [cdn-purge, surrogate-keys]}
+      - {id: cache-edge, name: Edge caching rules and edge compute (Cloudflare / Vercel), match: [edge-caching, cloudflare-cache-rules]}
+      - {id: cache-keys-vary, name: Cache keys / Vary / cookies that bust caches, match: [cache-key, vary-header]}
+      - {id: cache-debugging, name: Debugging cache behaviour (Age / x-cache / cf-cache-status), match: [cache-debugging]}
+      - {id: cache-origin-shield, name: Origin shield and tiered caching, match: [origin-shield, tiered-caching]}
+  - id: perf-images-media
+    name: Image and media optimisation
+    source: web.dev Learn Performance/Images + Video
+    match: [image-optimization, media-optimization]
+    subtopics:
+      - {id: img-formats, name: AVIF / WebP format selection, match: [avif, webp]}
+      - {id: img-cdn, name: Image CDNs and on-the-fly resizing, match: [image-cdn]}
+      - {id: img-video, name: Video as GIF replacement and poster/preload, match: [video-optimization]}
+      - {id: img-placeholder, name: Low-quality placeholders / blurhash, match: [image-placeholders, blurhash]}
+      - {id: img-svgo, name: SVG optimisation (SVGO), match: [svgo]}
+      - {id: img-sharp, name: Build-time image processing (sharp), match: [sharp-image]}
+      - {id: img-gif-to-video, name: Replacing animated GIFs with video, match: [gif-to-video]}
+      - {id: img-hls, name: Adaptive streaming (HLS / DASH), match: [hls-streaming, adaptive-bitrate]}
+  # --- React (react.dev)
+  - id: react-describing-ui
+    name: React - describing the UI (components, JSX, props)
+    source: react.dev Learn/Describing the UI
+    match: [jsx, react-components]
+    subtopics:
+      - {id: rx-props, name: Passing props / children / spreading, match: [react-props, children-prop]}
+      - {id: rx-conditional, name: Conditional rendering patterns, match: [conditional-rendering]}
+      - {id: rx-lists-keys, name: Rendering lists and keys, match: [list-keys, react-keys]}
+      - {id: rx-purity, name: Keeping components pure, match: [pure-components, rules-of-react]}
+      - {id: rx-composition, name: Composition patterns (compound components / render props / slots), match: [compound-components, render-props]}
+      - {id: rx-jsx-rules, name: JSX rules (fragments / className / expressions), match: [jsx-syntax, react-fragments]}
+      - {id: rx-children-api, name: children / cloneElement / Children API pitfalls, match: [cloneelement, react-children]}
+      - {id: rx-render-commit, name: Render and commit phases, match: [render-and-commit]}
+      - {id: rx-ref-as-prop, name: ref as a prop in React 19 and forwardRef migration, match: [forwardref, ref-as-prop]}
+  - id: react-interactivity
+    name: React - adding interactivity (events and state)
+    source: react.dev Learn/Adding Interactivity
+    match: [react-state, react-events]
+    subtopics:
+      - {id: rx-event-handlers, name: Event handlers and propagation, match: [react-event-handlers]}
+      - {id: rx-state-snapshot, name: State as a snapshot and batching, match: [state-snapshot, state-batching]}
+      - {id: rx-immutable-updates, name: Updating objects and arrays immutably (Immer), match: [immutable-updates, immer]}
+      - {id: rx-controlled-inputs, name: Controlled vs uncontrolled inputs, match: [controlled-components, uncontrolled-components]}
+      - {id: rx-state-updater, name: Queueing updates with updater functions and automatic batching, match: [state-updater-function, automatic-batching]}
+      - {id: rx-dnd-kit, name: Drag and drop with dnd-kit, match: [dnd-kit]}
+      - {id: rx-useid, name: useId for accessible ids, match: [useid]}
+      - {id: rx-lazy-init, name: Lazy initial state and initialising from props, match: [lazy-initial-state]}
+  - id: react-managing-state
+    name: React - managing state
+    source: react.dev Learn/Managing State
+    match: [react-state-management, usereducer]
+    subtopics:
+      - {id: rx-state-structure, name: Choosing state structure (avoid redundant / duplicated state), match: [state-structure, derived-state]}
+      - {id: rx-preserve-reset, name: Preserving and resetting state with keys and position, match: [reset-state-with-key]}
+      - {id: rx-reducer-context, name: Scaling with reducer + context, match: [reducer-context]}
+      - {id: rx-external-stores, name: External stores (Zustand / Redux Toolkit / Jotai), match: [zustand, redux-toolkit]}
+      - {id: rx-url-state, name: URL as state (search params), match: [url-search-params-state]}
+      - {id: rx-zustand-jotai, name: Client stores with Zustand / Jotai, match: [zustand, jotai]}
+      - {id: rx-redux-toolkit, name: Redux Toolkit and RTK Query, match: [redux-toolkit]}
+      - {id: rx-context-performance, name: Context re-render performance and splitting contexts, match: [context-performance]}
+      - {id: rx-xstate, name: State machines with XState, match: [xstate]}
+  - id: react-escape-hatches
+    name: React - escape hatches (refs, effects, custom hooks)
+    source: react.dev Learn/Escape Hatches
+    match: [useeffect, useref]
+    subtopics:
+      - {id: rx-refs-dom, name: Manipulating the DOM with refs (ref as prop / forwardRef / useImperativeHandle), match: [forwardref, useimperativehandle]}
+      - {id: rx-effect-sync, name: Synchronising with effects and cleanup, match: [effect-cleanup]}
+      - {id: rx-no-effect, name: You might not need an effect, match: [you-might-not-need-an-effect]}
+      - {id: rx-effect-deps, name: Removing effect dependencies / useEffectEvent, match: [effect-dependencies, useeffectevent]}
+      - {id: rx-custom-hooks, name: Reusing logic with custom hooks, match: [custom-hooks]}
+      - {id: rx-layout-effect, name: useLayoutEffect and measuring layout, match: [uselayouteffect]}
+      - {id: rx-imperative-handle, name: useImperativeHandle, match: [useimperativehandle]}
+      - {id: rx-effect-event, name: useEffectEvent and separating events from effects, match: [useeffectevent]}
+      - {id: rx-effect-cleanup, name: Effect cleanup / fetch race conditions / StrictMode double invoke, match: [strict-mode-double-render, effect-race-condition]}
+  - id: react-concurrent
+    name: React - Suspense, transitions and error boundaries
+    source: react.dev Reference/Suspense + useTransition + useDeferredValue + lazy
+    match: [suspense, concurrent-rendering]
+    subtopics:
+      - {id: rx-transitions, name: useTransition and startTransition, match: [usetransition]}
+      - {id: rx-deferred, name: useDeferredValue, match: [usedeferredvalue]}
+      - {id: rx-lazy, name: React.lazy code splitting, match: [react-lazy]}
+      - {id: rx-error-boundaries, name: Error boundaries, match: [error-boundaries]}
+      - {id: rx-suspense-data, name: Suspense-enabled data fetching and use(), match: [use-hook, suspense-data-fetching]}
+      - {id: rx-use-hook, name: The use() API with promises and context, match: [use-hook]}
+      - {id: rx-activity, name: Activity component for hidden-but-preserved UI, match: [activity-component]}
+      - {id: rx-ssr-streaming, name: Streaming SSR (renderToPipeableStream / hydrateRoot), match: [rendertopipeablestream, streaming-ssr]}
+      - {id: rx-rsc, name: React Server Components outside Next.js, match: [rsc-payload, rsc-bundler-integration]}
+  - id: react-19-actions
+    name: React - Actions and forms (React 19)
+    source: react.dev Reference/useActionState + useOptimistic + useFormStatus + form
+    match: [react-actions, react-19]
+    subtopics:
+      - {id: rx-useactionstate, name: useActionState for form state, match: [useactionstate]}
+      - {id: rx-useoptimistic, name: useOptimistic optimistic UI, match: [useoptimistic]}
+      - {id: rx-useformstatus, name: useFormStatus pending UI, match: [useformstatus]}
+      - {id: rx-react-hook-form, name: Form libraries (React Hook Form + zod), match: [react-hook-form]}
+      - {id: rx-form-action, name: form action prop and requestFormReset, match: [form-action-prop]}
+      - {id: rx-server-fn-security, name: Server Function security (auth / validation / closure capture), match: [server-functions-security]}
+      - {id: rx-zod, name: Schema validation with Zod on client and server, match: [zod-validation]}
+      - {id: rx-react19-upgrade, name: Upgrading to React 19 (codemods / removed APIs), match: [react-19-upgrade]}
+  - id: react-ecosystem
+    name: React - ecosystem and app architecture
+    source: react.dev Learn/Creating a React App + Reference/react-dom
+    match: [react-ecosystem, react-architecture]
+    subtopics:
+      - {id: rx-tanstack-query, name: Server state with TanStack Query, match: [tanstack-query]}
+      - {id: rx-react-router, name: React Router (data routers / loaders), match: [react-router]}
+      - {id: rx-portals, name: Portals and createRoot / hydrateRoot, match: [portals, createroot]}
+      - {id: rx-typescript, name: TypeScript with React (props / events / generics), match: [react-typescript]}
+      - {id: rx-react-compiler, name: React Compiler adoption, match: [react-compiler]}
+      - {id: rx-memo-profiler, name: Profiling and memoisation, match: [react-profiler, react-memo]}
+      - {id: rx-testing, name: Testing components with Testing Library, match: [react-testing-library]}
+      - {id: rx-component-libraries, name: Accessible component libraries (Radix / React Aria), match: [radix-ui, react-aria]}
+      - {id: rx-virtualization, name: List virtualisation (TanStack Virtual / react-window), match: [list-virtualization, tanstack-virtual]}
+      - {id: rx-tanstack-table, name: Data grids with TanStack Table, match: [tanstack-table]}
+  # --- Next.js (App Router docs)
+  - id: next-routing
+    name: Next.js App Router routing
+    source: Next.js docs/Routing
+    match: [app-router, nextjs-routing]
+    subtopics:
+      - {id: nx-layouts, name: Layouts / templates / nested routes, match: [nextjs-layouts]}
+      - {id: nx-dynamic-routes, name: Dynamic segments and generateStaticParams, match: [dynamic-routes, generatestaticparams]}
+      - {id: nx-route-groups, name: Route groups and private folders, match: [route-groups]}
+      - {id: nx-parallel-intercepting, name: Parallel and intercepting routes (modals), match: [parallel-routes, intercepting-routes]}
+      - {id: nx-loading-error, name: loading.js / error.js / not-found.js, match: [loading-ui, nextjs-error-handling]}
+      - {id: nx-navigation, name: Link / useRouter / redirect / prefetching, match: [nextjs-navigation, nextjs-prefetching]}
+      - {id: nx-segment-config, name: Route segment config (dynamic / revalidate / runtime), match: [route-segment-config]}
+      - {id: nx-redirects, name: notFound / redirect / permanentRedirect / redirects config, match: [nextjs-redirects, not-found-page]}
+      - {id: nx-i18n, name: Internationalised routing with a locale segment, match: [nextjs-i18n]}
+      - {id: nx-special-files, name: template / default / global-error special files, match: [global-error, template-file]}
+      - {id: nx-middleware, name: Middleware matchers and request rewriting, match: [nextjs-middleware, middleware-matcher]}
+  - id: next-rendering
+    name: Next.js rendering (server and client components, streaming)
+    source: Next.js docs/Rendering + Server and Client Components
+    match: [server-components, rsc]
+    subtopics:
+      - {id: nx-use-client, name: use client boundaries and serialisable props, match: [use-client-boundary]}
+      - {id: nx-streaming, name: Streaming with Suspense, match: [streaming-ssr]}
+      - {id: nx-static-dynamic, name: Static vs dynamic rendering and dynamic APIs, match: [static-rendering, dynamic-rendering]}
+      - {id: nx-ppr, name: Partial prerendering, match: [partial-prerendering, ppr]}
+      - {id: nx-hydration-errors, name: Hydration mismatch errors, match: [hydration-mismatch]}
+      - {id: nx-server-only, name: server-only / client-only and env var exposure, match: [server-only, next-public-env]}
+      - {id: nx-edge-runtime, name: Edge vs Node.js runtime, match: [edge-runtime]}
+      - {id: nx-serializable-props, name: Passing props across the server/client boundary, match: [serializable-props]}
+      - {id: nx-providers, name: Context providers in the App Router, match: [context-providers-app-router]}
+      - {id: nx-after, name: after() for post-response work, match: [nextjs-after]}
+  - id: next-data
+    name: Next.js data fetching, caching and mutations
+    source: Next.js docs/Data fetching + Caching + Server Actions
+    match: [nextjs-data-fetching, nextjs-caching]
+    subtopics:
+      - {id: nx-fetch-cache, name: fetch caching and revalidate options, match: [isr, revalidate]}
+      - {id: nx-server-actions, name: Server Actions and mutations, match: [server-actions]}
+      - {id: nx-revalidate-tag, name: revalidatePath / revalidateTag on-demand, match: [revalidatetag, on-demand-revalidation]}
+      - {id: nx-use-cache, name: use cache directive / cacheLife, match: [use-cache-directive]}
+      - {id: nx-route-handlers, name: Route handlers (route.ts), match: [route-handlers]}
+      - {id: nx-db-access, name: Data access layer and ORM use in server components, match: [data-access-layer]}
+      - {id: nx-static-params, name: generateStaticParams, match: [generatestaticparams]}
+      - {id: nx-client-fetching, name: Client-side fetching with SWR / TanStack Query in the App Router, match: [nextjs-client-fetching]}
+      - {id: nx-dynamic-apis, name: cookies() / headers() / searchParams dynamic APIs, match: [nextjs-cookies, dynamic-apis]}
+      - {id: nx-draft-mode, name: Draft mode for CMS previews, match: [draft-mode]}
+  - id: next-optimization
+    name: Next.js optimisation and metadata
+    source: Next.js docs/Optimizing + Metadata
+    match: [nextjs-optimization, nextjs-metadata]
+    subtopics:
+      - {id: nx-image, name: next/image configuration and remotePatterns, match: [next-image]}
+      - {id: nx-font, name: next/font, match: [next-font]}
+      - {id: nx-script, name: next/script strategies, match: [next-script]}
+      - {id: nx-metadata, name: generateMetadata / sitemap / robots / OG images, match: [generatemetadata, og-images]}
+      - {id: nx-bundle-analyzer, name: Bundle analysis and package import optimisation, match: [nextjs-bundle-analyzer]}
+      - {id: nx-next-dynamic, name: Lazy loading with next/dynamic, match: [next-dynamic]}
+      - {id: nx-og-images, name: Dynamic Open Graph images (ImageResponse), match: [imageresponse, og-image-generation]}
+      - {id: nx-sitemap-robots, name: sitemap.ts and robots.ts, match: [nextjs-sitemap, robots-txt]}
+      - {id: nx-third-parties, name: "@next/third-parties (Google Tag Manager / Analytics / embeds)", match: [next-third-parties]}
+      - {id: nx-turbopack, name: Turbopack for dev and build, match: [turbopack]}
+  - id: next-platform
+    name: Next.js middleware, auth, deployment and configuration
+    source: Next.js docs/Middleware + Authentication + Deploying + next.config
+    match: [nextjs-deployment, nextjs-middleware]
+    subtopics:
+      - {id: nx-auth, name: Authentication patterns (Auth.js / sessions / DAL checks), match: [nextjs-authentication, authjs]}
+      - {id: nx-self-host, name: Self-hosting with standalone output and Docker, match: [nextjs-standalone, nextjs-self-hosting]}
+      - {id: nx-config, name: next.config (redirects / rewrites / headers), match: [next-config, nextjs-redirects]}
+      - {id: nx-instrumentation, name: Instrumentation and OpenTelemetry, match: [nextjs-instrumentation]}
+      - {id: nx-pages-migration, name: Migrating Pages Router to App Router, match: [pages-router-migration]}
+      - {id: nx-testing, name: Testing Next.js apps, match: [nextjs-testing]}
+      - {id: nx-env-vars, name: Environment variables (NEXT_PUBLIC_ / runtime env), match: [next-public-env]}
+      - {id: nx-vercel, name: Deploying on Vercel (previews / env / function limits), match: [vercel-deployment]}
+      - {id: nx-static-export, name: Static export (output export), match: [static-export]}
+      - {id: nx-upgrade, name: Upgrading Next.js versions (codemods / async request APIs), match: [nextjs-upgrade, next-codemod]}
+      - {id: nx-security, name: Next.js security (Server Action exposure / middleware bypass / taint), match: [nextjs-security, taint-api]}
+  # --- Vue (vuejs.org guide)
+  - id: vue-essentials
+    name: Vue essentials (template syntax, reactivity, computed, watchers)
+    source: Vue guide/Essentials
+    match: [vue-template-syntax, vue-reactivity]
+    subtopics:
+      - {id: vu-ref-reactive, name: ref vs reactive and reactivity caveats, match: [ref-vs-reactive]}
+      - {id: vu-computed, name: Computed properties, match: [vue-computed]}
+      - {id: vu-watchers, name: watch / watchEffect / flush timing, match: [vue-watchers, watcheffect]}
+      - {id: vu-v-model-forms, name: Form input bindings v-model, match: [v-model]}
+      - {id: vu-lists-conditionals, name: v-for / v-if / keys, match: [v-for, v-if]}
+      - {id: vu-lifecycle, name: Lifecycle hooks and template refs, match: [vue-lifecycle-hooks, template-refs]}
+      - {id: vu-template-syntax, name: Template syntax and directives (v-bind / v-on / dynamic arguments), match: [vue-template-syntax, v-bind]}
+      - {id: vu-class-style, name: Class and style bindings, match: [class-style-bindings]}
+      - {id: vu-event-modifiers, name: Event handling and modifiers, match: [event-modifiers]}
+      - {id: vu-template-refs, name: Template refs and useTemplateRef, match: [template-refs, usetemplateref]}
+      - {id: vu-reactivity-caveats, name: Reactivity caveats (destructuring / toRefs / shallowRef), match: [torefs, shallowref]}
+  - id: vue-components
+    name: Vue components in depth
+    source: Vue guide/Components In-Depth
+    match: [vue-components]
+    subtopics:
+      - {id: vu-props-emits, name: Props and emits (defineProps / defineEmits), match: [defineprops, defineemits]}
+      - {id: vu-component-v-model, name: Component v-model and defineModel, match: [definemodel]}
+      - {id: vu-slots, name: Slots and scoped slots, match: [scoped-slots, vue-slots]}
+      - {id: vu-provide-inject, name: Provide / inject, match: [provide-inject]}
+      - {id: vu-async-components, name: Async components, match: [defineasynccomponent]}
+      - {id: vu-fallthrough, name: Fallthrough attributes, match: [fallthrough-attributes]}
+      - {id: vu-script-setup, name: script setup and component registration, match: [script-setup]}
+      - {id: vu-define-macros, name: defineExpose / defineOptions / defineSlots macros, match: [defineexpose]}
+      - {id: vu-dynamic-components, name: Dynamic components with component is, match: [dynamic-components]}
+  - id: vue-reusability
+    name: Vue reusability and built-ins
+    source: Vue guide/Reusability + Built-in Components
+    match: [composables, vue-built-ins]
+    subtopics:
+      - {id: vu-composables, name: Writing composables (VueUse patterns), match: [vueuse, composable-patterns]}
+      - {id: vu-directives, name: Custom directives, match: [custom-directives]}
+      - {id: vu-plugins, name: Plugins, match: [vue-plugins]}
+      - {id: vu-transition, name: Transition / TransitionGroup, match: [vue-transition]}
+      - {id: vu-keepalive-teleport, name: KeepAlive and Teleport, match: [keepalive, teleport]}
+      - {id: vu-render-functions, name: Render functions and JSX, match: [render-functions, vue-jsx]}
+      - {id: vu-vueuse, name: VueUse composables, match: [vueuse]}
+      - {id: vu-suspense, name: Suspense and async setup, match: [vue-suspense]}
+      - {id: vu-transition-group, name: TransitionGroup list animations, match: [transitiongroup]}
+  - id: vue-scaling-up
+    name: Vue scaling up (routing, state, testing, TypeScript, SSR)
+    source: Vue guide/Scaling Up + TypeScript; Pinia and Vue Router docs; Nuxt docs
+    match: [vue-router, pinia]
+    subtopics:
+      - {id: vu-router-guards, name: Navigation guards and route meta, match: [navigation-guards]}
+      - {id: vu-router-lazy, name: Lazy-loaded routes and data fetching on navigation, match: [lazy-routes]}
+      - {id: vu-pinia-stores, name: Pinia setup stores / storeToRefs, match: [pinia-stores, storetorefs]}
+      - {id: vu-testing, name: Testing with Vitest and Vue Test Utils, match: [vue-test-utils]}
+      - {id: vu-typescript, name: TypeScript with Vue (vue-tsc / typed props), match: [vue-typescript]}
+      - {id: vu-nuxt, name: Nuxt data fetching and server routes, match: [nuxt, usefetch]}
+      - {id: vu-ssr-hydration, name: SSR and hydration in Vue, match: [vue-ssr]}
+      - {id: vu-performance, name: Vue performance (v-memo / shallowRef / virtual lists), match: [vue-performance, shallowref]}
+      - {id: vu-tooling, name: create-vue / Vite / Vue DevTools tooling, match: [create-vue, vue-devtools]}
+      - {id: vu-i18n, name: vue-i18n, match: [vue-i18n]}
+      - {id: vu-security, name: Vue security (v-html / template injection), match: [v-html]}
+      - {id: vu-vue2-migration, name: Migrating Vue 2 / Options API to Vue 3, match: [vue-2-migration, vue-compat-build]}
+  # --- Django (docs.djangoproject.com)
+  - id: dj-models
+    name: Django models, migrations and querysets
+    source: Django docs/Models and databases + Migrations
+    match: [django-orm, django-models]
+    subtopics:
+      - {id: dj-migrations, name: Migrations (makemigrations / data migrations / squashing / zero-downtime), match: [django-migrations, data-migrations]}
+      - {id: dj-query-optimization, name: select_related / prefetch_related / N+1, match: [select-related, prefetch-related]}
+      - {id: dj-aggregation, name: Aggregation / annotate / F and Q expressions, match: [django-annotate, f-expressions]}
+      - {id: dj-transactions, name: Transactions (atomic / select_for_update / on_commit), match: [django-transactions, select-for-update]}
+      - {id: dj-model-managers, name: Custom managers and querysets, match: [model-managers]}
+      - {id: dj-constraints-indexes, name: Model constraints and indexes, match: [django-constraints, django-indexes]}
+      - {id: dj-field-types, name: Field types / choices / JSONField, match: [django-field-types, jsonfield]}
+      - {id: dj-f-q, name: F expressions / Q objects / conditional updates, match: [f-expressions, q-objects]}
+      - {id: dj-multi-db, name: Multiple databases and database routers, match: [database-routers]}
+      - {id: dj-model-inheritance, name: Abstract / multi-table / proxy model inheritance, match: [model-inheritance, proxy-models]}
+      - {id: dj-data-migrations, name: Data migrations with RunPython, match: [runpython, data-migration]}
+      - {id: dj-postgres, name: django.contrib.postgres (ArrayField / full-text search), match: [django-full-text-search, arrayfield]}
+  - id: dj-views-urls
+    name: Django URL dispatcher and views
+    source: Django docs/URL dispatcher + Views + Class-based views
+    match: [django-views, url-dispatcher]
+    subtopics:
+      - {id: dj-cbv, name: Generic class-based views and mixins, match: [class-based-views, generic-views]}
+      - {id: dj-url-patterns, name: path converters / include / namespaces / reverse, match: [path-converters, url-reverse]}
+      - {id: dj-middleware, name: Writing middleware, match: [django-middleware]}
+      - {id: dj-async-views, name: Async views and ASGI, match: [django-async, asgi]}
+      - {id: dj-file-responses, name: File responses / streaming / uploads, match: [fileresponse, django-file-uploads]}
+      - {id: dj-generic-editing, name: Generic editing views (CreateView / UpdateView / DeleteView), match: [createview, generic-editing-views]}
+      - {id: dj-request-response, name: HttpRequest / HttpResponse / JsonResponse, match: [jsonresponse, httprequest]}
+      - {id: dj-error-views, name: Custom 404 / 500 handlers and error reporting, match: [handler404, django-error-reporting]}
+      - {id: dj-view-decorators, name: View decorators (login_required / require_http_methods / cache_page), match: [view-decorators, login-required]}
+  - id: dj-templates-forms
+    name: Django templates and forms
+    source: Django docs/Templates + Forms
+    match: [django-templates, django-forms]
+    subtopics:
+      - {id: dj-template-inheritance, name: Template inheritance / include / context processors, match: [template-inheritance, context-processors]}
+      - {id: dj-custom-tags, name: Custom template tags and filters, match: [custom-template-tags]}
+      - {id: dj-modelform, name: ModelForm validation (clean methods), match: [modelform, form-clean]}
+      - {id: dj-formsets, name: Formsets and inline formsets, match: [formsets]}
+      - {id: dj-htmx, name: Django with htmx partials, match: [htmx]}
+      - {id: dj-form-clean, name: Form validation with clean() and clean_field, match: [form-clean-methods]}
+      - {id: dj-form-rendering, name: Form rendering templates / widgets / crispy-forms, match: [django-form-rendering, crispy-forms]}
+      - {id: dj-context-processors, name: Context processors and the Jinja2 backend, match: [context-processors, jinja2]}
+      - {id: dj-autoescape, name: Autoescaping / mark_safe / built-in filters, match: [django-autoescape]}
+      - {id: dj-file-upload-forms, name: File uploads in forms (FileField / request.FILES), match: [django-file-uploads]}
+  - id: dj-admin
+    name: Django admin
+    source: Django docs/The Django admin site
+    match: [django-admin]
+    subtopics:
+      - {id: dj-modeladmin, name: ModelAdmin list_display / filters / search, match: [modeladmin]}
+      - {id: dj-admin-inlines, name: Inlines and custom admin actions, match: [admin-inlines, admin-actions]}
+      - {id: dj-admin-performance, name: Admin performance on large tables, match: [admin-performance]}
+      - {id: dj-admin-security, name: Securing the admin, match: [admin-security]}
+      - {id: dj-admin-actions, name: Admin actions, match: [admin-actions]}
+      - {id: dj-admin-filters, name: list_filter / SimpleListFilter / search_fields, match: [simplelistfilter, admin-search]}
+      - {id: dj-admin-custom-views, name: Custom admin views / templates / AdminSite, match: [adminsite, admin-templates]}
+      - {id: dj-admin-forms, name: Admin forms / fieldsets / readonly / autocomplete_fields, match: [autocomplete-fields, admin-fieldsets]}
+  - id: dj-platform
+    name: Django auth, caching, signals, testing and deployment
+    source: Django docs/Authentication + Cache + Signals + Testing + Deployment checklist + i18n
+    match: [django-deployment, django-testing]
+    subtopics:
+      - {id: dj-custom-user, name: Custom user model, match: [custom-user-model]}
+      - {id: dj-permissions, name: Permissions and groups, match: [django-permissions]}
+      - {id: dj-cache-framework, name: Cache framework (per-view / low-level / Redis), match: [django-cache]}
+      - {id: dj-signals, name: Signals and when not to use them, match: [django-signals]}
+      - {id: dj-testcase, name: TestCase / Client / pytest-django, match: [pytest-django, django-testcase]}
+      - {id: dj-deploy-checklist, name: Deployment checklist / static files / gunicorn, match: [deployment-checklist, whitenoise, gunicorn]}
+      - {id: dj-i18n, name: Translation and localisation, match: [django-i18n]}
+      - {id: dj-management-commands, name: Custom management commands, match: [management-commands]}
+      - {id: dj-celery, name: Background tasks with Celery, match: [celery]}
+      - {id: dj-settings, name: Settings management and secrets (django-environ), match: [django-settings, django-environ]}
+      - {id: dj-static-media, name: Static and media files (collectstatic / WhiteNoise / django-storages), match: [collectstatic, whitenoise, django-storages]}
+      - {id: dj-logging, name: LOGGING configuration, match: [django-logging]}
+      - {id: dj-channels, name: Django Channels and WebSockets, match: [django-channels]}
+      - {id: dj-sessions-messages, name: Sessions and the messages framework, match: [django-sessions, messages-framework]}
+  - id: dj-rest-framework
+    name: Django REST framework
+    source: DRF API guide
+    match: [django-rest-framework, drf]
+    subtopics:
+      - {id: drf-serializers, name: Serializers and validation, match: [drf-serializers]}
+      - {id: drf-viewsets, name: ViewSets and routers, match: [viewsets]}
+      - {id: drf-auth-permissions, name: Authentication and permission classes, match: [drf-permissions]}
+      - {id: drf-pagination-filtering, name: Pagination / filtering / throttling, match: [drf-pagination, drf-throttling]}
+      - {id: drf-openapi, name: OpenAPI schema (drf-spectacular), match: [drf-spectacular]}
+      - {id: drf-throttling, name: Throttling, match: [drf-throttling]}
+      - {id: drf-versioning, name: API versioning, match: [drf-versioning]}
+      - {id: drf-testing, name: APIClient and APITestCase, match: [apitestcase]}
+      - {id: drf-nested, name: Nested writable serializers, match: [nested-serializers]}
+      - {id: drf-exceptions, name: Custom exception handler and error format, match: [drf-exception-handler]}
+  # --- Rails (guides.rubyonrails.org)
+  - id: rails-active-record
+    name: Rails Active Record
+    source: Rails Guides/Active Record basics + Migrations + Validations + Callbacks + Associations + Querying
+    match: [active-record]
+    subtopics:
+      - {id: rr-migrations, name: Migrations and strong_migrations safety, match: [rails-migrations, strong-migrations]}
+      - {id: rr-validations, name: Validations and errors, match: [rails-validations]}
+      - {id: rr-callbacks, name: Callbacks and their pitfalls, match: [rails-callbacks]}
+      - {id: rr-associations, name: Associations (has_many through / polymorphic / dependent), match: [rails-associations, polymorphic-associations]}
+      - {id: rr-querying, name: Querying / includes / N+1 / scopes, match: [rails-n-plus-one, rails-scopes]}
+      - {id: rr-encryption, name: Active Record encryption, match: [active-record-encryption]}
+      - {id: rr-scopes-enums, name: Scopes and enums, match: [activerecord-enum, activerecord-scopes]}
+      - {id: rr-eager-loading, name: Eager loading and strict_loading, match: [strict-loading, eager-loading]}
+      - {id: rr-locking, name: Transactions and optimistic / pessimistic locking, match: [optimistic-locking, pessimistic-locking]}
+      - {id: rr-multi-db, name: Multiple databases and read replicas, match: [rails-multiple-databases]}
+      - {id: rr-polymorphic-sti, name: Polymorphic associations and single-table inheritance, match: [polymorphic-associations, single-table-inheritance]}
+  - id: rails-controllers-routing
+    name: Rails Action Controller and routing
+    source: Rails Guides/Action Controller overview + Routing from the outside in
+    match: [action-controller, rails-routing]
+    subtopics:
+      - {id: rr-strong-params, name: Strong parameters, match: [strong-parameters]}
+      - {id: rr-filters, name: before_action filters and concerns, match: [before-action, rails-concerns]}
+      - {id: rr-resources, name: Resourceful routes / nested / shallow, match: [resourceful-routes]}
+      - {id: rr-api-mode, name: API-only apps and JSON rendering, match: [rails-api, jbuilder]}
+      - {id: rr-auth, name: Authentication generator / has_secure_password, match: [has-secure-password, rails-authentication]}
+      - {id: rr-rescue-from, name: rescue_from and error pages, match: [rescue-from]}
+      - {id: rr-respond-to, name: respond_to formats / rendering / redirects, match: [respond-to]}
+      - {id: rr-routing-constraints, name: Routing constraints / namespaces / concerns, match: [routing-constraints, route-concerns]}
+      - {id: rr-sessions-flash, name: Sessions / encrypted cookies / flash, match: [rails-flash, encrypted-cookies]}
+      - {id: rr-rate-limit, name: rate_limit and Rack::Attack, match: [rack-attack]}
+  - id: rails-views-hotwire
+    name: Rails Action View and Hotwire
+    source: Rails Guides/Action View + Form helpers; Turbo and Stimulus handbooks
+    match: [hotwire, action-view]
+    subtopics:
+      - {id: rr-form-with, name: form_with and form helpers, match: [form-with]}
+      - {id: rr-partials, name: Layouts / partials / view components, match: [rails-partials, view-components]}
+      - {id: rr-turbo-frames, name: Turbo Frames, match: [turbo-frames]}
+      - {id: rr-turbo-streams, name: Turbo Streams broadcasts, match: [turbo-streams]}
+      - {id: rr-stimulus, name: Stimulus controllers, match: [stimulus]}
+      - {id: rr-importmap, name: Importmap / Propshaft / jsbundling assets, match: [importmap-rails, propshaft]}
+      - {id: rr-viewcomponent, name: ViewComponent, match: [viewcomponent]}
+      - {id: rr-turbo-drive, name: Turbo Drive navigation / prefetch / morphing, match: [turbo-drive, turbo-morphing]}
+      - {id: rr-hotwire-native, name: Hotwire Native, match: [hotwire-native]}
+      - {id: rr-asset-bundling, name: Propshaft / jsbundling / cssbundling, match: [propshaft, jsbundling-rails]}
+      - {id: rr-i18n, name: Rails internationalisation (I18n), match: [rails-i18n]}
+  - id: rails-platform
+    name: Rails jobs, mail, storage, cable, security and deployment
+    source: Rails Guides/Active Job + Action Mailer + Active Storage + Action Cable + Security + Credentials + Upgrading; Kamal docs
+    match: [rails-deployment, rails-security]
+    subtopics:
+      - {id: rr-active-job, name: Active Job and Solid Queue / Sidekiq, match: [solid-queue, sidekiq]}
+      - {id: rr-mailer, name: Action Mailer and previews, match: [action-mailer]}
+      - {id: rr-active-storage, name: Active Storage uploads and variants, match: [active-storage]}
+      - {id: rr-action-cable, name: Action Cable channels, match: [action-cable]}
+      - {id: rr-credentials, name: Credentials and secrets, match: [rails-credentials]}
+      - {id: rr-kamal, name: Deploying with Kamal, match: [kamal]}
+      - {id: rr-upgrading, name: Upgrading Rails versions, match: [rails-upgrade]}
+      - {id: rr-caching, name: Fragment / Russian-doll caching and Solid Cache, match: [fragment-caching, russian-doll-caching]}
+      - {id: rr-testing, name: Testing (minitest / system tests / RSpec), match: [rails-system-tests, rspec]}
+      - {id: rr-solid-trifecta, name: Solid Queue / Solid Cache / Solid Cable, match: [solid-queue, solid-cache]}
+      - {id: rr-instrumentation, name: Instrumentation and error reporting (ActiveSupport::Notifications / Rails.error), match: [active-support-notifications, rails-error-reporter]}
+      - {id: rr-engines, name: Rails engines, match: [rails-engines]}
+  # --- Node.js and Express
+  - id: express-core
+    name: Express routing, middleware and error handling
+    source: Express guide/Routing + Writing and using middleware + Error handling
+    match: [express-routing, express-middleware]
+    subtopics:
+      - {id: ex-router, name: express.Router modular routes and params, match: [express-router]}
+      - {id: ex-error-middleware, name: Error-handling middleware and async errors (Express 5), match: [express-error-handling, express-5]}
+      - {id: ex-static, name: Serving static files and templates, match: [express-static, template-engines]}
+      - {id: ex-behind-proxy, name: trust proxy behind load balancers, match: [trust-proxy]}
+      - {id: ex-body-parsing, name: Body parsing limits / multipart (multer), match: [body-parser, multer]}
+      - {id: ex-template-engines, name: Template engines (EJS / Pug), match: [ejs, pug]}
+      - {id: ex-async-errors, name: Async errors in Express 5 and promise rejections, match: [express-5-async, express-async-errors]}
+      - {id: ex-sessions, name: express-session / cookie-parser / session stores, match: [express-session]}
+      - {id: ex-multer, name: File uploads with Multer, match: [multer]}
+      - {id: ex-v5-migration, name: Migrating Express 4 to 5, match: [express-5-migration]}
+  - id: express-production
+    name: Express production best practices
+    source: Express guide/Production best practices - performance and security
+    match: [express-production, express-security]
+    subtopics:
+      - {id: ex-helmet, name: helmet security headers, match: [helmet]}
+      - {id: ex-rate-limit, name: Rate limiting, match: [rate-limiting]}
+      - {id: ex-graceful-shutdown, name: Graceful shutdown and health checks, match: [graceful-shutdown, health-checks]}
+      - {id: ex-logging, name: Structured logging (pino), match: [pino, structured-logging]}
+      - {id: ex-process-manager, name: Process management (PM2 / systemd / containers) and clustering, match: [pm2, node-cluster]}
+      - {id: ex-compression, name: compression / ETag / static caching, match: [express-compression]}
+      - {id: ex-health-checks, name: Health and readiness endpoints, match: [health-check-endpoint]}
+      - {id: ex-dockerfile, name: Dockerising Node apps (multi-stage / non-root / NODE_ENV), match: [node-dockerfile]}
+      - {id: ex-passport, name: Passport.js authentication, match: [passport-js]}
+      - {id: ex-opentelemetry, name: APM and OpenTelemetry for Node, match: [opentelemetry-node]}
+  - id: node-runtime
+    name: Node.js runtime and core modules
+    source: Node.js API docs + nodejs.org/learn
+    match: [node-runtime, nodejs-core]
+    subtopics:
+      - {id: nd-streams, name: Streams and pipeline with backpressure, match: [node-streams, stream-pipeline]}
+      - {id: nd-fs, name: fs/promises and path handling, match: [fs-promises]}
+      - {id: nd-child-process, name: child_process spawn / execFile, match: [child-process]}
+      - {id: nd-worker-threads, name: worker_threads for CPU work, match: [worker-threads]}
+      - {id: nd-env-config, name: Configuration and --env-file / process.env validation, match: [env-file, config-validation]}
+      - {id: nd-test-runner, name: node test runner and supertest, match: [node-test-runner, supertest]}
+      - {id: nd-debugging, name: Debugging and profiling (--inspect / clinic / heap), match: [node-inspect, node-profiling]}
+      - {id: nd-typescript, name: Running TypeScript in Node (type stripping / tsx), match: [node-typescript, type-stripping]}
+      - {id: nd-event-loop-blocking, name: Event loop blocking and diagnostics, match: [event-loop-blocking, event-loop-lag]}
+      - {id: nd-asynclocalstorage, name: AsyncLocalStorage context propagation, match: [async-context-propagation, asynclocalstorage-context]}
+      - {id: nd-package-managers, name: npm / pnpm / package.json scripts and engines, match: [npm-scripts, package-json-engines]}
+      - {id: nd-crypto, name: node:crypto (randomUUID / scrypt / timingSafeEqual), match: [node-crypto]}
+      - {id: nd-version-management, name: Node version management (nvm / fnm / .nvmrc / LTS upgrades), match: [nvm, node-lts-upgrade]}
+  - id: api-design
+    name: Building HTTP APIs in Node
+    source: Express guide + OWASP ASVS V13 API + OpenAPI spec
+    match: [rest-api, api-design]
+    subtopics:
+      - {id: api-validation, name: Request validation with zod / JSON schema, match: [zod, json-schema-validation]}
+      - {id: api-pagination, name: Pagination (cursor vs offset), match: [cursor-pagination]}
+      - {id: api-errors, name: Error responses (RFC 9457 problem details), match: [problem-details]}
+      - {id: api-openapi, name: OpenAPI documentation, match: [openapi]}
+      - {id: api-db-pooling, name: Database access and connection pooling (pg / Prisma), match: [connection-pooling, prisma]}
+      - {id: api-websockets, name: WebSockets on the server (ws / Socket.IO), match: [socket-io, websocket-server]}
+      - {id: api-idempotency, name: Idempotency keys and safe retries, match: [idempotency-keys]}
+      - {id: api-versioning, name: API versioning and deprecation, match: [api-versioning]}
+      - {id: api-rest-conventions, name: REST resource design / methods / status codes, match: [rest-api-design, http-status-codes]}
+      - {id: api-graphql-server, name: GraphQL servers (Apollo / Yoga / DataLoader), match: [graphql-server, dataloader]}
+      - {id: api-ratelimit-headers, name: Rate limit headers and quotas, match: [ratelimit-headers]}
+      - {id: api-webhook-signing, name: Sending webhooks with HMAC signatures, match: [webhook-signing, hmac-signature]}
+      - {id: api-trpc, name: End-to-end typed APIs with tRPC, match: [trpc]}
+  # --- WordPress (developer handbooks)
+  - id: wp-themes
+    name: WordPress theme development
+    source: WordPress Theme Handbook
+    match: [wordpress-themes, theme-development]
+    subtopics:
+      - {id: wp-template-hierarchy, name: Template hierarchy, match: [template-hierarchy]}
+      - {id: wp-block-themes, name: Block themes and templates/parts, match: [block-themes, full-site-editing]}
+      - {id: wp-theme-json, name: theme.json settings and styles, match: [theme-json]}
+      - {id: wp-enqueue, name: Enqueueing scripts and styles, match: [wp-enqueue-scripts]}
+      - {id: wp-child-themes, name: Child themes, match: [child-themes]}
+      - {id: wp-template-parts, name: Template parts and block templates, match: [template-parts]}
+      - {id: wp-style-variations, name: Style variations and global styles, match: [style-variations, global-styles]}
+      - {id: wp-classic-functions, name: functions.php / theme supports / nav menus, match: [add-theme-support, nav-menus]}
+      - {id: wp-theme-check, name: Theme Check and directory submission, match: [theme-check]}
+      - {id: wp-the-loop, name: The Loop and template tags, match: [the-loop, wordpress-template-tags]}
+  - id: wp-plugins
+    name: WordPress plugin development
+    source: WordPress Plugin Handbook
+    match: [wordpress-plugins, plugin-development]
+    subtopics:
+      - {id: wp-hooks, name: Actions and filters, match: [wordpress-hooks, add-filter]}
+      - {id: wp-settings-api, name: Settings API and options pages, match: [settings-api]}
+      - {id: wp-shortcodes, name: Shortcodes, match: [shortcodes]}
+      - {id: wp-cron, name: WP-Cron scheduling, match: [wp-cron]}
+      - {id: wp-plugin-security, name: Nonces / sanitising / escaping / capabilities, match: [wp-nonces, wordpress-escaping]}
+      - {id: wp-custom-tables, name: Custom tables with dbDelta and $wpdb->prepare, match: [dbdelta, wpdb]}
+      - {id: wp-i18n, name: Internationalisation of plugins and themes, match: [wordpress-i18n]}
+      - {id: wp-activation, name: Activation / deactivation / uninstall hooks, match: [activation-hooks, uninstall-php]}
+      - {id: wp-admin-pages, name: Admin menus / pages / WP_List_Table, match: [add-menu-page, wp-list-table]}
+      - {id: wp-ajax, name: admin-ajax handlers, match: [admin-ajax]}
+      - {id: wp-plugin-directory, name: Plugin directory submission (SVN / readme.txt), match: [plugin-readme, wordpress-svn]}
+  - id: wp-blocks
+    name: WordPress block development
+    source: WordPress Block Editor Handbook
+    match: [gutenberg-blocks, block-development]
+    subtopics:
+      - {id: wp-create-block, name: create-block scaffold and block.json, match: [create-block, block-json]}
+      - {id: wp-dynamic-blocks, name: Dynamic blocks with render.php, match: [dynamic-blocks]}
+      - {id: wp-innerblocks, name: InnerBlocks and nested blocks, match: [innerblocks]}
+      - {id: wp-block-patterns, name: Block patterns and variations, match: [block-patterns, block-variations]}
+      - {id: wp-interactivity-api, name: Interactivity API, match: [interactivity-api]}
+      - {id: wp-block-deprecation, name: Block deprecations and validation errors, match: [block-deprecation]}
+      - {id: wp-block-supports, name: Block supports and attributes, match: [block-supports, block-attributes]}
+      - {id: wp-block-variations, name: Block variations and block styles, match: [block-variations]}
+      - {id: wp-block-bindings, name: Block Bindings API, match: [block-bindings]}
+      - {id: wp-editor-extensibility, name: Editor extensibility (SlotFills / sidebars / @wordpress/data), match: [slotfill, wordpress-data]}
+      - {id: wp-block-testing, name: Testing blocks (wp-scripts test-unit-js / test-e2e), match: [wp-scripts-test]}
+  - id: wp-data-apis
+    name: WordPress data and common APIs
+    source: WordPress Common APIs handbook + REST API Handbook + WP-CLI handbook
+    match: [wordpress-apis, wp-query]
+    subtopics:
+      - {id: wp-custom-post-types, name: Custom post types and taxonomies, match: [custom-post-types, custom-taxonomies]}
+      - {id: wp-metadata, name: Post meta and register_meta, match: [post-meta, register-meta]}
+      - {id: wp-transients, name: Transients and object cache, match: [transients, object-cache]}
+      - {id: wp-rest-endpoints, name: Custom REST endpoints and authentication, match: [register-rest-route, application-passwords]}
+      - {id: wp-cli, name: WP-CLI operations, match: [wp-cli]}
+      - {id: wp-multisite, name: Multisite, match: [multisite]}
+      - {id: wp-headless, name: Headless WordPress, match: [headless-wordpress]}
+      - {id: wp-taxonomies, name: Custom taxonomies, match: [custom-taxonomies]}
+      - {id: wp-query, name: WP_Query arguments and performance, match: [wp-query]}
+      - {id: wp-roles-caps, name: Users / roles / capabilities, match: [wordpress-capabilities, add-role]}
+      - {id: wp-http-api, name: HTTP API (wp_remote_get / wp_remote_post), match: [wp-remote-get]}
+  - id: wp-operations
+    name: WordPress performance, security and maintenance
+    source: WordPress Advanced Administration Handbook
+    match: [wordpress-performance, wordpress-security]
+    subtopics:
+      - {id: wp-page-caching, name: Page caching and object caching setup, match: [page-caching]}
+      - {id: wp-hardening, name: Hardening (file edits / XML-RPC / updates), match: [wordpress-hardening]}
+      - {id: wp-migration, name: Site migration and search-replace, match: [wordpress-migration]}
+      - {id: wp-debugging, name: WP_DEBUG and Query Monitor, match: [wp-debug, query-monitor]}
+      - {id: wp-backups, name: Backups and staging, match: [wordpress-backups]}
+      - {id: wp-object-cache, name: Persistent object cache (Redis), match: [object-cache, redis-object-cache]}
+      - {id: wp-updates-staging, name: Updates / auto-updates / staging workflow, match: [wordpress-updates, staging-site]}
+      - {id: wp-autoload-options, name: Database cleanup (autoloaded options / revisions), match: [autoloaded-options]}
+      - {id: wp-malware-cleanup, name: Cleaning a hacked site, match: [wordpress-malware-cleanup]}
+      - {id: wp-smtp, name: Email deliverability (SMTP / wp_mail), match: [wp-mail-smtp]}

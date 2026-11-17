@@ -1,0 +1,241 @@
+# Coverage spec: pomerium. Topics from the Pomerium docs (pomerium.com/docs, github.com/pomerium/documentation).
+subject: pomerium
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [pomerium]
+sources:
+  - "Pomerium docs (pomerium.com/docs)"
+topics:
+  - id: authorize-log-reading
+    name: "Authorization log reading"
+    source: "https://pomerium.com/docs/capabilities/audit-logs"
+    match: [authorize-log, allow-why-false, journalctl]
+  - id: usage-tracking
+    name: "Active user tracking from logs and databroker"
+    source: "https://pomerium.com/docs/capabilities/audit-logs"
+    match: [usage-tracking, databroker-sql]
+  - id: custom-idp
+    name: "Custom identity provider and authenticate URL"
+    source: "https://pomerium.com/docs/capabilities/authentication"
+    match: [authenticate-service-url, oauth2-callback]
+  - id: hosted-authenticate
+    name: "Hosted authenticate service"
+    source: "https://pomerium.com/docs/capabilities/authentication"
+    match: [hosted-idp, hosted-authenticate]
+  - id: direct-idp-token
+    name: "Direct IdP token authentication"
+    source: "https://pomerium.com/docs/capabilities/authentication"
+    match: [idp-access-token, bearer-token-format]
+  - id: front-channel-logout
+    name: "Single sign-out and front-channel logout"
+    source: "https://pomerium.com/docs/capabilities/authentication"
+    match: [front-channel-logout, single-sign-out]
+  - id: policy-locations
+    name: "Policy locations: routes, namespaces, clusters"
+    source: "https://pomerium.com/docs/capabilities/authorization"
+    match: [namespaces, clusters, policy-inheritance]
+  - id: policy-overrides
+    name: "Policy overrides"
+    source: "https://pomerium.com/docs/capabilities/authorization"
+    match: [public-access, cors-preflight, policy-override]
+  - id: ppl-core
+    name: "Pomerium Policy Language core"
+    source: "https://pomerium.com/docs/internals/ppl"
+    match: [ppl, deny-overrides-allow, logical-operators]
+  - id: ppl-certificate-matcher
+    name: "PPL certificate matcher"
+    source: "https://pomerium.com/docs/internals/ppl"
+    match: [certificate-matcher, spki-hash]
+  - id: ppl-time-matchers
+    name: "PPL time and date matchers"
+    source: "https://pomerium.com/docs/internals/ppl"
+    match: [time-of-day, day-of-week, date-matcher]
+  - id: ppl-device-record-matchers
+    name: "PPL device and record matchers"
+    source: "https://pomerium.com/docs/internals/ppl"
+    match: [device-matcher, record-matcher]
+  - id: ppl-string-matchers
+    name: "PPL string matchers"
+    source: "https://pomerium.com/docs/internals/ppl"
+    match: [string-matcher, starts-with]
+  - id: rego-policies
+    name: "Rego policies"
+    source: "https://pomerium.com/docs/internals/ppl"
+    match: [rego, opa, policy-inputs]
+  - id: jwt-bearer-routes
+    name: "JWT bearer token routes"
+    source: "https://pomerium.com/docs/capabilities/bearer-token-access"
+    match: [jwt-bearer, identity-providers, machine-to-machine]
+  - id: k8s-serviceaccount-bearer
+    name: "Kubernetes ServiceAccount bearer tokens"
+    source: "https://pomerium.com/docs/capabilities/bearer-token-access"
+    match: [serviceaccount-token, projected-token]
+  - id: user-impersonation
+    name: "User impersonation in the Console"
+    source: "https://pomerium.com/docs/capabilities/impersonation"
+    match: [impersonation, enterprise-console]
+  - id: service-accounts
+    name: "Service accounts"
+    source: "https://pomerium.com/docs/capabilities/service-accounts"
+    match: [service-accounts, service-account-jwt, authorization-header]
+  - id: k8s-api-impersonation
+    name: "Kubernetes API access by impersonation"
+    source: "https://pomerium.com/docs/capabilities/kubernetes-access"
+    match: [kubernetes-api, user-impersonation]
+  - id: k8s-api-jwt
+    name: "Kubernetes API access with Pomerium JWT"
+    source: "https://pomerium.com/docs/capabilities/kubernetes-access"
+    match: [authentication-config, kube-apiserver, structured-authentication]
+  - id: k8s-rbac-kubeconfig
+    name: "Kubernetes RBAC and kubeconfig"
+    source: "https://pomerium.com/docs/capabilities/kubernetes-access"
+    match: [rolebinding, kubeconfig, pomerium-cli]
+  - id: ssh-keys
+    name: "Native SSH CA and host keys"
+    source: "https://pomerium.com/docs/capabilities/native-ssh-access"
+    match: [ssh-user-ca, ssh-host-keys, ssh-keygen]
+  - id: ssh-configuration
+    name: "Native SSH configuration and routes"
+    source: "https://pomerium.com/docs/capabilities/native-ssh-access"
+    match: [ssh-address, ssh-routes, trusted-user-ca-keys]
+  - id: ssh-connecting
+    name: "Connecting through native SSH"
+    source: "https://pomerium.com/docs/capabilities/native-ssh-access"
+    match: [ssh-client, internal-cli, routes-portal]
+  - id: ssh-policy
+    name: "SSH policy criteria"
+    source: "https://pomerium.com/docs/capabilities/native-ssh-access"
+    match: [ssh-publickey, ssh-ca, ssh-username]
+  - id: ssh-jump-host
+    name: "SSH jump-host mode"
+    source: "https://pomerium.com/docs/capabilities/native-ssh-access"
+    match: [jump-host, proxyjump, direct-tcpip]
+  - id: ssh-client-bindings
+    name: "Client bindings"
+    source: "https://pomerium.com/docs/internals/client-binding"
+    match: [client-binding, revoke-binding]
+  - id: jwt-verification
+    name: "Upstream JWT verification"
+    source: "https://pomerium.com/docs/capabilities/getting-users-identity"
+    match: [jwt-assertion, jwks, x-pomerium-jwt-assertion]
+  - id: jwt-sidecar
+    name: "Envoy sidecar JWT verification"
+    source: "https://pomerium.com/docs/capabilities/getting-users-identity"
+    match: [envoy-sidecar, jwt-authn, sidecar]
+  - id: recording-setup
+    name: "Session recording setup"
+    source: "https://pomerium.com/docs/capabilities/session-recording"
+    match: [session-recording, envoy-dynamic-extensions, ssh-recording]
+  - id: recording-storage
+    name: "Session recording storage"
+    source: "https://pomerium.com/docs/capabilities/session-recording/storage"
+    match: [blob-storage, bucket-uri, azure-blob, object-layout]
+  - id: recording-operations
+    name: "Session recording limits and tuning"
+    source: "https://pomerium.com/docs/capabilities/session-recording"
+    match: [recording-limitations, session-recording-concurrency, pipe-max-size]
+  - id: recording-audit
+    name: "Session recording audit chain"
+    source: "https://pomerium.com/docs/capabilities/session-recording/auditing"
+    match: [chain-of-custody, worm-semantics, user-hmac-id]
+  - id: reverse-tunneling
+    name: "Reverse tunneling"
+    source: "https://pomerium.com/docs/capabilities/reverse-tunneling"
+    match: [reverse-tunnel, upstream-tunnel, ssh-policy-rego]
+  - id: reverse-tunnel-syntax
+    name: "Reverse tunnel -R syntax"
+    source: "https://pomerium.com/docs/capabilities/reverse-tunneling"
+    match: [dynamic-forwarding, static-forwarding, remote-port-zero]
+  - id: tcp-routes
+    name: "TCP routes"
+    source: "https://pomerium.com/docs/capabilities/non-http/tcp"
+    match: [tcp-routes, pomerium-cli-tcp, connect-method]
+  - id: tcp-advanced
+    name: "TCP bastion and proxy chaining"
+    source: "https://pomerium.com/docs/capabilities/non-http/tcp"
+    match: [bastion-host, proxy-chaining, tcp-https]
+  - id: mcp-protect-server
+    name: "Protecting an MCP server"
+    source: "https://pomerium.com/docs/capabilities/mcp/protect-mcp-server"
+    match: [mcp-server, mcp-route, mcp-inspector]
+  - id: mcp-tool-policies
+    name: "MCP tool policies"
+    source: "https://pomerium.com/docs/capabilities/mcp/limit-mcp-tools"
+    match: [mcp-tool, tool-allowlist, tools-call]
+  - id: mcp-upstream-oauth
+    name: "MCP upstream OAuth"
+    source: "https://pomerium.com/docs/capabilities/mcp/mcp-upstream-oauth"
+    match: [upstream-oauth2, rfc-9728, cimd, ssrf-allowlist]
+  - id: threat-model
+    name: "Security and threat model"
+    source: "https://pomerium.com/docs/internals/security"
+    match: [threat-model, vulnerability-disclosure, clean-upstream-lua]
+  - id: tls-baseline
+    name: "TLS versions and cipher suites"
+    source: "https://pomerium.com/docs/internals/security"
+    match: [tls-ciphers, downstream-tls, upstream-tls]
+  - id: mutual-authentication
+    name: "Mutual authentication methods"
+    source: "https://pomerium.com/docs/internals/mutual-auth"
+    match: [mutual-authentication, mtls, east-west]
+  - id: downstream-mtls
+    name: "Downstream mTLS"
+    source: "https://pomerium.com/docs/internals/certificates-and-tls"
+    match: [downstream-mtls, mkcert, pkcs12]
+  - id: upstream-mtls
+    name: "Upstream mTLS"
+    source: "https://pomerium.com/docs/internals/certificates-and-tls"
+    match: [upstream-mtls, tls-client-cert-file, tls-custom-ca-file]
+  - id: sessions
+    name: "Sessions and token refresh"
+    source: "https://pomerium.com/docs/internals/sessions"
+    match: [session-lifecycle, id-token-refresh, relying-party]
+  - id: cookie-settings
+    name: "Cookie settings"
+    source: "https://pomerium.com/docs/reference/cookies"
+    match: [cookie-secret, cookie-expire, cookie-same-site]
+  - id: databroker-storage
+    name: "Databroker storage backends"
+    source: "https://pomerium.com/docs/internals/data-storage"
+    match: [databroker, storage-backend, postgres]
+  - id: health-checks
+    name: "Health checks and probes"
+    source: "https://pomerium.com/docs/internals/health-checks"
+    match: [health-check, readyz, exclude-filter]
+  - id: special-routes
+    name: "Special routes and well-known endpoints"
+    source: "https://pomerium.com/docs/internals/special-routes"
+    match: [pomerium-endpoints, well-known-pomerium, jwks-json]
+  - id: programmatic-access
+    name: "Programmatic access login"
+    source: "https://pomerium.com/docs/internals/programmatic-access"
+    match: [programmatic-access, login-api, callback-handler]
+  - id: troubleshooting
+    name: "Troubleshooting"
+    source: "https://pomerium.com/docs/internals/troubleshooting"
+    match: [no-healthy-upstream, cors-troubleshooting, shared-secret]
+  - id: connections
+    name: "Connections, timeouts and draining"
+    source: "https://pomerium.com/docs/internals/connection"
+    match: [timeout-idle, connection-draining, listeners]
+  - id: routing
+    name: "Routing and load balancing"
+    source: "https://pomerium.com/docs/capabilities/routing"
+    match: [route-matching, lb-policy, outlier-detection]
+  - id: device-identity
+    name: "WebAuthn device identity"
+    source: "https://pomerium.com/docs/integrations/device-context/webauthn"
+    match: [webauthn, device-identity, device-enrollment]
+  - id: fleetdm
+    name: "FleetDM device posture"
+    source: "https://pomerium.com/docs/integrations/device-context/fleetdm"
+    match: [fleetdm, device-posture, failing-policies]
+  - id: ingress-controller
+    name: "Kubernetes Ingress Controller"
+    source: "https://pomerium.com/docs/deploy/k8s/ingress"
+    match: [ingress-controller, ingress-annotations, secure-upstream]
+  - id: self-remediation
+    name: "Self-remediation and custom error pages"
+    source: "https://pomerium.com/docs/capabilities/self-remediation"
+    match: [self-remediation, error-details, custom-denial-page]

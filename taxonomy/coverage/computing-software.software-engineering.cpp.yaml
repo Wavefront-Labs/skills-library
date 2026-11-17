@@ -1,0 +1,180 @@
+# Canonical coverage spec: C++ language, toolchain and build ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: cpp-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [cpp]
+sources:
+  - "C++ Core Guidelines (isocpp.github.io/CppCoreGuidelines)"
+  - "cppreference.com language and library sections"
+  - "CMake reference documentation (cmake.org/cmake/help/latest)"
+  - "GCC and Clang manuals: warning options, sanitizers, static analyzer"
+  - "SEI CERT C++ Coding Standard"
+topics:
+  - {id: cpp-interfaces, name: "Interface design", source: "Core Guidelines: I Interfaces", match: [cpp-interfaces], subtopics: [
+      {id: cpp-if-strong-types, name: "Strongly typed interfaces", match: [strongly-typed-interfaces]},
+      {id: cpp-if-params, name: "Passing parameters", match: [parameter-passing-conventions]},
+      {id: cpp-if-globals, name: "Avoiding globals and singletons", match: [avoid-globals-singletons]}]}
+  - {id: cpp-functions, name: "Function design", source: "Core Guidelines: F Functions", match: [cpp-functions], subtopics: [
+      {id: cpp-fn-returns, name: "Return values and out-parameters", match: [return-values-out-params]},
+      {id: cpp-fn-noexcept, name: "noexcept functions", match: [noexcept]},
+      {id: cpp-fn-overload, name: "Overloading and default arguments", match: [overloading-default-args]}]}
+  - {id: cpp-classes, name: "Class design", source: "Core Guidelines: C Classes", match: [cpp-classes], subtopics: [
+      {id: cpp-cl-zero, name: "Rule of zero", match: [rule-of-zero]},
+      {id: cpp-cl-virtual-dtor, name: "Virtual destructors", match: [virtual-destructors]},
+      {id: cpp-cl-special, name: "Special member functions", match: [special-member-functions]}]}
+  - {id: cpp-hierarchies, name: "Class hierarchies", source: "Core Guidelines: C.hier", match: [cpp-hierarchies], subtopics: [
+      {id: cpp-hi-override, name: "override and final", match: [override-final]},
+      {id: cpp-hi-crtp, name: "CRTP", match: [crtp-static-polymorphism]},
+      {id: cpp-hi-slicing, name: "Object slicing", match: [object-slicing]}]}
+  - {id: cpp-operators, name: "Operators and conversions", source: "cppreference: operator overloading", match: [cpp-operators], subtopics: [
+      {id: cpp-op-spaceship, name: "Three-way comparison", match: [three-way-comparison]},
+      {id: cpp-op-udl, name: "User-defined literals", match: [user-defined-literals]},
+      {id: cpp-op-conv, name: "Conversion operators", match: [conversion-operators-explicit]}]}
+  - {id: cpp-types, name: "Enumerations and type tools", source: "Core Guidelines: Enum", match: [cpp-types], subtopics: [
+      {id: cpp-ty-enumclass, name: "enum class", match: [enum-class-scoped]},
+      {id: cpp-ty-bitflags, name: "Bit flags", match: [bit-flags-bitset]},
+      {id: cpp-ty-casts, name: "Casts and std::byte", match: [casts-std-byte]}]}
+  - {id: cpp-resource, name: "Resource management", source: "Core Guidelines: R Resource management", match: [cpp-resource], subtopics: [
+      {id: cpp-rs-raii, name: "RAII", match: [raii]},
+      {id: cpp-rs-unique, name: "unique_ptr", match: [unique-ptr]},
+      {id: cpp-rs-weak, name: "weak_ptr and cycles", match: [weak-ptr]}]}
+  - {id: cpp-expressions, name: "Expressions and arithmetic", source: "Core Guidelines: ES Expressions; CERT INT", match: [cpp-expressions], subtopics: [
+      {id: cpp-ex-promotion, name: "Integer promotion and sign conversion", match: [integer-promotion-sign-conversion]},
+      {id: cpp-ex-order, name: "Evaluation order", match: [evaluation-order-sequencing]},
+      {id: cpp-ex-const, name: "const correctness", match: [const-correctness]}]}
+  - {id: cpp-performance, name: "Performance", source: "Core Guidelines: Per Performance", match: [cpp-performance], subtopics: [
+      {id: cpp-pf-bench, name: "Microbenchmarks", match: [google-benchmark]},
+      {id: cpp-pf-sso, name: "Small buffer optimisation", match: [small-string-optimization]},
+      {id: cpp-pf-layout, name: "Data layout and cache locality", match: [cache-locality-data-layout]}]}
+  - {id: cpp-concurrency, name: "Concurrency rules", source: "Core Guidelines: CP Concurrency", match: [cpp-concurrency], subtopics: [
+      {id: cpp-cc-locks, name: "Mutexes and scoped_lock", match: [scoped-lock-mutex]},
+      {id: cpp-cc-atomics, name: "Atomics and memory order", match: [atomics-memory-order]},
+      {id: cpp-cc-race, name: "Data races", match: [data-race]}]}
+  - {id: cpp-errors, name: "Error handling", source: "Core Guidelines: E Error handling", match: [cpp-errors], subtopics: [
+      {id: cpp-er-exceptions, name: "Exception safety", match: [exception-safety]},
+      {id: cpp-er-expected, name: "std::expected", match: [std-expected]},
+      {id: cpp-er-codes, name: "error_code and system_error", match: [error-code-system-error]}]}
+  - {id: cpp-constants, name: "Compile-time evaluation", source: "Core Guidelines: Con Constants", match: [cpp-constants], subtopics: [
+      {id: cpp-co-constexpr, name: "constexpr", match: [constexpr]},
+      {id: cpp-co-consteval, name: "consteval and constinit", match: [consteval]},
+      {id: cpp-co-static-assert, name: "static_assert", match: [static-assert]}]}
+  - {id: cpp-templates, name: "Templates and generic code", source: "Core Guidelines: T Templates", match: [cpp-templates], subtopics: [
+      {id: cpp-tp-concepts, name: "Concepts", match: [cpp-concepts]},
+      {id: cpp-tp-variadic, name: "Variadic templates and fold expressions", match: [variadic-fold-expressions]},
+      {id: cpp-tp-traits, name: "Type traits", match: [type-traits-metaprogramming]}]}
+  - {id: cpp-stl, name: "Standard library containers and algorithms", source: "cppreference: containers, algorithms", match: [cpp-stl], subtopics: [
+      {id: cpp-st-containers, name: "Choosing containers", match: [stl-containers]},
+      {id: cpp-st-algorithms, name: "Algorithms", match: [stl-algorithms]},
+      {id: cpp-st-tuple, name: "array, tuple and pair", match: [array-tuple-pair]}]}
+  - {id: cpp-text-io, name: "Text, I/O and time", source: "cppreference: strings, input/output, chrono, filesystem", match: [cpp-text-io], subtopics: [
+      {id: cpp-ti-format, name: "std::format", match: [std-format]},
+      {id: cpp-ti-iostreams, name: "iostreams and filesystem", match: [iostreams-filesystem]},
+      {id: cpp-ti-chrono, name: "chrono", match: [std-chrono]}]}
+  - {id: cpp-c-interop, name: "C interoperability", source: "Core Guidelines: CPL C-style programming", match: [cpp-c-interop], subtopics: [
+      {id: cpp-ci-malloc, name: "C memory management", match: [malloc]},
+      {id: cpp-ci-extern, name: "extern C boundaries", match: [extern-c-boundaries]},
+      {id: cpp-ci-deleters, name: "Wrapping C handles", match: [custom-deleters]}]}
+  - {id: cpp-source, name: "Source organisation", source: "Core Guidelines: SF Source files", match: [cpp-source], subtopics: [
+      {id: cpp-sf-headers, name: "Header guards and include order", match: [header-guards-include-order]},
+      {id: cpp-sf-odr, name: "ODR and inline variables", match: [odr-inline-variables]},
+      {id: cpp-sf-namespaces, name: "Namespaces", match: [namespaces-anonymous]}]}
+  - {id: cpp-functional, name: "Lambdas and callables", source: "cppreference: lambda, function objects", match: [cpp-functional], subtopics: [
+      {id: cpp-fu-lambda, name: "Lambdas", match: [cpp-lambdas]},
+      {id: cpp-fu-function, name: "std::function versus function_ref", match: [std-function-ref]},
+      {id: cpp-fu-invoke, name: "std::invoke and bind_front", match: [invoke-bind-front]}]}
+  - {id: cpp-move, name: "Value categories and moves", source: "cppreference: value categories, move semantics", match: [cpp-move], subtopics: [
+      {id: cpp-mv-move, name: "Move semantics", match: [move-semantics]},
+      {id: cpp-mv-elision, name: "Copy elision", match: [copy-elision]},
+      {id: cpp-mv-forward, name: "Perfect forwarding", match: [perfect-forwarding]}]}
+  - {id: cpp-memory-model, name: "Object model and lifetime", source: "cppreference: object, lifetime, alignment", match: [cpp-memory-model], subtopics: [
+      {id: cpp-mm-alias, name: "Strict aliasing", match: [strict-aliasing]},
+      {id: cpp-mm-align, name: "Alignment and padding", match: [alignment-padding]},
+      {id: cpp-mm-placement, name: "Placement new and launder", match: [placement-new-launder]}]}
+  - {id: cpp-allocation, name: "Dynamic allocation", source: "cppreference: memory management library", match: [cpp-allocation], subtopics: [
+      {id: cpp-al-pmr, name: "Polymorphic memory resources", match: [pmr]},
+      {id: cpp-al-newdelete, name: "Replacing operator new", match: [operator-new-replacement]},
+      {id: cpp-al-leaks, name: "Leak detection", match: [leak-detection]}]}
+  - {id: cpp-sanitizers, name: "Sanitizers", source: "Clang and GCC sanitizer docs", match: [cpp-sanitizers], subtopics: [
+      {id: cpp-sn-asan, name: "AddressSanitizer", match: [asan]},
+      {id: cpp-sn-tsan, name: "ThreadSanitizer", match: [threadsanitizer]},
+      {id: cpp-sn-ubsan, name: "UBSan check selection", match: [ubsan-checks]},
+      {id: cpp-sn-msan, name: "MemorySanitizer", match: [msan]}]}
+  - {id: cpp-warnings, name: "Compiler warnings", source: "GCC Warning Options; Clang diagnostics; MSVC warning levels", match: [cpp-warnings], subtopics: [
+      {id: cpp-wn-gcc, name: "GCC and Clang warning sets", match: [wall-wextra]},
+      {id: cpp-wn-msvc, name: "MSVC warning levels", match: [msvc-w4]},
+      {id: cpp-wn-suppress, name: "Suppressing warnings locally", match: [warning-suppression-pragmas]}]}
+  - {id: cpp-static-analysis, name: "Static analysis", source: "GCC -fanalyzer; clang-tidy checks list; Cppcheck manual", match: [cpp-static-analysis], subtopics: [
+      {id: cpp-sa-cppcheck, name: "cppcheck", match: [cppcheck]},
+      {id: cpp-sa-fanalyzer, name: "GCC -fanalyzer", match: [gcc-fanalyzer]},
+      {id: cpp-sa-tidy, name: "clang-tidy bugprone and cert checks", match: [clang-tidy-bugprone-cert]}]}
+  - {id: cpp-cert, name: "SEI CERT C++ rules", source: "SEI CERT C++ Coding Standard", match: [cpp-cert], subtopics: [
+      {id: cpp-ce-memory, name: "CERT memory rules", match: [cert-cpp-memory]},
+      {id: cpp-ce-strings, name: "CERT containers and strings rules", match: [cert-cpp-containers-strings]},
+      {id: cpp-ce-concurrency, name: "CERT concurrency and exceptions rules", match: [cert-cpp-exceptions-concurrency]}]}
+  - {id: cmake-language, name: "CMake language", source: "CMake docs: cmake-language(7), cmake-generator-expressions(7)", match: [cmake-language], subtopics: [
+      {id: cmake-lang-scope, name: "Variables and scope", match: [cmake-variables-scope]},
+      {id: cmake-lang-genex, name: "Generator expressions", match: [cmake-generator-expressions]},
+      {id: cmake-lang-functions, name: "Functions and macros", match: [cmake-functions-macros]}]}
+  - {id: cmake-targets, name: "CMake targets and packaging", source: "CMake docs: cmake-buildsystem(7), install, presets", match: [cmake-targets], subtopics: [
+      {id: cmake-tg-link, name: "Target usage requirements", match: [target-link-libraries]},
+      {id: cmake-tg-install, name: "Install and export", match: [cmake-install]},
+      {id: cmake-tg-presets, name: "Presets", match: [cmake-presets]}]}
+  - {id: cmake-testing, name: "CMake testing and dependencies", source: "CMake docs: ctest, cpack, FetchContent", match: [cmake-testing], subtopics: [
+      {id: cmake-ts-ctest, name: "CTest", match: [ctest]},
+      {id: cmake-ts-cpack, name: "CPack", match: [cpack-packaging]},
+      {id: cmake-ts-fetch, name: "FetchContent", match: [fetchcontent]}]}
+  - {id: cmake-compile, name: "CMake compile configuration", source: "CMake docs: cmake-compile-features, FindPackage", match: [cmake-compile], subtopics: [
+      {id: cmake-cp-pch, name: "Precompiled headers and unity builds", match: [precompiled-headers]},
+      {id: cmake-cp-findmod, name: "Find modules", match: [find-module-authoring]},
+      {id: cmake-cp-features, name: "Compile features and standards", match: [compile-features-standards]}]}
+  - {id: cpp-toolchains, name: "Toolchains", source: "GCC and Clang manuals; CMake toolchains", match: [cpp-toolchains], subtopics: [
+      {id: cpp-tc-cross, name: "Cross compiling", match: [toolchain-file]},
+      {id: cpp-tc-msvc, name: "MSVC toolchain", match: [permissive-minus]},
+      {id: cpp-tc-lto, name: "LTO and PGO", match: [lto-pgo]}]}
+  - {id: cpp-linking, name: "Linking", source: "GNU ld manual; GCC visibility docs", match: [cpp-linking], subtopics: [
+      {id: cpp-ln-shared, name: "Static versus shared libraries", match: [static-linking]},
+      {id: cpp-ln-visibility, name: "Symbol visibility", match: [symbol-visibility]},
+      {id: cpp-ln-undefined, name: "Diagnosing undefined references", match: [undefined-reference-debugging]}]}
+  - {id: cpp-debugging, name: "Debugging", source: "GDB and LLDB manuals", match: [cpp-debugging], subtopics: [
+      {id: cpp-db-gdb, name: "GDB core dumps", match: [gdb-core-dumps]},
+      {id: cpp-db-lldb, name: "LLDB", match: [lldb-debugging]},
+      {id: cpp-db-dwarf, name: "Split DWARF and debug info", match: [split-dwarf-debug-info]}]}
+  - {id: cpp-profiling, name: "Profiling", source: "perf, Valgrind and Compiler Explorer docs", match: [cpp-profiling], subtopics: [
+      {id: cpp-pr-perf, name: "perf and flame graphs", match: [perf-flamegraphs]},
+      {id: cpp-pr-valgrind, name: "Callgrind and Massif", match: [callgrind-massif]},
+      {id: cpp-pr-asm, name: "Reading compiler assembly", match: [compiler-explorer-assembly]}]}
+  - {id: cpp-test-quality, name: "Test quality", source: "gcov, GoogleTest, libFuzzer docs", match: [cpp-test-quality], subtopics: [
+      {id: cpp-tq-cov, name: "Coverage", match: [gcov]},
+      {id: cpp-tq-gtest, name: "GoogleTest", match: [googletest]},
+      {id: cpp-tq-fuzz, name: "Fuzzing", match: [libfuzzer]}]}
+  - {id: cpp-modern, name: "Modern language features", source: "cppreference: C++20 and C++23 features", match: [cpp-modern], subtopics: [
+      {id: cpp-mo-modules, name: "Modules", match: [cpp-modules]},
+      {id: cpp-mo-coro, name: "Coroutines", match: [cpp-coroutines]},
+      {id: cpp-mo-deducing, name: "Deducing this", match: [deducing-this]},
+      {id: cpp-mo-mdspan, name: "mdspan", match: [mdspan]}]}
+  - {id: cpp-threads, name: "Threading library", source: "cppreference: thread support library", match: [cpp-threads], subtopics: [
+      {id: cpp-th-jthread, name: "jthread and stop tokens", match: [jthread]},
+      {id: cpp-th-latch, name: "latch and barrier", match: [std-latch]},
+      {id: cpp-th-future, name: "async and futures", match: [std-future]}]}
+  - {id: cpp-style, name: "Style and naming", source: "Core Guidelines: NL Naming and layout", match: [cpp-style], subtopics: [
+      {id: cpp-sy-format, name: "clang-format", match: [clang-format]},
+      {id: cpp-sy-iwyu, name: "include-what-you-use", match: [include-what-you-use]},
+      {id: cpp-sy-naming, name: "Naming conventions", match: [naming-conventions]}]}
+  - {id: cpp-library-design, name: "Library design", source: "Core Guidelines: Class.ctor; ABI docs", match: [cpp-library-design], subtopics: [
+      {id: cpp-ld-pimpl, name: "Pimpl", match: [pimpl-idiom]},
+      {id: cpp-ld-abi, name: "ABI stability", match: [abi-versioning-inline-namespaces]},
+      {id: cpp-ld-header-only, name: "Header-only libraries", match: [header-only-libraries]}]}
+  - {id: cpp-containers-deep, name: "Container internals", source: "cppreference: container requirements", match: [cpp-containers-deep], subtopics: [
+      {id: cpp-cd-invalidation, name: "Iterator invalidation", match: [iterator-invalidation]},
+      {id: cpp-cd-flat, name: "Flat containers", match: [flat-map]},
+      {id: cpp-cd-reserve, name: "Capacity growth and reserve", match: [vector-capacity-reserve]}]}
+  - {id: cpp-numerics, name: "Numerics", source: "cppreference: numerics library", match: [cpp-numerics], subtopics: [
+      {id: cpp-nu-float, name: "Floating point pitfalls", match: [floating-point-pitfalls]},
+      {id: cpp-nu-random, name: "Random number generation", match: [random-number-engines]},
+      {id: cpp-nu-numeric, name: "Numeric algorithms", match: [numeric-algorithms-reduce]}]}
+  - {id: cpp-tooling, name: "Build tooling and CI", source: "clangd, ccache and CMake docs", match: [cpp-tooling], subtopics: [
+      {id: cpp-tl-cc, name: "compile_commands.json", match: [compile-commands-json]},
+      {id: cpp-tl-ccache, name: "ccache", match: [ccache]},
+      {id: cpp-tl-sanitizer-ci, name: "Sanitizer CI jobs", match: [sanitizer-ci-matrix]}]}

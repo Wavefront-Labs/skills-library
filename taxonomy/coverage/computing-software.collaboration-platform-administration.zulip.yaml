@@ -1,0 +1,311 @@
+# Coverage spec for Zulip server administration, from the Zulip production documentation.
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+# Topics follow the production docs table of contents on zulip.readthedocs.io.
+subject: zulip
+scope:
+  category: computing-software
+  field: collaboration-platform-administration
+  products: [zulip]
+sources:
+  - "Zulip production documentation (zulip.readthedocs.io/en/latest/production) - requirements, install, deployment, postgresql, reverse proxies, email, email gateway, ssl certificates, securing, system configuration, settings, upload backends, upgrade, export and import, management commands, troubleshooting, multiple organizations, video calls, mobile push notifications, authentication methods, scim"
+topics:
+  - id: hardware-requirements-and-scaling
+    name: "hardware requirements and scaling"
+    source: https://zulip.readthedocs.io/en/latest/production/requirements.html
+    match: [zulip-sizing, hardware-requirements, scalability]
+  - id: network-ports-and-firewall
+    name: "network ports and firewall"
+    source: https://zulip.readthedocs.io/en/latest/production/requirements.html
+    match: [zulip-firewall, network-requirements, port-4369]
+  - id: install-zulip-server
+    name: "install zulip server"
+    source: https://zulip.readthedocs.io/en/latest/production/install.html
+    match: [zulip-install, installer, certbot]
+  - id: installer-advanced-options
+    name: "installer advanced options"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [installer-options, postgresql-version, no-init-db]
+  - id: install-from-git
+    name: "install from git"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [install-from-git, zulip-main, git-deployment]
+  - id: zulip-notify-deploy-hook
+    name: "zulip notify deploy hook"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [deploy-hooks, zulip-notify, upgrade-notification]
+  - id: sentry-deploy-hook
+    name: "sentry deploy hook"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [sentry-release, deploy-hooks, error-tracking]
+  - id: split-services-across-hosts
+    name: "split services across hosts"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [standalone-services, puppet-profiles, multi-host-deployment]
+  - id: alternate-https-port
+    name: "alternate https port"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [alternate-port, nginx-listen-port, external-host]
+  - id: outgoing-http-proxy-smokescreen
+    name: "outgoing http proxy smokescreen"
+    source: https://zulip.readthedocs.io/en/latest/production/deployment.html
+    match: [smokescreen, http-proxy, ssrf]
+  - id: install-on-existing-server
+    name: "install on existing server"
+    source: https://zulip.readthedocs.io/en/latest/production/install-existing-server.html
+    match: [existing-server, nginx-merge, shared-host]
+  - id: remote-postgresql-server
+    name: "remote postgresql server"
+    source: https://zulip.readthedocs.io/en/latest/production/postgresql.html
+    match: [remote-postgresql, standalone-nodb, pg-hba]
+  - id: managed-postgresql-rds
+    name: "managed postgresql rds"
+    source: https://zulip.readthedocs.io/en/latest/production/postgresql.html
+    match: [amazon-rds, managed-database, remote-postgres-host]
+  - id: postgresql-warm-standby
+    name: "postgresql warm standby"
+    source: https://zulip.readthedocs.io/en/latest/production/postgresql.html
+    match: [warm-standby, wal-g, pg-ctl-promote]
+  - id: reverse-proxy-http-and-trusted-ips
+    name: "reverse proxy http and trusted ips"
+    source: https://zulip.readthedocs.io/en/latest/production/reverse-proxies.html
+    match: [reverse-proxy, http-only, loadbalancer-ips]
+  - id: nginx-reverse-proxy
+    name: "nginx reverse proxy"
+    source: https://zulip.readthedocs.io/en/latest/production/reverse-proxies.html
+    match: [nginx-proxy, proxy-read-timeout, proxy-buffering]
+  - id: apache-reverse-proxy
+    name: "apache reverse proxy"
+    source: https://zulip.readthedocs.io/en/latest/production/reverse-proxies.html
+    match: [apache2, proxypass, a2enmod]
+  - id: haproxy-reverse-proxy
+    name: "haproxy reverse proxy"
+    source: https://zulip.readthedocs.io/en/latest/production/reverse-proxies.html
+    match: [haproxy, tls-termination, forwarded-proto]
+  - id: reverse-proxy-requirements-generic
+    name: "reverse proxy requirements generic"
+    source: https://zulip.readthedocs.io/en/latest/production/reverse-proxies.html
+    match: [other-proxies, x-forwarded-proto, long-polling]
+  - id: outgoing-email-smtp-setup
+    name: "outgoing email smtp setup"
+    source: https://zulip.readthedocs.io/en/latest/production/email.html
+    match: [outgoing-email, smtp-settings, email-password]
+  - id: outgoing-email-providers
+    name: "outgoing email providers"
+    source: https://zulip.readthedocs.io/en/latest/production/email.html
+    match: [email-providers, email-use-tls, email-backend]
+  - id: outgoing-email-troubleshooting
+    name: "outgoing email troubleshooting"
+    source: https://zulip.readthedocs.io/en/latest/production/email.html
+    match: [send-test-email, email-troubleshooting, send-email-log]
+  - id: incoming-email-gateway-local
+    name: "incoming email gateway local"
+    source: https://zulip.readthedocs.io/en/latest/production/email-gateway.html
+    match: [email-gateway, local-mailserver, mx-record]
+  - id: incoming-email-gateway-polling
+    name: "incoming email gateway polling"
+    source: https://zulip.readthedocs.io/en/latest/production/email-gateway.html
+    match: [imap-polling, email-mirror, email-gateway-login]
+  - id: ssl-certificate-manual-install
+    name: "ssl certificate manual install"
+    source: https://zulip.readthedocs.io/en/latest/production/ssl-certificates.html
+    match: [ssl-certificates, certificate-chain, zulip-combined-chain]
+  - id: certbot-lets-encrypt-automation
+    name: "certbot lets encrypt automation"
+    source: https://zulip.readthedocs.io/en/latest/production/ssl-certificates.html
+    match: [certbot, lets-encrypt, setup-certbot]
+  - id: self-signed-certificate
+    name: "self signed certificate"
+    source: https://zulip.readthedocs.io/en/latest/production/ssl-certificates.html
+    match: [self-signed-cert, generate-self-signed-cert, nginx-reload]
+  - id: ssl-client-connection-troubleshooting
+    name: "ssl client connection troubleshooting"
+    source: https://zulip.readthedocs.io/en/latest/production/ssl-certificates.html
+    match: [tls-troubleshooting, android-tls, ios-tls-version]
+  - id: securing-your-zulip-server
+    name: "securing your zulip server"
+    source: https://zulip.readthedocs.io/en/latest/production/securing-your-zulip-server.html
+    match: [server-security, hardening, shell-access]
+  - id: rate-limiting-configuration
+    name: "rate limiting configuration"
+    source: https://zulip.readthedocs.io/en/latest/production/securing-your-zulip-server.html
+    match: [rate-limiting, rate-limiting-rules, reset-authentication-attempt-count]
+  - id: zulip-conf-system-configuration
+    name: "zulip conf system configuration"
+    source: https://zulip.readthedocs.io/en/latest/production/system-configuration.html
+    match: [zulip-conf, system-configuration, puppet-apply]
+  - id: zulip-conf-application-server-tuning
+    name: "zulip conf application server tuning"
+    source: https://zulip.readthedocs.io/en/latest/production/system-configuration.html
+    match: [application-server, uwsgi-processes, nginx-server-name]
+  - id: zulip-conf-postgresql-and-memcached
+    name: "zulip conf postgresql and memcached"
+    source: https://zulip.readthedocs.io/en/latest/production/system-configuration.html
+    match: [postgresql-backups, wal-g-backups, memcached-memory]
+  - id: tornado-sharding-configuration
+    name: "tornado sharding configuration"
+    source: https://zulip.readthedocs.io/en/latest/production/system-configuration.html
+    match: [tornado-sharding, refresh-sharding, realm-hosts]
+  - id: zulip-conf-network-proxy-gateway
+    name: "zulip conf network proxy gateway"
+    source: https://zulip.readthedocs.io/en/latest/production/system-configuration.html
+    match: [loadbalancer, http-proxy-settings, rejects-http-requests]
+  - id: zulip-settings-py-server-configuration
+    name: "zulip settings py server configuration"
+    source: https://zulip.readthedocs.io/en/latest/production/settings.html
+    match: [settings-py, server-configuration, restart-server]
+  - id: terms-of-service-and-privacy-policy
+    name: "terms of service and privacy policy"
+    source: https://zulip.readthedocs.io/en/latest/production/settings.html
+    match: [policies-directory, terms-of-service, privacy-policy]
+  - id: s3-upload-backend-setup
+    name: "s3 upload backend setup"
+    source: https://zulip.readthedocs.io/en/latest/production/upload-backends.html
+    match: [s3-uploads, upload-backend, s3-auth-uploads-bucket]
+  - id: s3-bucket-policies-and-export-bucket
+    name: "s3 bucket policies and export bucket"
+    source: https://zulip.readthedocs.io/en/latest/production/upload-backends.html
+    match: [s3-bucket-policy, s3-export-bucket, iam-user]
+  - id: s3-cache-and-storage-class
+    name: "s3 cache and storage class"
+    source: https://zulip.readthedocs.io/en/latest/production/upload-backends.html
+    match: [s3-cache, s3-storage-class, intelligent-tiering]
+  - id: migrate-local-uploads-to-s3
+    name: "migrate local uploads to s3"
+    source: https://zulip.readthedocs.io/en/latest/production/upload-backends.html
+    match: [transfer-uploads-to-s3, uploads-migration, local-uploads-dir]
+  - id: upgrade-zulip-release
+    name: "upgrade zulip release"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [zulip-upgrade, upgrade-zulip, release-tarball]
+  - id: upgrade-zulip-from-git
+    name: "upgrade zulip from git"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [upgrade-from-git, upgrade-zulip-from-git, git-repo-url]
+  - id: compare-settings-after-upgrade
+    name: "compare settings after upgrade"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [compare-settings, prod-settings-template, settings-py-merge]
+  - id: upgrade-troubleshooting-and-rollback
+    name: "upgrade troubleshooting and rollback"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [upgrade-rollback, upgrade-log, deployments-last]
+  - id: upgrade-deploy-hooks
+    name: "upgrade deploy hooks"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [pre-deploy-hooks, post-deploy-hooks, hook-files]
+  - id: preserve-local-service-config-changes
+    name: "preserve local service config changes"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [puppet-overwrite, nginx-include, zulip-include]
+  - id: upgrade-postgresql-version
+    name: "upgrade postgresql version"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [upgrade-postgresql, postgresql-major-version, manage-backup]
+  - id: upgrade-operating-system-ubuntu
+    name: "upgrade operating system ubuntu"
+    source: https://zulip.readthedocs.io/en/latest/production/upgrade.html
+    match: [os-upgrade, do-release-upgrade, upgrade-zulip-stage-2]
+  - id: backup-vs-export-strategy
+    name: "backup vs export strategy"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [backup-strategy, export-and-import, disaster-recovery]
+  - id: zulip-backup-tool
+    name: "zulip backup tool"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [manage-py-backup, backup-contents, skip-db]
+  - id: zulip-restore-backup
+    name: "zulip restore backup"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [restore-backup, keep-settings, backup-restore]
+  - id: manual-backup-and-restore
+    name: "manual backup and restore"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [manual-backup, no-init-db, configure-rabbitmq]
+  - id: logical-data-export
+    name: "logical data export"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [data-export, manage-py-export, deactivate-flag]
+  - id: import-into-new-zulip-server
+    name: "import into new zulip server"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [manage-py-import, data-import, delete-realm]
+  - id: compliance-export-search
+    name: "compliance export search"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [compliance-export, export-search, message-export]
+  - id: wal-g-streaming-database-backups
+    name: "wal g streaming database backups"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [wal-g-backups, point-in-time-recovery, s3-backups-bucket]
+  - id: wal-g-restore-database
+    name: "wal g restore database"
+    source: https://zulip.readthedocs.io/en/latest/production/export-and-import.html
+    match: [wal-g-restore, backup-fetch, recovery-signal]
+  - id: management-commands-usage
+    name: "management commands usage"
+    source: https://zulip.readthedocs.io/en/latest/production/management-commands.html
+    match: [management-commands, manage-py-shell, list-realms]
+  - id: logs-and-supervisorctl
+    name: "logs and supervisorctl"
+    source: https://zulip.readthedocs.io/en/latest/production/troubleshooting.html
+    match: [zulip-logs, supervisorctl, restart-server]
+  - id: troubleshooting-core-services
+    name: "troubleshooting core services"
+    source: https://zulip.readthedocs.io/en/latest/production/troubleshooting.html
+    match: [nginx-failure, allowed-hosts, rabbitmq-restart]
+  - id: restrict-unattended-upgrades
+    name: "restrict unattended upgrades"
+    source: https://zulip.readthedocs.io/en/latest/production/troubleshooting.html
+    match: [unattended-upgrades, package-blacklist, apt-upgrades]
+  - id: monitoring-zulip-nagios
+    name: "monitoring zulip nagios"
+    source: https://zulip.readthedocs.io/en/latest/production/troubleshooting.html
+    match: [monitoring, nagios-plugins, check-send-receive-time]
+  - id: installer-troubleshooting
+    name: "installer troubleshooting"
+    source: https://zulip.readthedocs.io/en/latest/production/troubleshooting.html
+    match: [install-troubleshooting, install-log, su-zulip]
+  - id: multiple-organizations-subdomains
+    name: "multiple organizations subdomains"
+    source: https://zulip.readthedocs.io/en/latest/production/multiple-organizations.html
+    match: [multiple-organizations, realm-subdomains, open-realm-creation]
+  - id: realm-hosts-root-domain-and-social-auth
+    name: "realm hosts root domain and social auth"
+    source: https://zulip.readthedocs.io/en/latest/production/multiple-organizations.html
+    match: [realm-hosts, social-auth-subdomain, root-domain]
+  - id: zoom-video-call-integration
+    name: "zoom video call integration"
+    source: https://zulip.readthedocs.io/en/latest/production/video-calls.html
+    match: [zoom-integration, video-calls, video-zoom-client-id]
+  - id: bigbluebutton-video-call-integration
+    name: "bigbluebutton video call integration"
+    source: https://zulip.readthedocs.io/en/latest/production/video-calls.html
+    match: [bigbluebutton, big-blue-button-url, bbb-conf-secret]
+  - id: webex-and-google-meet-integrations
+    name: "webex and google meet integrations"
+    source: https://zulip.readthedocs.io/en/latest/production/video-calls.html
+    match: [webex-integration, google-meet-integration, oauth-redirect-uri]
+  - id: register-mobile-push-notification-service
+    name: "register mobile push notification service"
+    source: https://zulip.readthedocs.io/en/latest/production/mobile-push-notifications.html
+    match: [mobile-push, push-notification-service, register-server]
+  - id: mobile-push-plan-management
+    name: "mobile push plan management"
+    source: https://zulip.readthedocs.io/en/latest/production/mobile-push-notifications.html
+    match: [push-plan, billing-admin, zulip-org-key]
+  - id: push-notification-privacy-and-e2ee
+    name: "push notification privacy and e2ee"
+    source: https://zulip.readthedocs.io/en/latest/production/mobile-push-notifications.html
+    match: [push-e2ee, push-privacy, legacy-push-protocol]
+  - id: ldap-user-data-sync
+    name: "ldap user data sync"
+    source: https://zulip.readthedocs.io/en/latest/production/authentication-methods.html
+    match: [ldap-sync, ldap-attr-map, sync-ldap-user-data]
+  - id: saml-authentication
+    name: "saml authentication"
+    source: https://zulip.readthedocs.io/en/latest/production/authentication-methods.html
+    match: [saml, saml-idp, social-auth-saml]
+  - id: scim-provisioning
+    name: "scim provisioning"
+    source: https://zulip.readthedocs.io/en/latest/production/scim.html
+    match: [scim, scim-config, bearer-token]

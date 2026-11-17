@@ -1,0 +1,130 @@
+# Canonical coverage spec: Kotlin language (JVM, coroutines, multiplatform).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: kotlin-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [kotlin]
+sources:
+  - "Kotlin documentation (kotlinlang.org/docs) - Basics, Concepts, Standard library, Coroutines guide, Multiplatform, Java interop, Gradle"
+  - "Kotlin language specification (kotlinlang.org/spec)"
+  - "Kotlin Coding Conventions and Android Kotlin style guide"
+  - "kotlinx.coroutines and kotlinx.serialization API references (kotlinlang.org/api)"
+topics:
+  - id: kt-null-safety
+    name: "Null safety"
+    source: "Kotlin docs - Null safety, Type checks and casts"
+    match: [kt-null-safety]
+    subtopics:
+      - {id: kt-null-safety-safe-call, name: "Safe calls, elvis and not-null assertion", match: [safe-call]}
+      - {id: kt-null-safety-smart-cast, name: "Smart casts and their limits", match: [smart-cast]}
+      - {id: kt-null-safety-platform-types, name: "Platform types and Java nullability", match: [platform-types]}
+      - {id: kt-null-safety-lateinit-lazy, name: "lateinit and lazy initialisation", match: [lateinit-lazy]}
+  - id: kt-functions
+    name: "Functions, lambdas and extensions"
+    source: "Kotlin docs - Functions, Lambdas, Extensions, Inline functions"
+    match: [kt-functions]
+    subtopics:
+      - {id: kt-functions-tailrec, name: "Tail recursive functions", match: [tailrec]}
+      - {id: kt-functions-named-arguments, name: "Default and named arguments", match: [named-arguments]}
+      - {id: kt-functions-extension-functions, name: "Extension functions and properties", match: [extension-functions]}
+      - {id: kt-functions-inline-reified, name: "Inline, noinline, crossinline and reified", match: [inline-reified]}
+      - {id: kt-functions-scope-functions, name: "Scope functions let run with apply also", match: [scope-functions]}
+      - {id: kt-functions-operator-overloading, name: "Operator overloading and infix functions", match: [operator-overloading]}
+  - id: kt-classes
+    name: "Classes, data modelling and delegation"
+    source: "Kotlin docs - Classes and objects, Properties, Sealed classes, Delegation"
+    match: [kt-classes]
+    subtopics:
+      - {id: kt-classes-enum-classes, name: "Enum classes", match: [enum-classes]}
+      - {id: kt-classes-destructuring, name: "Destructuring declarations", match: [destructuring]}
+      - {id: kt-classes-data-class, name: "Data classes and copy semantics", match: [data-class]}
+      - {id: kt-classes-sealed-class, name: "Sealed classes and exhaustive when", match: [sealed-class]}
+      - {id: kt-classes-companion-object, name: "Object declarations and companion objects", match: [companion-object]}
+      - {id: kt-classes-value-class, name: "Value classes", match: [value-class]}
+      - {id: kt-classes-delegation, name: "Delegation and delegated properties", match: [delegation]}
+  - id: kt-generics
+    name: "Generics and type system"
+    source: "Kotlin docs - Generics, Type aliases; Kotlin spec - Types"
+    match: [kt-generics]
+    subtopics:
+      - {id: kt-generics-variance, name: "Declaration-site variance in and out", match: [variance]}
+      - {id: kt-generics-generic-constraints, name: "Upper bounds and where clauses", match: [generic-constraints]}
+      - {id: kt-generics-typealias, name: "Type aliases and typealias limits", match: [typealias]}
+  - id: kt-collections
+    name: "Collections and sequences"
+    source: "Kotlin docs - Collections overview, Sequences, Collection operations"
+    match: [kt-collections]
+    subtopics:
+      - {id: kt-collections-readonly-collections, name: "Read-only vs mutable collections", match: [readonly-collections]}
+      - {id: kt-collections-sequences, name: "Sequences and lazy evaluation", match: [sequences]}
+      - {id: kt-collections-collection-operations, name: "Grouping, associating and aggregating", match: [collection-operations]}
+      - {id: kt-collections-ranges-arrays, name: "Ranges, progressions and arrays", match: [ranges-arrays]}
+  - id: kt-coroutines
+    name: "Coroutines and Flow"
+    source: "Kotlin coroutines guide (kotlinlang.org/docs/coroutines-guide.html), kotlinx.coroutines API"
+    match: [kt-coroutines]
+    subtopics:
+      - {id: kt-coroutines-context-job, name: "CoroutineContext and Job", match: [coroutine-context-job]}
+      - {id: kt-coroutines-coroutine-builders, name: "Suspend functions and coroutine builders", match: [coroutine-builders]}
+      - {id: kt-coroutines-structured-concurrency, name: "Structured concurrency and CoroutineScope", match: [structured-concurrency]}
+      - {id: kt-coroutines-cancellation, name: "Cancellation and timeouts", match: [cancellation]}
+      - {id: kt-coroutines-dispatchers, name: "Dispatchers and withContext", match: [dispatchers]}
+      - {id: kt-coroutines-coroutine-exceptions, name: "Exception handling in coroutines", match: [coroutine-exceptions]}
+      - {id: kt-coroutines-flow, name: "Flow cold streams and operators", match: [flow]}
+      - {id: kt-coroutines-stateflow-sharedflow, name: "StateFlow SharedFlow and Channels", match: [stateflow-sharedflow]}
+  - id: kt-errors
+    name: "Error handling"
+    source: "Kotlin docs - Exceptions, Result, Standard library functions"
+    match: [kt-errors]
+    subtopics:
+      - {id: kt-errors-preconditions, name: "Exceptions and preconditions", match: [preconditions]}
+      - {id: kt-errors-result-runcatching, name: "Result and runCatching", match: [result-runcatching]}
+      - {id: kt-errors-use-resources, name: "Resource management with use", match: [use-resources]}
+  - id: kt-java-interop
+    name: "Java and Kotlin interoperability"
+    source: "Kotlin docs - Calling Java from Kotlin, Calling Kotlin from Java"
+    match: [kt-java-interop]
+    subtopics:
+      - {id: kt-java-interop-jvm-annotations, name: "Calling Kotlin from Java annotations", match: [jvm-annotations]}
+      - {id: kt-java-interop-sam-conversion, name: "SAM conversions and functional interfaces", match: [sam-conversion]}
+      - {id: kt-java-interop-java-property-access, name: "Java getters setters and property syntax", match: [java-property-access]}
+  - id: kt-strings
+    name: "Strings and text"
+    source: "Kotlin docs - Strings, Regex, Standard library string functions"
+    match: [kt-strings]
+    subtopics:
+      - {id: kt-strings-string-templates, name: "String templates raw strings and buildString", match: [string-templates]}
+      - {id: kt-strings-regex, name: "Regex and string parsing", match: [regex]}
+  - id: kt-tooling
+    name: "Build and tooling"
+    source: "Kotlin docs - Gradle configuration, Compiler options, Coding conventions; Gradle Kotlin DSL primer"
+    match: [kt-tooling]
+    subtopics:
+      - {id: kt-tooling-version-catalogs, name: "Gradle version catalogs", match: [version-catalogs]}
+      - {id: kt-tooling-gradle-kotlin-plugin, name: "Gradle Kotlin plugin and toolchains", match: [gradle-kotlin-plugin]}
+      - {id: kt-tooling-ktlint-detekt, name: "Linting with ktlint and detekt", match: [ktlint-detekt]}
+      - {id: kt-tooling-coding-conventions, name: "Kotlin coding conventions", match: [coding-conventions]}
+      - {id: kt-tooling-kotlin-version-migration, name: "K2 compiler and language version migration", match: [kotlin-version-migration]}
+  - id: kt-testing
+    name: "Testing"
+    source: "Kotlin docs - Test code using JUnit in JVM, kotlinx-coroutines-test; MockK docs"
+    match: [kt-testing]
+    subtopics:
+      - {id: kt-testing-kotlin-test, name: "kotlin.test and JUnit 5", match: [kotlin-test]}
+      - {id: kt-testing-mockk, name: "MockK mocking", match: [mockk]}
+      - {id: kt-testing-coroutine-testing, name: "Testing coroutines with runTest", match: [coroutine-testing]}
+  - id: kt-multiplatform
+    name: "Kotlin Multiplatform and serialization"
+    source: "Kotlin docs - Kotlin Multiplatform, kotlinx.serialization guide"
+    match: [kt-multiplatform]
+    subtopics:
+      - {id: kt-multiplatform-source-sets, name: "Source sets and targets", match: [kmp-source-sets]}
+      - {id: kt-multiplatform-expect-actual, name: "expect and actual declarations", match: [expect-actual]}
+      - {id: kt-multiplatform-kotlinx-serialization, name: "kotlinx.serialization JSON", match: [kotlinx-serialization]}
+  - id: kt-dsl
+    name: "Type-safe builders"
+    source: "Kotlin docs - Type-safe builders, Lambdas with receiver"
+    match: [kt-dsl]
+    subtopics:
+      - {id: kt-dsl-dsl-builders, name: "Lambdas with receiver and DSL markers", match: [dsl-builders]}

@@ -1,0 +1,1028 @@
+# Canonical coverage spec: Digital privacy & personal security hygiene (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (EFF Surveillance Self-Defense, CISA Secure
+# Our World, NIST SP 800-63B-4, the Privacy Guides knowledge base and recommendation categories,
+# OS vendor security/privacy guides, password-manager and Signal support docs, FTC scam guidance),
+# not from what the library already has.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (SSD guide
+# Depth round 2 added subtopics from the next level of each source (SSD guide sub-headings, Privacy Guides
+# sub-pages, 800-63B sub-sections, CISA guidance, vendor settings articles per OS, password-manager and Signal docs).
+# headings, 800-63B section numbers, Privacy Guides page sections, vendor support-article lists).
+subject: digital-privacy-hygiene
+scope:
+  category: computing-software
+  field: digital-privacy-hygiene
+  products: [password-managers, two-factor-auth, vpn-tools, password-hygiene, device-hardening, privacy-configuration, phishing-awareness]
+sources:
+  - "EFF Surveillance Self-Defense (ssd.eff.org) - Basics (Your Security Plan, Seven Steps, Creating Strong Passwords, Communicating With Others, Keeping Your Data Safe, Why Metadata Matters, Choosing Your Tools), Tool Guides (Avoid Phishing, Delete Data Securely, Detect Bluetooth Trackers, Lockdown Mode, Enable 2FA, Encrypt iPhone, Encrypt Windows/Mac/Linux, Android and iPhone privacy settings, Manage Your Digital Footprint, Circumvent Censorship, Use Signal, Use Tor, Use WhatsApp), Further Learning (Attending a Protest, Choosing a Password Manager, Choosing a VPN, Signal Groups, Malware, Key Verification, Privacy Breakdown of Mobile Phones, AI Tools, Social Networks, Fingerprinting); subtopics from each guide's section headings"
+  - "CISA Secure Our World (cisa.gov/secure-our-world) - use strong passwords and a password manager, turn on MFA, recognize and report phishing, update software; plus CISA personal guidance on phishing-resistant MFA, mobile communications best practice and home network security"
+  - "NIST SP 800-63B-4 Digital Identity Guidelines - Authentication and Authenticator Management - 3.1.1 passwords, 3.1.2 look-up secrets, 3.1.3 out-of-band and PSTN restrictions, 3.1.4-3.1.5 OTP, 3.1.6-3.1.7 cryptographic authenticators and syncable authenticators, 3.2.2 rate limiting, 3.2.3 biometrics, 3.2.5 phishing resistance, 4.1 binding, 4.2 recovery (saved and issued recovery codes), 5 session management, Appendix A strength of passwords, Appendix B syncable authenticators"
+  - "Privacy Guides (privacyguides.org) - Knowledge Base (Threat Modeling, Common Threats, Account Creation, Account Deletion, Passwords, Multifactor Authentication, Email Security, VPN Overview, DNS Overview, Tor Overview, Private Payments, Android/iOS/Linux/macOS/Windows overviews) and Recommendations (desktop and mobile browsers, browser extensions, DNS resolvers, DNS filtering, email aliasing, email services, cloud storage, data removal services, encryption software, metadata redaction, password managers, MFA tools, real-time communication, security keys, mobile phones, router firmware)"
+  - "Vendor docs - Apple Platform Security guide and Apple Personal Safety User Guide (Lockdown Mode, Stolen Device Protection, Safety Check, Advanced Data Protection, Security Keys for Apple Account, Contact Key Verification); Android Help and Google Account Help (Private DNS, Theft Protection, Private Space, Advanced Protection, Privacy Checkup, Results about you); Microsoft Support (Windows Security, BitLocker, Windows Hello, Smart App Control, Memory Integrity, Controlled Folder Access, diagnostic data, Recall)"
+  - "Password manager and messenger docs - Bitwarden Help Center (vault, generator, Send, emergency access, organisations, CLI, passkeys, export), 1Password Support (Secret Key, Emergency Kit, Watchtower, item sharing, CLI, SSH agent), KeePassXC User Guide (databases, key files, YubiKey challenge-response, browser integration, auto-type, merge); Signal Support Center (registration lock, safety numbers, disappearing messages, usernames, linked devices, groups, backups and transfer)"
+  - "FTC Consumer Advice scam topics and reportfraud.ftc.gov, FBI IC3, APWG reporting, identitytheft.gov recovery steps"
+topics:
+  # ===================== password-managers (Bitwarden/1Password/KeePassXC docs, SSD Choosing a Password Manager)
+  - id: pm-selection
+    name: Choosing a password manager
+    source: SSD Choosing a Password Manager; Privacy Guides Password Managers criteria
+    match: [password-manager-selection, choosing-a-password-manager]
+    subtopics:
+      - {id: pm-sel-audits, name: Evaluating security audits and open-source status, match: [pm-security-audit]}
+      - {id: pm-sel-cloud-local, name: Cloud-synced vs local-file vault trade-off, match: [cloud-vs-local-vault]}
+      - {id: pm-sel-browser-builtin, name: Browser built-in password managers and when they suffice, match: [browser-builtin-password-manager]}
+      - {id: pm-sel-breach-lessons, name: Learning from vault provider breaches (encrypted vault theft), match: [vault-breach-lessons]}
+      - {id: pm-sel-portability, name: Export formats and lock-in check before committing, match: [vault-portability]}
+      - {id: pm-sel-zero-knowledge, name: Verifying zero-knowledge encryption claims and unencrypted metadata, match: [zero-knowledge-encryption]}
+      - {id: pm-sel-platform, name: Platform and browser support coverage check, match: [password-manager-platform-support]}
+      - {id: pm-sel-pricing, name: Free tier limits and family plan cost comparison, match: [password-manager-pricing]}
+      - {id: pm-sel-trial, name: Running a two-week trial with a test vault, match: [password-manager-trial]}
+  - id: pm-master-credential
+    name: Master password and vault account security
+    source: Bitwarden Help master password and two-step login; 1Password Secret Key and Emergency Kit
+    match: [master-password, vault-account-security]
+    subtopics:
+      - {id: pm-mc-memorize, name: Memorising a new master passphrase with spaced recall, match: [master-password-memorization]}
+      - {id: pm-mc-secret-key, name: 1Password Secret Key and Emergency Kit handling, match: [secret-key]}
+      - {id: pm-mc-vault-2fa, name: Two-step login on the vault account itself, match: [vault-account-2fa]}
+      - {id: pm-mc-biometric-unlock, name: Biometric and PIN unlock with vault timeout settings, match: [vault-timeout, biometric-unlock]}
+      - {id: pm-mc-kdf, name: KDF iterations and Argon2id settings, match: [kdf]}
+      - {id: pm-mc-change, name: Rotating the master password and encryption key, match: [master-password-change]}
+      - {id: pm-mc-hint, name: Master password hints and why to leave them empty, match: [master-password-hint]}
+      - {id: pm-mc-forgotten, name: Forgotten master password options and account reset, match: [forgotten-master-password]}
+      - {id: pm-mc-new-device, name: New-device login verification and approval, match: [new-device-verification]}
+  - id: pm-autofill
+    name: Autofill and browser extension use
+    source: Bitwarden Help auto-fill logins and URI match detection; KeePassXC User Guide browser integration and auto-type
+    match: [autofill, password-autofill]
+    subtopics:
+      - {id: pm-af-uri-match, name: URI match detection as a phishing check, match: [uri-match-detection]}
+      - {id: pm-af-pageload, name: Autofill-on-page-load and clickjacking risk, match: [autofill-on-page-load, autofill-clickjacking]}
+      - {id: pm-af-mobile, name: Mobile autofill service setup on iOS and Android, match: [mobile-autofill-service]}
+      - {id: pm-af-autotype, name: KeePassXC auto-type and browser integration, match: [keepassxc-auto-type, keepassxc-browser]}
+      - {id: pm-af-disable-browser, name: Disabling the browser's own password saving, match: [disable-browser-password-saving]}
+      - {id: pm-af-shortcuts, name: Keyboard shortcuts and manual fill, match: [autofill-keyboard-shortcut]}
+      - {id: pm-af-iframe, name: Autofill inside iframes and cross-origin forms, match: [iframe-autofill]}
+      - {id: pm-af-equivalent-domains, name: Equivalent domains and global match rules, match: [equivalent-domains]}
+      - {id: pm-af-troubleshoot, name: Troubleshooting autofill that does not trigger, match: [autofill-troubleshooting]}
+  - id: pm-generator-items
+    name: Generator and vault item types
+    source: Bitwarden Help generator, item types, custom fields, attachments
+    match: [password-generator, vault-items]
+    subtopics:
+      - {id: pm-gi-username, name: Username and email-alias generation, match: [username-generator]}
+      - {id: pm-gi-notes, name: Secure notes, identities and card items, match: [secure-notes]}
+      - {id: pm-gi-attachments, name: File attachments in a vault, match: [vault-attachments]}
+      - {id: pm-gi-custom-fields, name: Custom fields, PINs and security answers storage, match: [custom-fields]}
+      - {id: pm-gi-organise, name: Folders, tags and favourites for a large vault, match: [vault-organization]}
+      - {id: pm-gi-passphrase-gen, name: Passphrase generator word count and separator options, match: [passphrase-generator]}
+      - {id: pm-gi-history, name: Password history and recovering a previous password, match: [password-history]}
+      - {id: pm-gi-templates, name: Storing Wi-Fi and software licence and server items, match: [vault-item-templates]}
+  - id: pm-passkeys
+    name: Passkeys in password managers
+    source: Bitwarden Help storing passkeys; FIDO Alliance Credential Exchange; 800-63B Appendix B syncable authenticators
+    match: [passkeys, passkey-storage]
+    subtopics:
+      - {id: pm-pk-store, name: Saving and using a passkey from a password manager, match: [passkey-storage-in-password-manager]}
+      - {id: pm-pk-cross-device, name: Cross-device sign-in with QR hybrid transport, match: [hybrid-transport, cross-device-authentication]}
+      - {id: pm-pk-export, name: Moving passkeys between providers (Credential Exchange), match: [credential-exchange-protocol, passkey-migration]}
+      - {id: pm-pk-totp-in-vault, name: Integrated TOTP in the vault and its trade-off, match: [integrated-totp]}
+      - {id: pm-pk-provider-choice, name: Choosing which provider saves a passkey when OS and manager compete, match: [passkey-provider-selection]}
+      - {id: pm-pk-os-provider, name: Third-party credential provider settings on iOS and Android, match: [credential-provider-settings]}
+      - {id: pm-pk-inventory, name: Auditing which accounts support and hold passkeys, match: [passkey-inventory]}
+      - {id: pm-pk-troubleshoot, name: Passkey sign-in failures and fallbacks, match: [passkey-troubleshooting]}
+  - id: pm-sharing
+    name: Sharing credentials safely
+    source: Bitwarden Send and organisations; 1Password item sharing
+    match: [password-sharing]
+    subtopics:
+      - {id: pm-sh-send, name: Ephemeral encrypted sends with expiry, match: [bitwarden-send]}
+      - {id: pm-sh-link, name: Sharing an item with a non-user via one-time link, match: [one-time-share-link]}
+      - {id: pm-sh-collections, name: Shared collections and permission levels, match: [collections]}
+      - {id: pm-sh-revoke, name: Revoking access and rotating after someone leaves, match: [revoke-shared-access, offboarding]}
+      - {id: pm-sh-1p-vaults, name: 1Password shared vaults and guest accounts, match: [1password-shared-vaults]}
+      - {id: pm-sh-keeshare, name: KeePassXC KeeShare for shared groups, match: [keeshare]}
+      - {id: pm-sh-delegation, name: Account-level delegation instead of sharing a password, match: [delegated-access]}
+      - {id: pm-sh-wifi-qr, name: Sharing Wi-Fi credentials by QR code, match: [wifi-qr-sharing]}
+  - id: pm-backup-recovery
+    name: Vault backup, emergency access and recovery
+    source: Bitwarden emergency access and export; 1Password Emergency Kit; KeePassXC database backups
+    match: [vault-recovery, emergency-access]
+    subtopics:
+      - {id: pm-br-encrypted-export, name: Scheduled encrypted vault exports, match: [encrypted-export]}
+      - {id: pm-br-kdbx-backup, name: KDBX backup rotation and conflict handling, match: [kdbx-backup-rotation]}
+      - {id: pm-br-emergency-kit, name: Printing and storing the emergency kit, match: [emergency-kit]}
+      - {id: pm-br-restore-test, name: Test-restoring a vault to a clean device, match: [vault-restore-test]}
+      - {id: pm-br-bw-emergency, name: Bitwarden emergency access view vs takeover setup, match: [bitwarden-emergency-access]}
+      - {id: pm-br-1p-recovery, name: 1Password family recovery of a locked-out member, match: [1password-account-recovery]}
+      - {id: pm-br-offline, name: Offline vault access during a provider outage, match: [offline-vault-access]}
+      - {id: pm-br-paper, name: Paper backup of critical credentials in a safe, match: [paper-password-backup]}
+  - id: pm-keepassxc
+    name: KeePassXC local vault operations
+    source: KeePassXC User Guide (databases, key files, YubiKey, merge, CLI)
+    match: [keepassxc, kdbx]
+    subtopics:
+      - {id: pm-kp-keyfile, name: Key files as a second unlock factor, match: [keyfile]}
+      - {id: pm-kp-yubikey, name: YubiKey challenge-response unlock, match: [yubikey-challenge-response]}
+      - {id: pm-kp-merge, name: Merging divergent database copies, match: [kdbx-merge]}
+      - {id: pm-kp-sync, name: Syncing a KDBX file across devices, match: [syncthing]}
+      - {id: pm-kp-mobile, name: KeePassDX and Strongbox mobile clients, match: [keepassdx, strongbox]}
+      - {id: pm-kp-create, name: Creating a database with encryption settings and decryption time, match: [kdbx-database-creation]}
+      - {id: pm-kp-reports, name: Database reports (health check and HIBP check), match: [keepassxc-reports]}
+      - {id: pm-kp-ssh-agent, name: KeePassXC SSH agent integration, match: [keepassxc-ssh-agent]}
+      - {id: pm-kp-totp, name: KeePassXC TOTP entries, match: [keepassxc-totp]}
+  - id: pm-cli-automation
+    name: Password manager CLI and developer use
+    source: Bitwarden CLI docs; 1Password CLI and SSH agent docs
+    match: [password-manager-cli]
+    subtopics:
+      - {id: pm-cli-bw, name: Bitwarden CLI unlock, session and item retrieval, match: [bitwarden-cli]}
+      - {id: pm-cli-op, name: 1Password CLI op run and secret references, match: [1password-cli]}
+      - {id: pm-cli-ssh, name: Storing SSH keys with a password-manager SSH agent, match: [ssh-agent-password-manager]}
+      - {id: pm-cli-kpcli, name: keepassxc-cli for scripted lookups, match: [keepassxc-cli]}
+      - {id: pm-cli-bw-serve, name: Bitwarden CLI serve API for local scripts, match: [bw-serve]}
+      - {id: pm-cli-bws, name: Bitwarden Secrets Manager for machine secrets, match: [bitwarden-secrets-manager]}
+      - {id: pm-cli-op-inject, name: op inject templating of config files, match: [op-inject]}
+      - {id: pm-cli-git-signing, name: SSH commit signing with a vault-held key, match: [ssh-commit-signing]}
+  - id: pm-migration-admin
+    name: Migration and family/team administration
+    source: Bitwarden import/export and organisations; 1Password Families
+    match: [migration, family-vault]
+    subtopics:
+      - {id: pm-ma-csv, name: CSV export handling and secure deletion, match: [csv-export]}
+      - {id: pm-ma-dedupe, name: De-duplicating and cleaning an imported vault, match: [vault-deduplication]}
+      - {id: pm-ma-browser-cleanup, name: Purging passwords left in browsers after migration, match: [remove-browser-saved-passwords]}
+      - {id: pm-ma-family-onboard, name: Onboarding a non-technical family member, match: [family-plan-onboarding]}
+      - {id: pm-ma-self-host, name: Self-hosting a vault server, match: [vaultwarden]}
+      - {id: pm-ma-import, name: Importing a specific manager's export format, match: [password-manager-import]}
+      - {id: pm-ma-lastpass-exit, name: Leaving LastPass with attachments and shared folders, match: [lastpass-migration]}
+      - {id: pm-ma-policies, name: Organisation policies (master password rules and required 2FA), match: [organization-policies]}
+
+  # ===================== two-factor-auth (NIST 800-63B-4, SSD Enable 2FA, Privacy Guides MFA, vendor docs)
+  - id: mfa-method-selection
+    name: Choosing authentication factors by strength
+    source: NIST SP 800-63B-4 sections 3.1.2-3.1.7 and 3.2.5; CISA phishing-resistant MFA fact sheet
+    match: [mfa, 2fa]
+    subtopics:
+      - {id: mfa-ms-ranking, name: Ranking factors from SMS to FIDO2, match: [mfa-strength-ranking]}
+      - {id: mfa-ms-phishing-resistant, name: Phishing-resistant MFA and origin binding, match: [phishing-resistant-mfa]}
+      - {id: mfa-ms-sms-limits, name: SMS and voice OTP restrictions (PSTN), match: [sms-2fa]}
+      - {id: mfa-ms-push, name: Push approval with number matching, match: [number-matching]}
+      - {id: mfa-ms-hotp, name: HOTP counter tokens and resync, match: [hotp]}
+      - {id: mfa-ms-email-otp, name: Email codes and magic links as a factor, match: [email-otp]}
+      - {id: mfa-ms-biometric-role, name: Biometrics as an activation factor not a standalone factor, match: [biometric-activation-factor]}
+      - {id: mfa-ms-aal, name: Mapping methods to NIST AAL1-AAL3, match: [authenticator-assurance-level]}
+  - id: mfa-authenticator-apps
+    name: Authenticator apps (TOTP)
+    source: Privacy Guides MFA tools; Aegis and Ente Auth docs; RFC 6238
+    match: [totp, authenticator-app]
+    subtopics:
+      - {id: mfa-aa-select, name: Choosing an authenticator app, match: [authenticator-app-selection]}
+      - {id: mfa-aa-lock, name: Locking the authenticator app itself, match: [authenticator-app-lock]}
+      - {id: mfa-aa-drift, name: Fixing TOTP codes rejected by clock drift, match: [totp-time-drift]}
+      - {id: mfa-aa-backup, name: Encrypted seed backup and migration, match: [authenticator-migration]}
+      - {id: mfa-aa-enroll, name: Enrolling TOTP manually from the secret key text, match: [totp-manual-entry]}
+      - {id: mfa-aa-aegis, name: Aegis setup with an encrypted vault, match: [aegis-authenticator]}
+      - {id: mfa-aa-ente, name: Ente Auth end-to-end encrypted sync, match: [ente-auth-sync]}
+      - {id: mfa-aa-ga-export, name: Exporting from Google Authenticator via transfer QR, match: [google-authenticator-export]}
+      - {id: mfa-aa-ms-backup, name: Microsoft Authenticator backup and restore, match: [microsoft-authenticator-backup]}
+  - id: mfa-security-keys
+    name: Hardware security keys
+    source: Yubico docs (YubiKey Manager); Privacy Guides Security Keys; 800-63B 3.1.6-3.1.7
+    match: [security-keys, yubikey]
+    subtopics:
+      - {id: mfa-sk-select, name: Choosing a key (USB-C, NFC, FIDO2 level), match: [security-key-selection]}
+      - {id: mfa-sk-pin, name: Setting the FIDO2 PIN with ykman, match: [fido2-pin]}
+      - {id: mfa-sk-backup, name: Registering a backup key on every account, match: [backup-security-key]}
+      - {id: mfa-sk-resident, name: Managing discoverable credentials slots, match: [discoverable-credentials]}
+      - {id: mfa-sk-reset, name: Resetting a FIDO2 applet and what it destroys, match: [fido2-reset]}
+      - {id: mfa-sk-lost, name: Responding to a lost or stolen key, match: [lost-key-response]}
+      - {id: mfa-sk-register, name: Registering a key on a website and naming it, match: [security-key-registration]}
+      - {id: mfa-sk-otp-slots, name: YubiKey OTP slots and static password risk, match: [yubikey-otp-slots]}
+      - {id: mfa-sk-piv, name: PIV smart card and OpenPGP applets, match: [yubikey-piv, yubikey-openpgp]}
+  - id: mfa-passkeys-platform
+    name: Platform passkeys
+    source: Apple, Google and Microsoft passkey support pages; 800-63B syncable authenticators
+    match: [passkey-enrollment, platform-passkeys]
+    subtopics:
+      - {id: mfa-pp-apple, name: Passkeys in iCloud Keychain, match: [icloud-keychain-passkeys]}
+      - {id: mfa-pp-google, name: Passkeys in Google Password Manager, match: [google-password-manager-passkeys]}
+      - {id: mfa-pp-windows, name: Windows Hello passkeys, match: [windows-hello-passkeys]}
+      - {id: mfa-pp-synced-bound, name: Synced vs device-bound passkeys, match: [syncable-authenticators]}
+      - {id: mfa-pp-passwordless, name: Removing the password after passkey enrollment, match: [passwordless-account]}
+      - {id: mfa-pp-android, name: Passkeys via Android Credential Manager, match: [android-credential-manager]}
+      - {id: mfa-pp-manage, name: Viewing and deleting passkeys per platform, match: [passkey-management]}
+      - {id: mfa-pp-shared, name: Sharing passkeys with family groups, match: [shared-passkeys]}
+  - id: mfa-high-assurance-programs
+    name: Vendor high-assurance account modes
+    source: Google Advanced Protection Program; Apple Security Keys for Apple Account; Microsoft passwordless account
+    match: [advanced-protection-program, account-hardening-programs]
+    subtopics:
+      - {id: mfa-hap-google, name: Enrolling in Google Advanced Protection, match: [google-advanced-protection]}
+      - {id: mfa-hap-apple, name: Security keys for Apple Account, match: [apple-account-security-keys]}
+      - {id: mfa-hap-microsoft, name: Going passwordless on a Microsoft account, match: [microsoft-passwordless]}
+      - {id: mfa-hap-github, name: GitHub 2FA with keys and recovery codes, match: [github-2fa]}
+      - {id: mfa-hap-aws-root, name: AWS root user MFA, match: [aws-root-mfa]}
+      - {id: mfa-hap-registrar, name: Domain registrar account lock and 2FA, match: [registrar-2fa]}
+      - {id: mfa-hap-exchange, name: Crypto exchange withdrawal allowlists and 2FA, match: [exchange-withdrawal-allowlist]}
+      - {id: mfa-hap-paypal, name: PayPal 2FA and login alerts, match: [paypal-2fa]}
+  - id: mfa-phone-number
+    name: Phone number and SIM hardening
+    source: FCC SIM swap and port-out fraud rules; carrier account security pages; CISA mobile communications best practice
+    match: [sim-swap, phone-number-security]
+    subtopics:
+      - {id: mfa-pn-port-pin, name: Carrier port-out PIN and number lock, match: [port-out-pin, carrier-number-lock]}
+      - {id: mfa-pn-remove-sms, name: Removing SMS as a recovery path, match: [remove-sms-recovery]}
+      - {id: mfa-pn-sim-pin, name: Setting a SIM PIN, match: [sim-pin]}
+      - {id: mfa-pn-secondary, name: Using a separate number for account recovery, match: [secondary-phone-number]}
+      - {id: mfa-pn-swap-response, name: Responding to a suspected SIM swap, match: [sim-swap-response]}
+      - {id: mfa-pn-esim, name: eSIM transfer protections, match: [esim-transfer-security]}
+      - {id: mfa-pn-voip, name: VoIP numbers for 2FA and why some sites reject them, match: [voip-number-2fa]}
+      - {id: mfa-pn-alerts, name: Carrier SIM-change alerts and account notifications, match: [sim-change-alerts]}
+  - id: mfa-recovery-codes
+    name: Recovery codes and look-up secrets
+    source: NIST SP 800-63B-4 3.1.2 and 4.2.1.1 saved recovery codes
+    match: [backup-codes, recovery-codes]
+    subtopics:
+      - {id: mfa-rc-store, name: Storing recovery codes offline and in the vault, match: [offline-recovery-sheet]}
+      - {id: mfa-rc-regen, name: Regenerating codes after use or exposure, match: [backup-code-regeneration]}
+      - {id: mfa-rc-apple-key, name: Apple recovery key and recovery contact, match: [apple-recovery-key, apple-recovery-contact]}
+      - {id: mfa-rc-locked-out, name: Account recovery after losing the second factor, match: [account-recovery]}
+      - {id: mfa-rc-google, name: Google backup codes, match: [google-backup-codes]}
+      - {id: mfa-rc-microsoft, name: Microsoft account recovery code, match: [microsoft-recovery-code]}
+      - {id: mfa-rc-inventory, name: Recovery code inventory across accounts, match: [recovery-code-inventory]}
+      - {id: mfa-rc-escrow, name: Splitting recovery secrets with a trusted person (Shamir), match: [secret-sharing-escrow]}
+  - id: mfa-account-rollout
+    name: Turning on MFA account by account
+    source: SSD How to Enable Two-factor Authentication; CISA Turn On MFA
+    match: [mfa-rollout, multi-factor-authentication]
+    subtopics:
+      - {id: mfa-ar-email, name: Google 2-Step Verification on the primary email, match: [gmail-2-step-verification]}
+      - {id: mfa-ar-apple, name: Apple Account two-factor and trusted numbers, match: [apple-two-factor]}
+      - {id: mfa-ar-microsoft, name: Microsoft account two-step verification, match: [microsoft-account-2fa]}
+      - {id: mfa-ar-social, name: Social media account 2FA, match: [social-media-2fa]}
+      - {id: mfa-ar-bank, name: Banks with weak MFA options, match: [bank-2fa-limitations]}
+      - {id: mfa-ar-priority, name: Prioritising which accounts get MFA first, match: [mfa-priority-list]}
+      - {id: mfa-ar-amazon, name: Amazon two-step verification, match: [amazon-2sv]}
+      - {id: mfa-ar-gaming, name: Gaming platforms (Steam Guard and console accounts), match: [steam-guard]}
+      - {id: mfa-ar-government, name: Government portals (Login.gov and ID.me), match: [login-gov]}
+  - id: mfa-attacks
+    name: Attacks on MFA
+    source: CISA MFA fact sheets; 800-63B 3.2.5 phishing resistance; Microsoft token theft guidance
+    match: [mfa-fatigue, aitm]
+    subtopics:
+      - {id: mfa-at-fatigue, name: Push bombing and how to respond, match: [push-bombing]}
+      - {id: mfa-at-aitm, name: Adversary-in-the-middle proxies stealing session cookies, match: [adversary-in-the-middle]}
+      - {id: mfa-at-otp-relay, name: OTP relay scams by phone or chat, match: [otp-relay-scam]}
+      - {id: mfa-at-session, name: Revoking sessions after token theft, match: [revoke-sessions]}
+      - {id: mfa-at-helpdesk, name: Help-desk social engineering to reset MFA, match: [helpdesk-mfa-reset-attack]}
+      - {id: mfa-at-downgrade, name: Downgrade attacks to weaker fallback factors, match: [mfa-downgrade]}
+      - {id: mfa-at-cookie, name: Infostealer session-cookie theft bypassing MFA, match: [session-cookie-theft]}
+      - {id: mfa-at-alerts, name: Reading sign-in alerts and activity logs, match: [sign-in-activity-review]}
+
+  # ===================== vpn-tools (Privacy Guides VPN/DNS/Tor/browsers, SSD Choosing a VPN, Use Tor, Use Signal)
+  - id: vpn-selection
+    name: Choosing a VPN
+    source: SSD Choosing the VPN That's Right for You; Privacy Guides VPN Overview and VPN Services criteria
+    match: [vpn, vpn-selection]
+    subtopics:
+      - {id: vpn-sel-threat, name: What a VPN does and does not protect, match: [vpn-limitations]}
+      - {id: vpn-sel-audit, name: No-logs claims and independent audits, match: [no-logs-audit]}
+      - {id: vpn-sel-jurisdiction, name: Jurisdiction and ownership checks, match: [vpn-jurisdiction]}
+      - {id: vpn-sel-payment, name: Anonymous account and payment options, match: [vpn-anonymous-payment]}
+      - {id: vpn-sel-free, name: Why free VPNs are risky, match: [free-vpn]}
+      - {id: vpn-sel-reviews, name: Discounting affiliate VPN review sites, match: [vpn-review-sites]}
+      - {id: vpn-sel-features, name: Feature checklist (port forwarding and IPv6 and kill switch), match: [vpn-feature-checklist]}
+      - {id: vpn-sel-corporate, name: Corporate VPN vs privacy VPN, match: [corporate-vpn]}
+  - id: vpn-client-config
+    name: VPN client configuration
+    source: Mullvad, Proton VPN and IVPN client docs; Android always-on VPN; Apple VPN On Demand
+    match: [vpn-configuration, kill-switch]
+    subtopics:
+      - {id: vpn-cc-always-on, name: Android always-on VPN with block-without-VPN, match: [always-on-vpn]}
+      - {id: vpn-cc-ios, name: iOS VPN behaviour and On Demand rules, match: [vpn-on-demand]}
+      - {id: vpn-cc-split, name: Split tunnelling decisions, match: [split-tunneling]}
+      - {id: vpn-cc-multihop, name: Multi-hop and server selection, match: [multi-hop-vpn]}
+      - {id: vpn-cc-protocol, name: Choosing WireGuard vs OpenVPN, match: [vpn-protocol-selection]}
+      - {id: vpn-cc-lan, name: Local network access while connected, match: [vpn-lan-access]}
+      - {id: vpn-cc-router, name: Running the VPN on the router, match: [router-vpn]}
+      - {id: vpn-cc-wg-config, name: Importing raw WireGuard configs, match: [wireguard-config]}
+      - {id: vpn-cc-obfuscation, name: Obfuscation and stealth protocols, match: [vpn-obfuscation]}
+  - id: vpn-leak-testing
+    name: Leak testing
+    source: Privacy Guides VPN Overview; Mullvad connection check; browserleaks
+    match: [vpn-leak-test, dns-leak]
+    subtopics:
+      - {id: vpn-lt-ipv6, name: IPv6 leaks, match: [ipv6-leak]}
+      - {id: vpn-lt-webrtc, name: WebRTC IP leaks in browsers, match: [webrtc-leak]}
+      - {id: vpn-lt-dns, name: DNS leak testing and fixes, match: [dns-leak-test]}
+      - {id: vpn-lt-reconnect, name: Leaks during reconnect and boot, match: [vpn-reconnect-leak]}
+      - {id: vpn-lt-torrent, name: Torrent client IP leak check, match: [torrent-ip-check]}
+      - {id: vpn-lt-captive, name: Captive portals with a kill switch, match: [captive-portal]}
+      - {id: vpn-lt-tunnelvision, name: TunnelVision DHCP option 121 attack, match: [tunnelvision]}
+      - {id: vpn-lt-geo, name: IP geolocation mismatch fixes, match: [ip-geolocation]}
+  - id: dns-privacy
+    name: Encrypted and filtering DNS
+    source: Privacy Guides DNS Overview, DNS Resolvers and DNS Filtering; Android Private DNS help
+    match: [encrypted-dns, dns-privacy]
+    subtopics:
+      - {id: dns-p-android, name: Android Private DNS (DoT), match: [android-private-dns]}
+      - {id: dns-p-apple, name: Apple encrypted DNS configuration profiles, match: [ios-dns-profile]}
+      - {id: dns-p-windows, name: Windows DNS over HTTPS settings, match: [windows-doh]}
+      - {id: dns-p-nextdns, name: NextDNS profile with blocklists, match: [nextdns]}
+      - {id: dns-p-pihole, name: Pi-hole or AdGuard Home on the LAN, match: [pi-hole, adguard-home]}
+      - {id: dns-p-browser, name: Browser secure DNS settings, match: [browser-secure-dns]}
+      - {id: dns-p-linux, name: systemd-resolved DNS over TLS on Linux, match: [systemd-resolved]}
+      - {id: dns-p-router, name: Encrypted DNS on the router, match: [router-dns]}
+      - {id: dns-p-verify, name: Verifying which resolver is answering, match: [dns-resolver-verification]}
+  - id: privacy-browsers
+    name: Privacy browser setup
+    source: Privacy Guides Desktop Browsers and Mobile Browsers; SSD What Is Fingerprinting
+    match: [privacy-browser, browser-hardening]
+    subtopics:
+      - {id: pb-firefox, name: Hardening Firefox settings, match: [firefox-hardening, arkenfox]}
+      - {id: pb-brave, name: Configuring Brave shields, match: [brave-shields]}
+      - {id: pb-mobile, name: Mobile browser privacy on iOS and Android, match: [mobile-browser-privacy]}
+      - {id: pb-search, name: Choosing a private search engine, match: [private-search-engine]}
+      - {id: pb-profiles, name: Separating browsing with profiles and containers, match: [browser-profile-separation, multi-account-containers]}
+      - {id: pb-cookies, name: Cookie and site data clearing policy, match: [cookie-management]}
+      - {id: pb-mullvad, name: Mullvad Browser, match: [mullvad-browser-setup]}
+      - {id: pb-chrome, name: Hardening Chrome settings, match: [chrome-privacy-settings]}
+      - {id: pb-safari, name: Safari privacy settings, match: [safari-privacy]}
+      - {id: pb-private-mode, name: What private browsing mode does and does not do, match: [private-browsing-mode]}
+  - id: tracker-blocking
+    name: Tracker and ad blocking
+    source: Privacy Guides Browser Extensions; uBlock Origin wiki
+    match: [tracker-blocking, ublock-origin]
+    subtopics:
+      - {id: tb-filter-lists, name: uBlock Origin filter lists and medium mode, match: [ublock-filter-lists]}
+      - {id: tb-ios, name: iOS Safari content blockers, match: [ios-content-blocker]}
+      - {id: tb-extension-audit, name: Auditing and minimising browser extensions, match: [extension-audit]}
+      - {id: tb-cookie-banners, name: Handling cookie consent banners, match: [cookie-consent-banners]}
+      - {id: tb-mv3, name: Manifest V3 limits on blockers, match: [manifest-v3]}
+      - {id: tb-custom-filters, name: Custom uBlock filters and the element picker, match: [custom-filters]}
+      - {id: tb-breakage, name: Fixing site breakage per site, match: [site-breakage]}
+      - {id: tb-android, name: Android system-wide tracker blocking, match: [android-tracker-blocking]}
+      - {id: tb-url-params, name: Stripping tracking parameters from links, match: [tracking-parameters]}
+  - id: tor-use
+    name: Using Tor
+    source: SSD How to Use Tor and Use Tor on Android and iPhone; Tor Browser manual
+    match: [tor, tor-browser]
+    subtopics:
+      - {id: tor-u-security-level, name: Tor Browser security levels, match: [tor-security-level]}
+      - {id: tor-u-mobile, name: Tor on Android and iPhone (Tor Browser, Orbot, Onion Browser), match: [orbot, onion-browser]}
+      - {id: tor-u-bridges, name: Bridges and pluggable transports for censorship, match: [bridges]}
+      - {id: tor-u-tails, name: Tails amnesic system, match: [tails]}
+      - {id: tor-u-onion, name: Using onion services, match: [onion-services]}
+      - {id: tor-u-verify, name: Installing and verifying Tor Browser signatures, match: [tor-browser-verification]}
+      - {id: tor-u-new-identity, name: New identity and new circuit, match: [tor-new-identity]}
+      - {id: tor-u-downloads, name: Downloads and external apps leaking outside Tor, match: [tor-download-safety]}
+      - {id: tor-u-snowflake, name: Running a Snowflake proxy, match: [snowflake-proxy]}
+  - id: secure-messaging-signal
+    name: Signal secure messaging
+    source: SSD How to Use Signal and Creating and Managing Signal Groups; Signal Support Center
+    match: [signal, signal-messenger]
+    subtopics:
+      - {id: sig-setup, name: Installing and registering Signal, match: [signal-setup]}
+      - {id: sig-pin, name: Signal PIN and registration lock, match: [signal-pin, registration-lock]}
+      - {id: sig-safety-number, name: Verifying safety numbers, match: [safety-number]}
+      - {id: sig-disappearing, name: Disappearing messages defaults, match: [disappearing-messages]}
+      - {id: sig-username, name: Usernames and hiding your phone number, match: [signal-username]}
+      - {id: sig-groups, name: Running Signal groups safely, match: [signal-groups]}
+      - {id: sig-linked, name: Auditing linked devices, match: [signal-linked-devices]}
+      - {id: sig-backup, name: Transfer and backup when changing phones, match: [signal-backup]}
+      - {id: sig-desktop, name: Signal Desktop install and security, match: [signal-desktop-security]}
+      - {id: sig-notifications, name: Notification content privacy, match: [signal-notification-privacy]}
+      - {id: sig-calls, name: Signal call relay setting, match: [signal-call-relay]}
+      - {id: sig-proxy, name: Signal proxy for censorship, match: [signal-proxy]}
+  - id: other-messengers
+    name: Other messengers and encrypted calls
+    source: SSD How to Use WhatsApp and Key Verification; Apple Contact Key Verification
+    match: [secure-messaging, end-to-end-encryption]
+    subtopics:
+      - {id: om-whatsapp, name: WhatsApp privacy and security settings, match: [whatsapp-privacy]}
+      - {id: om-whatsapp-backup, name: WhatsApp end-to-end encrypted backups, match: [whatsapp-encrypted-backup]}
+      - {id: om-imessage-ckv, name: iMessage Contact Key Verification, match: [contact-key-verification]}
+      - {id: om-sms-rcs, name: SMS and RCS encryption limits, match: [sms-unencrypted]}
+      - {id: om-compare, name: Comparing messengers by metadata exposure, match: [messenger-comparison]}
+      - {id: om-matrix, name: Matrix and Element encrypted rooms, match: [matrix-element]}
+      - {id: om-telegram, name: Telegram secret chats and default non-E2EE, match: [telegram-privacy]}
+      - {id: om-messenger, name: Facebook Messenger end-to-end encryption, match: [messenger-e2ee]}
+      - {id: om-video, name: Encrypted video calls, match: [encrypted-video-calls]}
+  - id: email-privacy
+    name: Email privacy and encryption
+    source: Privacy Guides Email Security, Email Services and Email Aliasing
+    match: [email-privacy, email-encryption]
+    subtopics:
+      - {id: em-provider, name: Choosing an encrypted email provider, match: [encrypted-email-provider]}
+      - {id: em-pgp, name: OpenPGP keys for email, match: [openpgp]}
+      - {id: em-aliases, name: Email aliasing services, match: [email-aliases]}
+      - {id: em-pixels, name: Blocking tracking pixels and remote images, match: [email-tracking-pixels]}
+      - {id: em-custom-domain, name: Custom domain email ownership, match: [custom-domain-email]}
+      - {id: em-bridge, name: Proton Mail Bridge for desktop clients, match: [proton-bridge]}
+      - {id: em-expiring, name: Password-protected and expiring messages, match: [expiring-email]}
+      - {id: em-dmarc, name: SPF and DKIM and DMARC for your own domain, match: [dmarc]}
+      - {id: em-thunderbird, name: Thunderbird OpenPGP setup, match: [thunderbird-openpgp]}
+
+  # ===================== password-hygiene (NIST 800-63B 3.1.1 and App. A, CISA, SSD passwords, PG account creation/deletion)
+  - id: pw-strength
+    name: Strong unique passwords
+    source: NIST SP 800-63B-4 3.1.1 and Appendix A; SSD Creating Strong Passwords; CISA Use Strong Passwords
+    match: [password-strength, unique-passwords]
+    subtopics:
+      - {id: pw-s-length, name: Length over composition rules, match: [password-length]}
+      - {id: pw-s-diceware, name: Dice-generated passphrases, match: [diceware]}
+      - {id: pw-s-blocklist, name: Checking passwords against breach corpora (k-anonymity), match: [pwned-passwords-api]}
+      - {id: pw-s-reuse, name: Finding and eliminating reuse, match: [password-reuse]}
+      - {id: pw-s-meters, name: Interpreting strength meters, match: [password-strength-meters]}
+      - {id: pw-s-zxcvbn, name: Estimating guessing resistance with zxcvbn, match: [zxcvbn]}
+      - {id: pw-s-patterns, name: Avoiding predictable patterns and keyboard walks, match: [password-patterns]}
+      - {id: pw-s-pin, name: Choosing device and card PINs, match: [pin-selection]}
+  - id: pw-security-questions
+    name: Security questions and knowledge-based auth
+    source: NIST SP 800-63B-4 (KBA not permitted); bank KBA practice
+    match: [security-questions]
+    subtopics:
+      - {id: pw-sq-fake, name: Random answers to security questions, match: [security-question-fake-answers]}
+      - {id: pw-sq-phone, name: Phone verbal passwords with banks and carriers, match: [verbal-password]}
+      - {id: pw-sq-kba, name: Public-record KBA quizzes and defences, match: [knowledge-based-authentication]}
+      - {id: pw-sq-recovery, name: Removing weak recovery questions from accounts, match: [remove-security-questions]}
+      - {id: pw-sq-osint, name: Public information that answers common questions, match: [security-question-osint]}
+      - {id: pw-sq-irs, name: IRS Identity Protection PIN, match: [irs-ip-pin]}
+      - {id: pw-sq-voice, name: Bank voice ID and why to opt out, match: [voice-biometric-authentication]}
+      - {id: pw-sq-ssa, name: Blocking electronic access at Social Security, match: [ssa-block-access]}
+  - id: pw-breach-response
+    name: Breach monitoring and response
+    source: Have I Been Pwned; identitytheft.gov; FTC data breach guidance
+    match: [breach-response, data-breach]
+    subtopics:
+      - {id: pw-br-hibp, name: Have I Been Pwned searches and notifications, match: [have-i-been-pwned]}
+      - {id: pw-br-triage, name: Triaging a breach notification letter, match: [breach-notification-triage]}
+      - {id: pw-br-credit-freeze, name: Credit freezes at all bureaus, match: [credit-freeze]}
+      - {id: pw-br-identity-theft, name: Identity theft recovery plan, match: [identitytheft-gov]}
+      - {id: pw-br-infostealer, name: Responding to infostealer malware credential theft, match: [infostealer]}
+      - {id: pw-br-fraud-alert, name: Fraud alerts and extended fraud alerts, match: [fraud-alert]}
+      - {id: pw-br-chex, name: ChexSystems and NCTUE freezes, match: [chexsystems-freeze]}
+      - {id: pw-br-credit-report, name: Reviewing free credit reports, match: [credit-report-review]}
+      - {id: pw-br-monitoring, name: Evaluating identity monitoring offers, match: [identity-monitoring]}
+      - {id: pw-br-tax, name: Tax identity theft, match: [tax-identity-theft]}
+  - id: pw-account-lifecycle
+    name: Account inventory, creation and deletion
+    source: Privacy Guides Account Creation and Account Deletion
+    match: [account-inventory, account-deletion]
+    subtopics:
+      - {id: pw-al-inventory, name: Building an account inventory from email and vault, match: [account-discovery]}
+      - {id: pw-al-delete, name: Deleting unused accounts properly, match: [delete-old-accounts]}
+      - {id: pw-al-social-login, name: Sign in with Google or Apple trade-offs, match: [social-login]}
+      - {id: pw-al-oauth, name: Reviewing third-party app access grants, match: [oauth-grants]}
+      - {id: pw-al-minimal, name: Minimal-data account creation, match: [data-minimization-signup]}
+      - {id: pw-al-recycling, name: Recycled phone numbers and email addresses, match: [phone-number-recycling]}
+      - {id: pw-al-email-change, name: Changing the login email on many accounts, match: [account-email-change]}
+      - {id: pw-al-payments, name: Removing stored payment methods from accounts, match: [stored-payment-methods]}
+  - id: pw-email-root
+    name: Primary email as the root account
+    source: Privacy Guides Email Security; Google and Microsoft account security checklists
+    match: [primary-email-security]
+    subtopics:
+      - {id: pw-er-forwarding, name: Checking forwarding rules and filters, match: [email-forwarding-rules]}
+      - {id: pw-er-recovery, name: Recovery email and phone chain audit, match: [recovery-chain-audit]}
+      - {id: pw-er-compartment, name: Separate addresses for finance and logins, match: [email-compartmentalization]}
+      - {id: pw-er-domain, name: Domain renewal and lock for custom-domain email, match: [domain-renewal-risk]}
+      - {id: pw-er-app-passwords, name: Removing legacy app passwords and IMAP access, match: [app-passwords]}
+      - {id: pw-er-sessions, name: Reviewing active sessions and devices on email, match: [email-session-review]}
+      - {id: pw-er-delegation, name: Mailbox delegation and shared access, match: [mailbox-delegation]}
+      - {id: pw-er-google-checkup, name: Google Security Checkup walkthrough, match: [google-security-checkup]}
+      - {id: pw-er-ms-activity, name: Microsoft account recent activity review, match: [microsoft-recent-activity]}
+  - id: pw-household-legacy
+    name: Household credentials and digital legacy
+    source: Apple Legacy Contact; Google Inactive Account Manager; Facebook memorialization
+    match: [digital-legacy, shared-accounts]
+    subtopics:
+      - {id: pw-hl-apple, name: Apple Legacy Contact, match: [apple-legacy-contact]}
+      - {id: pw-hl-google, name: Google Inactive Account Manager, match: [google-inactive-account-manager]}
+      - {id: pw-hl-meta, name: Facebook legacy contact and memorialization, match: [facebook-legacy-contact]}
+      - {id: pw-hl-household, name: Shared household vault and streaming accounts, match: [household-vault]}
+      - {id: pw-hl-estate, name: Digital asset instructions in estate planning, match: [digital-estate-plan]}
+      - {id: pw-hl-deceased, name: Closing accounts of a deceased person, match: [deceased-account-closure]}
+      - {id: pw-hl-kids, name: Child accounts and parental controls, match: [child-accounts]}
+      - {id: pw-hl-seed, name: Crypto wallet seed phrase inheritance, match: [seed-phrase-inheritance]}
+  - id: pw-site-constraints
+    name: Site password constraints and rotation policy
+    source: NIST SP 800-63B-4 3.1.1.2 (no forced rotation, no composition rules)
+    match: [forced-rotation, legacy-systems]
+    subtopics:
+      - {id: pw-sc-truncation, name: Detecting silent password truncation, match: [password-truncation]}
+      - {id: pw-sc-charset, name: Character restrictions workarounds, match: [character-restrictions]}
+      - {id: pw-sc-rotation, name: When to change a password (and when not), match: [password-rotation]}
+      - {id: pw-sc-pin-login, name: Numeric PIN-only logins, match: [pin-only-login]}
+      - {id: pw-sc-paste, name: Sites that block paste, match: [paste-blocking]}
+      - {id: pw-sc-change-url, name: Well-known change-password URL, match: [change-password-url]}
+      - {id: pw-sc-lockout, name: Account lockout after failed attempts, match: [account-lockout]}
+      - {id: pw-sc-policy, name: Arguing a work password policy against NIST guidance, match: [password-policy]}
+
+  # ===================== device-hardening (CISA Update Software, SSD encryption and malware guides, Apple/Google/Microsoft docs, PG OS overviews)
+  - id: dh-updates
+    name: Software and firmware updates
+    source: CISA Update Software; vendor update docs
+    match: [automatic-updates, software-updates]
+    subtopics:
+      - {id: dh-up-firmware, name: Laptop firmware and BIOS updates (fwupd, vendor tools), match: [firmware-updates]}
+      - {id: dh-up-apps, name: Keeping third-party apps updated (winget, brew), match: [app-updates]}
+      - {id: dh-up-eol, name: End-of-support devices and replacement, match: [end-of-support]}
+      - {id: dh-up-rapid, name: Apple Background Security Improvements and rapid responses, match: [rapid-security-response]}
+      - {id: dh-up-android-patch, name: Android security patch level and update policy, match: [android-security-patch-level]}
+      - {id: dh-up-windows, name: Windows Update settings and deferral, match: [windows-update]}
+      - {id: dh-up-macos, name: macOS Software Update settings, match: [macos-software-update]}
+      - {id: dh-up-iot, name: IoT and smart-device firmware updates, match: [iot-firmware-updates]}
+  - id: dh-disk-encryption
+    name: Full-disk encryption
+    source: SSD How to Encrypt Your Windows, Mac, or Linux Computer and Encrypt Your iPhone
+    match: [device-encryption, full-disk-encryption]
+    subtopics:
+      - {id: dh-de-bitlocker, name: BitLocker and Device Encryption on Windows, match: [bitlocker]}
+      - {id: dh-de-filevault, name: FileVault on macOS, match: [filevault]}
+      - {id: dh-de-luks, name: LUKS on Linux, match: [luks]}
+      - {id: dh-de-mobile, name: Mobile device encryption and BFU state, match: [before-first-unlock]}
+      - {id: dh-de-recovery, name: Recovery key escrow and storage, match: [recovery-key]}
+      - {id: dh-de-external, name: Encrypting external drives, match: [external-drive-encryption]}
+      - {id: dh-de-status, name: Verifying encryption status (manage-bde and fdesetup), match: [encryption-status-check]}
+      - {id: dh-de-suspend, name: Suspending BitLocker for firmware updates, match: [bitlocker-suspend]}
+  - id: dh-file-encryption
+    name: File and container encryption
+    source: Privacy Guides Encryption Software; VeraCrypt, Cryptomator and age docs
+    match: [file-encryption, encryption-software]
+    subtopics:
+      - {id: dh-fe-veracrypt, name: VeraCrypt containers, match: [veracrypt]}
+      - {id: dh-fe-cryptomator, name: Cryptomator vaults over cloud storage, match: [cryptomator]}
+      - {id: dh-fe-age, name: age and GPG file encryption, match: [age-encryption]}
+      - {id: dh-fe-archive, name: Encrypted 7-Zip archives for sharing, match: [encrypted-archive]}
+      - {id: dh-fe-cloud, name: End-to-end encrypted cloud storage, match: [e2ee-cloud-storage, advanced-data-protection]}
+      - {id: dh-fe-usb, name: Hardware-encrypted USB drives with keypad PIN, match: [hardware-encrypted-usb]}
+      - {id: dh-fe-picocrypt, name: Picocrypt file encryption, match: [picocrypt]}
+      - {id: dh-fe-locked-notes, name: Locked notes on phones, match: [locked-notes]}
+  - id: dh-screen-lock
+    name: Screen lock and local authentication
+    source: Apple Platform Security passcodes; Android lock screen; NIST 800-63B 3.2.3 biometrics
+    match: [screen-lock]
+    subtopics:
+      - {id: dh-sl-passcode, name: Strong alphanumeric passcode choice, match: [strong-passcode]}
+      - {id: dh-sl-autolock, name: Auto-lock and inactivity timeouts, match: [auto-lock]}
+      - {id: dh-sl-biometric, name: Biometrics vs passcode and quick lockout, match: [biometric-lockout]}
+      - {id: dh-sl-lockscreen, name: Lock screen notification and widget exposure, match: [lock-screen-privacy]}
+      - {id: dh-sl-reboot, name: Inactivity reboot and powering off for protection, match: [inactivity-reboot]}
+      - {id: dh-sl-windows, name: Windows dynamic lock and lock-on-idle, match: [dynamic-lock]}
+      - {id: dh-sl-mac, name: macOS lock screen and require-password delay, match: [macos-lock-screen]}
+      - {id: dh-sl-erase, name: Erase data after failed passcode attempts, match: [erase-after-failed-attempts]}
+      - {id: dh-sl-extend, name: Android Extend Unlock (Smart Lock) risks, match: [extend-unlock]}
+  - id: dh-app-permissions
+    name: App permissions and installation hygiene
+    source: SSD Android and iPhone privacy and security settings; Apple App Privacy Report; Android permission manager
+    match: [app-permissions]
+    subtopics:
+      - {id: dh-ap-android, name: Android permission manager and auto-reset, match: [android-permission-manager]}
+      - {id: dh-ap-ios-report, name: iOS App Privacy Report, match: [app-privacy-report]}
+      - {id: dh-ap-sideload, name: Sideloading and unknown sources risk, match: [sideloading]}
+      - {id: dh-ap-vetting, name: Vetting apps before install, match: [app-vetting]}
+      - {id: dh-ap-macos-tcc, name: macOS Privacy and Security permissions (TCC), match: [macos-tcc-permissions]}
+      - {id: dh-ap-photos, name: iOS limited photo and contacts access, match: [limited-photo-access]}
+      - {id: dh-ap-clipboard, name: Clipboard access prompts and notifications, match: [clipboard-access]}
+      - {id: dh-ap-windows, name: Windows app permissions (camera and microphone and location), match: [windows-app-permissions]}
+      - {id: dh-ap-local-network, name: Local network permission on iOS, match: [local-network-permission]}
+  - id: dh-ios-hardening
+    name: iPhone and iPad hardening
+    source: Apple Personal Safety User Guide; SSD Enable Lockdown Mode
+    match: [ios, iphone-security]
+    subtopics:
+      - {id: dh-ios-lockdown, name: Lockdown Mode, match: [lockdown-mode]}
+      - {id: dh-ios-sdp, name: Stolen Device Protection, match: [stolen-device-protection]}
+      - {id: dh-ios-usb, name: USB accessory restrictions, match: [usb-restricted-mode]}
+      - {id: dh-ios-safety-check, name: Safety Check, match: [safety-check]}
+      - {id: dh-ios-adp, name: Advanced Data Protection for iCloud, match: [icloud-advanced-data-protection]}
+      - {id: dh-ios-airdrop, name: AirDrop receiving settings, match: [airdrop-settings]}
+      - {id: dh-ios-profiles, name: Checking installed configuration profiles, match: [configuration-profiles]}
+      - {id: dh-ios-activation, name: Activation Lock, match: [activation-lock]}
+      - {id: dh-ios-locked-apps, name: Locked and hidden apps, match: [locked-hidden-apps]}
+  - id: dh-android-hardening
+    name: Android hardening
+    source: Android Help security; Privacy Guides Android Overview and Mobile Phones
+    match: [android, android-security]
+    subtopics:
+      - {id: dh-and-theft, name: Theft protection features, match: [android-theft-protection]}
+      - {id: dh-and-private-space, name: Private Space, match: [android-private-space]}
+      - {id: dh-and-aapm, name: Android Advanced Protection mode, match: [android-advanced-protection]}
+      - {id: dh-and-graphene, name: GrapheneOS installation and use, match: [grapheneos]}
+      - {id: dh-and-verified-boot, name: Bootloader lock and verified boot, match: [verified-boot]}
+      - {id: dh-and-play-protect, name: Google Play Protect, match: [play-protect]}
+      - {id: dh-and-usb-debug, name: Developer options and USB debugging off, match: [usb-debugging]}
+      - {id: dh-and-2g, name: Disabling 2G against cell-site simulators, match: [disable-2g]}
+      - {id: dh-and-frp, name: Factory reset protection, match: [factory-reset-protection]}
+  - id: dh-windows-hardening
+    name: Windows hardening
+    source: Microsoft Support Windows Security; Privacy Guides Windows overview
+    match: [windows, windows-security]
+    subtopics:
+      - {id: dh-win-sac, name: Smart App Control and SmartScreen, match: [smart-app-control]}
+      - {id: dh-win-memint, name: Core isolation and memory integrity, match: [memory-integrity]}
+      - {id: dh-win-cfa, name: Controlled folder access against ransomware, match: [controlled-folder-access]}
+      - {id: dh-win-standard, name: Daily standard user account, match: [standard-user]}
+      - {id: dh-win-hello, name: Windows Hello sign-in, match: [windows-hello]}
+      - {id: dh-win-firewall, name: Windows Firewall profiles, match: [windows-firewall]}
+      - {id: dh-win-lsa, name: LSA protection, match: [lsa-protection]}
+      - {id: dh-win-uac, name: User Account Control level, match: [user-account-control]}
+      - {id: dh-win-exploit, name: Exploit protection settings, match: [exploit-protection]}
+  - id: dh-macos-hardening
+    name: macOS hardening
+    source: Apple Platform Security; Privacy Guides macOS overview
+    match: [macos, macos-security]
+    subtopics:
+      - {id: dh-mac-gatekeeper, name: Gatekeeper and notarisation, match: [gatekeeper]}
+      - {id: dh-mac-firewall, name: Application firewall and stealth mode, match: [macos-firewall]}
+      - {id: dh-mac-login-items, name: Auditing login items and background tasks, match: [login-items]}
+      - {id: dh-mac-sharing, name: Disabling unused sharing services, match: [macos-sharing-services]}
+      - {id: dh-mac-lockdown, name: Lockdown Mode on Mac, match: [macos-lockdown-mode]}
+      - {id: dh-mac-sip, name: System Integrity Protection status, match: [system-integrity-protection]}
+      - {id: dh-mac-xprotect, name: XProtect and built-in malware removal, match: [xprotect]}
+      - {id: dh-mac-standard, name: Daily standard account on a Mac, match: [macos-standard-account]}
+  - id: dh-linux-hardening
+    name: Linux desktop hardening
+    source: Privacy Guides Linux Overview
+    match: [linux-desktop-security]
+    subtopics:
+      - {id: dh-lin-ufw, name: Host firewall with ufw or firewalld, match: [ufw]}
+      - {id: dh-lin-flatpak, name: Flatpak sandbox permissions, match: [flatpak-permissions]}
+      - {id: dh-lin-unattended, name: Unattended security upgrades, match: [unattended-upgrades]}
+      - {id: dh-lin-secureboot, name: Secure Boot on Linux, match: [secure-boot]}
+      - {id: dh-lin-sudo, name: sudo and root account hygiene, match: [sudo-hygiene]}
+      - {id: dh-lin-apparmor, name: AppArmor and SELinux status, match: [apparmor]}
+      - {id: dh-lin-sshd, name: Disabling or hardening sshd on a desktop, match: [sshd-hardening]}
+      - {id: dh-lin-usbguard, name: USBGuard device allowlisting, match: [usbguard]}
+  - id: dh-backups
+    name: Personal backups
+    source: SSD Keeping Your Data Safe; CISA data backup options
+    match: [backups, 3-2-1-backup]
+    subtopics:
+      - {id: dh-bk-time-machine, name: Time Machine backups, match: [time-machine]}
+      - {id: dh-bk-windows, name: Windows Backup and File History, match: [file-history]}
+      - {id: dh-bk-phone, name: Phone backups to iCloud, Google and computer, match: [phone-backup]}
+      - {id: dh-bk-restore-test, name: Restore testing, match: [backup-restore-test]}
+      - {id: dh-bk-ransomware, name: Offline and versioned backups against ransomware, match: [offline-backup]}
+      - {id: dh-bk-restic, name: Encrypted cloud backup with restic or similar, match: [restic]}
+      - {id: dh-bk-sync, name: Sync is not backup (versioning and recycle bins), match: [sync-vs-backup]}
+      - {id: dh-bk-photos, name: Photo library backup, match: [photo-backup]}
+      - {id: dh-bk-nas, name: NAS backups with snapshots, match: [nas-snapshots]}
+  - id: dh-malware
+    name: Malware and stalkerware
+    source: SSD How Do I Protect Myself Against Malware; Coalition Against Stalkerware; Amnesty MVT
+    match: [malware, malware-protection]
+    subtopics:
+      - {id: dh-mw-cleanup, name: Cleaning an infected computer, match: [malware-removal]}
+      - {id: dh-mw-stalkerware, name: Detecting stalkerware on phones, match: [stalkerware]}
+      - {id: dh-mw-mvt, name: Mobile Verification Toolkit checks for spyware, match: [mobile-verification-toolkit]}
+      - {id: dh-mw-extensions, name: Malicious browser extensions, match: [malicious-extensions]}
+      - {id: dh-mw-av, name: Built-in antivirus scans and second-opinion scanners, match: [microsoft-defender]}
+      - {id: dh-mw-ransomware, name: Responding to ransomware on a home PC, match: [ransomware-response]}
+      - {id: dh-mw-autoruns, name: Persistence check with Autoruns, match: [autoruns]}
+      - {id: dh-mw-mac, name: macOS persistence check with KnockKnock, match: [knockknock]}
+      - {id: dh-mw-android, name: Android malware removal in safe mode, match: [android-safe-mode]}
+  - id: dh-physical-loss
+    name: Physical security, loss and trackers
+    source: SSD How to Detect Bluetooth Trackers; Apple Find My; Google Find Hub
+    match: [physical-security, find-my]
+    subtopics:
+      - {id: dh-pl-trackers, name: Detecting unwanted Bluetooth trackers, match: [unwanted-tracker-alerts]}
+      - {id: dh-pl-lost-device, name: Lost or stolen device response, match: [lost-device-response]}
+      - {id: dh-pl-border, name: Devices at border crossings, match: [border-device-search]}
+      - {id: dh-pl-usb, name: Untrusted USB and charging ports, match: [juice-jacking]}
+      - {id: dh-pl-wiping, name: Secure wiping before disposal, match: [secure-erase]}
+      - {id: dh-pl-camera, name: Camera and microphone indicators and covers, match: [camera-indicators]}
+      - {id: dh-pl-hotel, name: Hotel room device security, match: [hotel-device-security]}
+      - {id: dh-pl-shoulder, name: Shoulder surfing and privacy screens, match: [shoulder-surfing]}
+      - {id: dh-pl-repair, name: Repair mode before handing in a device, match: [repair-mode]}
+  - id: dh-home-network
+    name: Home network and router
+    source: CISA home network security guidance; Privacy Guides Router Firmware
+    match: [router-security, home-network]
+    subtopics:
+      - {id: dh-hn-admin, name: Router admin password and remote admin off, match: [router-admin-password]}
+      - {id: dh-hn-wifi, name: WPA3 and Wi-Fi password, match: [wpa3]}
+      - {id: dh-hn-upnp, name: Disabling UPnP and WPS, match: [upnp]}
+      - {id: dh-hn-guest, name: Guest network for visitors and IoT, match: [guest-network]}
+      - {id: dh-hn-firmware, name: Router firmware and OpenWrt, match: [router-firmware, openwrt]}
+      - {id: dh-hn-inventory, name: Inventorying devices on the network, match: [network-device-inventory]}
+      - {id: dh-hn-bridge, name: ISP router limits and bridge mode, match: [bridge-mode]}
+      - {id: dh-hn-ports, name: Reviewing port forwards, match: [port-forwarding-review]}
+      - {id: dh-hn-cameras, name: Home security camera hardening, match: [security-camera-hardening]}
+  - id: dh-firmware-boot
+    name: Boot chain and firmware protection
+    source: Microsoft BitLocker countermeasures; Apple Platform Security secure boot
+    match: [secure-boot, firmware-attack]
+    subtopics:
+      - {id: dh-fb-tpm-pin, name: TPM plus PIN pre-boot authentication, match: [bitlocker-pin]}
+      - {id: dh-fb-evil-maid, name: Evil-maid scenario defences, match: [evil-maid]}
+      - {id: dh-fb-dma, name: Kernel DMA protection, match: [kernel-dma-protection]}
+      - {id: dh-fb-mdm, name: Work profile and BYOD separation, match: [byod]}
+      - {id: dh-fb-uefi-pw, name: UEFI supervisor password and boot order, match: [uefi-password]}
+      - {id: dh-fb-tpm, name: Checking TPM status, match: [tpm-status]}
+      - {id: dh-fb-mac-startup, name: Mac Startup Security Utility and recovery lock, match: [startup-security-utility]}
+      - {id: dh-fb-tamper, name: Tamper-evident seals for travel, match: [tamper-evident]}
+
+  # ===================== privacy-configuration (SSD footprint/social networks/AI, Privacy Guides, vendor privacy docs)
+  - id: pc-threat-modeling
+    name: Threat modeling a personal security plan
+    source: SSD Your Security Plan; Privacy Guides Threat Modeling and Common Threats
+    match: [threat-model, security-plan]
+    subtopics:
+      - {id: pc-tm-assets, name: Listing what you protect and from whom, match: [threat-model-assets]}
+      - {id: pc-tm-likelihood, name: Likelihood and consequence scoring, match: [risk-likelihood-assessment]}
+      - {id: pc-tm-scenarios, name: Picking an SSD security scenario as baseline, match: [security-scenario]}
+      - {id: pc-tm-review, name: Reviewing the plan after life changes, match: [security-plan-review]}
+      - {id: pc-tm-adversary, name: Mapping adversary capabilities, match: [adversary-capabilities]}
+      - {id: pc-tm-seven, name: SSD Seven Steps to digital security, match: [seven-steps]}
+      - {id: pc-tm-family, name: Family security plan, match: [family-security-plan]}
+      - {id: pc-tm-tradeoffs, name: Usability trade-offs and minimum viable security, match: [security-tradeoffs]}
+  - id: pc-google
+    name: Google account privacy
+    source: Google Account Help (Privacy Checkup, My Activity, Timeline, ad settings, Takeout)
+    match: [google-privacy, privacy-checkup]
+    subtopics:
+      - {id: pc-g-activity, name: Web and App Activity auto-delete, match: [auto-delete]}
+      - {id: pc-g-timeline, name: Location history and Timeline, match: [google-timeline]}
+      - {id: pc-g-ads, name: My Ad Center personalisation, match: [google-ad-settings]}
+      - {id: pc-g-third-party, name: Third-party connections to the Google account, match: [google-third-party-access]}
+      - {id: pc-g-takeout, name: Google Takeout export before cleanup, match: [google-takeout]}
+      - {id: pc-g-youtube, name: YouTube watch and search history, match: [youtube-history]}
+      - {id: pc-g-chrome-sync, name: Chrome sync with a passphrase, match: [chrome-sync-passphrase]}
+      - {id: pc-g-about-me, name: Google About me profile visibility, match: [google-about-me]}
+  - id: pc-apple
+    name: Apple privacy settings
+    source: Apple Personal Safety User Guide; Apple privacy features
+    match: [apple-privacy]
+    subtopics:
+      - {id: pc-a-att, name: App Tracking Transparency, match: [app-tracking-transparency]}
+      - {id: pc-a-relay, name: iCloud Private Relay, match: [icloud-private-relay]}
+      - {id: pc-a-hme, name: Hide My Email, match: [hide-my-email]}
+      - {id: pc-a-analytics, name: Analytics and improvement sharing, match: [apple-analytics-sharing]}
+      - {id: pc-a-mail, name: Mail Privacy Protection, match: [mail-privacy-protection]}
+      - {id: pc-a-siri, name: Siri and dictation data, match: [siri-privacy]}
+      - {id: pc-a-namedrop, name: NameDrop and contact sharing, match: [namedrop]}
+      - {id: pc-a-family, name: Family Sharing visibility, match: [family-sharing-visibility]}
+  - id: pc-windows
+    name: Windows and Microsoft privacy settings
+    source: Microsoft Support privacy settings in Windows; Microsoft privacy dashboard
+    match: [windows-privacy, microsoft-privacy-dashboard]
+    subtopics:
+      - {id: pc-w-diag, name: Diagnostic data and tailored experiences, match: [windows-diagnostic-data]}
+      - {id: pc-w-recall, name: Recall snapshots control, match: [windows-recall]}
+      - {id: pc-w-adid, name: Advertising ID and suggested content, match: [advertising-id]}
+      - {id: pc-w-activity, name: Activity history and search history, match: [windows-activity-history]}
+      - {id: pc-w-local-account, name: Local vs Microsoft account sign-in, match: [windows-local-account]}
+      - {id: pc-w-edge, name: Edge privacy settings, match: [edge-privacy]}
+      - {id: pc-w-location, name: Windows location and Find my device, match: [windows-location]}
+      - {id: pc-w-onedrive, name: OneDrive folder backup and what it uploads, match: [onedrive-folder-backup]}
+  - id: pc-social
+    name: Social network privacy
+    source: SSD Protecting Yourself on Social Networks and Facebook Groups Reducing Risks
+    match: [social-media-privacy]
+    subtopics:
+      - {id: pc-s-facebook, name: Facebook audience and profile settings, match: [facebook-privacy]}
+      - {id: pc-s-instagram, name: Instagram private account and activity status, match: [instagram-privacy]}
+      - {id: pc-s-linkedin, name: LinkedIn visibility and data settings, match: [linkedin-privacy]}
+      - {id: pc-s-old-posts, name: Limiting and purging past posts, match: [limit-past-posts]}
+      - {id: pc-s-tagging, name: Tag and mention review, match: [tag-review]}
+      - {id: pc-s-groups, name: Group membership exposure, match: [facebook-groups-risk]}
+      - {id: pc-s-x, name: X privacy settings, match: [x-privacy]}
+      - {id: pc-s-tiktok, name: TikTok privacy settings, match: [tiktok-privacy]}
+      - {id: pc-s-snap-map, name: Snap Map ghost mode, match: [snap-map]}
+  - id: pc-data-brokers
+    name: Data brokers and people-search sites
+    source: Privacy Guides Data Removal Services; California Delete Act DROP; Google Results about you
+    match: [data-brokers, people-search-opt-out]
+    subtopics:
+      - {id: pc-db-manual, name: Manual opt-outs from major people-search sites, match: [manual-broker-opt-out]}
+      - {id: pc-db-service, name: Evaluating paid data removal services, match: [data-removal-service]}
+      - {id: pc-db-drop, name: California DROP single deletion request, match: [california-delete-act]}
+      - {id: pc-db-google, name: Google Results about you removal, match: [results-about-you]}
+      - {id: pc-db-prescreen, name: Prescreened offer and marketing list opt-outs, match: [optoutprescreen]}
+      - {id: pc-db-registry, name: State data broker registries, match: [data-broker-registry]}
+      - {id: pc-db-relist, name: Monitoring for broker relisting, match: [broker-relisting]}
+      - {id: pc-db-acp, name: Address confidentiality programs, match: [address-confidentiality-program]}
+  - id: pc-data-rights
+    name: Exercising data protection rights
+    source: GDPR Articles 15-21; CCPA/CPRA consumer rights; Global Privacy Control spec
+    match: [gdpr, ccpa]
+    subtopics:
+      - {id: pc-dr-sar, name: Subject access requests, match: [subject-access-request]}
+      - {id: pc-dr-erasure, name: Erasure requests, match: [right-to-erasure]}
+      - {id: pc-dr-gpc, name: Global Privacy Control opt-out signal, match: [global-privacy-control]}
+      - {id: pc-dr-complaint, name: Escalating to a regulator, match: [regulator-complaint]}
+      - {id: pc-dr-portability, name: Data portability requests, match: [data-portability-request]}
+      - {id: pc-dr-do-not-sell, name: Do not sell or share requests, match: [do-not-sell]}
+      - {id: pc-dr-rectification, name: Correction requests, match: [right-to-rectification]}
+      - {id: pc-dr-object, name: Objecting to direct marketing and profiling, match: [right-to-object]}
+  - id: pc-location
+    name: Location privacy
+    source: SSD Privacy Breakdown of Mobile Phones; Apple and Android location settings
+    match: [location-privacy, location-services]
+    subtopics:
+      - {id: pc-l-precise, name: Precise vs approximate location per app, match: [precise-location]}
+      - {id: pc-l-scanning, name: Wi-Fi and Bluetooth scanning settings, match: [wifi-bluetooth-scanning]}
+      - {id: pc-l-significant, name: Significant Locations and visit history, match: [significant-locations]}
+      - {id: pc-l-sharing, name: Auditing live location sharing, match: [location-sharing-audit]}
+      - {id: pc-l-photos, name: Camera geotagging, match: [geotagging]}
+      - {id: pc-l-system-services, name: iOS system services location, match: [system-services-location]}
+      - {id: pc-l-google-accuracy, name: Google Location Accuracy, match: [google-location-accuracy]}
+      - {id: pc-l-cpni, name: Carrier location data and CPNI opt-out, match: [cpni-opt-out]}
+  - id: pc-footprint
+    name: Managing your digital footprint
+    source: SSD How to Manage Your Digital Footprint
+    match: [digital-footprint]
+    subtopics:
+      - {id: pc-fp-self-search, name: Self-search audit of what is public, match: [self-doxxing-audit]}
+      - {id: pc-fp-alerts, name: Monitoring your name with alerts, match: [name-monitoring]}
+      - {id: pc-fp-usernames, name: Username compartmentalisation, match: [username-compartmentalization]}
+      - {id: pc-fp-doxxing, name: Responding to doxxing, match: [doxxing-response]}
+      - {id: pc-fp-reverse-image, name: Reverse image search on your photos, match: [reverse-image-search]}
+      - {id: pc-fp-outdated, name: Removing outdated content from search results, match: [outdated-content-removal]}
+      - {id: pc-fp-whois, name: WHOIS privacy for domains you own, match: [whois-privacy]}
+      - {id: pc-fp-sharenting, name: Posting about children (sharenting), match: [sharenting]}
+  - id: pc-ai-tools
+    name: Privacy with AI tools
+    source: SSD Privacy Considerations with AI Tools
+    match: [ai-privacy]
+    subtopics:
+      - {id: pc-ai-training, name: Opting out of training on your chats, match: [ai-training-opt-out]}
+      - {id: pc-ai-history, name: Chat history and retention settings, match: [ai-chat-history]}
+      - {id: pc-ai-prompts, name: Keeping sensitive data out of prompts, match: [ai-prompt-data-hygiene]}
+      - {id: pc-ai-meetings, name: AI meeting assistants and recording consent, match: [ai-meeting-assistant]}
+      - {id: pc-ai-memory, name: AI memory features, match: [ai-memory]}
+      - {id: pc-ai-connectors, name: Connected apps and agent permissions, match: [ai-connectors]}
+      - {id: pc-ai-local, name: Running local models for sensitive work, match: [local-llm-for-sensitive-data]}
+      - {id: pc-ai-deepfake, name: Removing non-consensual intimate and deepfake images, match: [deepfake-removal]}
+  - id: pc-payments
+    name: Private payments
+    source: Privacy Guides Private Payments and Financial Services
+    match: [private-payments]
+    subtopics:
+      - {id: pc-pay-virtual, name: Virtual and merchant-locked card numbers, match: [virtual-card-numbers]}
+      - {id: pc-pay-p2p, name: Payment app privacy settings (Venmo, Cash App), match: [payment-app-privacy]}
+      - {id: pc-pay-giftcards, name: Prepaid and gift-card payment for privacy, match: [prepaid-cards]}
+      - {id: pc-pay-mail, name: Mail and package privacy, match: [mail-forwarding-privacy]}
+      - {id: pc-pay-crypto, name: Cryptocurrency privacy basics, match: [cryptocurrency-privacy]}
+      - {id: pc-pay-loyalty, name: Loyalty program data, match: [loyalty-programs]}
+      - {id: pc-pay-open-banking, name: Reviewing open-banking and aggregator access, match: [open-banking-access]}
+      - {id: pc-pay-wallet, name: Tokenised mobile wallet payments, match: [mobile-wallet-tokenization]}
+  - id: pc-high-risk
+    name: High-risk situations
+    source: SSD Attending a Protest, Journalist on the move, Privacy for Students; Apple Personal Safety User Guide
+    match: [high-risk-privacy]
+    subtopics:
+      - {id: pc-hr-protest, name: Phone preparation for a protest, match: [protest-device-prep]}
+      - {id: pc-hr-travel, name: Travel device strategy, match: [travel-device]}
+      - {id: pc-hr-tech-abuse, name: Leaving an abusive relationship (tech safety), match: [tech-safety-plan]}
+      - {id: pc-hr-students, name: School-issued devices and accounts, match: [student-privacy]}
+      - {id: pc-hr-journalist, name: Source protection for journalists, match: [source-protection]}
+      - {id: pc-hr-organizing, name: Organising activist groups securely, match: [activist-opsec]}
+      - {id: pc-hr-public-figure, name: Public figure and candidate account hardening, match: [public-figure-security]}
+      - {id: pc-hr-reproductive, name: Reproductive health data privacy, match: [reproductive-health-privacy]}
+  - id: pc-ads-tracking
+    name: Advertising and cross-site tracking controls
+    source: Privacy Guides Common Threats (surveillance capitalism); Chrome privacy settings; Firefox ETP
+    match: [ad-tracking-controls]
+    subtopics:
+      - {id: pc-at-chrome, name: Chrome ad privacy and third-party cookies settings, match: [chrome-ad-privacy]}
+      - {id: pc-at-mobile-ids, name: Resetting or deleting the mobile advertising ID, match: [delete-advertising-id]}
+      - {id: pc-at-tv, name: Smart TV ACR tracking off, match: [smart-tv-acr]}
+      - {id: pc-at-car, name: Connected car data sharing, match: [connected-car-privacy]}
+      - {id: pc-at-etp, name: Firefox Enhanced Tracking Protection strict mode, match: [enhanced-tracking-protection]}
+      - {id: pc-at-off-meta, name: Facebook off-Meta activity, match: [off-meta-activity]}
+      - {id: pc-at-amazon, name: Amazon ad preferences, match: [amazon-ad-preferences]}
+      - {id: pc-at-ppa, name: Firefox privacy-preserving attribution, match: [privacy-preserving-attribution]}
+  - id: pc-metadata-iot
+    name: Metadata and connected-device privacy
+    source: SSD Why Metadata Matters; Privacy Guides Data and Metadata Redaction
+    match: [metadata-removal, smart-home]
+    subtopics:
+      - {id: pc-mi-exif, name: Stripping EXIF from photos, match: [exif]}
+      - {id: pc-mi-docs, name: Document metadata and redaction, match: [pdf-redaction]}
+      - {id: pc-mi-speakers, name: Smart speaker voice recordings, match: [voice-recording-review]}
+      - {id: pc-mi-fingerprint, name: Testing browser fingerprinting, match: [browser-fingerprinting]}
+      - {id: pc-mi-doorbell, name: Doorbell camera sharing and police requests, match: [doorbell-camera-privacy]}
+      - {id: pc-mi-sidewalk, name: Amazon Sidewalk, match: [amazon-sidewalk]}
+      - {id: pc-mi-office, name: Office Document Inspector, match: [document-inspector]}
+      - {id: pc-mi-wearables, name: Fitness tracker and wearable data, match: [fitness-tracker-privacy]}
+
+  # ===================== phishing-awareness (CISA Recognize and Report Phishing, SSD Avoid Phishing, FTC scam guidance)
+  - id: ph-email
+    name: Spotting phishing email
+    source: SSD How to Avoid Phishing Attacks; CISA Recognize and Report Phishing
+    match: [phishing, spear-phishing]
+    subtopics:
+      - {id: ph-em-headers, name: Reading email headers and authentication results, match: [email-headers]}
+      - {id: ph-em-links, name: Inspecting and expanding links safely, match: [link-inspection]}
+      - {id: ph-em-attachments, name: Checking attachments before opening, match: [attachment-scanning]}
+      - {id: ph-em-lookalike, name: Lookalike and homograph domains, match: [lookalike-domains]}
+      - {id: ph-em-display-name, name: Display-name and reply-to spoofing, match: [display-name-spoofing]}
+      - {id: ph-em-red-flags, name: Urgency and authority red flags, match: [phishing-red-flags]}
+      - {id: ph-em-url-scanner, name: Checking links with URL scanners, match: [url-scanner]}
+      - {id: ph-em-calendar, name: Calendar invite spam, match: [calendar-spam]}
+      - {id: ph-em-shared-docs, name: Shared document lure phishing, match: [shared-document-phishing]}
+  - id: ph-sms-voice
+    name: Text and phone scams
+    source: FTC Consumer Advice on text and phone scams
+    match: [smishing, vishing]
+    subtopics:
+      - {id: ph-sv-delivery, name: Package delivery and toll text scams, match: [delivery-scam-text]}
+      - {id: ph-sv-bank-call, name: Bank fraud department impersonation calls, match: [bank-impersonation-call]}
+      - {id: ph-sv-callback, name: Hang up and call back verification, match: [callback-verification]}
+      - {id: ph-sv-safe-word, name: Family safe word against voice clones, match: [family-safe-word]}
+      - {id: ph-sv-filtering, name: Spam call and text filtering on phones, match: [spam-call-filtering]}
+      - {id: ph-sv-wrong-number, name: Wrong-number text openers, match: [wrong-number-text]}
+      - {id: ph-sv-caller-id, name: Caller ID spoofing, match: [caller-id-spoofing]}
+      - {id: ph-sv-one-ring, name: One-ring callback scams, match: [one-ring-scam]}
+      - {id: ph-sv-junk, name: Reporting junk in iMessage and RCS, match: [report-junk-imessage]}
+  - id: ph-scam-types
+    name: Common scam types
+    source: FTC Consumer Advice scam topics
+    match: [scam]
+    subtopics:
+      - {id: ph-st-tech-support, name: Tech support pop-up scams, match: [tech-support-scam]}
+      - {id: ph-st-romance, name: Romance scams, match: [romance-scam]}
+      - {id: ph-st-pig, name: Investment and crypto pig-butchering scams, match: [pig-butchering]}
+      - {id: ph-st-marketplace, name: Online marketplace buyer and seller scams, match: [marketplace-scam]}
+      - {id: ph-st-job, name: Fake job and task scams, match: [job-scam]}
+      - {id: ph-st-government, name: Government and law enforcement impersonation, match: [government-impersonation-scam]}
+      - {id: ph-st-gift-card, name: Gift card payment demands, match: [gift-card-scam]}
+      - {id: ph-st-grandparent, name: Grandparent emergency scams, match: [grandparent-scam]}
+      - {id: ph-st-sextortion, name: Sextortion emails, match: [sextortion-email]}
+      - {id: ph-st-rental, name: Rental and housing scams, match: [rental-scam]}
+      - {id: ph-st-lottery, name: Prize and lottery scams, match: [lottery-scam]}
+      - {id: ph-st-charity, name: Charity and disaster scams, match: [charity-scam]}
+  - id: ph-credential-theft
+    name: Credential phishing techniques
+    source: CISA phishing guidance; Microsoft consent phishing docs
+    match: [credential-phishing]
+    subtopics:
+      - {id: ph-ct-consent, name: OAuth consent phishing, match: [consent-phishing]}
+      - {id: ph-ct-bitb, name: Browser-in-the-browser fake popups, match: [browser-in-the-browser]}
+      - {id: ph-ct-autofill-check, name: Password manager refusal to autofill as a signal, match: [autofill-as-phishing-check]}
+      - {id: ph-ct-qr, name: QR code phishing, match: [quishing]}
+      - {id: ph-ct-device-code, name: Device code phishing, match: [device-code-phishing]}
+      - {id: ph-ct-callback, name: Callback phishing (fake invoice call this number), match: [callback-phishing]}
+      - {id: ph-ct-seo, name: SEO poisoning of login pages, match: [seo-poisoning]}
+      - {id: ph-ct-drainer, name: Crypto wallet drainer approvals, match: [wallet-drainer]}
+      - {id: ph-ct-reset, name: Fake password reset emails, match: [password-reset-phishing]}
+  - id: ph-malicious-downloads
+    name: Malicious downloads and ads
+    source: SSD malware guide; FBI PSA on search engine ad impersonation
+    match: [malicious-attachments, malicious-downloads]
+    subtopics:
+      - {id: ph-md-fake-update, name: Fake browser update and CAPTCHA paste-command lures, match: [fake-browser-update, clickfix]}
+      - {id: ph-md-malvertising, name: Search ad impersonation of software sites, match: [malvertising]}
+      - {id: ph-md-fake-apps, name: Fake apps in app stores, match: [fake-apps]}
+      - {id: ph-md-macros, name: Office macros and HTML attachments, match: [macros]}
+      - {id: ph-md-cracked, name: Cracked software and game cheats, match: [cracked-software]}
+      - {id: ph-md-verify, name: Verifying download signatures and hashes, match: [download-verification]}
+      - {id: ph-md-ai, name: Fake AI tool sites and apps, match: [fake-ai-tools]}
+      - {id: ph-md-container, name: ISO and LNK and archive attachment tricks, match: [iso-lnk-attachments]}
+      - {id: ph-md-notifications, name: Browser notification spam, match: [browser-notification-spam]}
+  - id: ph-reporting
+    name: Reporting phishing and fraud
+    source: CISA Report Phishing; reportfraud.ftc.gov; ic3.gov; APWG
+    match: [report-phishing]
+    subtopics:
+      - {id: ph-rp-7726, name: Forwarding spam texts to 7726, match: [7726]}
+      - {id: ph-rp-ftc, name: Filing with the FTC, match: [ftc-report]}
+      - {id: ph-rp-ic3, name: Filing an IC3 complaint, match: [ic3-report]}
+      - {id: ph-rp-provider, name: Reporting to email providers and platforms, match: [report-to-provider]}
+      - {id: ph-rp-apwg, name: Reporting to APWG, match: [apwg-report]}
+      - {id: ph-rp-safe-browsing, name: Reporting a site to Google Safe Browsing, match: [safe-browsing-report]}
+      - {id: ph-rp-police, name: Police report for fraud or identity theft, match: [police-report]}
+      - {id: ph-rp-intl, name: Reporting outside the US (Action Fraud and others), match: [action-fraud]}
+  - id: ph-incident-response
+    name: After you clicked
+    source: identitytheft.gov; FTC what to do if you were scammed
+    match: [phishing-incident-response]
+    subtopics:
+      - {id: ph-ir-password, name: Entered a password on a phishing page, match: [credential-compromise-response]}
+      - {id: ph-ir-remote, name: Allowed remote access to a scammer, match: [remote-access-scam-cleanup]}
+      - {id: ph-ir-money, name: Sent money and recall attempts, match: [payment-recall]}
+      - {id: ph-ir-recovery-scam, name: Avoiding recovery scams after a loss, match: [recovery-scam]}
+      - {id: ph-ir-attachment, name: Opened a malicious attachment, match: [opened-malicious-attachment]}
+      - {id: ph-ir-ssn, name: Gave out an SSN or ID documents, match: [exposed-ssn]}
+      - {id: ph-ir-takeover, name: Social media account takeover recovery, match: [account-takeover-recovery]}
+      - {id: ph-ir-email, name: Hacked email account recovery, match: [hacked-email-recovery]}
+      - {id: ph-ir-card, name: Card details entered on a fake shop, match: [card-compromise]}
+  - id: ph-social-engineering
+    name: Social engineering and impersonation
+    source: SSD Avoid Phishing; FBI elder fraud reports
+    match: [social-engineering, pretexting]
+    subtopics:
+      - {id: ph-se-friend, name: Hacked friend account impersonation, match: [friend-impersonation]}
+      - {id: ph-se-support, name: Fake customer support accounts on social media, match: [fake-support-accounts]}
+      - {id: ph-se-elder, name: Protecting older relatives from fraud, match: [elder-fraud-prevention]}
+      - {id: ph-se-bec, name: Invoice and payment redirection fraud, match: [business-email-compromise]}
+      - {id: ph-se-drill, name: Running a phishing drill for a family or small team, match: [phishing-simulation]}
+      - {id: ph-se-deepfake, name: Deepfake video call fraud, match: [deepfake-video-call]}
+      - {id: ph-se-giveaway, name: Celebrity and giveaway impersonation, match: [giveaway-scam]}
+      - {id: ph-se-verification-code, name: Verification code scams (Google Voice and WhatsApp), match: [verification-code-scam]}

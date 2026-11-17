@@ -1,0 +1,1284 @@
+# Canonical coverage spec: AI / ML engineering (whole field).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (certification exam guides, official docs
+# tables of contents, the Hugging Face course, MLOps maturity models, LLM provider docs, NIST AI RMF),
+# not from what the library happened to contain.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (exam task statements,
+# docs page sub-headings, API reference sections, course chapter sections).
+subject: ai-ml-engineering
+scope:
+  category: computing-software
+  field: ai-ml-engineering
+  products: [pytorch, tensorflow-keras, scikit-learn, hugging-face, langchain, mlflow, model-training, mlops, feature-engineering, llm-application-engineering, ml-platform-engineering]
+sources:
+  - "Google Cloud Professional Machine Learning Engineer exam guide (2024+) - Section 1 architecting low-code ML, 2 collaborating to manage data and models (data exploration, preprocessing, feature store, prototyping, tracking), 3 scaling prototypes into ML models (building, training, choosing hardware), 4 serving and scaling models (batch/online, scaling, A/B), 5 automating and orchestrating ML pipelines (CI/CD/CT, metadata, lineage), 6 monitoring AI solutions (responsible AI, drift, troubleshooting)"
+  - "AWS Certified Machine Learning Engineer - Associate (MLA-C01) exam guide - Domain 1 data preparation (ingest, transform, feature engineering, data integrity and bias), Domain 2 ML model development (choose approach, train and refine, analyze performance), Domain 3 deployment and orchestration (deployment infrastructure, scripted infrastructure, CI/CD), Domain 4 monitoring, maintenance and security (inference monitoring, infrastructure cost, security); task statements used as subtopics"
+  - "PyTorch documentation ToC (pytorch.org/docs/stable) - Notes (autograd mechanics, AMP, CUDA semantics, reproducibility, serialization, multiprocessing), torch.nn, torch.autograd, torch.optim and lr_scheduler, torch.utils.data, torch.amp, torch.compile, torch.distributed (DDP, FSDP2, DTensor, distributed checkpoint, torchrun), torch.export and ONNX, torch.profiler, torch.library custom ops, torch.utils.checkpoint, torch.func"
+  - "TensorFlow and Keras guides (tensorflow.org/guide, keras.io/guides) - Sequential/Functional/subclassing, custom layers and models, training and evaluation with built-ins, writing a training loop from scratch, callbacks, tf.data, distributed training (tf.distribute), mixed precision, XLA, SavedModel, TF Serving, LiteRT/TFLite conversion, Keras 3 multi-backend migration"
+  - "scikit-learn User Guide ToC (scikit-learn.org/stable/user_guide) - 1 supervised learning (linear models, SVM, neighbors, trees, ensembles incl. HistGradientBoosting, calibration), 2 unsupervised (clustering, decomposition, outlier detection), 3 model selection and evaluation (CV, tuning, metrics, validation curves, decision threshold), 4 inspection (partial dependence, permutation importance), 6 dataset transformations (pipelines, preprocessing, imputation, feature selection, text feature extraction), 9 model persistence, developing estimators"
+  - "Hugging Face LLM Course chapters (huggingface.co/learn) - 1 transformer models, 2 using transformers (pipelines, models, tokenizers), 3 fine-tuning a pretrained model (Trainer, full training loop with Accelerate), 4 sharing models and tokenizers (Hub, model cards), 5 the Datasets library, 6 the Tokenizers library, 7 main NLP tasks, 8 debugging, 11 fine-tuning LLMs (chat templates, SFT, LoRA, evaluation), 12 reasoning; plus Transformers docs (generation strategies, quantization, Optimum/ONNX, TGI)"
+  - "LangChain / LangGraph / LangSmith docs (python.langchain.com, langchain-ai.github.io/langgraph) - LCEL and Runnables, chat models, prompt templates, output parsers and structured output, document loaders, text splitters, embeddings and vector stores, retrievers, tools and agents, LangGraph state graphs, persistence and human-in-the-loop, streaming, LangSmith tracing and evaluation"
+  - "MLflow docs ToC (mlflow.org/docs/latest) - Tracking (runs, autolog, tracking server and backend/artifact stores), Models (flavors, signatures, pyfunc), Model Registry (versions, aliases, tags), Projects, Deployment (mlflow models serve, build-docker, Kubernetes/SageMaker), MLflow for GenAI (evaluate, tracing, prompt registry)"
+  - "MLOps maturity models - Google Cloud 'MLOps continuous delivery and automation pipelines in ML' (level 0/1/2, CT, metadata, feature store, pipeline triggers) and Microsoft Azure MLOps maturity model (levels 0-4); Google 'Rules of ML' and 'ML Test Score' rubric (data, model, infra, monitoring tests)"
+  - "Anthropic Claude API docs and OpenAI platform docs - prompt engineering guides, structured outputs, tool use / function calling, embeddings, prompt caching, batch API, streaming, extended thinking, evaluation guides, guardrails (reducing hallucinations, jailbreak and prompt injection mitigation), fine-tuning vs prompting; OWASP Top 10 for LLM Applications 2025"
+  - "NIST AI Risk Management Framework 1.0 (AI 100-1) and Generative AI Profile (AI 600-1) - Govern, Map, Measure, Manage functions; test, evaluation, verification and validation (TEVV), trustworthiness characteristics (valid and reliable, safe, secure, explainable, privacy-enhanced, fair), incident tracking"
+topics:
+  # --- PyTorch (pytorch.org/docs ToC)
+  - id: pt-tensors-devices
+    name: Tensors, dtypes and CUDA semantics
+    source: PyTorch docs/Tensors + Notes CUDA semantics + Reproducibility
+    match: [cuda-semantics, tensor-operations, torch-tensors]
+    subtopics:
+      - {id: pt-tn-views, name: Views vs copies / contiguous and in-place pitfalls, match: [tensor-views, contiguous-memory]}
+      - {id: pt-tn-broadcast, name: Broadcasting and indexing (gather / scatter / advanced indexing), match: [broadcasting-rules, gather-scatter]}
+      - {id: pt-tn-async, name: Asynchronous CUDA execution / streams and synchronization, match: [cuda-streams, cuda-synchronize]}
+      - {id: pt-tn-determinism, name: Reproducibility (seeds / deterministic algorithms / cuDNN flags), match: [use-deterministic-algorithms, pytorch-reproducibility]}
+      - {id: pt-tn-tf32, name: TF32 and matmul precision settings, match: [tf32, matmul-precision]}
+      - {id: pt-tn-promotion, name: Type promotion rules and dtype casting, match: [type-promotion, dtype-casting]}
+      - {id: pt-tn-pinned, name: Pinned memory and non_blocking host-to-device copies, match: [pinned-memory, non-blocking-transfer]}
+      - {id: pt-tn-channels-last, name: channels_last memory format for conv nets, match: [channels-last-memory-format]}
+      - {id: pt-tn-sparse, name: Sparse tensors (COO / CSR) and sparse ops, match: [sparse-tensors]}
+      - {id: pt-tn-mps, name: Device-agnostic code across CUDA / MPS / CPU, match: [mps-backend, device-agnostic-code]}
+  - id: pt-autograd
+    name: Autograd mechanics
+    source: PyTorch docs/Autograd mechanics + torch.autograd + torch.func
+    match: [autograd, autograd-mechanics]
+    subtopics:
+      - {id: pt-ag-function, name: Custom autograd.Function (forward / backward / ctx), match: [custom-autograd-function]}
+      - {id: pt-ag-hooks, name: Tensor and module hooks (register_hook / forward hooks), match: [autograd-hooks, forward-hooks]}
+      - {id: pt-ag-inference-mode, name: no_grad vs inference_mode vs detach, match: [inference-mode]}
+      - {id: pt-ag-torch-func, name: torch.func (vmap / grad / jacrev / functional_call), match: [torch-func, vmap]}
+      - {id: pt-ag-gradcheck, name: Gradient checking (gradcheck) for custom ops, match: [gradcheck]}
+      - {id: pt-ag-retain-graph, name: retain_graph / create_graph and higher-order gradients, match: [retain-graph, higher-order-gradients]}
+      - {id: pt-ag-saved-tensors, name: Saved tensor hooks and activation offload to CPU, match: [saved-tensors-hooks]}
+      - {id: pt-ag-inplace-error, name: In-place modification errors in backward (version counter), match: [inplace-autograd-error]}
+      - {id: pt-ag-graph-inspect, name: Inspecting the autograd graph (grad_fn / next_functions), match: [grad-fn, autograd-graph-inspection]}
+  - id: pt-nn-module
+    name: Building models with torch.nn
+    source: PyTorch docs/torch.nn + Build the Neural Network tutorial
+    match: [nn-module, torch-nn]
+    subtopics:
+      - {id: pt-nn-params-buffers, name: Parameters / buffers and state_dict structure, match: [register-buffer, state-dict]}
+      - {id: pt-nn-init, name: Weight initialization (nn.init), match: [weight-initialization, nn-init]}
+      - {id: pt-nn-containers, name: ModuleList / ModuleDict / Sequential containers, match: [modulelist, moduledict]}
+      - {id: pt-nn-train-eval, name: train() vs eval() behavior (dropout / batchnorm), match: [train-eval-mode, batchnorm-eval]}
+      - {id: pt-nn-freeze, name: Freezing layers and partial fine-tuning, match: [freeze-layers, requires-grad-false]}
+      - {id: pt-nn-custom-module, name: Writing a custom nn.Module (forward / extra_repr / submodule registration), match: [custom-nn-module]}
+      - {id: pt-nn-parametrize, name: Parametrizations (weight_norm / spectral_norm / orthogonal), match: [parametrizations, spectral-norm]}
+      - {id: pt-nn-lazy, name: Lazy modules and shape inference, match: [lazy-modules]}
+      - {id: pt-nn-meta-device, name: Meta-device initialization and to_empty for huge models, match: [meta-device]}
+      - {id: pt-nn-mha, name: nn.MultiheadAttention / TransformerEncoder and attention masks, match: [multiheadattention, attention-masks]}
+  - id: pt-data-loading
+    name: Datasets and DataLoader
+    source: PyTorch docs/torch.utils.data
+    match: [dataloader, torch-dataset]
+    subtopics:
+      - {id: pt-dl-map-iterable, name: Map-style vs IterableDataset (sharding across workers), match: [iterabledataset, map-style-dataset]}
+      - {id: pt-dl-collate, name: collate_fn and padding variable-length batches, match: [collate-fn, pad-sequence]}
+      - {id: pt-dl-samplers, name: Samplers (WeightedRandomSampler / BatchSampler), match: [weightedrandomsampler, batch-sampler]}
+      - {id: pt-dl-workers, name: Worker tuning (num_workers / persistent_workers / prefetch_factor / seeding), match: [persistent-workers, worker-init-fn]}
+      - {id: pt-dl-distributed-sampler, name: DistributedSampler and set_epoch, match: [distributedsampler, set-epoch]}
+      - {id: pt-dl-transforms, name: torchvision.transforms.v2 augmentation pipelines, match: [transforms-v2, torchvision-transforms]}
+      - {id: pt-dl-webdataset, name: Streaming sharded datasets (WebDataset / MosaicML Streaming), match: [webdataset, mosaic-streaming]}
+      - {id: pt-dl-bottleneck, name: Diagnosing input-bound training (GPU starved by the loader), match: [dataloader-bottleneck]}
+      - {id: pt-dl-stateful, name: Resumable data loading with StatefulDataLoader, match: [statefuldataloader]}
+  - id: pt-optim
+    name: Optimizers and learning-rate schedules
+    source: PyTorch docs/torch.optim + lr_scheduler + swa_utils
+    match: [torch-optim, lr-scheduler]
+    subtopics:
+      - {id: pt-op-param-groups, name: Parameter groups (no weight decay on norms and biases), match: [param-groups, adamw-weight-decay]}
+      - {id: pt-op-warmup, name: Warmup and cosine / OneCycle schedules, match: [warmup-cosine, onecyclelr]}
+      - {id: pt-op-ema, name: EMA and SWA weights (AveragedModel), match: [averagedmodel, ema-weights, swa]}
+      - {id: pt-op-grad-accum, name: Gradient accumulation and effective batch size, match: [gradient-accumulation-pytorch]}
+      - {id: pt-op-clip, name: Gradient clipping (clip_grad_norm_) and grad-norm monitoring, match: [gradient-clipping, grad-norm]}
+      - {id: pt-op-choose, name: Choosing an optimizer (SGD momentum / AdamW / Adafactor / Lion), match: [optimizer-selection, adafactor]}
+      - {id: pt-op-fused, name: Fused and foreach optimizer implementations, match: [fused-optimizer, foreach-optimizer]}
+      - {id: pt-op-plateau, name: ReduceLROnPlateau and chaining schedulers (SequentialLR), match: [reducelronplateau, sequentiallr]}
+      - {id: pt-op-8bit, name: Memory-efficient optimizers (8-bit Adam / ZeroRedundancyOptimizer), match: [8bit-optimizers, zeroredundancyoptimizer]}
+  - id: pt-amp
+    name: Automatic mixed precision
+    source: PyTorch docs/torch.amp + AMP examples
+    match: [amp, torch-autocast]
+    subtopics:
+      - {id: pt-amp-bf16, name: bf16 vs fp16 autocast choice, match: [bf16-vs-fp16]}
+      - {id: pt-amp-gradscaler, name: GradScaler with clipping / accumulation and multiple optimizers, match: [gradscaler-unscale]}
+      - {id: pt-amp-fp8, name: FP8 training (Transformer Engine / torchao float8), match: [fp8-training]}
+      - {id: pt-amp-autocast-ops, name: Autocast op eligibility and disabling autocast for unstable regions, match: [autocast-op-lists]}
+      - {id: pt-amp-cpu, name: CPU autocast with bfloat16, match: [cpu-autocast]}
+      - {id: pt-amp-overflow, name: Diagnosing fp16 overflow and inf / NaN under loss scaling, match: [fp16-overflow]}
+      - {id: pt-amp-inference, name: Half-precision inference (bf16 / fp16 weights), match: [half-precision-inference]}
+      - {id: pt-amp-custom-fwd, name: custom_fwd / custom_bwd for custom autograd functions under autocast, match: [custom-fwd]}
+      - {id: pt-amp-fp32-accum, name: Keeping sensitive ops in fp32 (softmax / norms / loss reductions), match: [fp32-accumulation]}
+  - id: pt-compile
+    name: torch.compile
+    source: PyTorch docs/torch.compiler (programming model, troubleshooting)
+    match: [torch-compile]
+    subtopics:
+      - {id: pt-co-modes, name: Compile modes (default / reduce-overhead / max-autotune), match: [compile-modes, max-autotune]}
+      - {id: pt-co-graph-breaks, name: Diagnosing graph breaks and recompiles (TORCH_LOGS / tlparse), match: [graph-breaks, torch-logs]}
+      - {id: pt-co-dynamic, name: Dynamic shapes and mark_dynamic, match: [dynamic-shapes]}
+      - {id: pt-co-cudagraphs, name: CUDA graphs for small-batch inference, match: [cuda-graphs]}
+      - {id: pt-co-backends, name: Compiler backends and fullgraph=True, match: [compile-backends, fullgraph]}
+      - {id: pt-co-cache, name: Compile caches and cold-start time (FX graph cache / mega-cache), match: [compile-cache]}
+      - {id: pt-co-regional, name: Regional compilation of repeated blocks, match: [regional-compilation]}
+      - {id: pt-co-disable, name: Escape hatches (torch.compiler.disable / allow_in_graph), match: [compiler-disable]}
+      - {id: pt-co-minifier, name: Accuracy and crash minifiers for compile bugs, match: [compile-minifier]}
+  - id: pt-distributed
+    name: Distributed training
+    source: PyTorch docs/torch.distributed (DDP, FSDP2, DTensor, torchrun, distributed checkpoint)
+    match: [ddp, fsdp, distributed-training]
+    subtopics:
+      - {id: pt-di-torchrun, name: torchrun launch (rendezvous / elastic / multi-node), match: [torchrun-multinode, elastic-training]}
+      - {id: pt-di-ddp-nosync, name: DDP gradient accumulation with no_sync and unused parameters, match: [ddp-no-sync, find-unused-parameters]}
+      - {id: pt-di-fsdp2, name: FSDP2 fully_shard wrapping and mixed precision policy, match: [fully-shard, fsdp2]}
+      - {id: pt-di-dcp, name: Distributed checkpoint (torch.distributed.checkpoint), match: [distributed-checkpoint]}
+      - {id: pt-di-nccl-debug, name: NCCL hangs and timeouts debugging, match: [nccl-debug, collective-timeout]}
+      - {id: pt-di-tp, name: Tensor parallel with DTensor, match: [tensor-parallelism, dtensor]}
+      - {id: pt-di-pp, name: Pipeline parallelism (torch.distributed.pipelining), match: [pipeline-parallelism]}
+      - {id: pt-di-collectives, name: Collective ops and process groups (all_reduce / all_gather / barrier), match: [collective-ops, process-groups]}
+      - {id: pt-di-deepspeed, name: DeepSpeed ZeRO stages and config, match: [deepspeed, zero-stages]}
+      - {id: pt-di-cp, name: Context parallelism for long sequences, match: [context-parallelism]}
+  - id: pt-serialization
+    name: Saving, loading and resuming
+    source: PyTorch docs/Notes Serialization semantics + Saving and loading models
+    match: [torch-save, pytorch-serialization]
+    subtopics:
+      - {id: pt-se-weights-only, name: torch.load weights_only and safe loading, match: [weights-only, torch-load-security]}
+      - {id: pt-se-resume, name: Full training-state checkpoints (optimizer / scheduler / RNG / scaler), match: [resume-training]}
+      - {id: pt-se-safetensors, name: safetensors format, match: [safetensors]}
+      - {id: pt-se-map-location, name: Cross-device loading and state_dict key mismatches, match: [map-location, load-state-dict-strict]}
+      - {id: pt-se-async, name: Asynchronous checkpointing to cut save stalls, match: [async-checkpointing]}
+      - {id: pt-se-retention, name: Checkpoint storage to object stores and retention policy, match: [checkpoint-retention]}
+      - {id: pt-se-convert, name: Converting checkpoints across model code changes (key remapping), match: [checkpoint-conversion]}
+      - {id: pt-se-mmap, name: Low-memory loading with torch.load(mmap=True) and load_state_dict(assign=True), match: [mmap-load]}
+  - id: pt-export-deploy
+    name: Exporting and optimizing models for inference
+    source: PyTorch docs/torch.export + torch.onnx + quantization (torchao) + ExecuTorch
+    match: [torch-export, model-export-pytorch]
+    subtopics:
+      - {id: pt-ex-export, name: torch.export and ExportedProgram, match: [exportedprogram]}
+      - {id: pt-ex-onnx, name: ONNX export (dynamo=True) and ONNX Runtime validation, match: [onnx-export, onnx-runtime]}
+      - {id: pt-ex-quant, name: Post-training quantization (torchao / PT2E), match: [post-training-quantization, torchao]}
+      - {id: pt-ex-torchscript, name: TorchScript legacy (trace vs script) migration, match: [torchscript]}
+      - {id: pt-ex-executorch, name: On-device deployment with ExecuTorch, match: [executorch]}
+      - {id: pt-ex-tensorrt, name: Torch-TensorRT compilation, match: [torch-tensorrt]}
+      - {id: pt-ex-aoti, name: AOTInductor packaging (aoti_compile_and_package), match: [aotinductor]}
+      - {id: pt-ex-qat, name: Quantization-aware training, match: [quantization-aware-training]}
+      - {id: pt-ex-dims, name: Dynamic dims in torch.export and export failure triage, match: [export-dynamic-dims]}
+  - id: pt-profiling
+    name: Profiling and performance
+    source: PyTorch docs/torch.profiler + Performance tuning guide + torch.utils.benchmark
+    match: [torch-profiler, pytorch-performance]
+    subtopics:
+      - {id: pt-pr-trace, name: Profiler traces (schedule / tensorboard / Perfetto), match: [profiler-trace, chrome-trace]}
+      - {id: pt-pr-memory-snapshot, name: CUDA memory snapshots (_record_memory_history), match: [memory-snapshot]}
+      - {id: pt-pr-benchmark, name: Correct GPU timing (torch.utils.benchmark / CUDA events), match: [torch-benchmark, cuda-events]}
+      - {id: pt-pr-perf-guide, name: Performance tuning checklist (channels_last / fused optimizers / SDPA), match: [performance-tuning-guide, scaled-dot-product-attention]}
+      - {id: pt-pr-nsys, name: Nsight Systems with NVTX ranges, match: [nsight-systems, nvtx]}
+      - {id: pt-pr-flops, name: FLOP counting and achieved TFLOPS, match: [flop-counter]}
+      - {id: pt-pr-hta, name: Holistic Trace Analysis for distributed traces, match: [holistic-trace-analysis]}
+      - {id: pt-pr-launch, name: Diagnosing CPU-bound / kernel-launch-overhead workloads, match: [kernel-launch-overhead]}
+  - id: pt-custom-ops
+    name: Custom operators and kernels
+    source: PyTorch docs/torch.library + C++ extensions + Triton user-defined kernels
+    match: [custom-ops, torch-library]
+    subtopics:
+      - {id: pt-cu-custom-op, name: torch.library.custom_op with register_fake, match: [custom-op, register-fake]}
+      - {id: pt-cu-cpp-ext, name: C++/CUDA extensions (cpp_extension / load_inline), match: [cpp-extension]}
+      - {id: pt-cu-triton, name: Writing Triton kernels for PyTorch, match: [triton-kernel]}
+      - {id: pt-cu-test, name: Testing custom ops with opcheck, match: [opcheck]}
+      - {id: pt-cu-register-autograd, name: register_autograd for custom ops, match: [register-autograd]}
+      - {id: pt-cu-cpp-op, name: TORCH_LIBRARY C++ op registration and dispatch keys, match: [torch-library-cpp, dispatcher]}
+      - {id: pt-cu-triton-op, name: torch.library.triton_op and compile integration, match: [triton-op]}
+      - {id: pt-cu-build, name: Building extension wheels (TORCH_CUDA_ARCH_LIST / ABI compatibility), match: [torch-cuda-arch-list]}
+  - id: pt-debugging
+    name: Debugging training failures
+    source: PyTorch docs/Autograd anomaly detection + CUDA memory management
+    match: [debugging-nan, nan, oom]
+    subtopics:
+      - {id: pt-db-anomaly, name: Anomaly detection for NaN backward ops, match: [anomaly-detection]}
+      - {id: pt-db-oom, name: CUDA out-of-memory triage and fragmentation, match: [cuda-out-of-memory, memory-fragmentation]}
+      - {id: pt-db-act-ckpt, name: Activation checkpointing to cut memory, match: [gradient-checkpointing, activation-checkpointing]}
+      - {id: pt-db-overfit-batch, name: Overfit-one-batch and shape sanity checks, match: [overfit-one-batch]}
+      - {id: pt-db-sync, name: Finding hidden host-device syncs (set_sync_debug_mode), match: [sync-debug-mode]}
+      - {id: pt-db-device-assert, name: Device-side asserts and CUDA_LAUNCH_BLOCKING, match: [cuda-launch-blocking, device-side-assert]}
+      - {id: pt-db-grad-flow, name: Gradient flow checks for dead and exploding layers, match: [gradient-flow]}
+      - {id: pt-db-loss-spikes, name: Loss spikes and divergence in large-model training, match: [loss-spikes]}
+  # --- TensorFlow / Keras
+  - id: tf-model-apis
+    name: Keras model building APIs
+    source: Keras guides/Sequential, Functional API, Making new layers and models via subclassing
+    match: [keras-functional-api, keras-sequential, model-subclassing]
+    subtopics:
+      - {id: tf-ma-functional-multi, name: Multi-input / multi-output functional models, match: [multi-output-model]}
+      - {id: tf-ma-custom-layer, name: Custom layers (build / call / get_config), match: [custom-keras-layer, get-config]}
+      - {id: tf-ma-custom-loss-metric, name: Custom losses and metrics (stateful Metric), match: [custom-keras-metric, custom-loss]}
+      - {id: tf-ma-transfer, name: Transfer learning with Keras Applications (freeze then fine-tune), match: [keras-transfer-learning]}
+      - {id: tf-ma-subclass, name: Subclassed models with call(training=) and add_loss, match: [add-loss, keras-training-argument]}
+      - {id: tf-ma-masking, name: Masking and padding for sequences (mask_zero / Masking layer), match: [keras-masking, mask-zero]}
+      - {id: tf-ma-mha, name: Keras MultiHeadAttention and transformer blocks, match: [keras-multiheadattention]}
+      - {id: tf-ma-shared, name: Shared layers and nested models, match: [shared-layers]}
+      - {id: tf-ma-rnn, name: Recurrent layers (LSTM / GRU and cuDNN kernel conditions), match: [keras-lstm, cudnn-lstm]}
+  - id: tf-training
+    name: Training and evaluation with Keras
+    source: Keras guides/Training and evaluation with the built-in methods + Writing a training loop from scratch + Callbacks
+    match: [model-fit, custom-training-loop, callbacks]
+    subtopics:
+      - {id: tf-tr-train-step, name: Overriding train_step for custom fit logic, match: [train-step]}
+      - {id: tf-tr-gradienttape, name: GradientTape loops with tf.function, match: [gradienttape]}
+      - {id: tf-tr-callbacks, name: EarlyStopping / ModelCheckpoint / ReduceLROnPlateau / BackupAndRestore, match: [backupandrestore, earlystopping]}
+      - {id: tf-tr-class-weight, name: class_weight and sample_weight, match: [keras-class-weight]}
+      - {id: tf-tr-tensorboard, name: TensorBoard logging and profiling, match: [tensorboard]}
+      - {id: tf-tr-compile, name: compile() arguments (loss / metrics / steps_per_execution), match: [steps-per-execution]}
+      - {id: tf-tr-custom-callback, name: Writing custom Keras callbacks, match: [custom-callback]}
+      - {id: tf-tr-predict, name: evaluate / predict performance and predict_on_batch, match: [keras-predict]}
+      - {id: tf-tr-lr-schedule, name: LearningRateSchedule objects and LearningRateScheduler, match: [learning-rate-schedule-keras]}
+  - id: tf-data
+    name: tf.data input pipelines
+    source: TensorFlow guide/tf.data + Better performance with tf.data
+    match: [tf-data, input-pipeline]
+    subtopics:
+      - {id: tf-da-tfrecord, name: Writing and reading TFRecord with tf.train.Example, match: [tfrecord]}
+      - {id: tf-da-perf, name: prefetch / parallel map / cache / AUTOTUNE, match: [prefetch, autotune]}
+      - {id: tf-da-sharding, name: Sharding and interleave for many files, match: [dataset-interleave, dataset-sharding]}
+      - {id: tf-da-augment, name: Preprocessing layers vs tf.data augmentation, match: [keras-preprocessing-layers]}
+      - {id: tf-da-sources, name: Dataset sources (from_tensor_slices / from_generator / list_files), match: [from-generator, from-tensor-slices]}
+      - {id: tf-da-batching, name: padded_batch / bucket_by_sequence_length and ragged tensors, match: [padded-batch, ragged-tensors]}
+      - {id: tf-da-snapshot, name: Dataset save / snapshot and iterator checkpointing, match: [dataset-snapshot]}
+      - {id: tf-da-tfds, name: TensorFlow Datasets (tfds.load), match: [tfds]}
+      - {id: tf-da-service, name: tf.data service for disaggregated preprocessing, match: [tf-data-service]}
+  - id: tf-distribute
+    name: Distributed training with tf.distribute
+    source: TensorFlow guide/Distributed training with TensorFlow
+    match: [tf-distribute, mirroredstrategy]
+    subtopics:
+      - {id: tf-di-mirrored, name: MirroredStrategy on one host, match: [mirrored-strategy-scope]}
+      - {id: tf-di-multiworker, name: MultiWorkerMirroredStrategy and TF_CONFIG, match: [multiworkermirroredstrategy, tf-config]}
+      - {id: tf-di-tpu, name: TPUStrategy, match: [tpustrategy]}
+      - {id: tf-di-ps, name: ParameterServerStrategy with a coordinator, match: [parameterserverstrategy]}
+      - {id: tf-di-custom-loop, name: Custom training loops with strategy.run and reduce, match: [strategy-run]}
+      - {id: tf-di-dist-dataset, name: Distributed input and global batch size, match: [distribute-dataset]}
+      - {id: tf-di-fault, name: Multi-worker fault tolerance and preemption, match: [multi-worker-fault-tolerance]}
+      - {id: tf-di-keras-dist, name: Keras distribution API (DataParallel / ModelParallel), match: [keras-distribution-api]}
+  - id: tf-performance
+    name: Mixed precision and XLA
+    source: TensorFlow guide/Mixed precision + XLA
+    match: [keras-mixed-precision, xla]
+    subtopics:
+      - {id: tf-pf-policy, name: mixed_float16 / mixed_bfloat16 policy and loss scaling, match: [mixed-float16, loss-scale-optimizer]}
+      - {id: tf-pf-jit, name: jit_compile=True and XLA pitfalls, match: [jit-compile]}
+      - {id: tf-pf-profiler, name: TensorFlow Profiler input-bound vs compute-bound, match: [tf-profiler]}
+      - {id: tf-pf-gpu-memory, name: GPU memory growth and device placement, match: [memory-growth, tf-device-placement]}
+      - {id: tf-pf-retracing, name: tf.function retracing and input_signature, match: [retracing, input-signature]}
+      - {id: tf-pf-eager-debug, name: Debugging tf.function (run_functions_eagerly / tf.print), match: [run-functions-eagerly]}
+      - {id: tf-pf-gpu-guide, name: TensorFlow GPU performance guide (threads / layout / host overhead), match: [tf-gpu-performance]}
+      - {id: tf-pf-check-numerics, name: Finding NaN with tf.debugging.enable_check_numerics, match: [check-numerics]}
+  - id: tf-export-serving
+    name: SavedModel, serving and on-device conversion
+    source: TensorFlow guide/SavedModel + TF Serving + LiteRT converter
+    match: [savedmodel, tensorflow-serving]
+    subtopics:
+      - {id: tf-ex-signatures, name: Serving signatures and ExportArchive, match: [serving-signatures, exportarchive]}
+      - {id: tf-ex-tfserving, name: TF Serving docker with model versions and REST/gRPC, match: [tf-serving-docker]}
+      - {id: tf-ex-tflite, name: LiteRT / TFLite conversion and quantization, match: [tflite, litert]}
+      - {id: tf-ex-tfjs, name: TensorFlow.js conversion, match: [tensorflowjs]}
+      - {id: tf-ex-batching, name: TF Serving batching and model config file, match: [tf-serving-batching, model-config-file]}
+      - {id: tf-ex-warmup, name: SavedModel warmup requests, match: [savedmodel-warmup]}
+      - {id: tf-ex-cli, name: saved_model_cli show and run, match: [saved-model-cli]}
+      - {id: tf-ex-tf2onnx, name: tf2onnx conversion, match: [tf2onnx]}
+      - {id: tf-ex-tftrt, name: TF-TRT optimization, match: [tf-trt]}
+  - id: tf-keras3
+    name: Keras 3 multi-backend
+    source: Keras guides/Migrating Keras 2 code to multi-backend Keras 3
+    match: [keras-3, multi-backend]
+    subtopics:
+      - {id: tf-k3-migrate, name: Migrating tf.keras code to Keras 3, match: [keras3-migration]}
+      - {id: tf-k3-backend, name: Choosing JAX / PyTorch / TF backend and keras.ops, match: [keras-backend, keras-ops]}
+      - {id: tf-k3-format, name: .keras format saving and custom object registration, match: [keras-format, register-keras-serializable]}
+  # --- scikit-learn (User Guide ToC)
+      - {id: tf-k3-jax-training, name: Stateless training with the JAX backend, match: [keras-jax-backend]}
+      - {id: tf-k3-torch, name: Keras 3 with the PyTorch backend, match: [keras-torch-backend]}
+      - {id: tf-k3-hub, name: KerasHub pretrained models and presets, match: [keras-hub]}
+      - {id: tf-k3-quantize, name: Keras 3 dtype policies and model.quantize(), match: [keras-quantize]}
+      - {id: tf-k3-input, name: Backend-agnostic input pipelines (tf.data / PyTorch DataLoader / grain), match: [backend-agnostic-input]}
+      - {id: tf-k3-legacy, name: Loading legacy H5 and SavedModel in Keras 3 (TFSMLayer), match: [tfsmlayer, h5-format]}
+  - id: sk-pipelines
+    name: Pipelines and composite estimators
+    source: scikit-learn User Guide 6.1 Pipelines and composite estimators
+    match: [pipeline, columntransformer]
+    subtopics:
+      - {id: sk-pi-set-output, name: set_output(transform="pandas") and feature names, match: [set-output, get-feature-names-out]}
+      - {id: sk-pi-ttr, name: TransformedTargetRegressor for target transforms, match: [transformedtargetregressor]}
+      - {id: sk-pi-caching, name: Pipeline memory caching, match: [pipeline-memory-caching]}
+      - {id: sk-pi-featureunion, name: FeatureUnion and custom transformers, match: [featureunion, custom-transformer]}
+      - {id: sk-pi-selectors, name: make_pipeline / make_column_transformer and make_column_selector, match: [make-column-selector]}
+      - {id: sk-pi-nested-params, name: Nested step__param tuning and passthrough / drop steps, match: [nested-params]}
+      - {id: sk-pi-debug, name: Inspecting and debugging intermediate pipeline steps, match: [pipeline-debugging]}
+      - {id: sk-pi-functiontransformer, name: FunctionTransformer for stateless steps, match: [functiontransformer]}
+  - id: sk-preprocessing
+    name: Preprocessing and imputation
+    source: scikit-learn User Guide 6.3 Preprocessing data + 6.4 Imputation of missing values
+    match: [sklearn-preprocessing, imputation]
+    subtopics:
+      - {id: sk-pp-scalers, name: Choosing scalers (Standard / Robust / QuantileTransformer / PowerTransformer), match: [robustscaler, quantiletransformer, powertransformer]}
+      - {id: sk-pp-encoders, name: OneHotEncoder handle_unknown / min_frequency and OrdinalEncoder, match: [onehotencoder, ordinalencoder]}
+      - {id: sk-pp-imputers, name: SimpleImputer / KNNImputer / IterativeImputer with missing indicators, match: [iterativeimputer, knnimputer, missing-indicator]}
+      - {id: sk-pp-discretize, name: KBinsDiscretizer and SplineTransformer, match: [kbinsdiscretizer, splinetransformer]}
+      - {id: sk-pp-normalizer, name: Normalizer (row-wise) vs column scalers, match: [normalizer]}
+      - {id: sk-pp-targetencoder, name: TargetEncoder with internal cross-fitting, match: [targetencoder]}
+      - {id: sk-pp-labels, name: Target encoders (LabelEncoder / LabelBinarizer / MultiLabelBinarizer), match: [multilabelbinarizer, labelencoder]}
+      - {id: sk-pp-sparse, name: Scaling sparse matrices safely (MaxAbsScaler / with_mean=False), match: [maxabsscaler]}
+  - id: sk-model-selection
+    name: Cross-validation and hyperparameter tuning
+    source: scikit-learn User Guide 3.1 Cross-validation + 3.2 Tuning hyper-parameters
+    match: [cross-validation, gridsearchcv]
+    subtopics:
+      - {id: sk-ms-splitters, name: Choosing CV splitters (Stratified / Group / TimeSeriesSplit), match: [stratifiedkfold, groupkfold, timeseriessplit]}
+      - {id: sk-ms-halving, name: Successive halving search (HalvingGridSearchCV), match: [halvinggridsearchcv, successive-halving]}
+      - {id: sk-ms-nested, name: Nested cross-validation for unbiased estimates, match: [nested-cross-validation]}
+      - {id: sk-ms-curves, name: Validation and learning curves, match: [validation-curve, learning-curve]}
+      - {id: sk-ms-multimetric, name: Multi-metric scoring and refit, match: [multimetric-scoring, refit-strategy]}
+      - {id: sk-ms-random, name: RandomizedSearchCV with scipy distributions, match: [randomizedsearchcv]}
+      - {id: sk-ms-cvpredict, name: cross_validate / cross_val_predict and return_train_score, match: [cross-val-predict]}
+      - {id: sk-ms-permtest, name: permutation_test_score for significance, match: [permutation-test-score]}
+      - {id: sk-ms-predefined, name: PredefinedSplit and custom CV iterables, match: [predefinedsplit]}
+  - id: sk-linear-models
+    name: Linear models
+    source: scikit-learn User Guide 1.1 Linear models + 1.4 SVM + 1.6 Nearest neighbors + 1.9 Naive Bayes
+    match: [linear-models, logistic-regression]
+    subtopics:
+      - {id: sk-lm-regularization, name: Ridge / Lasso / ElasticNet with CV variants, match: [elasticnet, lassocv]}
+      - {id: sk-lm-logistic, name: LogisticRegression solvers / penalties and C, match: [logistic-regression-solvers]}
+      - {id: sk-lm-sgd, name: SGDClassifier / partial_fit for out-of-core learning, match: [sgdclassifier, partial-fit]}
+      - {id: sk-lm-glm, name: Poisson / Tweedie GLMs for counts and claims, match: [poisson-regression, tweedie-regression]}
+      - {id: sk-lm-quantile, name: QuantileRegressor, match: [quantileregressor]}
+      - {id: sk-lm-robust, name: Robust regression (HuberRegressor / RANSACRegressor), match: [huberregressor, ransac]}
+      - {id: sk-lm-svm, name: Support vector machines (SVC / LinearSVC kernels and scaling), match: [svc, linearsvc]}
+      - {id: sk-lm-knn, name: Nearest neighbors (KNeighbors / algorithm and metric choice), match: [kneighborsclassifier]}
+      - {id: sk-lm-nb, name: Naive Bayes for text and counts (MultinomialNB / ComplementNB), match: [multinomialnb, complementnb]}
+  - id: sk-ensembles
+    name: Trees and ensembles
+    source: scikit-learn User Guide 1.10 Decision trees + 1.11 Ensembles
+    match: [random-forest, gradient-boosting, ensembles]
+    subtopics:
+      - {id: sk-en-hgb, name: HistGradientBoosting with native categorical support and early stopping, match: [histgradientboosting]}
+      - {id: sk-en-rf, name: RandomForest / ExtraTrees tuning and OOB score, match: [oob-score, extratrees]}
+      - {id: sk-en-stacking, name: Stacking and voting ensembles, match: [stackingclassifier, voting-classifier]}
+      - {id: sk-en-xgb-lgbm, name: XGBoost / LightGBM via the sklearn API, match: [xgboost, lightgbm]}
+      - {id: sk-en-monotonic, name: Monotonic and interaction constraints, match: [monotonic-constraints]}
+      - {id: sk-en-tree, name: Decision tree pruning (ccp_alpha) and export_text, match: [ccp-alpha, decision-tree-pruning]}
+      - {id: sk-en-catboost, name: CatBoost with categorical features, match: [catboost]}
+      - {id: sk-en-bagging, name: BaggingClassifier and AdaBoost, match: [baggingclassifier, adaboost]}
+      - {id: sk-en-gbm-tuning, name: Gradient boosting tuning order (learning rate / depth / leaves / rounds), match: [boosting-hyperparameters]}
+  - id: sk-unsupervised
+    name: Clustering, decomposition and outlier detection
+    source: scikit-learn User Guide 2.3 Clustering + 2.5 Decomposition + 2.7 Novelty and outlier detection
+    match: [clustering, dimensionality-reduction, outlier-detection]
+    subtopics:
+      - {id: sk-un-kmeans, name: KMeans choosing k (silhouette / elbow) and MiniBatchKMeans, match: [kmeans, silhouette-score]}
+      - {id: sk-un-dbscan, name: DBSCAN / HDBSCAN density clustering, match: [dbscan, hdbscan]}
+      - {id: sk-un-pca, name: PCA / TruncatedSVD and explained variance, match: [pca, truncatedsvd]}
+      - {id: sk-un-isoforest, name: IsolationForest / LocalOutlierFactor anomaly detection, match: [isolationforest, localoutlierfactor]}
+      - {id: sk-un-manifold, name: t-SNE / UMAP visualization pitfalls, match: [tsne, umap]}
+      - {id: sk-un-gmm, name: Gaussian mixture models and BIC selection, match: [gaussian-mixture]}
+      - {id: sk-un-agglomerative, name: Agglomerative clustering and dendrograms, match: [agglomerative-clustering]}
+      - {id: sk-un-eval, name: Clustering evaluation (ARI / Davies-Bouldin / stability), match: [adjusted-rand-index, cluster-evaluation]}
+      - {id: sk-un-nmf, name: NMF and LDA topic decomposition, match: [nmf, latent-dirichlet-allocation]}
+      - {id: sk-un-oneclass, name: Novelty detection with OneClassSVM, match: [oneclasssvm]}
+  - id: sk-metrics
+    name: Metrics, scoring and decision thresholds
+    source: scikit-learn User Guide 3.4 Metrics and scoring + 3.3 Tuning the decision threshold
+    match: [scoring, classification-metrics]
+    subtopics:
+      - {id: sk-me-scorer, name: make_scorer and custom scoring strings, match: [make-scorer]}
+      - {id: sk-me-threshold, name: TunedThresholdClassifierCV and FixedThresholdClassifier, match: [tunedthresholdclassifiercv, decision-threshold]}
+      - {id: sk-me-multiclass, name: Multiclass averaging (macro / micro / weighted) and classification_report, match: [macro-average, classification-report]}
+      - {id: sk-me-regression, name: Regression metrics (MAE / RMSE / MAPE / pinball), match: [regression-metrics, pinball-loss]}
+      - {id: sk-me-curves, name: ROC and precision-recall curves with Display APIs, match: [roc-curve, precision-recall-curve]}
+      - {id: sk-me-dummy, name: Dummy baselines (DummyClassifier / DummyRegressor), match: [dummyclassifier]}
+      - {id: sk-me-logloss, name: Log loss and proper scoring of probabilities, match: [log-loss]}
+      - {id: sk-me-multilabel, name: Multilabel metrics (hamming loss / subset accuracy), match: [multilabel-metrics, hamming-loss]}
+  - id: sk-inspection
+    name: Model inspection and explainability
+    source: scikit-learn User Guide 4 Inspection + SHAP docs
+    match: [model-inspection, explainability]
+    subtopics:
+      - {id: sk-in-permutation, name: Permutation importance vs impurity importance, match: [permutation-importance]}
+      - {id: sk-in-pdp, name: Partial dependence and ICE plots, match: [partial-dependence, ice-plots]}
+      - {id: sk-in-shap, name: SHAP values for tree and linear models, match: [shap]}
+      - {id: sk-in-coef, name: Interpreting linear model coefficients correctly, match: [coefficient-interpretation]}
+      - {id: sk-in-lime, name: LIME local explanations, match: [lime]}
+      - {id: sk-in-tree-viz, name: Visualizing trees (plot_tree / export_graphviz), match: [plot-tree]}
+      - {id: sk-in-correlated, name: Importance with correlated features (clustered permutation importance), match: [correlated-features-importance]}
+      - {id: sk-in-counterfactual, name: Counterfactual explanations (DiCE), match: [counterfactual-explanations]}
+  - id: sk-calibration
+    name: Probability calibration
+    source: scikit-learn User Guide 1.16 Probability calibration
+    match: [calibration, calibratedclassifiercv]
+    subtopics:
+      - {id: sk-ca-methods, name: Sigmoid vs isotonic calibration with CalibratedClassifierCV, match: [isotonic-calibration, platt-scaling]}
+      - {id: sk-ca-diagnose, name: Calibration curves and Brier score, match: [calibration-curve, brier-score]}
+      - {id: sk-ca-multiclass, name: Multiclass calibration and temperature scaling, match: [temperature-scaling]}
+      - {id: sk-ca-when, name: When calibration matters (boosting / SVM / naive Bayes), match: [calibration-need]}
+      - {id: sk-ca-ece, name: Expected calibration error and reliability diagrams, match: [expected-calibration-error]}
+      - {id: sk-ca-frozen, name: Calibrating a prefit model (FrozenEstimator / ensemble=False), match: [frozenestimator]}
+      - {id: sk-ca-conformal, name: Conformal prediction sets and intervals (MAPIE), match: [conformal-prediction]}
+      - {id: sk-ca-prior-shift, name: Adjusting probabilities after base-rate (prior) shift, match: [prior-shift]}
+  - id: sk-persistence
+    name: Model persistence and custom estimators
+    source: scikit-learn User Guide 9 Model persistence + Developing scikit-learn estimators
+    match: [model-persistence, sklearn-api-contract]
+    subtopics:
+      - {id: sk-pe-skops, name: skops / ONNX persistence and version skew, match: [skops, version-skew]}
+      - {id: sk-pe-estimator-checks, name: Writing a custom estimator that passes check_estimator, match: [check-estimator, custom-estimator]}
+  # --- Hugging Face (LLM Course chapters + Transformers docs)
+      - {id: sk-pe-tags, name: Estimator tags and metadata routing, match: [metadata-routing]}
+      - {id: sk-pe-joblib-parallel, name: n_jobs / joblib parallel backends and thread oversubscription, match: [n-jobs, joblib-parallel]}
+      - {id: sk-pe-pickle, name: Pickle / joblib security and untrusted model files, match: [untrusted-model-files]}
+      - {id: sk-pe-skl2onnx, name: skl2onnx conversion and numeric verification, match: [skl2onnx]}
+      - {id: sk-pe-array-api, name: Array API dispatch for GPU arrays, match: [array-api]}
+      - {id: sk-pe-config, name: Global options with set_config / config_context, match: [sklearn-config-context]}
+  - id: hf-pipelines-models
+    name: Pipelines, Auto classes and model loading
+    source: HF course ch1-2 + Transformers docs/Pipelines, Auto classes, Loading models
+    match: [transformers-pipeline, auto-classes]
+    subtopics:
+      - {id: hf-pm-pipeline, name: pipeline() for tasks / batching and device_map, match: [pipeline-batching, device-map]}
+      - {id: hf-pm-dtype-load, name: Loading large models (torch_dtype / low_cpu_mem / sharded checkpoints), match: [sharded-checkpoints, torch-dtype]}
+      - {id: hf-pm-trust-remote, name: trust_remote_code and revision pinning, match: [trust-remote-code, revision-pinning]}
+      - {id: hf-pm-heads, name: Task heads and num_labels / id2label config, match: [id2label, task-heads]}
+      - {id: hf-pm-custom, name: Custom models with PretrainedConfig / PreTrainedModel and register_for_auto_class, match: [custom-pretrained-model, register-for-auto-class]}
+      - {id: hf-pm-attn, name: Attention implementations (sdpa / flash_attention_2), match: [attn-implementation, flash-attention]}
+      - {id: hf-pm-processors, name: Vision and audio processors (AutoProcessor / image processors), match: [autoprocessor, image-processor]}
+      - {id: hf-pm-debug, name: Debugging Transformers errors and asking for help (course ch8), match: [transformers-debugging]}
+  - id: hf-tokenizers
+    name: Tokenizers
+    source: HF course ch2 + ch6 The Tokenizers library
+    match: [tokenizers, fast-tokenizer]
+    subtopics:
+      - {id: hf-tk-train, name: Training a new tokenizer from an old one, match: [train-new-from-iterator, train-tokenizer]}
+      - {id: hf-tk-offsets, name: Offset mapping and word_ids for token classification, match: [offset-mapping, word-ids]}
+      - {id: hf-tk-chat-template, name: Chat templates (apply_chat_template), match: [chat-template, apply-chat-template]}
+      - {id: hf-tk-special, name: Adding special tokens and resizing embeddings, match: [resize-token-embeddings, special-tokens]}
+      - {id: hf-tk-padding, name: Padding / truncation sides and attention masks, match: [padding-side, truncation]}
+      - {id: hf-tk-algos, name: BPE vs WordPiece vs Unigram tokenization algorithms, match: [bpe, wordpiece, unigram-tokenization]}
+      - {id: hf-tk-components, name: Normalizers / pre-tokenizers / post-processors in the tokenizers library, match: [pre-tokenizer]}
+      - {id: hf-tk-overflow, name: Long inputs with stride and return_overflowing_tokens, match: [return-overflowing-tokens]}
+  - id: hf-datasets
+    name: The Datasets library
+    source: HF course ch5 The Datasets library
+    match: [datasets, hf-datasets]
+    subtopics:
+      - {id: hf-ds-load, name: load_dataset from local files / Hub and scripts, match: [load-dataset]}
+      - {id: hf-ds-map-filter, name: map / filter with batched=True and num_proc, match: [batched-map, dataset-map]}
+      - {id: hf-ds-streaming, name: Streaming datasets for data larger than disk, match: [streaming]}
+      - {id: hf-ds-push, name: Creating and pushing datasets to the Hub, match: [push-dataset]}
+      - {id: hf-ds-faiss, name: Semantic search with add_faiss_index, match: [faiss-index]}
+      - {id: hf-ds-arrow, name: Arrow cache / save_to_disk and memory mapping, match: [save-to-disk, arrow-cache]}
+      - {id: hf-ds-format, name: set_format / with_format and conversion to pandas, match: [with-format]}
+      - {id: hf-ds-split, name: train_test_split / shuffle / select and interleave_datasets, match: [interleave-datasets]}
+      - {id: hf-ds-features, name: Features schema / ClassLabel and cast_column, match: [classlabel, cast-column]}
+  - id: hf-fine-tuning
+    name: Fine-tuning with Trainer and Accelerate
+    source: HF course ch3 Fine-tuning a pretrained model + ch7 main NLP tasks + Accelerate docs
+    match: [trainer, fine-tuning]
+    subtopics:
+      - {id: hf-ft-accelerate, name: Custom training loop with Accelerate, match: [accelerate, accelerate-launch]}
+      - {id: hf-ft-token-class, name: Token classification (NER) label alignment, match: [token-classification, ner]}
+      - {id: hf-ft-seq2seq, name: Seq2seq fine-tuning (summarization / translation), match: [seq2seqtrainer, summarization]}
+      - {id: hf-ft-callbacks, name: Trainer callbacks / early stopping and custom compute_loss, match: [trainer-callbacks, compute-loss]}
+      - {id: hf-ft-qa, name: Extractive question answering preprocessing, match: [question-answering]}
+      - {id: hf-ft-args, name: TrainingArguments essentials (eval / save strategy / precision / accumulation), match: [trainingarguments]}
+      - {id: hf-ft-collators, name: Data collators (padding / language modeling / seq2seq), match: [data-collator]}
+      - {id: hf-ft-mlm, name: Masked and causal language model training (domain adaptation), match: [masked-language-modeling, causal-language-modeling]}
+      - {id: hf-ft-hpsearch, name: Trainer.hyperparameter_search, match: [trainer-hyperparameter-search]}
+      - {id: hf-ft-deepspeed, name: Trainer with DeepSpeed / FSDP configs, match: [trainer-deepspeed]}
+  - id: hf-llm-fine-tuning
+    name: Fine-tuning LLMs (SFT, PEFT, preference)
+    source: HF course ch11 Fine-tuning LLMs + TRL docs + PEFT docs
+    match: [peft, lora, qlora]
+    subtopics:
+      - {id: hf-lf-sft, name: Supervised fine-tuning with TRL SFTTrainer, match: [sfttrainer, supervised-fine-tuning]}
+      - {id: hf-lf-dpo, name: Preference tuning with DPO, match: [dpo, preference-optimization]}
+      - {id: hf-lf-merge, name: Merging adapters and serving LoRA, match: [merge-and-unload]}
+      - {id: hf-lf-eval, name: Evaluating fine-tuned LLMs (lighteval / lm-eval-harness), match: [lm-eval-harness, lighteval]}
+      - {id: hf-lf-grpo, name: GRPO and online RL with verifiable rewards, match: [grpo]}
+      - {id: hf-lf-packing, name: Conversational dataset formats / completion-only loss and packing, match: [sft-packing]}
+      - {id: hf-lf-lora-config, name: LoRA configuration (rank / alpha / target_modules / dropout), match: [lora-rank, target-modules]}
+      - {id: hf-lf-reward, name: Reward model training with RewardTrainer, match: [reward-model]}
+      - {id: hf-lf-unsloth, name: Single-GPU efficient LLM fine-tuning (Unsloth / Liger kernels), match: [unsloth]}
+  - id: hf-generation
+    name: Text generation and decoding
+    source: Transformers docs/Generation strategies + KV cache
+    match: [text-generation, generate]
+    subtopics:
+      - {id: hf-ge-strategies, name: Greedy / beam / sampling (temperature / top-p / top-k), match: [decoding-strategies, top-p-sampling]}
+      - {id: hf-ge-kv-cache, name: KV cache types and static cache for compile, match: [kv-cache]}
+      - {id: hf-ge-speculative, name: Assisted / speculative decoding, match: [speculative-decoding]}
+      - {id: hf-ge-stopping, name: Stopping criteria / streamers and generation_config, match: [generation-config, textstreamer]}
+      - {id: hf-ge-logits, name: Logits processors and constrained generation (bad_words_ids / force words), match: [logits-processor]}
+      - {id: hf-ge-batched, name: Batched generation with left padding, match: [batched-generation]}
+      - {id: hf-ge-repetition, name: Repetition control (repetition_penalty / no_repeat_ngram_size), match: [repetition-penalty]}
+      - {id: hf-ge-scores, name: Token scores and logprobs (output_scores / compute_transition_scores), match: [compute-transition-scores]}
+  - id: hf-hub
+    name: Hub sharing and model cards
+    source: HF course ch4 Sharing models and tokenizers + Hub docs
+    match: [hugging-face-hub, push-to-hub]
+    subtopics:
+      - {id: hf-hb-cards, name: Writing model cards with metadata, match: [model-card]}
+      - {id: hf-hb-cli, name: huggingface-cli / hf_hub_download / caching and offline mode, match: [hf-hub-download, hf-offline]}
+      - {id: hf-hb-gated, name: Tokens / gated models and private repos, match: [gated-models, hf-token]}
+      - {id: hf-hb-spaces, name: Gradio demos on Spaces, match: [hf-spaces, gradio]}
+      - {id: hf-hb-hfapi, name: HfApi (create_repo / upload_folder / branches and PRs), match: [hfapi, upload-folder]}
+      - {id: hf-hb-large, name: Large files with Xet / LFS and repo limits, match: [xet-storage, git-lfs]}
+      - {id: hf-hb-endpoints, name: Inference Endpoints and Inference Providers, match: [inference-endpoints, inference-providers]}
+      - {id: hf-hb-dataset-card, name: Dataset cards and dataset viewer configuration, match: [dataset-card]}
+  - id: hf-optimization
+    name: Quantization and optimized inference
+    source: Transformers docs/Quantization + Optimum docs + TGI docs
+    match: [quantization, optimum]
+    subtopics:
+      - {id: hf-op-bnb, name: bitsandbytes 8-bit / 4-bit loading, match: [bitsandbytes, 4bit]}
+      - {id: hf-op-gptq-awq, name: GPTQ / AWQ pre-quantized models, match: [gptq, awq]}
+      - {id: hf-op-onnx, name: Optimum ONNX export and ORT inference, match: [optimum-onnx]}
+      - {id: hf-op-tgi, name: Serving with Text Generation Inference, match: [text-generation-inference, tgi]}
+      - {id: hf-op-gguf, name: GGUF conversion and llama.cpp quantization, match: [gguf, llama-cpp]}
+      - {id: hf-op-choose, name: Choosing a quantization method (bnb / GPTQ / AWQ / HQQ / torchao), match: [quantization-method-selection]}
+      - {id: hf-op-fp8, name: FP8 and compressed-tensors quantization for vLLM (llm-compressor), match: [compressed-tensors, llm-compressor]}
+      - {id: hf-op-openvino, name: CPU inference with Optimum Intel / OpenVINO, match: [openvino]}
+  # --- LangChain / LangGraph / LangSmith
+  - id: lc-lcel
+    name: LCEL and Runnables
+    source: LangChain docs/LCEL + Runnable interface
+    match: [lcel, runnables]
+    subtopics:
+      - {id: lc-lc-parallel, name: RunnableParallel / RunnablePassthrough / assign, match: [runnableparallel, runnablepassthrough]}
+      - {id: lc-lc-fallbacks, name: with_fallbacks and with_retry, match: [with-fallbacks, with-retry]}
+      - {id: lc-lc-config, name: configurable_fields / configurable_alternatives and RunnableConfig, match: [configurable-fields, runnableconfig]}
+      - {id: lc-lc-streaming, name: Streaming with astream and astream_events, match: [astream-events, langchain-streaming]}
+      - {id: lc-lc-batch, name: batch / abatch with max_concurrency, match: [max-concurrency, langchain-batch]}
+      - {id: lc-lc-lambda, name: RunnableLambda and @chain custom runnables, match: [runnablelambda]}
+      - {id: lc-lc-branch, name: Routing with RunnableBranch and custom routers, match: [runnablebranch, langchain-routing]}
+      - {id: lc-lc-bind, name: bind / bind_tools and with_config, match: [runnable-bind]}
+      - {id: lc-lc-history, name: RunnableWithMessageHistory (legacy chat history), match: [runnablewithmessagehistory]}
+  - id: lc-prompts-parsers
+    name: Chat models, prompt templates and output parsing
+    source: LangChain docs/Chat models + Prompt templates + Structured outputs
+    match: [chatprompttemplate, with-structured-output]
+    subtopics:
+      - {id: lc-pp-init-chat, name: init_chat_model and provider switching, match: [init-chat-model]}
+      - {id: lc-pp-messages-placeholder, name: MessagesPlaceholder and few-shot prompt templates, match: [messagesplaceholder, fewshotchatmessageprompttemplate]}
+      - {id: lc-pp-parsers, name: Output parsers and OutputFixingParser, match: [pydanticoutputparser, outputfixingparser]}
+      - {id: lc-pp-rate-limit, name: Rate limiting and caching LLM calls, match: [inmemoryratelimiter, llm-cache]}
+      - {id: lc-pp-multimodal, name: Multimodal inputs (images / PDFs) in chat messages, match: [multimodal-messages]}
+      - {id: lc-pp-messages, name: Message types / content blocks and usage_metadata, match: [usage-metadata, content-blocks]}
+      - {id: lc-pp-partials, name: Partial variables and template formats, match: [partial-variables]}
+      - {id: lc-pp-custom-chat, name: Writing a custom chat model integration, match: [custom-chat-model]}
+  - id: lc-retrieval
+    name: Document loading, splitting and retrieval
+    source: LangChain docs/Document loaders + Text splitters + Vector stores + Retrievers
+    match: [retriever, vector-store, text-splitter]
+    subtopics:
+      - {id: lc-rt-loaders, name: Document loaders and metadata, match: [document-loaders]}
+      - {id: lc-rt-multivector, name: ParentDocumentRetriever / MultiVectorRetriever, match: [parentdocumentretriever, multivectorretriever]}
+      - {id: lc-rt-selfquery, name: Self-query and metadata filtering, match: [self-query-retriever, metadata-filtering]}
+      - {id: lc-rt-ensemble, name: EnsembleRetriever and contextual compression, match: [ensembleretriever, contextual-compression]}
+      - {id: lc-rt-indexing, name: Indexing API (RecordManager incremental sync), match: [record-manager, langchain-indexing-api]}
+      - {id: lc-rt-splitters, name: RecursiveCharacterTextSplitter and token-aware splitting, match: [recursivecharactertextsplitter]}
+      - {id: lc-rt-mmr, name: MMR search and similarity score thresholds, match: [mmr, similarity-score-threshold]}
+      - {id: lc-rt-cache-emb, name: CacheBackedEmbeddings, match: [cachebackedembeddings]}
+      - {id: lc-rt-bm25, name: BM25Retriever keyword retrieval, match: [bm25retriever]}
+  - id: lc-agents-tools
+    name: Tools and agents
+    source: LangChain docs/Tools + Agents
+    match: [tool-calling, agents]
+    subtopics:
+      - {id: lc-at-tool-decorator, name: Defining tools (@tool / StructuredTool / args_schema), match: [tool-decorator, structured-tools]}
+      - {id: lc-at-create-agent, name: Prebuilt ReAct agent (create_react_agent / create_agent), match: [create-react-agent]}
+      - {id: lc-at-toolkits, name: Toolkits (SQL database agent), match: [sql-agent]}
+      - {id: lc-at-tool-errors, name: Handling tool errors and ToolMessage artifacts, match: [tool-error-handling]}
+      - {id: lc-at-middleware, name: Agent middleware hooks in create_agent, match: [agent-middleware]}
+      - {id: lc-at-injected, name: Injected tool arguments and runtime context, match: [injectedtoolarg]}
+      - {id: lc-at-mcp, name: MCP tools via langchain-mcp-adapters, match: [langchain-mcp-adapters]}
+      - {id: lc-at-response-format, name: Agent structured responses (response_format), match: [response-format]}
+  - id: lc-langgraph
+    name: LangGraph state graphs
+    source: LangGraph docs/Concepts (graph API, persistence, human-in-the-loop, multi-agent)
+    match: [langgraph, stategraph]
+    subtopics:
+      - {id: lc-lg-state, name: State schema / reducers and conditional edges, match: [state-reducers, conditional-edges]}
+      - {id: lc-lg-checkpointer, name: Checkpointers and thread persistence, match: [checkpointer, langgraph-persistence]}
+      - {id: lc-lg-hitl, name: Human-in-the-loop with interrupt and Command, match: [interrupt, human-in-the-loop]}
+      - {id: lc-lg-multiagent, name: Multi-agent supervisor and handoffs, match: [multi-agent-supervisor, agent-handoffs]}
+      - {id: lc-lg-subgraphs, name: Subgraphs and Send map-reduce, match: [subgraphs, send-api]}
+      - {id: lc-lg-stream, name: Stream modes (values / updates / messages / custom), match: [stream-mode]}
+      - {id: lc-lg-time-travel, name: Time travel / replay and update_state, match: [langgraph-time-travel, update-state]}
+      - {id: lc-lg-functional, name: Functional API (@entrypoint / @task), match: [langgraph-functional-api]}
+      - {id: lc-lg-platform, name: Deploying with langgraph.json and LangGraph Platform, match: [langgraph-platform]}
+      - {id: lc-lg-limits, name: Recursion limit / retry policies and node caching, match: [recursion-limit, retry-policy]}
+  - id: lc-memory
+    name: Memory and conversation state
+    source: LangChain docs/Memory + LangGraph long-term memory store
+    match: [memory, conversation-history]
+    subtopics:
+      - {id: lc-me-trim, name: trim_messages and summarization of history, match: [trim-messages]}
+      - {id: lc-me-store, name: Long-term memory with BaseStore, match: [long-term-memory, langgraph-store]}
+      - {id: lc-me-checkpoint-db, name: Postgres / SQLite checkpointers in production, match: [postgres-checkpointer]}
+      - {id: lc-me-semantic, name: Semantic memory retrieval for user facts, match: [semantic-memory]}
+      - {id: lc-me-procedural, name: Procedural memory and prompt self-updating (LangMem), match: [procedural-memory]}
+      - {id: lc-me-episodic, name: Episodic memory as few-shot from past interactions, match: [episodic-memory]}
+      - {id: lc-me-remove, name: Deleting and editing messages (RemoveMessage), match: [removemessage]}
+      - {id: lc-me-namespaces, name: Memory namespaces per user and privacy controls, match: [memory-namespaces]}
+  - id: lc-langsmith
+    name: LangSmith tracing and evaluation
+    source: LangSmith docs/Observability + Evaluation
+    match: [langsmith, tracing]
+    subtopics:
+      - {id: lc-ls-traceable, name: Tracing with @traceable and metadata/tags, match: [traceable]}
+      - {id: lc-ls-datasets-eval, name: Datasets and evaluate() experiments, match: [langsmith-evaluation, langsmith-datasets]}
+      - {id: lc-ls-online, name: Online evaluators and production monitoring, match: [online-evaluation]}
+  # --- MLflow
+      - {id: lc-ls-prompt-hub, name: Prompt management in LangSmith, match: [langsmith-prompts]}
+      - {id: lc-ls-annotation, name: Annotation queues and human feedback, match: [annotation-queues]}
+      - {id: lc-ls-pairwise, name: Pairwise experiments in LangSmith, match: [langsmith-pairwise]}
+      - {id: lc-ls-sampling, name: Trace sampling / OpenTelemetry export and data retention, match: [langsmith-sampling]}
+      - {id: lc-ls-pytest, name: LangSmith pytest integration for eval-driven tests, match: [langsmith-pytest]}
+  - id: mf-tracking
+    name: Experiment tracking
+    source: MLflow docs/Tracking
+    match: [experiment-tracking, autolog]
+    subtopics:
+      - {id: mf-tr-server, name: Tracking server with backend and artifact stores, match: [mlflow-tracking-server, artifact-store]}
+      - {id: mf-tr-search, name: Querying runs with search_runs and the client API, match: [search-runs, mlflowclient]}
+      - {id: mf-tr-system-metrics, name: System metrics and step-wise metric logging, match: [system-metrics]}
+      - {id: mf-tr-datasets, name: Dataset tracking with mlflow.data, match: [mlflow-data, dataset-tracking]}
+      - {id: mf-tr-nested, name: Nested runs and parent/child sweeps, match: [nested-runs]}
+      - {id: mf-tr-artifacts, name: Logging artifacts / figures / tables, match: [log-artifact, log-table]}
+      - {id: mf-tr-auth, name: Tracking server authentication and permissions, match: [mlflow-authentication]}
+      - {id: mf-tr-gc, name: Run deletion / mlflow gc and database upgrades, match: [mlflow-gc, mlflow-db-upgrade]}
+  - id: mf-models
+    name: MLflow Models and flavors
+    source: MLflow docs/Models (flavors, signatures, pyfunc)
+    match: [mlflow-models, pyfunc]
+    subtopics:
+      - {id: mf-mo-signature, name: Signatures and input examples, match: [model-signature, infer-signature]}
+      - {id: mf-mo-models-from-code, name: Models from code, match: [models-from-code]}
+      - {id: mf-mo-deps, name: Dependency capture and validation (pip_requirements / validate_serving_input), match: [pip-requirements, validate-serving-input]}
+      - {id: mf-mo-custom-flavor, name: Custom pyfunc wrappers with artifacts and context, match: [custom-pyfunc]}
+      - {id: mf-mo-uri, name: Loading models by URI (runs / models / aliases), match: [model-uri]}
+      - {id: mf-mo-transformers, name: Transformers flavor (pipelines / PEFT / task), match: [mlflow-transformers-flavor]}
+      - {id: mf-mo-evaluate, name: mlflow.models.evaluate for classical models, match: [mlflow-models-evaluate]}
+      - {id: mf-mo-type-hints, name: Type-hint pyfunc signatures and ResponsesAgent, match: [responsesagent, pyfunc-type-hints]}
+  - id: mf-registry
+    name: Model Registry
+    source: MLflow docs/Model Registry
+    match: [model-registry, registered-model]
+    subtopics:
+      - {id: mf-re-aliases, name: Aliases and tags instead of stages, match: [model-aliases]}
+      - {id: mf-re-promotion, name: Cross-environment promotion (copy_model_version), match: [copy-model-version, model-promotion]}
+      - {id: mf-re-uc, name: Unity Catalog registry on Databricks, match: [unity-catalog-registry]}
+      - {id: mf-re-webhooks, name: Registry automation (CI on new versions / webhooks), match: [registry-webhooks]}
+      - {id: mf-re-register, name: Registering models and version lineage, match: [register-model]}
+      - {id: mf-re-search, name: search_registered_models / search_model_versions, match: [search-model-versions]}
+      - {id: mf-re-retention, name: Archiving and deleting model versions, match: [model-version-retention]}
+      - {id: mf-re-permissions, name: Registry permissions and access control, match: [registry-permissions]}
+  - id: mf-deploy
+    name: Serving and deployment
+    source: MLflow docs/Deployment
+    match: [mlflow-serve, mlflow-deployment]
+    subtopics:
+      - {id: mf-de-docker, name: mlflow models build-docker, match: [build-docker]}
+      - {id: mf-de-batch, name: Batch scoring with spark_udf, match: [spark-udf]}
+      - {id: mf-de-sagemaker, name: Deploying to SageMaker / Kubernetes (MLServer), match: [mlserver, mlflow-sagemaker]}
+      - {id: mf-de-local-serve, name: mlflow models serve and the scoring protocol, match: [mlflow-models-serve]}
+      - {id: mf-de-env-manager, name: env_manager choices (virtualenv / conda / local / uv), match: [env-manager]}
+      - {id: mf-de-workers, name: Scoring server tuning (workers / timeouts / MLServer), match: [mlflow-serve-workers]}
+      - {id: mf-de-generate-dockerfile, name: mlflow models predict and generate-dockerfile, match: [generate-dockerfile]}
+      - {id: mf-de-databricks, name: Databricks Model Serving endpoints, match: [databricks-model-serving]}
+  - id: mf-projects
+    name: MLflow Projects and reproducible runs
+    source: MLflow docs/Projects
+    match: [mlflow-projects, mlproject]
+    subtopics:
+      - {id: mf-pr-mlproject, name: MLproject file entry points and environments, match: [mlproject-file]}
+      - {id: mf-pr-run-git, name: Running projects from git with parameters, match: [mlflow-run]}
+      - {id: mf-pr-docker-env, name: Docker environments for projects, match: [mlproject-docker]}
+      - {id: mf-pr-recipes, name: Reproducing a past run from its logged artifacts, match: [run-reproduction]}
+      - {id: mf-pr-k8s, name: Kubernetes backend for MLflow Projects, match: [mlflow-kubernetes-backend]}
+      - {id: mf-pr-multistep, name: Multistep workflows chaining mlflow.run, match: [multistep-workflow]}
+      - {id: mf-pr-params, name: MLproject parameter types and validation, match: [mlproject-parameters]}
+      - {id: mf-pr-databricks, name: Running projects on Databricks clusters, match: [mlflow-databricks-backend]}
+  - id: mf-genai
+    name: MLflow for GenAI
+    source: MLflow docs/GenAI (tracing, evaluation, prompt registry)
+    match: [mlflow-genai, mlflow-tracing]
+    subtopics:
+      - {id: mf-ge-tracing, name: MLflow Tracing autolog for LLM apps, match: [mlflow-trace]}
+      - {id: mf-ge-evaluate, name: mlflow.genai.evaluate with scorers / LLM judges, match: [mlflow-evaluate]}
+      - {id: mf-ge-prompts, name: Prompt registry and versioning, match: [prompt-registry]}
+  # --- Model training & evaluation (craft; PMLE section 3, MLA domain 2)
+      - {id: mf-ge-gateway, name: MLflow AI Gateway routes, match: [mlflow-ai-gateway]}
+      - {id: mf-ge-feedback, name: Logging feedback and expectations on traces, match: [log-feedback, trace-assessments]}
+      - {id: mf-ge-manual-trace, name: Manual tracing with @mlflow.trace and spans, match: [mlflow-trace-decorator]}
+      - {id: mf-ge-custom-scorer, name: Custom code-based scorers (@scorer), match: [custom-scorer]}
+      - {id: mf-ge-agent-eval, name: Evaluating tool-calling agents in MLflow, match: [mlflow-agent-evaluation]}
+      - {id: mf-ge-monitoring, name: Production monitoring of GenAI traces, match: [mlflow-production-monitoring]}
+  - id: mt-data-splits
+    name: Data splitting and validation design
+    source: AWS MLA-C01 Task 2.2/2.3 + Google PMLE 3.2 + Rules of ML
+    match: [train-test-split, data-splits]
+    subtopics:
+      - {id: mt-ds-temporal, name: Temporal / out-of-time splits, match: [temporal-split]}
+      - {id: mt-ds-group, name: Group splits to stop entity leakage, match: [group-split]}
+      - {id: mt-ds-dedup, name: Near-duplicate and contamination checks across splits, match: [train-test-contamination, near-duplicate-detection]}
+      - {id: mt-ds-stratify, name: Stratified splitting for rare classes and multilabel, match: [stratified-split]}
+      - {id: mt-ds-sizes, name: Choosing validation and test set sizes, match: [test-set-size]}
+      - {id: mt-ds-holdout, name: Holdout reuse and adaptive overfitting to the test set, match: [holdout-reuse]}
+      - {id: mt-ds-shift, name: Checking split distribution match (covariate shift), match: [covariate-shift-check]}
+      - {id: mt-ds-bootstrap, name: Holdout vs k-fold vs bootstrap validation choice, match: [bootstrap-validation]}
+  - id: mt-metrics
+    name: Metric selection and evaluation
+    source: AWS MLA-C01 Task 2.3 Analyze model performance + Google PMLE 3.2
+    match: [model-evaluation, metrics]
+    subtopics:
+      - {id: mt-me-business, name: Mapping business cost to metrics and thresholds, match: [cost-sensitive-evaluation]}
+      - {id: mt-me-ci, name: Confidence intervals and significance for model comparison, match: [confidence-intervals, mcnemar-test]}
+      - {id: mt-me-ranking, name: Ranking metrics (NDCG / MAP / recall@k), match: [ndcg, ranking-metrics]}
+      - {id: mt-me-slices, name: Sliced evaluation and subgroup performance, match: [sliced-evaluation, subgroup-metrics]}
+      - {id: mt-me-proper, name: Probabilistic evaluation with proper scoring rules, match: [proper-scoring-rules]}
+      - {id: mt-me-forecast, name: Forecast metrics (MASE / sMAPE / WAPE), match: [mase, wape]}
+      - {id: mt-me-online, name: Aligning offline metrics with online KPIs, match: [offline-online-metrics]}
+      - {id: mt-me-bootstrap, name: Bootstrap confidence intervals for metrics, match: [bootstrap-ci]}
+      - {id: mt-me-cv, name: Detection and segmentation metrics (IoU / mAP), match: [iou, detection-map]}
+  - id: mt-generalization
+    name: Overfitting, regularization and learning dynamics
+    source: AWS MLA-C01 Task 2.2 (regularization, overfitting) + Google PMLE 3.2
+    match: [overfitting, regularization]
+    subtopics:
+      - {id: mt-ge-diagnose, name: Bias-variance diagnosis with learning curves, match: [bias-variance, learning-curves]}
+      - {id: mt-ge-dropout-wd, name: Dropout / weight decay and data augmentation choices, match: [dropout, weight-decay]}
+      - {id: mt-ge-lr-finder, name: Learning-rate range test and batch-size scaling, match: [learning-rate-finder, batch-size-scaling]}
+      - {id: mt-ge-early-stop, name: Early stopping and checkpoint selection, match: [early-stopping]}
+      - {id: mt-ge-smoothing, name: Label smoothing and mixup / cutmix, match: [label-smoothing, mixup]}
+      - {id: mt-ge-norm, name: Normalization layer choice (BatchNorm / LayerNorm / RMSNorm), match: [layernorm, rmsnorm]}
+      - {id: mt-ge-double-descent, name: Double descent and overparameterized models, match: [double-descent]}
+      - {id: mt-ge-scaling, name: Scaling laws and compute-optimal model sizing, match: [scaling-laws]}
+  - id: mt-hpo
+    name: Hyperparameter optimization
+    source: AWS MLA-C01 Task 2.2 (hyperparameter tuning) + Google PMLE 3.2
+    match: [hyperparameter-tuning, bayesian-optimization]
+    subtopics:
+      - {id: mt-hp-optuna, name: Optuna studies with pruning and storage, match: [optuna, optuna-pruning]}
+      - {id: mt-hp-asha, name: Hyperband / ASHA multi-fidelity search, match: [hyperband, asha]}
+      - {id: mt-hp-managed, name: Managed tuning (SageMaker AMT / Vertex Vizier), match: [sagemaker-automatic-model-tuning, vertex-vizier]}
+      - {id: mt-hp-search-space, name: Search space design (log scales / conditional params), match: [search-space-design]}
+      - {id: mt-hp-ray-tune, name: Ray Tune search algorithms and schedulers, match: [ray-tune]}
+      - {id: mt-hp-pbt, name: Population-based training, match: [population-based-training]}
+      - {id: mt-hp-importance, name: Hyperparameter importance analysis, match: [hyperparameter-importance]}
+      - {id: mt-hp-wandb, name: W&B Sweeps, match: [wandb-sweeps]}
+      - {id: mt-hp-random, name: Random vs grid search and trial budgeting, match: [random-search]}
+  - id: mt-imbalance
+    name: Imbalanced data
+    source: AWS MLA-C01 Task 1.3 (class imbalance) + Task 2.3
+    match: [class-imbalance, smote]
+    subtopics:
+      - {id: mt-im-weights, name: Class weights and focal loss, match: [class-weights, focal-loss]}
+      - {id: mt-im-threshold, name: Threshold tuning under imbalance, match: [threshold-tuning]}
+      - {id: mt-im-resample, name: Over/undersampling inside CV folds, match: [oversampling, undersampling]}
+      - {id: mt-im-metrics, name: Metrics for rare events (PR-AUC / recall at precision), match: [pr-auc]}
+      - {id: mt-im-extreme, name: Extreme imbalance framed as anomaly detection, match: [extreme-imbalance]}
+      - {id: mt-im-recalibrate, name: Correcting probabilities after resampling, match: [resampling-calibration]}
+      - {id: mt-im-ensembles, name: Balanced ensembles (BalancedRandomForest / EasyEnsemble), match: [balanced-random-forest, easyensemble]}
+      - {id: mt-im-active, name: Active learning to collect minority examples, match: [active-learning]}
+  - id: mt-error-analysis
+    name: Error analysis and debugging models
+    source: Google PMLE 3.2 + Rules of ML (rule 26) + AWS MLA-C01 Task 2.3 (SageMaker Debugger, Clarify)
+    match: [error-analysis, model-debugging]
+    subtopics:
+      - {id: mt-ea-confusion, name: Confusion analysis and worst-error review, match: [confusion-matrix-analysis]}
+      - {id: mt-ea-label-noise, name: Finding label errors (confident learning / cleanlab), match: [label-noise, cleanlab]}
+      - {id: mt-ea-baselines, name: Baselines and sanity checks before modeling, match: [baselines]}
+      - {id: mt-ea-convergence, name: Diagnosing non-convergence and loss curves, match: [loss-curves, training-convergence]}
+      - {id: mt-ea-slices, name: Automated slice discovery, match: [slice-discovery]}
+      - {id: mt-ea-debugger, name: SageMaker Debugger built-in rules, match: [sagemaker-debugger]}
+      - {id: mt-ea-uncertainty, name: Uncertainty estimation (MC dropout / deep ensembles), match: [uncertainty-estimation, mc-dropout]}
+      - {id: mt-ea-ood, name: Out-of-distribution input detection, match: [ood-detection]}
+  - id: mt-transfer-learning
+    name: Transfer learning and pretrained models
+    source: Google PMLE 3.1 (pretrained models, Model Garden) + AWS MLA-C01 Task 2.1 (foundation models, JumpStart)
+    match: [transfer-learning, pretrained-models]
+    subtopics:
+      - {id: mt-tl-strategy, name: Feature extraction vs fine-tuning vs train-from-scratch, match: [feature-extraction-vs-fine-tuning]}
+      - {id: mt-tl-layerwise, name: Discriminative learning rates and gradual unfreezing, match: [discriminative-learning-rates, gradual-unfreezing]}
+      - {id: mt-tl-distillation, name: Knowledge distillation to smaller models, match: [knowledge-distillation]}
+      - {id: mt-tl-domain-shift, name: Domain adaptation and continued pretraining, match: [domain-adaptation, continued-pretraining]}
+      - {id: mt-tl-timm, name: Vision backbones with timm, match: [timm]}
+      - {id: mt-tl-setfit, name: Few-shot text classification with SetFit, match: [setfit]}
+      - {id: mt-tl-ssl, name: Self-supervised and contrastive pretraining, match: [self-supervised-learning, contrastive-learning]}
+      - {id: mt-tl-forgetting, name: Catastrophic forgetting mitigation, match: [catastrophic-forgetting]}
+  - id: mt-reproducibility
+    name: Reproducible training
+    source: Google PMLE 2.3 (tracking, lineage) + PyTorch reproducibility notes
+    match: [reproducibility, experiment-reproducibility]
+    subtopics:
+      - {id: mt-re-seeds, name: Seed control across libraries and dataloaders, match: [random-seeds]}
+      - {id: mt-re-env-pin, name: Pinning environments / data snapshots and code versions per run, match: [environment-pinning]}
+      - {id: mt-re-variance, name: Measuring run-to-run variance (multi-seed reporting), match: [multi-seed-evaluation]}
+  # --- MLOps (Google MLOps levels, Azure MLOps maturity, ML Test Score)
+      - {id: mt-re-nondeterminism, name: Sources of GPU nondeterminism, match: [gpu-nondeterminism]}
+      - {id: mt-re-wandb, name: Experiment tracking with Weights and Biases, match: [weights-and-biases]}
+      - {id: mt-re-hydra, name: Config management with Hydra, match: [hydra-config]}
+      - {id: mt-re-resume, name: Deterministic resume (data order / RNG state), match: [resume-determinism]}
+      - {id: mt-re-checklist, name: ML reproducibility checklist for reports, match: [reproducibility-checklist]}
+  - id: ops-pipelines
+    name: ML pipeline orchestration
+    source: Google MLOps level 1 (pipeline automation) + Google PMLE 5.1
+    match: [pipeline-orchestration, ml-pipelines]
+    subtopics:
+      - {id: ops-pi-kfp, name: Kubeflow Pipelines / Vertex AI Pipelines components, match: [kubeflow-pipelines, vertex-ai-pipelines]}
+      - {id: ops-pi-sagemaker, name: SageMaker Pipelines steps and conditions, match: [sagemaker-pipelines]}
+      - {id: ops-pi-airflow, name: Airflow / Dagster / Prefect for ML workflows, match: [airflow-ml, dagster, prefect]}
+      - {id: ops-pi-caching, name: Step caching / idempotency and backfills, match: [step-caching]}
+      - {id: ops-pi-metaflow, name: Metaflow / ZenML pipelines, match: [metaflow, zenml]}
+      - {id: ops-pi-tfx, name: TFX standard components, match: [tfx-components]}
+      - {id: ops-pi-argo, name: Argo Workflows for ML, match: [argo-workflows]}
+      - {id: ops-pi-schedules, name: Scheduled and event-triggered pipeline runs, match: [pipeline-schedules]}
+      - {id: ops-pi-azureml, name: Azure ML pipelines and components, match: [azure-ml-pipelines]}
+  - id: ops-cicd-ct
+    name: CI/CD and continuous training
+    source: Google MLOps level 2 (CI/CD pipeline automation) + AWS MLA-C01 Task 3.3
+    match: [ci-cd, continuous-training]
+    subtopics:
+      - {id: ops-cc-model-tests, name: ML Test Score tests (data / model / infra), match: [ml-test-score, model-testing]}
+      - {id: ops-cc-retrain-triggers, name: Retraining triggers (schedule / drift / data arrival), match: [retraining-triggers]}
+      - {id: ops-cc-gates, name: Promotion gates comparing challenger vs champion, match: [champion-challenger, promotion-gates]}
+      - {id: ops-cc-cml, name: CML / GitHub Actions reports for model PRs, match: [cml]}
+      - {id: ops-cc-iac, name: Infrastructure as code for ML resources, match: [ml-infrastructure-as-code]}
+      - {id: ops-cc-sm-projects, name: SageMaker Projects with CodePipeline / CodeBuild, match: [sagemaker-projects, codepipeline]}
+      - {id: ops-cc-cloud-build, name: Cloud Build triggers for Vertex AI pipelines, match: [cloud-build]}
+      - {id: ops-cc-maturity, name: MLOps maturity assessment (Google levels / Azure model), match: [mlops-maturity]}
+  - id: ops-data-validation
+    name: Data validation and versioning
+    source: Google MLOps (data validation, ML metadata) + AWS MLA-C01 Task 1.3 (data integrity)
+    match: [data-validation, data-versioning]
+    subtopics:
+      - {id: ops-dv-ge, name: Great Expectations / pandera schema checks, match: [great-expectations, pandera]}
+      - {id: ops-dv-tfdv, name: TFDV schema inference and skew detection, match: [tfdv]}
+      - {id: ops-dv-dvc, name: DVC data and pipeline versioning, match: [dvc]}
+      - {id: ops-dv-lakefs, name: Versioned data lakes (lakeFS / Delta time travel), match: [lakefs, delta-time-travel]}
+      - {id: ops-dv-contracts, name: Data contracts between producers and ML consumers, match: [data-contracts]}
+      - {id: ops-dv-gates, name: Data quality gates that block pipelines, match: [data-quality-gates]}
+      - {id: ops-dv-deequ, name: Deequ / Glue Data Quality at scale, match: [deequ, glue-data-quality]}
+      - {id: ops-dv-labels, name: Label quality and annotation workflows (Ground Truth), match: [sagemaker-ground-truth, annotation-quality]}
+  - id: ops-deployment
+    name: Model deployment strategies
+    source: Google PMLE 4.1-4.2 + AWS MLA-C01 Task 3.1 (deployment targets and strategies)
+    match: [model-deployment, deployment-strategies]
+    subtopics:
+      - {id: ops-de-canary, name: Canary and blue/green model rollout, match: [canary-release, blue-green-deployment]}
+      - {id: ops-de-shadow, name: Shadow deployment and offline replay, match: [shadow-deployment]}
+      - {id: ops-de-ab, name: A/B tests and multi-armed bandits for models, match: [ab-testing, multi-armed-bandit]}
+      - {id: ops-de-endpoints, name: Endpoint types (real-time / serverless / async / batch transform), match: [async-inference, serverless-inference, batch-transform]}
+      - {id: ops-de-multimodel, name: Multi-model endpoints and model packing, match: [multi-model-endpoints]}
+      - {id: ops-de-rollback, name: Deployment guardrails and automatic rollback, match: [deployment-guardrails, automatic-rollback]}
+      - {id: ops-de-edge, name: Edge deployment (SageMaker Neo / on-device), match: [sagemaker-neo, edge-deployment]}
+      - {id: ops-de-vertex, name: Vertex AI endpoints and traffic split, match: [vertex-ai-endpoints, traffic-split]}
+      - {id: ops-de-autoscaling, name: Endpoint autoscaling policies, match: [endpoint-autoscaling]}
+  - id: ops-serving
+    name: Model serving runtimes
+    source: Google PMLE 4.2 (scaling online serving) + KServe / Triton / vLLM / BentoML docs
+    match: [model-serving, inference]
+    subtopics:
+      - {id: ops-se-triton, name: Triton Inference Server model repository and dynamic batching, match: [triton, dynamic-batching]}
+      - {id: ops-se-kserve, name: KServe InferenceService, match: [kserve]}
+      - {id: ops-se-vllm, name: vLLM serving for LLMs (paged attention / continuous batching), match: [vllm, continuous-batching]}
+      - {id: ops-se-bentoml, name: BentoML / FastAPI model services, match: [bentoml, fastapi-model-serving]}
+      - {id: ops-se-latency, name: Latency budgets and load testing inference, match: [inference-load-testing, latency-budget]}
+      - {id: ops-se-ensemble, name: Triton ensembles and business logic scripting, match: [triton-ensemble]}
+      - {id: ops-se-torchserve, name: TorchServe handlers and model archives, match: [torchserve]}
+      - {id: ops-se-sglang, name: SGLang and choosing an LLM serving engine, match: [sglang]}
+      - {id: ops-se-ray-serve, name: Ray Serve deployments, match: [ray-serve]}
+      - {id: ops-se-cold-start, name: Model warmup and cold-start mitigation, match: [cold-start]}
+  - id: ops-batch-inference
+    name: Batch and streaming inference
+    source: Google PMLE 4.1 (batch vs online) + AWS MLA-C01 Task 3.1
+    match: [batch-inference, streaming-inference]
+    subtopics:
+      - {id: ops-bi-spark, name: Distributed batch scoring (Spark / Ray Data), match: [ray-data, spark-batch-scoring]}
+      - {id: ops-bi-stream, name: Streaming inference with Kafka / Flink, match: [kafka-inference]}
+      - {id: ops-bi-precompute, name: Precomputed predictions and caching, match: [precomputed-predictions]}
+      - {id: ops-bi-backfill, name: Backfilling predictions after model changes, match: [prediction-backfill]}
+      - {id: ops-bi-vertex, name: Vertex AI batch prediction, match: [vertex-batch-prediction]}
+      - {id: ops-bi-warehouse, name: In-warehouse inference (BigQuery ML / Snowflake), match: [bigquery-ml]}
+      - {id: ops-bi-vllm-offline, name: Offline LLM batch inference with vLLM, match: [vllm-offline-inference]}
+      - {id: ops-bi-validate, name: Batch scoring job scheduling and output validation, match: [batch-scoring-validation]}
+  - id: ops-monitoring
+    name: Production monitoring
+    source: Google PMLE 6.2 + AWS MLA-C01 Task 4.1 (SageMaker Model Monitor)
+    match: [model-monitoring, data-drift]
+    subtopics:
+      - {id: ops-mo-drift-tests, name: Drift statistics (PSI / KS / Jensen-Shannon), match: [psi, jensen-shannon]}
+      - {id: ops-mo-skew, name: Training-serving skew detection, match: [training-serving-skew]}
+      - {id: ops-mo-delayed-labels, name: Performance monitoring with delayed labels, match: [label-delay]}
+      - {id: ops-mo-model-monitor, name: SageMaker Model Monitor / Vertex Model Monitoring setup, match: [sagemaker-model-monitor, vertex-model-monitoring]}
+      - {id: ops-mo-evidently, name: Evidently reports and test suites, match: [evidently]}
+      - {id: ops-mo-concept, name: Concept drift detection, match: [concept-drift]}
+      - {id: ops-mo-alerting, name: Model monitoring alerts and runbooks, match: [model-alerting]}
+      - {id: ops-mo-endpoint-metrics, name: Endpoint operational metrics (CloudWatch / Prometheus), match: [endpoint-metrics]}
+      - {id: ops-mo-attribution, name: Feature attribution drift, match: [attribution-drift]}
+  - id: ops-governance
+    name: Model governance, lineage and responsible AI
+    source: Google PMLE 6.1 (responsible AI) + AWS MLA-C01 Task 4.3 + NIST AI RMF Govern/Map
+    match: [model-governance, ml-lineage]
+    subtopics:
+      - {id: ops-go-model-cards, name: Model cards and documentation, match: [model-cards]}
+      - {id: ops-go-bias, name: Bias and fairness metrics (SageMaker Clarify / Fairlearn), match: [fairness-metrics, fairlearn, sagemaker-clarify]}
+      - {id: ops-go-lineage, name: ML metadata and lineage tracking, match: [ml-metadata, artifact-lineage]}
+      - {id: ops-go-security, name: ML security (IAM least privilege / VPC endpoints / encryption), match: [ml-security]}
+      - {id: ops-go-approval, name: Model approval workflows and audit trails, match: [model-approval-workflow]}
+      - {id: ops-go-sm-cards, name: SageMaker Model Cards and model dashboard, match: [sagemaker-model-cards]}
+      - {id: ops-go-xai, name: Vertex Explainable AI and explanation reports, match: [vertex-explainable-ai]}
+      - {id: ops-go-privacy, name: Privacy-preserving ML (differential privacy / federated learning), match: [differential-privacy, federated-learning]}
+      - {id: ops-go-mrm, name: Model risk management and independent validation (SR 11-7), match: [model-risk-management]}
+  # --- Feature engineering
+  - id: fe-numeric
+    name: Numeric feature transforms
+    source: AWS MLA-C01 Task 1.2 (scaling, normalization, binning, log transforms) + scikit-learn 6.3
+    match: [numeric-features, feature-scaling]
+    subtopics:
+      - {id: fe-nu-log-power, name: Log / Box-Cox / Yeo-Johnson for skewed features, match: [log-transform, box-cox]}
+      - {id: fe-nu-binning, name: Binning and outlier clipping, match: [binning, winsorizing]}
+      - {id: fe-nu-interactions, name: Interaction and ratio features, match: [interaction-features, polynomial-features]}
+      - {id: fe-nu-scaling-choice, name: Which models need scaling and which do not, match: [scaling-choice]}
+      - {id: fe-nu-minmax, name: Standardization vs min-max scaling, match: [min-max-scaling]}
+      - {id: fe-nu-rank, name: Rank and quantile transforms, match: [rank-transform]}
+      - {id: fe-nu-aggregates, name: Group aggregate features, match: [aggregation-features]}
+      - {id: fe-nu-domain, name: Domain-derived features from expert knowledge, match: [domain-features]}
+  - id: fe-categorical
+    name: Categorical encoding
+    source: AWS MLA-C01 Task 1.2 (one-hot, label, binary encoding) + scikit-learn 6.3.4
+    match: [categorical-encoding, one-hot-encoding]
+    subtopics:
+      - {id: fe-ca-target, name: Target encoding with cross-fitting, match: [target-encoding]}
+      - {id: fe-ca-hashing, name: Hashing trick for high cardinality, match: [hashing-trick, high-cardinality]}
+      - {id: fe-ca-entity-embed, name: Learned entity embeddings, match: [entity-embeddings]}
+      - {id: fe-ca-rare, name: Rare category grouping and unseen categories, match: [rare-categories, unseen-categories]}
+      - {id: fe-ca-ordinal, name: Ordinal vs nominal encoding choice, match: [ordinal-encoding]}
+      - {id: fe-ca-count, name: Count and frequency encoding, match: [frequency-encoding]}
+      - {id: fe-ca-binary, name: Binary encoding, match: [binary-encoding]}
+      - {id: fe-ca-multihot, name: Multi-valued categorical features (multi-hot), match: [multi-hot-encoding]}
+  - id: fe-missing
+    name: Missing data handling
+    source: AWS MLA-C01 Task 1.2 (imputation) + scikit-learn 6.4
+    match: [missing-data, missing-values]
+    subtopics:
+      - {id: fe-mi-mechanisms, name: MCAR / MAR / MNAR diagnosis and indicator features, match: [missingness-mechanisms]}
+      - {id: fe-mi-impute-strategy, name: Imputation strategy choice and leakage-safe fitting, match: [imputation-strategy]}
+      - {id: fe-mi-native, name: Models with native missing-value handling, match: [native-missing-support]}
+      - {id: fe-mi-time, name: Forward-fill and interpolation for time series gaps, match: [forward-fill, interpolation]}
+      - {id: fe-mi-mice, name: Multiple imputation (MICE), match: [multiple-imputation, mice]}
+      - {id: fe-mi-profile, name: Profiling missingness patterns, match: [missingno]}
+      - {id: fe-mi-deletion, name: Deletion vs imputation trade-offs, match: [listwise-deletion]}
+      - {id: fe-mi-serving, name: Handling missing values at serving time, match: [serving-missing-values]}
+  - id: fe-text
+    name: Text features
+    source: scikit-learn 6.2.3 Text feature extraction + AWS MLA-C01 Task 1.2 (tokenization, embeddings)
+    match: [text-features, tf-idf]
+    subtopics:
+      - {id: fe-te-tfidf, name: TfidfVectorizer n-grams / min_df and sublinear tf, match: [tfidfvectorizer]}
+      - {id: fe-te-embeddings, name: Sentence embeddings as features, match: [sentence-embeddings]}
+      - {id: fe-te-cleaning, name: Text normalization and cleaning, match: [text-normalization]}
+      - {id: fe-te-meta, name: Handcrafted text statistics features, match: [text-statistics-features]}
+      - {id: fe-te-bow, name: CountVectorizer / HashingVectorizer bag of words, match: [countvectorizer, hashingvectorizer]}
+      - {id: fe-te-lemma, name: Tokenization / stemming and lemmatization with spaCy, match: [lemmatization, spacy]}
+      - {id: fe-te-entities, name: Named-entity and keyword features, match: [entity-features]}
+      - {id: fe-te-topics, name: Topic model features (BERTopic), match: [bertopic]}
+  - id: fe-time
+    name: Time and sequence features
+    source: AWS MLA-C01 Task 1.2 + Google PMLE 2.2
+    match: [time-series, lag-features]
+    subtopics:
+      - {id: fe-ti-cyclical, name: Cyclical encoding of date/time parts, match: [cyclical-encoding]}
+      - {id: fe-ti-rolling, name: Rolling and expanding window aggregates, match: [rolling-window]}
+      - {id: fe-ti-holidays, name: Calendar and holiday features, match: [holiday-features]}
+      - {id: fe-ti-diff, name: Differencing and target transforms for forecasting, match: [differencing]}
+      - {id: fe-ti-resample, name: Resampling irregular series to a fixed frequency, match: [time-resampling]}
+      - {id: fe-ti-ewm, name: Exponentially weighted features, match: [ewm-features]}
+      - {id: fe-ti-tsfresh, name: Automated time-series features (tsfresh), match: [tsfresh]}
+      - {id: fe-ti-recency, name: Time-since-event and recency features, match: [recency-features]}
+  - id: fe-leakage
+    name: Leakage avoidance
+    source: Google PMLE 2.2 + Rules of ML (training-serving skew)
+    match: [data-leakage, target-leakage]
+    subtopics:
+      - {id: fe-le-pit, name: Point-in-time correct joins, match: [point-in-time-correctness]}
+      - {id: fe-le-audit, name: Leakage audits (too-good features / adversarial validation), match: [adversarial-validation, leakage-audit]}
+      - {id: fe-le-preprocessing, name: Preprocessing fit on full data (scaler / imputer leakage), match: [preprocessing-leakage]}
+      - {id: fe-le-group, name: Duplicate entities across train and test, match: [entity-leakage]}
+      - {id: fe-le-purged, name: Purged / embargoed time-series CV, match: [purged-cv, embargo]}
+      - {id: fe-le-availability, name: Features unavailable at prediction time, match: [prediction-time-availability]}
+      - {id: fe-le-proxy, name: Target proxies in IDs / text / metadata, match: [proxy-leakage]}
+      - {id: fe-le-oof, name: Out-of-fold aggregate features, match: [out-of-fold-features]}
+  - id: fe-feature-stores
+    name: Feature stores
+    source: Google PMLE 2.1 (Vertex AI Feature Store) + AWS MLA-C01 Task 1.2 (SageMaker Feature Store) + Feast docs
+    match: [feature-store, feast]
+    subtopics:
+      - {id: fe-fs-feast, name: Feast feature views / materialization and online serving, match: [feast-materialize, feature-views]}
+      - {id: fe-fs-sagemaker, name: SageMaker Feature Store groups and offline store, match: [sagemaker-feature-store]}
+      - {id: fe-fs-vertex, name: Vertex AI Feature Store, match: [vertex-feature-store]}
+      - {id: fe-fs-design, name: Feature store adoption decision and entity design, match: [feature-store-design]}
+      - {id: fe-fs-on-demand, name: On-demand / request-time features, match: [on-demand-features]}
+      - {id: fe-fs-streaming, name: Streaming feature pipelines to the online store, match: [streaming-features]}
+      - {id: fe-fs-historical, name: Point-in-time historical retrieval for training sets, match: [get-historical-features]}
+      - {id: fe-fs-databricks, name: Databricks Feature Engineering in Unity Catalog, match: [databricks-feature-store]}
+  - id: fe-selection
+    name: Feature selection
+    source: scikit-learn User Guide 1.13 Feature selection + AWS MLA-C01 Task 1.2
+    match: [feature-selection]
+    subtopics:
+      - {id: fe-se-filter, name: Filter methods (mutual information / variance threshold / correlation), match: [mutual-information, variancethreshold]}
+      - {id: fe-se-wrapper, name: RFE / SequentialFeatureSelector, match: [rfecv, sequentialfeatureselector]}
+      - {id: fe-se-embedded, name: L1 and model-based selection (SelectFromModel), match: [selectfrommodel, l1-selection]}
+  # --- LLM application engineering (Anthropic / OpenAI docs, OWASP LLM Top 10, NIST AI RMF)
+      - {id: fe-se-stability, name: Selection stability and leakage in selection, match: [selection-stability]}
+      - {id: fe-se-boruta, name: Boruta and shadow features, match: [boruta]}
+      - {id: fe-se-vif, name: Multicollinearity (VIF) and correlated-feature pruning, match: [vif]}
+      - {id: fe-se-permutation, name: Permutation-based feature elimination, match: [permutation-feature-selection]}
+      - {id: fe-se-shap, name: SHAP-based feature selection, match: [shap-feature-selection]}
+  - id: llm-prompting
+    name: Prompt engineering
+    source: Anthropic docs/Prompt engineering overview + OpenAI prompt engineering guide
+    match: [prompt-engineering, system-prompt]
+    subtopics:
+      - {id: llm-pr-xml, name: Structuring prompts with XML tags and long documents, match: [xml-tags, long-context-prompting]}
+      - {id: llm-pr-few-shot, name: Few-shot examples selection, match: [few-shot]}
+      - {id: llm-pr-cot, name: Chain of thought and extended thinking, match: [chain-of-thought, extended-thinking]}
+      - {id: llm-pr-chaining, name: Prompt chaining and decomposition, match: [prompt-chaining]}
+      - {id: llm-pr-prefill, name: Prefill and role prompting, match: [prefill, role-prompting]}
+      - {id: llm-pr-versioning, name: Prompt versioning and regression testing, match: [prompt-versioning]}
+      - {id: llm-pr-clear, name: Clear and direct instructions with context, match: [clear-instructions]}
+      - {id: llm-pr-meta, name: Prompt generators / improvers and meta-prompting, match: [prompt-improver, meta-prompting]}
+      - {id: llm-pr-migration, name: Migrating prompts across model generations, match: [prompt-migration]}
+      - {id: llm-pr-hallucination, name: Reducing hallucinations (permission to abstain / quote grounding), match: [reduce-hallucinations]}
+  - id: llm-structured-output
+    name: Structured outputs
+    source: Anthropic docs/Structured outputs + OpenAI Structured Outputs guide
+    match: [structured-output, json-schema]
+    subtopics:
+      - {id: llm-so-strict, name: Schema-constrained outputs (strict JSON schema), match: [strict-json-schema, constrained-decoding]}
+      - {id: llm-so-pydantic, name: Pydantic / Instructor validation and retry, match: [instructor, pydantic]}
+      - {id: llm-so-extraction, name: Information extraction pipelines, match: [llm-extraction]}
+      - {id: llm-so-classification, name: LLM classification with fixed labels and logprobs, match: [llm-classification, logprobs]}
+      - {id: llm-so-json-mode, name: JSON mode vs strict schemas vs forced tool calls, match: [json-mode]}
+      - {id: llm-so-limits, name: Supported JSON Schema features and limits, match: [json-schema-limitations]}
+      - {id: llm-so-streaming, name: Streaming partial structured output, match: [partial-json-streaming]}
+      - {id: llm-so-refusals, name: Refusals and max_tokens truncation in structured output, match: [structured-output-refusals]}
+  - id: llm-tool-use
+    name: Tool use and function calling
+    source: Anthropic docs/Tool use + OpenAI function calling guide + MCP spec
+    match: [tool-use, function-calling]
+    subtopics:
+      - {id: llm-tu-schema-design, name: Tool schema and description design, match: [tool-schema-design]}
+      - {id: llm-tu-parallel, name: Parallel tool calls and tool_choice, match: [parallel-tool-calls, tool-choice]}
+      - {id: llm-tu-mcp, name: Model Context Protocol servers, match: [mcp, model-context-protocol]}
+      - {id: llm-tu-errors, name: Tool errors / timeouts and result size limits, match: [tool-result-errors]}
+      - {id: llm-tu-loop, name: Implementing the client tool-use loop (tool_use / tool_result), match: [tool-use-loop]}
+      - {id: llm-tu-server-tools, name: Server tools (web search / web fetch / code execution), match: [server-tools, web-search-tool]}
+      - {id: llm-tu-tool-search, name: Scaling to many tools with tool search, match: [tool-search]}
+      - {id: llm-tu-mcp-connector, name: Remote MCP servers via the API MCP connector, match: [mcp-connector]}
+      - {id: llm-tu-streaming, name: Streaming tool-call arguments, match: [tool-streaming]}
+  - id: llm-rag
+    name: Retrieval-augmented generation
+    source: Anthropic docs/Contextual retrieval + OpenAI retrieval guide
+    match: [rag, retrieval-augmented-generation]
+    subtopics:
+      - {id: llm-ra-chunking, name: Chunking strategies and contextual retrieval, match: [chunking, contextual-retrieval]}
+      - {id: llm-ra-hybrid, name: Hybrid search and reranking, match: [hybrid-search, reranking]}
+      - {id: llm-ra-query-transform, name: Query rewriting / HyDE / multi-query, match: [query-rewriting, hyde]}
+      - {id: llm-ra-citations, name: Grounded answers with citations, match: [citations, grounded-generation]}
+      - {id: llm-ra-graphrag, name: GraphRAG and structured retrieval, match: [graphrag]}
+      - {id: llm-ra-eval, name: RAG evaluation (context precision / recall / RAGAS), match: [ragas, retrieval-evaluation]}
+      - {id: llm-ra-parsing, name: Document parsing for RAG (PDF / tables / OCR), match: [document-parsing]}
+      - {id: llm-ra-agentic, name: Agentic RAG with retrieval as a tool, match: [agentic-rag]}
+      - {id: llm-ra-acl, name: Permission-aware retrieval and index freshness, match: [acl-aware-retrieval]}
+  - id: llm-embeddings-vectordb
+    name: Embeddings and vector databases
+    source: OpenAI embeddings guide + pgvector / Qdrant / FAISS docs
+    match: [embeddings, vector-search]
+    subtopics:
+      - {id: llm-ev-model-choice, name: Choosing embedding models (MTEB / dimensions / Matryoshka), match: [embedding-model-selection, matryoshka-embeddings]}
+      - {id: llm-ev-pgvector, name: pgvector indexes (HNSW / IVFFlat), match: [pgvector, hnsw]}
+      - {id: llm-ev-ann-tuning, name: ANN recall vs latency tuning (FAISS / Qdrant), match: [ann-tuning, faiss]}
+      - {id: llm-ev-reindex, name: Re-embedding and index migration, match: [re-embedding]}
+      - {id: llm-ev-qdrant, name: Managed vector DBs (Qdrant / Pinecone) collections and payload filters, match: [qdrant, pinecone]}
+      - {id: llm-ev-vq, name: Vector quantization (scalar / binary / product), match: [vector-quantization, product-quantization]}
+      - {id: llm-ev-similarity, name: Similarity metrics and normalization, match: [cosine-similarity]}
+      - {id: llm-ev-finetune, name: Fine-tuning embedding models with sentence-transformers, match: [embedding-fine-tuning]}
+      - {id: llm-ev-sparse, name: Sparse and late-interaction retrieval (SPLADE / ColBERT), match: [splade, colbert]}
+  - id: llm-evaluation
+    name: LLM evaluation
+    source: Anthropic docs/Define success criteria and build evaluations + OpenAI evals + NIST AI RMF Measure (TEVV)
+    match: [llm-evaluation, eval-set]
+    subtopics:
+      - {id: llm-ev-golden, name: Building golden datasets and test cases, match: [golden-dataset]}
+      - {id: llm-ev-judge, name: LLM-as-judge rubric design and calibration, match: [llm-as-judge]}
+      - {id: llm-ev-pairwise, name: Pairwise comparison and regression evals in CI, match: [pairwise-evaluation, eval-regression-ci]}
+      - {id: llm-ev-agent-eval, name: Evaluating agents and multi-turn tasks, match: [agent-evaluation]}
+      - {id: llm-ev-hallucination, name: Hallucination and faithfulness measurement, match: [faithfulness, hallucination-detection]}
+      - {id: llm-ev-criteria, name: Defining measurable success criteria, match: [success-criteria]}
+      - {id: llm-ev-code-graded, name: Code-graded evals (exact match / regex / unit tests), match: [code-graded-evals]}
+      - {id: llm-ev-contamination, name: Benchmark limitations and contamination, match: [benchmark-contamination]}
+      - {id: llm-ev-harness, name: Eval harnesses (promptfoo / OpenAI Evals), match: [promptfoo, openai-evals]}
+  - id: llm-safety
+    name: Guardrails and LLM security
+    source: OWASP Top 10 for LLM Applications 2025 + Anthropic docs/Strengthen guardrails
+    match: [guardrails, prompt-injection]
+    subtopics:
+      - {id: llm-sa-injection, name: Indirect prompt injection defenses, match: [indirect-prompt-injection]}
+      - {id: llm-sa-moderation, name: Input/output moderation and content classifiers, match: [content-moderation]}
+      - {id: llm-sa-pii, name: PII redaction and data leakage controls, match: [pii-redaction]}
+      - {id: llm-sa-excessive-agency, name: Excessive agency and tool permissioning, match: [excessive-agency]}
+      - {id: llm-sa-red-team, name: Red teaming LLM applications, match: [red-teaming]}
+      - {id: llm-sa-jailbreak, name: Jailbreak mitigation, match: [jailbreak-mitigation]}
+      - {id: llm-sa-prompt-leak, name: System prompt leakage (OWASP LLM07), match: [system-prompt-leakage]}
+      - {id: llm-sa-output, name: Improper output handling (OWASP LLM05), match: [improper-output-handling]}
+      - {id: llm-sa-unbounded, name: Unbounded consumption and denial of wallet (OWASP LLM10), match: [unbounded-consumption]}
+      - {id: llm-sa-poisoning, name: Data / model poisoning and LLM supply chain (OWASP LLM03 / LLM04), match: [data-poisoning, llm-supply-chain]}
+  - id: llm-cost-latency
+    name: Cost, latency and throughput
+    source: Anthropic docs/Prompt caching, Batch processing, Streaming, Reduce latency + OpenAI latency optimization
+    match: [prompt-caching, llm-latency]
+    subtopics:
+      - {id: llm-cl-cache, name: Prompt caching breakpoints and cache hit rate, match: [cache-control]}
+      - {id: llm-cl-batch, name: Batch API for offline workloads, match: [batch-api, message-batches]}
+      - {id: llm-cl-streaming, name: Streaming responses (SSE) to clients, match: [sse-streaming, llm-streaming]}
+      - {id: llm-cl-routing, name: Model routing and cascades by difficulty, match: [model-routing, llm-cascade]}
+      - {id: llm-cl-rate-limits, name: Rate limits / retries and backoff, match: [rate-limits, exponential-backoff]}
+      - {id: llm-cl-token-count, name: Token counting and budget control, match: [token-counting]}
+      - {id: llm-cl-latency, name: Latency levers (model size / output length / streaming / parallel calls), match: [latency-optimization]}
+      - {id: llm-cl-tiers, name: Service tiers and priority capacity, match: [service-tiers]}
+      - {id: llm-cl-context, name: Context window management and long-context cost, match: [context-window-management]}
+      - {id: llm-cl-cost-model, name: Cost modeling from token prices, match: [llm-cost-modeling]}
+  - id: llm-agents
+    name: Agent design
+    source: Anthropic 'Building effective agents' + OpenAI agents guide
+    match: [agents, agentic-workflows]
+    subtopics:
+      - {id: llm-ag-patterns, name: Workflow patterns (routing / parallelization / orchestrator-workers / evaluator-optimizer), match: [orchestrator-workers, evaluator-optimizer]}
+      - {id: llm-ag-context, name: Context engineering and compaction for long-running agents, match: [context-engineering, context-compaction]}
+      - {id: llm-ag-computer-use, name: Computer use and browser agents, match: [computer-use]}
+      - {id: llm-ag-sandbox, name: Code execution sandboxes for agents, match: [code-execution-sandbox]}
+      - {id: llm-ag-sdk, name: Agent SDKs (Claude Agent SDK / OpenAI Agents SDK), match: [claude-agent-sdk, openai-agents-sdk]}
+      - {id: llm-ag-subagents, name: Multi-agent systems and subagents, match: [subagents, multi-agent-systems]}
+      - {id: llm-ag-memory, name: Memory tool and persistent agent memory, match: [memory-tool]}
+      - {id: llm-ag-budget, name: Agent loop stopping conditions and budgets, match: [agent-loop-budget]}
+      - {id: llm-ag-skills, name: Agent Skills packaging, match: [agent-skills]}
+  - id: llm-customization
+    name: Model customization choices
+    source: OpenAI fine-tuning guide + Anthropic docs (choosing a model, fine-tuning vs prompting)
+    match: [fine-tuning-vs-prompting, model-selection]
+    subtopics:
+      - {id: llm-cu-ft-api, name: Hosted fine-tuning APIs (data format / validation / evals), match: [hosted-fine-tuning]}
+      - {id: llm-cu-distill, name: Distilling a large model into a small one, match: [model-distillation]}
+      - {id: llm-cu-selection, name: Picking a model by quality / cost / latency evals, match: [llm-model-selection]}
+      - {id: llm-cu-synthetic, name: Synthetic training data generation, match: [synthetic-data-generation]}
+      - {id: llm-cu-rft, name: Reinforcement fine-tuning with graders, match: [reinforcement-fine-tuning]}
+      - {id: llm-cu-open-weights, name: Self-hosting open-weight models vs API models, match: [open-weight-models]}
+      - {id: llm-cu-bedrock, name: Customizing models on Bedrock / Vertex AI, match: [bedrock-custom-models]}
+      - {id: llm-cu-deprecation, name: Model version pinning and deprecation migrations, match: [model-deprecation]}
+  - id: llm-observability
+    name: LLM observability
+    source: OpenTelemetry GenAI semantic conventions + Langfuse / Phoenix docs
+    match: [llm-observability, llm-tracing]
+    subtopics:
+      - {id: llm-ob-otel, name: OpenTelemetry GenAI spans, match: [opentelemetry-genai]}
+      - {id: llm-ob-langfuse, name: Langfuse / Phoenix tracing and feedback, match: [langfuse, arize-phoenix]}
+      - {id: llm-ob-feedback, name: Collecting user feedback into eval sets, match: [user-feedback-loop]}
+      - {id: llm-ob-cost, name: Per-feature token cost attribution, match: [token-cost-attribution]}
+      - {id: llm-ob-logging, name: Request / response logging with PII controls and retention, match: [llm-request-logging]}
+      - {id: llm-ob-online-eval, name: Sampling production traffic for online evaluation, match: [production-eval-sampling]}
+      - {id: llm-ob-dashboards, name: LLM metrics dashboards (latency / tokens / errors / cache hits), match: [llm-metrics-dashboard]}
+      - {id: llm-ob-debug, name: Debugging bad outputs from traces, match: [trace-debugging]}
+  - id: llm-risk
+    name: AI risk management
+    source: NIST AI RMF 1.0 + Generative AI Profile (AI 600-1) + EU AI Act obligations
+    match: [ai-risk-management, nist-ai-rmf]
+    subtopics:
+      - {id: llm-ri-map, name: AI system impact assessment (Map function), match: [ai-impact-assessment]}
+      - {id: llm-ri-measure, name: TEVV plan and trustworthiness metrics (Measure), match: [tevv]}
+      - {id: llm-ri-incidents, name: AI incident response and logging (Manage), match: [ai-incident-response]}
+      - {id: llm-ri-euaiact, name: EU AI Act risk classification and obligations, match: [eu-ai-act]}
+      - {id: llm-ri-govern, name: GOVERN function policies / roles and accountability, match: [ai-governance-policy]}
+      - {id: llm-ri-genai-profile, name: Generative AI Profile risks and actions (NIST AI 600-1), match: [genai-profile]}
+      - {id: llm-ri-third-party, name: Third-party AI and model supplier risk (GOVERN 6 / MANAGE 3), match: [third-party-ai-risk]}
+      - {id: llm-ri-iso42001, name: ISO/IEC 42001 AI management system, match: [iso-42001]}
+      - {id: llm-ri-transparency, name: Transparency and AI-generated content disclosure, match: [ai-transparency]}
+  # --- ML platform engineering
+  - id: plat-compute
+    name: Training compute and GPU scheduling
+    source: Google PMLE 3.3 (choosing hardware) + NVIDIA GPU Operator / Kueue / Slurm docs
+    match: [gpu, training-compute]
+    subtopics:
+      - {id: plat-co-kueue, name: Kueue quotas and gang scheduling on Kubernetes, match: [kueue, gang-scheduling]}
+      - {id: plat-co-gpu-sharing, name: GPU sharing (MIG / time-slicing / MPS), match: [mig, gpu-time-slicing]}
+      - {id: plat-co-hardware, name: Choosing GPU vs TPU and instance types, match: [accelerator-selection, tpu]}
+      - {id: plat-co-network, name: High-speed interconnect (NVLink / InfiniBand / EFA) for multi-node, match: [efa, infiniband]}
+      - {id: plat-co-gpu-operator, name: NVIDIA GPU Operator and device plugin, match: [gpu-operator, nvidia-device-plugin]}
+      - {id: plat-co-slurm, name: Slurm GPU jobs (sbatch / gres / srun), match: [sbatch, gres]}
+      - {id: plat-co-storage, name: Training storage throughput (FSx for Lustre / GCS FUSE), match: [fsx-lustre]}
+      - {id: plat-co-memory, name: Estimating GPU memory for training and inference, match: [gpu-memory-estimation]}
+  - id: plat-orchestration
+    name: Workload orchestration
+    source: Kubeflow docs (Training Operator) + Ray docs (Ray Train, KubeRay)
+    match: [kubeflow, ray]
+    subtopics:
+      - {id: plat-or-kuberay, name: KubeRay clusters and autoscaling, match: [kuberay]}
+      - {id: plat-or-training-operator, name: Kubeflow Training Operator (PyTorchJob), match: [pytorchjob, training-operator]}
+      - {id: plat-or-managed, name: Managed training jobs (SageMaker / Vertex AI custom training), match: [sagemaker-training-jobs, vertex-custom-training]}
+      - {id: plat-or-volcano, name: Batch job queues and priorities (Volcano / Slurm partitions), match: [volcano, slurm]}
+      - {id: plat-or-ray-train, name: Ray Train TorchTrainer, match: [ray-train]}
+      - {id: plat-or-jobset, name: JobSet and LeaderWorkerSet for multi-node jobs, match: [jobset, leaderworkerset]}
+      - {id: plat-or-hyperpod, name: SageMaker HyperPod resilient clusters, match: [sagemaker-hyperpod]}
+      - {id: plat-or-skypilot, name: SkyPilot multi-cloud jobs, match: [skypilot]}
+  - id: plat-dev-env
+    name: ML developer environments and self-service
+    source: Google PMLE 2.3 (Vertex AI Workbench) + JupyterHub / Kubeflow Notebooks docs
+    match: [ml-platform, self-service]
+    subtopics:
+      - {id: plat-de-jupyterhub, name: JupyterHub on Kubernetes with GPU profiles, match: [jupyterhub]}
+      - {id: plat-de-images, name: Reproducible GPU container images (CUDA / driver compatibility), match: [cuda-container-images]}
+      - {id: plat-de-templates, name: Project templates and golden paths for ML teams, match: [ml-golden-path]}
+      - {id: plat-de-data-access, name: Data access and credentials for notebooks, match: [notebook-data-access]}
+      - {id: plat-de-studio, name: SageMaker Studio / Vertex AI Workbench, match: [sagemaker-studio, vertex-workbench]}
+      - {id: plat-de-kf-notebooks, name: Kubeflow Notebooks and profiles, match: [kubeflow-notebooks]}
+      - {id: plat-de-devcontainer, name: Dev containers and remote GPU development, match: [devcontainer-gpu]}
+      - {id: plat-de-culling, name: Idle notebook and kernel culling, match: [idle-culling]}
+  - id: plat-cost
+    name: Platform cost and capacity
+    source: AWS MLA-C01 Task 4.2 (monitor and optimize infrastructure and costs)
+    match: [cost-optimization, finops]
+    subtopics:
+      - {id: plat-cs-spot, name: Spot training with checkpoint-restart, match: [spot-instances, managed-spot-training]}
+      - {id: plat-cs-chargeback, name: GPU utilization tracking and chargeback, match: [gpu-chargeback]}
+      - {id: plat-cs-inference-right-size, name: Right-sizing inference (Inference Recommender / autoscaling), match: [inference-recommender, right-sizing]}
+      - {id: plat-cs-reservations, name: GPU reservations and capacity blocks, match: [capacity-blocks, gpu-reservations]}
+      - {id: plat-cs-karpenter, name: GPU node autoscaling (Karpenter / cluster autoscaler), match: [karpenter-gpu]}
+      - {id: plat-cs-commitments, name: Savings Plans and committed-use discounts for ML, match: [sagemaker-savings-plans, committed-use-discounts]}
+      - {id: plat-cs-neuron, name: Alternative accelerators (Inferentia / Trainium), match: [inferentia, trainium]}
+      - {id: plat-cs-scale-zero, name: Scale-to-zero inference, match: [scale-to-zero]}
+  - id: plat-observability
+    name: Platform observability
+    source: NVIDIA DCGM docs + AWS MLA-C01 Task 4.1
+    match: [dcgm, gpu-monitoring]
+    subtopics:
+      - {id: plat-ob-dcgm, name: DCGM exporter metrics and alerts, match: [dcgm-exporter]}
+      - {id: plat-ob-xid, name: GPU health (Xid errors / ECC) and node remediation, match: [xid-errors]}
+      - {id: plat-ob-job-metrics, name: Training job health dashboards (MFU / throughput / stragglers), match: [mfu, straggler-detection]}
+      - {id: plat-ob-serving-metrics, name: Inference SLOs (TTFT / TPOT / queue depth), match: [ttft, inference-slo]}
+      - {id: plat-ob-nccl-tests, name: NCCL tests and interconnect bandwidth validation, match: [nccl-tests]}
+      - {id: plat-ob-burn-in, name: GPU burn-in and node acceptance testing, match: [gpu-burn-in]}
+      - {id: plat-ob-grafana, name: Prometheus / Grafana dashboards for ML clusters, match: [grafana-ml]}
+      - {id: plat-ob-profiling, name: Fleet-wide continuous profiling, match: [continuous-profiling]}

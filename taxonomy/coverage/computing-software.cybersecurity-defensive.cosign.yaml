@@ -1,0 +1,267 @@
+# Coverage spec for Sigstore Cosign (computing-software / cybersecurity-defensive).
+subject: Sigstore Cosign
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [cosign]
+sources:
+  - "Cosign command reference (https://github.com/sigstore/cosign/tree/main/doc)"
+  - "Cosign specs and README (https://github.com/sigstore/cosign)"
+topics:
+  # Signing container images
+  - id: sign-image
+    name: "cosign sign by digest and recursive multi-arch"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["sign-by-digest", "recursive-signing"]
+  - id: sign-annotations
+    name: "Signature annotations and tag signing"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["annotations", "tag-signing"]
+  - id: sign-keyless
+    name: "Keyless signing with Fulcio and OIDC"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["keyless", "fulcio-auth-flow", "oidc-provider"]
+  - id: sign-identity-token
+    name: "Identity tokens and ambient credentials"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["identity-token", "ambient-credentials"]
+  - id: sign-tlog
+    name: "Transparency log upload and creation timestamp"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["tlog-upload", "record-creation-timestamp"]
+  - id: sign-registry-access
+    name: "Registry authentication, mTLS and Kubernetes keychain"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["registry-auth", "registry-mtls", "k8s-keychain"]
+  - id: sign-kms
+    name: "KMS key URIs for signing"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["kms", "kms-uri", "key-from-env"]
+  - id: sign-certificate
+    name: "Attaching certificates and chains"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["certificate-chain", "bring-your-own-pki"]
+  - id: sign-bundle-config
+    name: "Bundle output and signing config"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign.md
+    match: ["bundle", "signing-config"]
+  # Verifying container images
+  - id: verify-key
+    name: "Verify with public key or KMS"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["verify", "public-key", "key-url"]
+  - id: verify-local-image
+    name: "Verify a locally saved image"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["local-image"]
+  - id: verify-keyless
+    name: "Keyless verification identity and issuer"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["certificate-identity", "certificate-oidc-issuer"]
+  - id: verify-regexp
+    name: "Regular expression identity matching"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["identity-regexp", "issuer-regexp"]
+  - id: verify-github-claims
+    name: "GitHub workflow certificate claims"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["github-workflow", "github-actions"]
+  - id: verify-insecure
+    name: "Insecure ignore flags and claim checks"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["insecure-ignore-tlog", "insecure-ignore-sct", "check-claims"]
+  - id: verify-timestamps
+    name: "Signed timestamps and trusted root"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["use-signed-timestamps", "trusted-root", "rfc3161"]
+  - id: verify-output
+    name: "Verify output format and parallel workers"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify.md
+    match: ["output-format", "max-workers"]
+  - id: verify-exit-codes
+    name: "Verification exit codes"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_exit_codes.md
+    match: ["exit-codes"]
+  # Blobs
+  - id: sign-blob
+    name: "Sign blobs and algorithms"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign-blob.md
+    match: ["sign-blob", "signing-algorithm"]
+  - id: blob-timestamp
+    name: "Blob signing with a timestamp authority"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_sign-blob.md
+    match: ["tsa", "timestamp-authority"]
+  - id: verify-blob
+    name: "Verify blobs with a bundle"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify-blob.md
+    match: ["verify-blob", "blob-stdin"]
+  # Attestations
+  - id: attest-image
+    name: "Attest images with predicates"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_attest.md
+    match: ["attest", "predicate", "no-upload"]
+  - id: attest-types
+    name: "Predicate types"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_attest.md
+    match: ["predicate-type", "slsa-provenance", "openvex"]
+  - id: verify-attestation
+    name: "Verify attestations with policies"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify-attestation.md
+    match: ["verify-attestation", "rego", "cue"]
+  - id: attest-blob
+    name: "Attest blobs"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_attest-blob.md
+    match: ["attest-blob", "blob-hash", "statement"]
+  - id: verify-blob-attestation
+    name: "Verify blob attestations"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_verify-blob-attestation.md
+    match: ["verify-blob-attestation", "digest-alg"]
+  # Keys
+  - id: generate-key-pair
+    name: "Generate key pairs"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_generate-key-pair.md
+    match: ["generate-key-pair", "cosign-password"]
+  - id: key-pair-in-kms
+    name: "Key pairs in KMS, Kubernetes, GitHub, GitLab"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_generate-key-pair.md
+    match: ["kms-key-pair", "gitlab-key", "github-key"]
+  - id: import-key-pair
+    name: "Import an existing key"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_import-key-pair.md
+    match: ["import-key-pair"]
+  - id: public-key
+    name: "Extract a public key"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_public-key.md
+    match: ["extract-public-key"]
+  - id: key-format
+    name: "Key file format and algorithms"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/README.md
+    match: ["key-format", "ecdsa-p256"]
+  # Trust roots and bundles
+  - id: initialize-tuf
+    name: "Initialize the TUF root"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_initialize.md
+    match: ["initialize", "tuf", "staging"]
+  - id: tuf-mirror
+    name: "Custom TUF mirror and root checksum"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_initialize.md
+    match: ["mirror", "root-checksum"]
+  - id: trusted-root-create
+    name: "Create a trusted root"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_trusted-root_create.md
+    match: ["trusted-root-create"]
+  - id: signing-config-create
+    name: "Create a signing config"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_signing-config_create.md
+    match: ["signing-config-create", "rekor-config"]
+  - id: bundle-create
+    name: "Create a Sigstore bundle"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_bundle_create.md
+    match: ["bundle-create"]
+  - id: bundle-from-container
+    name: "Convert legacy attestations to bundles"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_bundle_create-from-container.md
+    match: ["create-from-container", "oci-referrers"]
+  - id: bundle-inspect-upgrade
+    name: "Inspect and upgrade bundles"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_bundle_upgrade.md
+    match: ["bundle-inspect", "bundle-upgrade"]
+  # Registry utilities
+  - id: clean
+    name: "Remove signatures from an image"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_clean.md
+    match: ["clean"]
+  - id: download
+    name: "Download signatures and attestations"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_download_attestation.md
+    match: ["download-signature", "download-attestation"]
+  - id: download-sbom
+    name: "Deprecated SBOM download"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_download_sbom.md
+    match: ["download-sbom", "sbom-deprecated"]
+  - id: tree
+    name: "Display supply chain artifacts"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_tree.md
+    match: ["tree", "referrers-mode"]
+  - id: save-load
+    name: "Save and load images on disk"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_save.md
+    match: ["save", "load", "air-gap"]
+  - id: login
+    name: "Registry login"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_login.md
+    match: ["login", "password-stdin"]
+  - id: env
+    name: "Environment variables"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_env.md
+    match: ["env", "show-sensitive-values"]
+  - id: completion
+    name: "Shell completion"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_completion.md
+    match: ["completion"]
+  # Hardware
+  - id: piv-tool
+    name: "PIV hardware token management"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_piv-tool.md
+    match: ["piv-tool", "yubikey", "set-pin"]
+  - id: piv-generate-key
+    name: "Generate PIV keys with policies"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_piv-tool_generate-key.md
+    match: ["pin-policy", "touch-policy", "security-key"]
+  - id: pkcs11-tool
+    name: "PKCS11 token tools"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/doc/cosign_pkcs11-tool_list-keys-uris.md
+    match: ["pkcs11", "list-keys-uris"]
+  # Specs and README topics
+  - id: signature-storage
+    name: "Signature tag storage scheme"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/SIGNATURE_SPEC.md
+    match: ["signature-tag", "tag-based-discovery"]
+  - id: simple-signing
+    name: "Simple Signing payload and hashing"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/SIGNATURE_SPEC.md
+    match: ["simple-signing", "payload"]
+  - id: signature-properties
+    name: "Signature properties and annotations"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/SIGNATURE_SPEC.md
+    match: ["signature-properties", "rekor-bundle"]
+  - id: attestation-layout
+    name: "Attestation OCI layout"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/ATTESTATION_SPEC.md
+    match: ["attestation-layout", "dsse"]
+  - id: bundle-spec
+    name: "Bundle storage in OCI registries"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/BUNDLE_SPEC.md
+    match: ["bundle-spec", "referrers-api", "bundle-annotations"]
+  - id: generic-predicate
+    name: "Generic cosign predicate"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/COSIGN_PREDICATE_SPEC.md
+    match: ["generic-predicate"]
+  - id: vuln-attestation
+    name: "Vulnerability scan attestation"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/COSIGN_VULN_ATTESTATION_SPEC.md
+    match: ["vuln-attestation", "vulnerability-scan"]
+  - id: sbom-spec
+    name: "SBOM media types and scopes"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/specs/SBOM_SPEC.md
+    match: ["sbom-media-types", "sbom-scope"]
+  - id: cosign-repository
+    name: "Separate signature repository"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/README.md
+    match: ["cosign-repository", "artifact-registry"]
+  - id: legacy-registries
+    name: "Registries without OCI media types"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/README.md
+    match: ["docker-media-types", "registry-support"]
+  - id: other-artifacts
+    name: "Signing blobs, WASM and Tekton in registries"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/README.md
+    match: ["upload-blob", "wasm", "tekton"]
+  - id: counter-signing
+    name: "Counter-signing"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/README.md
+    match: ["counter-signing"]
+  - id: troubleshooting
+    name: "Troubleshooting verification failures"
+    source: https://raw.githubusercontent.com/sigstore/cosign/main/README.md
+    match: ["troubleshooting", "no-signatures-found"]

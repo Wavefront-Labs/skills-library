@@ -1,0 +1,398 @@
+# Canonical coverage spec: Scheme and Racket (R7RS-small, Racket Guide/Reference, SICP).
+subject: scheme-racket
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [scheme-racket]
+sources:
+  - "R7RS-small report table of contents (small.r7rs.org)"
+  - "The Racket Guide (docs.racket-lang.org/guide)"
+  - "The Racket Reference (docs.racket-lang.org/reference)"
+  - "RackUnit, raco, DrRacket and FFI manuals (docs.racket-lang.org)"
+  - "Structure and Interpretation of Computer Programs chapters as curriculum"
+topics:
+  - id: racket-lexical
+    name: "Lexical syntax and reader"
+    source: "g:syntax-overview, r:reader"
+    match: [racket-lexical]
+    subtopics:
+      - {id: racket-lexical-datum-comments, name: "Comments and datum comments", match: [datum-comments]}
+      - {id: racket-lexical-reader-literals, name: "Reader literals and quote shorthands", match: [reader-literals]}
+  - id: racket-lang-line
+    name: "The #lang line and base languages"
+    source: "g:module-basics, g:languages"
+    match: [racket-lang-line]
+    subtopics:
+      - {id: racket-lang-line-lang-line, name: "#lang line and file structure", match: [lang-line]}
+      - {id: racket-lang-line-racket-base, name: "racket vs racket/base", match: [racket-base]}
+  - id: racket-definitions
+    name: "Definitions and assignment"
+    source: "g:define, r:define"
+    match: [racket-definitions]
+    subtopics:
+      - {id: racket-definitions-define-forms, name: "define, define-values and set!", match: [define-forms]}
+      - {id: racket-definitions-internal-definitions, name: "Internal definitions and begin", match: [internal-definitions]}
+      - {id: racket-definitions-define-values, name: "Multiple values with define-values", match: [define-values]}
+  - id: racket-procedures
+    name: "Procedures and arguments"
+    source: "g:lambda, g:application"
+    match: [racket-procedures]
+    subtopics:
+      - {id: racket-procedures-optional-arguments, name: "Optional arguments", match: [optional-arguments]}
+      - {id: racket-procedures-keyword-arguments, name: "Keyword arguments", match: [keyword-arguments]}
+      - {id: racket-procedures-rest-arguments, name: "Rest arguments and apply", match: [rest-arguments]}
+      - {id: racket-procedures-case-lambda, name: "case-lambda dispatch on arity", match: [case-lambda]}
+  - id: racket-conditionals
+    name: "Conditionals"
+    source: "g:conditionals"
+    match: [racket-conditionals]
+    subtopics:
+      - {id: racket-conditionals-cond-case, name: "if, cond and case", match: [cond-case]}
+      - {id: racket-conditionals-when-unless, name: "when, unless and begin sequencing", match: [when-unless]}
+      - {id: racket-conditionals-and-or, name: "and, or and short-circuit values", match: [and-or]}
+  - id: racket-binding
+    name: "Local binding"
+    source: "g:let, r:let"
+    match: [racket-binding]
+    subtopics:
+      - {id: racket-binding-let-forms, name: "let, let* and letrec", match: [let-forms]}
+      - {id: racket-binding-named-let, name: "Named let loops", match: [named-let]}
+      - {id: racket-binding-let-values, name: "let-values and splicing forms", match: [let-values]}
+  - id: racket-numbers
+    name: "Numbers"
+    source: "g:numbers, r:numbers"
+    match: [racket-numbers]
+    subtopics:
+      - {id: racket-numbers-numeric-tower, name: "Numeric tower: integers, rationals, reals, complex", match: [numeric-tower]}
+      - {id: racket-numbers-exact-inexact, name: "Exactness and rounding", match: [exact-inexact]}
+      - {id: racket-numbers-number-conversion, name: "Parsing and formatting numbers", match: [number-conversion]}
+  - id: racket-equality
+    name: "Equality and truthiness"
+    source: "r:equality"
+    match: [racket-equality]
+    subtopics:
+      - {id: racket-equality-equality-predicates, name: "eq?, eqv?, equal? and =", match: [equality-predicates]}
+      - {id: racket-equality-truthiness, name: "Booleans and truthiness", match: [truthiness]}
+  - id: racket-text
+    name: "Strings, bytes and symbols"
+    source: "g:strings, g:symbols, r:strings"
+    match: [racket-text]
+    subtopics:
+      - {id: racket-text-string-operations, name: "String operations", match: [string-operations]}
+      - {id: racket-text-bytes-strings, name: "Bytes and conversion", match: [bytes-strings]}
+      - {id: racket-text-symbols-keywords, name: "Symbols and keywords", match: [symbols-keywords]}
+      - {id: racket-text-format-strings, name: "format, printf and racket/format", match: [format-strings]}
+  - id: racket-pairs-lists
+    name: "Pairs and lists"
+    source: "g:pairs, r:pairs"
+    match: [racket-pairs-lists]
+    subtopics:
+      - {id: racket-pairs-lists-list-operations, name: "List operations", match: [list-operations]}
+      - {id: racket-pairs-lists-association-lists, name: "Association lists", match: [association-lists]}
+      - {id: racket-pairs-lists-mutable-pairs, name: "Mutable pairs (mcons)", match: [mutable-pairs]}
+  - id: racket-higher-order
+    name: "Higher-order functions"
+    source: "g:for, r:pairs"
+    match: [racket-higher-order]
+    subtopics:
+      - {id: racket-higher-order-fold-map-filter, name: "map, filter, foldl and foldr", match: [fold-map-filter]}
+      - {id: racket-higher-order-compose-curry, name: "compose, curry and procedure combinators", match: [compose-curry]}
+      - {id: racket-higher-order-sorting, name: "Sorting", match: [sorting]}
+  - id: racket-vectors
+    name: "Vectors"
+    source: "g:vectors, r:vectors"
+    match: [racket-vectors]
+    subtopics:
+      - {id: racket-vectors-vector-operations, name: "Vector operations", match: [vector-operations]}
+      - {id: racket-vectors-specialized-vectors, name: "flvectors and fxvectors", match: [specialized-vectors]}
+  - id: racket-hash-sets
+    name: "Hash tables, sets and dictionaries"
+    source: "g:hash-tables, r:hashes, r:sets"
+    match: [racket-hash-sets]
+    subtopics:
+      - {id: racket-hash-sets-hash-tables, name: "Hash tables", match: [hash-tables]}
+      - {id: racket-hash-sets-sets, name: "Sets", match: [sets]}
+      - {id: racket-hash-sets-dict-interface, name: "Generic dict interface", match: [dict-interface]}
+  - id: racket-for-loops
+    name: "for loops and comprehensions"
+    source: "g:for, r:sequences"
+    match: [racket-for-loops]
+    subtopics:
+      - {id: racket-for-loops-for-comprehensions, name: "for, for/list and friends", match: [for-comprehensions]}
+      - {id: racket-for-loops-for-fold, name: "for/fold accumulators", match: [for-fold]}
+      - {id: racket-for-loops-sequences-generators, name: "Sequences, streams and generators", match: [sequences-generators]}
+  - id: racket-recursion
+    name: "Recursion and tail calls"
+    source: "sicp"
+    match: [racket-recursion]
+    subtopics:
+      - {id: racket-recursion-tail-calls, name: "Proper tail calls", match: [tail-calls]}
+      - {id: racket-recursion-accumulator-recursion, name: "Accumulators and mutual recursion", match: [accumulator-recursion]}
+  - id: racket-quoting
+    name: "Quote, quasiquote and eval"
+    source: "g:qq, g:eval"
+    match: [racket-quoting]
+    subtopics:
+      - {id: racket-quoting-quasiquote-unquote, name: "Quote and quasiquote", match: [quasiquote-unquote]}
+      - {id: racket-quoting-eval-namespaces, name: "eval and namespaces", match: [eval-namespaces]}
+  - id: racket-structs
+    name: "Structures"
+    source: "g:define-struct, r:structures"
+    match: [racket-structs]
+    subtopics:
+      - {id: racket-structs-struct-definition, name: "Defining structs", match: [struct-definition]}
+      - {id: racket-structs-struct-options, name: "Struct options and inheritance", match: [struct-options]}
+      - {id: racket-structs-struct-properties, name: "Struct properties and printing", match: [struct-properties]}
+  - id: racket-match
+    name: "Pattern matching with match"
+    source: "g:match, r:match"
+    match: [racket-match]
+    subtopics:
+      - {id: racket-match-match-patterns, name: "match patterns", match: [match-patterns]}
+      - {id: racket-match-match-struct-list, name: "Matching structs and nested data", match: [match-struct-list]}
+      - {id: racket-match-match-define, name: "match-define, match-let and match-lambda", match: [match-define]}
+  - id: racket-exceptions
+    name: "Exceptions and cleanup"
+    source: "g:control, r:exns"
+    match: [racket-exceptions]
+    subtopics:
+      - {id: racket-exceptions-exception-handling, name: "raise, with-handlers and error", match: [exception-handling]}
+      - {id: racket-exceptions-custom-exceptions, name: "Custom exception structs", match: [custom-exceptions]}
+      - {id: racket-exceptions-dynamic-wind, name: "dynamic-wind and cleanup", match: [dynamic-wind]}
+  - id: racket-continuations
+    name: "Continuations"
+    source: "g:control, r:continuations"
+    match: [racket-continuations]
+    subtopics:
+      - {id: racket-continuations-call-cc, name: "call/cc escape and re-entry", match: [call-cc]}
+      - {id: racket-continuations-delimited-continuations, name: "Prompts and delimited continuations", match: [delimited-continuations]}
+      - {id: racket-continuations-continuation-marks, name: "Continuation marks", match: [continuation-marks]}
+  - id: racket-parameters
+    name: "Parameters"
+    source: "r:parameters"
+    match: [racket-parameters]
+    subtopics:
+      - {id: racket-parameters-parameters, name: "make-parameter and parameterize", match: [parameters]}
+      - {id: racket-parameters-parameter-guards, name: "Guards and built-in parameters", match: [parameter-guards]}
+  - id: racket-modules
+    name: "Modules"
+    source: "g:modules, g:module-basics, r:require"
+    match: [racket-modules]
+    subtopics:
+      - {id: racket-modules-require-provide, name: "require and provide", match: [require-provide]}
+      - {id: racket-modules-submodules, name: "Submodules: module, module+, module*", match: [submodules]}
+      - {id: racket-modules-module-paths, name: "Module path forms", match: [module-paths]}
+  - id: racket-modules-advanced
+    name: "Advanced module techniques"
+    source: "g:module-basics"
+    match: [racket-modules-advanced]
+    subtopics:
+      - {id: racket-modules-advanced-require-transformers, name: "only-in, except-in, rename-in, prefix-in", match: [require-transformers]}
+      - {id: racket-modules-advanced-lazy-require, name: "lazy-require and dynamic-require", match: [lazy-require]}
+      - {id: racket-modules-advanced-main-submodule, name: "main submodule and command-line entry", match: [main-submodule]}
+  - id: racket-syntax-rules
+    name: "Pattern macros: define-syntax-rule and syntax-rules"
+    source: "g:macros, g:pattern-macros"
+    match: [racket-syntax-rules]
+    subtopics:
+      - {id: racket-syntax-rules-define-syntax-rule, name: "define-syntax-rule", match: [define-syntax-rule]}
+      - {id: racket-syntax-rules-syntax-rules-ellipsis, name: "syntax-rules, literals and ellipses", match: [syntax-rules-ellipsis]}
+      - {id: racket-syntax-rules-macro-hygiene, name: "Macro hygiene", match: [macro-hygiene]}
+  - id: racket-syntax-case
+    name: "Procedural macros"
+    source: "g:macros"
+    match: [racket-syntax-case]
+    subtopics:
+      - {id: racket-syntax-case-syntax-case, name: "syntax-case and syntax", match: [syntax-case]}
+      - {id: racket-syntax-case-syntax-parse, name: "syntax/parse patterns", match: [syntax-parse]}
+      - {id: racket-syntax-case-macro-phases, name: "Phase levels and begin-for-syntax", match: [macro-phases]}
+      - {id: racket-syntax-case-datum-to-syntax, name: "datum->syntax and intentional capture", match: [datum-to-syntax]}
+  - id: racket-macro-debug
+    name: "Debugging macros"
+    source: "macro-debugger"
+    match: [racket-macro-debug]
+    subtopics:
+      - {id: racket-macro-debug-macro-stepper, name: "Macro Stepper", match: [macro-stepper]}
+      - {id: racket-macro-debug-expand-syntax, name: "expand, syntax->datum and expand-once", match: [expand-syntax]}
+  - id: racket-contracts
+    name: "Contracts"
+    source: "g:contracts, r:contracts"
+    match: [racket-contracts]
+    subtopics:
+      - {id: racket-contracts-function-contracts, name: "Function contracts: -> and ->*", match: [function-contracts]}
+      - {id: racket-contracts-data-contracts, name: "Data contracts: listof, struct/c, flat predicates", match: [data-contracts]}
+      - {id: racket-contracts-contract-blame, name: "Reading blame messages", match: [contract-blame]}
+      - {id: racket-contracts-contract-out, name: "contract-out versus define/contract", match: [contract-out]}
+  - id: racket-classes
+    name: "Object-oriented programming"
+    source: "g:classes"
+    match: [racket-classes]
+    subtopics:
+      - {id: racket-classes-class-definitions, name: "class, new and send", match: [class-definitions]}
+      - {id: racket-classes-interfaces-mixins, name: "Interfaces, inheritance and mixins", match: [interfaces-mixins]}
+  - id: racket-generics
+    name: "Generic interfaces and units"
+    source: "r:structures"
+    match: [racket-generics]
+    subtopics:
+      - {id: racket-generics-generic-interfaces, name: "racket/generic interfaces", match: [generic-interfaces]}
+      - {id: racket-generics-units-signatures, name: "Units and signatures", match: [units-signatures]}
+  - id: racket-io
+    name: "Input and output"
+    source: "g:io, r:ports"
+    match: [racket-io]
+    subtopics:
+      - {id: racket-io-ports, name: "Ports and the current ports", match: [ports]}
+      - {id: racket-io-file-io, name: "Reading and writing files", match: [file-io]}
+      - {id: racket-io-string-ports, name: "String and byte ports", match: [string-ports]}
+  - id: racket-regexps
+    name: "Regular expressions"
+    source: "g:regexp, r:regexp"
+    match: [racket-regexps]
+    subtopics:
+      - {id: racket-regexps-regexps, name: "regexp-match and pregexp", match: [regexps]}
+      - {id: racket-regexps-regexp-replace, name: "regexp-replace and replace-star", match: [regexp-replace]}
+  - id: racket-concurrency
+    name: "Threads and synchronisation"
+    source: "g:concurrency, r:threads"
+    match: [racket-concurrency]
+    subtopics:
+      - {id: racket-concurrency-threads, name: "Green threads", match: [threads]}
+      - {id: racket-concurrency-sync-channels, name: "Channels and sync", match: [sync-channels]}
+      - {id: racket-concurrency-semaphores, name: "Semaphores and locks", match: [semaphores]}
+      - {id: racket-concurrency-custodians, name: "Custodians and resource management", match: [custodians]}
+  - id: racket-parallelism
+    name: "Places and futures"
+    source: "r:places, r:futures"
+    match: [racket-parallelism]
+    subtopics:
+      - {id: racket-parallelism-places, name: "Places", match: [places]}
+      - {id: racket-parallelism-futures, name: "Futures", match: [futures]}
+  - id: racket-ffi
+    name: "Foreign function interface"
+    source: "foreign"
+    match: [racket-ffi]
+    subtopics:
+      - {id: racket-ffi-ffi-unsafe, name: "ffi/unsafe basics: ffi-lib and get-ffi-obj", match: [ffi-unsafe]}
+      - {id: racket-ffi-ffi-functions, name: "_fun types and define-c", match: [ffi-functions]}
+      - {id: racket-ffi-ffi-cstruct, name: "C structs and memory", match: [ffi-cstruct]}
+      - {id: racket-ffi-ffi-callbacks, name: "Callbacks and lifetimes", match: [ffi-callbacks]}
+  - id: racket-raco
+    name: "raco command-line tools"
+    source: "raco, pkg"
+    match: [racket-raco]
+    subtopics:
+      - {id: racket-raco-raco-make, name: "raco make and compiled output", match: [raco-make]}
+      - {id: racket-raco-raco-test, name: "raco test", match: [raco-test]}
+      - {id: racket-raco-raco-pkg, name: "raco pkg install and manage", match: [raco-pkg]}
+      - {id: racket-raco-raco-exe, name: "raco exe and raco distribute", match: [raco-exe]}
+  - id: racket-rackunit
+    name: "Testing with RackUnit"
+    source: "rackunit"
+    match: [racket-rackunit]
+    subtopics:
+      - {id: racket-rackunit-rackunit-checks, name: "check forms", match: [rackunit-checks]}
+      - {id: racket-rackunit-rackunit-suites, name: "test-case and test-suite", match: [rackunit-suites]}
+      - {id: racket-rackunit-rackunit-submodule-test, name: "Tests in a test submodule", match: [rackunit-submodule-test]}
+  - id: racket-drracket
+    name: "DrRacket IDE"
+    source: "drracket"
+    match: [racket-drracket]
+    subtopics:
+      - {id: racket-drracket-drracket-stepper, name: "Stepper and debugger", match: [drracket-stepper]}
+      - {id: racket-drracket-drracket-repl, name: "Definitions window and REPL", match: [drracket-repl]}
+      - {id: racket-drracket-check-syntax, name: "Check Syntax and Racket tooling", match: [check-syntax]}
+  - id: racket-cli
+    name: "Command line and REPL"
+    source: "raco"
+    match: [racket-cli]
+    subtopics:
+      - {id: racket-cli-racket-cli, name: "racket command-line flags", match: [racket-cli]}
+      - {id: racket-cli-xrepl, name: "xrepl enhanced REPL", match: [xrepl]}
+  - id: racket-performance
+    name: "Performance"
+    source: "g:performance"
+    match: [racket-performance]
+    subtopics:
+      - {id: racket-performance-profiler, name: "Profiling with the profile library", match: [profiler]}
+      - {id: racket-performance-performance-tips, name: "Performance tips from the Guide", match: [performance-tips]}
+      - {id: racket-performance-unsafe-ops, name: "racket/unsafe/ops", match: [unsafe-ops]}
+  - id: r7rs-small
+    name: "R7RS-small portability"
+    source: "r7rs, r7rs-doc"
+    match: [r7rs-small]
+    subtopics:
+      - {id: r7rs-small-r7rs-define-library, name: "R7RS define-library and import", match: [r7rs-define-library]}
+      - {id: r7rs-small-r7rs-define-record-type, name: "R7RS define-record-type", match: [r7rs-define-record-type]}
+      - {id: r7rs-small-r7rs-guard, name: "R7RS guard, raise and error objects", match: [r7rs-guard]}
+      - {id: r7rs-small-r7rs-bytevectors, name: "R7RS bytevectors and characters", match: [r7rs-bytevectors]}
+  - id: sicp-procedures
+    name: "SICP chapter 1: procedures and abstraction"
+    source: "sicp"
+    match: [sicp-procedures]
+    subtopics:
+      - {id: sicp-procedures-sicp-newton-sqrt, name: "Newton's method square root", match: [sicp-newton-sqrt]}
+      - {id: sicp-procedures-sicp-recursion-processes, name: "Linear recursion vs iteration", match: [sicp-recursion-processes]}
+      - {id: sicp-procedures-sicp-higher-order-procedures, name: "Higher-order procedures", match: [sicp-higher-order-procedures]}
+  - id: sicp-data
+    name: "SICP chapter 2: data abstraction"
+    source: "sicp"
+    match: [sicp-data]
+    subtopics:
+      - {id: sicp-data-sicp-data-abstraction, name: "Data abstraction with rational numbers", match: [sicp-data-abstraction]}
+      - {id: sicp-data-sicp-hierarchical-data, name: "Sequences, trees and sets", match: [sicp-hierarchical-data]}
+      - {id: sicp-data-sicp-symbolic-data, name: "Symbolic data: differentiation", match: [sicp-symbolic-data]}
+      - {id: sicp-data-sicp-generic-operations, name: "Generic operations and data-directed programming", match: [sicp-generic-operations]}
+  - id: sicp-state
+    name: "SICP chapter 3: state, environments and streams"
+    source: "sicp"
+    match: [sicp-state]
+    subtopics:
+      - {id: sicp-state-sicp-assignment-state, name: "Assignment and local state", match: [sicp-assignment-state]}
+      - {id: sicp-state-sicp-environment-model, name: "The environment model", match: [sicp-environment-model]}
+      - {id: sicp-state-sicp-streams, name: "Streams and delayed evaluation", match: [sicp-streams]}
+  - id: sicp-evaluators
+    name: "SICP chapters 4-5: evaluators and machines"
+    source: "sicp"
+    match: [sicp-evaluators]
+    subtopics:
+      - {id: sicp-evaluators-sicp-metacircular-evaluator, name: "Metacircular evaluator", match: [sicp-metacircular-evaluator]}
+      - {id: sicp-evaluators-sicp-amb-nondeterminism, name: "amb and nondeterministic evaluation", match: [sicp-amb-nondeterminism]}
+      - {id: sicp-evaluators-sicp-register-machines, name: "Register machines and compilation", match: [sicp-register-machines]}
+  - id: racket-languages
+    name: "Creating languages"
+    source: "g:languages"
+    match: [racket-languages]
+    subtopics:
+      - {id: racket-languages-custom-languages, name: "Defining a #lang with a reader and module-begin", match: [custom-languages]}
+      - {id: racket-languages-module-begin, name: "#%module-begin, #%app and #%datum", match: [module-begin]}
+      - {id: racket-languages-sicp-language-package, name: "The sicp language package", match: [sicp-language-package]}
+  - id: racket-typed-lazy
+    name: "Typed Racket and Lazy Racket"
+    source: "ts-guide, lazy"
+    match: [racket-typed-lazy]
+    subtopics:
+      - {id: racket-typed-lazy-typed-racket-basics, name: "Typed Racket basics", match: [typed-racket-basics]}
+      - {id: racket-typed-lazy-lazy-racket, name: "Lazy Racket", match: [lazy-racket]}
+  - id: racket-system
+    name: "Files, processes and command lines"
+    source: "r:filesystem"
+    match: [racket-system]
+    subtopics:
+      - {id: racket-system-paths, name: "Paths and directories", match: [paths]}
+      - {id: racket-system-subprocess, name: "Running external programs", match: [subprocess]}
+      - {id: racket-system-command-line-parsing, name: "command-line flags", match: [command-line-parsing]}
+  - id: racket-web-gui
+    name: "Web and GUI libraries"
+    source: "web-server, gui"
+    match: [racket-web-gui]
+    subtopics:
+      - {id: racket-web-gui-web-server-servlets, name: "web-server servlets", match: [web-server-servlets]}
+      - {id: racket-web-gui-gui-toolkit, name: "racket/gui windows and events", match: [gui-toolkit]}
+  - id: racket-data-formats
+    name: "JSON, XML and CSV data"
+    source: "json, xml"
+    match: [racket-data-formats]
+    subtopics:
+      - {id: racket-data-formats-json-handling, name: "JSON", match: [json-handling]}
+      - {id: racket-data-formats-xml-handling, name: "XML and X-expressions", match: [xml-handling]}

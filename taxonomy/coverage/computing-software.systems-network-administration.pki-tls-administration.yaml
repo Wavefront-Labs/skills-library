@@ -1,0 +1,337 @@
+# Coverage spec: PKI and TLS administration (pki-tls-administration product).
+# Topics come from external structures: RFCs, CA/B Forum BRs, vendor docs, Mozilla and NIST guidance.
+subject: pki-tls-administration
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [pki-tls-administration]
+sources:
+  - "RFC 5280 (X.509 v3 certificate and CRL profile), RFC 3647 (CP/CPS framework), RFC 6960 (OCSP), RFC 6962 (Certificate Transparency), RFC 8555 (ACME), RFC 8446 (TLS 1.3), RFC 8659 (CAA)"
+  - "CA/Browser Forum Baseline Requirements, S/MIME and Code Signing BRs (cabforum.org)"
+  - "Microsoft Active Directory Certificate Services documentation table of contents (learn.microsoft.com)"
+  - "Mozilla Server Side TLS guidelines (wiki.mozilla.org/Security/Server_Side_TLS) and NIST SP 800-57 Part 1, SP 800-52 Rev 2, SP 800-131A"
+  - "OpenSSL, step-ca, cfssl, EJBCA, certbot, cert-manager, nginx, Apache, HAProxy and Java keytool documentation"
+topics:
+  - id: pki-hierarchy
+    name: "PKI hierarchy design"
+    source: "https://www.rfc-editor.org/rfc/rfc5280"
+    match: [pki-hierarchy]
+    subtopics:
+      - {id: pki-hierarchy-root-intermediate-tiers, name: "Root and intermediate CA tiers", match: [root-intermediate-tiers]}
+      - {id: pki-hierarchy-offline-root-storage, name: "Offline root CA operation", match: [offline-root-storage]}
+      - {id: pki-hierarchy-path-length-constraints, name: "Path length constraints", match: [path-length-constraints]}
+  - id: pki-policy-docs
+    name: "CP, CPS and naming"
+    source: "https://www.rfc-editor.org/rfc/rfc3647"
+    match: [pki-policy-docs]
+    subtopics:
+      - {id: pki-policy-docs-cp-cps-documents, name: "Certificate Policy and CPS documents", match: [cp-cps-documents]}
+      - {id: pki-policy-docs-certificate-dn-naming, name: "Certificate subject and DN naming", match: [certificate-dn-naming]}
+  - id: pki-constraints
+    name: "Constraints and policies"
+    source: "https://www.rfc-editor.org/rfc/rfc5280"
+    match: [pki-constraints]
+    subtopics:
+      - {id: pki-constraints-name-constraints-extension, name: "Name constraints extension", match: [name-constraints-extension]}
+      - {id: pki-constraints-certificate-policies-oids, name: "Certificate policies and OIDs", match: [certificate-policies-oids]}
+  - id: pki-x509-profile
+    name: "X.509 v3 certificate profile"
+    source: "https://www.rfc-editor.org/rfc/rfc5280"
+    match: [pki-x509-profile]
+    subtopics:
+      - {id: pki-x509-profile-x509-base-fields, name: "X.509 base fields and encoding", match: [x509-base-fields]}
+      - {id: pki-x509-profile-key-usage-eku, name: "Key usage and extended key usage", match: [key-usage-eku]}
+      - {id: pki-x509-profile-san-vs-cn-handling, name: "Subject alternative names versus CN", match: [san-vs-cn-handling]}
+  - id: pki-cabf
+    name: "CA/Browser Forum requirements"
+    source: "https://cabforum.org/working-groups/server/baseline-requirements/documents/"
+    match: [pki-cabf]
+    subtopics:
+      - {id: pki-cabf-cabf-validation-types, name: "DV, OV and EV validation", match: [cabf-validation-types]}
+      - {id: pki-cabf-cabf-lifetime-schedule, name: "Certificate lifetime reduction schedule", match: [cabf-lifetime-schedule]}
+  - id: pki-extensions
+    name: "Authority and CRL extensions"
+    source: "https://www.rfc-editor.org/rfc/rfc5280"
+    match: [pki-extensions]
+    subtopics:
+      - {id: pki-extensions-aia-cdp-extensions, name: "AIA and CRL distribution points", match: [aia-cdp-extensions]}
+      - {id: pki-extensions-ski-aki-matching, name: "Subject and authority key identifiers", match: [ski-aki-matching]}
+  - id: pki-openssl-csr
+    name: "OpenSSL keys and CSRs"
+    source: "https://docs.openssl.org/master/man1/openssl-genpkey/"
+    match: [pki-openssl-csr]
+    subtopics:
+      - {id: pki-openssl-csr-openssl-keygen-algorithms, name: "OpenSSL key generation", match: [openssl-keygen-algorithms]}
+      - {id: pki-openssl-csr-openssl-csr-with-san, name: "OpenSSL CSR with SAN", match: [openssl-csr-with-san]}
+  - id: pki-openssl-ca
+    name: "OpenSSL ca command"
+    source: "https://docs.openssl.org/master/man1/openssl-ca/"
+    match: [pki-openssl-ca]
+    subtopics:
+      - {id: pki-openssl-ca-openssl-ca-setup, name: "OpenSSL ca directory and config", match: [openssl-ca-setup]}
+      - {id: pki-openssl-ca-openssl-ca-sign-revoke, name: "Signing and revoking with openssl ca", match: [openssl-ca-sign-revoke]}
+      - {id: pki-openssl-ca-openssl-ca-extension-sections, name: "Extension sections per certificate type", match: [openssl-ca-extension-sections]}
+  - id: pki-openssl-tools
+    name: "OpenSSL inspection and conversion"
+    source: "https://docs.openssl.org/master/man1/openssl-x509/"
+    match: [pki-openssl-tools]
+    subtopics:
+      - {id: pki-openssl-tools-openssl-inspect-certs, name: "Inspect certificates, CSRs and CRLs", match: [openssl-inspect-certs]}
+      - {id: pki-openssl-tools-openssl-pkcs12-pem-conversion, name: "PEM, DER, PKCS#12 and PKCS#7 conversion", match: [openssl-pkcs12-pem-conversion]}
+      - {id: pki-openssl-tools-openssl-verify-chain, name: "Verify chains with openssl verify", match: [openssl-verify-chain]}
+  - id: pki-step-ca
+    name: "smallstep step-ca"
+    source: "https://smallstep.com/docs/step-ca/getting-started/"
+    match: [pki-step-ca]
+    subtopics:
+      - {id: pki-step-ca-step-ca-init-provisioners, name: "step-ca initialisation and provisioners", match: [step-ca-init-provisioners]}
+      - {id: pki-step-ca-step-ca-acme-renewal, name: "step-ca ACME and renewal daemon", match: [step-ca-acme-renewal]}
+  - id: pki-cfssl
+    name: "cfssl"
+    source: "https://github.com/cloudflare/cfssl"
+    match: [pki-cfssl]
+    subtopics:
+      - {id: pki-cfssl-cfssl-config-profiles, name: "cfssl signing profiles", match: [cfssl-config-profiles]}
+      - {id: pki-cfssl-cfssl-api-multirootca, name: "cfssl serve API and multirootca", match: [cfssl-api-multirootca]}
+  - id: pki-ejbca
+    name: "EJBCA"
+    source: "https://docs.keyfactor.com/ejbca/latest/"
+    match: [pki-ejbca]
+    subtopics:
+      - {id: pki-ejbca-ejbca-profiles, name: "EJBCA certificate and end entity profiles", match: [ejbca-profiles]}
+      - {id: pki-ejbca-ejbca-ra-protocols, name: "EJBCA RA protocols and issuance interfaces", match: [ejbca-ra-protocols]}
+  - id: pki-adcs-design
+    name: "AD CS deployment"
+    source: "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/active-directory-certificate-services-overview"
+    match: [pki-adcs-design]
+    subtopics:
+      - {id: pki-adcs-design-adcs-two-tier-deployment, name: "AD CS two-tier deployment", match: [adcs-two-tier-deployment]}
+      - {id: pki-adcs-design-adcs-offline-root-publishing, name: "Offline root publishing to AD and web", match: [adcs-offline-root-publishing]}
+  - id: pki-adcs-templates
+    name: "AD CS templates and autoenrolment"
+    source: "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/active-directory-certificate-services-overview"
+    match: [pki-adcs-templates]
+    subtopics:
+      - {id: pki-adcs-templates-adcs-template-versions-permissions, name: "Certificate templates and permissions", match: [adcs-template-versions-permissions]}
+      - {id: pki-adcs-templates-adcs-autoenrollment-gpo, name: "Autoenrolment through Group Policy", match: [adcs-autoenrollment-gpo]}
+      - {id: pki-adcs-templates-adcs-esc-hardening, name: "AD CS misconfiguration hardening", match: [adcs-esc-hardening]}
+  - id: pki-adcs-revocation
+    name: "AD CS revocation publishing"
+    source: "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/active-directory-certificate-services-overview"
+    match: [pki-adcs-revocation]
+    subtopics:
+      - {id: pki-adcs-revocation-adcs-crl-aia-config, name: "AD CS CRL and AIA publishing", match: [adcs-crl-aia-config]}
+      - {id: pki-adcs-revocation-adcs-ocsp-responder, name: "AD CS Online Responder", match: [adcs-ocsp-responder]}
+  - id: pki-adcs-enrol
+    name: "NDES, SCEP and CEP/CES"
+    source: "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/network-device-enrollment-service-guidance"
+    match: [pki-adcs-enrol]
+    subtopics:
+      - {id: pki-adcs-enrol-adcs-ndes-scep, name: "NDES for SCEP enrolment", match: [adcs-ndes-scep]}
+      - {id: pki-adcs-enrol-adcs-cep-ces, name: "Certificate Enrollment Policy and Web Service", match: [adcs-cep-ces]}
+  - id: pki-hsm
+    name: "HSM and key ceremonies"
+    source: "https://docs.oasis-open.org/pkcs11/pkcs11-base/v2.40/os/pkcs11-base-v2.40-os.html"
+    match: [pki-hsm]
+    subtopics:
+      - {id: pki-hsm-hsm-pkcs11-integration, name: "HSM integration with PKCS#11", match: [hsm-pkcs11-integration]}
+      - {id: pki-hsm-key-ceremony-script, name: "Root key ceremony script", match: [key-ceremony-script]}
+      - {id: pki-hsm-key-backup-split-knowledge, name: "Key backup and M-of-N split knowledge", match: [key-backup-split-knowledge]}
+  - id: pki-key-mgmt
+    name: "Key management guidance"
+    source: "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
+    match: [pki-key-mgmt]
+    subtopics:
+      - {id: pki-key-mgmt-nist-cryptoperiods, name: "Cryptoperiods and key lifecycle", match: [nist-cryptoperiods]}
+      - {id: pki-key-mgmt-key-algorithm-selection, name: "Choosing key algorithms and sizes", match: [key-algorithm-selection]}
+  - id: pki-acme-protocol
+    name: "ACME protocol (RFC 8555)"
+    source: "https://www.rfc-editor.org/rfc/rfc8555"
+    match: [pki-acme-protocol]
+    subtopics:
+      - {id: pki-acme-protocol-acme-order-flow, name: "ACME account, order and finalise flow", match: [acme-order-flow]}
+      - {id: pki-acme-protocol-acme-challenge-types, name: "ACME challenge types", match: [acme-challenge-types]}
+      - {id: pki-acme-protocol-acme-eab-and-account-keys, name: "ACME accounts, EAB and key rollover", match: [acme-eab-and-account-keys]}
+  - id: pki-certbot
+    name: "certbot"
+    source: "https://eff-certbot.readthedocs.io/en/stable/using.html"
+    match: [pki-certbot]
+    subtopics:
+      - {id: pki-certbot-certbot-issue-renew, name: "certbot issue and renew", match: [certbot-issue-renew]}
+      - {id: pki-certbot-certbot-deploy-hooks, name: "certbot hooks and reloads", match: [certbot-deploy-hooks]}
+  - id: pki-acme-clients
+    name: "Other ACME clients"
+    source: "https://github.com/acmesh-official/acme.sh/wiki"
+    match: [pki-acme-clients]
+    subtopics:
+      - {id: pki-acme-clients-acme-sh-dns-api, name: "acme.sh with DNS APIs", match: [acme-sh-dns-api]}
+      - {id: pki-acme-clients-caddy-automatic-https, name: "Caddy automatic HTTPS", match: [caddy-automatic-https]}
+  - id: pki-cert-manager
+    name: "cert-manager"
+    source: "https://cert-manager.io/docs/configuration/"
+    match: [pki-cert-manager]
+    subtopics:
+      - {id: pki-cert-manager-cert-manager-issuers, name: "cert-manager Issuers and ClusterIssuers", match: [cert-manager-issuers]}
+      - {id: pki-cert-manager-cert-manager-ingress-gateway, name: "cert-manager with Ingress and Gateway", match: [cert-manager-ingress-gateway]}
+  - id: pki-acme-testing
+    name: "ACME testing and limits"
+    source: "https://github.com/letsencrypt/pebble"
+    match: [pki-acme-testing]
+    subtopics:
+      - {id: pki-acme-testing-pebble-acme-test-server, name: "Pebble and test ACME servers", match: [pebble-acme-test-server]}
+      - {id: pki-acme-testing-acme-rate-limits, name: "ACME rate limits and avoiding them", match: [acme-rate-limits]}
+  - id: pki-crl
+    name: "Certificate revocation lists"
+    source: "https://www.rfc-editor.org/rfc/rfc5280"
+    match: [pki-crl]
+    subtopics:
+      - {id: pki-crl-crl-generation-distribution, name: "CRL generation and distribution", match: [crl-generation-distribution]}
+      - {id: pki-crl-delta-crl-and-partitioning, name: "Delta CRLs and CRL partitioning", match: [delta-crl-and-partitioning]}
+  - id: pki-ocsp
+    name: "OCSP"
+    source: "https://www.rfc-editor.org/rfc/rfc6960"
+    match: [pki-ocsp]
+    subtopics:
+      - {id: pki-ocsp-ocsp-responder-operation, name: "OCSP responder operation", match: [ocsp-responder-operation]}
+      - {id: pki-ocsp-ocsp-stapling-config, name: "OCSP stapling configuration", match: [ocsp-stapling-config]}
+      - {id: pki-ocsp-ocsp-must-staple, name: "OCSP Must-Staple", match: [ocsp-must-staple]}
+  - id: pki-crlite
+    name: "Browser revocation"
+    source: "https://blog.mozilla.org/security/tag/crlite/"
+    match: [pki-crlite]
+    subtopics:
+      - {id: pki-crlite-crlite-and-crlsets, name: "CRLite and browser revocation lists", match: [crlite-and-crlsets]}
+      - {id: pki-crlite-short-lived-certificate-strategy, name: "Short-lived certificates instead of revocation", match: [short-lived-certificate-strategy]}
+  - id: pki-ct
+    name: "Certificate Transparency"
+    source: "https://www.rfc-editor.org/rfc/rfc6962"
+    match: [pki-ct]
+    subtopics:
+      - {id: pki-ct-ct-sct-embedding, name: "CT logs and SCT delivery", match: [ct-sct-embedding]}
+      - {id: pki-ct-ct-monitoring-alerts, name: "CT monitoring and alerting", match: [ct-monitoring-alerts]}
+  - id: pki-caa
+    name: "CAA records"
+    source: "https://www.rfc-editor.org/rfc/rfc8659"
+    match: [pki-caa]
+    subtopics:
+      - {id: pki-caa-caa-records-policy, name: "CAA records for issuance control", match: [caa-records-policy]}
+      - {id: pki-caa-caa-wildcard-iodef-tree, name: "CAA wildcard, iodef and tree climbing", match: [caa-wildcard-iodef-tree]}
+  - id: pki-tls-versions
+    name: "TLS protocol versions"
+    source: "https://www.rfc-editor.org/rfc/rfc8446"
+    match: [pki-tls-versions]
+    subtopics:
+      - {id: pki-tls-versions-tls13-config, name: "TLS 1.3 handshake and configuration", match: [tls13-config]}
+      - {id: pki-tls-versions-tls12-legacy-support, name: "TLS 1.2 and legacy client support", match: [tls12-legacy-support]}
+  - id: pki-cipher-policy
+    name: "Cipher policy and Mozilla profiles"
+    source: "https://wiki.mozilla.org/Security/Server_Side_TLS"
+    match: [pki-cipher-policy]
+    subtopics:
+      - {id: pki-cipher-policy-mozilla-tls-profiles, name: "Mozilla modern, intermediate and old profiles", match: [mozilla-tls-profiles]}
+      - {id: pki-cipher-policy-cipher-suite-ordering, name: "Cipher suite selection and ordering", match: [cipher-suite-ordering]}
+  - id: pki-http-hardening
+    name: "HSTS and ALPN"
+    source: "https://www.rfc-editor.org/rfc/rfc6797"
+    match: [pki-http-hardening]
+    subtopics:
+      - {id: pki-http-hardening-hsts-preload, name: "HSTS and preload", match: [hsts-preload]}
+      - {id: pki-http-hardening-alpn-http2-http3, name: "ALPN, HTTP/2 and HTTP/3", match: [alpn-http2-http3]}
+  - id: pki-session
+    name: "Session resumption"
+    source: "https://www.rfc-editor.org/rfc/rfc8446"
+    match: [pki-session]
+    subtopics:
+      - {id: pki-session-tls-session-tickets, name: "Session tickets and resumption", match: [tls-session-tickets]}
+      - {id: pki-session-zero-rtt-early-data, name: "0-RTT early data", match: [zero-rtt-early-data]}
+  - id: pki-mtls
+    name: "Mutual TLS"
+    source: "https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_verify_client"
+    match: [pki-mtls]
+    subtopics:
+      - {id: pki-mtls-mtls-nginx-client-auth, name: "Mutual TLS on nginx", match: [mtls-nginx-client-auth]}
+      - {id: pki-mtls-mtls-identity-revocation, name: "mTLS identity mapping and revocation", match: [mtls-identity-revocation]}
+  - id: pki-nginx
+    name: "nginx TLS"
+    source: "https://nginx.org/en/docs/http/configuring_https_servers.html"
+    match: [pki-nginx]
+    subtopics:
+      - {id: pki-nginx-nginx-tls-server-block, name: "nginx TLS server block", match: [nginx-tls-server-block]}
+      - {id: pki-nginx-nginx-sni-multiple-certs, name: "nginx SNI and multiple certificates", match: [nginx-sni-multiple-certs]}
+  - id: pki-apache
+    name: "Apache TLS"
+    source: "https://httpd.apache.org/docs/2.4/mod/mod_ssl.html"
+    match: [pki-apache]
+    subtopics:
+      - {id: pki-apache-apache-mod-ssl-config, name: "Apache mod_ssl configuration", match: [apache-mod-ssl-config]}
+      - {id: pki-apache-apache-client-cert-auth, name: "Apache client certificate authentication", match: [apache-client-cert-auth]}
+  - id: pki-haproxy
+    name: "HAProxy TLS"
+    source: "https://docs.haproxy.org/"
+    match: [pki-haproxy]
+    subtopics:
+      - {id: pki-haproxy-haproxy-bind-ssl, name: "HAProxy bind ssl options", match: [haproxy-bind-ssl]}
+      - {id: pki-haproxy-haproxy-crt-list, name: "HAProxy crt-list and SNI filters", match: [haproxy-crt-list]}
+  - id: pki-windows-tls
+    name: "IIS and Schannel"
+    source: "https://learn.microsoft.com/en-us/iis/get-started/whats-new-in-iis-8/iis-80-server-name-indication-sni-ssl-scalability"
+    match: [pki-windows-tls]
+    subtopics:
+      - {id: pki-windows-tls-iis-sni-bindings, name: "IIS HTTPS bindings and SNI", match: [iis-sni-bindings]}
+      - {id: pki-windows-tls-schannel-registry-hardening, name: "Schannel protocol and cipher hardening", match: [schannel-registry-hardening]}
+  - id: pki-java
+    name: "Java keystores"
+    source: "https://docs.oracle.com/en/java/javase/21/docs/specs/man/keytool.html"
+    match: [pki-java]
+    subtopics:
+      - {id: pki-java-java-keystore-keytool, name: "Java keystores with keytool", match: [java-keystore-keytool]}
+      - {id: pki-java-java-truststore-jsse, name: "Java truststores and JSSE settings", match: [java-truststore-jsse]}
+  - id: pki-lifecycle
+    name: "Certificate lifecycle management"
+    source: "https://www.rfc-editor.org/rfc/rfc5280"
+    match: [pki-lifecycle]
+    subtopics:
+      - {id: pki-lifecycle-cert-inventory-discovery, name: "Certificate inventory and discovery", match: [cert-inventory-discovery]}
+      - {id: pki-lifecycle-expiry-monitoring-prometheus, name: "Expiry monitoring and alerting", match: [expiry-monitoring-prometheus]}
+      - {id: pki-lifecycle-renewal-runbook, name: "Renewal and replacement runbook", match: [renewal-runbook]}
+  - id: pki-trust-distribution
+    name: "Internal trust distribution"
+    source: "https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/"
+    match: [pki-trust-distribution]
+    subtopics:
+      - {id: pki-trust-distribution-os-trust-store-install, name: "Installing a private root in OS trust stores", match: [os-trust-store-install]}
+      - {id: pki-trust-distribution-gpo-mdm-trust-distribution, name: "Trust distribution via GPO and MDM", match: [gpo-mdm-trust-distribution]}
+  - id: pki-kubernetes
+    name: "Kubernetes and service mesh PKI"
+    source: "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/"
+    match: [pki-kubernetes]
+    subtopics:
+      - {id: pki-kubernetes-k8s-cluster-pki-rotation, name: "Kubernetes control plane PKI", match: [k8s-cluster-pki-rotation]}
+      - {id: pki-kubernetes-service-mesh-workload-identity, name: "Service mesh and SPIFFE workload certificates", match: [service-mesh-workload-identity]}
+  - id: pki-smime
+    name: "S/MIME administration"
+    source: "https://cabforum.org/working-groups/smime/"
+    match: [pki-smime]
+    subtopics:
+      - {id: pki-smime-smime-certificate-admin, name: "S/MIME certificate administration", match: [smime-certificate-admin]}
+  - id: pki-codesign
+    name: "Code signing administration"
+    source: "https://cabforum.org/working-groups/code-signing/documents/"
+    match: [pki-codesign]
+    subtopics:
+      - {id: pki-codesign-code-signing-key-protection, name: "Code signing certificates and key protection", match: [code-signing-key-protection]}
+  - id: pki-troubleshooting
+    name: "TLS troubleshooting"
+    source: "https://docs.openssl.org/master/man1/openssl-s_client/"
+    match: [pki-troubleshooting]
+    subtopics:
+      - {id: pki-troubleshooting-s-client-debugging, name: "Debugging with openssl s_client", match: [s-client-debugging]}
+      - {id: pki-troubleshooting-chain-verify-errors, name: "Fixing chain and trust errors", match: [chain-verify-errors]}
+      - {id: pki-troubleshooting-sni-clock-hostname-faults, name: "SNI, clock skew and hostname faults", match: [sni-clock-hostname-faults]}
+  - id: pki-pqc-migration
+    name: "PQC readiness and migration"
+    source: "https://csrc.nist.gov/projects/post-quantum-cryptography"
+    match: [pki-pqc-migration]
+    subtopics:
+      - {id: pki-pqc-migration-pqc-readiness-hybrid-kex, name: "Post-quantum readiness and hybrid key exchange", match: [pqc-readiness-hybrid-kex]}
+      - {id: pki-pqc-migration-crypto-inventory-agility, name: "Cryptographic inventory and agility plan", match: [crypto-inventory-agility]}

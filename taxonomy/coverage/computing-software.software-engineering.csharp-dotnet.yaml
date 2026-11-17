@@ -1,0 +1,407 @@
+# Canonical coverage spec: C# language, .NET runtime, ASP.NET Core, EF Core and .NET tooling.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: csharp-dotnet-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [csharp-dotnet]
+sources:
+  - "Microsoft Learn: C# documentation (learn.microsoft.com/dotnet/csharp) table of contents"
+  - "Microsoft Learn: .NET fundamentals, runtime and diagnostics documentation"
+  - "Microsoft Learn: ASP.NET Core documentation table of contents"
+  - "Microsoft Learn: Entity Framework Core documentation"
+  - "dotnet CLI reference, MSBuild reference, NuGet documentation"
+  - "xUnit, BenchmarkDotNet, Polly and OpenTelemetry .NET documentation"
+topics:
+  - id: cs-types
+    name: "Type system"
+    source: "Microsoft Learn C# fundamentals: Types"
+    match: [csharp-type-system]
+    subtopics:
+      - {id: cs-boxing, name: "Boxing, unboxing and value versus reference types", match: [boxing-unboxing]}
+      - {id: cs-nrt, name: "Nullable reference types", match: [nullable-reference-types]}
+      - {id: cs-flags, name: "Enums and flags enums", match: [flags-enums]}
+      - {id: cs-tuples, name: "Tuples and deconstruction", match: [tuples-deconstruction]}
+      - {id: cs-extmethods, name: "Extension methods and extension members", match: [extension-methods]}
+  - id: cs-syntax
+    name: "Modern C# syntax"
+    source: "Microsoft Learn: What's new in C# 12, 13 and 14"
+    match: [csharp-modern-syntax]
+    subtopics:
+      - {id: cs-primary, name: "Primary constructors", match: [primary-constructors]}
+      - {id: cs-collexpr, name: "Collection expressions", match: [collection-expressions]}
+      - {id: cs-rawstr, name: "Raw string literals", match: [raw-string-literals]}
+      - {id: cs-required, name: "Required members and init-only setters", match: [required-members]}
+      - {id: cs-field, name: "The field keyword and semi-auto properties", match: [field-keyword]}
+  - id: cs-patterns
+    name: "Pattern matching and records"
+    source: "Microsoft Learn: Pattern matching, Records"
+    match: [csharp-pattern-matching-records]
+    subtopics:
+      - {id: cs-patmatch, name: "Pattern matching and switch expressions", match: [csharp-pattern-matching]}
+      - {id: cs-records, name: "Records and value equality", match: [csharp-records]}
+      - {id: cs-listpat, name: "List and slice patterns", match: [list-patterns]}
+  - id: cs-oop
+    name: "Classes and object design"
+    source: "Microsoft Learn: Object-oriented programming in C#"
+    match: [csharp-oop]
+    subtopics:
+      - {id: cs-virtual, name: "virtual, override, new and sealed", match: [virtual-override-new]}
+      - {id: cs-interfaces, name: "Default interface members", match: [default-interface-members]}
+      - {id: cs-operators, name: "Operator overloading and conversions", match: [operator-overloading]}
+      - {id: cs-indexers, name: "Indexers and ranges", match: [indexers-ranges]}
+  - id: cs-strings
+    name: "Strings and text"
+    source: "Microsoft Learn: Strings, regular expressions and globalization"
+    match: [csharp-strings-text]
+    subtopics:
+      - {id: cs-interp, name: "Interpolated string handlers", match: [interpolated-string-handlers]}
+      - {id: cs-culture, name: "Culture-invariant formatting and comparison", match: [culture-invariant]}
+      - {id: cs-regex, name: "Regex source generator", match: [regex-source-generator]}
+      - {id: cs-encoding, name: "UTF-8 and text encoding", match: [utf8-encoding]}
+  - id: cs-generics
+    name: "Generics"
+    source: "Microsoft Learn: Generics"
+    match: [csharp-generics]
+    subtopics:
+      - {id: cs-constraints, name: "Constraints and variance", match: [generic-constraints]}
+      - {id: cs-genmath, name: "Generic math and static abstract members", match: [generic-math]}
+  - id: cs-delegates
+    name: "Delegates, events and lambdas"
+    source: "Microsoft Learn: Delegates and events"
+    match: [csharp-delegates-events]
+    subtopics:
+      - {id: cs-events, name: "Events and handler leaks", match: [csharp-events]}
+      - {id: cs-closures, name: "Closures and captured variables", match: [closures]}
+      - {id: cs-localfn, name: "Local functions and static lambdas", match: [local-functions]}
+  - id: cs-linq
+    name: "LINQ"
+    source: "Microsoft Learn: LINQ"
+    match: [csharp-linq]
+    subtopics:
+      - {id: cs-deferred, name: "Deferred execution", match: [deferred-execution]}
+      - {id: cs-groupjoin, name: "GroupBy, Join and set operators", match: [linq-groupby-join]}
+      - {id: cs-linqperf, name: "LINQ performance and allocation", match: [linq-performance]}
+      - {id: cs-newlinq, name: "CountBy, AggregateBy and Index operators", match: [linq-countby-aggregateby]}
+  - id: cs-collections
+    name: "Collections"
+    source: "Microsoft Learn: Collections and data structures"
+    match: [csharp-collections]
+    subtopics:
+      - {id: cs-immutable, name: "Immutable and frozen collections", match: [frozen-collections]}
+      - {id: cs-concurrent, name: "Concurrent collections", match: [concurrent-collections]}
+      - {id: cs-priorityq, name: "PriorityQueue and SortedSet", match: [priorityqueue-sortedset]}
+      - {id: cs-dictkeys, name: "Dictionary key design and comparers", match: [equality-comparers]}
+  - id: cs-async
+    name: "Asynchronous programming"
+    source: "Microsoft Learn: Asynchronous programming; Task-based Asynchronous Pattern"
+    match: [csharp-async]
+    subtopics:
+      - {id: cs-asyncawait, name: "async await and ConfigureAwait", match: [async-await]}
+      - {id: cs-whenall, name: "Task.WhenAll and WhenAny", match: [task-whenall]}
+      - {id: cs-asyncstreams, name: "IAsyncEnumerable", match: [iasyncenumerable]}
+      - {id: cs-tcs, name: "TaskCompletionSource", match: [taskcompletionsource]}
+      - {id: cs-periodic, name: "PeriodicTimer loops", match: [periodictimer]}
+      - {id: cs-semaphore, name: "SemaphoreSlim async locking", match: [semaphoreslim]}
+  - id: cs-threading
+    name: "Threading and synchronization"
+    source: "Microsoft Learn: Managed threading"
+    match: [csharp-threading]
+    subtopics:
+      - {id: cs-lock, name: "lock, Lock type and Monitor", match: [lock-statement]}
+      - {id: cs-interlocked, name: "Interlocked and volatile", match: [interlocked-volatile]}
+      - {id: cs-threadpool, name: "ThreadPool starvation", match: [threadpool-starvation]}
+      - {id: cs-plinq, name: "Parallel and PLINQ", match: [plinq]}
+      - {id: cs-channels, name: "Channels", match: [system-threading-channels]}
+  - id: cs-memory
+    name: "Memory and runtime"
+    source: "Microsoft Learn: Memory management and garbage collection"
+    match: [dotnet-memory-management]
+    subtopics:
+      - {id: cs-span, name: "Span, Memory and stackalloc", match: [span-t]}
+      - {id: cs-dispose, name: "IDisposable and async disposal", match: [idisposable]}
+      - {id: cs-gcmodes, name: "Server versus workstation GC and runtimeconfig", match: [gc-settings-runtimeconfig]}
+      - {id: cs-weakref, name: "WeakReference and ConditionalWeakTable", match: [weakreference]}
+      - {id: cs-largeheap, name: "LOH and pinned object heap", match: [large-object-heap]}
+  - id: cs-interop
+    name: "Native interop"
+    source: "Microsoft Learn: Native interoperability"
+    match: [dotnet-interop]
+    subtopics:
+      - {id: cs-pinvoke, name: "P/Invoke and LibraryImport", match: [libraryimport-pinvoke]}
+      - {id: cs-marshal, name: "Marshalling strings and structs", match: [marshalling]}
+      - {id: cs-unsafe, name: "unsafe code and pointers", match: [unsafe-pointers]}
+  - id: cs-exceptions
+    name: "Exceptions"
+    source: "Microsoft Learn: Exceptions and exception handling"
+    match: [csharp-exception-handling]
+    subtopics:
+      - {id: cs-filters, name: "Exception filters", match: [exception-filters]}
+      - {id: cs-customex, name: "Designing custom exceptions", match: [custom-exceptions]}
+      - {id: cs-resultpat, name: "Result types instead of exceptions", match: [result-pattern]}
+  - id: cs-reflection
+    name: "Reflection and metadata"
+    source: "Microsoft Learn: Reflection and attributes"
+    match: [csharp-reflection]
+    subtopics:
+      - {id: cs-attrs, name: "Custom attributes", match: [custom-attributes]}
+      - {id: cs-reflperf, name: "Reflection cost and caching delegates", match: [reflection-performance]}
+      - {id: cs-exprtrees, name: "Expression trees", match: [expression-trees]}
+      - {id: cs-srcgen, name: "Source generators", match: [source-generators]}
+  - id: cs-json
+    name: "JSON and serialization"
+    source: "Microsoft Learn: System.Text.Json"
+    match: [dotnet-json]
+    subtopics:
+      - {id: cs-stjoptions, name: "JsonSerializerOptions and naming policies", match: [system-text-json-options]}
+      - {id: cs-converters, name: "Custom JsonConverter", match: [json-converters]}
+      - {id: cs-jsonpoly, name: "Polymorphic serialization", match: [json-polymorphism]}
+      - {id: cs-jsonsrcgen, name: "JSON source generation", match: [json-source-generation]}
+      - {id: cs-reader, name: "Utf8JsonReader streaming", match: [utf8jsonreader]}
+  - id: cs-io
+    name: "I/O"
+    source: "Microsoft Learn: File and stream I/O; System.IO.Pipelines"
+    match: [dotnet-io]
+    subtopics:
+      - {id: cs-filestream, name: "Async FileStream and File APIs", match: [async-file-io]}
+      - {id: cs-pipelines, name: "System.IO.Pipelines", match: [io-pipelines]}
+      - {id: cs-zip, name: "Compression and ZipArchive", match: [ziparchive-compression]}
+  - id: cs-hosting
+    name: "Generic host, configuration and DI"
+    source: "Microsoft Learn: .NET Generic Host, Configuration, Dependency injection"
+    match: [dotnet-generic-host]
+    subtopics:
+      - {id: cs-options, name: "Options pattern and validation", match: [options-pattern]}
+      - {id: cs-keyed, name: "Keyed services", match: [keyed-services]}
+      - {id: cs-secrets, name: "User secrets and configuration providers", match: [user-secrets]}
+      - {id: cs-bgservice, name: "BackgroundService workers", match: [backgroundservice]}
+      - {id: cs-lifetimes, name: "DI lifetimes and captive dependencies", match: [di-lifetimes]}
+  - id: aspnet-minimal
+    name: "ASP.NET Core minimal APIs"
+    source: "Microsoft Learn: ASP.NET Core Minimal APIs"
+    match: [aspnet-minimal-apis]
+    subtopics:
+      - {id: an-groups, name: "Route groups", match: [route-groups]}
+      - {id: an-filters, name: "Endpoint filters", match: [endpoint-filters]}
+      - {id: an-binding, name: "Parameter binding and AsParameters", match: [minimal-api-binding]}
+      - {id: an-results, name: "TypedResults and results", match: [typedresults]}
+  - id: aspnet-mvc
+    name: "ASP.NET Core controllers"
+    source: "Microsoft Learn: ASP.NET Core Web API controllers"
+    match: [aspnet-controllers]
+    subtopics:
+      - {id: an-modelbind, name: "Model binding and binding sources", match: [model-binding]}
+      - {id: an-actionfilters, name: "Action and exception filters", match: [action-filters]}
+      - {id: an-versioning, name: "API versioning", match: [api-versioning]}
+      - {id: an-formatters, name: "Content negotiation and formatters", match: [content-negotiation]}
+      - {id: an-validation, name: "Model validation and ProblemDetails", match: [model-validation]}
+  - id: aspnet-pipeline
+    name: "ASP.NET Core request pipeline"
+    source: "Microsoft Learn: ASP.NET Core Fundamentals: Middleware, Caching, Performance"
+    match: [aspnet-request-pipeline]
+    subtopics:
+      - {id: an-middleware, name: "Middleware ordering", match: [middleware-pipeline]}
+      - {id: an-outputcache, name: "Output caching", match: [output-caching]}
+      - {id: an-hybridcache, name: "HybridCache", match: [hybridcache]}
+      - {id: an-compression, name: "Response compression", match: [response-compression]}
+      - {id: an-forwarded, name: "Forwarded headers behind proxies", match: [forwarded-headers]}
+      - {id: an-ratelimit, name: "Rate limiting and CORS", match: [aspnet-rate-limiting]}
+  - id: aspnet-security
+    name: "ASP.NET Core security"
+    source: "Microsoft Learn: ASP.NET Core Security and Identity"
+    match: [aspnet-security]
+    subtopics:
+      - {id: an-jwt, name: "JWT bearer and policies", match: [jwt-bearer]}
+      - {id: an-cookie, name: "Cookie authentication", match: [cookie-authentication]}
+      - {id: an-identity, name: "ASP.NET Core Identity", match: [aspnet-identity]}
+      - {id: an-dataprotection, name: "Data Protection API", match: [data-protection-api]}
+      - {id: an-antiforgery, name: "Antiforgery tokens", match: [antiforgery]}
+      - {id: an-hsts, name: "HTTPS redirection and HSTS", match: [hsts-https]}
+  - id: aspnet-realtime
+    name: "Real-time and RPC"
+    source: "Microsoft Learn: SignalR, gRPC, YARP"
+    match: [aspnet-realtime-rpc]
+    subtopics:
+      - {id: an-signalr, name: "SignalR hubs and scale-out", match: [signalr-hubs]}
+      - {id: an-grpc, name: "gRPC services", match: [grpc-aspnet-core]}
+      - {id: an-yarp, name: "YARP reverse proxy", match: [yarp-reverse-proxy]}
+      - {id: an-sse, name: "Server-sent events endpoints", match: [server-sent-events]}
+  - id: aspnet-ui
+    name: "ASP.NET Core UI frameworks"
+    source: "Microsoft Learn: Blazor, Razor Pages"
+    match: [aspnet-ui]
+    subtopics:
+      - {id: an-blazor, name: "Blazor components and render modes", match: [blazor-render-modes]}
+      - {id: an-blazorforms, name: "Blazor forms and validation", match: [blazor-forms]}
+      - {id: an-razor, name: "Razor Pages handlers", match: [razor-pages]}
+      - {id: an-bunit, name: "bUnit component tests", match: [bunit]}
+  - id: aspnet-hosting
+    name: "ASP.NET Core hosting and operations"
+    source: "Microsoft Learn: ASP.NET Core Host and deploy"
+    match: [aspnet-hosting]
+    subtopics:
+      - {id: an-kestrel, name: "Kestrel configuration and limits", match: [kestrel-configuration]}
+      - {id: an-health, name: "Health checks and graceful shutdown", match: [aspnet-health-checks]}
+      - {id: an-openapi, name: "OpenAPI documents", match: [aspnet-openapi]}
+      - {id: an-aspire, name: ".NET Aspire app host", match: [aspire-app-host]}
+  - id: ef-modeling
+    name: "EF Core modeling"
+    source: "Microsoft Learn: EF Core Modeling"
+    match: [ef-core-modeling]
+    subtopics:
+      - {id: ef-fluent, name: "Fluent API, owned types and conversions", match: [ef-fluent-api]}
+      - {id: ef-inherit, name: "Inheritance mapping TPH TPT TPC", match: [ef-inheritance-mapping]}
+      - {id: ef-json, name: "JSON columns", match: [ef-json-columns]}
+      - {id: ef-seed, name: "Data seeding", match: [ef-data-seeding]}
+      - {id: ef-temporal, name: "Temporal tables", match: [ef-temporal-tables]}
+  - id: ef-querying
+    name: "EF Core querying and saving"
+    source: "Microsoft Learn: EF Core Querying, Saving data"
+    match: [ef-core-querying]
+    subtopics:
+      - {id: ef-loading, name: "Relationships and loading", match: [eager-loading]}
+      - {id: ef-compiled, name: "Compiled queries", match: [ef-compiled-queries]}
+      - {id: ef-filters, name: "Global query filters", match: [ef-global-query-filters]}
+      - {id: ef-bulk, name: "ExecuteUpdate and ExecuteDelete", match: [executeupdate]}
+      - {id: ef-concurrency, name: "Concurrency tokens", match: [ef-concurrency-tokens]}
+      - {id: ef-splitq, name: "Split queries and tracking behaviour", match: [query-splitting]}
+  - id: ef-operations
+    name: "EF Core operations"
+    source: "Microsoft Learn: EF Core Managing schemas, Testing, Performance"
+    match: [ef-core-operations]
+    subtopics:
+      - {id: ef-migr, name: "Migrations in production", match: [ef-migrations]}
+      - {id: ef-intercept, name: "Interceptors and logging", match: [ef-interceptors]}
+      - {id: ef-pooling, name: "DbContext lifetime and pooling", match: [dbcontext-pooling]}
+      - {id: ef-testing, name: "Testing data access", match: [ef-core-testing]}
+      - {id: ef-diag, name: "Query plans and diagnosing slow queries", match: [ef-slow-queries]}
+  - id: cs-adonet
+    name: "ADO.NET and micro-ORMs"
+    source: "Microsoft Learn: ADO.NET; Dapper documentation"
+    match: [dotnet-ado-net]
+    subtopics:
+      - {id: ad-dbcommand, name: "DbCommand parameters and readers", match: [dbcommand-parameters]}
+      - {id: ad-dapper, name: "Dapper queries and multi-mapping", match: [dapper]}
+      - {id: ad-sqlclient, name: "SqlClient resiliency and connection strings", match: [sqlclient-resiliency]}
+  - id: cs-cli
+    name: ".NET SDK and CLI"
+    source: "Microsoft Learn: .NET CLI reference"
+    match: [dotnet-sdk-cli]
+    subtopics:
+      - {id: cli-global, name: "global.json SDK pinning", match: [global-json]}
+      - {id: cli-tools, name: "Global and local tools", match: [dotnet-tools]}
+      - {id: cli-watch, name: "dotnet watch and hot reload", match: [dotnet-watch]}
+      - {id: cli-templates, name: "Custom dotnet new templates", match: [dotnet-new-templates]}
+      - {id: cli-solution, name: "Solution files and slnx", match: [slnx-solution]}
+  - id: cs-msbuild
+    name: "MSBuild"
+    source: "Microsoft Learn: MSBuild reference"
+    match: [msbuild]
+    subtopics:
+      - {id: ms-shared, name: "Directory.Build.props", match: [directory-build-props]}
+      - {id: ms-targets, name: "Custom targets and properties", match: [msbuild-targets]}
+      - {id: ms-binlog, name: "Binary logs", match: [msbuild-binlog]}
+      - {id: ms-items, name: "Item groups, globbing and conditions", match: [msbuild-itemgroups]}
+  - id: cs-nuget
+    name: "NuGet"
+    source: "Microsoft Learn: NuGet documentation"
+    match: [nuget]
+    subtopics:
+      - {id: nu-cpm, name: "Central package management", match: [central-package-management]}
+      - {id: nu-pack, name: "Creating and publishing packages", match: [nuget-pack]}
+      - {id: nu-mapping, name: "Package source mapping", match: [package-source-mapping]}
+      - {id: nu-audit, name: "Vulnerability auditing with NuGetAudit", match: [nuget-audit]}
+      - {id: nu-multitarget, name: "Multi-targeting", match: [multi-targeting]}
+  - id: cs-testing
+    name: "Testing"
+    source: "Microsoft Learn: Testing in .NET; xUnit and BenchmarkDotNet documentation"
+    match: [dotnet-testing-practice]
+    subtopics:
+      - {id: ts-xunit, name: "xUnit and WebApplicationFactory", match: [xunit]}
+      - {id: ts-theory, name: "xUnit theories and data sources", match: [xunit-theory]}
+      - {id: ts-mstest, name: "MSTest and NUnit", match: [mstest-nunit]}
+      - {id: ts-bogus, name: "Test data with Bogus and AutoFixture", match: [bogus-autofixture]}
+      - {id: ts-assert, name: "Assertion libraries", match: [assertion-libraries]}
+      - {id: ts-bench, name: "BenchmarkDotNet", match: [benchmarkdotnet]}
+      - {id: ts-fake, name: "FakeTimeProvider", match: [faketimeprovider]}
+  - id: cs-diagnostics
+    name: ".NET diagnostics"
+    source: "Microsoft Learn: .NET diagnostics tools"
+    match: [dotnet-diagnostics]
+    subtopics:
+      - {id: dg-counters, name: "dotnet-counters and dotnet-trace", match: [dotnet-counters]}
+      - {id: dg-dump, name: "dotnet-dump", match: [dotnet-dump]}
+      - {id: dg-gcdump, name: "dotnet-gcdump", match: [dotnet-gcdump]}
+      - {id: dg-monitor, name: "dotnet-monitor sidecar", match: [dotnet-monitor]}
+      - {id: dg-stack, name: "dotnet-stack and hang analysis", match: [dotnet-stack]}
+      - {id: dg-eventsource, name: "EventSource and EventListener", match: [eventsource]}
+  - id: cs-observability
+    name: "Observability"
+    source: "Microsoft Learn: Logging, Metrics, Distributed tracing in .NET"
+    match: [dotnet-observability]
+    subtopics:
+      - {id: ob-ilogger, name: "ILogger and Serilog", match: [ilogger]}
+      - {id: ob-logsrc, name: "LoggerMessage source generator", match: [loggermessage-generator]}
+      - {id: ob-meters, name: "Metrics with Meter", match: [system-diagnostics-metrics]}
+      - {id: ob-otel, name: "OpenTelemetry for .NET", match: [opentelemetry-dotnet]}
+      - {id: ob-activity, name: "ActivitySource and tracing", match: [activitysource]}
+  - id: cs-resilience
+    name: "Resilience and HTTP"
+    source: "Microsoft Learn: HttpClient, Resilience, Polly"
+    match: [dotnet-resilience]
+    subtopics:
+      - {id: rs-factory, name: "IHttpClientFactory", match: [ihttpclientfactory]}
+      - {id: rs-polly, name: "Polly v8 resilience pipelines", match: [resilience-pipelines]}
+      - {id: rs-idempotency, name: "Idempotency keys for APIs", match: [idempotency-keys]}
+      - {id: rs-outbox, name: "Transactional outbox", match: [outbox-pattern]}
+  - id: cs-publish
+    name: "Publishing and deployment"
+    source: "Microsoft Learn: .NET application publishing overview"
+    match: [dotnet-publish]
+    subtopics:
+      - {id: pb-aot, name: "Native AOT and trimming", match: [native-aot]}
+      - {id: pb-single, name: "Single-file publish", match: [single-file-publish]}
+      - {id: pb-r2r, name: "ReadyToRun compilation", match: [readytorun]}
+      - {id: pb-selfcontained, name: "Self-contained versus framework-dependent", match: [self-contained-deployment]}
+      - {id: pb-container, name: "SDK container builds", match: [dotnet-container-publish]}
+  - id: cs-perf
+    name: "Runtime performance"
+    source: "Microsoft Learn: .NET performance; runtime configuration docs"
+    match: [dotnet-performance]
+    subtopics:
+      - {id: pf-tiered, name: "Tiered compilation and dynamic PGO", match: [dynamic-pgo]}
+      - {id: pf-alloc, name: "Allocation reduction patterns", match: [allocation-reduction]}
+      - {id: pf-cache, name: "MemoryCache usage", match: [memorycache]}
+  - id: cs-analyzers
+    name: "Code analysis"
+    source: "Microsoft Learn: .NET code analysis"
+    match: [dotnet-code-analysis]
+    subtopics:
+      - {id: an2-roslyn, name: "Analyzers and editorconfig severity", match: [roslyn-analyzers]}
+      - {id: an2-author, name: "Writing a custom analyzer", match: [custom-analyzer]}
+      - {id: an2-format, name: "dotnet format", match: [dotnet-format]}
+  - id: cs-jobs
+    name: "Background jobs and messaging"
+    source: "Hangfire, Quartz.NET, MassTransit, Azure SDK for .NET documentation"
+    match: [dotnet-messaging-jobs]
+    subtopics:
+      - {id: jb-hangfire, name: "Hangfire and Quartz.NET scheduling", match: [quartz-hangfire]}
+      - {id: jb-masstransit, name: "MassTransit messaging", match: [masstransit]}
+      - {id: jb-servicebus, name: "Azure Service Bus client", match: [azure-service-bus]}
+      - {id: jb-redis, name: "StackExchange.Redis", match: [stackexchange-redis]}
+  - id: cs-security
+    name: "Application security in .NET"
+    source: "Microsoft Learn: .NET security and cryptography"
+    match: [dotnet-security]
+    subtopics:
+      - {id: sc-aes, name: "AES-GCM encryption", match: [aesgcm]}
+      - {id: sc-hash, name: "Password hashing with Rfc2898 and Identity", match: [password-hashing]}
+      - {id: sc-keyvault, name: "Azure Key Vault configuration", match: [azure-key-vault]}
+  - id: cs-desktop
+    name: "Desktop and cross-platform UI"
+    source: "Microsoft Learn: WPF, .NET MAUI"
+    match: [dotnet-desktop-ui]
+    subtopics:
+      - {id: ds-mvvm, name: "MVVM with CommunityToolkit", match: [mvvm-community-toolkit]}
+      - {id: ds-maui, name: ".NET MAUI Shell and lifecycle", match: [maui-shell]}
+      - {id: ds-wpf, name: "WPF data binding", match: [wpf-data-binding]}

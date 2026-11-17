@@ -1,0 +1,219 @@
+# Coverage spec: kubespray. Topics from the Kubespray docs (kubespray.io, markdown under docs/ in kubernetes-sigs/kubespray).
+subject: kubespray
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [kubespray]
+sources:
+  - "Kubespray docs (kubespray.io)"
+topics:
+  # --- Ansible and inventory ---
+  - id: kubespray-inventory-groups
+    name: "Inventory groups and membership"
+    source: "https://kubespray.io/docs/ansible/inventory.md"
+    match: [inventory,kube_control_plane,kube_node,etcd,k8s_cluster,groups]
+  - id: kubespray-bastion
+    name: "Bastion host access"
+    source: "https://kubespray.io/docs/ansible/inventory.md"
+    match: [bastion,jump host,private nodes,ssh]
+  - id: kubespray-ansible-install
+    name: "Installing Ansible and Python compatibility"
+    source: "https://kubespray.io/docs/ansible/ansible.md"
+    match: [ansible,virtualenv,requirements.txt,ansible-core,python]
+  - id: kubespray-ansible-vars
+    name: "Variable layers and extra vars"
+    source: "https://kubespray.io/docs/ansible/ansible.md"
+    match: [group_vars,host_vars,extra vars,precedence,booleans]
+  - id: kubespray-ansible-tags
+    name: "Tags and targeted playbook runs"
+    source: "https://kubespray.io/docs/ansible/ansible.md"
+    match: [tags,skip-tags,download,preinstall,resolvconf]
+  - id: kubespray-ansible-env
+    name: "Ansible environment troubleshooting and the container image"
+    source: "https://kubespray.io/docs/ansible/ansible.md"
+    match: [ANSIBLE_LIBRARY,quay.io,container image,troubleshooting]
+  - id: kubespray-collection
+    name: "Kubespray as an Ansible collection"
+    source: "https://kubespray.io/docs/ansible/ansible_collection.md"
+    match: [collection,ansible-galaxy,requirements.yml,import_playbook]
+  # --- Host prerequisites ---
+  - id: kubespray-kernel
+    name: "Kernel requirements and OS matrix"
+    source: "https://kubespray.io/docs/operations/kernel-requirements.md"
+    match: [kernel,cgroups v2,SystemVerification,preflight]
+  - id: kubespray-ports
+    name: "Firewall port requirements"
+    source: "https://kubespray.io/docs/operations/port-requirements.md"
+    match: [ports,firewall,6443,2379,10250,nodeport]
+  - id: kubespray-proxy
+    name: "Environment proxy and no_proxy"
+    source: "https://kubespray.io/docs/advanced/proxy.md"
+    match: [http_proxy,https_proxy,no_proxy,additional_no_proxy,custom CA]
+  # --- Offline and air-gapped installs ---
+  - id: kubespray-offline-artifacts
+    name: "Offline artifacts and internal services"
+    source: "https://kubespray.io/docs/operations/offline-environment.md"
+    match: [offline,air-gapped,mirror,generate_list.sh,files_repo]
+  - id: kubespray-offline-vars
+    name: "Offline inventory overrides"
+    source: "https://kubespray.io/docs/operations/offline-environment.md"
+    match: [registry_host,registry_addr,kube_image_repo,offline.yml]
+  - id: kubespray-offline-auth
+    name: "Authenticated registries and file repositories"
+    source: "https://kubespray.io/docs/operations/offline-environment.md"
+    match: [registry_user,registry_pass,ansible-vault,containerd_registry_auth,unsafe_show_logs]
+  - id: kubespray-offline-python
+    name: "Python packages offline"
+    source: "https://kubespray.io/docs/operations/offline-environment.md"
+    match: [pypi,pip,python packages,container image]
+  # --- Container runtimes ---
+  - id: kubespray-containerd
+    name: "containerd configuration and registry mirrors"
+    source: "https://kubespray.io/docs/CRI/containerd.md"
+    match: [containerd,container_manager,containerd_registries_mirrors,insecure registry]
+  - id: kubespray-containerd-runtimes
+    name: "containerd runtimes, NRI and static binary"
+    source: "https://kubespray.io/docs/CRI/containerd.md"
+    match: [containerd_runc_runtime,runtimeclass,nri_enabled,containerd_static_binary]
+  - id: kubespray-crio
+    name: "CRI-O"
+    source: "https://kubespray.io/docs/CRI/cri-o.md"
+    match: [crio,cri-o,crio_registries,crio_remap_enable]
+  - id: kubespray-docker
+    name: "Docker and cri-dockerd"
+    source: "https://kubespray.io/docs/CRI/docker.md"
+    match: [docker,cri-dockerd,docker_options,overlay2]
+  - id: kubespray-sandbox-runtimes
+    name: "gVisor and Kata Containers"
+    source: "https://kubespray.io/docs/CRI/kata-containers.md"
+    match: [gvisor,runsc,kata,qemu,pod overhead]
+  # --- Network plugins ---
+  - id: kubespray-calico-basics
+    name: "Calico datastore, backend and pools"
+    source: "https://kubespray.io/docs/CNI/calico.md"
+    match: [calico,calicoctl,calico_datastore,typha,calico_pool_cidr]
+  - id: kubespray-calico-encapsulation
+    name: "Calico encapsulation modes and migration"
+    source: "https://kubespray.io/docs/CNI/calico.md"
+    match: [vxlan,ipip,calico_ipip_mode,bgp mode,migration]
+  - id: kubespray-calico-bgp
+    name: "Calico BGP peering and route reflectors"
+    source: "https://kubespray.io/docs/CNI/calico.md"
+    match: [calico_rr,peer_with_router,peers,global_as_num,route reflector]
+  - id: kubespray-calico-ebpf
+    name: "Calico eBPF dataplane"
+    source: "https://kubespray.io/docs/CNI/calico.md"
+    match: [calico_bpf_enabled,ebpf,dsr,ipvsadm]
+  - id: kubespray-calico-tuning
+    name: "Calico WireGuard, MTU and tuning"
+    source: "https://kubespray.io/docs/CNI/calico.md"
+    match: [calico_wireguard_enabled,calico_veth_mtu,felix,calico_ipam_host_local]
+  - id: kubespray-cilium-ipam
+    name: "Cilium IPAM and pod CIDRs"
+    source: "https://kubespray.io/docs/CNI/cilium.md"
+    match: [cilium_ipam_mode,cilium_pool_cidr,cilium_loadbalancer_ip_pools,kube_owner]
+  - id: kubespray-cilium-bgp
+    name: "Cilium BGP control plane"
+    source: "https://kubespray.io/docs/CNI/cilium.md"
+    match: [cilium_bgp_cluster_configs,bgpv2,cilium_enable_bgp_control_plane,peering policy]
+  - id: kubespray-cilium-kpr
+    name: "Cilium kube-proxy replacement and operator"
+    source: "https://kubespray.io/docs/CNI/cilium.md"
+    match: [cilium_kube_proxy_replacement,cilium_operator_custom_args,cilium_version,identity allocation]
+  - id: kubespray-cilium-encryption
+    name: "Cilium transparent encryption"
+    source: "https://kubespray.io/docs/CNI/cilium.md"
+    match: [cilium_encryption_type,ipsec,cilium_ipsec_key,wireguard]
+  - id: kubespray-cilium-observability
+    name: "Cilium Hubble, bandwidth manager and rolling restarts"
+    source: "https://kubespray.io/docs/CNI/cilium.md"
+    match: [hubble,cilium_enable_bandwidth_manager,host firewall,cilium_rolling_restart_wait_retries_count]
+  - id: kubespray-simple-cni
+    name: "Flannel, Kube-OVN and kube-router"
+    source: "https://kubespray.io/docs/CNI/flannel.md"
+    match: [flannel,kube-ovn,kube-router,host-gw,gobgp]
+  - id: kubespray-generic-macvlan-multus
+    name: "Generic CNI, macvlan and Multus"
+    source: "https://kubespray.io/docs/CNI/multus.md"
+    match: [cni,macvlan,multus,kube_network_plugin_multus,NetworkAttachmentDefinition]
+  # --- High availability ---
+  - id: kubespray-ha-localhost
+    name: "Localhost load balancing for the apiserver"
+    source: "https://kubespray.io/docs/operations/ha-mode.md"
+    match: [loadbalancer_apiserver_localhost,nginx-proxy,localhost lb]
+  - id: kubespray-ha-external
+    name: "External load balancer endpoints"
+    source: "https://kubespray.io/docs/operations/ha-mode.md"
+    match: [kube_apiserver_endpoint,haproxy,vip,supplementary_addresses_in_ssl_keys]
+  - id: kubespray-kube-vip
+    name: "kube-vip"
+    source: "https://kubespray.io/docs/ingress/kube-vip.md"
+    match: [kube_vip_enabled,kube-vip,vip,arp,bgp]
+  - id: kubespray-metallb
+    name: "MetalLB"
+    source: "https://kubespray.io/docs/ingress/metallb.md"
+    match: [metallb,address_pools,layer2,metallb_peers,strict arp]
+  # --- Scaling and etcd ---
+  - id: kubespray-scale-workers
+    name: "Adding and removing worker nodes"
+    source: "https://kubespray.io/docs/operations/nodes.md"
+    match: [scale.yml,remove-node.yml,facts.yml,allow_ungraceful_removal]
+  - id: kubespray-scale-control-plane
+    name: "Adding and removing control plane nodes"
+    source: "https://kubespray.io/docs/operations/nodes.md"
+    match: [control plane,cluster-info,nginx-proxy restart,first control plane]
+  - id: kubespray-etcd-members
+    name: "Adding and removing etcd members"
+    source: "https://kubespray.io/docs/operations/nodes.md"
+    match: [etcd member,etcd_retries,ignore_assert_errors,--etcd-servers]
+  - id: kubespray-etcd-config
+    name: "etcd deployment types and metrics"
+    source: "https://kubespray.io/docs/operations/etcd.md"
+    match: [etcd_deployment_type,etcd_metrics_port,etcd_listen_metrics_urls,kube-prometheus-stack]
+  - id: kubespray-recovery
+    name: "Control plane recovery"
+    source: "https://kubespray.io/docs/operations/recover-control-plane.md"
+    match: [recover-control-plane.yml,broken_etcd,etcd_snapshot,quorum]
+  # --- Upgrades ---
+  - id: kubespray-upgrade-graceful
+    name: "Graceful upgrades with upgrade-cluster.yml"
+    source: "https://kubespray.io/docs/operations/upgrades.md"
+    match: [upgrade-cluster.yml,kube_version,upgrade_cluster_setup,cordon drain]
+  - id: kubespray-upgrade-rollout
+    name: "Upgrade batch size and pauses"
+    source: "https://kubespray.io/docs/operations/upgrades.md"
+    match: [serial,upgrade_node_confirm,upgrade_node_pause_seconds,post upgrade]
+  - id: kubespray-upgrade-releases
+    name: "Upgrading across Kubespray releases"
+    source: "https://kubespray.io/docs/operations/upgrades.md"
+    match: [git tag,minor release,skip releases,sample inventory]
+  - id: kubespray-upgrade-components
+    name: "Component upgrades by tag and OS package updates"
+    source: "https://kubespray.io/docs/operations/upgrades.md"
+    match: [--tags,skip-tags,system_upgrade,system_upgrade_reboot]
+  # --- DNS ---
+  - id: kubespray-dns-modes
+    name: "dns_mode and resolvconf_mode"
+    source: "https://kubespray.io/docs/advanced/dns-stack.md"
+    match: [dns_mode,resolvconf_mode,coredns_dual,upstream_dns_servers,docker_dns]
+  - id: kubespray-coredns
+    name: "CoreDNS configuration variables"
+    source: "https://kubespray.io/docs/advanced/dns-stack.md"
+    match: [coredns,coredns_external_zones,dns_etchosts,old_dns_domains,cache]
+  - id: kubespray-nodelocaldns
+    name: "Nodelocal DNS cache and limits"
+    source: "https://kubespray.io/docs/advanced/dns-stack.md"
+    match: [nodelocaldns,enable_nodelocaldns_secondary,searchdomains,ndots]
+  # --- Add-ons and cloud ---
+  - id: kubespray-cert-manager
+    name: "cert-manager add-on"
+    source: "https://kubespray.io/docs/advanced/cert_manager.md"
+    match: [cert_manager_enabled,cluster-issuer,acme,cert_manager_trusted_internal_ca]
+  - id: kubespray-aws
+    name: "AWS provider preparation and dynamic inventory"
+    source: "https://kubespray.io/docs/cloud_providers/aws.md"
+    match: [aws,iam,kubernetes.io/cluster,kubespray-role,dynamic inventory]
+  - id: kubespray-openstack
+    name: "OpenStack external provider and Cinder CSI"
+    source: "https://kubespray.io/docs/cloud_controllers/openstack.md"
+    match: [openstack,octavia,cinder_csi_enabled,external_openstack_lbaas,allowed-address]

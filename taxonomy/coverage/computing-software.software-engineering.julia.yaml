@@ -1,0 +1,281 @@
+# Canonical coverage spec: Julia language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: julia-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [julia]
+sources:
+  - "Julia manual (docs.julialang.org/en/v1) - Manual chapters, Base and Standard Library reference, Style Guide, Performance Tips, Noteworthy Differences"
+  - "Pkg.jl documentation (pkgdocs.julialang.org) - environments, Project.toml, Manifest.toml, registries, compat, testing, artifacts"
+  - "Julia Style Guide and BlueStyle (github.com/invenia/BlueStyle) and the JuliaFormatter docs"
+  - "Test, Documenter.jl, BenchmarkTools.jl, PackageCompiler.jl, Distributed and Threads documentation"
+topics:
+  - id: jl-types
+    name: "Type system and numbers"
+    source: "Julia manual Types, Integers and Floating-Point Numbers"
+    match: [jl-types]
+    subtopics:
+      - {id: jl-types-abstract-concrete-types, name: "Abstract, concrete and parametric types", match: [abstract-concrete-types]}
+      - {id: jl-types-integer-overflow-float, name: "Integer overflow, promotion and floating point", match: [integer-overflow-float]}
+      - {id: jl-types-type-promotion-conversion, name: "Promotion and conversion", match: [type-promotion-conversion]}
+      - {id: jl-types-parametric-types-where-bounds, name: "Parametric types and type bounds", match: [parametric-types-where-bounds]}
+  - id: jl-multiple-dispatch
+    name: "Methods and multiple dispatch"
+    source: "Julia manual Methods"
+    match: [jl-multiple-dispatch]
+    subtopics:
+      - {id: jl-multiple-dispatch-methods-dispatch, name: "Writing methods and resolving ambiguity", match: [methods-dispatch]}
+      - {id: jl-multiple-dispatch-type-stability, name: "Type stability and inference", match: [type-stability]}
+      - {id: jl-multiple-dispatch-method-ambiguities-invalidation, name: "Method ambiguities and invalidations", match: [method-ambiguities-invalidation]}
+      - {id: jl-multiple-dispatch-traits-holy-trait-pattern, name: "Holy traits and trait dispatch", match: [traits-holy-trait-pattern]}
+  - id: jl-structs
+    name: "Composite types and constructors"
+    source: "Julia manual Composite Types, Constructors"
+    match: [jl-structs]
+    subtopics:
+      - {id: jl-structs-structs-constructors, name: "struct, mutable struct and constructors", match: [structs-constructors]}
+      - {id: jl-structs-constructors-inner-outer, name: "Inner and outer constructors", match: [constructors-inner-outer]}
+      - {id: jl-structs-mutable-immutable-structs-fields, name: "Mutable vs immutable structs and field types", match: [mutable-immutable-structs-fields]}
+  - id: jl-collections
+    name: "Arrays and collections"
+    source: "Julia manual Multi-dimensional Arrays, Collections"
+    match: [jl-collections]
+    subtopics:
+      - {id: jl-collections-array-indexing-broadcast, name: "1-based indexing, views and broadcasting", match: [array-indexing-broadcast]}
+      - {id: jl-collections-dict-set-tuples, name: "Dict, Set, Tuple and NamedTuple", match: [dict-set-tuples]}
+      - {id: jl-collections-dict-set-operations, name: "Dict, Set and iteration order", match: [dict-set-operations]}
+      - {id: jl-collections-comprehensions-generators, name: "Comprehensions and generators", match: [comprehensions-generators]}
+  - id: jl-strings
+    name: "Strings and Unicode"
+    source: "Julia manual Strings"
+    match: [jl-strings]
+    subtopics:
+      - {id: jl-strings-string-handling, name: "UTF-8 indexing, interpolation and parsing", match: [string-handling]}
+      - {id: jl-strings-regex-julia, name: "Regular expressions", match: [regex-julia]}
+      - {id: jl-strings-string-indexing-codeunits, name: "String indexing, bytes and graphemes", match: [string-indexing-codeunits]}
+  - id: jl-control-flow
+    name: "Control flow and iteration"
+    source: "Julia manual Control Flow"
+    match: [jl-control-flow]
+    subtopics:
+      - {id: jl-control-flow-loops-iteration, name: "for loops, iterators and the iteration protocol", match: [loops-iteration]}
+      - {id: jl-control-flow-do-blocks-try-finally, name: "do blocks, ternaries and short-circuit", match: [do-blocks-try-finally]}
+  - id: jl-functions
+    name: "Functions and arguments"
+    source: "Julia manual Functions"
+    match: [jl-functions]
+    subtopics:
+      - {id: jl-functions-args-kwargs-closures, name: "Keyword arguments, varargs and anonymous functions", match: [args-kwargs-closures]}
+      - {id: jl-functions-keyword-arguments-splatting, name: "Keyword arguments, varargs and splatting", match: [keyword-arguments-splatting]}
+  - id: jl-errors
+    name: "Exceptions and error handling"
+    source: "Julia manual Control Flow (Exception Handling)"
+    match: [jl-errors]
+    subtopics:
+      - {id: jl-errors-try-catch-exceptions, name: "try, catch, finally and custom exceptions", match: [try-catch-exceptions]}
+      - {id: jl-errors-exceptions-try-catch-finally, name: "try/catch/finally and custom exceptions", match: [exceptions-try-catch-finally]}
+  - id: jl-modules
+    name: "Modules and scope"
+    source: "Julia manual Modules, Scope of Variables"
+    match: [jl-modules]
+    subtopics:
+      - {id: jl-modules-modules-using-import, name: "module, using, import and export", match: [modules-using-import]}
+      - {id: jl-modules-scope-globals, name: "Global variables and soft scope", match: [scope-globals]}
+  - id: jl-packages
+    name: "Package manager and environments"
+    source: "Pkg.jl documentation"
+    match: [jl-packages]
+    subtopics:
+      - {id: jl-packages-pkg-environments, name: "Project.toml, Manifest.toml and activate", match: [pkg-environments]}
+      - {id: jl-packages-pkg-develop-register, name: "Creating, testing and registering packages", match: [pkg-develop-register]}
+      - {id: jl-packages-pkg-project-manifest-compat, name: "Project.toml, Manifest.toml and compat", match: [pkg-project-manifest-compat]}
+  - id: jl-testing
+    name: "Testing"
+    source: "Julia manual Unit Testing"
+    match: [jl-testing]
+    subtopics:
+      - {id: jl-testing-test-stdlib, name: "Test.jl, testsets and approximate comparison", match: [test-stdlib]}
+      - {id: jl-testing-test-testsets-approx, name: "Test.jl testsets and approximate equality", match: [test-testsets-approx]}
+  - id: jl-docs
+    name: "Documentation"
+    source: "Julia manual Documentation; Documenter.jl"
+    match: [jl-docs]
+    subtopics:
+      - {id: jl-docs-docstrings-documenter, name: "Docstrings, doctests and Documenter.jl", match: [docstrings-documenter]}
+  - id: jl-performance
+    name: "Performance"
+    source: "Julia manual Performance Tips"
+    match: [jl-performance]
+    subtopics:
+      - {id: jl-performance-performance-tips, name: "Allocation, preallocation and in-place operations", match: [performance-tips]}
+      - {id: jl-performance-profiling-julia, name: "Profile, ProfileView and Chairmarks", match: [profiling-julia]}
+      - {id: jl-performance-type-stability-code-warntype, name: "Type stability and @code_warntype", match: [type-stability-code-warntype]}
+  - id: jl-compile-latency
+    name: "Compilation latency and precompilation"
+    source: "Julia manual Pkg precompilation; PackageCompiler docs"
+    match: [jl-compile-latency]
+    subtopics:
+      - {id: jl-compile-latency-precompile-latency, name: "Precompilation, Revise and reducing time to first x", match: [precompile-latency]}
+      - {id: jl-compile-latency-packagecompiler-juliac-sysimage, name: "Sysimages, PackageCompiler and trimming", match: [packagecompiler-juliac-sysimage]}
+  - id: jl-macros
+    name: "Metaprogramming"
+    source: "Julia manual Metaprogramming"
+    match: [jl-macros]
+    subtopics:
+      - {id: jl-macros-macros-expr, name: "Expr, quoting, macros and generated functions", match: [macros-expr]}
+      - {id: jl-macros-macro-hygiene-esc, name: "Macro hygiene, esc and quoting", match: [macro-hygiene-esc]}
+  - id: jl-concurrency
+    name: "Threads, tasks and async"
+    source: "Julia manual Multi-Threading, Asynchronous Programming"
+    match: [jl-concurrency]
+    subtopics:
+      - {id: jl-concurrency-threads-tasks, name: "Threads.@threads, tasks and channels", match: [threads-tasks]}
+      - {id: jl-concurrency-distributed-computing, name: "Distributed.jl and process-based parallelism", match: [distributed-computing]}
+      - {id: jl-concurrency-threads-tasks-channels, name: "Threads, tasks, Channels and locks", match: [threads-tasks-channels]}
+  - id: jl-io
+    name: "Files and IO"
+    source: "Julia manual Networking and Streams, Base file docs"
+    match: [jl-io]
+    subtopics:
+      - {id: jl-io-file-io-streams, name: "open, read, write and do-block file handling", match: [file-io-streams]}
+  - id: jl-dataframes
+    name: "Tabular data"
+    source: "DataFrames.jl and CSV.jl docs"
+    match: [jl-dataframes]
+    subtopics:
+      - {id: jl-dataframes-dataframes-jl, name: "DataFrames.jl select, transform, groupby and joins", match: [dataframes-jl]}
+  - id: jl-numerics
+    name: "Linear algebra and numerics"
+    source: "Julia manual Linear Algebra"
+    match: [jl-numerics]
+    subtopics:
+      - {id: jl-numerics-linear-algebra-stdlib, name: "LinearAlgebra, factorizations and BLAS threads", match: [linear-algebra-stdlib]}
+      - {id: jl-numerics-random-and-statistics, name: "Random numbers and Statistics", match: [random-and-statistics]}
+  - id: jl-interop
+    name: "Interoperability"
+    source: "Julia manual Calling C and Fortran Code; PythonCall docs"
+    match: [jl-interop]
+    subtopics:
+      - {id: jl-interop-ccall-ffi, name: "ccall, C libraries and wrapping with jlcxx or BinaryBuilder", match: [ccall-ffi]}
+      - {id: jl-interop-ccall-pythoncall, name: "ccall, PythonCall and RCall", match: [ccall-pythoncall]}
+  - id: jl-style
+    name: "Style and formatting"
+    source: "Julia Style Guide; BlueStyle; JuliaFormatter docs"
+    match: [jl-style]
+    subtopics:
+      - {id: jl-style-style-guide-format, name: "Julia style guide, BlueStyle and JuliaFormatter", match: [style-guide-format]}
+  - id: jl-install
+    name: "Installation and runtime"
+    source: "juliaup and Julia manual Command-line Interface"
+    match: [jl-install]
+    subtopics:
+      - {id: jl-install-juliaup-cli, name: "juliaup, startup.jl and command-line options", match: [juliaup-cli]}
+  - id: jl-logging
+    name: "Logging and debugging"
+    source: "Julia manual Logging; Debugger.jl docs"
+    match: [jl-logging]
+    subtopics:
+      - {id: jl-logging-logging-debugging, name: "Logging macros, Infiltrator and Debugger.jl", match: [logging-debugging]}
+  - id: jl-web
+    name: "Web and serialization"
+    source: "HTTP.jl, JSON3.jl docs"
+    match: [jl-web]
+    subtopics:
+      - {id: jl-web-http-json, name: "HTTP.jl requests and JSON parsing", match: [http-json]}
+  - id: jl-plotting
+    name: "Plotting"
+    source: "Makie and Plots.jl docs"
+    match: [jl-plotting]
+    subtopics:
+      - {id: jl-plotting-plots-makie, name: "Plots.jl and Makie basics", match: [plots-makie]}
+  - id: jl-sciml
+    name: "Optimisation and differential equations"
+    source: "DifferentialEquations.jl and JuMP docs"
+    match: [jl-sciml]
+    subtopics:
+      - {id: jl-sciml-jump-diffeq, name: "JuMP optimisation and DifferentialEquations.jl", match: [jump-diffeq]}
+  - id: jl-autodiff
+    name: "Automatic differentiation and machine learning"
+    source: "ForwardDiff, Zygote, Flux docs"
+    match: [jl-autodiff]
+    subtopics:
+      - {id: jl-autodiff-autodiff-flux, name: "ForwardDiff, Zygote and Flux", match: [autodiff-flux]}
+  - id: jl-gpu
+    name: "GPU computing"
+    source: "CUDA.jl docs"
+    match: [jl-gpu]
+    subtopics:
+      - {id: jl-gpu-cuda-jl, name: "CUDA.jl arrays and kernels", match: [cuda-jl]}
+  - id: jl-ci
+    name: "Continuous integration"
+    source: "julia-actions and Pkg docs"
+    match: [jl-ci]
+    subtopics:
+      - {id: jl-ci-julia-github-actions, name: "GitHub Actions for Julia packages", match: [julia-github-actions]}
+  - id: jl-where-methods
+    name: "Parametric methods"
+    source: "Julia manual Methods (Parametric Methods)"
+    match: [jl-where-methods]
+    subtopics:
+      - {id: jl-where-methods-where-clauses, name: "where clauses and type parameters in methods", match: [where-clauses]}
+  - id: jl-missing-nothing
+    name: "Missing values and nothing"
+    source: "Julia manual Missing Values"
+    match: [jl-missing-nothing]
+    subtopics:
+      - {id: jl-missing-nothing-missing-vs-nothing, name: "missing, nothing and Union types", match: [missing-vs-nothing]}
+  - id: jl-ranges-sorting
+    name: "Ranges and sorting"
+    source: "Julia manual Arrays; Base Sorting docs"
+    match: [jl-ranges-sorting]
+    subtopics:
+      - {id: jl-ranges-sorting-ranges-sorting, name: "Ranges, sort, sortperm and searching", match: [ranges-sorting]}
+  - id: jl-dates
+    name: "Dates and times"
+    source: "Julia manual Dates stdlib"
+    match: [jl-dates]
+    subtopics:
+      - {id: jl-dates-dates-stdlib, name: "Date, DateTime, periods and TimeZones.jl", match: [dates-stdlib]}
+  - id: jl-process
+    name: "Running external programs"
+    source: "Julia manual Running External Programs"
+    match: [jl-process]
+    subtopics:
+      - {id: jl-process-run-commands, name: "Cmd objects, run, read and pipelines", match: [run-commands]}
+  - id: jl-serialization
+    name: "Serialization and data formats"
+    source: "Serialization stdlib; JLD2, TOML docs"
+    match: [jl-serialization]
+    subtopics:
+      - {id: jl-serialization-serialize-jld2-toml, name: "Serialization, JLD2, TOML and Arrow", match: [serialize-jld2-toml]}
+  - id: jl-artifacts-prefs
+    name: "Artifacts and preferences"
+    source: "Pkg.jl Artifacts and Preferences docs"
+    match: [jl-artifacts-prefs]
+    subtopics:
+      - {id: jl-artifacts-prefs-artifacts-preferences, name: "Artifacts.toml and Preferences.jl", match: [artifacts-preferences]}
+  - id: jl-memory-gc
+    name: "Memory and garbage collection"
+    source: "Julia manual Memory; GC docs"
+    match: [jl-memory-gc]
+    subtopics:
+      - {id: jl-memory-gc-gc-memory-management, name: "GC pressure, finalizers and memory use", match: [gc-memory-management]}
+  - id: jl-sparse-structured
+    name: "Sparse and structured arrays"
+    source: "SparseArrays stdlib docs"
+    match: [jl-sparse-structured]
+    subtopics:
+      - {id: jl-sparse-structured-sparse-arrays, name: "SparseArrays, StaticArrays and OffsetArrays", match: [sparse-arrays]}
+  - id: jl-enums-consts
+    name: "Enums and constants"
+    source: "Julia manual Types (Enum), Constants"
+    match: [jl-enums-consts]
+    subtopics:
+      - {id: jl-enums-consts-enums-constants, name: "@enum, const and Val-based flags", match: [enums-constants]}
+  - id: jl-repl-unicode
+    name: "REPL and Unicode input"
+    source: "Julia manual REPL; Unicode Input"
+    match: [jl-repl-unicode]
+    subtopics:
+      - {id: jl-repl-unicode-repl-modes-unicode, name: "REPL modes, help, shell and Unicode completion", match: [repl-modes-unicode]}

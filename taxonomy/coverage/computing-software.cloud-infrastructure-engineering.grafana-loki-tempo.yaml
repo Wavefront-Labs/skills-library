@@ -1,0 +1,61 @@
+# Canonical coverage spec: Grafana LGTM stack (Loki, Grafana, Tempo, Mimir) and Alloy.
+# Topics come from the official Grafana Labs documentation tables of contents, not from the library.
+subject: grafana-loki-tempo
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [grafana-loki-tempo]
+sources:
+  - "grafana.com/docs/loki/latest table of contents: query (log queries, metric queries, template functions, logcli), configure, operations (storage, retention, multi-tenancy, caching), alert, reference (HTTP API), setup (Helm install)"
+  - "grafana.com/docs/tempo/latest table of contents: TraceQL and TraceQL metrics, metrics-generator, configuration, API, storage (Parquet), compaction, multitenancy, caching, receivers, sampling"
+  - "grafana.com/docs/mimir/latest table of contents: architecture, deployment modes, hash ring, configuration parameters and limits, ruler, HA tracker, query sharding, mimirtool, remote write"
+  - "grafana.com/docs/alloy/latest table of contents: configuration syntax, component reference (loki, prometheus, discovery, otelcol), clustering, debugging"
+  - "grafana.com/docs/grafana/latest/datasources: Loki, Tempo, Prometheus/Mimir data source configuration, trace to logs, trace to metrics, derived fields, exemplars, service map"
+topics:
+  - {id: metric-queries, name: LogQL metric queries and range aggregations, source: Loki docs - query, match: [logql-metric-queries]}
+  - {id: unwrap, name: LogQL unwrap and numeric extraction, source: Loki docs - metric queries, match: [logql-unwrap]}
+  - {id: pattern-parser, name: LogQL pattern and regexp parsers, source: Loki docs - log queries, match: [pattern-parser]}
+  - {id: line-format, name: LogQL line_format and label_format templates, source: Loki docs - template functions, match: [line-format]}
+  - {id: limits-config, name: Loki limits_config and per-tenant overrides, source: Loki docs - configure, match: [loki-limits]}
+  - {id: log-deletion, name: Loki compactor log deletion API, source: Loki docs - operations storage, match: [log-deletion]}
+  - {id: multi-tenancy, name: Loki multi-tenancy and X-Scope-OrgID, source: Loki docs - operations, match: [loki-multi-tenancy]}
+  - {id: query-frontend, name: Loki query frontend splitting and caching, source: Loki docs - operations caching, match: [loki-query-frontend]}
+  - {id: loki-ruler, name: Loki ruler recording and alerting rules, source: Loki docs - alert, match: [loki-ruler-rules]}
+  - {id: tsdb-index, name: Loki TSDB index and schema v13 migration, source: Loki docs - storage, match: [tsdb-index]}
+  - {id: object-storage, name: Loki object storage configuration, source: Loki docs - storage, match: [loki-object-storage]}
+  - {id: logcli, name: logcli queries and tail, source: Loki docs - query logcli, match: [logcli]}
+  - {id: loki-api, name: Loki HTTP API push and query, source: Loki docs - reference, match: [loki-http-api]}
+  - {id: loki-helm, name: Loki Helm chart installation, source: Loki docs - setup, match: [loki-helm-chart]}
+  - {id: structured-metadata, name: Loki structured metadata, source: Loki docs - get started, match: [structured-metadata]}
+  - {id: logs-drilldown, name: Grafana Logs Drilldown and patterns, source: Loki docs - visualize, match: [logs-drilldown]}
+  - {id: traceql-metrics, name: TraceQL metrics queries, source: Tempo docs - TraceQL, match: [traceql-metrics]}
+  - {id: metrics-generator, name: Tempo metrics-generator configuration, source: Tempo docs - metrics-generator, match: [tempo-metrics-generator]}
+  - {id: tempo-api, name: Tempo HTTP API search and trace lookup, source: Tempo docs - API, match: [tempo-http-api]}
+  - {id: vparquet, name: Tempo Parquet block format, source: Tempo docs - configuration, match: [vparquet]}
+  - {id: tempo-retention, name: Tempo compactor and retention, source: Tempo docs - configuration, match: [tempo-retention]}
+  - {id: tempo-receivers, name: Tempo receivers OTLP Jaeger Zipkin, source: Tempo docs - configuration, match: [tempo-receivers]}
+  - {id: tempo-multitenancy, name: Tempo multitenancy, source: Tempo docs - multitenancy, match: [tempo-multitenancy]}
+  - {id: tail-sampling, name: Tail sampling with Alloy in front of Tempo, source: Tempo docs - sampling, match: [tail-sampling]}
+  - {id: service-graphs, name: Tempo service graphs configuration, source: Tempo docs - metrics-generator, match: [service-graphs]}
+  - {id: tempo-caching, name: Tempo caching and query performance, source: Tempo docs - caching, match: [tempo-caching]}
+  - {id: mimir-modes, name: Mimir monolithic and microservices modes, source: Mimir docs - architecture, match: [mimir-deployment-modes]}
+  - {id: hash-ring, name: Mimir hash ring and memberlist, source: Mimir docs - architecture, match: [hash-ring]}
+  - {id: mimir-limits, name: Mimir limits and runtime overrides, source: Mimir docs - configuration, match: [mimir-limits]}
+  - {id: mimir-ruler, name: Mimir ruler, source: Mimir docs - ruler, match: [mimir-ruler]}
+  - {id: mimirtool, name: mimirtool rules and analyze commands, source: Mimir docs - tools, match: [mimirtool]}
+  - {id: remote-write, name: Mimir remote write ingestion, source: Mimir docs - configure, match: [mimir-remote-write]}
+  - {id: ha-tracker, name: Mimir HA tracker deduplication, source: Mimir docs - high availability, match: [ha-tracker]}
+  - {id: query-sharding, name: Mimir query sharding, source: Mimir docs - query-frontend, match: [query-sharding]}
+  - {id: alloy-syntax, name: Alloy configuration syntax and components, source: Alloy docs - get started, match: [alloy-syntax]}
+  - {id: loki-process, name: Alloy loki.source.file and loki.process stages, source: Alloy docs - component reference, match: [loki-process]}
+  - {id: discovery-relabel, name: Alloy discovery.kubernetes and relabeling, source: Alloy docs - component reference, match: [discovery-relabel]}
+  - {id: prom-scrape, name: Alloy prometheus.scrape to remote write, source: Alloy docs - component reference, match: [alloy-prometheus-scrape]}
+  - {id: otelcol-pipeline, name: Alloy OpenTelemetry collector pipeline, source: Alloy docs - otelcol components, match: [alloy-otelcol]}
+  - {id: alloy-clustering, name: Alloy clustering, source: Alloy docs - configure, match: [alloy-clustering]}
+  - {id: alloy-debug, name: Alloy UI fmt and debugging, source: Alloy docs - troubleshoot, match: [alloy-debugging]}
+  - {id: datasource-provisioning, name: Provisioning Loki Tempo and Mimir data sources, source: Grafana docs - data sources, match: [datasource-provisioning]}
+  - {id: exemplars, name: Exemplars from metrics to traces, source: Grafana docs - exemplars, match: [exemplars]}
+  - {id: trace-to-logs, name: Trace to logs correlation, source: Grafana docs - Tempo data source, match: [trace-to-logs]}
+  - {id: trace-to-metrics, name: Trace to metrics correlation, source: Grafana docs - Tempo data source, match: [trace-to-metrics]}
+  - {id: derived-fields, name: Loki derived fields to traces, source: Grafana docs - Loki data source, match: [derived-fields]}
+  - {id: service-map, name: Service map and node graph, source: Grafana docs - Tempo data source, match: [service-map]}

@@ -1,0 +1,1425 @@
+# Canonical coverage spec: Data Engineering (whole field).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (certification exam guides, official docs
+# tables of contents, DAMA-DMBOK knowledge areas, the Fundamentals of Data Engineering chapter list),
+# not from what we happened to write, so the check measures the library against the subject.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (exam objective
+# bullets, docs page headings, CLI/config reference groups, book chapter sub-sections).
+subject: data-engineering
+scope:
+  category: computing-software
+  field: data-engineering
+  products: [apache-spark, apache-airflow, dbt, apache-kafka, snowflake, databricks, apache-flink, data-modelling, etl-pipeline-design, streaming-architecture, data-quality, data-warehouse-architecture]
+sources:
+  - "Databricks Certified Data Engineer Associate exam guide - Databricks Intelligence Platform; Development and Ingestion (notebooks, Databricks Connect, Auto Loader); Data Processing & Transformations (medallion, compute types, Lakeflow/DLT, Spark SQL/PySpark aggregations and joins); Productionizing Data Pipelines (Asset Bundles, Workflows/Jobs, repair and rerun, serverless); Data Governance & Quality (Unity Catalog, privileges, Delta Sharing, Lakehouse Federation, lineage, audit)"
+  - "Databricks Certified Data Engineer Professional exam guide - Developing code for data processing (Delta MERGE, CDF, streaming, deduplication), Data ingestion and acquisition, Data transformation/cleansing/quality, Data sharing and federation, Monitoring and alerting (Spark UI, system tables, event logs, query profile), Cost and performance optimisation, Ensuring data security and compliance (row filters, column masks, dynamic views, PII), Data governance, Debugging and deploying (Asset Bundles, CI/CD, testing), Data modelling"
+  - "Google Cloud Professional Data Engineer exam guide - 1 Designing data processing systems (security and compliance, reliability and fidelity, flexibility and portability, data migrations); 2 Ingesting and processing the data (planning pipelines, building pipelines, deploying and operationalising pipelines); 3 Storing the data; 4 Preparing and using data for analysis; 5 Maintaining and automating data workloads (resource optimisation, automation and repeatability, organising workloads, monitoring and troubleshooting, failure awareness)"
+  - "Apache Spark docs ToC (spark.apache.org/docs/latest) - Cluster mode overview, Submitting applications, Running on YARN/Kubernetes, Configuration, Monitoring (web UI, event log, history server, metrics), Tuning guide (serialization, memory, GC), Job scheduling (dynamic allocation, fair scheduler); SQL/DataFrames/Datasets guide (data sources Parquet/ORC/JSON/CSV/JDBC/Avro/Hive, performance tuning, AQE, hints, built-in functions, window functions); Structured Streaming programming guide; PySpark (pandas API on Spark, Arrow, pandas UDFs), Spark Connect"
+  - "Apache Kafka documentation ToC (kafka.apache.org/documentation) - APIs, Configuration (broker/topic/producer/consumer/connect/streams), Design (persistence, efficiency, producer, consumer, message delivery semantics, replication, log compaction, quotas), Operations (basic ops, add/modify/delete topics, balancing leadership, checking consumer position, MirrorMaker geo-replication, expanding the cluster and reassigning partitions, increasing replication factor, monitoring, KRaft, tiered storage), Security (SSL, SASL, authorization/ACLs), Kafka Connect, Kafka Streams"
+  - "Apache Airflow docs ToC (airflow.apache.org/docs) - Core concepts (DAGs, DAG runs, tasks, operators, sensors, TaskFlow, executors, XComs, variables, params, pools, priority weights), Authoring and scheduling (cron and timetables, assets/data-aware scheduling, deferrable operators, dynamic task mapping, task groups, branching, trigger rules, setup/teardown), Administration and deployment (logging and monitoring, metrics, database, Helm chart, upgrading), Security, Best practices (top-level code, testing DAGs), Airflow 3 migration"
+  - "dbt docs ToC (docs.getdbt.com) - Build your project (models SQL/Python, sources, seeds, snapshots, data tests, unit tests, documentation, exposures, materializations, jinja and macros, packages, hooks and operations, analyses, project variables, environment variables), Node selection syntax, State and defer (Slim CI), dbt Mesh (model contracts, versions, access, groups), Semantic Layer, Deploy (jobs, CI jobs, environments), Best-practice guides (how we structure our dbt projects)"
+  - "Snowflake docs ToC (docs.snowflake.com) - Virtual warehouses, Micro-partitions and clustering, Loading data (stages, file formats, COPY INTO, Snowpipe, Snowpipe Streaming), Unloading data, Streams and tasks, Dynamic tables, Time Travel and Fail-safe, Cloning, Secure data sharing, Access control (RBAC), Data governance (masking and row access policies, tags, object dependencies), Cost management (resource monitors, budgets), Query performance (query profile, search optimisation, query acceleration, materialized views), Snowpark, Iceberg tables"
+  - "Apache Flink docs ToC (nightlies.apache.org/flink) - Concepts (stateful stream processing, timely stream processing), DataStream API (windows, process functions, working with state, side outputs, async I/O, joins), Table API and SQL, Connectors (Kafka, FileSystem, JDBC, CDC), Fault tolerance (checkpointing, savepoints, state backends, state TTL, schema evolution), Deployment (Kubernetes operator, high availability, memory configuration), Operations (metrics, back pressure)"
+  - "DAMA-DMBOK2 knowledge areas - Data Governance, Data Architecture, Data Modeling and Design, Data Storage and Operations, Data Security, Data Integration and Interoperability, Document and Content Management, Reference and Master Data, Data Warehousing and Business Intelligence, Metadata Management, Data Quality"
+  - "Fundamentals of Data Engineering (Reis and Housley) chapters - 2 The Data Engineering Lifecycle (undercurrents security, data management, DataOps, data architecture, orchestration, software engineering), 3 Designing Good Data Architecture, 4 Choosing Technologies Across the Lifecycle, 5 Data Generation in Source Systems, 6 Storage, 7 Ingestion, 8 Queries, Modeling and Transformation, 9 Serving Data for Analytics, ML and Reverse ETL, 10 Security and Privacy"
+topics:
+  # --- Apache Spark (Spark docs ToC, Databricks exams)
+  - id: spark-architecture
+    name: Spark architecture, cluster managers and spark-submit
+    source: Spark docs/Cluster mode overview + Submitting applications
+    match: [spark-architecture, spark-submit, cluster-manager]
+    subtopics:
+      - {id: spark-arch-driver-executors, name: Driver / executors / tasks / stages / jobs, match: [driver-and-executors, spark-execution-model]}
+      - {id: spark-arch-submit-flags, name: spark-submit deploy modes and flags, match: [spark-submit, deploy-mode]}
+      - {id: spark-arch-yarn, name: Running on YARN, match: [spark-on-yarn]}
+      - {id: spark-arch-k8s, name: Running on Kubernetes, match: [spark-on-kubernetes, spark-operator]}
+      - {id: spark-arch-dynamic-allocation, name: Dynamic allocation and the external shuffle service, match: [dynamic-allocation]}
+      - {id: spark-arch-fair-scheduler, name: Fair scheduler pools within an application, match: [fair-scheduler, scheduler-pools]}
+      - {id: spark-arch-connect, name: Spark Connect client-server, match: [spark-connect]}
+      - {id: spark-arch-config-precedence, name: Configuration precedence (spark-defaults.conf / --conf / SparkConf / runtime SQL conf), match: [spark-defaults-conf, spark-config-precedence]}
+      - {id: spark-arch-standalone, name: Standalone cluster manager (master / workers / HA), match: [spark-standalone]}
+      - {id: spark-arch-packaging, name: Packaging dependencies (--packages / --jars / --py-files / venv archives), match: [py-files, spark-dependency-packaging]}
+      - {id: spark-arch-resources, name: GPU and custom resource scheduling / stage-level resource profiles, match: [spark-gpu-scheduling, resource-profiles]}
+      - {id: spark-arch-decommission, name: Graceful executor decommissioning and shuffle migration, match: [executor-decommissioning]}
+  - id: spark-dataframe-api
+    name: DataFrame transformations and actions
+    source: Spark docs/SQL DataFrames guide + Databricks Associate (Spark SQL and PySpark)
+    match: [dataframe-api, pyspark-dataframe]
+    subtopics:
+      - {id: spark-df-lazy-eval, name: Lazy evaluation / transformations vs actions / narrow vs wide, match: [lazy-evaluation, narrow-vs-wide]}
+      - {id: spark-df-aggregations, name: groupBy / agg / pivot / rollup / cube, match: [spark-aggregations, pivot-rollup-cube]}
+      - {id: spark-df-window-functions, name: Window functions, match: [spark-window-functions]}
+      - {id: spark-df-complex-types, name: Arrays / structs / maps / explode / higher-order functions, match: [explode, higher-order-functions, nested-data-spark]}
+      - {id: spark-df-null-handling, name: Null handling and data cleansing (na / fillna / dropDuplicates), match: [spark-null-handling, dropduplicates]}
+      - {id: spark-df-dates-timestamps, name: Dates / timestamps / time zones, match: [spark-timestamps, session-timezone]}
+      - {id: spark-df-join-types, name: Join types (semi / anti / cross / null-safe equality), match: [spark-join-types, null-safe-join]}
+      - {id: spark-df-strings-regex, name: String and regex functions (regexp_extract / split / format_string), match: [spark-regex-functions]}
+      - {id: spark-df-sql-views, name: Spark SQL temp views / global views / parameterized spark.sql, match: [temp-views, parameterized-sql]}
+      - {id: spark-df-schemas, name: Defining schemas (StructType / DDL strings / schema_of_json), match: [structtype-schema]}
+      - {id: spark-df-set-ops, name: unionByName / intersect / except set operations, match: [unionbyname]}
+      - {id: spark-df-conditional, name: Conditional logic (when / otherwise / expr / case), match: [when-otherwise]}
+      - {id: spark-df-dataset-api, name: Typed Dataset API and encoders (Scala), match: [spark-dataset-api]}
+  - id: spark-data-sources
+    name: Data sources and file formats
+    source: Spark docs/Data sources
+    match: [spark-data-sources]
+    subtopics:
+      - {id: spark-ds-parquet, name: Parquet options / schema merging / predicate pushdown, match: [parquet, predicate-pushdown]}
+      - {id: spark-ds-csv-json, name: CSV and JSON reading modes and corrupt records, match: [csv-json-reader, corrupt-record]}
+      - {id: spark-ds-jdbc, name: JDBC reads (partitionColumn / fetchsize) and writes, match: [spark-jdbc]}
+      - {id: spark-ds-write-modes, name: Save modes / partitionBy / dynamic partition overwrite, match: [save-modes, dynamic-partition-overwrite]}
+      - {id: spark-ds-hive-catalog, name: Tables / Hive metastore / managed vs external, match: [hive-metastore, managed-vs-external-tables]}
+      - {id: spark-ds-avro-orc, name: Avro and ORC, match: [spark-avro, orc]}
+      - {id: spark-ds-generic-options, name: Generic file options (pathGlobFilter / recursiveFileLookup / modifiedAfter / ignoreCorruptFiles), match: [ignorecorruptfiles, recursive-file-lookup]}
+      - {id: spark-ds-binary, name: Binary file and whole-text sources, match: [binaryfile-source]}
+      - {id: spark-ds-xml, name: XML data source, match: [spark-xml]}
+      - {id: spark-ds-s3a, name: Cloud object storage connectors and S3A committers, match: [s3a-committer]}
+      - {id: spark-ds-partition-discovery, name: Partition discovery and schema inference cost, match: [partition-discovery]}
+      - {id: spark-ds-python-datasource, name: Python Data Source API (custom readers and writers), match: [python-data-source-api]}
+      - {id: spark-ds-bucketing, name: Bucketed tables (bucketBy / sortBy), match: [bucketing]}
+  - id: spark-performance
+    name: Spark SQL performance tuning
+    source: Spark docs/SQL performance tuning + Tuning guide
+    match: [spark-tuning, performance-tuning]
+    subtopics:
+      - {id: spark-perf-aqe, name: Adaptive query execution (coalesce / skew join / join switch), match: [adaptive-query-execution, aqe]}
+      - {id: spark-perf-caching, name: cache / persist storage levels and when not to, match: [spark-caching, persist-storage-level]}
+      - {id: spark-perf-partitions, name: Partition sizing / shuffle partitions / maxPartitionBytes, match: [partition-sizing, spark-sql-shuffle-partitions]}
+      - {id: spark-perf-explain, name: Reading EXPLAIN plans and Catalyst, match: [explain-plan, catalyst-optimizer]}
+      - {id: spark-perf-skew, name: Skew detection and salting, match: [data-skew, salting]}
+      - {id: spark-perf-joins, name: Join strategies and hints, match: [join-hints, broadcast-join]}
+      - {id: spark-perf-memory, name: Executor memory / overhead / GC, match: [executor-memory, garbage-collection]}
+      - {id: spark-perf-serialization, name: Kryo serialization and small-file compaction, match: [kryo-serialization, small-file-compaction]}
+      - {id: spark-perf-dpp, name: Dynamic partition pruning, match: [dynamic-partition-pruning]}
+      - {id: spark-perf-cbo, name: Table statistics and cost-based optimizer (ANALYZE TABLE), match: [cost-based-optimizer, analyze-table]}
+      - {id: spark-perf-speculation, name: Speculative execution, match: [speculative-execution]}
+      - {id: spark-perf-runtime-filters, name: Runtime bloom filters and join filter pushdown, match: [runtime-bloom-filter]}
+      - {id: spark-perf-shuffle-service, name: Shuffle tuning (compression / buffers / push-based shuffle), match: [push-based-shuffle]}
+  - id: spark-structured-streaming
+    name: Structured Streaming
+    source: Spark docs/Structured Streaming programming guide
+    match: [structured-streaming]
+    subtopics:
+      - {id: spark-ss-sources-sinks, name: Sources and sinks (Kafka / files / foreachBatch), match: [spark-kafka-source, foreachbatch]}
+      - {id: spark-ss-triggers, name: Triggers (processingTime / availableNow) and output modes, match: [trigger-availablenow, output-modes]}
+      - {id: spark-ss-watermark-agg, name: Watermarking and windowed aggregation, match: [spark-streaming-watermark, windowed-aggregation]}
+      - {id: spark-ss-joins, name: Stream-static and stream-stream joins, match: [stream-stream-join, stream-static-join]}
+      - {id: spark-ss-dedup, name: Streaming deduplication (dropDuplicatesWithinWatermark), match: [streaming-deduplication]}
+      - {id: spark-ss-stateful, name: Arbitrary stateful processing (transformWithState / flatMapGroupsWithState), match: [transformwithstate, flatmapgroupswithstate]}
+      - {id: spark-ss-checkpoint, name: Checkpoint location and recovery semantics, match: [checkpointing, checkpoint-recovery]}
+      - {id: spark-ss-monitoring, name: StreamingQueryListener and progress metrics, match: [streaming-query-listener, streaming-progress-metrics]}
+      - {id: spark-ss-rate-limits, name: Rate limiting (maxOffsetsPerTrigger / maxFilesPerTrigger / minOffsetsPerTrigger), match: [maxoffsetspertrigger]}
+      - {id: spark-ss-state-store, name: State store providers (RocksDB) and the state data source reader, match: [rocksdb-state-store, state-data-source]}
+      - {id: spark-ss-query-changes, name: Changes allowed between restarts of a streaming query, match: [streaming-query-changes]}
+      - {id: spark-ss-continuous, name: Continuous processing and real-time mode, match: [spark-real-time-mode]}
+      - {id: spark-ss-kafka-sink, name: Writing to Kafka from Structured Streaming (at-least-once caveats), match: [spark-kafka-sink]}
+  - id: pyspark-udfs
+    name: PySpark UDFs, pandas UDFs and Arrow
+    source: Spark docs/PySpark user guide (Arrow, pandas UDFs, pandas API on Spark)
+    match: [pyspark-udf, pandas-udf]
+    subtopics:
+      - {id: pyspark-udf-python-cost, name: Python UDF cost and builtin alternatives, match: [python-udf-performance]}
+      - {id: pyspark-udf-pandas, name: Scalar / grouped-map / applyInPandas pandas UDFs, match: [pandas-udf, applyinpandas]}
+      - {id: pyspark-udf-arrow, name: Arrow conversion toPandas / createDataFrame, match: [apache-arrow, topandas]}
+      - {id: pyspark-udf-pandas-api, name: pandas API on Spark, match: [pandas-api-on-spark]}
+      - {id: pyspark-udf-testing, name: Unit testing PySpark code (assertDataFrameEqual / local session), match: [pyspark-testing, assertdataframeequal]}
+      - {id: pyspark-udf-udtf, name: Python user-defined table functions (UDTFs), match: [python-udtf]}
+      - {id: pyspark-udf-arrow-udf, name: Arrow-optimized Python UDFs, match: [arrow-optimized-udf]}
+      - {id: pyspark-udf-mapinpandas, name: mapInPandas / mapInArrow, match: [mapinpandas]}
+      - {id: pyspark-udf-cogroup, name: Cogrouped applyInPandas, match: [cogrouped-map]}
+      - {id: pyspark-udf-deps, name: Python dependency management on clusters (venv-pack / conda-pack / PEX), match: [pyspark-dependency-management]}
+      - {id: pyspark-udf-debugging, name: Debugging and profiling PySpark (Python worker logs / UDF profiler), match: [pyspark-profiler]}
+  - id: spark-monitoring
+    name: Spark UI, event logs and history server
+    source: Spark docs/Monitoring and instrumentation
+    match: [spark-ui, spark-monitoring]
+    subtopics:
+      - {id: spark-mon-ui-tabs, name: Reading the Jobs / Stages / SQL / Storage / Executors tabs, match: [spark-ui-tabs]}
+      - {id: spark-mon-history, name: Event log and history server, match: [spark-history-server, spark-event-log]}
+      - {id: spark-mon-metrics, name: Metrics system and sinks (Prometheus), match: [spark-metrics, spark-prometheus]}
+      - {id: spark-mon-stragglers, name: Diagnosing stragglers / spill / task failures, match: [stragglers, spill]}
+      - {id: spark-mon-oom, name: Driver and executor OOM triage, match: [spark-oom]}
+      - {id: spark-mon-rest-api, name: Monitoring REST API (/api/v1/applications), match: [spark-rest-api]}
+      - {id: spark-mon-logging, name: Driver and executor logging with log4j2, match: [log4j2-config]}
+      - {id: spark-mon-fetch-failures, name: FetchFailedException and lost executors, match: [fetchfailedexception]}
+      - {id: spark-mon-sql-tab, name: SQL tab query plan metrics, match: [sql-tab-metrics]}
+      - {id: spark-mon-thread-dumps, name: Thread dumps for hung tasks and drivers, match: [spark-thread-dump]}
+      - {id: spark-mon-listener, name: Custom SparkListener and QueryExecutionListener, match: [spark-listener]}
+
+  # --- Apache Kafka (Kafka docs ToC)
+  - id: kafka-topic-design
+    name: Topics, partitions and replication
+    source: Kafka docs/Design (replication) + Operations (topics)
+    match: [topics, partitions, replication-factor]
+    subtopics:
+      - {id: kafka-td-partition-count, name: Partition count sizing, match: [partition-count-sizing]}
+      - {id: kafka-td-keys, name: Partition keys and ordering, match: [partition-key, message-ordering]}
+      - {id: kafka-td-isr, name: ISR / min.insync.replicas / unclean leader election, match: [min-insync-replicas, unclean-leader-election]}
+      - {id: kafka-td-retention, name: Retention by time and size / segments, match: [retention-ms, log-segments]}
+      - {id: kafka-td-compaction, name: Log compaction and tombstones, match: [log-compaction, tombstones]}
+      - {id: kafka-td-naming, name: Topic naming and configuration management, match: [topic-naming, topic-config-management]}
+      - {id: kafka-td-message-size, name: Message size limits (max.message.bytes / message.max.bytes / fetch sizes), match: [max-message-bytes]}
+      - {id: kafka-td-delete, name: Deleting topics and cleaning up, match: [delete-topic]}
+      - {id: kafka-td-add-partitions, name: Adding partitions to an existing topic safely, match: [add-partitions]}
+      - {id: kafka-td-increase-rf, name: Increasing replication factor, match: [increase-replication-factor]}
+      - {id: kafka-td-rack, name: Rack awareness (broker.rack / replica placement), match: [rack-awareness]}
+      - {id: kafka-td-timestamps, name: Message timestamp types (CreateTime vs LogAppendTime), match: [message-timestamp-type]}
+  - id: kafka-producers
+    name: Producer configuration
+    source: Kafka docs/Producer configs + Design (the producer)
+    match: [kafka-producer]
+    subtopics:
+      - {id: kafka-prod-acks, name: acks / retries / delivery.timeout.ms, match: [acks-all, delivery-timeout]}
+      - {id: kafka-prod-batching, name: Batching (linger.ms / batch.size) and compression, match: [linger-ms, producer-compression]}
+      - {id: kafka-prod-idempotence, name: Idempotent producer, match: [idempotent-producer, enable-idempotence]}
+      - {id: kafka-prod-partitioner, name: Partitioners (sticky / custom), match: [sticky-partitioner, custom-partitioner]}
+      - {id: kafka-prod-errors, name: Producer error handling and callbacks, match: [producer-error-handling]}
+      - {id: kafka-prod-in-flight, name: max.in.flight.requests.per.connection and ordering, match: [max-in-flight-requests]}
+      - {id: kafka-prod-buffer, name: buffer.memory / max.block.ms backpressure, match: [buffer-memory]}
+      - {id: kafka-prod-metrics, name: Producer metrics and throughput tuning, match: [producer-metrics]}
+      - {id: kafka-prod-headers, name: Record headers and metadata, match: [record-headers]}
+      - {id: kafka-prod-serializers, name: Serializers and serdes choice, match: [kafka-serializers]}
+      - {id: kafka-prod-librdkafka, name: librdkafka-based client configuration (confluent-kafka-python / Go), match: [librdkafka]}
+  - id: kafka-consumers
+    name: Consumers and consumer groups
+    source: Kafka docs/Consumer configs + Design (the consumer)
+    match: [consumer-groups, kafka-consumer]
+    subtopics:
+      - {id: kafka-cons-rebalance, name: Rebalancing protocols (cooperative-sticky / KIP-848), match: [rebalancing, cooperative-sticky]}
+      - {id: kafka-cons-offsets, name: Offset commit strategies, match: [offset-commit]}
+      - {id: kafka-cons-poll, name: max.poll.interval.ms / max.poll.records / poll loop, match: [max-poll-interval-ms]}
+      - {id: kafka-cons-static, name: Static membership, match: [static-membership, group-instance-id]}
+      - {id: kafka-cons-reset, name: Resetting offsets and replaying, match: [reset-offsets, auto-offset-reset]}
+      - {id: kafka-cons-lag, name: Consumer lag monitoring, match: [consumer-lag]}
+      - {id: kafka-cons-fetch, name: Fetch tuning (fetch.min.bytes / fetch.max.wait.ms / max.partition.fetch.bytes), match: [fetch-min-bytes]}
+      - {id: kafka-cons-assign, name: Manual partition assignment (assign vs subscribe), match: [manual-partition-assignment]}
+      - {id: kafka-cons-parallel, name: Multi-threaded and parallel consumer patterns, match: [parallel-consumer]}
+      - {id: kafka-cons-follower-fetch, name: Rack-aware follower fetching (client.rack), match: [follower-fetching]}
+      - {id: kafka-cons-groups-cli, name: kafka-consumer-groups.sh describe / delete / states, match: [kafka-consumer-groups-cli]}
+      - {id: kafka-cons-seek-time, name: Seeking by timestamp (offsetsForTimes), match: [offsetsfortimes]}
+  - id: kafka-delivery-semantics
+    name: Delivery semantics and transactions
+    source: Kafka docs/Design (message delivery semantics)
+    match: [exactly-once, kafka-transactions]
+    subtopics:
+      - {id: kafka-ds-transactional-producer, name: Transactional producer and zombie fencing, match: [transactional-id, zombie-fencing]}
+      - {id: kafka-ds-read-committed, name: read_committed consumers, match: [read-committed]}
+      - {id: kafka-ds-consume-transform-produce, name: Consume-transform-produce with sendOffsetsToTransaction, match: [consume-transform-produce]}
+      - {id: kafka-ds-outbox, name: Transactional outbox for DB-to-Kafka, match: [transactional-outbox]}
+      - {id: kafka-ds-hanging, name: Hanging transactions and a stuck last stable offset, match: [hanging-transactions, last-stable-offset]}
+      - {id: kafka-ds-at-least-once, name: At-least-once vs at-most-once commit ordering, match: [at-least-once]}
+      - {id: kafka-ds-offsets-in-sink, name: Exactly-once into external stores by storing offsets in the sink, match: [offsets-in-sink]}
+      - {id: kafka-ds-txn-tuning, name: Transaction performance tuning (commit interval / batching), match: [transaction-batching]}
+      - {id: kafka-ds-txn-tool, name: kafka-transactions.sh list / describe / abort, match: [kafka-transactions-tool]}
+  - id: kafka-connect
+    name: Kafka Connect
+    source: Kafka docs/Kafka Connect
+    match: [kafka-connect]
+    subtopics:
+      - {id: kafka-conn-distributed, name: Distributed workers and REST API, match: [distributed-mode, connect-rest-api]}
+      - {id: kafka-conn-cdc, name: Debezium CDC source connectors, match: [debezium]}
+      - {id: kafka-conn-sinks, name: Sink connectors (JDBC / S3) and upserts, match: [s3-sink-connector, jdbc-sink-connector]}
+      - {id: kafka-conn-smt, name: Single message transforms, match: [single-message-transform, smt]}
+      - {id: kafka-conn-errors, name: Error tolerance and DLQ, match: [connect-dead-letter-queue, errors-tolerance]}
+      - {id: kafka-conn-converters, name: Converters and schemas, match: [converters]}
+      - {id: kafka-conn-lifecycle, name: Connector lifecycle (pause / resume / restart tasks / validate), match: [connector-restart]}
+      - {id: kafka-conn-offsets, name: Managing connector offsets (KIP-875 offsets API), match: [connector-offsets]}
+      - {id: kafka-conn-worker, name: Worker configuration (internal topics / group.id / plugin.path), match: [connect-worker-config, plugin-path]}
+      - {id: kafka-conn-secrets, name: Externalizing secrets with ConfigProvider, match: [config-provider]}
+      - {id: kafka-conn-eos-source, name: Exactly-once source connectors, match: [exactly-once-source]}
+      - {id: kafka-conn-monitoring, name: Connect metrics and task failure monitoring, match: [connect-monitoring]}
+      - {id: kafka-conn-k8s, name: Kafka Connect on Kubernetes (Strimzi KafkaConnect / KafkaConnector), match: [strimzi-kafka-connect]}
+  - id: kafka-schema-registry
+    name: Schema registry and compatibility
+    source: Confluent Schema Registry docs; Kafka docs/serdes
+    match: [schema-registry]
+    subtopics:
+      - {id: kafka-sr-compat, name: Compatibility modes, match: [backward-compatibility, full-compatibility]}
+      - {id: kafka-sr-formats, name: Avro / Protobuf / JSON Schema, match: [avro, protobuf]}
+      - {id: kafka-sr-subject-naming, name: Subject naming strategies, match: [subject-naming-strategy]}
+      - {id: kafka-sr-ci, name: Schema compatibility checks in CI, match: [schema-ci-checks]}
+      - {id: kafka-sr-evolution, name: Evolving Avro / Protobuf schemas safely (defaults / field numbers), match: [avro-schema-evolution]}
+      - {id: kafka-sr-references, name: Schema references and shared types, match: [schema-references]}
+      - {id: kafka-sr-ops, name: Schema Registry operations (modes / migration / backups), match: [schema-registry-migration]}
+      - {id: kafka-sr-delete, name: Soft and hard deleting schemas and subjects, match: [schema-deletion]}
+      - {id: kafka-sr-rules, name: Data contract rules and metadata (CEL / migration rules), match: [schema-rules]}
+      - {id: kafka-sr-client-config, name: Serializer client config (auto.register.schemas / use.latest.version), match: [auto-register-schemas]}
+  - id: kafka-streams
+    name: Kafka Streams
+    source: Kafka docs/Kafka Streams
+    match: [kafka-streams]
+    subtopics:
+      - {id: kafka-ks-dsl, name: KStream / KTable / GlobalKTable DSL, match: [kstream-ktable]}
+      - {id: kafka-ks-state-stores, name: State stores and changelog topics, match: [kafka-streams-state-store]}
+      - {id: kafka-ks-windowing, name: Windowed aggregations and grace periods, match: [kafka-streams-windowing, grace-period]}
+      - {id: kafka-ks-joins, name: Stream-table and co-partitioned joins, match: [co-partitioning]}
+      - {id: kafka-ks-eos, name: processing.guarantee exactly_once_v2, match: [kafka-streams-eos]}
+      - {id: kafka-ks-testing, name: TopologyTestDriver testing, match: [topologytestdriver]}
+      - {id: kafka-ks-processor-api, name: Processor API and punctuators, match: [processor-api]}
+      - {id: kafka-ks-iq, name: Interactive queries, match: [interactive-queries]}
+      - {id: kafka-ks-error-handlers, name: Deserialization / production / processing exception handlers, match: [deserialization-exception-handler]}
+      - {id: kafka-ks-scaling, name: Scaling with standby replicas and warmup tasks, match: [standby-replicas]}
+      - {id: kafka-ks-suppress, name: Suppression and emit-final results, match: [suppress-operator]}
+      - {id: kafka-ks-repartition, name: Repartition topics and naming processors, match: [repartition-topics]}
+      - {id: kafka-ks-config, name: Streams config tuning (commit.interval.ms / cache / num.stream.threads), match: [commit-interval-ms]}
+  - id: kafka-operations
+    name: Cluster operations
+    source: Kafka docs/Operations
+    match: [kafka-operations]
+    subtopics:
+      - {id: kafka-ops-reassign, name: Expanding the cluster and reassigning partitions, match: [partition-reassignment]}
+      - {id: kafka-ops-rolling, name: Rolling restarts / controlled shutdown / leader balancing, match: [rolling-restart-kafka, preferred-leader-election]}
+      - {id: kafka-ops-kraft, name: KRaft mode and ZooKeeper migration, match: [kraft]}
+      - {id: kafka-ops-tiered, name: Tiered storage, match: [tiered-storage]}
+      - {id: kafka-ops-quotas, name: Client quotas, match: [kafka-quotas]}
+      - {id: kafka-ops-upgrade, name: Version upgrades and inter.broker.protocol, match: [kafka-upgrade]}
+      - {id: kafka-ops-monitoring, name: Broker monitoring (URP / request latency / JMX), match: [under-replicated-partitions, kafka-jmx-metrics]}
+      - {id: kafka-ops-jbod, name: JBOD log directories and disk failure handling, match: [jbod, log-dirs]}
+      - {id: kafka-ops-dynamic-config, name: Dynamic broker and topic config with kafka-configs.sh, match: [dynamic-broker-config]}
+      - {id: kafka-ops-capacity, name: Capacity planning (disk / network / partition limits), match: [kafka-capacity-planning]}
+      - {id: kafka-ops-strimzi, name: Running Kafka on Kubernetes with the Strimzi operator, match: [strimzi-kafka-operator]}
+      - {id: kafka-ops-cruise-control, name: Cruise Control rebalancing, match: [cruise-control]}
+      - {id: kafka-ops-offline, name: Recovering offline partitions, match: [offline-partitions]}
+      - {id: kafka-ops-dump-log, name: Inspecting segments with kafka-dump-log.sh, match: [kafka-dump-log]}
+  - id: kafka-security
+    name: Kafka security
+    source: Kafka docs/Security
+    match: [kafka-security]
+    subtopics:
+      - {id: kafka-sec-tls, name: TLS encryption and mTLS, match: [kafka-tls]}
+      - {id: kafka-sec-sasl, name: SASL (SCRAM / OAUTHBEARER / GSSAPI), match: [sasl-scram, kafka-sasl]}
+      - {id: kafka-sec-acls, name: ACLs and authorizer, match: [kafka-acls]}
+      - {id: kafka-sec-managed-iam, name: Managed-service IAM (MSK IAM / Confluent API keys), match: [msk-iam]}
+      - {id: kafka-sec-delegation, name: Delegation tokens, match: [delegation-tokens]}
+      - {id: kafka-sec-principal-mapping, name: Principal mapping rules (ssl.principal.mapping.rules / sasl.kerberos.principal.to.local.rules), match: [principal-mapping]}
+      - {id: kafka-sec-cert-rotation, name: Certificate and credential rotation without downtime, match: [kafka-certificate-rotation]}
+      - {id: kafka-sec-audit, name: Authorization audit logging, match: [kafka-audit-log]}
+      - {id: kafka-sec-controller, name: Securing controller and inter-broker listeners, match: [controller-listener-security]}
+  - id: kafka-geo-replication
+    name: Geo-replication and MirrorMaker 2
+    source: Kafka docs/Geo-replication (MirrorMaker)
+    match: [mirrormaker, geo-replication]
+    subtopics:
+      - {id: kafka-geo-mm2-config, name: MirrorMaker 2 configuration and topic naming, match: [mirrormaker2]}
+      - {id: kafka-geo-offset-sync, name: Consumer offset translation / checkpoints, match: [offset-translation]}
+      - {id: kafka-geo-dr, name: Active-passive vs active-active DR and failover, match: [kafka-disaster-recovery]}
+      - {id: kafka-geo-cluster-linking, name: Confluent Cluster Linking / MSK Replicator alternatives, match: [cluster-linking]}
+      - {id: kafka-geo-stretch, name: Stretch clusters across zones and regions, match: [stretch-cluster]}
+      - {id: kafka-geo-mm2-monitoring, name: MirrorMaker 2 monitoring and replication lag, match: [mm2-monitoring]}
+      - {id: kafka-geo-mm2-eos, name: Exactly-once MirrorMaker 2, match: [mm2-exactly-once]}
+      - {id: kafka-geo-acl-sync, name: Topic config and ACL synchronisation, match: [acl-sync]}
+
+  # --- Apache Airflow (Airflow docs ToC)
+  - id: airflow-dag-authoring
+    name: DAG authoring
+    source: Airflow docs/Core concepts (DAGs, tasks, operators, TaskFlow)
+    match: [dag, taskflow-api]
+    subtopics:
+      - {id: af-auth-taskflow, name: TaskFlow decorators and classic operators, match: [taskflow-api]}
+      - {id: af-auth-top-level-code, name: Top-level code and DAG parsing performance, match: [top-level-code, parsing-performance]}
+      - {id: af-auth-branching, name: Branching and trigger rules, match: [branching, trigger-rules]}
+      - {id: af-auth-taskgroups, name: Task groups, match: [task-groups]}
+      - {id: af-auth-setup-teardown, name: Setup and teardown tasks, match: [setup-teardown]}
+      - {id: af-auth-templating, name: Jinja templating and params, match: [jinja-templating, dag-params]}
+      - {id: af-auth-custom-operator, name: Writing custom operators and hooks, match: [custom-operator, airflow-hooks]}
+      - {id: af-auth-core-operators, name: Core operators (Bash / Python / virtualenv / external python), match: [pythonvirtualenvoperator]}
+      - {id: af-auth-default-args, name: DAG file organisation and default_args, match: [dag-default-args]}
+      - {id: af-auth-chain, name: Dependency helpers (chain / cross_downstream / edge labels), match: [chain-dependencies]}
+      - {id: af-auth-short-circuit, name: Short-circuiting and skipping tasks, match: [shortcircuitoperator]}
+      - {id: af-auth-plugins, name: Sharing code between DAGs (plugins / include packages), match: [airflow-plugins]}
+      - {id: af-auth-task-resources, name: Task routing (queue / pool_slots / executor_config), match: [executor-config]}
+  - id: airflow-scheduling
+    name: Scheduling, timetables and backfills
+    source: Airflow docs/Authoring and scheduling (cron, timetables, DAG runs)
+    match: [catchup, backfill, data-interval]
+    subtopics:
+      - {id: af-sch-intervals, name: data_interval / logical date semantics, match: [data-interval, logical-date]}
+      - {id: af-sch-timetables, name: Custom timetables and cron presets, match: [timetables]}
+      - {id: af-sch-backfill, name: Backfill and clearing tasks, match: [backfill, clear-tasks]}
+      - {id: af-sch-concurrency, name: Concurrency (max_active_runs / pools / priority_weight), match: [max-active-runs, pools, priority-weight]}
+      - {id: af-sch-retries, name: Retries / retry_delay / execution_timeout, match: [retries, execution-timeout]}
+      - {id: af-sch-timezones, name: Time zones and DST in schedules, match: [airflow-timezones]}
+      - {id: af-sch-run-states, name: DAG run and task instance states, match: [dag-run-states]}
+      - {id: af-sch-manual-trigger, name: Manual triggers with run conf, match: [trigger-dag-conf]}
+      - {id: af-sch-versioning, name: DAG versioning and DAG bundles, match: [dag-versioning, dag-bundles]}
+      - {id: af-sch-depends-past, name: depends_on_past / wait_for_downstream, match: [depends-on-past]}
+      - {id: af-sch-zombies, name: Zombie / orphaned tasks and heartbeats, match: [zombie-task-detection]}
+  - id: airflow-data-aware
+    name: Data-aware scheduling with assets (datasets)
+    source: Airflow docs/Assets and data-aware scheduling
+    match: [airflow-assets, data-aware-scheduling]
+    subtopics:
+      - {id: af-da-assets, name: Producing and consuming assets, match: [airflow-assets, airflow-datasets]}
+      - {id: af-da-conditional, name: Conditional asset expressions and combined schedules, match: [asset-expressions]}
+      - {id: af-da-external-sensor, name: Cross-DAG dependencies (ExternalTaskSensor / TriggerDagRunOperator), match: [externaltasksensor, triggerdagrunoperator]}
+      - {id: af-da-event-driven, name: Event-driven scheduling (asset watchers / REST trigger), match: [event-driven-scheduling]}
+      - {id: af-da-alias, name: Asset aliases for dynamic outlets, match: [asset-alias]}
+      - {id: af-da-events, name: Asset events and extra metadata and inlets, match: [asset-events]}
+      - {id: af-da-decorator, name: Asset decorator (@asset) definitions, match: [asset-decorator]}
+      - {id: af-da-time-and-asset, name: Combined time and asset schedules (AssetOrTimeSchedule), match: [assetortimeschedule]}
+  - id: airflow-sensors-deferrable
+    name: Sensors and deferrable operators
+    source: Airflow docs/Sensors + Deferrable operators and triggers
+    match: [sensors, deferrable-operators]
+    subtopics:
+      - {id: af-sens-modes, name: poke vs reschedule mode and timeouts, match: [reschedule-mode, sensor-timeout]}
+      - {id: af-sens-deferrable, name: Deferrable operators and the triggerer, match: [triggerer, deferrable-operators]}
+      - {id: af-sens-custom-trigger, name: Writing a custom trigger, match: [custom-trigger]}
+      - {id: af-sens-file-sensors, name: S3 / GCS key sensors patterns, match: [s3keysensor]}
+      - {id: af-sens-task-sensor, name: Sensor decorator (@task.sensor) / PythonSensor / SqlSensor / HttpSensor, match: [task-sensor-decorator]}
+      - {id: af-sens-triggerer-capacity, name: Triggerer HA and capacity tuning, match: [triggerer-capacity]}
+      - {id: af-sens-soft-fail, name: soft_fail / exponential_backoff / silent_fail, match: [soft-fail]}
+      - {id: af-sens-start-trigger, name: Starting execution from the triggerer (start_from_trigger), match: [start-from-trigger]}
+  - id: airflow-xcom-config
+    name: XComs, variables, connections and secrets
+    source: Airflow docs/XComs, Variables, Connections, Secrets backends
+    match: [xcom, connections, variables]
+    subtopics:
+      - {id: af-xc-xcom, name: XCom size limits and custom backends, match: [xcom, xcom-backend]}
+      - {id: af-xc-connections, name: Connections and URI/JSON formats, match: [connections]}
+      - {id: af-xc-secrets, name: Secrets backends, match: [secrets-backend]}
+      - {id: af-xc-variables, name: Variables and env-var overrides, match: [variables]}
+      - {id: af-xc-conn-cli, name: Managing and testing connections from the CLI, match: [airflow-connections-cli]}
+      - {id: af-xc-masking, name: Masking sensitive values in logs and UI, match: [secret-masking]}
+      - {id: af-xc-fernet, name: Fernet key encryption and rotation, match: [fernet-key]}
+      - {id: af-xc-config-env, name: Airflow config via AIRFLOW__SECTION__KEY environment variables, match: [airflow-config-env]}
+  - id: airflow-dynamic
+    name: Dynamic task mapping and DAG factories
+    source: Airflow docs/Dynamic task mapping
+    match: [dynamic-task-mapping]
+    subtopics:
+      - {id: af-dyn-expand, name: expand / partial / expand_kwargs, match: [expand, expand-kwargs]}
+      - {id: af-dyn-factory, name: Generating DAGs from config, match: [dag-factory]}
+      - {id: af-dyn-limits, name: max_map_length and mapped concurrency, match: [max-active-tis-per-dag]}
+      - {id: af-dyn-mapped-groups, name: Mapping over task groups, match: [mapped-task-groups]}
+      - {id: af-dyn-map-zip, name: Transforming mapped inputs with .map() and .zip(), match: [xcom-map-zip]}
+      - {id: af-dyn-generation, name: Generating dynamic DAGs from external sources and parse cost, match: [dynamic-dag-generation]}
+      - {id: af-dyn-index-template, name: Naming mapped instances (map_index_template), match: [map-index-template]}
+      - {id: af-dyn-reduce, name: Reducing mapped outputs downstream, match: [mapped-reduce]}
+  - id: airflow-deployment
+    name: Executors and deployment
+    source: Airflow docs/Executors + Helm chart + Production deployment
+    match: [executor, airflow-deployment]
+    subtopics:
+      - {id: af-dep-executors, name: Choosing an executor (Local / Celery / Kubernetes / multiple), match: [celeryexecutor, kubernetesexecutor]}
+      - {id: af-dep-helm, name: Official Helm chart deployment, match: [airflow-helm-chart]}
+      - {id: af-dep-kpo, name: KubernetesPodOperator, match: [kubernetespodoperator]}
+      - {id: af-dep-metadb, name: Metadata database maintenance (db clean / upgrades), match: [airflow-db-clean, metadata-database]}
+      - {id: af-dep-managed, name: Managed Airflow (MWAA / Cloud Composer / Astronomer), match: [mwaa, cloud-composer]}
+      - {id: af-dep-scaling, name: Scheduler and worker scaling parameters, match: [airflow-parallelism, scheduler-tuning]}
+      - {id: af-dep-image, name: Customising the official Docker image, match: [airflow-docker-image]}
+      - {id: af-dep-dag-sync, name: Shipping DAG code (git-sync / baked image / bundles), match: [git-sync]}
+      - {id: af-dep-edge, name: Edge executor and multiple executors, match: [edgeexecutor, multiple-executors]}
+      - {id: af-dep-keda, name: Celery worker autoscaling with KEDA, match: [keda-autoscaling]}
+      - {id: af-dep-auth, name: Auth managers and UI access control (FAB / simple), match: [auth-manager]}
+      - {id: af-dep-compose, name: Local development with docker compose, match: [airflow-docker-compose]}
+      - {id: af-dep-providers, name: Provider package management, match: [airflow-providers]}
+  - id: airflow-testing-ops
+    name: Testing, CI and observability
+    source: Airflow docs/Best practices (testing a DAG) + Logging and monitoring
+    match: [dag-testing, airflow-ci]
+    subtopics:
+      - {id: af-test-dagbag, name: DAG integrity tests with DagBag, match: [dagbag-test]}
+      - {id: af-test-dag-test, name: dag.test() and local debugging, match: [dag-test-method]}
+      - {id: af-test-logging, name: Remote logging and log configuration, match: [remote-logging]}
+      - {id: af-test-metrics, name: StatsD / OpenTelemetry metrics, match: [airflow-metrics, statsd]}
+      - {id: af-test-alerting, name: Callbacks / SLAs / deadline alerts, match: [on-failure-callback, sla-miss]}
+      - {id: af-test-lineage, name: OpenLineage integration, match: [openlineage]}
+      - {id: af-test-operator-unit, name: Unit testing operators and hooks with mocks, match: [operator-unit-tests]}
+      - {id: af-test-deploy-pipeline, name: CI/CD pipeline for DAG deployment, match: [dag-deployment-pipeline]}
+      - {id: af-test-health, name: Scheduler / triggerer health checks, match: [scheduler-health-check]}
+      - {id: af-test-rest-api, name: Automating with the Airflow REST API, match: [airflow-rest-api]}
+      - {id: af-test-queued, name: Debugging tasks stuck in queued or scheduled, match: [queued-tasks]}
+  - id: airflow-upgrade
+    name: Upgrading to Airflow 3
+    source: Airflow docs/Upgrading to Airflow 3
+    match: [airflow-3-migration]
+    subtopics:
+      - {id: af-up-breaking, name: Removed context keys and execution_date changes, match: [airflow-3-breaking-changes]}
+      - {id: af-up-ruff, name: ruff AIR rules for upgrade checks, match: [ruff-air-rules]}
+      - {id: af-up-task-sdk, name: Task SDK and API server architecture, match: [task-sdk, airflow-api-server]}
+      - {id: af-up-db-access, name: No direct metadata DB access from tasks, match: [direct-db-access-removed]}
+      - {id: af-up-db-migrate, name: airflow db migrate and minor-version upgrades, match: [airflow-db-migrate]}
+      - {id: af-up-constraints, name: Constraints files and provider compatibility, match: [constraints-file]}
+      - {id: af-up-removed, name: Removed features (SubDAGs / SLAs / pickling), match: [subdag-removal]}
+      - {id: af-up-standard-provider, name: Operators moved to the standard provider, match: [standard-provider]}
+
+  # --- dbt (dbt docs ToC)
+  - id: dbt-project-structure
+    name: Project structure and model layering
+    source: dbt docs/How we structure our dbt projects
+    match: [dbt-project-structure, staging-models]
+    subtopics:
+      - {id: dbt-ps-staging, name: Staging models (one per source / rename and cast), match: [staging-models]}
+      - {id: dbt-ps-intermediate, name: Intermediate models, match: [intermediate-models]}
+      - {id: dbt-ps-marts, name: Marts and naming conventions, match: [data-marts, dbt-naming-conventions]}
+      - {id: dbt-ps-config-hierarchy, name: dbt_project.yml config inheritance and +configs, match: [dbt-config-hierarchy]}
+      - {id: dbt-ps-profiles, name: profiles.yml targets and environments, match: [profiles-yml, dbt-targets]}
+      - {id: dbt-ps-vars-env, name: Project vars and env_var, match: [dbt-vars, env-var]}
+      - {id: dbt-ps-yaml-layout, name: Model YAML file layout (_models.yml per folder), match: [model-yaml-layout]}
+      - {id: dbt-ps-analyses, name: Analyses folder, match: [dbt-analyses]}
+      - {id: dbt-ps-utility, name: Utility models (date spine), match: [date-spine]}
+      - {id: dbt-ps-base, name: Base models for joins within staging, match: [base-models]}
+      - {id: dbt-ps-sqlfluff, name: Linting SQL with SQLFluff (dbt templater), match: [sqlfluff]}
+      - {id: dbt-ps-precommit, name: pre-commit hooks for dbt projects (dbt-checkpoint), match: [dbt-checkpoint]}
+  - id: dbt-materializations
+    name: Materializations
+    source: dbt docs/Materializations
+    match: [dbt-materializations]
+    subtopics:
+      - {id: dbt-mat-view-table, name: view / table / ephemeral choice, match: [ephemeral-models, view-vs-table]}
+      - {id: dbt-mat-incremental, name: Incremental strategies, match: [incremental-models, incremental-strategy]}
+      - {id: dbt-mat-microbatch, name: Microbatch incremental, match: [microbatch]}
+      - {id: dbt-mat-mv, name: Materialized views and dynamic tables, match: [dbt-materialized-view, dbt-dynamic-table]}
+      - {id: dbt-mat-custom, name: Custom materializations, match: [custom-materialization]}
+      - {id: dbt-mat-predicates, name: incremental_predicates, match: [incremental-predicates]}
+      - {id: dbt-mat-schema-change, name: on_schema_change, match: [on-schema-change]}
+      - {id: dbt-mat-full-refresh, name: Full refresh control (full_refresh config), match: [full-refresh-config]}
+      - {id: dbt-mat-adapter-configs, name: Adapter-specific configs (cluster_by / partition_by / file_format), match: [adapter-specific-configs]}
+      - {id: dbt-mat-insert-overwrite, name: insert_overwrite strategy, match: [insert-overwrite]}
+  - id: dbt-sources-seeds
+    name: Sources, seeds and freshness
+    source: dbt docs/Sources + Seeds
+    match: [dbt-sources, dbt-seeds]
+    subtopics:
+      - {id: dbt-src-define, name: Defining sources and source()/ref(), match: [dbt-sources]}
+      - {id: dbt-src-freshness, name: Source freshness (loaded_at_field / warn_after), match: [source-freshness]}
+      - {id: dbt-src-seeds, name: Seeds (column_types / quoting / when not to), match: [dbt-seeds]}
+      - {id: dbt-src-codegen, name: Generating source YAML (codegen package), match: [dbt-codegen]}
+      - {id: dbt-src-external, name: External sources (dbt-external-tables), match: [dbt-external-tables]}
+      - {id: dbt-src-tests, name: Source tests and loaded_at_query, match: [source-tests]}
+      - {id: dbt-src-overrides, name: Overriding package sources, match: [source-overrides]}
+      - {id: dbt-src-selection, name: Selecting sources (source selector and source_status), match: [source-selection]}
+  - id: dbt-testing
+    name: Data tests and unit tests
+    source: dbt docs/Data tests + Unit tests
+    match: [dbt-tests]
+    subtopics:
+      - {id: dbt-test-generic, name: Generic tests and config (severity / where / store_failures), match: [generic-tests, store-failures]}
+      - {id: dbt-test-singular, name: Singular tests, match: [singular-tests]}
+      - {id: dbt-test-custom-generic, name: Writing custom generic tests, match: [custom-generic-test]}
+      - {id: dbt-test-unit, name: Unit tests (given / expect), match: [dbt-unit-tests]}
+      - {id: dbt-test-packages, name: dbt-expectations / dbt_utils test packages, match: [dbt-expectations, dbt-utils]}
+      - {id: dbt-test-thresholds, name: warn_if / error_if thresholds, match: [warn-if-error-if]}
+      - {id: dbt-test-unit-incremental, name: Unit testing incremental models, match: [incremental-unit-tests]}
+      - {id: dbt-test-fixtures, name: Unit test fixture formats (dict / csv / sql), match: [unit-test-fixtures]}
+      - {id: dbt-test-evaluator, name: Project best-practice checks (dbt-project-evaluator), match: [project-evaluator-rules]}
+      - {id: dbt-test-indirect, name: Indirect test selection, match: [indirect-selection]}
+  - id: dbt-snapshots
+    name: Snapshots
+    source: dbt docs/Snapshots
+    match: [dbt-snapshots]
+    subtopics:
+      - {id: dbt-snap-strategies, name: timestamp vs check strategy, match: [snapshot-strategy]}
+      - {id: dbt-snap-hard-deletes, name: Hard deletes handling, match: [hard-deletes]}
+      - {id: dbt-snap-yaml-config, name: YAML snapshot config and meta columns, match: [snapshot-meta-columns]}
+      - {id: dbt-snap-recovery, name: Repairing a broken snapshot, match: [snapshot-repair]}
+      - {id: dbt-snap-source, name: What to snapshot (sources vs models), match: [snapshot-source-selection]}
+      - {id: dbt-snap-valid-to, name: dbt_valid_to_current and current-row conventions, match: [dbt-valid-to-current]}
+      - {id: dbt-snap-migrate, name: Migrating legacy snapshot blocks to YAML, match: [snapshot-migration]}
+      - {id: dbt-snap-pit, name: Point-in-time queries over snapshots, match: [snapshot-point-in-time]}
+  - id: dbt-jinja-macros
+    name: Jinja, macros, packages and hooks
+    source: dbt docs/Jinja and macros + Packages + Hooks and operations
+    match: [dbt-macros, jinja]
+    subtopics:
+      - {id: dbt-jm-dispatch, name: adapter.dispatch cross-database macros, match: [adapter-dispatch]}
+      - {id: dbt-jm-packages, name: packages.yml and version pinning, match: [dbt-packages]}
+      - {id: dbt-jm-hooks, name: pre-hook / post-hook / on-run-end, match: [dbt-hooks, on-run-end]}
+      - {id: dbt-jm-run-operation, name: run-operation for admin tasks, match: [run-operation]}
+      - {id: dbt-jm-generate-schema, name: Overriding generate_schema_name, match: [generate-schema-name]}
+      - {id: dbt-jm-python-models, name: Python models, match: [dbt-python-models]}
+      - {id: dbt-jm-control-flow, name: Jinja control flow / set / loops / whitespace control, match: [jinja-control-flow]}
+      - {id: dbt-jm-run-query, name: run_query and agate results, match: [run-query]}
+      - {id: dbt-jm-introspective, name: Introspective macros (graph / get_column_values / get_relations), match: [introspective-queries]}
+      - {id: dbt-jm-debugging, name: Debugging macros (log / compiled SQL / dbt compile), match: [dbt-debugging]}
+      - {id: dbt-jm-builtin-override, name: Overriding built-in macros, match: [builtin-macro-override]}
+      - {id: dbt-jm-context, name: Context variables (this / target / invocation_id / flags), match: [dbt-context-variables]}
+  - id: dbt-selection-ci
+    name: Node selection, state and Slim CI
+    source: dbt docs/Node selection syntax + State and defer
+    match: [node-selection, slim-ci]
+    subtopics:
+      - {id: dbt-sel-syntax, name: Selectors (graph operators / tags / selectors.yml), match: [node-selection, selectors-yml]}
+      - {id: dbt-sel-state, name: state:modified and --defer, match: [state-modified, dbt-defer]}
+      - {id: dbt-sel-build, name: dbt build ordering and --fail-fast, match: [dbt-build]}
+      - {id: dbt-sel-ci-job, name: CI job in GitHub Actions / dbt Cloud CI, match: [dbt-ci-job]}
+      - {id: dbt-sel-clone, name: dbt clone for zero-copy CI environments, match: [dbt-clone]}
+      - {id: dbt-sel-retry, name: dbt retry and artifacts (run_results / manifest), match: [dbt-retry, dbt-artifacts]}
+      - {id: dbt-sel-empty, name: --empty and sample mode for fast CI, match: [dbt-empty-flag, dbt-sample-mode]}
+      - {id: dbt-sel-ls, name: dbt ls and manifest querying, match: [dbt-ls]}
+      - {id: dbt-sel-result, name: Result and source_status selectors, match: [result-selector]}
+      - {id: dbt-sel-compare, name: Advanced CI compare changes, match: [advanced-ci-compare]}
+  - id: dbt-docs
+    name: Documentation and exposures
+    source: dbt docs/Documentation + Exposures
+    match: [dbt-docs, exposures]
+    subtopics:
+      - {id: dbt-docs-generate, name: dbt docs generate / doc blocks / persist_docs, match: [persist-docs, doc-blocks]}
+      - {id: dbt-docs-exposures, name: Exposures for dashboards and apps, match: [exposures]}
+      - {id: dbt-docs-meta, name: meta / owner / tags conventions, match: [dbt-meta]}
+      - {id: dbt-docs-catalog, name: Catalog integration (dbt Explorer / DataHub), match: [dbt-explorer]}
+      - {id: dbt-docs-hosting, name: Hosting the docs site, match: [dbt-docs-hosting]}
+      - {id: dbt-docs-osmosis, name: Propagating column docs (dbt-osmosis), match: [dbt-osmosis]}
+      - {id: dbt-docs-coverage, name: Documentation coverage checks, match: [doc-coverage]}
+      - {id: dbt-docs-overview, name: Custom overview page (__overview__ doc block), match: [docs-overview-block]}
+  - id: dbt-mesh
+    name: dbt Mesh (contracts, versions, access)
+    source: dbt docs/dbt Mesh
+    match: [dbt-mesh, dbt-contracts]
+    subtopics:
+      - {id: dbt-mesh-contracts, name: Model contracts and constraints, match: [dbt-contracts]}
+      - {id: dbt-mesh-versions, name: Model versions and deprecation, match: [model-versions]}
+      - {id: dbt-mesh-access, name: Groups and access modifiers, match: [access-modifiers, dbt-groups]}
+      - {id: dbt-mesh-cross-project, name: Cross-project ref, match: [cross-project-ref]}
+      - {id: dbt-mesh-dependencies, name: Project dependencies (dependencies.yml), match: [dependencies-yml]}
+      - {id: dbt-mesh-split, name: Splitting a monolith into multiple projects, match: [mesh-project-split]}
+      - {id: dbt-mesh-deprecation, name: deprecation_date and breaking-change detection, match: [deprecation-date]}
+      - {id: dbt-mesh-constraints, name: Constraint enforcement per platform, match: [model-constraints]}
+  - id: dbt-semantic-layer
+    name: Semantic Layer and MetricFlow
+    source: dbt docs/Semantic Layer
+    match: [dbt-semantic-layer, metricflow]
+    subtopics:
+      - {id: dbt-sl-semantic-models, name: Semantic models (entities / dimensions / measures), match: [semantic-model]}
+      - {id: dbt-sl-metric-types, name: Metric types (simple / ratio / cumulative / derived / conversion), match: [derived-metrics, cumulative-metrics]}
+      - {id: dbt-sl-time-spine, name: Time spine configuration, match: [time-spine]}
+      - {id: dbt-sl-saved-queries, name: Saved queries, exports and querying, match: [saved-queries]}
+      - {id: dbt-sl-granularity, name: Time dimensions and granularity, match: [time-granularity]}
+      - {id: dbt-sl-api, name: Semantic Layer APIs (JDBC / GraphQL) and integrations, match: [semantic-layer-api]}
+      - {id: dbt-sl-mf-cli, name: MetricFlow CLI validate and query, match: [mf-cli]}
+      - {id: dbt-sl-filters, name: Metric filters and multi-hop joins, match: [metric-filters]}
+      - {id: dbt-sl-conversion, name: Conversion metrics, match: [conversion-metrics]}
+  - id: dbt-deployment
+    name: Deployment and operations
+    source: dbt docs/Deploy dbt (jobs, environments, orchestration)
+    match: [dbt-deployment]
+    subtopics:
+      - {id: dbt-dep-orchestration, name: Running dbt from Airflow (Cosmos) / Databricks / Dagster, match: [astronomer-cosmos, dbt-orchestration]}
+      - {id: dbt-dep-environments, name: Dev / CI / prod environments and schemas, match: [dbt-environments]}
+      - {id: dbt-dep-performance, name: Project run performance (threads / model timing), match: [dbt-performance]}
+      - {id: dbt-dep-upgrade, name: Upgrading dbt versions and deprecations, match: [dbt-upgrade]}
+      - {id: dbt-dep-grants, name: grants config and access in warehouse, match: [dbt-grants]}
+      - {id: dbt-dep-cloud-jobs, name: dbt Cloud deploy jobs and run steps, match: [dbt-cloud-jobs]}
+      - {id: dbt-dep-chaining, name: Job chaining and merge-triggered jobs, match: [job-chaining]}
+      - {id: dbt-dep-fusion, name: dbt Fusion engine, match: [dbt-fusion]}
+      - {id: dbt-dep-observability, name: Run observability (elementary / dbt_artifacts), match: [dbt-run-observability]}
+      - {id: dbt-dep-blue-green, name: Blue-green deployments with schema swaps, match: [blue-green-deployment]}
+      - {id: dbt-dep-secrets, name: Secrets in dbt (DBT_ENV_SECRET_ variables), match: [dbt-env-secret]}
+
+  # --- Snowflake (Snowflake docs ToC)
+  - id: snowflake-warehouses
+    name: Virtual warehouses and cost control
+    source: Snowflake docs/Virtual warehouses + Cost management
+    match: [virtual-warehouse, cost-control]
+    subtopics:
+      - {id: sf-wh-sizing, name: Warehouse sizing and auto-suspend, match: [warehouse-sizing, auto-suspend]}
+      - {id: sf-wh-multicluster, name: Multi-cluster warehouses and scaling policy, match: [multi-cluster-warehouse]}
+      - {id: sf-wh-resource-monitors, name: Resource monitors and budgets, match: [resource-monitor, snowflake-budgets]}
+      - {id: sf-wh-attribution, name: Cost attribution by tag / user / query, match: [cost-attribution]}
+      - {id: sf-wh-qas, name: Query acceleration service, match: [query-acceleration]}
+      - {id: sf-wh-snowpark-optimized, name: Snowpark-optimized warehouses, match: [snowpark-optimized-warehouse]}
+      - {id: sf-wh-isolation, name: Warehouse-per-workload isolation, match: [workload-isolation]}
+      - {id: sf-wh-timeouts, name: Statement timeouts and queued-query limits, match: [statement-timeout]}
+      - {id: sf-wh-gen2, name: Gen2 and adaptive warehouses, match: [gen2-warehouse]}
+      - {id: sf-wh-serverless, name: Serverless feature credit consumption (METERING_HISTORY), match: [serverless-credits]}
+      - {id: sf-wh-storage, name: Storage cost analysis (TABLE_STORAGE_METRICS), match: [table-storage-metrics]}
+      - {id: sf-wh-query-tag, name: Query tags for workload tracking, match: [query-tag]}
+  - id: snowflake-loading
+    name: Loading and unloading data
+    source: Snowflake docs/Loading data + Unloading data
+    match: [copy-into, snowflake-stages]
+    subtopics:
+      - {id: sf-load-stages, name: Internal / external stages and storage integrations, match: [snowflake-stages, storage-integration]}
+      - {id: sf-load-file-formats, name: File formats and semi-structured loading, match: [file-format, variant]}
+      - {id: sf-load-copy-options, name: COPY options (ON_ERROR / VALIDATION_MODE / load history), match: [copy-into, validation-mode]}
+      - {id: sf-load-unload, name: Unloading with COPY INTO location, match: [unload-data]}
+      - {id: sf-load-snowpipe, name: Snowpipe auto-ingest, match: [snowpipe]}
+      - {id: sf-load-streaming, name: Snowpipe Streaming and Kafka connector, match: [snowpipe-streaming]}
+      - {id: sf-load-infer, name: INFER_SCHEMA and MATCH_BY_COLUMN_NAME, match: [infer-schema, match-by-column-name]}
+      - {id: sf-load-transform, name: Transforming data during COPY, match: [copy-transformations]}
+      - {id: sf-load-pipe-troubleshoot, name: Troubleshooting Snowpipe (SYSTEM$PIPE_STATUS / COPY_HISTORY), match: [pipe-status]}
+      - {id: sf-load-directory, name: Directory tables on stages, match: [directory-tables]}
+      - {id: sf-load-put, name: PUT / GET file transfer, match: [put-command]}
+      - {id: sf-load-openflow, name: Openflow and native connectors, match: [snowflake-openflow]}
+  - id: snowflake-pipelines
+    name: Streams, tasks and dynamic tables
+    source: Snowflake docs/Streams and tasks + Dynamic tables
+    match: [streams, tasks, dynamic-tables]
+    subtopics:
+      - {id: sf-pipe-streams, name: Stream types and staleness, match: [stream-offset, stream-staleness]}
+      - {id: sf-pipe-tasks, name: Task graphs / serverless tasks / WHEN conditions, match: [task-dag, serverless-tasks]}
+      - {id: sf-pipe-dynamic-tables, name: Dynamic tables target lag and refresh modes, match: [snowflake-dynamic-tables, target-lag]}
+      - {id: sf-pipe-alerts, name: Alerts and notifications, match: [snowflake-alerts]}
+      - {id: sf-pipe-append-only, name: Append-only / insert-only streams and streams on views, match: [append-only-stream]}
+      - {id: sf-pipe-task-history, name: Task failure handling and TASK_HISTORY, match: [task-history]}
+      - {id: sf-pipe-triggered, name: Triggered tasks, match: [triggered-tasks]}
+      - {id: sf-pipe-dt-incremental, name: Dynamic table incremental refresh constraints, match: [incremental-refresh-mode]}
+      - {id: sf-pipe-finalizer, name: Finalizer tasks, match: [finalizer-task]}
+      - {id: sf-pipe-stream-merge, name: MERGE patterns consuming streams, match: [stream-merge-pattern]}
+  - id: snowflake-time-travel
+    name: Time Travel, Fail-safe and cloning
+    source: Snowflake docs/Time Travel and Fail-safe + Cloning
+    match: [snowflake-time-travel, zero-copy-clone]
+    subtopics:
+      - {id: sf-tt-query, name: AT / BEFORE queries and UNDROP, match: [undrop, at-before]}
+      - {id: sf-tt-retention, name: DATA_RETENTION_TIME_IN_DAYS and storage cost, match: [data-retention-time]}
+      - {id: sf-tt-clone, name: Zero-copy cloning for dev and recovery, match: [zero-copy-clone]}
+      - {id: sf-tt-replication, name: Database replication and failover, match: [snowflake-replication]}
+      - {id: sf-tt-fail-safe, name: Fail-safe recovery, match: [fail-safe]}
+      - {id: sf-tt-clone-grants, name: Clone behaviour (grants / pipes / streams / tasks), match: [clone-grants]}
+      - {id: sf-tt-backups, name: Backup sets and immutable backups, match: [snowflake-backups]}
+      - {id: sf-tt-client-redirect, name: Client redirect for failover, match: [client-redirect]}
+  - id: snowflake-access-control
+    name: Access control and data governance
+    source: Snowflake docs/Access control + Data governance
+    match: [role-hierarchy, snowflake-rbac]
+    subtopics:
+      - {id: sf-ac-rbac, name: Role hierarchy and future grants, match: [future-grants, snowflake-rbac]}
+      - {id: sf-ac-masking, name: Masking policies, match: [masking-policy]}
+      - {id: sf-ac-row-access, name: Row access policies, match: [row-access-policy]}
+      - {id: sf-ac-tags, name: Object tagging and tag-based masking, match: [tag-based-masking, object-tagging]}
+      - {id: sf-ac-network, name: Network policies / key-pair auth / MFA, match: [network-policy, key-pair-authentication]}
+      - {id: sf-ac-access-history, name: ACCESS_HISTORY and auditing, match: [access-history]}
+      - {id: sf-ac-database-roles, name: Database roles, match: [database-roles]}
+      - {id: sf-ac-managed-access, name: Managed access schemas, match: [managed-access-schema]}
+      - {id: sf-ac-scim, name: SSO and SCIM provisioning, match: [scim-provisioning]}
+      - {id: sf-ac-service-users, name: Service users and programmatic access tokens, match: [programmatic-access-token]}
+      - {id: sf-ac-projection, name: Projection and aggregation policies, match: [projection-policy]}
+      - {id: sf-ac-secondary-roles, name: Secondary roles, match: [secondary-roles]}
+  - id: snowflake-sharing
+    name: Secure data sharing
+    source: Snowflake docs/Secure data sharing
+    match: [secure-data-sharing]
+    subtopics:
+      - {id: sf-sh-shares, name: Creating shares and secure views, match: [secure-views]}
+      - {id: sf-sh-reader, name: Reader accounts, match: [reader-account]}
+      - {id: sf-sh-listings, name: Listings and Marketplace / cross-region, match: [snowflake-marketplace, cross-cloud-sharing]}
+      - {id: sf-sh-clean-rooms, name: Data clean rooms, match: [data-clean-room]}
+      - {id: sf-sh-db-roles, name: Sharing with database roles across databases, match: [share-database-roles]}
+      - {id: sf-sh-consume, name: Consuming shares (IMPORTED PRIVILEGES), match: [imported-privileges]}
+      - {id: sf-sh-native-apps, name: Native App Framework, match: [native-app-framework]}
+      - {id: sf-sh-private-listing, name: Private listings, match: [private-listing]}
+  - id: snowflake-performance
+    name: Query performance
+    source: Snowflake docs/Optimizing query performance
+    match: [query-profile, snowflake-performance]
+    subtopics:
+      - {id: sf-perf-profile, name: Reading the query profile, match: [query-profile]}
+      - {id: sf-perf-clustering, name: Clustering keys and depth, match: [clustering-key, clustering-depth]}
+      - {id: sf-perf-sos, name: Search optimization service, match: [search-optimization]}
+      - {id: sf-perf-mv, name: Materialized views, match: [snowflake-materialized-views]}
+      - {id: sf-perf-cache, name: Result / warehouse cache behaviour, match: [result-cache]}
+      - {id: sf-perf-query-history, name: Analysing QUERY_HISTORY (spilling / queueing / pruning), match: [snowflake-query-history]}
+      - {id: sf-perf-exploding-joins, name: Exploding joins and query anti-patterns, match: [exploding-joins]}
+      - {id: sf-perf-hybrid, name: Hybrid tables, match: [hybrid-tables]}
+      - {id: sf-perf-auto-clustering, name: Automatic clustering cost management, match: [automatic-clustering]}
+      - {id: sf-perf-pruning, name: Pruning diagnostics (partitions scanned vs total), match: [snowflake-pruning]}
+  - id: snowflake-snowpark
+    name: Snowpark and extensibility
+    source: Snowflake docs/Snowpark + UDFs and stored procedures
+    match: [snowpark]
+    subtopics:
+      - {id: sf-sp-dataframe, name: Snowpark Python DataFrames, match: [snowpark-python]}
+      - {id: sf-sp-udfs, name: UDFs / UDTFs / vectorized UDFs, match: [snowflake-udf]}
+      - {id: sf-sp-procs, name: Stored procedures (SQL / Python), match: [snowflake-stored-procedures]}
+      - {id: sf-sp-external-access, name: External access integrations, match: [external-access-integration]}
+      - {id: sf-sp-pandas, name: Snowpark pandas API, match: [snowpark-pandas]}
+      - {id: sf-sp-spcs, name: Snowpark Container Services, match: [snowpark-container-services]}
+      - {id: sf-sp-packages, name: Python packages and artifact repository, match: [snowflake-packages]}
+      - {id: sf-sp-notebooks, name: Snowflake Notebooks, match: [snowflake-notebooks]}
+      - {id: sf-sp-cortex, name: Cortex AI SQL functions, match: [cortex-functions]}
+      - {id: sf-sp-streamlit, name: Streamlit in Snowflake, match: [streamlit-in-snowflake]}
+  - id: snowflake-iceberg
+    name: Iceberg and external tables
+    source: Snowflake docs/Apache Iceberg tables + External tables
+    match: [snowflake-iceberg-tables, external-tables]
+    subtopics:
+      - {id: sf-ice-managed, name: Snowflake-managed Iceberg tables and external volumes, match: [external-volume]}
+      - {id: sf-ice-catalog, name: Catalog integrations (Polaris / Glue), match: [catalog-integration]}
+      - {id: sf-ice-external, name: External tables over data lake files, match: [external-tables]}
+      - {id: sf-ice-dev-ops, name: Snowflake CLI and schemachange deployments, match: [snowflake-cli, schemachange]}
+      - {id: sf-ice-convert, name: Converting and migrating Iceberg tables, match: [iceberg-table-conversion]}
+      - {id: sf-ice-refresh, name: Refreshing externally managed Iceberg tables, match: [iceberg-auto-refresh]}
+      - {id: sf-ice-open-catalog, name: Snowflake Open Catalog / Horizon Iceberg REST access, match: [snowflake-open-catalog]}
+      - {id: sf-ice-terraform, name: Managing Snowflake with Terraform, match: [snowflake-terraform]}
+      - {id: sf-ice-create-or-alter, name: Declarative DDL (CREATE OR ALTER), match: [create-or-alter]}
+
+  # --- Databricks (Associate and Professional exam guides)
+  - id: databricks-delta
+    name: Delta Lake tables
+    source: Databricks Associate/Professional - Delta Lake
+    match: [delta-lake, delta-table]
+    subtopics:
+      - {id: dbx-delta-merge, name: MERGE INTO upserts and deduplication, match: [merge-into]}
+      - {id: dbx-delta-optimize, name: OPTIMIZE / liquid clustering / Z-order, match: [liquid-clustering, z-order]}
+      - {id: dbx-delta-vacuum, name: VACUUM and retention, match: [vacuum]}
+      - {id: dbx-delta-time-travel, name: Time travel and RESTORE, match: [time-travel, restore]}
+      - {id: dbx-delta-schema, name: Schema enforcement and evolution, match: [schema-evolution, mergeschema]}
+      - {id: dbx-delta-cdf, name: Change data feed, match: [change-data-feed]}
+      - {id: dbx-delta-constraints, name: CHECK constraints and generated columns, match: [delta-constraints, generated-columns]}
+      - {id: dbx-delta-deletion-vectors, name: Deletion vectors, match: [deletion-vectors]}
+      - {id: dbx-delta-predictive, name: Predictive optimization, match: [predictive-optimization]}
+      - {id: dbx-delta-properties, name: Table properties and log retention, match: [delta-table-properties]}
+      - {id: dbx-delta-concurrency, name: Concurrency control and conflict exceptions, match: [concurrent-modification]}
+      - {id: dbx-delta-history, name: DESCRIBE HISTORY / DESCRIBE DETAIL, match: [describe-history]}
+      - {id: dbx-delta-clone, name: Shallow and deep clone, match: [deep-clone]}
+      - {id: dbx-delta-column-mapping, name: Column mapping for rename and drop, match: [column-mapping]}
+  - id: databricks-ingestion
+    name: Ingestion (Auto Loader, COPY INTO, connectors)
+    source: Databricks Associate - Development and Ingestion
+    match: [autoloader, auto-loader]
+    subtopics:
+      - {id: dbx-ing-autoloader, name: Auto Loader options and schema inference/evolution, match: [cloudfiles, schema-hints]}
+      - {id: dbx-ing-file-notification, name: Directory listing vs file notification mode, match: [file-notification-mode]}
+      - {id: dbx-ing-copy-into, name: COPY INTO idempotent loads, match: [databricks-copy-into]}
+      - {id: dbx-ing-lakeflow-connect, name: Lakeflow Connect managed connectors, match: [lakeflow-connect]}
+      - {id: dbx-ing-rescued, name: Rescued data column, match: [rescued-data]}
+      - {id: dbx-ing-kafka, name: Streaming from Kafka / Event Hubs / Kinesis on Databricks, match: [databricks-kafka-ingestion]}
+      - {id: dbx-ing-read-files, name: read_files table-valued function, match: [read-files]}
+      - {id: dbx-ing-cleansource, name: Auto Loader backfill and cleanSource, match: [cleansource]}
+      - {id: dbx-ing-rate, name: Auto Loader rate limiting and scaling, match: [autoloader-rate-limiting]}
+  - id: databricks-dlt
+    name: Lakeflow declarative pipelines (DLT)
+    source: Databricks Associate - Data Processing (DLT)
+    match: [delta-live-tables, dlt]
+    subtopics:
+      - {id: dbx-dlt-expectations, name: Expectations (warn / drop / fail), match: [expectations]}
+      - {id: dbx-dlt-apply-changes, name: APPLY CHANGES / AUTO CDC and SCD type 2, match: [apply-changes-into]}
+      - {id: dbx-dlt-st-mv, name: Streaming tables vs materialized views, match: [streaming-tables]}
+      - {id: dbx-dlt-event-log, name: Pipeline event log monitoring, match: [dlt-event-log]}
+      - {id: dbx-dlt-modes, name: Triggered vs continuous / development vs production, match: [dlt-pipeline-modes]}
+      - {id: dbx-dlt-params, name: Pipeline parameters and configuration, match: [pipeline-parameters]}
+      - {id: dbx-dlt-full-refresh, name: Full refresh and resetting streaming tables, match: [dlt-full-refresh]}
+      - {id: dbx-dlt-append-flow, name: Append flows and sinks, match: [append-flow]}
+      - {id: dbx-dlt-uc, name: Publishing to Unity Catalog and multiple schemas, match: [dlt-unity-catalog]}
+      - {id: dbx-dlt-python, name: Python pipeline API (@dp.table / pyspark.pipelines), match: [pyspark-pipelines]}
+      - {id: dbx-dlt-quarantine, name: Quarantining invalid records, match: [dlt-quarantine]}
+  - id: databricks-jobs
+    name: Workflows and jobs
+    source: Databricks Associate - Productionizing Data Pipelines
+    match: [databricks-jobs, databricks-workflows]
+    subtopics:
+      - {id: dbx-jobs-tasks, name: Task types and dependencies, match: [task-dependencies]}
+      - {id: dbx-jobs-repair, name: Repair and rerun failed runs, match: [repair-run]}
+      - {id: dbx-jobs-triggers, name: Triggers (schedule / file arrival / table update), match: [file-arrival-trigger]}
+      - {id: dbx-jobs-params, name: Job and task parameters / task values, match: [task-values, job-parameters]}
+      - {id: dbx-jobs-control-flow, name: If/else and for-each tasks, match: [for-each-task]}
+      - {id: dbx-jobs-alerts, name: Notifications and duration thresholds, match: [job-notifications]}
+      - {id: dbx-jobs-run-as, name: Run-as identity, match: [run-as]}
+      - {id: dbx-jobs-queueing, name: Concurrency limits and queueing, match: [job-queueing]}
+      - {id: dbx-jobs-continuous, name: Continuous jobs, match: [continuous-job]}
+      - {id: dbx-jobs-api, name: Jobs API and CLI, match: [jobs-api]}
+      - {id: dbx-jobs-serverless, name: Serverless jobs and environments, match: [serverless-jobs]}
+      - {id: dbx-jobs-dbt-sql, name: dbt and SQL task types, match: [dbt-task]}
+  - id: databricks-bundles
+    name: Asset Bundles and CI/CD
+    source: Databricks Associate/Professional - Asset Bundles, testing and deploying
+    match: [databricks-asset-bundles]
+    subtopics:
+      - {id: dbx-dab-structure, name: databricks.yml targets and resources, match: [databricks-yml]}
+      - {id: dbx-dab-deploy, name: bundle validate / deploy / run, match: [bundle-deploy]}
+      - {id: dbx-dab-ci, name: CI/CD with service principals, match: [databricks-cicd, service-principal]}
+      - {id: dbx-dab-testing, name: Testing notebooks and code (pytest / Databricks Connect), match: [databricks-connect]}
+      - {id: dbx-dab-git-folders, name: Git folders (Repos), match: [git-folders]}
+      - {id: dbx-dab-variables, name: Bundle variables and target overrides, match: [bundle-variables]}
+      - {id: dbx-dab-templates, name: Bundle templates, match: [bundle-templates]}
+      - {id: dbx-dab-artifacts, name: Building wheels and artifacts, match: [bundle-artifacts]}
+      - {id: dbx-dab-bind, name: Binding and generating existing resources, match: [bundle-bind]}
+      - {id: dbx-dab-modes, name: Deployment modes (development / production), match: [bundle-deployment-modes]}
+      - {id: dbx-dab-terraform, name: Terraform provider for workspace infrastructure, match: [databricks-terraform]}
+  - id: databricks-unity-catalog
+    name: Unity Catalog governance
+    source: Databricks Associate/Professional - Data Governance
+    match: [unity-catalog]
+    subtopics:
+      - {id: dbx-uc-privileges, name: Privileges / ownership / inheritance, match: [catalog-grants]}
+      - {id: dbx-uc-external, name: External locations and storage credentials, match: [external-location, storage-credential]}
+      - {id: dbx-uc-row-column, name: Row filters / column masks / dynamic views, match: [row-filters, column-masks]}
+      - {id: dbx-uc-lineage-audit, name: Lineage and audit logs, match: [data-lineage, audit-logs]}
+      - {id: dbx-uc-volumes, name: Volumes for files, match: [uc-volumes]}
+      - {id: dbx-uc-migration, name: Hive metastore to UC migration (UCX / SYNC), match: [uc-migration]}
+      - {id: dbx-uc-abac, name: Governed tags and ABAC policies, match: [abac-policies]}
+      - {id: dbx-uc-information-schema, name: Information schema queries, match: [uc-information-schema]}
+      - {id: dbx-uc-managed-tables, name: Managed vs external tables in Unity Catalog, match: [uc-managed-tables]}
+      - {id: dbx-uc-workspace-binding, name: Workspace-catalog binding and isolation, match: [workspace-binding]}
+      - {id: dbx-uc-service-credentials, name: Service credentials and UC connections, match: [service-credentials]}
+      - {id: dbx-uc-classification, name: Data classification, match: [data-classification]}
+  - id: databricks-sharing-federation
+    name: Delta Sharing and Lakehouse Federation
+    source: Databricks Associate - Delta Sharing, Lakehouse Federation
+    match: [delta-sharing, lakehouse-federation]
+    subtopics:
+      - {id: dbx-sh-d2d, name: Databricks-to-Databricks sharing, match: [delta-sharing]}
+      - {id: dbx-sh-open, name: Open sharing recipients and tokens, match: [open-sharing]}
+      - {id: dbx-sh-federation, name: Lakehouse Federation connections and foreign catalogs, match: [lakehouse-federation, foreign-catalog]}
+      - {id: dbx-sh-egress, name: Sharing cost and egress considerations, match: [sharing-egress-cost]}
+      - {id: dbx-sh-volumes, name: Sharing volumes / notebooks / models, match: [share-volumes]}
+      - {id: dbx-sh-history, name: Sharing table history and CDF with recipients, match: [share-with-history]}
+      - {id: dbx-sh-catalog-federation, name: Catalog federation (Hive metastore / Glue), match: [catalog-federation]}
+      - {id: dbx-sh-clean-rooms, name: Databricks Clean Rooms, match: [databricks-clean-rooms]}
+      - {id: dbx-sh-pushdown, name: Federation query pushdown and performance, match: [federation-pushdown]}
+  - id: databricks-compute
+    name: Compute selection and cost
+    source: Databricks Associate - compute types; Professional - cost and performance
+    match: [cluster-policies, serverless-compute]
+    subtopics:
+      - {id: dbx-comp-types, name: All-purpose / job / SQL warehouse / serverless, match: [job-clusters, sql-warehouse]}
+      - {id: dbx-comp-policies, name: Cluster policies, match: [cluster-policies]}
+      - {id: dbx-comp-photon, name: Photon, match: [photon]}
+      - {id: dbx-comp-access-modes, name: Access modes (standard / dedicated), match: [access-mode]}
+      - {id: dbx-comp-pools, name: Instance pools and spot, match: [instance-pools, spot-instances]}
+      - {id: dbx-comp-autoterminate, name: Autoscaling and auto termination, match: [auto-termination]}
+      - {id: dbx-comp-init-scripts, name: Init scripts and cluster libraries, match: [init-scripts]}
+      - {id: dbx-comp-runtime, name: Databricks Runtime version selection, match: [databricks-runtime]}
+      - {id: dbx-comp-sql-warehouse-sizing, name: SQL warehouse sizing and scaling, match: [sql-warehouse-sizing]}
+      - {id: dbx-comp-troubleshoot, name: Cluster event log and startup troubleshooting, match: [cluster-event-log]}
+  - id: databricks-monitoring
+    name: Monitoring with system tables and query profile
+    source: Databricks Professional - Monitoring and alerting
+    match: [system-tables]
+    subtopics:
+      - {id: dbx-mon-billing, name: system.billing usage cost analysis, match: [billable-usage]}
+      - {id: dbx-mon-query-profile, name: Query profile and query history, match: [databricks-query-profile]}
+      - {id: dbx-mon-lakehouse-monitoring, name: Lakehouse monitoring (data profiling / drift), match: [lakehouse-monitoring]}
+      - {id: dbx-mon-sql-alerts, name: SQL alerts, match: [databricks-sql-alerts]}
+      - {id: dbx-mon-access-audit, name: system.access audit queries, match: [system-access-audit]}
+      - {id: dbx-mon-lakeflow, name: system.lakeflow job run analytics, match: [lakeflow-system-tables]}
+      - {id: dbx-mon-compute, name: system.compute cluster and warehouse tables, match: [compute-system-tables]}
+      - {id: dbx-mon-budgets, name: Budgets and cost alerts, match: [databricks-budgets]}
+      - {id: dbx-mon-driver-logs, name: Driver logs and Spark UI on Databricks, match: [databricks-driver-logs]}
+
+  # --- Apache Flink (Flink docs ToC)
+  - id: flink-datastream
+    name: DataStream API
+    source: Flink docs/DataStream API
+    match: [datastream-api]
+    subtopics:
+      - {id: flink-ds-windows, name: Window assigners / triggers / evictors, match: [window-assigners]}
+      - {id: flink-ds-process-function, name: KeyedProcessFunction and timers, match: [keyedprocessfunction, flink-timers]}
+      - {id: flink-ds-side-outputs, name: Side outputs, match: [side-outputs]}
+      - {id: flink-ds-async-io, name: Async I/O for enrichment, match: [async-io]}
+      - {id: flink-ds-joins, name: Window / interval joins, match: [interval-join]}
+      - {id: flink-ds-broadcast-state, name: Broadcast state pattern, match: [broadcast-state]}
+      - {id: flink-ds-source-api, name: Source API (FLIP-27) and building sources, match: [flink-source-api]}
+      - {id: flink-ds-coprocess, name: Connected streams and CoProcessFunction, match: [coprocessfunction]}
+      - {id: flink-ds-rich, name: Rich functions and operator lifecycle, match: [rich-functions]}
+      - {id: flink-ds-chaining, name: Operator chaining and slot sharing, match: [operator-chaining, slot-sharing]}
+      - {id: flink-ds-batch-mode, name: Batch execution mode, match: [batch-execution-mode]}
+      - {id: flink-ds-pyflink, name: PyFlink DataStream and Table jobs, match: [pyflink]}
+      - {id: flink-ds-testing, name: Testing Flink jobs (MiniCluster / operator test harness), match: [flink-testing]}
+  - id: flink-time
+    name: Event time and watermarks
+    source: Flink docs/Timely stream processing + Generating watermarks
+    match: [event-time, watermarks]
+    subtopics:
+      - {id: flink-time-strategy, name: WatermarkStrategy and bounded out-of-orderness, match: [watermarkstrategy, bounded-out-of-orderness]}
+      - {id: flink-time-idleness, name: Idle sources and alignment, match: [idleness, watermark-alignment]}
+      - {id: flink-time-lateness, name: Allowed lateness and late data, match: [allowed-lateness]}
+      - {id: flink-time-generators, name: Periodic vs punctuated watermark generators, match: [punctuated-watermarks]}
+      - {id: flink-time-kafka, name: Per-partition watermarks in the Kafka source, match: [per-partition-watermarks]}
+      - {id: flink-time-sql, name: Watermarks in Flink SQL DDL, match: [sql-watermark]}
+      - {id: flink-time-stuck, name: Debugging stuck watermarks, match: [stuck-watermark]}
+      - {id: flink-time-processing, name: Processing-time semantics, match: [flink-processing-time]}
+  - id: flink-state
+    name: State and fault tolerance
+    source: Flink docs/Fault tolerance (state, checkpointing, savepoints, state backends)
+    match: [state-backend, checkpoints]
+    subtopics:
+      - {id: flink-st-keyed, name: Keyed and operator state, match: [keyed-state, operator-state]}
+      - {id: flink-st-backends, name: State backends (HashMap / RocksDB / ForSt), match: [rocksdb, hashmapstatebackend]}
+      - {id: flink-st-checkpoint-tuning, name: Checkpoint tuning (unaligned / incremental / intervals), match: [unaligned-checkpoints, incremental-checkpoint]}
+      - {id: flink-st-savepoints, name: Savepoints and job upgrades, match: [savepoint, job-upgrade]}
+      - {id: flink-st-ttl, name: State TTL, match: [state-ttl]}
+      - {id: flink-st-evolution, name: State schema evolution and uid(), match: [state-migration, operator-uid]}
+      - {id: flink-st-processor-api, name: State Processor API, match: [state-processor-api]}
+      - {id: flink-st-changelog, name: Changelog state backend, match: [changelog-state-backend]}
+      - {id: flink-st-retained, name: Checkpoint storage and retained checkpoints, match: [retained-checkpoints]}
+      - {id: flink-st-rocksdb-tuning, name: RocksDB memory and performance tuning, match: [rocksdb-tuning]}
+      - {id: flink-st-rescale, name: Rescaling with max parallelism and key groups, match: [max-parallelism]}
+      - {id: flink-st-checkpoint-failures, name: Troubleshooting checkpoint timeouts and failures, match: [checkpoint-timeout]}
+  - id: flink-sql
+    name: Table API and SQL
+    source: Flink docs/Table API and SQL
+    match: [flink-sql, table-api]
+    subtopics:
+      - {id: flink-sql-dynamic-tables, name: Dynamic tables and changelog modes, match: [dynamic-tables, retract-stream]}
+      - {id: flink-sql-joins, name: Regular / interval / temporal / lookup joins, match: [temporal-join, lookup-join]}
+      - {id: flink-sql-windows, name: Window TVFs (TUMBLE / HOP / CUMULATE), match: [window-tvf]}
+      - {id: flink-sql-gateway, name: SQL client and SQL gateway, match: [sql-client, sql-gateway]}
+      - {id: flink-sql-udf, name: User-defined functions, match: [flink-udf]}
+      - {id: flink-sql-catalogs, name: Catalogs (Hive / JDBC / Iceberg), match: [flink-catalogs]}
+      - {id: flink-sql-topn, name: Deduplication and Top-N queries, match: [top-n]}
+      - {id: flink-sql-cep, name: MATCH_RECOGNIZE pattern detection, match: [match-recognize]}
+      - {id: flink-sql-state-ttl, name: State TTL and hints in SQL jobs, match: [table-exec-state-ttl]}
+      - {id: flink-sql-minibatch, name: Mini-batch and two-phase aggregation tuning, match: [mini-batch-aggregation]}
+      - {id: flink-sql-materialized, name: Materialized tables, match: [flink-materialized-table]}
+      - {id: flink-sql-compiled-plan, name: Upgrading SQL jobs with compiled plans, match: [compiled-plan]}
+  - id: flink-connectors
+    name: Connectors and CDC
+    source: Flink docs/Connectors
+    match: [flink-connectors]
+    subtopics:
+      - {id: flink-conn-kafka, name: Kafka source/sink and exactly-once, match: [kafka-sink, flink-kafka-connector]}
+      - {id: flink-conn-filesystem, name: FileSystem sink and rolling policies, match: [filesink, rolling-policy]}
+      - {id: flink-conn-cdc, name: Flink CDC, match: [flink-cdc]}
+      - {id: flink-conn-jdbc, name: JDBC / upsert sinks, match: [upsert-kafka, flink-jdbc]}
+      - {id: flink-conn-lakehouse, name: Iceberg and Paimon sinks, match: [flink-iceberg-sink, apache-paimon]}
+      - {id: flink-conn-elasticsearch, name: Elasticsearch / OpenSearch sink, match: [flink-elasticsearch]}
+      - {id: flink-conn-formats, name: Formats (JSON / avro-confluent / debezium-json), match: [debezium-json-format]}
+      - {id: flink-conn-kinesis, name: Kinesis and Pulsar connectors, match: [flink-kinesis]}
+      - {id: flink-conn-custom-sink, name: Custom sinks with Sink V2 and two-phase commit, match: [two-phase-commit-sink]}
+  - id: flink-deployment
+    name: Deployment and operations
+    source: Flink docs/Deployment + Operations
+    match: [flink-deployment, flink-kubernetes-operator]
+    subtopics:
+      - {id: flink-dep-k8s-operator, name: Kubernetes operator FlinkDeployment, match: [flink-kubernetes-operator]}
+      - {id: flink-dep-memory, name: TaskManager / JobManager memory model, match: [flink-memory-configuration]}
+      - {id: flink-dep-ha, name: High availability, match: [flink-high-availability]}
+      - {id: flink-dep-backpressure, name: Backpressure and scaling, match: [backpressure, parallelism]}
+      - {id: flink-dep-metrics, name: Metrics and monitoring, match: [flink-metrics]}
+      - {id: flink-dep-restart, name: Restart strategies and failover, match: [restart-strategy]}
+      - {id: flink-dep-modes, name: Application vs session deployment modes, match: [application-mode]}
+      - {id: flink-dep-autoscaler, name: Flink autoscaler, match: [flink-autoscaler]}
+      - {id: flink-dep-upgrade, name: Upgrading Flink versions, match: [flink-version-upgrade]}
+      - {id: flink-dep-security, name: SSL and Kerberos security, match: [flink-ssl]}
+      - {id: flink-dep-logging, name: Logging configuration, match: [flink-logging]}
+      - {id: flink-dep-managed, name: Managed Flink services, match: [managed-flink]}
+      - {id: flink-dep-cli, name: Flink CLI (run / stop with savepoint / list), match: [flink-cli]}
+
+  # --- Data modelling (DAMA-DMBOK Data Modeling and Design; FoDE ch 8)
+  - id: dm-levels
+    name: Conceptual, logical and physical models
+    source: DAMA-DMBOK/Data Modeling and Design
+    match: [conceptual-logical-physical]
+    subtopics:
+      - {id: dm-lvl-erd, name: Entity-relationship modelling and cardinality, match: [er-modelling, entity-relationship]}
+      - {id: dm-lvl-normal-forms, name: Normal forms, match: [normalization, third-normal-form]}
+      - {id: dm-lvl-keys, name: Natural vs surrogate keys and hashing, match: [surrogate-keys, natural-keys]}
+      - {id: dm-lvl-naming, name: Naming standards and data dictionaries, match: [data-dictionary, naming-standards]}
+      - {id: dm-lvl-reverse-engineer, name: Reverse-engineering and documenting an existing schema, match: [reverse-engineering-schema]}
+      - {id: dm-lvl-tools, name: Modelling as code (DBML / dbdiagram), match: [dbml]}
+      - {id: dm-lvl-subtypes, name: Supertype and subtype modelling, match: [supertype-subtype]}
+      - {id: dm-lvl-bitemporal, name: Temporal and bitemporal modelling, match: [bitemporal-modelling]}
+      - {id: dm-lvl-review, name: Data model review and validation, match: [data-model-review]}
+      - {id: dm-lvl-hierarchies, name: Hierarchies (adjacency list / closure table), match: [closure-table]}
+      - {id: dm-lvl-physical, name: Physical design (indexes / constraints / data types), match: [physical-data-model]}
+  - id: dm-dimensional
+    name: Dimensional modelling
+    source: Kimball Data Warehouse Toolkit; FoDE ch 8
+    match: [dimensional-modelling, star-schema]
+    subtopics:
+      - {id: dm-dim-bus-matrix, name: Bus matrix and conformed dimensions, match: [bus-matrix, conformed-dimensions]}
+      - {id: dm-dim-scd, name: Slowly changing dimensions, match: [slowly-changing-dimensions, scd-type-2]}
+      - {id: dm-dim-fact-types, name: Fact table types, match: [periodic-snapshot, accumulating-snapshot]}
+      - {id: dm-dim-date, name: Date and time dimensions, match: [date-dimension]}
+      - {id: dm-dim-junk-mini, name: Junk / mini / role-playing dimensions, match: [role-playing-dimension, junk-dimension]}
+      - {id: dm-dim-bridge, name: Bridge tables and many-to-many, match: [bridge-table]}
+      - {id: dm-dim-late-dims, name: Late-arriving dimensions and unknown members, match: [late-arriving-dimension]}
+      - {id: dm-dim-factless, name: Factless fact tables, match: [factless-fact]}
+      - {id: dm-dim-degenerate, name: Degenerate dimensions, match: [degenerate-dimension]}
+      - {id: dm-dim-ragged, name: Ragged and variable-depth hierarchies, match: [ragged-hierarchy]}
+      - {id: dm-dim-aggregates, name: Aggregate fact tables, match: [aggregate-fact-tables]}
+      - {id: dm-dim-additivity, name: Additive / semi-additive / non-additive facts, match: [semi-additive-facts]}
+      - {id: dm-dim-scd6, name: SCD types 1 / 3 / 6 hybrid, match: [scd-type-6]}
+  - id: dm-data-vault
+    name: Data Vault
+    source: Data Vault 2.0 (Linstedt); FoDE ch 8
+    match: [data-vault]
+    subtopics:
+      - {id: dm-dv-hubs-links-sats, name: Hubs / links / satellites, match: [hub, satellite]}
+      - {id: dm-dv-pit-bridge, name: PIT and bridge tables, match: [point-in-time-table]}
+      - {id: dm-dv-automation, name: Automating Data Vault with dbt (automate_dv), match: [automate-dv]}
+      - {id: dm-dv-hash, name: Hash keys and hash diffs, match: [hash-diff]}
+      - {id: dm-dv-business-vault, name: Business vault and computed satellites, match: [business-vault]}
+      - {id: dm-dv-same-as, name: Same-as and hierarchical links, match: [same-as-link]}
+      - {id: dm-dv-effectivity, name: Effectivity satellites, match: [effectivity-satellite]}
+      - {id: dm-dv-record-source, name: Load metadata and record source tracking, match: [record-source]}
+      - {id: dm-dv-info-marts, name: Information marts on top of a vault, match: [information-mart]}
+  - id: dm-wide-semi
+    name: Wide tables and semi-structured modelling
+    source: FoDE ch 8 (wide denormalized tables); DMBOK NoSQL modelling
+    match: [one-big-table, wide-table]
+    subtopics:
+      - {id: dm-ws-obt, name: One Big Table trade-offs, match: [one-big-table]}
+      - {id: dm-ws-nested, name: Nested / repeated fields, match: [nested-struct, repeated-fields]}
+      - {id: dm-ws-json, name: Modelling JSON / VARIANT data, match: [json-modelling, semi-structured-data]}
+      - {id: dm-ws-activity-schema, name: Activity schema / event tables, match: [activity-schema, event-modelling]}
+      - {id: dm-ws-document, name: Document modelling (MongoDB), match: [document-modelling]}
+      - {id: dm-ws-wide-column, name: Key-value and wide-column modelling (DynamoDB / Cassandra), match: [dynamodb-single-table, wide-column-modelling]}
+      - {id: dm-ws-graph, name: Graph data modelling, match: [graph-data-model]}
+      - {id: dm-ws-schema-on-read, name: Schema-on-read trade-offs, match: [schema-on-read]}
+  - id: dm-reference-master
+    name: Reference and master data
+    source: DAMA-DMBOK/Reference and Master Data
+    match: [master-data-management, reference-data]
+    subtopics:
+      - {id: dm-rm-mdm, name: MDM styles and golden records, match: [golden-record, master-data-management]}
+      - {id: dm-rm-entity-resolution, name: Entity resolution and matching, match: [entity-resolution]}
+      - {id: dm-rm-reference, name: Reference data / code tables management, match: [reference-data]}
+      - {id: dm-rm-hierarchy, name: Hierarchy management (product / org hierarchies), match: [hierarchy-management]}
+      - {id: dm-rm-survivorship, name: Survivorship rules, match: [survivorship-rules]}
+      - {id: dm-rm-iso, name: Reference data standards (ISO country / currency codes), match: [iso-code-standards]}
+      - {id: dm-rm-identity-graph, name: Customer 360 and identity graphs, match: [identity-graph]}
+      - {id: dm-rm-tools, name: MDM tool selection, match: [mdm-tools]}
+  - id: dm-schema-change
+    name: Schema change management
+    source: DAMA-DMBOK/Data Storage and Operations; GCP PDE 1.4 data migrations
+    match: [schema-migration]
+    subtopics:
+      - {id: dm-sc-migrations, name: Versioned schema migrations (Flyway / Liquibase), match: [flyway, liquibase]}
+      - {id: dm-sc-expand-contract, name: Expand-contract for breaking column changes, match: [expand-contract]}
+      - {id: dm-sc-backfill-columns, name: Backfilling new columns, match: [column-backfill]}
+      - {id: dm-sc-online-mysql, name: Online schema change in MySQL (gh-ost / pt-online-schema-change), match: [gh-ost]}
+      - {id: dm-sc-postgres-locks, name: Postgres migrations without locking (lock_timeout / CONCURRENTLY), match: [postgres-migration-locks]}
+      - {id: dm-sc-deprecation, name: Schema deprecation and communication process, match: [schema-deprecation]}
+      - {id: dm-sc-rollback, name: Migration rollback strategies, match: [migration-rollback]}
+      - {id: dm-sc-declarative, name: Declarative schema management (Atlas), match: [atlas-schema]}
+      - {id: dm-sc-lakehouse, name: Schema changes in lakehouse tables (ALTER / column mapping / overwriteSchema), match: [lakehouse-schema-change]}
+
+  # --- ETL/ELT pipeline design (FoDE ch 5, 7, 8; GCP PDE section 2; DMBOK Data Integration)
+  - id: etl-source-systems
+    name: Source systems and extraction
+    source: FoDE ch 5 Data Generation in Source Systems
+    match: [source-systems, extraction]
+    subtopics:
+      - {id: etl-src-db-extract, name: Extracting from OLTP databases safely (replicas / snapshots), match: [database-extraction]}
+      - {id: etl-src-api, name: Ingesting from APIs (pagination / rate limits), match: [api-ingestion]}
+      - {id: etl-src-files, name: File drops / SFTP ingestion, match: [file-ingestion, sftp]}
+      - {id: etl-src-saas, name: Managed EL tools (Fivetran / Airbyte / dlt), match: [fivetran, airbyte]}
+      - {id: etl-src-events, name: Event and log sources, match: [event-ingestion]}
+      - {id: etl-src-webhooks, name: Webhook ingestion, match: [webhook-ingestion]}
+      - {id: etl-src-sheets, name: Spreadsheet and Google Sheets sources, match: [spreadsheet-ingestion]}
+      - {id: etl-src-discovery, name: Source system discovery and profiling, match: [source-discovery]}
+      - {id: etl-src-fixed-width, name: Mainframe / fixed-width / EBCDIC files, match: [fixed-width-files]}
+      - {id: etl-src-salesforce, name: Salesforce extraction (Bulk API 2.0), match: [salesforce-bulk-api]}
+      - {id: etl-src-dlthub, name: Custom extract-load with dlt (dlthub), match: [dlthub]}
+  - id: etl-incremental
+    name: Incremental and idempotent loads
+    source: FoDE ch 7 Ingestion; GCP PDE 2.2
+    match: [incremental-load, idempotency]
+    subtopics:
+      - {id: etl-inc-hwm, name: High-water-mark extraction, match: [high-water-mark]}
+      - {id: etl-inc-merge, name: MERGE / upsert patterns, match: [merge, upsert]}
+      - {id: etl-inc-partition-overwrite, name: Partition overwrite, match: [partition-overwrite]}
+      - {id: etl-inc-full-vs-inc, name: Full refresh vs incremental decision, match: [full-refresh]}
+      - {id: etl-inc-dedup, name: Deduplication strategies, match: [deduplication]}
+      - {id: etl-inc-hard-deletes, name: Detecting hard deletes in sources, match: [hard-delete-detection]}
+      - {id: etl-inc-scd2-merge, name: SCD2 merges in SQL, match: [scd2-merge]}
+      - {id: etl-inc-append-ledger, name: Append-only ledgers with latest-row views, match: [append-only-ledger]}
+      - {id: etl-inc-delete-insert, name: Delete-insert by partition or batch, match: [delete-insert]}
+      - {id: etl-inc-aggregates, name: Incremental aggregates and rollups, match: [incremental-aggregation]}
+      - {id: etl-inc-audit-columns, name: Batch IDs and audit columns, match: [audit-columns]}
+  - id: etl-cdc
+    name: Change data capture
+    source: FoDE ch 5 and 7 (CDC); DMBOK Data Integration
+    match: [cdc, change-data-capture]
+    subtopics:
+      - {id: etl-cdc-log-based, name: Log-based CDC (binlog / WAL / logical replication), match: [binlog, wal]}
+      - {id: etl-cdc-apply, name: Applying CDC streams in order, match: [merge-ordering, sequence-number]}
+      - {id: etl-cdc-snapshot, name: Initial snapshot plus streaming handover, match: [snapshot-mode]}
+      - {id: etl-cdc-postgres, name: Postgres replication slots and WAL bloat, match: [replication-slots]}
+      - {id: etl-cdc-sqlserver, name: SQL Server CDC and change tracking, match: [sql-server-change-tracking]}
+      - {id: etl-cdc-mysql, name: MySQL binlog and GTID configuration for CDC, match: [gtid]}
+      - {id: etl-cdc-oracle, name: Oracle CDC (LogMiner / XStream), match: [logminer]}
+      - {id: etl-cdc-ddl, name: Handling source DDL changes in CDC, match: [cdc-schema-changes]}
+      - {id: etl-cdc-query-based, name: Query-based CDC (updated_at polling) and its limits, match: [query-based-cdc]}
+      - {id: etl-cdc-lakehouse, name: Applying CDC to lakehouse tables, match: [cdc-to-lakehouse]}
+      - {id: etl-cdc-cloud, name: Cloud CDC services (AWS DMS / Datastream), match: [aws-dms, datastream]}
+  - id: etl-late-data
+    name: Late and out-of-order data
+    source: FoDE ch 7; Streaming Systems
+    match: [late-arriving-data]
+    subtopics:
+      - {id: etl-late-lookback, name: Lookback windows and reprocessing, match: [lookback]}
+      - {id: etl-late-early-facts, name: Early-arriving facts, match: [early-arriving-fact]}
+      - {id: etl-late-restatement, name: Restatements and versioned outputs, match: [restatement]}
+      - {id: etl-late-time-columns, name: Event time vs load time columns, match: [event-time-vs-processing-time]}
+      - {id: etl-late-partitions, name: Reprocessing partitions for late data, match: [partition-reprocessing]}
+      - {id: etl-late-completeness, name: Batch completeness checks before publishing, match: [batch-completeness-check]}
+      - {id: etl-late-inferred, name: Inferred members for late dimensions, match: [inferred-members]}
+      - {id: etl-late-preliminary, name: Preliminary vs final figures, match: [preliminary-figures]}
+  - id: etl-reliability
+    name: Error handling and recovery
+    source: GCP PDE 5.5 Failure awareness; FoDE ch 2 DataOps
+    match: [error-handling, dead-letter-queue]
+    subtopics:
+      - {id: etl-rel-retries, name: Retry strategies and backoff, match: [retry-strategy, exponential-backoff]}
+      - {id: etl-rel-dlq, name: Dead-letter queues and quarantine, match: [quarantine-table]}
+      - {id: etl-rel-backfill, name: Backfill and replay design, match: [replay]}
+      - {id: etl-rel-runbooks, name: Pipeline runbooks and on-call, match: [pipeline-runbook, data-on-call]}
+      - {id: etl-rel-checkpoint-restart, name: Checkpoint/restart for long batch jobs, match: [checkpoint-restart]}
+      - {id: etl-rel-wap, name: Write-audit-publish, match: [wap-pattern]}
+      - {id: etl-rel-circuit-breaker, name: Circuit breakers that halt on bad data, match: [circuit-breaker]}
+      - {id: etl-rel-poison, name: Poison messages, match: [poison-message]}
+      - {id: etl-rel-alerting, name: Pipeline alerting design and alert fatigue, match: [pipeline-alerting]}
+      - {id: etl-rel-postmortem, name: Data incident postmortems, match: [data-postmortem]}
+      - {id: etl-rel-timeouts, name: Timeouts and resource limits, match: [pipeline-timeouts]}
+  - id: etl-file-formats
+    name: Storage and file formats
+    source: FoDE ch 6 Storage; GCP PDE section 3
+    match: [file-formats]
+    subtopics:
+      - {id: etl-ff-columnar, name: Parquet / ORC / Avro selection, match: [columnar-formats]}
+      - {id: etl-ff-compression, name: Compression codecs, match: [compression-codecs]}
+      - {id: etl-ff-small-files, name: Small-file problem and compaction, match: [small-file-problem]}
+      - {id: etl-ff-object-storage, name: Object storage layout and lifecycle, match: [object-storage-layout]}
+      - {id: etl-ff-csv, name: CSV pitfalls (quoting / encoding / BOM / delimiters), match: [csv-pitfalls]}
+      - {id: etl-ff-parquet-tuning, name: Parquet row groups / page size / dictionary encoding, match: [parquet-row-groups]}
+      - {id: etl-ff-arrow, name: Arrow IPC and Feather interchange, match: [arrow-ipc]}
+      - {id: etl-ff-manifests, name: File naming and manifests and success markers, match: [manifest-files]}
+      - {id: etl-ff-encoding, name: Character encoding and Unicode normalisation, match: [character-encoding]}
+      - {id: etl-ff-ndjson, name: JSON Lines / NDJSON, match: [ndjson]}
+  - id: etl-orchestration-design
+    name: Orchestration and dependency design
+    source: FoDE ch 2 undercurrent Orchestration; GCP PDE 5.2
+    match: [orchestration]
+    subtopics:
+      - {id: etl-orch-choice, name: Choosing an orchestrator (Airflow / Dagster / Prefect), match: [orchestrator-selection, dagster]}
+      - {id: etl-orch-dependencies, name: Cross-pipeline dependencies and SLAs, match: [pipeline-dependencies]}
+      - {id: etl-orch-config, name: Config-driven / metadata-driven pipelines, match: [metadata-driven-pipelines]}
+      - {id: etl-orch-assets, name: Asset-based orchestration (Dagster software-defined assets), match: [software-defined-assets]}
+      - {id: etl-orch-prefect, name: Prefect flows and deployments, match: [prefect]}
+      - {id: etl-orch-event-driven, name: Event-driven pipelines (object storage events / serverless), match: [object-storage-events]}
+      - {id: etl-orch-step-functions, name: Cloud-native workflow services (Step Functions / Workflows), match: [step-functions]}
+      - {id: etl-orch-partitions, name: Partitioned runs and backfill design, match: [partitioned-runs]}
+  - id: etl-testing
+    name: Pipeline testing and DataOps
+    source: FoDE ch 2 DataOps; Databricks Professional testing and deployment
+    match: [dataops, pipeline-testing]
+    subtopics:
+      - {id: etl-test-unit, name: Unit testing transformations, match: [transformation-unit-tests]}
+      - {id: etl-test-integration, name: Integration tests with ephemeral environments, match: [ephemeral-environments]}
+      - {id: etl-test-data-diff, name: Data diffing between versions, match: [data-diff]}
+      - {id: etl-test-fixtures, name: Test data and fixtures / synthetic data, match: [test-data-generation]}
+      - {id: etl-test-cicd, name: CI/CD for data pipelines, match: [data-pipeline-cicd]}
+      - {id: etl-test-golden, name: Regression testing with golden datasets, match: [golden-dataset]}
+      - {id: etl-test-load, name: Load and performance testing pipelines, match: [pipeline-load-testing]}
+      - {id: etl-test-streaming, name: Testing streaming jobs, match: [streaming-tests]}
+  - id: etl-migration
+    name: Data migrations
+    source: GCP PDE 1.4 Planning and executing data migrations
+    match: [data-migration]
+    subtopics:
+      - {id: etl-mig-plan, name: Warehouse migration planning and parallel run, match: [warehouse-migration, parallel-run]}
+      - {id: etl-mig-validate, name: Reconciliation and validation (counts / checksums), match: [reconciliation]}
+      - {id: etl-mig-sql-translate, name: SQL dialect translation (sqlglot), match: [sql-translation, sqlglot]}
+      - {id: etl-mig-bulk-transfer, name: Bulk data transfer options, match: [bulk-transfer]}
+      - {id: etl-mig-assessment, name: Migration assessment and inventory from query logs, match: [migration-assessment]}
+      - {id: etl-mig-cutover, name: Cutover and rollback planning, match: [cutover-plan]}
+      - {id: etl-mig-legacy-etl, name: Migrating legacy ETL tools (SSIS / Informatica), match: [legacy-etl-migration]}
+      - {id: etl-mig-hadoop, name: Hadoop to cloud migration, match: [hadoop-migration]}
+
+  # --- Streaming architecture (FoDE ch 7; Streaming Systems; Kafka/Flink design docs)
+  - id: stream-guarantees
+    name: Delivery guarantees and ordering
+    source: Kafka docs/Design; Streaming Systems ch 5
+    match: [delivery-semantics]
+    subtopics:
+      - {id: stream-g-idempotent-sink, name: Idempotent sinks and dedup keys, match: [idempotent-sink]}
+      - {id: stream-g-e2e-eos, name: End-to-end exactly-once, match: [end-to-end-exactly-once]}
+      - {id: stream-g-ordering, name: Ordering guarantees and keys, match: [message-ordering]}
+      - {id: stream-g-dual-write, name: The dual-write problem, match: [dual-write-problem]}
+      - {id: stream-g-multi-sink, name: Consistency across multiple sinks, match: [multi-sink-consistency]}
+      - {id: stream-g-testing, name: Testing delivery guarantees under failure, match: [delivery-guarantee-testing]}
+      - {id: stream-g-reprocessing, name: Reprocessing and replaying streams, match: [stream-reprocessing]}
+  - id: stream-time
+    name: Time, windows and triggers
+    source: Streaming Systems ch 2-3; Flink docs/Timely stream processing
+    match: [windowing]
+    subtopics:
+      - {id: stream-t-windows, name: Window types, match: [tumbling-window, session-window]}
+      - {id: stream-t-watermarks, name: Watermarks and completeness, match: [watermark]}
+      - {id: stream-t-triggers, name: Triggers and accumulation modes, match: [trigger-policy]}
+      - {id: stream-t-session-gap, name: Session windows and gap tuning, match: [session-gap]}
+      - {id: stream-t-late-policy, name: Late data policies (drop / side output / update), match: [late-data-policy]}
+      - {id: stream-t-calendar, name: Calendar and time-zone aligned windows, match: [calendar-windows]}
+      - {id: stream-t-hopping, name: Sliding and hopping window cost, match: [hopping-window]}
+      - {id: stream-t-clock-skew, name: Clock skew and producer timestamps, match: [clock-skew]}
+  - id: stream-patterns
+    name: Streaming architecture patterns
+    source: FoDE ch 3 (Lambda, Kappa, event-driven); Designing Event-Driven Systems
+    match: [lambda-architecture, kappa-architecture]
+    subtopics:
+      - {id: stream-p-duality, name: Stream-table duality and changelogs, match: [stream-table-duality]}
+      - {id: stream-p-event-design, name: Event design (event vs state / envelopes), match: [event-design, event-envelope]}
+      - {id: stream-p-backpressure, name: Backpressure handling, match: [backpressure]}
+      - {id: stream-p-schema-evolution, name: Schema evolution in long-running pipelines, match: [schema-evolution]}
+      - {id: stream-p-stream-processing-choice, name: Choosing a stream processor, match: [stream-processor-selection]}
+      - {id: stream-p-cloud-pubsub, name: Cloud messaging (Pub/Sub / Kinesis / Event Hubs) trade-offs, match: [pubsub, kinesis]}
+      - {id: stream-p-event-sourcing, name: Event sourcing and CQRS, match: [event-sourcing, cqrs]}
+      - {id: stream-p-enrichment, name: Stream enrichment patterns (lookups / caching / CDC tables), match: [stream-enrichment]}
+      - {id: stream-p-joins, name: Designing streaming joins, match: [streaming-join-design]}
+      - {id: stream-p-lakehouse, name: Streaming into lakehouse tables, match: [streaming-ingestion-lakehouse]}
+      - {id: stream-p-streaming-db, name: Streaming databases (Materialize / RisingWave), match: [streaming-database]}
+      - {id: stream-p-topology, name: Topic topology and fan-out design, match: [topic-topology]}
+
+  # --- Data quality (DAMA-DMBOK Data Quality + Metadata; FoDE ch 2 data management)
+  - id: dq-dimensions
+    name: Data quality dimensions and measurement
+    source: DAMA-DMBOK/Data Quality
+    match: [dq-dimensions, data-quality-metrics]
+    subtopics:
+      - {id: dq-dim-scorecards, name: Scorecards and DQ KPIs, match: [scorecard]}
+      - {id: dq-dim-profiling, name: Data profiling, match: [data-profiling]}
+      - {id: dq-dim-issue-mgmt, name: DQ issue management lifecycle, match: [dq-issue-management]}
+      - {id: dq-dim-rules, name: Defining DQ rules per dimension, match: [dq-rule-definition]}
+      - {id: dq-dim-root-cause, name: Root cause analysis for DQ issues, match: [dq-root-cause]}
+      - {id: dq-dim-thresholds, name: DQ thresholds and acceptance levels, match: [dq-thresholds]}
+      - {id: dq-dim-impact, name: Business impact and cost of poor data quality, match: [dq-business-impact]}
+      - {id: dq-dim-assessment, name: DQ assessment and baselining, match: [dq-assessment]}
+  - id: dq-validation
+    name: Validation and testing frameworks
+    source: DAMA-DMBOK/Data Quality; GX and Soda docs
+    match: [data-testing, data-tests]
+    subtopics:
+      - {id: dq-val-gx, name: Great Expectations, match: [great-expectations]}
+      - {id: dq-val-soda, name: Soda, match: [soda-core]}
+      - {id: dq-val-pandera, name: DataFrame schema validation (pandera / pydantic), match: [pandera]}
+      - {id: dq-val-reconciliation, name: Source-to-target reconciliation checks, match: [source-target-reconciliation]}
+      - {id: dq-val-deequ, name: Deequ / PyDeequ, match: [deequ]}
+      - {id: dq-val-dmf, name: In-warehouse metric functions (Snowflake DMFs / Dataform assertions), match: [data-metric-functions]}
+      - {id: dq-val-streaming, name: Validation in streaming pipelines, match: [streaming-validation]}
+      - {id: dq-val-strategy, name: Where to test (source / transform / serve), match: [dq-test-strategy]}
+  - id: dq-observability
+    name: Data observability
+    source: FoDE ch 2 DataOps (observability and monitoring)
+    match: [data-observability]
+    subtopics:
+      - {id: dq-obs-freshness, name: Freshness and volume monitoring, match: [freshness, volume-anomaly]}
+      - {id: dq-obs-anomaly, name: Statistical anomaly detection on metrics, match: [dq-anomaly-detection]}
+      - {id: dq-obs-schema-drift, name: Schema drift detection, match: [schema-drift]}
+      - {id: dq-obs-incident, name: Data incident response, match: [incident-triage]}
+      - {id: dq-obs-platforms, name: Observability platforms (Monte Carlo / Elementary / Soda Cloud), match: [observability-platform]}
+      - {id: dq-obs-distribution, name: Field-level distribution monitoring, match: [distribution-drift]}
+      - {id: dq-obs-pipeline, name: Pipeline run observability, match: [pipeline-run-observability]}
+      - {id: dq-obs-as-code, name: Monitors as code, match: [monitors-as-code]}
+  - id: dq-contracts
+    name: Data contracts
+    source: FoDE ch 5 (working with source teams); Open Data Contract Standard
+    match: [data-contracts]
+    subtopics:
+      - {id: dq-con-odcs, name: Contract specification (ODCS / datacontract-cli), match: [odcs, datacontract-cli]}
+      - {id: dq-con-enforce, name: Enforcing contracts in CI and at runtime, match: [contract-enforcement]}
+      - {id: dq-con-slas, name: SLAs / SLOs for data products, match: [slo]}
+      - {id: dq-con-versioning, name: Contract versioning and breaking changes, match: [contract-versioning]}
+      - {id: dq-con-producer, name: Producer-side validation at the source, match: [producer-validation]}
+      - {id: dq-con-negotiation, name: Contract ownership and negotiation, match: [contract-negotiation]}
+      - {id: dq-con-data-product-spec, name: Data product specifications, match: [data-product-specification]}
+      - {id: dq-con-quality-rules, name: Quality and semantic clauses in contracts, match: [contract-quality-rules]}
+  - id: dq-metadata-lineage
+    name: Metadata management and lineage
+    source: DAMA-DMBOK/Metadata Management
+    match: [metadata-management, data-lineage]
+    subtopics:
+      - {id: dq-md-catalog, name: Data catalogs (DataHub / OpenMetadata), match: [datahub, data-catalog]}
+      - {id: dq-md-column-lineage, name: Column-level lineage, match: [column-level-lineage]}
+      - {id: dq-md-openlineage, name: OpenLineage events, match: [openlineage]}
+      - {id: dq-md-glossary, name: Business glossary, match: [business-glossary]}
+      - {id: dq-md-openmetadata, name: OpenMetadata, match: [openmetadata-ingestion]}
+      - {id: dq-md-crawlers, name: Automated metadata ingestion (Glue crawlers / catalog connectors), match: [glue-data-catalog]}
+      - {id: dq-md-impact, name: Lineage-based impact analysis, match: [impact-analysis]}
+      - {id: dq-md-taxonomy, name: Metadata standards and tagging taxonomy, match: [metadata-taxonomy]}
+      - {id: dq-md-dataplex, name: Dataplex / cloud governance catalogs, match: [dataplex]}
+
+  # --- Warehouse and lakehouse architecture (FoDE ch 3, 4, 6, 9, 10; DMBOK Architecture, Governance, Security, DW&BI)
+  - id: arch-layering
+    name: Layered and medallion architecture
+    source: FoDE ch 3; Databricks Associate (medallion)
+    match: [medallion-architecture]
+    subtopics:
+      - {id: arch-lay-bronze-silver-gold, name: Bronze / silver / gold responsibilities, match: [bronze-silver-gold]}
+      - {id: arch-lay-env-isolation, name: Dev / test / prod environment isolation, match: [environment-isolation]}
+      - {id: arch-lay-data-mesh, name: Data mesh and domain ownership, match: [data-mesh]}
+      - {id: arch-lay-kimball-inmon, name: Kimball vs Inmon, match: [kimball, inmon]}
+      - {id: arch-lay-lakehouse, name: Lakehouse vs warehouse vs lake, match: [lakehouse-architecture]}
+      - {id: arch-lay-landing, name: Immutable landing zones and raw retention, match: [immutable-landing-zone]}
+      - {id: arch-lay-multi-tenant, name: Multi-tenant data platform design, match: [multi-tenancy]}
+      - {id: arch-lay-fabric, name: Data fabric and hub-and-spoke, match: [data-fabric]}
+  - id: arch-table-formats
+    name: Open table formats
+    source: FoDE ch 6 Storage (lakehouse); Iceberg / Delta / Hudi docs
+    match: [open-table-formats, apache-iceberg]
+    subtopics:
+      - {id: arch-tf-iceberg, name: Iceberg tables (catalogs / snapshots / partition evolution), match: [apache-iceberg, partition-evolution]}
+      - {id: arch-tf-maintenance, name: Table maintenance (expire snapshots / compaction / orphan files), match: [expire-snapshots, table-maintenance]}
+      - {id: arch-tf-hudi, name: Apache Hudi copy-on-write vs merge-on-read, match: [apache-hudi, merge-on-read]}
+      - {id: arch-tf-interop, name: Format interoperability (UniForm / XTable), match: [uniform, xtable]}
+      - {id: arch-tf-delta-oss, name: Delta Lake outside Databricks (delta-rs / OSS), match: [delta-rs]}
+      - {id: arch-tf-rest-catalog, name: Iceberg REST catalogs (Polaris / Nessie / Glue), match: [iceberg-rest-catalog]}
+      - {id: arch-tf-row-level, name: Iceberg row-level operations and delete files, match: [iceberg-delete-files]}
+      - {id: arch-tf-branching, name: Iceberg branching and tagging (WAP), match: [iceberg-branching]}
+      - {id: arch-tf-pyiceberg, name: Lightweight access (PyIceberg / DuckDB), match: [pyiceberg]}
+      - {id: arch-tf-selection, name: Choosing a table format, match: [table-format-selection]}
+  - id: arch-storage-layout
+    name: Partitioning and clustering strategy
+    source: FoDE ch 6; GCP PDE 3 Storing the data
+    match: [partitioning, clustering]
+    subtopics:
+      - {id: arch-sl-pruning, name: Partition pruning and key design, match: [partition-pruning, partition-key-design]}
+      - {id: arch-sl-bigquery, name: BigQuery partitioning and clustering, match: [bigquery-partitioning]}
+      - {id: arch-sl-redshift, name: Redshift distribution and sort keys, match: [redshift-distkey]}
+      - {id: arch-sl-over-partitioning, name: Hive-style paths and over-partitioning, match: [over-partitioning]}
+      - {id: arch-sl-sort-order, name: Sorted writes and sort order, match: [sort-order]}
+      - {id: arch-sl-postgres, name: Postgres declarative partitioning, match: [postgres-partitioning]}
+      - {id: arch-sl-retention, name: Time-based partition retention, match: [partition-retention]}
+      - {id: arch-sl-clickhouse, name: ClickHouse ORDER BY and partition keys, match: [clickhouse-order-by]}
+  - id: arch-security-privacy
+    name: Security and privacy
+    source: FoDE ch 10 Security and Privacy; DMBOK Data Security; GCP PDE 1.1
+    match: [data-security, pii]
+    subtopics:
+      - {id: arch-sec-access, name: RBAC / least privilege / access reviews, match: [rbac, least-privilege]}
+      - {id: arch-sec-masking, name: Masking and tokenisation, match: [dynamic-data-masking, tokenization]}
+      - {id: arch-sec-pii-discovery, name: PII discovery and classification, match: [pii-classification]}
+      - {id: arch-sec-gdpr-delete, name: Right-to-erasure deletes in lakes and warehouses, match: [right-to-erasure, gdpr]}
+      - {id: arch-sec-encryption, name: Encryption at rest/in transit and key management, match: [encryption-at-rest, cmek]}
+      - {id: arch-sec-pseudonymization, name: Pseudonymisation and k-anonymity, match: [pseudonymization, k-anonymity]}
+      - {id: arch-sec-dp, name: Differential privacy, match: [differential-privacy]}
+      - {id: arch-sec-secrets, name: Secrets management for pipelines, match: [pipeline-secrets]}
+      - {id: arch-sec-network, name: Private connectivity (PrivateLink / VPC Service Controls), match: [private-connectivity]}
+      - {id: arch-sec-auditing, name: Data access auditing, match: [access-auditing]}
+      - {id: arch-sec-residency, name: Data residency and sovereignty, match: [data-residency]}
+  - id: arch-governance
+    name: Data governance operating model
+    source: DAMA-DMBOK/Data Governance
+    match: [data-governance]
+    subtopics:
+      - {id: arch-gov-stewardship, name: Data ownership and stewardship, match: [data-stewardship]}
+      - {id: arch-gov-policies, name: Data policies and retention, match: [data-retention-policy]}
+      - {id: arch-gov-data-products, name: Data products and SLAs, match: [data-products]}
+      - {id: arch-gov-operating-model, name: Governance operating model and council, match: [governance-operating-model]}
+      - {id: arch-gov-classification, name: Data classification policy, match: [classification-policy]}
+      - {id: arch-gov-compliance, name: Regulatory compliance mapping (GDPR / CCPA / HIPAA), match: [regulatory-compliance]}
+      - {id: arch-gov-maturity, name: Data management maturity assessment, match: [data-maturity-assessment]}
+      - {id: arch-gov-policy-as-code, name: Policy as code, match: [policy-as-code]}
+  - id: arch-platform-selection
+    name: Technology and platform selection
+    source: FoDE ch 4 Choosing Technologies; GCP PDE 1.3
+    match: [platform-selection]
+    subtopics:
+      - {id: arch-ps-tco, name: TCO and build vs buy, match: [build-vs-buy, tco]}
+      - {id: arch-ps-warehouse-compare, name: Comparing warehouses (Snowflake / BigQuery / Databricks / Redshift), match: [warehouse-comparison]}
+      - {id: arch-ps-finops, name: Data platform FinOps, match: [finops]}
+      - {id: arch-ps-lock-in, name: Vendor lock-in and portability, match: [vendor-lock-in]}
+      - {id: arch-ps-benchmark, name: Proof of concept and benchmark evaluation, match: [platform-benchmark]}
+      - {id: arch-ps-serverless, name: Serverless vs provisioned compute, match: [serverless-vs-provisioned]}
+      - {id: arch-ps-open-source, name: Open-source query engines (Trino / DuckDB), match: [trino, duckdb]}
+      - {id: arch-ps-forecast, name: Cost forecasting and capacity planning, match: [cost-forecasting]}
+  - id: arch-serving
+    name: Serving data
+    source: FoDE ch 9 Serving Data for Analytics, ML and Reverse ETL
+    match: [data-serving]
+    subtopics:
+      - {id: arch-srv-bi, name: Serving BI and semantic models, match: [bi-serving]}
+      - {id: arch-srv-reverse-etl, name: Reverse ETL, match: [reverse-etl]}
+      - {id: arch-srv-ml-features, name: Serving ML features (feature stores), match: [feature-store]}
+      - {id: arch-srv-api, name: Data APIs and low-latency serving stores, match: [data-api]}
+      - {id: arch-srv-olap, name: Real-time OLAP (ClickHouse / Druid / Pinot), match: [real-time-olap, clickhouse]}
+      - {id: arch-srv-preagg, name: Pre-aggregation and caching layers (Cube), match: [pre-aggregation]}
+      - {id: arch-srv-embedded, name: Embedded and multi-tenant analytics, match: [embedded-analytics]}
+      - {id: arch-srv-external, name: Serving data to external consumers, match: [data-sharing-external]}
+      - {id: arch-srv-vector, name: Serving for LLM / RAG (vector stores), match: [vector-database]}
+      - {id: arch-srv-concurrency, name: Serving SLAs and concurrency, match: [serving-concurrency]}

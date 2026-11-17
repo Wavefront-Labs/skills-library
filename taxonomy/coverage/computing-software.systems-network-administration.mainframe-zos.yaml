@@ -1,0 +1,293 @@
+# Coverage spec: IBM z/OS Mainframe. Topics and subtopics from the external structures in `sources`.
+subject: mainframe-zos
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [mainframe-zos]
+sources:
+  - "IBM z/OS documentation library ToC (ibm.com/docs/en/zos) - MVS JCL Reference and User's Guide, TSO/E, ISPF, DFSMS (Using Data Sets, Access Method Services), SDSF, JES2, z/OS UNIX System Services, Parallel Sysplex, Language Environment, z/OSMF"
+  - "IBM CICS Transaction Server documentation ToC (ibm.com/docs/en/cics-ts)"
+  - "IBM Db2 for z/OS documentation ToC (administration, SQL, utilities, performance)"
+  - "IBM RACF Security Administrator's Guide and Command Language Reference"
+  - "IBM Z Mainframe Foundations / Master the Mainframe curriculum and IBM Certified System Administrator - z/OS exam outline"
+topics:
+  - id: tso-ispf
+    name: TSO/E and ISPF
+    source: "z/OS TSO/E User's Guide; ISPF User's Guide"
+    match: [tso, ispf, ispf-edit]
+    subtopics:
+      - {id: ispf-editor-commands, name: "ISPF editor primary and line commands", match: [ispf-primary-commands, line-commands, edit-macros]}
+      - {id: tso-commands-and-clists, name: "TSO commands, CLIST and REXX execs", match: [tso-commands, clist, rexx]}
+  - id: datasets
+    name: Datasets and DFSMS
+    source: "z/OS DFSMS Using Data Sets"
+    match: [dataset, pds, dsorg]
+    subtopics:
+      - {id: dataset-organisations, name: "Dataset organisations (PS, PDS, PDSE, VSAM)", match: [dsorg, pdse, partitioned-dataset]}
+      - {id: sms-and-storage-classes, name: "SMS classes and storage management", match: [sms, storage-class, management-class]}
+  - id: jcl-basics
+    name: JCL fundamentals
+    source: "z/OS MVS JCL Reference"
+    match: [jcl, job-statement, exec-pgm]
+    subtopics:
+      - {id: job-exec-dd-statements, name: "JOB, EXEC and DD statements", match: [jcl-job-card, dd-statement, jcl-syntax]}
+      - {id: dd-disposition-and-space, name: "DISP, SPACE and DCB parameters", match: [disp, space-allocation, dcb]}
+  - id: jcl-advanced
+    name: Advanced JCL
+    source: "z/OS MVS JCL User's Guide"
+    match: [proc, symbolic-parameters, cond-code]
+    subtopics:
+      - {id: procs-and-symbolics, name: "Cataloged and in-stream procedures", match: [proc, pend, jcllib, symbolic-parameter]}
+      - {id: cond-if-then-else, name: "COND and IF/THEN/ELSE", match: [cond-parameter, if-then-else, restart]}
+  - id: jcl-utilities
+    name: IBM utility programs
+    source: "z/OS DFSMSdfp Utilities"
+    match: [iebgener, idcams, iebcopy]
+    subtopics:
+      - {id: iebgener-iebcopy-sort, name: "IEBGENER, IEBCOPY and DFSORT", match: [iebgener, dfsort, sort-utility]}
+      - {id: idcams-vsam-management, name: "IDCAMS for VSAM and catalog", match: [idcams, define-cluster, repro, listcat]}
+  - id: jes
+    name: JES2 and job management
+    source: "z/OS JES2 Commands; SDSF User's Guide"
+    match: [jes2, sdsf, job-class]
+    subtopics:
+      - {id: sdsf-operations, name: "SDSF job and output management", match: [sdsf, sysout, job-purge]}
+      - {id: jes2-classes-and-initiators, name: "JES2 job classes, initiators and spool", match: [jes2-initiator, job-class, spool-management]}
+  - id: unix-ss
+    name: z/OS UNIX System Services
+    source: "z/OS UNIX System Services User's Guide"
+    match: [uss, zfs, bpxbatch]
+    subtopics:
+      - {id: uss-shell-and-zfs, name: "z/OS UNIX shell and zFS file systems", match: [oshell, zfs-filesystem, omvs]}
+      - {id: ebcdic-ascii-conversion, name: "EBCDIC and ASCII data conversion", match: [ebcdic, iconv, code-page]}
+  - id: zowe
+    name: Zowe and modern tooling
+    source: "Zowe documentation"
+    match: [zowe, zowe-cli, z-open-editor]
+    subtopics:
+      - {id: zowe-cli-usage, name: "Zowe CLI", match: [zowe-cli-profiles, zowe-jobs, zowe-files]}
+      - {id: zosmf-rest-services, name: "z/OSMF REST", match: [zosmf, rest-jobs-api, workflows]}
+  - id: sysplex
+    name: Parallel Sysplex
+    source: "Parallel Sysplex documentation"
+    match: [sysplex, coupling-facility, xcf]
+    subtopics:
+      - {id: sysplex-fundamentals, name: "Parallel Sysplex fundamentals", match: [parallel-sysplex, cf-structures, xcf-signalling]}
+      - {id: workload-manager-wlm, name: "Workload Manager", match: [wlm, service-class, goals]}
+  - id: operations
+    name: System operations
+    source: "z/OS MVS System Commands"
+    match: [operator-commands, console, ipl]
+    subtopics:
+      - {id: operator-commands, name: "MVS operator commands", match: [display-commands, vary-command, console-commands]}
+      - {id: ipl-and-parmlib, name: "IPL and PARMLIB", match: [ipl-process, parmlib, loadxx]}
+  - id: smf
+    name: SMF and logging
+    source: "z/OS MVS System Management Facilities"
+    match: [smf, smf-records, syslog]
+    subtopics:
+      - {id: smf-recording-setup, name: "SMF recording configuration", match: [smf-dump, smfprmxx, smf-types]}
+      - {id: syslog-and-logrec, name: "SYSLOG, LOGREC and diagnostics", match: [syslog, logrec, dump-analysis]}
+  - id: abends
+    name: Abends and problem determination
+    source: "z/OS MVS System Codes"
+    match: [abend, s0c7, s0c4]
+    subtopics:
+      - {id: common-abends, name: "Common abend codes", match: [sb37, s0c7, s806]}
+      - {id: ipcs-dump-reading, name: "Reading dumps with IPCS", match: [ipcs, dump-dataset, stack-trace]}
+  - id: cics-arch
+    name: CICS architecture
+    source: "CICS TS documentation/Overview and Configuring"
+    match: [cics, cics-region, cics-resource-definitions]
+    subtopics:
+      - {id: cics-regions-and-csd, name: "CICS regions, CSD and resource definitions", match: [cics-csd, ceda, cics-startup]}
+      - {id: cics-cemt-master-terminal, name: "CEMT master terminal commands", match: [cemt, cemt-inquire, cemt-set]}
+  - id: cics-programming
+    name: CICS application programming
+    source: "CICS TS Application Programming Reference"
+    match: [exec-cics, commarea, channels-containers]
+    subtopics:
+      - {id: exec-cics-programming, name: "EXEC CICS command-level programming", match: [exec-cics-link, exec-cics-xctl, exec-cics-return]}
+      - {id: channels-and-containers, name: "Channels and containers", match: [channel-container, put-container, get-container]}
+  - id: cics-bms
+    name: BMS maps and terminals
+    source: "CICS TS BMS documentation"
+    match: [bms, bms-map, send-map]
+    subtopics:
+      - {id: bms-map-definition, name: "BMS mapset definition", match: [dfhmsd, dfhmdf, mapset-assembly]}
+      - {id: terminal-and-3270-attributes, name: "3270 data stream and attribute handling", match: [field-attributes, cursor-positioning, mdt]}
+  - id: cics-files
+    name: CICS file control
+    source: "CICS TS File control"
+    match: [cics-file-control, vsam-in-cics, read-for-update]
+    subtopics:
+      - {id: file-control-commands, name: "File control commands", match: [exec-cics-read, exec-cics-write, exec-cics-rewrite]}
+      - {id: tsq-tdq-temp-storage, name: "Temporary storage and transient data", match: [tsq, tdq, writeq-ts]}
+  - id: cics-recovery
+    name: Recovery, syncpoints and units of work
+    source: "CICS TS Recovery and restart"
+    match: [syncpoint, unit-of-work, rollback-cics]
+    subtopics:
+      - {id: syncpoint-and-rollback, name: "Syncpoint and rollback", match: [exec-cics-syncpoint, exec-cics-syncpoint-rollback, logical-unit-of-work]}
+      - {id: cics-abends-and-handling, name: "CICS abends and error handling", match: [handle-abend, abend-codes, asra]}
+  - id: cics-perf
+    name: CICS performance and monitoring
+    source: "CICS TS Performance Guide"
+    match: [cics-statistics, cics-monitoring, cics-dispatch]
+    subtopics:
+      - {id: cics-statistics-and-smf110, name: "Statistics and SMF 110", match: [cics-stats, smf-110, cicsplex-sm]}
+      - {id: cics-tuning-areas, name: "Tuning CICS regions", match: [dsa-storage, maxtask, tcb-modes]}
+  - id: cics-web
+    name: CICS web and integration
+    source: "CICS TS Web services and Liberty"
+    match: [cics-web-services, cics-json, liberty-jvm-server]
+    subtopics:
+      - {id: cics-json-web-services, name: "JSON and web services in CICS", match: [cics-pipeline, zosconnect, json-assistant]}
+      - {id: liberty-jvm-server, name: "Liberty JVM server in CICS", match: [jvmserver, liberty-profile, java-in-cics]}
+  - id: db2-arch
+    name: Db2 for z/OS architecture
+    source: "Db2 for z/OS Administration Guide"
+    match: [db2-zos, db2-subsystem, bufferpool]
+    subtopics:
+      - {id: db2-subsystem-and-address-spaces, name: "Db2 subsystem and address spaces", match: [ssas, dbm1, irlm]}
+      - {id: bufferpools-and-memory, name: "Buffer pools", match: [bufferpool-tuning, alter-bufferpool, hit-ratio]}
+  - id: db2-objects
+    name: Db2 objects and DDL
+    source: "Db2 SQL Reference/DDL"
+    match: [tablespace, db2-ddl, partitioned-tablespace]
+    subtopics:
+      - {id: tablespace-types, name: "Table space types", match: [universal-tablespace, partition-by-range, partition-by-growth]}
+      - {id: indexes-and-clustering, name: "Indexes and clustering", match: [clustering-index, index-only-access, create-index-db2]}
+  - id: db2-sql-programming
+    name: Db2 SQL and application programming
+    source: "Db2 Application programming and SQL guide"
+    match: [embedded-sql, precompile-bind, cursors]
+    subtopics:
+      - {id: embedded-sql-cobol, name: "Embedded SQL in COBOL", match: [exec-sql, sqlca, host-variables]}
+      - {id: bind-plans-packages, name: "Packages, plans and BIND", match: [bind-package, bind-plan, collection-id]}
+  - id: db2-utilities
+    name: Db2 utilities
+    source: "Db2 for z/OS Utility Guide"
+    match: [db2-reorg, db2-runstats, db2-load]
+    subtopics:
+      - {id: reorg-runstats-load, name: "REORG, RUNSTATS and LOAD", match: [reorg-tablespace, runstats-utility, load-utility]}
+      - {id: copy-recover-quiesce, name: "COPY, RECOVER, QUIESCE", match: [image-copy, recover-utility, point-in-time-recovery]}
+  - id: db2-performance
+    name: Db2 performance
+    source: "Db2 for z/OS Performance guide"
+    match: [explain, access-path, db2-locking]
+    subtopics:
+      - {id: explain-and-access-paths, name: "EXPLAIN and access paths", match: [explain-plan-table, access-path-tuning, optimizer-hints]}
+      - {id: locking-and-isolation, name: "Locking and isolation", match: [lock-escalation, isolation-levels, deadlock-timeout]}
+  - id: db2-admin-ops
+    name: Db2 operations and recovery
+    source: "Db2 Administration"
+    match: [db2-commands, bsds, db2-logging]
+    subtopics:
+      - {id: db2-commands-and-restart, name: "Db2 commands and restart", match: [dis-thread, start-db2, term-utility]}
+      - {id: bsds-and-log-management, name: "BSDS and logging", match: [bsds-recovery, print-log-map, archive-log]}
+  - id: racf-basics
+    name: RACF fundamentals
+    source: "RACF Security Administrator's Guide"
+    match: [racf, racf-profiles, racf-classes]
+    subtopics:
+      - {id: users-groups-and-profiles, name: "Users, groups and profiles", match: [adduser, addgroup, racf-userid]}
+      - {id: dataset-profile-protection, name: "Dataset profiles and access", match: [addsd, permit, universal-access]}
+  - id: racf-general
+    name: General resources and OPERCMDS
+    source: "RACF Command Language Reference"
+    match: [general-resource-class, rdefine, setropts]
+    subtopics:
+      - {id: general-resource-profiles, name: "General resource profiles", match: [rdefine, rlist, racf-class-active]}
+      - {id: started-tasks-and-surrogat, name: "STARTED class and SURROGAT", match: [started-task-identity, surrogat-class, batch-userid]}
+  - id: racf-audit
+    name: RACF auditing and reporting
+    source: "RACF Auditor's Guide"
+    match: [racf-audit, irrdbu00, racf-sef]
+    subtopics:
+      - {id: irrdbu00-and-reports, name: "IRRDBU00 database unload and reports", match: [irrdbu00, racf-database-unload, dbu-reports]}
+      - {id: setropts-and-password-rules, name: "SETROPTS and password policy", match: [setropts-list, password-rules, revoke-interval]}
+  - id: zos-network
+    name: z/OS Communications Server
+    source: "z/OS Communications Server IP guides"
+    match: [tcpip-zos, vtam, netstat-zos]
+    subtopics:
+      - {id: tcpip-profile-and-netstat, name: "TCP/IP profile and NETSTAT", match: [tcpip-profile, netstat, ports-reserved]}
+      - {id: at-tls-policy, name: "Application Transparent TLS", match: [at-tls, policy-agent, pagent]}
+  - id: mq-ims
+    name: MQ and IMS
+    source: "IBM MQ for z/OS; IMS documentation"
+    match: [ibm-mq-zos, ims-db, ims-tm]
+    subtopics:
+      - {id: mq-queue-manager-operations, name: "MQ queue manager operations", match: [mq-zos, runmqsc, csqutil]}
+      - {id: ims-overview, name: "IMS DB and TM overview", match: [ims-dl1, ims-transaction-manager, psb-dbd]}
+  - id: cobol-lang-env
+    name: Language Environment and compile
+    source: "z/OS Language Environment Programming Guide"
+    match: [language-environment, compile-cobol, link-edit]
+    subtopics:
+      - {id: le-runtime-options, name: "Language Environment runtime options", match: [cee-options, runopts, ceedump]}
+      - {id: compile-link-go, name: "Compile, link-edit and run", match: [prelink-binder, compile-jcl, load-module]}
+  - id: batch-sched
+    name: Batch scheduling and automation
+    source: "Operations best practice"
+    match: [batch-scheduler, job-dependencies, automation]
+    subtopics:
+      - {id: job-scheduler-concepts, name: "Job scheduling and dependencies", match: [tws, control-m, job-dependencies]}
+      - {id: gdg-generation-data-groups, name: "Generation data groups", match: [gdg, gdg-base, generation-limit]}
+  - id: hsm-backup
+    name: Storage backup and HSM
+    source: "z/OS DFSMShsm; DFSMSdss"
+    match: [dfhsm, dfdss, hsm-migrate]
+    subtopics:
+      - {id: dfdss-dump-restore, name: "DFSMSdss dump and restore", match: [adrdssu, dss-dump, dss-restore]}
+      - {id: hsm-migration-and-recall, name: "DFSMShsm migration and recall", match: [hsm, hmigrate, hrecall]}
+  - id: rmf-perf
+    name: RMF and performance
+    source: "z/OS RMF User's Guide"
+    match: [rmf, rmf-monitor-iii, capacity]
+    subtopics:
+      - {id: rmf-monitoring, name: "RMF Monitor I/III", match: [rmf-reports, cpu-utilization, delay-reports]}
+      - {id: capacity-and-msu, name: "Capacity, MSU and software cost", match: [msu, rolling-4hr-average, capacity-planning]}
+  - id: zos-install-maint
+    name: Installation and maintenance
+    source: "z/OS Planning for Installation; SMP/E"
+    match: [smp-e, ptf, service]
+    subtopics:
+      - {id: smpe-receive-apply-accept, name: "SMP/E process", match: [smpe, receive-apply-accept, hold-data]}
+      - {id: hardware-hmc-lpar, name: "HMC, LPARs and activation", match: [hmc, lpar, activation-profile]}
+  - id: cics-security
+    name: CICS security
+    source: "CICS TS RACF Security Guide"
+    match: [cics-security, sit-sec, transaction-security]
+    subtopics:
+      - {id: cics-resource-security, name: "Transaction and resource security", match: [xtran, xfct, resource-security]}
+      - {id: cics-surrogate-and-link-security, name: "Link security and surrogate users", match: [link-security, surrogate-user, cics-userid]}
+  - id: cics-mro
+    name: CICS multi-region and CICSPlex
+    source: "CICS TS Intercommunication Guide"
+    match: [mro, isc, cicsplex-sm]
+    subtopics:
+      - {id: mro-and-function-shipping, name: "MRO and function shipping", match: [mro, function-shipping, dynamic-routing]}
+      - {id: cicsplex-sm-basics, name: "CICSPlex SM basics", match: [cpsm, cmas, cics-bas]}
+  - id: db2-datasharing
+    name: Db2 data sharing
+    source: "Db2 Data Sharing Planning"
+    match: [db2-data-sharing, group-buffer-pool, member]
+    subtopics:
+      - {id: data-sharing-concepts, name: "Data sharing group concepts", match: [data-sharing-group, lock-structure, gbp]}
+      - {id: ddf-and-distributed-access, name: "DDF and distributed access", match: [ddf, db2-connect, jdbc-db2]}
+  - id: db2-security
+    name: Db2 authorisation
+    source: "Db2 Administration/Security"
+    match: [db2-grant, db2-authid, db2-roles]
+    subtopics:
+      - {id: grants-and-privileges, name: "GRANT, REVOKE and authorisation", match: [grant-execute, secadm, db2-privileges]}
+      - {id: native-encryption-and-masking, name: "Row permissions and column masks", match: [row-permission, column-mask, db2-encryption]}
+  - id: zos-ssh-ftp
+    name: File transfer and SSH
+    source: "z/OS Communications Server/FTP and OpenSSH"
+    match: [zos-ftp, sftp-zos, scp-zos]
+    subtopics:
+      - {id: ftp-to-zos, name: "FTP to z/OS", match: [ftp-site-commands, jes-ftp, quote-site]}
+      - {id: openssh-zos, name: "OpenSSH on z/OS", match: [sshd-zos, ssh-keys-zos, racf-keyrings]}

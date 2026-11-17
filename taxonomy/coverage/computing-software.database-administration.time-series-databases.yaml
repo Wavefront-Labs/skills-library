@@ -1,0 +1,316 @@
+# Coverage spec: Time-series databases (time-series-databases product).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: time-series-databases
+scope:
+  category: computing-software
+  field: database-administration
+  products: [time-series-databases]
+sources:
+  - "InfluxDB v2 and InfluxDB 3 documentation tables of contents (docs.influxdata.com) - data model, buckets, Flux, InfluxQL, tasks, Telegraf, security, backup, performance"
+  - "TimescaleDB documentation (docs.timescale.com) - hypertables, compression, continuous aggregates, policies, jobs, tuning, backup, migration"
+  - "Prometheus storage and operating documentation (prometheus.io/docs/prometheus/latest/storage) plus Thanos, Mimir and VictoriaMetrics docs - TSDB blocks, WAL, retention, remote write, cardinality, recording rules, HA"
+  - "QuestDB and ClickHouse documentation for time-series modelling"
+topics:
+  - id: influx-data-model
+    name: "InfluxDB data model"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-data-model]
+    subtopics:
+      - {id: influx-data-model-influxdb-line-protocol, name: "Line protocol format", match: [influxdb-line-protocol]}
+      - {id: influx-data-model-influxdb-tags-vs-fields, name: "Tags versus fields", match: [influxdb-tags-vs-fields]}
+  - id: influx-buckets-retention
+    name: "InfluxDB buckets and retention"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-buckets-retention]
+    subtopics:
+      - {id: influx-buckets-retention-influxdb-bucket-retention, name: "Bucket retention periods", match: [influxdb-bucket-retention]}
+      - {id: influx-buckets-retention-influxdb-shard-group-duration, name: "Shard group duration", match: [influxdb-shard-group-duration]}
+  - id: influx-flux
+    name: "Flux query language"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-flux]
+    subtopics:
+      - {id: influx-flux-flux-pipeline-basics, name: "Flux pipeline basics", match: [flux-pipeline-basics]}
+      - {id: influx-flux-flux-aggregatewindow, name: "aggregateWindow and downsampling", match: [flux-aggregatewindow]}
+      - {id: influx-flux-flux-joins-and-pivot, name: "Flux join and pivot", match: [flux-joins-and-pivot]}
+  - id: influx-influxql
+    name: "InfluxQL"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-influxql]
+    subtopics:
+      - {id: influx-influxql-influxql-group-by-time-fill, name: "InfluxQL GROUP BY time and fill", match: [influxql-group-by-time-fill]}
+      - {id: influx-influxql-influxql-subqueries-and-cq, name: "Subqueries and continuous queries", match: [influxql-subqueries-and-cq]}
+  - id: influx-tasks
+    name: "InfluxDB tasks"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-tasks]
+    subtopics:
+      - {id: influx-tasks-influxdb-tasks-downsampling, name: "Tasks for downsampling", match: [influxdb-tasks-downsampling]}
+      - {id: influx-tasks-influxdb-task-troubleshooting, name: "Task failure troubleshooting", match: [influxdb-task-troubleshooting]}
+  - id: influx-telegraf
+    name: "Telegraf"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-telegraf]
+    subtopics:
+      - {id: influx-telegraf-telegraf-inputs-outputs, name: "Telegraf inputs and outputs", match: [telegraf-inputs-outputs]}
+      - {id: influx-telegraf-telegraf-processors-aggregators, name: "Processors and aggregators", match: [telegraf-processors-aggregators]}
+      - {id: influx-telegraf-telegraf-buffering-batching, name: "Telegraf buffering and batching", match: [telegraf-buffering-batching]}
+  - id: influx-v3
+    name: "InfluxDB 3"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-v3]
+    subtopics:
+      - {id: influx-v3-influxdb3-sql-datafusion, name: "InfluxDB 3 SQL and DataFusion", match: [influxdb3-sql-datafusion]}
+      - {id: influx-v3-influxdb3-parquet-object-storage, name: "InfluxDB 3 Parquet and object storage", match: [influxdb3-parquet-object-storage]}
+      - {id: influx-v3-influxdb3-migration-from-v2, name: "Migrating from InfluxDB 2 to 3", match: [influxdb3-migration-from-v2]}
+  - id: influx-auth-tokens
+    name: "InfluxDB authentication"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-auth]
+    subtopics:
+      - {id: influx-auth-tokens-influxdb-api-tokens-orgs, name: "API tokens and organisations", match: [influxdb-api-tokens-orgs]}
+      - {id: influx-auth-tokens-influxdb-tls-hardening, name: "TLS and network hardening", match: [influxdb-tls-hardening]}
+  - id: influx-cardinality
+    name: "InfluxDB cardinality"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-cardinality]
+    subtopics:
+      - {id: influx-cardinality-influxdb-series-cardinality, name: "Series cardinality diagnosis", match: [influxdb-series-cardinality]}
+      - {id: influx-cardinality-influxdb-tsi-index, name: "TSI index and memory", match: [influxdb-tsi-index]}
+  - id: influx-backup
+    name: "InfluxDB backup and HA"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-backup]
+    subtopics:
+      - {id: influx-backup-influxdb-backup-restore, name: "InfluxDB backup and restore", match: [influxdb-backup-restore]}
+      - {id: influx-backup-influxdb-ha-clustering, name: "InfluxDB high availability", match: [influxdb-ha-clustering]}
+  - id: influx-write-perf
+    name: "InfluxDB performance"
+    source: "https://docs.influxdata.com/influxdb/v2/"
+    match: [tsdb-influx-performance]
+    subtopics:
+      - {id: influx-write-perf-influxdb-write-batching-tuning, name: "Write batching and ingest tuning", match: [influxdb-write-batching-tuning]}
+      - {id: influx-write-perf-influxdb-query-performance, name: "Query performance", match: [influxdb-query-performance]}
+  - id: ts-hypertables
+    name: "TimescaleDB hypertables"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-hypertables]
+    subtopics:
+      - {id: ts-hypertables-timescale-create-hypertable, name: "Creating a hypertable", match: [timescale-create-hypertable]}
+      - {id: ts-hypertables-timescale-chunk-interval, name: "Chunk interval sizing", match: [timescale-chunk-interval]}
+      - {id: ts-hypertables-timescale-space-partitioning, name: "Space partitioning and dimensions", match: [timescale-space-partitioning]}
+  - id: ts-compression
+    name: "TimescaleDB compression"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-compression]
+    subtopics:
+      - {id: ts-compression-timescale-compression-segmentby, name: "Compression segmentby and orderby", match: [timescale-compression-segmentby]}
+      - {id: ts-compression-timescale-compression-policy, name: "Compression policy", match: [timescale-compression-policy]}
+      - {id: ts-compression-timescale-compressed-chunk-changes, name: "Changing compressed data", match: [timescale-compressed-chunk-changes]}
+  - id: ts-caggs
+    name: "TimescaleDB continuous aggregates"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-caggs]
+    subtopics:
+      - {id: ts-caggs-timescale-continuous-aggregate-create, name: "Creating a continuous aggregate", match: [timescale-continuous-aggregate-create]}
+      - {id: ts-caggs-timescale-cagg-refresh-policy, name: "Refresh policies", match: [timescale-cagg-refresh-policy]}
+      - {id: ts-caggs-timescale-realtime-hierarchical-caggs, name: "Real-time and hierarchical aggregates", match: [timescale-realtime-hierarchical-caggs]}
+  - id: ts-retention
+    name: "TimescaleDB retention"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-retention]
+    subtopics:
+      - {id: ts-retention-timescale-retention-policy, name: "Retention policy", match: [timescale-retention-policy]}
+      - {id: ts-retention-timescale-drop-chunks-manual, name: "Manual drop_chunks", match: [timescale-drop-chunks-manual]}
+  - id: ts-reorder
+    name: "TimescaleDB reorder and skip"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-reorder]
+    subtopics:
+      - {id: ts-reorder-timescale-reorder-policy, name: "Reorder policy", match: [timescale-reorder-policy]}
+      - {id: ts-reorder-timescale-chunk-skipping, name: "Chunk exclusion and skipping", match: [timescale-chunk-skipping]}
+  - id: ts-jobs
+    name: "TimescaleDB background jobs"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-jobs]
+    subtopics:
+      - {id: ts-jobs-timescale-user-defined-actions, name: "User-defined actions", match: [timescale-user-defined-actions]}
+      - {id: ts-jobs-timescale-job-troubleshooting, name: "Job troubleshooting", match: [timescale-job-troubleshooting]}
+  - id: ts-tuning
+    name: "TimescaleDB tuning"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-tuning]
+    subtopics:
+      - {id: ts-tuning-timescale-tune-postgresql-config, name: "timescaledb-tune and config", match: [timescale-tune-postgresql-config]}
+      - {id: ts-tuning-timescale-memory-parallel-workers, name: "Parallelism and memory", match: [timescale-memory-parallel-workers]}
+  - id: ts-functions
+    name: "TimescaleDB time functions"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-functions]
+    subtopics:
+      - {id: ts-functions-timescale-time-bucket-gapfill, name: "time_bucket and gapfill", match: [timescale-time-bucket-gapfill]}
+      - {id: ts-functions-timescale-hyperfunctions-toolkit, name: "Hyperfunctions and Toolkit", match: [timescale-hyperfunctions-toolkit]}
+  - id: ts-backup
+    name: "TimescaleDB backup"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-backup]
+    subtopics:
+      - {id: ts-backup-timescale-pg-dump-restore, name: "pg_dump and restore", match: [timescale-pg-dump-restore]}
+      - {id: ts-backup-timescale-wal-pitr-replication, name: "WAL archiving and replicas", match: [timescale-wal-pitr-replication]}
+  - id: ts-multinode
+    name: "TimescaleDB multi-node"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-multinode]
+    subtopics:
+      - {id: ts-multinode-timescale-multinode-status, name: "Multi-node deprecation", match: [timescale-multinode-status]}
+      - {id: ts-multinode-timescale-scaling-alternatives, name: "Scaling alternatives", match: [timescale-scaling-alternatives]}
+  - id: ts-migration
+    name: "TimescaleDB migration and upgrade"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-migration]
+    subtopics:
+      - {id: ts-migration-timescale-migrate-from-postgres, name: "Migrating from PostgreSQL", match: [timescale-migrate-from-postgres]}
+      - {id: ts-migration-timescale-extension-upgrade, name: "Upgrading the extension", match: [timescale-extension-upgrade]}
+  - id: ts-indexing
+    name: "TimescaleDB indexing"
+    source: "https://docs.timescale.com/"
+    match: [tsdb-timescale-indexing]
+    subtopics:
+      - {id: ts-indexing-timescale-index-strategy, name: "Index strategy", match: [timescale-index-strategy]}
+      - {id: ts-indexing-timescale-unique-constraints, name: "Unique constraints and upserts", match: [timescale-unique-constraints]}
+  - id: prom-tsdb-layout
+    name: "Prometheus TSDB layout"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-layout]
+    subtopics:
+      - {id: prom-tsdb-layout-prometheus-tsdb-blocks, name: "TSDB blocks", match: [prometheus-tsdb-blocks]}
+      - {id: prom-tsdb-layout-prometheus-wal-and-head, name: "WAL and head block", match: [prometheus-wal-and-head]}
+      - {id: prom-tsdb-layout-prometheus-compaction, name: "Compaction", match: [prometheus-compaction]}
+  - id: prom-retention
+    name: "Prometheus retention and sizing"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-retention]
+    subtopics:
+      - {id: prom-retention-prometheus-retention-time-size, name: "Retention time and size", match: [prometheus-retention-time-size]}
+      - {id: prom-retention-prometheus-storage-sizing, name: "Storage and memory sizing", match: [prometheus-storage-sizing]}
+  - id: prom-remote
+    name: "Prometheus remote storage"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-remote]
+    subtopics:
+      - {id: prom-remote-prometheus-remote-write-tuning, name: "Remote write tuning", match: [prometheus-remote-write-tuning]}
+      - {id: prom-remote-prometheus-remote-read, name: "Remote read", match: [prometheus-remote-read]}
+      - {id: prom-remote-prometheus-remote-write-receiver, name: "Remote write receiver", match: [prometheus-remote-write-receiver]}
+  - id: prom-cardinality
+    name: "Prometheus cardinality"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-cardinality]
+    subtopics:
+      - {id: prom-cardinality-prometheus-cardinality-analysis, name: "Finding high-cardinality series", match: [prometheus-cardinality-analysis]}
+      - {id: prom-cardinality-prometheus-relabel-drop-labels, name: "Relabeling to drop labels and series", match: [prometheus-relabel-drop-labels]}
+      - {id: prom-cardinality-prometheus-sample-limits, name: "Scrape limits", match: [prometheus-sample-limits]}
+  - id: prom-recording
+    name: "Prometheus recording rules"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-recording]
+    subtopics:
+      - {id: prom-recording-prometheus-recording-rules, name: "Recording rules", match: [prometheus-recording-rules]}
+      - {id: prom-recording-prometheus-rule-naming, name: "Rule naming conventions", match: [prometheus-rule-naming]}
+  - id: prom-promql-storage
+    name: "PromQL and storage cost"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-promql-cost]
+    subtopics:
+      - {id: prom-promql-storage-promql-range-vs-instant-cost, name: "Query cost of range and instant selectors", match: [promql-range-vs-instant-cost]}
+      - {id: prom-promql-storage-promql-subqueries-staleness, name: "Subqueries and staleness", match: [promql-subqueries-staleness]}
+  - id: prom-thanos
+    name: "Thanos"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-thanos]
+    subtopics:
+      - {id: prom-thanos-thanos-sidecar-store, name: "Thanos sidecar and store gateway", match: [thanos-sidecar-store]}
+      - {id: prom-thanos-thanos-compactor-downsampling, name: "Thanos compactor and downsampling", match: [thanos-compactor-downsampling]}
+  - id: prom-mimir
+    name: "Grafana Mimir"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-mimir]
+    subtopics:
+      - {id: prom-mimir-mimir-architecture, name: "Mimir architecture", match: [mimir-architecture]}
+      - {id: prom-mimir-mimir-ingesters-compactor, name: "Ingesters, limits and compactor", match: [mimir-ingesters-compactor]}
+  - id: prom-vm
+    name: "VictoriaMetrics"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-victoriametrics]
+    subtopics:
+      - {id: prom-vm-victoriametrics-single-vs-cluster, name: "Single node versus cluster", match: [victoriametrics-single-vs-cluster]}
+      - {id: prom-vm-victoriametrics-vmagent, name: "vmagent and relabeling", match: [victoriametrics-vmagent]}
+  - id: prom-backup
+    name: "Prometheus backup"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-backup]
+    subtopics:
+      - {id: prom-backup-prometheus-snapshots-backup, name: "Snapshots", match: [prometheus-snapshots-backup]}
+      - {id: prom-backup-prometheus-tsdb-admin-cli, name: "promtool tsdb admin", match: [prometheus-tsdb-admin-cli]}
+  - id: prom-ha
+    name: "Prometheus HA and sharding"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-prom-ha]
+    subtopics:
+      - {id: prom-ha-prometheus-ha-pairs, name: "HA pairs", match: [prometheus-ha-pairs]}
+      - {id: prom-ha-prometheus-federation-sharding, name: "Federation and sharding", match: [prometheus-federation-sharding]}
+  - id: gen-cardinality
+    name: "TSDB cardinality design"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-gen-cardinality]
+    subtopics:
+      - {id: gen-cardinality-tsdb-cardinality-budgeting, name: "Cardinality budgeting", match: [tsdb-cardinality-budgeting]}
+      - {id: gen-cardinality-tsdb-high-cardinality-fixes, name: "Fixing high cardinality", match: [tsdb-high-cardinality-fixes]}
+  - id: gen-downsampling
+    name: "TSDB downsampling and gaps"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-gen-downsampling]
+    subtopics:
+      - {id: gen-downsampling-tsdb-downsampling-rollups, name: "Downsampling and rollups", match: [tsdb-downsampling-rollups]}
+      - {id: gen-downsampling-tsdb-gap-filling, name: "Gap filling and interpolation", match: [tsdb-gap-filling]}
+  - id: gen-schema
+    name: "TSDB schema design"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-gen-schema]
+    subtopics:
+      - {id: gen-schema-tsdb-iot-schema-design, name: "IoT schema design", match: [tsdb-iot-schema-design]}
+      - {id: gen-schema-tsdb-metrics-wide-vs-narrow, name: "Wide versus narrow metric schemas", match: [tsdb-metrics-wide-vs-narrow]}
+  - id: gen-sizing
+    name: "TSDB capacity sizing"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-gen-sizing]
+    subtopics:
+      - {id: gen-sizing-tsdb-capacity-sizing, name: "Capacity and hardware sizing", match: [tsdb-capacity-sizing]}
+      - {id: gen-sizing-tsdb-compression-ratios, name: "Compression ratios", match: [tsdb-compression-ratios]}
+  - id: gen-ha-backup
+    name: "TSDB backup and HA"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-gen-backup-ha]
+    subtopics:
+      - {id: gen-ha-backup-tsdb-backup-strategy, name: "Backup strategy", match: [tsdb-backup-strategy]}
+      - {id: gen-ha-backup-tsdb-high-availability, name: "High availability patterns", match: [tsdb-high-availability]}
+  - id: gen-selection
+    name: "TSDB selection and late data"
+    source: "https://prometheus.io/docs/prometheus/latest/storage/"
+    match: [tsdb-gen-selection]
+    subtopics:
+      - {id: gen-selection-tsdb-engine-selection, name: "Choosing an engine", match: [tsdb-engine-selection]}
+      - {id: gen-selection-tsdb-out-of-order-late-data, name: "Out-of-order and late data", match: [tsdb-out-of-order-late-data]}
+  - id: qdb-notes
+    name: "QuestDB"
+    source: "https://questdb.io/docs/"
+    match: [tsdb-questdb]
+    subtopics:
+      - {id: qdb-notes-questdb-designated-timestamp-partitions, name: "Designated timestamp and partitions", match: [questdb-designated-timestamp-partitions]}
+      - {id: qdb-notes-questdb-ilp-ingestion, name: "InfluxDB line protocol ingestion", match: [questdb-ilp-ingestion]}
+  - id: ch-notes
+    name: "ClickHouse for time series"
+    source: "https://clickhouse.com/docs/"
+    match: [tsdb-clickhouse]
+    subtopics:
+      - {id: ch-notes-clickhouse-mergetree-time-series, name: "MergeTree for time series", match: [clickhouse-mergetree-time-series]}
+      - {id: ch-notes-clickhouse-ttl-materialized-views, name: "TTL and materialized views", match: [clickhouse-ttl-materialized-views]}

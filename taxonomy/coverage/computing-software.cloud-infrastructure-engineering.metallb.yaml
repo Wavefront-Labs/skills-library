@@ -1,0 +1,265 @@
+# Coverage spec for MetalLB (computing-software / cloud-infrastructure-engineering).
+subject: MetalLB
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [metallb]
+sources:
+  - "MetalLB website documentation (https://github.com/metallb/metallb/tree/main/website/content)"
+topics:
+  - id: address-allocation
+    name: "Address allocation and pools"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/_index.md
+    match: ["address-allocation", "ip-pool", "rfc1918"]
+  - id: announcement-modes
+    name: "External announcement modes"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/_index.md
+    match: ["announcement", "arp", "ndp"]
+  - id: l2-mode-failover
+    name: "Layer 2 mode and failover"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/layer2.md
+    match: ["layer2", "failover", "memberlist"]
+  - id: l2-gratuitous-arp
+    name: "Periodic gratuitous ARP"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/layer2.md
+    match: ["gratuitous-arp", "fdb-aging"]
+  - id: l2-leader-election
+    name: "Layer 2 leader election and Keepalived comparison"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/layer2.md
+    match: ["leader-election", "brain-split", "keepalived"]
+  - id: bgp-load-balancing
+    name: "BGP load-balancing behaviour"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/bgp.md
+    match: ["ecmp", "packet-hash"]
+  - id: bgp-reset-mitigation
+    name: "BGP connection resets and mitigations"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/bgp.md
+    match: ["resilient-ecmp", "connection-reset"]
+  - id: frr-k8s-mode
+    name: "FRR-K8s mode and FRR limitations"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/bgp.md
+    match: ["frr-k8s", "frr-limitations"]
+  - id: project-maturity
+    name: "Project maturity and config format stability"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/concepts/maturity.md
+    match: ["maturity", "beta"]
+  - id: requirements
+    name: "Requirements"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/_index.md
+    match: ["requirements", "port-7946"]
+  - id: strict-arp
+    name: "Strict ARP for kube-proxy IPVS"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["strict-arp", "ipvs"]
+  - id: manifest-install
+    name: "Install by manifest or Kustomize"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["manifest", "kustomize"]
+  - id: helm-install
+    name: "Install with Helm"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["helm"]
+  - id: pod-security
+    name: "Pod security admission"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["pod-security", "privileged"]
+  - id: operator
+    name: "MetalLB Operator"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["operator", "operatorhub"]
+  - id: bgp-backend-selection
+    name: "BGP backend selection and FRR logging"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["backend-selection", "frr-logging"]
+  - id: upgrade
+    name: "Upgrading MetalLB"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["upgrade", "release-notes"]
+  - id: lb-class
+    name: "LoadBalancerClass"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/_index.md
+    match: ["lb-class", "loadbalancerclass"]
+  - id: cloud-compat
+    name: "Cloud compatibility"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/clouds.md
+    match: ["cloud-compatibility", "floating-ip"]
+  - id: openshift-openstack
+    name: "OpenShift and OpenStack notes"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/clouds.md
+    match: ["openshift", "openstack"]
+  - id: network-addons
+    name: "Network addon compatibility"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/installation/network-addons.md
+    match: ["network-addon", "kube-router"]
+  - id: calico
+    name: "Calico coexistence"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/calico.md
+    match: ["calico", "serviceloadbalancerips"]
+  - id: k3s
+    name: "K3s and Klipper servicelb"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/k3s.md
+    match: ["k3s", "klipper"]
+  - id: ipaddresspool
+    name: "IPAddressPool basics"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_index.md
+    match: ["ipaddresspool", "cidr"]
+  - id: l2advertisement
+    name: "L2Advertisement basics"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_index.md
+    match: ["l2advertisement"]
+  - id: bgp-peer-advertisement
+    name: "BGPPeer and BGPAdvertisement basics"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_index.md
+    match: ["bgppeer", "bgpadvertisement"]
+  - id: bfd
+    name: "BFD profiles"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_index.md
+    match: ["bfd", "bfdprofile"]
+  - id: autoassign-buggy-ips
+    name: "autoAssign and avoidBuggyIPs"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_ipaddresspool_configuration.md
+    match: ["autoassign", "avoidbuggyips"]
+  - id: service-allocation
+    name: "Pool scope by namespace and service, priority"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_ipaddresspool_configuration.md
+    match: ["serviceallocation", "pool-priority"]
+  - id: stale-config
+    name: "Stale config and changing a service IP"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_ipaddresspool_configuration.md
+    match: ["stale-config", "reassign-ip"]
+  - id: dual-stack
+    name: "Dual stack and PreferDualStack"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_ipaddresspool_configuration.md
+    match: ["dual-stack", "preferdualstack"]
+  - id: aggregation-communities
+    name: "BGP aggregation, localpref and communities"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["aggregationlength", "communities", "localpref"]
+  - id: community-alias
+    name: "Community aliases"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["community-alias"]
+  - id: peer-node-selectors
+    name: "Limiting BGP peers to nodes"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["peer-node-selectors", "rack-and-spine"]
+  - id: advertisement-scope
+    name: "BGP advertisement to node and peer subsets"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["advertisement-scope", "peers-subset"]
+  - id: bgp-service-selectors
+    name: "BGP advertisement service selectors"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["bgp-serviceselectors"]
+  - id: source-address
+    name: "BGP source address"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["sourceaddress"]
+  - id: vrf
+    name: "BGP peering via VRF"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["vrf"]
+  - id: frrconfiguration
+    name: "FRRConfiguration merging"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["frrconfiguration", "toreceive"]
+  - id: graceful-restart
+    name: "BGP graceful restart"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["graceful-restart"]
+  - id: local-asn
+    name: "Local AS override"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_bgp_configuration.md
+    match: ["localasn", "local-as"]
+  - id: l2-node-selectors
+    name: "L2 node selectors"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_l2_configuration.md
+    match: ["l2-nodeselectors"]
+  - id: l2-preferred-nodes
+    name: "L2 preferred node selectors and weights"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_l2_configuration.md
+    match: ["preferrednodeselectors"]
+  - id: l2-interfaces
+    name: "L2 interface selection"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_l2_configuration.md
+    match: ["l2-interfaces"]
+  - id: l2-service-selectors
+    name: "L2 advertisement service selectors"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/_advanced_l2_configuration.md
+    match: ["l2-serviceselectors"]
+  - id: specific-ip
+    name: "Requesting specific IPs or pools"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/usage/_index.md
+    match: ["loadbalancerips", "address-pool-annotation"]
+  - id: traffic-policy
+    name: "External traffic policy in L2 and BGP"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/usage/_index.md
+    match: ["externaltrafficpolicy"]
+  - id: ip-sharing
+    name: "IP address sharing"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/usage/_index.md
+    match: ["allow-shared-ip"]
+  - id: full-example
+    name: "Full production and sandbox example"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/usage/example.md
+    match: ["full-example"]
+  - id: dual-announce
+    name: "Announcing via L2 and BGP together"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/faq/_index.md
+    match: ["dual-announce"]
+  - id: service-status
+    name: "ServiceL2Status and ServiceBGPStatus"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/faq/_index.md
+    match: ["servicel2status", "servicebgpstatus"]
+  - id: prometheus-scrape
+    name: "Scraping with Prometheus Operator"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/prometheus-metrics/_index.md
+    match: ["servicemonitor", "prometheus"]
+  - id: alert-rules
+    name: "Sample alert rules"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/prometheus-metrics/_index.md
+    match: ["alert-rules", "prometheusrule"]
+  - id: metrics-reference
+    name: "Metrics reference"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/prometheus-metrics/_index.md
+    match: ["metrics-reference"]
+  - id: metric-relabeling
+    name: "Backward-compatible metric relabeling"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/prometheus-metrics/_index.md
+    match: ["metric-relabeling"]
+  - id: troubleshoot-config
+    name: "Troubleshooting configuration validity"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["config-validation", "webhook"]
+  - id: troubleshoot-ip-assignment
+    name: "Troubleshooting IP assignment"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["ip-assignment", "controller"]
+  - id: troubleshoot-advertising
+    name: "Troubleshooting service advertisement"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["not-advertising", "exclude-lb"]
+  - id: troubleshoot-l2
+    name: "Troubleshooting L2 with arping and tcpdump"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["arping", "tcpdump"]
+  - id: troubleshoot-bgp
+    name: "Troubleshooting BGP sessions"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["bgp-session", "vtysh"]
+  - id: troubleshoot-intermittent
+    name: "Intermittent traffic and narrowing scope"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["intermittent"]
+  - id: troubleshoot-rp-filter
+    name: "Asymmetric return path and rp_filter"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["rp-filter", "asymmetric-routing"]
+  - id: bug-report
+    name: "Bug report collection and debugging distroless containers"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/troubleshooting/_index.md
+    match: ["bug-report", "ephemeral-container"]
+  - id: configmap-migration
+    name: "Migrating ConfigMap config to CRDs"
+    source: https://raw.githubusercontent.com/metallb/metallb/main/website/content/configuration/migration_to_crds.md
+    match: ["configmaptocrs", "configmap-migration"]

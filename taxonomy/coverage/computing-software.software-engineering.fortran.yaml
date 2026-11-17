@@ -1,0 +1,361 @@
+# Canonical coverage spec: Fortran language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: fortran-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [fortran]
+sources:
+  - "Fortran 2018 / 2023 standard (ISO/IEC 1539-1) and J3 working documents (j3-fortran.org)"
+  - "Fortran-lang.org learn pages, best practices and intrinsic reference"
+  - "GNU Fortran (gfortran) manual, LLVM Flang, Intel ifx and LFortran docs"
+  - "Fortran Package Manager (fpm) docs and Fortran standard library (stdlib) docs"
+  - "OpenMP, MPI and OpenACC specifications; CMake, make, gdb, valgrind docs"
+topics:
+  - id: fortran-source-form
+    name: "Source form and lexical structure"
+    source: "Fortran 2018 standard: Lexical tokens and source form"
+    match: [fortran-source-form]
+    subtopics:
+      - {id: fortran-source-form-free-form-source, name: "Free-form source layout", match: [free-form-source]}
+      - {id: fortran-source-form-fixed-form-source, name: "Fixed-form source and its column rules", match: [fixed-form-source]}
+      - {id: fortran-source-form-preprocessing-include, name: "INCLUDE lines and preprocessing", match: [preprocessing-include]}
+  - id: fortran-intrinsic-types
+    name: "Intrinsic types and kinds"
+    source: "Fortran 2018 standard: Types; iso_fortran_env"
+    match: [fortran-intrinsic-types]
+    subtopics:
+      - {id: fortran-intrinsic-types-integer-real-types, name: "Integer and real types", match: [integer-real-types]}
+      - {id: fortran-intrinsic-types-character-type, name: "Character type and length", match: [character-type]}
+  - id: fortran-kinds
+    name: "Kind parameters and portability"
+    source: "Fortran 2018 standard: Intrinsic kinds; iso_fortran_env"
+    match: [fortran-kinds]
+    subtopics:
+      - {id: fortran-kinds-iso-fortran-env-kinds, name: "Named kinds from iso_fortran_env", match: [iso-fortran-env-kinds]}
+      - {id: fortran-kinds-selected-kind-functions, name: "selected_real_kind and selected_int_kind", match: [selected-kind-functions]}
+  - id: fortran-declarations
+    name: "Declarations and attributes"
+    source: "Fortran 2018 standard: Type declaration statements, attribute specifications"
+    match: [fortran-declarations]
+    subtopics:
+      - {id: fortran-declarations-implicit-none, name: "implicit none", match: [implicit-none]}
+      - {id: fortran-declarations-parameter-constants, name: "Named constants with parameter", match: [parameter-constants]}
+      - {id: fortran-declarations-intent-attributes, name: "intent in, out and inout", match: [intent-attributes]}
+      - {id: fortran-declarations-save-initialization, name: "save attribute and initial values", match: [save-initialization]}
+  - id: fortran-derived-types
+    name: "Derived types"
+    source: "Fortran 2018 standard: Derived types"
+    match: [fortran-derived-types]
+    subtopics:
+      - {id: fortran-derived-types-derived-type-basics, name: "Defining and using derived types", match: [derived-type-basics]}
+      - {id: fortran-derived-types-structure-constructors, name: "Structure constructors", match: [structure-constructors]}
+      - {id: fortran-derived-types-parameterized-derived-types, name: "Parameterized derived types", match: [parameterized-derived-types]}
+  - id: fortran-oop
+    name: "Object-oriented Fortran"
+    source: "Fortran 2018 standard: Type extension, polymorphism, type-bound procedures"
+    match: [fortran-oop]
+    subtopics:
+      - {id: fortran-oop-type-bound-procedures, name: "Type-bound procedures", match: [type-bound-procedures]}
+      - {id: fortran-oop-type-extension, name: "Type extension and inheritance", match: [type-extension]}
+      - {id: fortran-oop-polymorphic-class, name: "Polymorphic class entities", match: [polymorphic-class]}
+      - {id: fortran-oop-abstract-deferred, name: "Abstract types and deferred procedures", match: [abstract-deferred]}
+  - id: fortran-generic
+    name: "Generic interfaces and operators"
+    source: "Fortran 2018 standard: Generic interfaces, defined operations"
+    match: [fortran-generic]
+    subtopics:
+      - {id: fortran-generic-generic-interfaces, name: "Generic procedure interfaces", match: [generic-interfaces]}
+      - {id: fortran-generic-operator-overloading, name: "Defined operators and assignment", match: [operator-overloading]}
+  - id: fortran-arrays-basics
+    name: "Array declaration and sections"
+    source: "Fortran 2018 standard: Array concepts, array sections"
+    match: [fortran-arrays-basics]
+    subtopics:
+      - {id: fortran-arrays-basics-array-bounds-sections, name: "Array bounds, shape and sections", match: [array-bounds-sections]}
+      - {id: fortran-arrays-basics-array-constructors, name: "Array constructors", match: [array-constructors]}
+      - {id: fortran-arrays-basics-column-major-order, name: "Column-major storage order", match: [column-major-order]}
+  - id: fortran-array-ops
+    name: "Whole-array operations and array intrinsics"
+    source: "Fortran 2018 standard: Array assignment, where, intrinsic array procedures"
+    match: [fortran-array-ops]
+    subtopics:
+      - {id: fortran-array-ops-whole-array-expressions, name: "Whole-array expressions and elemental application", match: [whole-array-expressions]}
+      - {id: fortran-array-ops-where-construct, name: "where and elsewhere masking", match: [where-construct]}
+      - {id: fortran-array-ops-array-reductions, name: "Reductions: sum, product, maxval, minloc and friends", match: [array-reductions]}
+      - {id: fortran-array-ops-array-reshaping-packing, name: "reshape, pack, spread, transpose, cshift", match: [array-reshaping-packing]}
+  - id: fortran-dynamic-arrays
+    name: "Allocatable and assumed-shape arrays"
+    source: "Fortran 2018 standard: Allocatable arrays, assumed-shape and assumed-rank dummies"
+    match: [fortran-dynamic-arrays]
+    subtopics:
+      - {id: fortran-dynamic-arrays-allocatable-arrays, name: "Allocatable arrays and automatic deallocation", match: [allocatable-arrays]}
+      - {id: fortran-dynamic-arrays-move-alloc, name: "move_alloc and resizing", match: [move-alloc]}
+      - {id: fortran-dynamic-arrays-assumed-shape-rank, name: "Assumed-shape, assumed-size and assumed-rank dummies", match: [assumed-shape-rank]}
+  - id: fortran-pointers
+    name: "Pointers and targets"
+    source: "Fortran 2018 standard: Pointer and target attributes"
+    match: [fortran-pointers]
+    subtopics:
+      - {id: fortran-pointers-pointer-target, name: "pointer, target and association", match: [pointer-target]}
+      - {id: fortran-pointers-pointer-remapping, name: "Pointer bounds remapping", match: [pointer-remapping]}
+  - id: fortran-control-flow
+    name: "Control flow constructs"
+    source: "Fortran 2018 standard: Execution control"
+    match: [fortran-control-flow]
+    subtopics:
+      - {id: fortran-control-flow-do-loops, name: "do loops and do while", match: [do-loops]}
+      - {id: fortran-control-flow-select-case, name: "select case construct", match: [select-case]}
+      - {id: fortran-control-flow-exit-cycle-named, name: "exit, cycle and named constructs", match: [exit-cycle-named]}
+      - {id: fortran-control-flow-select-type, name: "select type construct", match: [select-type]}
+  - id: fortran-do-concurrent
+    name: "do concurrent and parallel loops"
+    source: "Fortran 2018 standard: DO CONCURRENT, locality specifiers"
+    match: [fortran-do-concurrent]
+    subtopics:
+      - {id: fortran-do-concurrent-do-concurrent, name: "do concurrent construct", match: [do-concurrent]}
+      - {id: fortran-do-concurrent-do-concurrent-locality, name: "Locality specifiers local, local_init, shared, reduce", match: [do-concurrent-locality]}
+  - id: fortran-procedures
+    name: "Procedures and arguments"
+    source: "Fortran 2018 standard: Program units and procedures"
+    match: [fortran-procedures]
+    subtopics:
+      - {id: fortran-procedures-functions-subroutines, name: "Functions, subroutines and result", match: [functions-subroutines]}
+      - {id: fortran-procedures-optional-keyword-args, name: "Optional and keyword arguments", match: [optional-keyword-args]}
+      - {id: fortran-procedures-pure-elemental, name: "pure and elemental procedures", match: [pure-elemental]}
+      - {id: fortran-procedures-recursive-procedures, name: "recursive procedures", match: [recursive-procedures]}
+  - id: fortran-interfaces
+    name: "Interfaces and procedure arguments"
+    source: "Fortran 2018 standard: Interface blocks, procedure pointers"
+    match: [fortran-interfaces]
+    subtopics:
+      - {id: fortran-interfaces-explicit-interfaces, name: "Explicit interfaces and why modules supply them", match: [explicit-interfaces]}
+      - {id: fortran-interfaces-procedure-pointers, name: "Procedure pointers and callbacks", match: [procedure-pointers]}
+      - {id: fortran-interfaces-abstract-interface, name: "Abstract interfaces", match: [abstract-interface]}
+  - id: fortran-modules
+    name: "Modules, submodules and program units"
+    source: "Fortran 2018 standard: Program units and use association"
+    match: [fortran-modules]
+    subtopics:
+      - {id: fortran-modules-module-basics, name: "Module structure", match: [module-basics]}
+      - {id: fortran-modules-use-only-rename, name: "use association with only and rename", match: [use-only-rename]}
+      - {id: fortran-modules-access-private-public, name: "private, public and protected", match: [access-private-public]}
+      - {id: fortran-modules-submodules, name: "Submodules", match: [submodules]}
+      - {id: fortran-modules-main-program, name: "Main program and stop statements", match: [main-program]}
+  - id: fortran-io-formatted
+    name: "Formatted and internal I/O"
+    source: "Fortran 2018 standard: Input/output editing"
+    match: [fortran-io-formatted]
+    subtopics:
+      - {id: fortran-io-formatted-format-descriptors, name: "Format edit descriptors", match: [format-descriptors]}
+      - {id: fortran-io-formatted-list-directed-io, name: "List-directed I/O", match: [list-directed-io]}
+      - {id: fortran-io-formatted-internal-io, name: "Internal I/O on strings", match: [internal-io]}
+      - {id: fortran-io-formatted-namelist-io, name: "Namelist I/O", match: [namelist-io]}
+  - id: fortran-io-files
+    name: "File I/O and access methods"
+    source: "Fortran 2018 standard: Input/output statements"
+    match: [fortran-io-files]
+    subtopics:
+      - {id: fortran-io-files-open-close-inquire, name: "open, close, inquire and units", match: [open-close-inquire]}
+      - {id: fortran-io-files-stream-access, name: "Stream and unformatted access", match: [stream-access]}
+      - {id: fortran-io-files-direct-access, name: "Direct-access and sequential unformatted files", match: [direct-access]}
+  - id: fortran-cmdline-env
+    name: "Command line, environment and processes"
+    source: "Fortran 2018 standard: Intrinsic procedures"
+    match: [fortran-cmdline-env]
+    subtopics:
+      - {id: fortran-cmdline-env-command-line-args, name: "Command-line arguments", match: [command-line-args]}
+      - {id: fortran-cmdline-env-environment-variables, name: "Environment variables", match: [environment-variables]}
+      - {id: fortran-cmdline-env-execute-command-line, name: "execute_command_line", match: [execute-command-line]}
+  - id: fortran-strings
+    name: "Character strings"
+    source: "Fortran 2018 standard: Character type and intrinsics"
+    match: [fortran-strings]
+    subtopics:
+      - {id: fortran-strings-character-intrinsics, name: "Character intrinsics", match: [character-intrinsics]}
+      - {id: fortran-strings-deferred-length-strings, name: "Deferred-length allocatable strings", match: [deferred-length-strings]}
+      - {id: fortran-strings-unicode-characters, name: "Unicode and ISO_10646 characters", match: [unicode-characters]}
+  - id: fortran-numeric-intrinsics
+    name: "Numeric and bit intrinsics"
+    source: "Fortran 2018 standard: Intrinsic procedures"
+    match: [fortran-numeric-intrinsics]
+    subtopics:
+      - {id: fortran-numeric-intrinsics-math-intrinsics, name: "Mathematical intrinsics", match: [math-intrinsics]}
+      - {id: fortran-numeric-intrinsics-bit-intrinsics, name: "Bit manipulation intrinsics", match: [bit-intrinsics]}
+      - {id: fortran-numeric-intrinsics-numeric-inquiry, name: "Numeric inquiry functions", match: [numeric-inquiry]}
+      - {id: fortran-numeric-intrinsics-random-numbers, name: "Random number generation", match: [random-numbers]}
+  - id: fortran-ieee
+    name: "IEEE floating point"
+    source: "Fortran 2018 standard: IEEE modules"
+    match: [fortran-ieee]
+    subtopics:
+      - {id: fortran-ieee-ieee-arithmetic, name: "ieee_arithmetic module", match: [ieee-arithmetic]}
+      - {id: fortran-ieee-ieee-exceptions, name: "Floating-point exceptions and traps", match: [ieee-exceptions]}
+      - {id: fortran-ieee-float-comparison, name: "Comparing floating-point numbers", match: [float-comparison]}
+  - id: fortran-coarrays
+    name: "Coarrays and parallel features"
+    source: "Fortran 2018 standard: Coarray features, collective subroutines, teams, events"
+    match: [fortran-coarrays]
+    subtopics:
+      - {id: fortran-coarrays-coarray-basics, name: "Coarray declaration and images", match: [coarray-basics]}
+      - {id: fortran-coarrays-sync-images, name: "Synchronisation statements", match: [sync-images]}
+      - {id: fortran-coarrays-collective-subroutines, name: "Collective subroutines", match: [collective-subroutines]}
+      - {id: fortran-coarrays-coarray-teams-events, name: "Teams, events and atomics", match: [coarray-teams-events]}
+  - id: fortran-c-interop
+    name: "C interoperability"
+    source: "Fortran 2018 standard: Interoperability with C"
+    match: [fortran-c-interop]
+    subtopics:
+      - {id: fortran-c-interop-iso-c-binding, name: "iso_c_binding kinds and types", match: [iso-c-binding]}
+      - {id: fortran-c-interop-bind-c-procedures, name: "bind(c) procedures", match: [bind-c-procedures]}
+      - {id: fortran-c-interop-c-pointers, name: "c_ptr, c_loc and c_f_pointer", match: [c-pointers]}
+      - {id: fortran-c-interop-c-interop-types, name: "Interoperable derived types and descriptors", match: [c-interop-types]}
+  - id: fortran-interop-python
+    name: "Python and other-language interop"
+    source: "NumPy f2py docs; Fortran-lang interop pages"
+    match: [fortran-interop-python]
+    subtopics:
+      - {id: fortran-interop-python-f2py-wrapping, name: "f2py wrapping for Python", match: [f2py-wrapping]}
+      - {id: fortran-interop-python-mixed-language-linking, name: "Linking Fortran with C, C++ and runtime libraries", match: [mixed-language-linking]}
+  - id: fortran-legacy
+    name: "Legacy features and modernisation"
+    source: "Fortran 2018 standard: Obsolescent and deleted features"
+    match: [fortran-legacy]
+    subtopics:
+      - {id: fortran-legacy-obsolescent-features, name: "Obsolescent and deleted features", match: [obsolescent-features]}
+      - {id: fortran-legacy-common-equivalence, name: "common blocks and equivalence", match: [common-equivalence]}
+      - {id: fortran-legacy-legacy-modernization, name: "Modernisation workflow for legacy code", match: [legacy-modernization]}
+  - id: fortran-standards
+    name: "Language standards and portability"
+    source: "ISO/IEC 1539-1 and J3/WG5 documents"
+    match: [fortran-standards]
+    subtopics:
+      - {id: fortran-standards-standard-versions, name: "Fortran standard versions", match: [standard-versions]}
+      - {id: fortran-standards-fortran-2023-features, name: "Fortran 2023 additions", match: [fortran-2023-features]}
+  - id: fortran-style
+    name: "Style and naming"
+    source: "Fortran-lang best practices; Modern Fortran style guides"
+    match: [fortran-style]
+    subtopics:
+      - {id: fortran-style-naming-conventions, name: "Naming and layout conventions", match: [naming-conventions]}
+      - {id: fortran-style-best-practices-fortran-lang, name: "Fortran-lang best practices", match: [best-practices-fortran-lang]}
+  - id: fortran-gfortran
+    name: "GNU Fortran compiler"
+    source: "GNU Fortran manual: Invoking GNU Fortran, Runtime"
+    match: [fortran-gfortran]
+    subtopics:
+      - {id: fortran-gfortran-gfortran-basics, name: "Compiling and linking with gfortran", match: [gfortran-basics]}
+      - {id: fortran-gfortran-gfortran-warnings, name: "Warning flags", match: [gfortran-warnings]}
+      - {id: fortran-gfortran-gfortran-optimization, name: "Optimisation and architecture flags", match: [gfortran-optimization]}
+  - id: fortran-other-compilers
+    name: "Other Fortran compilers"
+    source: "Intel ifx, LLVM Flang docs"
+    match: [fortran-other-compilers]
+    subtopics:
+      - {id: fortran-other-compilers-ifx-compiler, name: "Intel ifx compiler", match: [ifx-compiler]}
+      - {id: fortran-other-compilers-llvm-flang, name: "LLVM Flang", match: [llvm-flang]}
+  - id: fortran-build-systems
+    name: "Build systems for Fortran"
+    source: "GNU make manual; CMake Fortran support"
+    match: [fortran-build-systems]
+    subtopics:
+      - {id: fortran-build-systems-make-modules, name: "Makefiles, module files and compile order", match: [make-modules]}
+      - {id: fortran-build-systems-cmake-fortran, name: "CMake for Fortran projects", match: [cmake-fortran]}
+  - id: fortran-fpm
+    name: "Fortran Package Manager"
+    source: "fpm documentation: manifest, commands, dependencies"
+    match: [fortran-fpm]
+    subtopics:
+      - {id: fortran-fpm-fpm-project, name: "Creating and building projects with fpm", match: [fpm-project]}
+      - {id: fortran-fpm-fpm-manifest, name: "fpm.toml manifest", match: [fpm-manifest]}
+      - {id: fortran-fpm-fpm-dependencies, name: "fpm dependencies and profiles", match: [fpm-dependencies]}
+  - id: fortran-stdlib
+    name: "Fortran standard library (stdlib)"
+    source: "stdlib documentation"
+    match: [fortran-stdlib]
+    subtopics:
+      - {id: fortran-stdlib-stdlib-usage, name: "Using stdlib in a project", match: [stdlib-usage]}
+      - {id: fortran-stdlib-stdlib-linalg-sorting, name: "stdlib linear algebra, sorting and statistics", match: [stdlib-linalg-sorting]}
+  - id: fortran-testing
+    name: "Testing frameworks"
+    source: "test-drive and pFUnit docs"
+    match: [fortran-testing]
+    subtopics:
+      - {id: fortran-testing-test-drive, name: "test-drive unit testing with fpm", match: [test-drive]}
+      - {id: fortran-testing-pfunit, name: "pFUnit testing", match: [pfunit]}
+  - id: fortran-tooling
+    name: "Formatting, linting, language server and docs"
+    source: "fprettify, fortitude, fortls and FORD docs"
+    match: [fortran-tooling]
+    subtopics:
+      - {id: fortran-tooling-fprettify, name: "fprettify formatter", match: [fprettify]}
+      - {id: fortran-tooling-fortitude, name: "fortitude linter", match: [fortitude]}
+      - {id: fortran-tooling-ford-docs, name: "FORD documentation generator", match: [ford-docs]}
+  - id: fortran-debugging
+    name: "Debugging and runtime checks"
+    source: "gfortran manual runtime options; gdb manual; valgrind manual"
+    match: [fortran-debugging]
+    subtopics:
+      - {id: fortran-debugging-runtime-checks, name: "Runtime checks and backtraces", match: [runtime-checks]}
+      - {id: fortran-debugging-gdb-fortran, name: "Debugging Fortran with gdb", match: [gdb-fortran]}
+      - {id: fortran-debugging-valgrind-sanitizers, name: "Valgrind and sanitizers", match: [valgrind-sanitizers]}
+  - id: fortran-performance
+    name: "Performance and profiling"
+    source: "gfortran optimisation docs; gprof and perf docs"
+    match: [fortran-performance]
+    subtopics:
+      - {id: fortran-performance-cache-friendly-loops, name: "Cache-friendly loops and layout", match: [cache-friendly-loops]}
+      - {id: fortran-performance-array-temporaries, name: "Array temporaries and copy-in/copy-out", match: [array-temporaries]}
+      - {id: fortran-performance-profiling-tools, name: "Profiling with gprof, perf and timers", match: [profiling-tools]}
+      - {id: fortran-performance-vectorization-lto, name: "Vectorisation reports, inlining and LTO", match: [vectorization-lto]}
+  - id: fortran-blas-lapack
+    name: "BLAS and LAPACK"
+    source: "Netlib BLAS/LAPACK docs; OpenBLAS and MKL docs"
+    match: [fortran-blas-lapack]
+    subtopics:
+      - {id: fortran-blas-lapack-blas-lapack-calls, name: "Calling BLAS and LAPACK from Fortran", match: [blas-lapack-calls]}
+      - {id: fortran-blas-lapack-link-blas-libs, name: "Linking OpenBLAS, MKL and reference BLAS", match: [link-blas-libs]}
+  - id: fortran-openmp
+    name: "OpenMP"
+    source: "OpenMP specification for Fortran; gfortran manual"
+    match: [fortran-openmp]
+    subtopics:
+      - {id: fortran-openmp-openmp-parallel-do, name: "OpenMP parallel do and workshare", match: [openmp-parallel-do]}
+      - {id: fortran-openmp-openmp-data-sharing, name: "OpenMP data sharing and races", match: [openmp-data-sharing]}
+      - {id: fortran-openmp-openmp-reductions, name: "OpenMP reductions and SIMD", match: [openmp-reductions]}
+  - id: fortran-mpi
+    name: "MPI"
+    source: "MPI standard (Fortran bindings); implementation docs"
+    match: [fortran-mpi]
+    subtopics:
+      - {id: fortran-mpi-mpi-f08, name: "MPI with the mpi_f08 module", match: [mpi-f08]}
+      - {id: fortran-mpi-mpi-communication, name: "MPI point-to-point and collectives", match: [mpi-communication]}
+  - id: fortran-gpu
+    name: "GPU offload"
+    source: "OpenACC specification; compiler docs for OpenMP target and DO CONCURRENT offload"
+    match: [fortran-gpu]
+    subtopics:
+      - {id: fortran-gpu-openacc-directives, name: "OpenACC directives", match: [openacc-directives]}
+      - {id: fortran-gpu-offload-do-concurrent, name: "OpenMP target and do concurrent offload", match: [offload-do-concurrent]}
+  - id: fortran-containers-ci
+    name: "Containers and CI"
+    source: "Docker docs; fortran-lang setup-fortran action"
+    match: [fortran-containers-ci]
+    subtopics:
+      - {id: fortran-containers-ci-docker-fortran, name: "Docker images for Fortran builds", match: [docker-fortran]}
+      - {id: fortran-containers-ci-ci-github-actions, name: "Continuous integration on GitHub Actions", match: [ci-github-actions]}
+  - id: fortran-security
+    name: "Security hardening"
+    source: "gfortran/GCC hardening options; secure coding practice"
+    match: [fortran-security]
+    subtopics:
+      - {id: fortran-security-hardening-flags, name: "Hardening compiler and linker flags", match: [hardening-flags]}
+      - {id: fortran-security-input-validation, name: "Validating external input", match: [input-validation]}
+  - id: fortran-error-handling
+    name: "Error handling"
+    source: "Fortran 2018 standard: iostat, stat, error stop"
+    match: [fortran-error-handling]
+    subtopics:
+      - {id: fortran-error-handling-iostat-iomsg, name: "iostat, iomsg and err handling in I/O", match: [iostat-iomsg]}
+      - {id: fortran-error-handling-error-stop-codes, name: "error stop and exit codes", match: [error-stop-codes]}
+      - {id: fortran-error-handling-status-arguments, name: "stat and errmsg patterns", match: [status-arguments]}

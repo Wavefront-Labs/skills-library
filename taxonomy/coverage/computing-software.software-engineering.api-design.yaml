@@ -1,0 +1,226 @@
+# Canonical coverage spec: API design (REST, GraphQL, gRPC, events) and API security.
+# Topics come from the external sources listed below, not from existing skills.
+subject: api-design
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [api-design]
+sources:
+  - "OpenAPI Specification 3.1 (spec.openapis.org/oas/v3.1.0)"
+  - "Google API Improvement Proposals (google.aip.dev)"
+  - "Microsoft REST API Guidelines (github.com/microsoft/api-guidelines)"
+  - "OWASP API Security Top 10 2023 (owasp.org/API-Security)"
+  - "IETF RFC 9110, 9111, 9457, 8288, 8594 and related HTTP specifications"
+  - "JSON:API specification (jsonapi.org/format)"
+  - "GraphQL specification (spec.graphql.org) and graphql.org learn"
+  - "gRPC documentation (grpc.io/docs)"
+  - "AsyncAPI specification (asyncapi.com/docs)"
+topics:
+  - id: api-resource-naming
+    name: "Resource-oriented naming (AIP-122)"
+    source: "Google AIP-122, AIP-121"
+    match: [resource-naming]
+  - id: api-http-caching
+    name: "HTTP caching semantics"
+    source: "RFC 9111"
+    match: [http-caching]
+  - id: api-content-negotiation
+    name: "Content negotiation and media types"
+    source: "RFC 9110 section 12"
+    match: [content-negotiation]
+  - id: api-link-header
+    name: "Web linking and Link header"
+    source: "RFC 8288"
+    match: [link-header]
+  - id: api-json-merge-patch
+    name: "JSON Merge Patch and JSON Patch"
+    source: "RFC 7396, RFC 6902"
+    match: [json-merge-patch]
+  - id: api-problem-details
+    name: "Problem Details error responses"
+    source: "RFC 9457"
+    match: [rfc-9457]
+  - id: api-idempotency-key
+    name: "Idempotency keys for unsafe requests"
+    source: "IETF Idempotency-Key header draft, Microsoft REST guidelines"
+    match: [idempotency-key]
+  - id: api-cursor-pagination
+    name: "Cursor pagination"
+    source: "Google AIP-158"
+    match: [cursor-pagination]
+  - id: api-field-masks
+    name: "Field masks and partial responses"
+    source: "Google AIP-161"
+    match: [field-masks]
+  - id: api-custom-methods
+    name: "Custom methods"
+    source: "Google AIP-136"
+    match: [aip-136]
+  - id: api-long-running-operations
+    name: "Long-running operations"
+    source: "Google AIP-151, Microsoft REST guidelines"
+    match: [long-running-operations]
+  - id: api-sunset-header
+    name: "Deprecation and Sunset headers"
+    source: "RFC 8594, RFC 9745"
+    match: [sunset-header]
+  - id: api-webhook-signatures
+    name: "Webhook signing and verification"
+    source: "Standard Webhooks specification"
+    match: [webhook-signatures]
+  - id: api-jwt-validation
+    name: "JWT validation in APIs"
+    source: "RFC 7519, RFC 8725"
+    match: [jwt-validation]
+  - id: api-oauth2-scopes
+    name: "OAuth 2.0 scopes and API keys"
+    source: "RFC 6749, OWASP API Top 10"
+    match: [oauth2-scopes]
+  - id: api-mass-assignment
+    name: "Mass assignment and property-level authorization"
+    source: "OWASP API3 2023"
+    match: [mass-assignment]
+  - id: api-relay-connections
+    name: "GraphQL cursor connections"
+    source: "GraphQL Cursor Connections Specification"
+    match: [relay-connections]
+  - id: api-graphql-federation
+    name: "GraphQL federation"
+    source: "GraphQL Composite Schemas spec, Apollo Federation docs"
+    match: [graphql-federation]
+  - id: api-graphql-subscriptions
+    name: "GraphQL subscriptions"
+    source: "GraphQL specification section 6.2.3"
+    match: [graphql-subscriptions]
+  - id: api-grpc-deadlines
+    name: "gRPC deadlines and status codes"
+    source: "grpc.io/docs/guides/deadlines and status-codes"
+    match: [grpc-deadlines]
+  - id: api-grpc-interceptors
+    name: "gRPC interceptors"
+    source: "grpc.io/docs/guides/interceptors"
+    match: [grpc-interceptors]
+  - id: api-grpc-streaming
+    name: "gRPC streaming RPCs"
+    source: "grpc.io/docs/what-is-grpc/core-concepts"
+    match: [grpc-streaming]
+  - id: api-asyncapi-documents
+    name: "AsyncAPI documents for event APIs"
+    source: "AsyncAPI specification"
+    match: [asyncapi]
+  - id: api-optimistic-concurrency
+    name: "Optimistic concurrency with ETag and If-Match"
+    source: "RFC 9110 section 13, AIP-154"
+    match: [optimistic-concurrency]
+  - id: api-rate-limiting
+    name: "Rate limiting and quotas"
+    source: "OWASP API4 2023, RateLimit header draft"
+    match: [rate-limiting]
+  - id: api-http-status-codes
+    name: "HTTP status code selection"
+    source: "RFC 9110 section 15"
+    match: [http-status-codes]
+  - id: api-filtering
+    name: "Filtering and sorting"
+    source: "Google AIP-160, AIP-132"
+    match: [aip-160]
+  - id: api-dataloader
+    name: "GraphQL N+1 and batching"
+    source: "graphql.org best practices, DataLoader"
+    match: [dataloader]
+  - id: api-bola
+    name: "Broken object level authorization"
+    source: "OWASP API1 2023"
+    match: [bola]
+  - id: api-bfla
+    name: "Broken function level authorization"
+    source: "OWASP API5 2023"
+    match: [bfla]
+  - id: api-authentication-flaws
+    name: "Broken authentication in APIs"
+    source: "OWASP API2 2023"
+    match: [api-authentication-flaws]
+  - id: api-resource-consumption
+    name: "Unrestricted resource consumption"
+    source: "OWASP API4 2023"
+    match: [resource-consumption]
+  - id: api-cors
+    name: "CORS for APIs"
+    source: "Fetch Standard, OWASP API8 security misconfiguration"
+    match: [cors-for-apis]
+  - id: api-inventory
+    name: "Improper inventory management"
+    source: "OWASP API9 2023"
+    match: [api-inventory]
+  - id: api-unsafe-consumption
+    name: "Unsafe consumption of third-party APIs"
+    source: "OWASP API10 2023"
+    match: [unsafe-api-consumption]
+  - id: api-business-flow-abuse
+    name: "Unrestricted access to sensitive business flows"
+    source: "OWASP API6 2023"
+    match: [business-flow-abuse]
+  - id: api-ssrf
+    name: "Server-side request forgery in APIs"
+    source: "OWASP API7 2023"
+    match: [api-ssrf]
+  - id: api-openapi-refs
+    name: "OpenAPI components and references"
+    source: "OpenAPI 3.1 Components Object, Reference Object"
+    match: [openapi-refs]
+  - id: api-oneof-discriminator
+    name: "OpenAPI polymorphism with oneOf and discriminator"
+    source: "OpenAPI 3.1 Discriminator Object"
+    match: [oneof-discriminator]
+  - id: api-security-schemes
+    name: "OpenAPI security schemes"
+    source: "OpenAPI 3.1 Security Scheme Object"
+    match: [security-schemes]
+  - id: api-openapi-callbacks
+    name: "OpenAPI callbacks and webhooks"
+    source: "OpenAPI 3.1 Callback Object and webhooks field"
+    match: [openapi-callbacks]
+  - id: api-spectral-linting
+    name: "API linting with Spectral rulesets"
+    source: "Stoplight Spectral docs"
+    match: [spectral-linting]
+  - id: api-oasdiff
+    name: "Breaking change detection with oasdiff"
+    source: "oasdiff documentation"
+    match: [oasdiff]
+  - id: api-retry-after
+    name: "Retry-After and 429/503 handling"
+    source: "RFC 9110 section 10.2.3, RFC 6585"
+    match: [retry-after]
+  - id: api-range-requests
+    name: "Range requests and partial content"
+    source: "RFC 9110 section 14"
+    match: [range-requests]
+  - id: api-content-encoding
+    name: "Content-Encoding and compression"
+    source: "RFC 9110 section 8.4"
+    match: [content-encoding]
+  - id: api-http-method-semantics
+    name: "HTTP method safety and idempotency"
+    source: "RFC 9110 section 9"
+    match: [http-method-semantics]
+  - id: api-graphql-introspection
+    name: "GraphQL introspection and hardening"
+    source: "GraphQL specification section 4, graphql.org security"
+    match: [graphql-introspection]
+  - id: api-grpc-metadata
+    name: "gRPC metadata and call credentials"
+    source: "grpc.io/docs/guides/metadata and auth"
+    match: [grpc-metadata]
+  - id: api-grpc-web
+    name: "gRPC-Web for browsers"
+    source: "grpc.io/docs/platforms/web"
+    match: [grpc-web]
+  - id: api-json-api
+    name: "JSON:API documents"
+    source: "jsonapi.org/format"
+    match: [json-api]
+  - id: api-server-sent-events
+    name: "Server-Sent Events streaming"
+    source: "WHATWG HTML Standard section 9.2"
+    match: [server-sent-events]

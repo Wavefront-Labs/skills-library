@@ -1,0 +1,262 @@
+# Coverage spec for Argo CD Image Updater (devops-ci-cd).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: argocd-image-updater
+scope:
+  category: computing-software
+  field: devops-ci-cd
+  products: [argocd-image-updater]
+sources:
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/index.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/installation.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/testing.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/test.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/webhook.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/completion.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/authentication.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/applications.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/migration.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/registries.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/webhook.md
+  - https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/examples/index.md
+topics:
+  - id: install-manifests-and-namespaces
+    name: Install manifests and namespaces
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/installation.md
+    match: [install, install-yaml, separate-namespace, kustomize-base, kubectl-apply]
+  - id: namespace-versus-cluster-scope-rbac
+    name: Namespace versus cluster scope and RBAC
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/installation.md
+    match: [rbac, watch-namespaces, clusterrole, cluster-scoped, namespace-scope]
+  - id: multi-cluster-and-multi-instance-layouts
+    name: Multi-cluster and multi-instance layouts
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/installation.md
+    match: [multi-cluster, multiple-instances, controller-placement, team-isolation, argocd-user, argocd-namespace]
+  - id: running-and-completion-from-the-cli
+    name: Running and shell completion from the CLI
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+    match: [run-locally, once, kubeconfig, warmup-cache, cli, shell-completion, run-flags]
+  - id: polling-interval-and-concurrency
+    name: Polling interval and concurrency
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+    match: [interval, polling, max-concurrent-apps, max-concurrent-reconciles, run-flags]
+  - id: leader-election-and-ha
+    name: Leader election and high availability
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+    match: [leader-election, multiple-instances, run-flags]
+  - id: logging-and-dry-run
+    name: Logging and dry-run
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+    match: [loglevel, logformat, log-level, dry-run]
+  - id: health-probes-and-kube-events
+    name: Health probes and Kubernetes events
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+    match: [health-probe, kube-events, healthz]
+  - id: metrics-and-observability
+    name: Prometheus metrics and observability
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/run.md
+    match: [metrics, prometheus, metrics-bind-address, grafana, observability, metrics-clusterrolebinding]
+  - id: configmap-settings
+    name: ConfigMap settings
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/installation.md
+    match: [configmap, argocd-image-updater-config, config-keys, git-config]
+  - id: registries-conf-file
+    name: The registries.conf file
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/registries.md
+    match: [registries-conf, registry-config, registries-conf-path, api-url, prefix]
+  - id: supported-registries-and-inference
+    name: Supported registries and inference
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/registries.md
+    match: [registries, supported-registries, registry-inference, custom-registry, docker-hub]
+  - id: default-registry-and-rate-limits
+    name: Default registry and rate limits
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/registries.md
+    match: [default-registry, defaultns, rate-limit, docker-hub-limits, ratelimit]
+  - id: registry-tls-trust
+    name: Registry TLS trust
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/registries.md
+    match: [registry-tls, ca-file, ca-data, insecure, argocd-tls-certs-cm, self-signed]
+  - id: credential-source-selection
+    name: Credential source selection
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/authentication.md
+    match: [credentials, credential-sources, authentication, per-image-credentials, per-registry-credentials, serviceaccount]
+  - id: kubernetes-secret-registry-credentials
+    name: Kubernetes secret registry credentials
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/authentication.md
+    match: [pullsecret, secret, dockerconfigjson, kubectl-create-secret, pull-secret, credentials]
+  - id: env-and-script-credentials
+    name: Environment and script credentials
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/authentication.md
+    match: [env-credentials, ext-script, external-script, ecr, short-lived-token]
+  - id: credential-expiry-and-cloud-identity
+    name: Credential expiry and cloud identity
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/authentication.md
+    match: [credsexpire, credentials-caching, workload-identity, azure-acr]
+  - id: choosing-a-write-back-method
+    name: Choosing a write-back method
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [write-back, write-back-method, argocd-method, git-method, write-back-config]
+  - id: argocd-method-parameter-overrides
+    name: Argo CD method parameter overrides
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [argocd-method, plugin-env, write-back-method]
+  - id: git-write-back-flow
+    name: Git write-back flow
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [git-write-back, argocd-source-file, target-revision, branch-tracking, persistent-overrides]
+  - id: git-repository-authentication
+    name: Git repository authentication
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [git-credentials, repocreds, git-secret, ssh-private-key, known-hosts]
+  - id: github-app-authentication
+    name: GitHub App authentication
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [github-app, github-enterprise, mtls, proxy]
+  - id: git-branch-and-repository-selection
+    name: Git branch and repository selection
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [git-branch, git-repository, branch-template, write-branch, text-template, write-back-config]
+  - id: write-back-target-files
+    name: Write-back target files
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [write-back-target, helmvalues, kustomization, helm-values, kustomize-edit-set-image, base-target]
+  - id: multi-source-and-applicationset-write-back
+    name: Multi-source and ApplicationSet write-back
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [multi-source, applicationset, source-types, kustomize-source, helm-source]
+  - id: pull-request-workflow
+    name: Pull request write-back workflow
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [pull-request, merge-request, protected-branch, head-branch, pr-title]
+  - id: pull-request-providers
+    name: Pull request providers
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [github, gitlab, azure-devops, gitea, forgejo, pr-labels, pull-request]
+  - id: commit-author-and-message
+    name: Commit author and message
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [commit-message, commit-template, git-commit-user, git-commit-email, template-command, oci-labels, git-commit-method]
+  - id: commit-signing-and-api-commits
+    name: Commit signing and API commits
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-methods.md
+    match: [commit-signing, gpg, ssh-signing, sign-off, git-commit-method, verified-commits, github-app]
+  - id: update-strategy-selection
+    name: Update strategy selection
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [update-strategy, mutable-tags, newest-build, alphabetical, digest, semver, calver]
+  - id: semver-constraints
+    name: Semver constraints
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [semver, version-constraint, prerelease, semver-constraint, tilde-constraint]
+  - id: newest-build-ordering
+    name: Newest-build ordering
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [newest-build, latest-strategy, build-date, reproducible-builds, docker-hub-limits]
+  - id: digest-tracking-of-mutable-tags
+    name: Digest tracking of mutable tags
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [digest, mutable-tags, sha256, latest-tag, environment-tags]
+  - id: alphabetical-and-date-tags
+    name: Alphabetical and date-based tags
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [alphabetical, name-strategy, lexical-sort, date-tags, allow-tags]
+  - id: calver-layouts
+    name: CalVer layouts
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [calver, calver-layout, calendar-versioning, layout-tokens, tag-layout]
+  - id: calver-ordering-and-validation
+    name: CalVer ordering, modifiers and validation
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update-strategies.md
+    match: [calver-ordering, micro-segment, optional-segments, no-separators, tag-prefix, modifier, image-variants, layout-validation]
+  - id: cr-structure-and-inheritance
+    name: ImageUpdater CR structure and inheritance
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [imageupdater-cr, alias, image-name, common-update-settings, hierarchical-config, crd, inheritance]
+  - id: tag-filtering
+    name: Tag filtering
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [allow-tags, ignore-tags, tag-filtering, regexp, glob-patterns, disable-updates]
+  - id: platform-selection
+    name: Platform selection
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [platforms, multi-arch, manifest-list, linux-arm64, mixed-architecture]
+  - id: helm-manifest-targets-config
+    name: Helm manifest targets
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [helm, helm-parameters, image-name-tag, yaml-list-index, helm-spec, helm-values]
+  - id: kustomize-manifest-targets-config
+    name: Kustomize manifest targets
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [kustomize, force-update, image-override, custom-resources, kustomize-edit-set-image]
+  - id: plugin-manifest-targets-config
+    name: Plugin manifest targets
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [plugin, cmp, helmfile, config-management-plugin, plugin-env]
+  - id: application-refs-and-manifest-targets
+    name: Application refs and manifest targets
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [manifest-targets, application-refs, applicationrefs]
+  - id: image-signature-verification
+    name: Image signature verification
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/images.md
+    match: [cosign, image-signature, imagesverification, supply-chain, public-key, referrers-api, application-refs]
+  - id: application-name-matching
+    name: Application name matching
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/applications.md
+    match: [application-selection, name-pattern, specificity, glob-pattern, multiple-crs, namepattern]
+  - id: application-label-selection
+    name: Application label selection
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/applications.md
+    match: [label-selectors, matchlabels, matchexpressions, application-refs]
+  - id: legacy-annotation-mode
+    name: Legacy annotation mode
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/applications.md
+    match: [useannotations, legacy-annotations, annotations, image-list, applicationset]
+  - id: update-flow-and-sync-behaviour
+    name: Update flow and sync behaviour
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/basics/update.md
+    match: [update-process, reconciliation-loop, sync-policy, auto-sync, rollback, strict-image-match, force-update]
+  - id: imageupdater-status-monitoring
+    name: ImageUpdater status monitoring
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/applications.md
+    match: [status, conditions, recent-updates, kubectl-get-imageupdater, ready, monitoring, observability]
+  - id: webhook-server-setup
+    name: Webhook server setup
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/webhook.md
+    match: [webhook, enable-webhook, webhook-port, network-policy, ratelimit]
+  - id: webhook-authentication
+    name: Webhook authentication
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/webhook.md
+    match: [webhook-secret, webhook-require-secret, argocd-image-updater-secret, query-secret, authorization-header, webhook]
+  - id: webhook-registry-integrations
+    name: Webhook registry integrations
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/webhook.md
+    match: [webhook-type, aliyun-acr, azure-acr, cloudevents, aws-ecr, eventbridge]
+  - id: webhook-tls-settings
+    name: Webhook TLS settings
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/webhook.md
+    match: [tls, disable-tls, tls-min-version, tls-ciphers, argocd-image-updater-tls, http2, webhook]
+  - id: test-command-usage
+    name: Test command usage
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/cmd/test.md
+    match: [test-command, test-flags, dry-check, registries-conf-path]
+  - id: test-command-troubleshooting
+    name: Test command troubleshooting
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/install/testing.md
+    match: [troubleshooting, test-command, credentials, platforms]
+  - id: annotation-to-crd-migration
+    name: Annotation to CRD migration
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/migration.md
+    match: [migration, annotations-to-crd, annotation-mapping, v1-crd, legacy-annotations]
+  - id: crd-upgrade-pitfalls
+    name: CRD upgrade pitfalls
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/configuration/migration.md
+    match: [crd-upgrade, namespace-field-removal, inheritance, v1-4, common-update-settings]
+  - id: worked-examples
+    name: Worked ImageUpdater examples
+    source: https://github.com/argoproj-labs/argocd-image-updater/blob/master/docs/examples/index.md
+    match: [examples, imageupdater-cr, git-write-back, pull-request]

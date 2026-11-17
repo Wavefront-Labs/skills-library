@@ -1,0 +1,191 @@
+# Coverage spec: vitess. Topics from the Vitess docs (vitess.io/docs/25.0).
+subject: vitess
+scope:
+  category: computing-software
+  field: database-administration
+  products: [vitess]
+sources:
+  - "Vitess docs (vitess.io/docs/25.0)"
+topics:
+  # --- Topology, sharding model and VSchema ---
+  - id: vitess-topology-and-tablet-types
+    name: "Topology service, cells and tablet types"
+    source: "https://vitess.io/docs/25.0/concepts/topology-service/"
+    match: [topology-service,etcd,cell,tablet-types,global-topology]
+  - id: vitess-sharding-key-ranges
+    name: "Sharding key ranges and shard names"
+    source: "https://vitess.io/docs/25.0/reference/features/sharding/"
+    match: [sharding,key-ranges,shard-names,keyspace-id,partition]
+  - id: vitess-vindexes
+    name: "Vindex types, primary vindex and consistent lookup"
+    source: "https://vitess.io/docs/25.0/reference/features/vindexes/"
+    match: [vindex,primary-vindex,secondary-vindex,lookup-vindex,unique,consistent-lookup,owner-table,two-phase-commit]
+  - id: vitess-sequences
+    name: "Sequences for sharded auto-increment"
+    source: "https://vitess.io/docs/25.0/reference/features/vitess-sequences/"
+    match: [sequences,auto-increment,vschema,sharded-keyspace,unsharded-keyspace]
+  - id: vitess-schema-tracking
+    name: "Schema tracking in vtgate"
+    source: "https://vitess.io/docs/25.0/reference/features/schema-tracking/"
+    match: [schema-tracking,vtgate,vttablet,query-planning,schema-change-signal]
+  - id: vitess-reference-tables
+    name: "Reference tables kept in sync"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/reference_tables/"
+    match: [reference-tables,materialize,vschema,vreplication,shard-targeting]
+  # --- VReplication workflows ---
+  - id: vitess-vreplication-core
+    name: "VReplication streams and tablet selection"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/vreplication/"
+    match: [vreplication,workflows,streams,materialize,failover-continuation,tablet-picker,tablet-types,cells,vstream]
+  - id: vitess-vreplication-troubleshooting
+    name: "VReplication troubleshooting"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/faq/"
+    match: [vreplication,troubleshooting,io-eof,gtid,binlog-format]
+  - id: vitess-vreplication-throttling
+    name: "VReplication throttling behaviour"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/throttling/"
+    match: [vreplication,throttler,throttle-threshold,replication-lag,vstreamer]
+  - id: vitess-tablet-throttler
+    name: "Tablet throttler metrics and scopes"
+    source: "https://vitess.io/docs/25.0/reference/features/tablet-throttler/"
+    match: [throttler,tablet-throttler,replication-lag,thresholds,metrics]
+  - id: vitess-movetables
+    name: "MoveTables lifecycle and options"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/movetables/"
+    match: [movetables,vreplication,switchtraffic,reversetraffic,cutover,auto-increment,sequences,on-ddl,defer-secondary-keys]
+  - id: vitess-reshard
+    name: "Reshard workflow"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/reshard/"
+    match: [reshard,resharding,vreplication,switchtraffic,split-shards]
+  - id: vitess-vdiff
+    name: "VDiff data verification"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/vdiff/"
+    match: [vdiff,data-verification,vreplication,primary-key,resume]
+  - id: vitess-materialize-and-lookupvindex
+    name: "Materialize and LookupVindex commands"
+    source: "https://vitess.io/docs/25.0/reference/vreplication/materialize/"
+    match: [materialize,lookupvindex,vreplication,rollups,table-settings]
+  - id: vitess-routing-rules
+    name: "Routing rules and view routing"
+    source: "https://vitess.io/docs/25.0/reference/features/schema-routing-rules/"
+    match: [routing-rules,vtctldclient,traffic-switching,applyroutingrules,views]
+  # --- Online DDL and schema changes ---
+  - id: vitess-online-ddl-strategies
+    name: "Online DDL strategies and flags"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/ddl-strategies/"
+    match: [online-ddl,ddl-strategy,vitess-strategy,applyschema,schema-changes,cut-over-threshold,force-cut-over-after,singleton]
+  - id: vitess-declarative-ddl
+    name: "Declarative online DDL"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/declarative-migrations/"
+    match: [online-ddl,declarative,idempotent,create-table,schema-as-code]
+  - id: vitess-revertible-ddl
+    name: "Reverting online DDL migrations"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/revertible-migrations/"
+    match: [online-ddl,revert,revertible-migrations,vitess-migration,rollback]
+  - id: vitess-concurrent-ddl
+    name: "Concurrent online DDL migrations"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/concurrent-migrations/"
+    match: [online-ddl,concurrent-migrations,allow-concurrent,scheduler,copy-phase]
+  - id: vitess-postponed-ddl
+    name: "Postponing launch and completion of migrations"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/postponed-migrations/"
+    match: [online-ddl,postpone-launch,postpone-completion,alter-vitess-migration,single-shard-experiment]
+  - id: vitess-ddl-failover-recovery
+    name: "Online DDL across failovers"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/recoverable-migrations/"
+    match: [online-ddl,recoverable-migrations,failover,reparent,vreplication]
+  - id: vitess-instant-ddl
+    name: "Instant DDL and partition rotation"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/instant-ddl-migrations/"
+    match: [online-ddl,instant-ddl,prefer-instant-ddl,partitioning,range-partition]
+  - id: vitess-ddl-validation
+    name: "Validating migrations with VDiff"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/validating-migrations/"
+    match: [online-ddl,vdiff,validation,postpone-completion,ready-to-complete]
+  - id: vitess-table-lifecycle
+    name: "Table lifecycle and garbage collection"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/table-lifecycle/"
+    match: [table-lifecycle,drop-table,table-gc-lifecycle,online-ddl,innodb]
+  - id: vitess-unmanaged-schema-changes
+    name: "Unmanaged schema changes"
+    source: "https://vitess.io/docs/25.0/user-guides/schema-changes/unmanaged-schema-changes/"
+    match: [schema-changes,applyschema,unmanaged-ddl,reloadschema,direct-ddl]
+  # --- Reparenting, durability and VTOrc ---
+  - id: vitess-planned-reparent
+    name: "PlannedReparentShard"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-advanced/reparenting/"
+    match: [reparenting,plannedreparentshard,failover,avoid-tablet,maintenance]
+  - id: vitess-emergency-reparent
+    name: "EmergencyReparentShard"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-advanced/reparenting/"
+    match: [reparenting,emergencyreparentshard,failover,primary-down,prevent-cross-cell-promotion]
+  - id: vitess-external-reparenting
+    name: "External reparenting and replication repair"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-advanced/reparenting/"
+    match: [reparenting,external-reparenting,tabletexternallyreparented,disable-active-reparents,reparenttablet]
+  - id: vitess-version-aware-election
+    name: "MySQL version aware primary election"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-advanced/reparenting/"
+    match: [reparenting,primary-election,mysql-upgrade,rolling-upgrade,allow-cross-cell-promotion]
+  - id: vitess-durability-and-replication
+    name: "Durability policies and semi-sync requirements"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-basic/durability_policy/"
+    match: [durability-policy,semi-sync,setkeyspacedurabilitypolicy,promotion-rules,cross-cell,replication,gtid,row-based-replication,binlog-row-image]
+  - id: vitess-vtorc-recoveries
+    name: "VTOrc automated and quorum recoveries"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-basic/vtorc/"
+    match: [vtorc,recovery,failover,cells-no-recovery,clusters-to-watch,quorum,emergency-reparent,track-shard-tablet-health,split-brain]
+  - id: vitess-vtorc-operations
+    name: "VTOrc UI, API and metrics"
+    source: "https://vitess.io/docs/25.0/reference/vtorc/ui_api_metrics/"
+    match: [vtorc,api,metrics,debug-status,errant-gtid]
+  # --- Query serving and connections ---
+  - id: vitess-query-plans
+    name: "Query plans, scatter queries and vtexplain"
+    source: "https://vitess.io/docs/25.0/concepts/execution-plans/"
+    match: [execution-plans,scatter-query,routing,queryz,vexplain,vtexplain,explain,vschema]
+  - id: vitess-query-buffering
+    name: "Query buffering during failover"
+    source: "https://vitess.io/docs/25.0/reference/features/vtgate-buffering/"
+    match: [buffering,vtgate,failover,plannedreparentshard,enable-buffer]
+  - id: vitess-query-consolidation
+    name: "Query consolidation"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-advanced/query-consolidation/"
+    match: [query-consolidation,vttablet,consolidator,overload,read-after-write]
+  - id: vitess-replica-lag-load-balancing
+    name: "Replica lag and load balancing"
+    source: "https://vitess.io/docs/25.0/user-guides/configuration-advanced/query-load-balancing/"
+    match: [load-balancing,replication-lag,vtgate,healthy-degraded-unhealthy,min-number-serving-vttablets]
+  - id: vitess-reserved-connections
+    name: "Reserved connections and temp tables"
+    source: "https://vitess.io/docs/25.0/reference/query-serving/reserved-conn/"
+    match: [reserved-connections,temporary-tables,connection-pool,get-lock,vtgate]
+  - id: vitess-connection-pools
+    name: "vttablet connection pools"
+    source: "https://vitess.io/docs/25.0/reference/features/connection-pools/"
+    match: [connection-pooling,vttablet,mysql-connections,capacity,metrics]
+  - id: vitess-distributed-transactions
+    name: "Distributed transactions with 2PC"
+    source: "https://vitess.io/docs/25.0/reference/features/distributed-transaction/"
+    match: [transactions,twopc,transaction-mode,distributed-transaction,semi-sync]
+  # --- Backup, restore, upgrades and monitoring ---
+  - id: vitess-backup-engines
+    name: "Backup engines: xtrabackup and MySQL Shell"
+    source: "https://vitess.io/docs/25.0/user-guides/operating-vitess/backup-and-restore/creating-a-backup/"
+    match: [backup,xtrabackup,xbstream,backup-engine,vtctldclient,mysqlshell,logical-backup,restore]
+  - id: vitess-backup-compression-and-binlogs
+    name: "Backup compression, hooks and binlogs"
+    source: "https://vitess.io/docs/25.0/user-guides/operating-vitess/backup-and-restore/overview/"
+    match: [backup,compression,zstd,external-compressor,hooks,binary-logs,include-binlogs,builtin-engine,point-in-time-recovery]
+  - id: vitess-restore-pitr
+    name: "Restore and point-in-time recovery"
+    source: "https://vitess.io/docs/25.0/user-guides/operating-vitess/backup-and-restore/bootstrap-and-restore/"
+    match: [restore,point-in-time-recovery,pitr,restore-from-backup,bootstrap]
+  - id: vitess-upgrade-order
+    name: "Upgrade order and canarying"
+    source: "https://vitess.io/docs/25.0/user-guides/operating-vitess/upgrading-vitess/"
+    match: [upgrade,rolling-upgrade,canary,vttablet,vtgate]
+  - id: vitess-monitoring
+    name: "Monitoring options"
+    source: "https://vitess.io/docs/25.0/reference/features/monitoring/"
+    match: [monitoring,metrics,expvar,debug-vars,status-page]

@@ -1,0 +1,653 @@
+# Canonical coverage spec: aerospace engineering (civil practice; whole field).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+# Topics and subtopics come from external structures named in sources, not from existing skills.
+# Scope is civil professional practice: no weapons, munitions or energetic-material formulation.
+subject: aerospace-engineering
+scope:
+  category: engineering-technology
+  field: aerospace-engineering
+  products: [aerodynamics, computational-fluid-dynamics, ansys-fluent, matlab-simulink, aircraft-structures, propulsion-engineering, flight-dynamics-control, orbital-mechanics, spacecraft-systems-design]
+sources:
+  - "Anderson, Fundamentals of Aerodynamics and Introduction to Flight (chapter lists)"
+  - "Raymer, Aircraft Design: A Conceptual Approach (chapter lists)"
+  - "Etkin and Reid, Dynamics of Flight; Nelson, Flight Stability and Automatic Control"
+  - "Niu, Airframe Structural Design; Megson, Aircraft Structures for Engineering Students"
+  - "Mattingly, Elements of Propulsion; Hill and Peterson, Mechanics and Thermodynamics of Propulsion"
+  - "Curtis, Orbital Mechanics for Engineering Students; Vallado, Fundamentals of Astrodynamics and Applications"
+  - "Wertz and Larson, Space Mission Analysis and Design; Fortescue et al., Spacecraft Systems Engineering"
+  - "Versteeg and Malalasekera, An Introduction to Computational Fluid Dynamics; Blazek, Computational Fluid Dynamics Principles and Applications"
+  - "FAA 14 CFR Parts 25 and 33; EASA CS-25; ICAO Annex 16 (regulator structure)"
+  - "MathWorks Aerospace Blockset and Control System Toolbox documentation tables of contents"
+  - "Ansys Fluent user guide table of contents"
+  - "NASA Systems Engineering Handbook; NASA GSFC-STD-7000 (GEVS); CubeSat Design Specification"
+topics:
+  - id: airfoil-aerodynamics
+    name: Airfoil aerodynamics
+    source: see sources
+    match: [airfoils, airfoil-theory]
+    subtopics:
+      - {id: thin-airfoil-theory, name: Thin airfoil theory and zero-lift angle, match: [thin-airfoil-theory]}
+      - {id: naca-airfoil-geometry, name: NACA 4- and 5-digit airfoil geometry, match: [naca-airfoils]}
+      - {id: xfoil-viscous-analysis, name: Running viscous airfoil polars in XFOIL, match: [xfoil]}
+      - {id: airfoil-selection, name: Airfoil selection by Reynolds number and CL range, match: [airfoil-selection]}
+  - id: finite-wing-theory
+    name: Finite wing theory
+    source: see sources
+    match: [finite-wing, lifting-surfaces]
+    subtopics:
+      - {id: lifting-line, name: Lifting-line theory and span efficiency, match: [lifting-line]}
+      - {id: vortex-lattice, name: Vortex-lattice method setup and limits, match: [vortex-lattice]}
+      - {id: wing-washout-twist, name: Twist and washout for stall progression, match: [washout]}
+      - {id: wing-planform-trades, name: Taper, sweep and aspect ratio trades, match: [wing-planform-design]}
+  - id: high-lift-systems
+    name: High-lift systems
+    source: see sources
+    match: [high-lift, high-lift-systems]
+    subtopics:
+      - {id: flap-design, name: Flap types and CLmax increments, match: [flap-design]}
+      - {id: clmax-sizing, name: CLmax required from stall speed, match: [clmax-sizing]}
+      - {id: leading-edge-slats, name: Slats, Krueger flaps and leading-edge devices, match: [slats]}
+      - {id: ground-effect, name: Ground effect on lift and drag, match: [ground-effect]}
+  - id: compressible-flow
+    name: Compressible flow fundamentals
+    source: see sources
+    match: [compressible-flow, gas-dynamics]
+    subtopics:
+      - {id: normal-shock-relations, name: Normal shock relations, match: [normal-shock]}
+      - {id: oblique-shock-expansion, name: Oblique shocks and Prandtl-Meyer expansion, match: [oblique-shock]}
+      - {id: prandtl-glauert, name: Compressibility corrections, match: [prandtl-glauert]}
+      - {id: area-mach-relation, name: Quasi-1D area-Mach relation, match: [area-mach-relation]}
+  - id: transonic-aerodynamics
+    name: Transonic and supersonic aerodynamics
+    source: see sources
+    match: [transonic, supersonic]
+    subtopics:
+      - {id: supercritical-airfoil, name: Supercritical airfoil design, match: [supercritical-airfoil]}
+      - {id: wing-sweep, name: Wing sweep and drag divergence, match: [wing-sweep]}
+      - {id: area-rule, name: Area rule, match: [area-rule]}
+      - {id: shock-buffet, name: Shock buffet and buffet onset, match: [buffet]}
+  - id: boundary-layers
+    name: Boundary layers
+    source: see sources
+    match: [boundary-layer, viscous-flow]
+    subtopics:
+      - {id: flat-plate-boundary-layer, name: Flat plate boundary layer relations, match: [flat-plate-boundary-layer]}
+      - {id: transition-prediction, name: Transition prediction, match: [transition]}
+      - {id: flow-separation, name: Separation and laminar separation bubbles, match: [flow-separation]}
+      - {id: vortex-generators, name: Vortex generators and passive flow control, match: [vortex-generators]}
+  - id: wind-tunnel-testing
+    name: Wind-tunnel testing and data
+    source: see sources
+    match: [wind-tunnel, aero-testing]
+    subtopics:
+      - {id: wall-corrections, name: Wall and blockage corrections, match: [wall-corrections]}
+      - {id: balance-data-reduction, name: Force balance data reduction, match: [balance-data]}
+      - {id: reynolds-scaling, name: Reynolds and Mach scaling, match: [reynolds-scaling]}
+      - {id: pressure-measurement, name: Pressure measurement and probe calibration, match: [pressure-measurement]}
+  - id: mesh-generation
+    name: Mesh generation
+    source: see sources
+    match: [meshing, mesh-generation]
+    subtopics:
+      - {id: y-plus, name: First cell height from y+, match: [y-plus]}
+      - {id: inflation-layers, name: Prism layers and growth ratio, match: [inflation-layers]}
+      - {id: mesh-quality, name: Mesh quality metrics, match: [mesh-quality]}
+      - {id: grid-convergence-index, name: Grid convergence index, match: [grid-convergence-index]}
+  - id: turbulence-modelling
+    name: Turbulence modelling
+    source: see sources
+    match: [turbulence-models, turbulence-modelling]
+    subtopics:
+      - {id: spalart-allmaras, name: Spalart-Allmaras model, match: [spalart-allmaras]}
+      - {id: k-omega-sst, name: k-omega SST model, match: [k-omega-sst]}
+      - {id: rans-limitations, name: RANS failure modes, match: [rans-limitations]}
+      - {id: detached-eddy-simulation, name: DES and LES, match: [detached-eddy-simulation]}
+  - id: numerical-methods
+    name: Numerical methods
+    source: see sources
+    match: [discretisation, numerical-schemes]
+    subtopics:
+      - {id: density-based-solver, name: Pressure-based vs density-based solvers, match: [density-based-solver]}
+      - {id: flux-limiters, name: Spatial schemes and limiters, match: [flux-limiters]}
+      - {id: cfl-number, name: Time integration and CFL, match: [cfl-number]}
+      - {id: farfield-boundary, name: Farfield and outlet boundary conditions, match: [farfield-boundary]}
+  - id: convergence-monitoring
+    name: Convergence monitoring
+    source: see sources
+    match: [convergence, solver-convergence]
+    subtopics:
+      - {id: residual-monitoring, name: Residuals and force monitors, match: [residuals]}
+      - {id: iterative-convergence, name: Iterative vs discretisation error, match: [iterative-convergence]}
+      - {id: time-averaging, name: Averaging unsteady results, match: [time-averaging]}
+      - {id: grid-sequencing, name: Grid sequencing and restarts, match: [grid-sequencing]}
+  - id: cfd-validation
+    name: Verification, validation and uncertainty
+    source: see sources
+    match: [verification-validation, cfd-uncertainty]
+    subtopics:
+      - {id: asme-vv20, name: ASME V&V 20 uncertainty framework, match: [asme-vv20]}
+      - {id: validation-experiments, name: Choosing validation data, match: [validation-data]}
+      - {id: turbulence-model-uncertainty, name: Turbulence model form uncertainty, match: [model-form-uncertainty]}
+      - {id: nasa-turbulence-modeling-resource, name: NASA Turbulence Modeling Resource verification cases, match: [turbulence-modeling-resource]}
+  - id: aero-cfd-practice
+    name: Aerospace CFD practice
+    source: see sources
+    match: [aero-cfd, external-aerodynamics]
+    subtopics:
+      - {id: airfoil-2d-cfd, name: 2D airfoil CFD workflow, match: [airfoil-cfd]}
+      - {id: wing-body-cfd, name: Wing-body cruise CFD, match: [wing-body-cfd]}
+      - {id: high-lift-cfd, name: High-lift configuration CFD, match: [high-lift-cfd]}
+      - {id: drag-prediction-workshop, name: Drag prediction workshop practice, match: [drag-prediction-workshop]}
+  - id: fluent-meshing
+    name: Fluent meshing workflow
+    source: see sources
+    match: [fluent-meshing]
+    subtopics:
+      - {id: watertight-geometry-workflow, name: Watertight geometry workflow, match: [watertight-geometry]}
+      - {id: poly-hexcore-mesh, name: Poly-hexcore volume mesh, match: [poly-hexcore]}
+      - {id: size-functions, name: Size functions and curvature refinement, match: [size-functions]}
+      - {id: mesh-check-report, name: Mesh check and quality report, match: [mesh-check]}
+  - id: fluent-models
+    name: Fluent physics models
+    source: see sources
+    match: [fluent-models]
+    subtopics:
+      - {id: fluent-sst-setup, name: SST model setup, match: [fluent-sst]}
+      - {id: ideal-gas-energy, name: Energy equation with ideal gas, match: [ideal-gas-energy]}
+      - {id: transition-sst, name: Transition SST model, match: [transition-sst]}
+      - {id: sutherland-viscosity, name: Sutherland viscosity law, match: [sutherland-viscosity]}
+  - id: fluent-boundary-conditions
+    name: Fluent boundary conditions
+    source: see sources
+    match: [fluent-boundary-conditions]
+    subtopics:
+      - {id: pressure-far-field, name: Pressure far-field condition, match: [pressure-far-field]}
+      - {id: pressure-inlet-outlet, name: Pressure inlet and outlet, match: [pressure-outlet]}
+      - {id: wall-roughness, name: Wall roughness settings, match: [wall-roughness]}
+      - {id: reference-values, name: Reference values for coefficients, match: [reference-values]}
+  - id: fluent-solver
+    name: Fluent solver settings
+    source: see sources
+    match: [fluent-solver]
+    subtopics:
+      - {id: coupled-solver, name: Coupled pressure-based solver, match: [coupled-solver]}
+      - {id: courant-ramp, name: Courant number ramping, match: [courant-ramp]}
+      - {id: pseudo-transient, name: Pseudo-transient method, match: [pseudo-transient]}
+      - {id: hybrid-initialization, name: Hybrid initialization, match: [hybrid-initialization]}
+  - id: fluent-postprocessing
+    name: Fluent postprocessing
+    source: see sources
+    match: [fluent-postprocessing]
+    subtopics:
+      - {id: force-reports, name: Force and moment reports, match: [force-reports]}
+      - {id: surface-integrals, name: Surface integrals, match: [surface-integrals]}
+      - {id: fluent-pathlines, name: Contours and pathlines, match: [pathlines]}
+      - {id: fluent-journals, name: Journal and TUI automation, match: [fluent-journals]}
+  - id: fluent-hpc-automation
+    name: Fluent HPC and automation
+    source: see sources
+    match: [fluent-hpc]
+    subtopics:
+      - {id: parallel-partitioning, name: Parallel partitioning, match: [parallel-partitioning]}
+      - {id: design-points, name: Parametric design points, match: [design-points]}
+      - {id: fluent-udf, name: UDF basics, match: [fluent-udf]}
+      - {id: fluent-batch, name: Batch runs on a cluster, match: [fluent-batch]}
+  - id: aerospace-blockset
+    name: Aerospace Blockset modelling
+    source: see sources
+    match: [aerospace-blockset]
+    subtopics:
+      - {id: standard-atmosphere-blocks, name: ISA atmosphere blocks, match: [standard-atmosphere]}
+      - {id: eom-6dof-blocks, name: 6DOF equations-of-motion blocks, match: [eom-6dof]}
+      - {id: dryden-turbulence, name: Dryden wind turbulence model, match: [dryden-turbulence]}
+      - {id: coordinate-conversion, name: Frame conversions and quaternions, match: [quaternions]}
+  - id: trim-and-linearization
+    name: Trim and linearization
+    source: see sources
+    match: [trim-linearization]
+    subtopics:
+      - {id: operating-point-trim, name: Operating point search and trim, match: [operating-point]}
+      - {id: linearize-model, name: Linearizing Simulink models, match: [linearize]}
+      - {id: derivative-extraction, name: Extracting stability derivatives, match: [derivative-extraction]}
+      - {id: modal-analysis, name: Eigenvalue modal analysis, match: [modal-analysis]}
+  - id: control-design-matlab
+    name: Control design in MATLAB
+    source: see sources
+    match: [control-design-matlab]
+    subtopics:
+      - {id: pidtune, name: Tuning PID loops, match: [pidtune]}
+      - {id: lqr-design, name: LQR design, match: [lqr]}
+      - {id: margin-analysis, name: Gain and phase margins, match: [margin-analysis]}
+      - {id: gain-scheduling, name: Gain scheduling, match: [gain-scheduling]}
+  - id: monte-carlo-dispersions
+    name: Monte Carlo dispersions
+    source: see sources
+    match: [monte-carlo, dispersions]
+    subtopics:
+      - {id: parameter-sampling, name: Parameter sampling, match: [parameter-sampling]}
+      - {id: parsim-parallel, name: Parallel simulation runs, match: [parsim]}
+      - {id: dispersion-statistics, name: Dispersion statistics, match: [dispersion-statistics]}
+      - {id: seed-reproducibility, name: Reproducible random seeds, match: [seed-reproducibility]}
+  - id: trajectory-integration
+    name: Trajectory integration
+    source: see sources
+    match: [trajectory-analysis, ode-integration]
+    subtopics:
+      - {id: ode45-choice, name: Choosing an ODE solver, match: [ode45]}
+      - {id: event-detection, name: Event detection, match: [event-detection]}
+      - {id: attitude-integration, name: Attitude propagation, match: [attitude-integration]}
+      - {id: simulation-validation, name: Validating a simulation, match: [simulation-validation]}
+  - id: model-based-verification
+    name: Model-based verification
+    source: see sources
+    match: [model-based-verification]
+    subtopics:
+      - {id: simulink-test, name: Simulink Test harnesses, match: [simulink-test]}
+      - {id: requirements-based-tests, name: Requirements-based tests, match: [requirements-based-testing]}
+      - {id: model-advisor, name: Model Advisor checks, match: [model-advisor]}
+      - {id: embedded-code-generation, name: Embedded code generation, match: [embedded-coder]}
+  - id: structural-loads
+    name: Structural loads
+    source: see sources
+    match: [loads, flight-loads]
+    subtopics:
+      - {id: vn-diagram, name: V-n manoeuvre and gust diagram, match: [vn-diagram]}
+      - {id: gust-loads, name: Discrete gust loads, match: [gust-loads]}
+      - {id: limit-ultimate-loads, name: Limit and ultimate load factors, match: [limit-ultimate]}
+      - {id: wing-load-distribution, name: Spanwise load distribution, match: [spanwise-loading]}
+  - id: certification-basis
+    name: Structural certification basis
+    source: see sources
+    match: [certification-basis, airworthiness]
+    subtopics:
+      - {id: part-25-subpart-c, name: 14 CFR Part 25 Subpart C structure, match: [part-25-subpart-c]}
+      - {id: cs-25-structures, name: EASA CS-25 structural book, match: [cs-25]}
+      - {id: compliance-reports, name: Structural compliance documentation, match: [compliance-reports]}
+      - {id: special-conditions, name: Special conditions and issue papers, match: [special-conditions]}
+  - id: thin-walled-structures
+    name: Thin-walled structures
+    source: see sources
+    match: [thin-walled, semi-monocoque]
+    subtopics:
+      - {id: box-beam-shear-flow, name: Shear flow in box beams, match: [shear-flow]}
+      - {id: closed-section-torsion, name: Torsion of closed sections, match: [closed-section-torsion]}
+      - {id: panel-buckling, name: Panel buckling, match: [panel-buckling]}
+      - {id: postbuckling, name: Stiffened panel postbuckling, match: [postbuckling]}
+  - id: metallic-fatigue
+    name: Metallic fatigue and fracture
+    source: see sources
+    match: [fatigue, damage-tolerance]
+    subtopics:
+      - {id: s-n-curves, name: S-N curves and mean stress, match: [s-n-curve]}
+      - {id: miner-rule, name: Miner rule spectrum damage, match: [miner-rule]}
+      - {id: paris-crack-growth, name: Crack growth with Paris law, match: [paris-law]}
+      - {id: part-25-571, name: Damage tolerance under 25.571, match: [part-25-571]}
+  - id: composite-structures
+    name: Composite structures
+    source: see sources
+    match: [composites, composite-laminates]
+    subtopics:
+      - {id: classical-lamination-theory, name: Classical lamination theory, match: [classical-lamination-theory]}
+      - {id: ply-failure-criteria, name: Ply failure criteria, match: [ply-failure]}
+      - {id: open-hole-compression, name: Open-hole strength, match: [open-hole]}
+      - {id: bvid-impact, name: Impact damage and BVID, match: [bvid]}
+  - id: joints-and-fasteners
+    name: Joints and fasteners
+    source: see sources
+    match: [joints, fasteners]
+    subtopics:
+      - {id: bolted-joint-bearing, name: Bolted joint bearing and bypass, match: [bolted-joints]}
+      - {id: lug-analysis, name: Lug analysis, match: [lug-analysis]}
+      - {id: fastener-load-distribution, name: Fastener load distribution, match: [fastener-load-distribution]}
+      - {id: bonded-joints, name: Bonded joints, match: [bonded-joints]}
+  - id: structural-fem
+    name: Structural finite element practice
+    source: see sources
+    match: [structural-fem, fem]
+    subtopics:
+      - {id: wing-box-fem, name: Wing-box FE model, match: [wing-box-fem]}
+      - {id: margins-of-safety, name: Margins of safety reporting, match: [margin-of-safety]}
+      - {id: test-correlation, name: Test correlation of FE models, match: [test-correlation]}
+      - {id: gvt, name: Ground vibration testing, match: [ground-vibration-test]}
+  - id: aeroelasticity
+    name: Aeroelasticity
+    source: see sources
+    match: [aeroelasticity, flutter]
+    subtopics:
+      - {id: flutter-basics, name: Flutter mechanism and mass balance, match: [flutter-basics]}
+      - {id: wing-divergence, name: Static divergence, match: [divergence]}
+      - {id: control-reversal, name: Aileron control reversal, match: [control-reversal]}
+      - {id: part-25-629, name: Aeroelastic stability under 25.629, match: [part-25-629]}
+  - id: aerospace-materials
+    name: Aerospace materials
+    source: see sources
+    match: [aerospace-materials, materials-allowables]
+    subtopics:
+      - {id: aluminium-alloys, name: Aluminium alloy selection, match: [aluminium-alloys]}
+      - {id: mmpds-allowables, name: MMPDS allowables, match: [mmpds]}
+      - {id: cmh-17, name: CMH-17 composite allowables, match: [cmh-17]}
+      - {id: corrosion-scc, name: Corrosion and stress corrosion, match: [stress-corrosion]}
+  - id: gas-turbine-cycles
+    name: Gas turbine cycles
+    source: see sources
+    match: [gas-turbine, brayton-cycle]
+    subtopics:
+      - {id: ideal-brayton, name: Ideal Brayton cycle, match: [ideal-brayton]}
+      - {id: off-design-matching, name: Off-design matching, match: [off-design]}
+      - {id: component-efficiencies, name: Component efficiencies, match: [component-efficiency]}
+      - {id: thrust-lapse, name: Thrust lapse with altitude and Mach, match: [thrust-lapse]}
+  - id: inlets-and-nozzles
+    name: Inlets and nozzles
+    source: see sources
+    match: [inlets, nozzles]
+    subtopics:
+      - {id: inlet-pressure-recovery, name: Inlet pressure recovery, match: [pressure-recovery]}
+      - {id: subsonic-diffuser, name: Subsonic diffuser design, match: [subsonic-diffuser]}
+      - {id: cd-nozzle, name: Convergent-divergent nozzle, match: [cd-nozzle]}
+      - {id: nozzle-thrust-coefficient, name: Nozzle thrust coefficient, match: [thrust-coefficient]}
+  - id: turbomachinery
+    name: Turbomachinery
+    source: see sources
+    match: [turbomachinery, compressors]
+    subtopics:
+      - {id: velocity-triangles, name: Velocity triangles, match: [velocity-triangles]}
+      - {id: euler-work, name: Euler work equation, match: [euler-work]}
+      - {id: compressor-map, name: Compressor map and surge, match: [compressor-map]}
+      - {id: blade-cooling, name: Turbine blade cooling basics, match: [blade-cooling]}
+  - id: combustors-emissions
+    name: Combustors and emissions
+    source: see sources
+    match: [combustors, emissions]
+    subtopics:
+      - {id: combustor-pressure-loss, name: Combustor pressure loss, match: [combustor-pressure-loss]}
+      - {id: icao-annex-16-emissions, name: ICAO Annex 16 engine emissions, match: [icao-annex-16]}
+      - {id: combustor-liner-cooling, name: Liner cooling, match: [liner-cooling]}
+      - {id: lean-burn, name: Staged and lean-burn concepts, match: [lean-burn]}
+  - id: propellers
+    name: Propeller performance
+    source: see sources
+    match: [propellers, propeller-theory]
+    subtopics:
+      - {id: momentum-theory, name: Momentum theory, match: [momentum-theory]}
+      - {id: blade-element-theory, name: Blade element theory, match: [blade-element]}
+      - {id: advance-ratio, name: Advance ratio and efficiency, match: [advance-ratio]}
+      - {id: propeller-matching, name: Engine-propeller matching, match: [propeller-matching]}
+  - id: rocket-performance
+    name: Launch vehicle rocket performance
+    source: see sources
+    match: [rocket-performance, rocket-equation]
+    subtopics:
+      - {id: tsiolkovsky, name: Rocket equation and staging, match: [tsiolkovsky]}
+      - {id: ideal-nozzle-performance, name: Ideal nozzle performance, match: [ideal-nozzle]}
+      - {id: staging-optimisation, name: Staging optimisation, match: [staging-optimisation]}
+      - {id: feed-cycles, name: Liquid engine feed cycles overview, match: [feed-cycles]}
+  - id: electric-propulsion
+    name: Electric propulsion
+    source: see sources
+    match: [electric-propulsion]
+    subtopics:
+      - {id: gridded-ion, name: Gridded ion thrusters, match: [gridded-ion]}
+      - {id: hall-thruster, name: Hall thrusters, match: [hall-thruster]}
+      - {id: power-thrust-isp, name: Power, thrust and Isp trade, match: [power-thrust-isp]}
+      - {id: plume-interaction, name: Plume spacecraft interaction, match: [plume-interaction]}
+  - id: engine-installation
+    name: Engine installation and certification
+    source: see sources
+    match: [engine-installation, engine-certification]
+    subtopics:
+      - {id: installed-thrust, name: Installed thrust and drag accounting, match: [installed-thrust]}
+      - {id: nacelle-drag, name: Nacelle drag, match: [nacelle-drag]}
+      - {id: part-33, name: 14 CFR Part 33 engine airworthiness, match: [part-33]}
+      - {id: engine-sizing, name: Engine sizing, match: [engine-sizing]}
+  - id: aircraft-performance
+    name: Aircraft performance
+    source: see sources
+    match: [aircraft-performance, flight-performance]
+    subtopics:
+      - {id: climb-performance, name: Climb performance, match: [climb-performance]}
+      - {id: breguet-range, name: Breguet range, match: [breguet-range]}
+      - {id: takeoff-field-length, name: Takeoff field length, match: [takeoff-field-length]}
+      - {id: payload-range, name: Payload-range diagram, match: [payload-range]}
+  - id: static-stability
+    name: Static stability and trim
+    source: see sources
+    match: [static-stability, trim]
+    subtopics:
+      - {id: neutral-point, name: Neutral point and static margin, match: [neutral-point]}
+      - {id: trim-curve, name: Trim curve, match: [trim-curve]}
+      - {id: cg-limits, name: CG envelope, match: [cg-limits]}
+      - {id: tail-sizing, name: Tail volume sizing, match: [tail-sizing]}
+  - id: dynamic-modes
+    name: Dynamic modes
+    source: see sources
+    match: [dynamic-stability, flight-modes]
+    subtopics:
+      - {id: short-period, name: Short-period mode, match: [short-period]}
+      - {id: phugoid, name: Phugoid, match: [phugoid]}
+      - {id: dutch-roll, name: Dutch roll and spiral, match: [dutch-roll]}
+      - {id: state-space-lat-lon, name: State-space models, match: [state-space]}
+  - id: stability-derivatives
+    name: Stability derivatives
+    source: see sources
+    match: [stability-derivatives, derivative-estimation]
+    subtopics:
+      - {id: usaf-datcom, name: USAF DATCOM estimation, match: [datcom]}
+      - {id: longitudinal-derivatives, name: Longitudinal derivatives, match: [longitudinal-derivatives]}
+      - {id: lateral-derivatives, name: Lateral-directional derivatives, match: [lateral-derivatives]}
+      - {id: control-derivatives, name: Control derivatives, match: [control-derivatives]}
+  - id: handling-qualities
+    name: Handling qualities
+    source: see sources
+    match: [handling-qualities]
+    subtopics:
+      - {id: cooper-harper, name: Cooper-Harper ratings, match: [cooper-harper]}
+      - {id: mil-std-1797, name: MIL-STD-1797 criteria, match: [mil-std-1797]}
+      - {id: pio, name: Pilot-induced oscillation, match: [pilot-induced-oscillation]}
+      - {id: short-period-criteria, name: Short-period criteria, match: [short-period-criteria]}
+  - id: control-law-design
+    name: Control law design
+    source: see sources
+    match: [control-laws, sas]
+    subtopics:
+      - {id: yaw-damper, name: Yaw damper, match: [yaw-damper]}
+      - {id: attitude-hold, name: Pitch attitude hold, match: [attitude-hold]}
+      - {id: robust-loop-shaping, name: Loop shaping and margins, match: [loop-shaping]}
+      - {id: lqr-lateral, name: LQR for lateral dynamics, match: [lqr-lateral]}
+  - id: flight-test
+    name: Flight test
+    source: see sources
+    match: [flight-test, parameter-identification]
+    subtopics:
+      - {id: flight-test-instrumentation, name: Flight test instrumentation, match: [flight-test-instrumentation]}
+      - {id: pitot-static-calibration, name: Pitot-static calibration, match: [pitot-static]}
+      - {id: system-identification, name: System identification, match: [system-identification]}
+      - {id: performance-reduction, name: Performance data reduction, match: [performance-reduction]}
+  - id: autopilot-modes
+    name: Autopilot modes
+    source: see sources
+    match: [autopilot, autopilot-modes]
+    subtopics:
+      - {id: altitude-hold, name: Altitude hold, match: [altitude-hold]}
+      - {id: heading-select, name: Heading select, match: [heading-select]}
+      - {id: glideslope-coupling, name: Glideslope coupling, match: [glideslope]}
+      - {id: autothrottle, name: Autothrottle, match: [autothrottle]}
+  - id: envelope-protection
+    name: Flight envelope protection
+    source: see sources
+    match: [envelope-protection, fly-by-wire]
+    subtopics:
+      - {id: stall-protection, name: Stall protection, match: [stall-protection]}
+      - {id: load-factor-limiting, name: Load factor limiting, match: [load-factor-limiting]}
+      - {id: control-law-reversion, name: Control law reversion, match: [control-law-reversion]}
+      - {id: sensor-voting, name: Sensor voting and redundancy, match: [sensor-voting]}
+  - id: two-body-motion
+    name: Two-body motion
+    source: see sources
+    match: [two-body, keplerian-orbits]
+    subtopics:
+      - {id: kepler-equation, name: Kepler equation, match: [kepler-equation]}
+      - {id: state-vector-elements, name: State vectors and elements, match: [orbital-elements]}
+      - {id: vis-viva, name: Vis-viva and energy, match: [vis-viva]}
+      - {id: orbit-propagation, name: Orbit propagation, match: [orbit-propagation]}
+  - id: orbit-transfers
+    name: Orbit transfers
+    source: see sources
+    match: [transfers, orbit-transfers]
+    subtopics:
+      - {id: hohmann, name: Hohmann transfer, match: [hohmann]}
+      - {id: bielliptic, name: Bi-elliptic transfer, match: [bielliptic]}
+      - {id: plane-change, name: Plane change, match: [plane-change]}
+      - {id: lambert, name: Lambert problem, match: [lambert]}
+  - id: orbital-perturbations
+    name: Perturbations
+    source: see sources
+    match: [perturbations, orbit-perturbations]
+    subtopics:
+      - {id: j2-effects, name: J2 effects, match: [j2]}
+      - {id: sun-synchronous, name: Sun-synchronous orbits, match: [sun-synchronous]}
+      - {id: drag-decay, name: Drag and decay, match: [drag-decay]}
+      - {id: third-body-srp, name: Third body and radiation pressure, match: [third-body]}
+  - id: launch-and-rendezvous
+    name: Launch windows and rendezvous
+    source: see sources
+    match: [launch-windows, rendezvous]
+    subtopics:
+      - {id: launch-azimuth, name: Launch azimuth, match: [launch-azimuth]}
+      - {id: phasing, name: Phasing orbits, match: [phasing]}
+      - {id: ascent-losses, name: Ascent losses, match: [ascent-losses]}
+      - {id: porkchop, name: Porkchop plots, match: [porkchop]}
+  - id: interplanetary
+    name: Interplanetary trajectories
+    source: see sources
+    match: [interplanetary, patched-conics]
+    subtopics:
+      - {id: sphere-of-influence, name: Sphere of influence, match: [sphere-of-influence]}
+      - {id: hyperbolic-excess, name: Hyperbolic excess, match: [hyperbolic-excess]}
+      - {id: gravity-assist, name: Gravity assist, match: [gravity-assist]}
+      - {id: capture-orbit, name: Capture orbits, match: [capture-orbit]}
+  - id: constellation-design
+    name: Constellation design
+    source: see sources
+    match: [constellations, coverage]
+    subtopics:
+      - {id: walker-constellation, name: Walker constellations, match: [walker]}
+      - {id: ground-track, name: Ground tracks, match: [ground-track]}
+      - {id: repeat-ground-track, name: Repeat ground tracks, match: [repeat-ground-track]}
+      - {id: eclipse-geometry, name: Eclipse geometry, match: [eclipse-geometry]}
+  - id: three-body-dynamics
+    name: Three-body dynamics
+    source: see sources
+    match: [cr3bp, lagrange-points]
+    subtopics:
+      - {id: lagrange-point-locations, name: Lagrange point locations, match: [lagrange-point-locations]}
+      - {id: halo-orbits, name: Halo orbits, match: [halo-orbits]}
+      - {id: jacobi-constant, name: Jacobi constant, match: [jacobi-constant]}
+      - {id: station-keeping, name: Libration station keeping, match: [libration-station-keeping]}
+  - id: orbit-determination
+    name: Orbit determination basics
+    source: see sources
+    match: [orbit-determination, space-situational]
+    subtopics:
+      - {id: tle-sgp4, name: TLE and SGP4, match: [sgp4]}
+      - {id: reference-frames, name: ECI and ECEF frames, match: [eci-ecef]}
+      - {id: conjunction-assessment, name: Conjunction assessment basics, match: [conjunction-assessment]}
+      - {id: batch-least-squares, name: Batch least squares, match: [batch-least-squares]}
+  - id: atmospheric-entry
+    name: Atmospheric entry
+    source: see sources
+    match: [atmospheric-entry, re-entry]
+    subtopics:
+      - {id: ballistic-coefficient, name: Ballistic coefficient, match: [ballistic-coefficient]}
+      - {id: sutton-graves, name: Sutton-Graves heating, match: [sutton-graves]}
+      - {id: entry-corridor, name: Entry corridor, match: [entry-corridor]}
+      - {id: lifting-entry, name: Lifting entry, match: [lifting-entry]}
+  - id: mission-systems-engineering
+    name: Mission systems engineering
+    source: see sources
+    match: [systems-engineering, spacecraft-design]
+    subtopics:
+      - {id: requirements-flowdown, name: Requirements flow-down, match: [requirements-flowdown]}
+      - {id: margin-philosophy, name: Mass and power margins, match: [margin-philosophy]}
+      - {id: design-reviews, name: Design reviews, match: [design-reviews]}
+      - {id: trade-studies, name: Trade studies, match: [trade-studies]}
+  - id: power-subsystem
+    name: Power subsystem
+    source: see sources
+    match: [power-subsystem, eps]
+    subtopics:
+      - {id: solar-array-sizing, name: Solar array sizing, match: [solar-array-sizing]}
+      - {id: battery-sizing, name: Battery sizing, match: [battery-sizing]}
+      - {id: power-bus, name: Power bus architecture, match: [power-bus]}
+      - {id: eclipse-power, name: Eclipse power budget, match: [eclipse-power]}
+  - id: thermal-control
+    name: Thermal control
+    source: see sources
+    match: [thermal-control, spacecraft-thermal]
+    subtopics:
+      - {id: thermal-node-model, name: Thermal node model, match: [thermal-node-model]}
+      - {id: mli-radiators, name: MLI and radiators, match: [mli]}
+      - {id: heaters, name: Heaters and thermostats, match: [heaters]}
+      - {id: thermal-vacuum, name: Thermal vacuum test, match: [thermal-vacuum]}
+  - id: adcs
+    name: Attitude determination and control
+    source: see sources
+    match: [adcs, attitude-control]
+    subtopics:
+      - {id: attitude-kinematics, name: Attitude kinematics, match: [attitude-kinematics]}
+      - {id: reaction-wheel-sizing, name: Reaction wheel sizing, match: [reaction-wheels]}
+      - {id: magnetorquers, name: Magnetorquers and detumble, match: [magnetorquers]}
+      - {id: star-tracker, name: Star trackers and sensors, match: [star-tracker]}
+  - id: spacecraft-communications
+    name: Communications
+    source: see sources
+    match: [link-budget, spacecraft-comms]
+    subtopics:
+      - {id: antenna-gain, name: Antenna gain, match: [antenna-gain]}
+      - {id: modulation-coding, name: Modulation and coding, match: [modulation-coding]}
+      - {id: ground-contact, name: Ground station contact, match: [ground-contact]}
+      - {id: link-margin, name: Link margin, match: [link-margin]}
+  - id: propulsion-subsystem
+    name: Spacecraft propulsion subsystem
+    source: see sources
+    match: [propulsion-subsystem]
+    subtopics:
+      - {id: propellant-mass, name: Delta-v to propellant mass, match: [propellant-mass]}
+      - {id: blowdown, name: Blowdown pressurisation, match: [blowdown]}
+      - {id: tank-sizing, name: Tank sizing, match: [tank-sizing]}
+      - {id: thruster-layout, name: Thruster layout, match: [thruster-layout]}
+  - id: spacecraft-structures
+    name: Structures and mechanisms
+    source: see sources
+    match: [spacecraft-structures, mechanisms]
+    subtopics:
+      - {id: random-vibration, name: Random vibration loads, match: [random-vibration]}
+      - {id: modal-survey, name: Modal survey, match: [modal-survey]}
+      - {id: deployables, name: Deployable mechanisms, match: [deployables]}
+      - {id: separation-shock, name: Separation shock, match: [separation-shock]}
+  - id: environmental-testing
+    name: Environmental testing
+    source: see sources
+    match: [environmental-testing]
+    subtopics:
+      - {id: radiation-tid, name: Radiation total dose, match: [radiation-tid]}
+      - {id: gevs, name: GEVS test levels, match: [gevs]}
+      - {id: emc-testing, name: EMC testing, match: [emc-testing]}
+      - {id: acoustic-test, name: Acoustic testing, match: [acoustic-test]}
+  - id: smallsat-cubesat
+    name: Smallsat and CubeSat design
+    source: see sources
+    match: [cubesat, smallsat]
+    subtopics:
+      - {id: cubesat-spec, name: CubeSat Design Specification, match: [cubesat-design-spec]}
+      - {id: cubesat-power, name: CubeSat power, match: [cubesat-power]}
+      - {id: cubesat-comms, name: CubeSat comms, match: [cubesat-comms]}
+      - {id: cubesat-deorbit, name: CubeSat deorbit compliance, match: [deorbit]}
+  - id: reliability-fdir
+    name: Reliability and fault protection
+    source: see sources
+    match: [reliability, fdir]
+    subtopics:
+      - {id: fmea, name: FMEA, match: [fmea]}
+      - {id: reliability-prediction, name: Reliability prediction, match: [reliability-prediction]}
+      - {id: fault-protection, name: Fault protection, match: [fault-protection]}
+      - {id: redundancy-design, name: Redundancy design, match: [redundancy]}

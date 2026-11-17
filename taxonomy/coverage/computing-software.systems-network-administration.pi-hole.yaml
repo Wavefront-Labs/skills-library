@@ -1,0 +1,303 @@
+# Coverage spec for Pi-hole v6 administration, from the Pi-hole documentation (docs.pi-hole.net).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+# Topics follow the docs: main install pages, Docker, API, FTL configuration, databases, groups, regex, DNS and VPN guides, routers.
+subject: pi-hole
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [pi-hole]
+sources:
+  - "Pi-hole documentation (docs.pi-hole.net) - prerequisites, install, post-install, update, uninstall, pihole command, Docker, REST API, FTL configuration reference, DNS resolver and cache, blocking modes, privacy levels, signals, web server, query and gravity databases, group management, regex filters, Unbound and dnscrypt-proxy guides, WireGuard guides, router guides, benchmark, Home Assistant"
+topics:
+  - id: pi-hole-system-requirements
+    name: "pi-hole system requirements"
+    source: https://docs.pi-hole.net/main/prerequisites/
+    match: [pihole-requirements, hardware-sizing, supported-os]
+  - id: pi-hole-ports-and-firewall
+    name: "pi-hole ports and firewall rules"
+    source: https://docs.pi-hole.net/main/prerequisites/
+    match: [pihole-ports, pihole-firewall, ufw-rules]
+  - id: install-pi-hole-bare-metal
+    name: "install pi-hole on a host"
+    source: https://docs.pi-hole.net/main/basic-install/
+    match: [pihole-install, installer-script, review-before-run]
+  - id: point-network-at-pi-hole
+    name: "point your network at pi-hole"
+    source: https://docs.pi-hole.net/main/post-install/
+    match: [pihole-dns-rollout, router-dhcp-dns, host-resolver]
+  - id: pihole-cli-group-access
+    name: "cli authentication and the pihole group"
+    source: https://docs.pi-hole.net/main/post-install/
+    match: [pihole-group, cli-authentication, cli-password]
+  - id: update-and-uninstall-pi-hole
+    name: "update and uninstall pi-hole"
+    source: https://docs.pi-hole.net/main/update/
+    match: [pihole-update, pihole-uninstall, release-notes]
+  - id: pihole-command-cheatsheet
+    name: "the pihole command at a glance"
+    source: https://docs.pi-hole.net/main/pihole-command/
+    match: [pihole-command, pihole-cli, wrapper-script]
+  - id: manage-allow-deny-lists-cli
+    name: "allowlist and denylist from the cli"
+    source: https://docs.pi-hole.net/guides/misc/allowlist-denylist/
+    match: [allowlist-cli, denylist-cli, domainlist-table]
+  - id: update-gravity-blocklists
+    name: "update gravity (blocklists)"
+    source: https://docs.pi-hole.net/main/pihole-command/
+    match: [gravity-update, adlist-subscriptions, list-status-codes]
+  - id: troubleshoot-with-pihole-debug-and-logs
+    name: "debug and log commands"
+    source: https://docs.pi-hole.net/main/pihole-command/
+    match: [pihole-debug, pihole-tail, log-flush]
+  - id: pause-pi-hole-blocking
+    name: "pause blocking"
+    source: https://docs.pi-hole.net/main/pihole-command/
+    match: [disable-blocking, blocking-timer, dns-blocking-endpoint]
+  - id: repair-and-checkout-pi-hole
+    name: "repair and checkout"
+    source: https://docs.pi-hole.net/main/pihole-command/
+    match: [pihole-repair, pihole-checkout, branch-testing]
+  - id: local-dns-record-order
+    name: "order of locally defined dns records"
+    source: https://docs.pi-hole.net/main/faq/
+    match: [local-dns-records, hosts-precedence, custom-list]
+  - id: troubleshoot-common-pihole-oddities
+    name: "common pi-hole surprises"
+    source: https://docs.pi-hole.net/main/faq/
+    match: [pihole-faq, chrome-random-queries, suite-change-error]
+  - id: docker-compose-quickstart
+    name: "pi-hole in docker: quick start"
+    source: https://docs.pi-hole.net/docker/
+    match: [docker-compose-quickstart, pihole-container, pihole-image-tags]
+  - id: docker-ftlconf-environment
+    name: "configure ftl with ftlconf_ variables"
+    source: https://docs.pi-hole.net/docker/configuration/
+    match: [ftlconf-variables, docker-env-config, single-source-of-truth]
+  - id: docker-web-password
+    name: "web password in docker"
+    source: https://docs.pi-hole.net/docker/configuration/
+    match: [docker-password, webpassword-file, docker-secrets]
+  - id: docker-capabilities
+    name: "container capabilities for pi-hole"
+    source: https://docs.pi-hole.net/docker/configuration/
+    match: [docker-capabilities, net-admin, cap-add]
+  - id: docker-dhcp-network-modes
+    name: "dhcp and docker network modes"
+    source: https://docs.pi-hole.net/docker/DHCP/
+    match: [docker-dhcp, macvlan, dhcp-relay]
+  - id: docker-port-conflicts-and-listening
+    name: "port conflicts and listening mode in docker"
+    source: https://docs.pi-hole.net/docker/tips-and-tricks/
+    match: [systemd-resolved-port-53, docker-port-conflicts, bridge-listening-mode]
+  - id: docker-upgrade-and-watchtower
+    name: "upgrading pi-hole in docker"
+    source: https://docs.pi-hole.net/docker/upgrading/
+    match: [docker-upgrade, compose-pull, watchtower]
+  - id: docker-v5-to-v6-migration
+    name: "docker v5 to v6 variable migration"
+    source: https://docs.pi-hole.net/docker/upgrading/v5-v6/
+    match: [docker-v6-migration, env-var-mapping, revservers-format]
+  - id: docker-build-local-image
+    name: "build the pi-hole image locally"
+    source: https://docs.pi-hole.net/docker/build-image/
+    match: [docker-build-sh, pihole-local-image, branch-image]
+  - id: api-overview-and-errors
+    name: "pi-hole api overview"
+    source: https://docs.pi-hole.net/api/
+    match: [pihole-api, http-methods, error-handling]
+  - id: api-authentication-sid
+    name: "api authentication with a session id"
+    source: https://docs.pi-hole.net/api/auth/
+    match: [api-sid, x-ftl-sid, api-login]
+  - id: api-two-factor-and-app-passwords
+    name: "2fa and application passwords"
+    source: https://docs.pi-hole.net/api/auth/
+    match: [pihole-2fa, totp, app-password]
+  - id: api-session-limits-and-logout
+    name: "api session limits"
+    source: https://docs.pi-hole.net/api/auth/
+    match: [api-sessions, session-timeout, rate-limiting-login]
+  - id: api-custom-tls-certificate
+    name: "tls certificates for the web interface"
+    source: https://docs.pi-hole.net/api/tls/
+    match: [pihole-tls, webserver-cert, ca-trust]
+  - id: ftl-config-three-methods
+    name: "pi-hole v6 configuration methods"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [pihole-toml, pihole-ftl-config, read-only-config]
+  - id: configure-upstream-dns-servers
+    name: "upstream dns servers"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [pihole-upstreams, dns-upstream, upstream-port]
+  - id: dns-listening-modes
+    name: "dns listening modes"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [listening-mode, open-resolver, dns-interface]
+  - id: blocking-modes-and-edns
+    name: "blocking modes and edns"
+    source: https://docs.pi-hole.net/ftldns/blockingmode/
+    match: [blocking-mode, nxdomain-null-nodata, edns-blocked-code]
+  - id: dns-cache-tuning
+    name: "dns cache tuning"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [dns-cache-size, cache-optimizer, upstream-blocked-ttl]
+  - id: dns-rate-limiting
+    name: "dns rate limiting"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [rate-limit, refused-reply, per-client-limit]
+  - id: reverse-servers-conditional-forwarding
+    name: "reverse servers (conditional forwarding)"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [rev-servers, conditional-forwarding, local-hostnames]
+  - id: local-domain-and-custom-dns-records
+    name: "local domain and custom records"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [dns-domain, custom-dns-hosts, cname-records]
+  - id: special-domains-bypass-prevention
+    name: "special domains that stop dns bypass"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [mozilla-canary, icloud-private-relay, designated-resolver]
+  - id: dnssec-and-private-reverse-lookups
+    name: "dnssec and private reverse lookups"
+    source: https://docs.pi-hole.net/ftldns/dns-resolver/
+    match: [pihole-dnssec, bogus-priv, dnssec-cache-size]
+  - id: dhcp-server-setup
+    name: "pi-hole dhcp server"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [pihole-dhcp-server, dhcp-range, lease-time]
+  - id: dhcp-static-leases-and-unknown-clients
+    name: "static dhcp leases"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [static-dhcp-leases, dhcp-hosts, ignore-unknown-clients]
+  - id: ntp-server-and-time-sync
+    name: "ntp server and time sync in ftl"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [pihole-ntp, ntp-sync, rtc-update]
+  - id: client-name-resolution
+    name: "client name resolution"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [resolver-names, mac-names, refresh-names]
+  - id: query-database-retention-and-storage
+    name: "query database retention and storage"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [maxdbdays, dbinterval, wal-mode]
+  - id: regex-filter-basics-and-hierarchy
+    name: "regex filters in ftl"
+    source: https://docs.pi-hole.net/regex/
+    match: [regex-filters, regex-reload, regex-debug]
+  - id: regex-syntax-tutorial
+    name: "pi-hole regex syntax"
+    source: https://docs.pi-hole.net/regex/tutorial/
+    match: [regex-anchors, regex-groups, regex-character-classes]
+  - id: regex-querytype-invert-reply
+    name: "regex extensions: querytype, invert, reply"
+    source: https://docs.pi-hole.net/regex/pi-hole/
+    match: [regex-querytype, regex-invert, regex-reply]
+  - id: regex-approximate-matching
+    name: "approximate regex matching"
+    source: https://docs.pi-hole.net/regex/approximate/
+    match: [agrep-regex, fuzzy-domain-match, regex-backreference]
+  - id: regex-test-mode
+    name: "regex test mode"
+    source: https://docs.pi-hole.net/regex/testmode/
+    match: [regex-test, pihole-ftl-regex-test, regex-debug-script]
+  - id: allow-deny-priority-order
+    name: "allow and deny priority"
+    source: https://docs.pi-hole.net/database/domain-database/
+    match: [domain-priority, allowlist-wins, denylist-order]
+  - id: gravity-database-tables
+    name: "the gravity database"
+    source: https://docs.pi-hole.net/database/domain-database/
+    match: [gravity-db-schema, adlist-status, domainlist-types]
+  - id: client-cidr-and-group-membership
+    name: "groups and clients"
+    source: https://docs.pi-hole.net/group_management/
+    match: [client-subnets, group-management, default-group]
+  - id: per-client-blocking-example
+    name: "per-client blocking with groups"
+    source: https://docs.pi-hole.net/group_management/example/
+    match: [per-client-blocking, exclude-client-from-blocking, group-lists]
+  - id: ftl-signals-and-reloads
+    name: "signals for pihole-ftl"
+    source: https://docs.pi-hole.net/ftldns/signals/
+    match: [ftl-signals, sighup, realtime-signal]
+  - id: query-database-schema-and-status-codes
+    name: "query database schema and codes"
+    source: https://docs.pi-hole.net/database/query-database/
+    match: [queries-table, query-status-ids, sqlite-query-stats]
+  - id: backup-and-split-query-database
+    name: "backup and rotate the query database"
+    source: https://docs.pi-hole.net/database/query-database/
+    match: [sqlite-online-backup, rotate-ftl-db, pihole-ftl-db-backup]
+  - id: privacy-levels
+    name: "privacy levels"
+    source: https://docs.pi-hole.net/ftldns/privacylevels/
+    match: [privacy-level, anonymous-mode, hide-domains]
+  - id: webserver-ports-acl-and-prefix
+    name: "web server ports, acl and prefix"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [webserver-port, webserver-acl, reverse-proxy-prefix]
+  - id: extra-dnsmasq-configuration
+    name: "extra dnsmasq configuration"
+    source: https://docs.pi-hole.net/ftldns/configfile/
+    match: [dnsmasq-lines, etc-dnsmasq-d, dnsmasq-conf-conflicts]
+  - id: unbound-recursive-resolver-setup
+    name: "unbound as a recursive resolver for pi-hole"
+    source: https://docs.pi-hole.net/guides/dns/unbound/
+    match: [unbound-pihole, recursive-dns, unbound-config]
+  - id: unbound-root-reachability-test
+    name: "test root server access before unbound"
+    source: https://docs.pi-hole.net/guides/dns/unbound/
+    match: [dns-interception, root-server-test, unbound-prerequisites]
+  - id: unbound-dnssec-validation-test
+    name: "test unbound dnssec validation"
+    source: https://docs.pi-hole.net/guides/dns/unbound/
+    match: [dnssec-works-test, ad-flag, dnssec-bogus]
+  - id: unbound-resolvconf-and-logging
+    name: "unbound resolvconf conflict and logging"
+    source: https://docs.pi-hole.net/guides/dns/unbound/
+    match: [unbound-resolvconf, unbound-verbosity, apparmor-unbound-log]
+  - id: dnscrypt-proxy-encrypted-upstream
+    name: "dnscrypt-proxy as pi-hole upstream"
+    source: https://docs.pi-hole.net/guides/dns/dnscrypt-proxy/
+    match: [dnscrypt-proxy, doh-upstream, systemd-socket-override]
+  - id: upstream-dns-provider-choices
+    name: "choosing upstream dns providers"
+    source: https://docs.pi-hole.net/guides/dns/upstream-dns-providers/
+    match: [upstream-providers, quad9, opendns]
+  - id: wireguard-server-install
+    name: "wireguard server for pi-hole"
+    source: https://docs.pi-hole.net/guides/vpn/wireguard/server/
+    match: [wireguard-server, wg0-conf, wireguard-ddns]
+  - id: wireguard-add-client
+    name: "add a wireguard client"
+    source: https://docs.pi-hole.net/guides/vpn/wireguard/client/
+    match: [wireguard-client, preshared-key, persistent-keepalive]
+  - id: wireguard-access-internal-devices
+    name: "wireguard access to internal devices"
+    source: https://docs.pi-hole.net/guides/vpn/wireguard/internal/
+    match: [wireguard-nat, ip-forwarding, wireguard-allowedips]
+  - id: wireguard-route-all-traffic
+    name: "route all traffic through wireguard"
+    source: https://docs.pi-hole.net/guides/vpn/wireguard/route-everything/
+    match: [full-tunnel-vpn, wireguard-default-route, split-tunnel]
+  - id: wireguard-troubleshooting-faq
+    name: "wireguard troubleshooting"
+    source: https://docs.pi-hole.net/guides/vpn/wireguard/faq/
+    match: [wireguard-dynamic-ip, wireguard-mtu, wireguard-dns-reset]
+  - id: router-dhcp-dns-opnsense-usg
+    name: "pointing a router at pi-hole"
+    source: https://docs.pi-hole.net/routers/OPNsense/
+    match: [opnsense-pihole, ubiquiti-usg-pihole, router-dns-method]
+  - id: block-hardcoded-dns-with-firewall
+    name: "blocking other dns servers"
+    source: https://docs.pi-hole.net/routers/OPNsense/
+    match: [block-other-dns, hardcoded-dns, opnsense-firewall-rules]
+  - id: benchmark-pihole-performance
+    name: "realistic benchmarking"
+    source: https://docs.pi-hole.net/guides/misc/benchmark/
+    match: [pihole-benchmark, dig-mass-query, cache-size-benchmark]
+  - id: home-assistant-pihole-switch
+    name: "home assistant and pi-hole blocking"
+    source: https://docs.pi-hole.net/guides/misc/homeassistant/
+    match: [home-assistant-pihole, api-blocking-toggle, rest-command]

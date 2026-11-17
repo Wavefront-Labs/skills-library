@@ -1,0 +1,320 @@
+# Coverage spec: IoT protocols (computing-software / firmware-embedded-development / iot-protocols).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: firmware-embedded-development.iot-protocols
+scope:
+  category: computing-software
+  field: firmware-embedded-development
+  products: [iot-protocols]
+sources:
+  - "OASIS MQTT 3.1.1 and 5.0 specifications (docs.oasis-open.org/mqtt) - packets, QoS, sessions, topics, properties, security"
+  - "IETF RFCs 7252, 7641, 7959, 6690, 8613, 8428, 8949 (CoAP, observe, block-wise, link-format, OSCORE, SenML, CBOR) and RFC 9019 firmware update architecture"
+  - "OMA SpecWorks LwM2M specification and registry; LoRa Alliance LoRaWAN L2 specification and Regional Parameters; Thread Group and OpenThread guides; CSA Matter and Zigbee specifications"
+  - "Broker manuals (Mosquitto, EMQX, HiveMQ), AWS IoT Core and Azure IoT Hub/DPS developer guides, Eclipse Sparkplug specification, ChirpStack and The Things Stack docs"
+topics:
+  - id: mqtt-packets
+    name: "MQTT control packets"
+    source: "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+    match: [mqtt-packets]
+    subtopics:
+      - {id: mqtt-packets-connect-packet, name: "MQTT CONNECT packet", match: [connect-packet]}
+      - {id: mqtt-packets-publish-subscribe-packets, name: "PUBLISH and SUBSCRIBE packets", match: [publish-subscribe-packets]}
+      - {id: mqtt-packets-keepalive-ping, name: "MQTT keep alive and PINGREQ", match: [keepalive-ping]}
+  - id: mqtt-qos-reliability
+    name: "MQTT QoS and delivery guarantees"
+    source: "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+    match: [mqtt-qos-reliability]
+    subtopics:
+      - {id: mqtt-qos-reliability-qos-flows, name: "MQTT QoS 0, 1, 2 flows", match: [qos-flows]}
+      - {id: mqtt-qos-reliability-retained-messages, name: "MQTT retained messages", match: [retained-messages]}
+      - {id: mqtt-qos-reliability-last-will, name: "MQTT last will and testament", match: [last-will]}
+  - id: mqtt-sessions
+    name: "MQTT sessions"
+    source: "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html"
+    match: [mqtt-sessions]
+    subtopics:
+      - {id: mqtt-sessions-clean-session-3-1-1, name: "MQTT 3.1.1 clean session", match: [clean-session-3-1-1]}
+      - {id: mqtt-sessions-session-expiry-v5, name: "MQTT 5 session expiry", match: [session-expiry-v5]}
+  - id: mqtt-topics
+    name: "MQTT topics"
+    source: "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+    match: [mqtt-topics]
+    subtopics:
+      - {id: mqtt-topics-topic-filters-wildcards, name: "MQTT topic filters and wildcards", match: [topic-filters-wildcards]}
+      - {id: mqtt-topics-topic-design, name: "MQTT topic design", match: [topic-design]}
+  - id: mqtt5-features
+    name: "MQTT 5 features"
+    source: "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html"
+    match: [mqtt5-features]
+    subtopics:
+      - {id: mqtt5-features-shared-subscriptions, name: "MQTT shared subscriptions", match: [shared-subscriptions]}
+      - {id: mqtt5-features-user-properties-reason-codes, name: "MQTT 5 properties and reason codes", match: [user-properties-reason-codes]}
+      - {id: mqtt5-features-topic-aliases-flow-control, name: "MQTT 5 topic aliases and flow control", match: [topic-aliases-flow-control]}
+  - id: mqtt-security
+    name: "MQTT security"
+    source: "https://mosquitto.org/man/mosquitto-conf-5.html"
+    match: [mqtt-security]
+    subtopics:
+      - {id: mqtt-security-mqtt-tls-client-certs, name: "MQTT TLS and client certificates", match: [mqtt-tls-client-certs]}
+      - {id: mqtt-security-mqtt-auth-acl, name: "MQTT authentication and ACL", match: [mqtt-auth-acl]}
+      - {id: mqtt-security-enhanced-auth-v5, name: "MQTT 5 enhanced authentication", match: [enhanced-auth-v5]}
+  - id: mosquitto-broker
+    name: "Mosquitto broker operations"
+    source: "https://mosquitto.org/man/mosquitto-conf-5.html"
+    match: [mosquitto-broker]
+    subtopics:
+      - {id: mosquitto-broker-mosquitto-conf-listeners, name: "Mosquitto listeners and configuration", match: [mosquitto-conf-listeners]}
+      - {id: mosquitto-broker-mosquitto-bridge, name: "Mosquitto bridge configuration", match: [mosquitto-bridge]}
+      - {id: mosquitto-broker-mosquitto-persistence-logging, name: "Mosquitto persistence and logging", match: [mosquitto-persistence-logging]}
+  - id: emqx-broker
+    name: "EMQX broker"
+    source: "https://docs.emqx.com/en/emqx/latest/"
+    match: [emqx-broker]
+    subtopics:
+      - {id: emqx-broker-emqx-rule-engine, name: "EMQX rule engine and data integration", match: [emqx-rule-engine]}
+      - {id: emqx-broker-emqx-clustering, name: "EMQX clustering", match: [emqx-clustering]}
+  - id: hivemq-broker
+    name: "HiveMQ broker"
+    source: "https://docs.hivemq.com/hivemq/latest/user-guide/index.html"
+    match: [hivemq-broker]
+    subtopics:
+      - {id: hivemq-broker-hivemq-extensions, name: "HiveMQ extensions", match: [hivemq-extensions]}
+      - {id: hivemq-broker-hivemq-cluster, name: "HiveMQ clustering and operations", match: [hivemq-cluster]}
+  - id: mqtt-client-practice
+    name: "MQTT client practice"
+    source: "https://eclipse.dev/paho/"
+    match: [mqtt-client-practice]
+    subtopics:
+      - {id: mqtt-client-practice-paho-reconnect-patterns, name: "MQTT client reconnect patterns", match: [paho-reconnect-patterns]}
+      - {id: mqtt-client-practice-mqtt-over-websockets, name: "MQTT over WebSockets", match: [mqtt-over-websockets]}
+  - id: coap-messages
+    name: "CoAP messaging"
+    source: "https://www.rfc-editor.org/rfc/rfc7252"
+    match: [coap-messages]
+    subtopics:
+      - {id: coap-messages-coap-message-format, name: "CoAP message format", match: [coap-message-format]}
+      - {id: coap-messages-coap-confirmable-retransmit, name: "CoAP confirmable retransmission", match: [coap-confirmable-retransmit]}
+  - id: coap-observe
+    name: "CoAP observe"
+    source: "https://www.rfc-editor.org/rfc/rfc7641"
+    match: [coap-observe]
+    subtopics:
+      - {id: coap-observe-coap-observe-registration, name: "CoAP observe registration", match: [coap-observe-registration]}
+      - {id: coap-observe-coap-observe-notifications, name: "CoAP observe notifications", match: [coap-observe-notifications]}
+  - id: coap-blockwise
+    name: "CoAP block-wise transfers"
+    source: "https://www.rfc-editor.org/rfc/rfc7959"
+    match: [coap-blockwise]
+    subtopics:
+      - {id: coap-blockwise-coap-block1-block2, name: "CoAP Block1 and Block2", match: [coap-block1-block2]}
+      - {id: coap-blockwise-coap-resource-discovery-link-format, name: "CoAP resource discovery", match: [coap-resource-discovery-link-format]}
+  - id: coap-security
+    name: "CoAP security"
+    source: "https://www.rfc-editor.org/rfc/rfc7252#section-9"
+    match: [coap-security]
+    subtopics:
+      - {id: coap-security-coap-dtls, name: "CoAP over DTLS", match: [coap-dtls]}
+      - {id: coap-security-oscore-basics, name: "OSCORE object security", match: [oscore-basics]}
+  - id: lwm2m-model
+    name: "LwM2M data model and registration"
+    source: "https://www.openmobilealliance.org/release/LightweightM2M/"
+    match: [lwm2m-model]
+    subtopics:
+      - {id: lwm2m-model-lwm2m-object-model, name: "LwM2M objects, instances and resources", match: [lwm2m-object-model]}
+      - {id: lwm2m-model-lwm2m-registration-interface, name: "LwM2M registration interface", match: [lwm2m-registration-interface]}
+  - id: lwm2m-operations
+    name: "LwM2M device management"
+    source: "https://www.openmobilealliance.org/lwm2m/"
+    match: [lwm2m-operations]
+    subtopics:
+      - {id: lwm2m-operations-lwm2m-device-management, name: "LwM2M read write execute and observe", match: [lwm2m-device-management]}
+      - {id: lwm2m-operations-lwm2m-bootstrap, name: "LwM2M bootstrap", match: [lwm2m-bootstrap]}
+      - {id: lwm2m-operations-lwm2m-firmware-update, name: "LwM2M firmware update object", match: [lwm2m-firmware-update]}
+  - id: lorawan-regional
+    name: "LoRaWAN regional parameters"
+    source: "https://lora-alliance.org/resource_hub/rp2-1-0-4-regional-parameters/"
+    match: [lorawan-regional]
+    subtopics:
+      - {id: lorawan-regional-lorawan-regional-parameters, name: "LoRaWAN regional parameters", match: [lorawan-regional-parameters]}
+      - {id: lorawan-regional-lorawan-mac-commands, name: "LoRaWAN MAC commands", match: [lorawan-mac-commands]}
+  - id: lorawan-activation
+    name: "LoRaWAN activation"
+    source: "https://lora-alliance.org/resource_hub/lorawan-specification-v1-0-4/"
+    match: [lorawan-activation]
+    subtopics:
+      - {id: lorawan-activation-lorawan-otaa-join, name: "LoRaWAN OTAA join", match: [lorawan-otaa-join]}
+      - {id: lorawan-activation-lorawan-abp, name: "LoRaWAN ABP", match: [lorawan-abp]}
+  - id: lorawan-classes
+    name: "LoRaWAN device classes"
+    source: "https://lora-alliance.org/resource_hub/lorawan-specification-v1-0-4/"
+    match: [lorawan-classes]
+    subtopics:
+      - {id: lorawan-classes-lorawan-class-a-rx-windows, name: "LoRaWAN Class A receive windows", match: [lorawan-class-a-rx-windows]}
+      - {id: lorawan-classes-lorawan-class-b-c, name: "LoRaWAN Class B and C", match: [lorawan-class-b-c]}
+  - id: lorawan-adr-airtime
+    name: "LoRaWAN ADR and airtime"
+    source: "https://lora-alliance.org/resource_hub/lorawan-specification-v1-0-4/"
+    match: [lorawan-adr-airtime]
+    subtopics:
+      - {id: lorawan-adr-airtime-lorawan-adr-algorithm, name: "LoRaWAN adaptive data rate", match: [lorawan-adr-algorithm]}
+      - {id: lorawan-adr-airtime-lorawan-duty-cycle-airtime, name: "LoRaWAN duty cycle and airtime", match: [lorawan-duty-cycle-airtime]}
+  - id: lorawan-network-servers
+    name: "LoRaWAN network servers"
+    source: "https://www.chirpstack.io/docs/"
+    match: [lorawan-network-servers]
+    subtopics:
+      - {id: lorawan-network-servers-chirpstack-setup, name: "ChirpStack setup", match: [chirpstack-setup]}
+      - {id: lorawan-network-servers-ttn-the-things-stack, name: "The Things Stack (TTN)", match: [ttn-the-things-stack]}
+      - {id: lorawan-network-servers-lorawan-payload-codecs, name: "LoRaWAN payload codecs", match: [lorawan-payload-codecs]}
+  - id: lorawan-security
+    name: "LoRaWAN security"
+    source: "https://lora-alliance.org/resource_hub/lorawan-specification-v1-0-4/"
+    match: [lorawan-security]
+    subtopics:
+      - {id: lorawan-security-lorawan-keys-and-mic, name: "LoRaWAN keys and MIC", match: [lorawan-keys-and-mic]}
+      - {id: lorawan-security-lorawan-frame-counters, name: "LoRaWAN frame counters", match: [lorawan-frame-counters]}
+  - id: thread-network
+    name: "Thread network architecture"
+    source: "https://www.threadgroup.org/What-is-Thread/Overview"
+    match: [thread-network]
+    subtopics:
+      - {id: thread-network-thread-roles-and-topology, name: "Thread device roles and topology", match: [thread-roles-and-topology]}
+      - {id: thread-network-thread-commissioning-meshcop, name: "Thread commissioning (MeshCoP)", match: [thread-commissioning-meshcop]}
+      - {id: thread-network-thread-border-router, name: "Thread Border Router", match: [thread-border-router]}
+  - id: thread-ipv6
+    name: "Thread IPv6 and tools"
+    source: "https://openthread.io/guides/thread-primer/ipv6-addressing"
+    match: [thread-ipv6]
+    subtopics:
+      - {id: thread-ipv6-thread-6lowpan-addressing, name: "Thread 6LoWPAN addressing", match: [thread-6lowpan-addressing]}
+      - {id: thread-ipv6-openthread-cli, name: "OpenThread CLI", match: [openthread-cli]}
+  - id: matter-core
+    name: "Matter fabrics and data model"
+    source: "https://csa-iot.org/all-solutions/matter/"
+    match: [matter-core]
+    subtopics:
+      - {id: matter-core-matter-fabrics-and-nodes, name: "Matter fabrics, nodes and operational credentials", match: [matter-fabrics-and-nodes]}
+      - {id: matter-core-matter-data-model-clusters, name: "Matter data model and clusters", match: [matter-data-model-clusters]}
+  - id: matter-commissioning
+    name: "Matter commissioning"
+    source: "https://csa-iot.org/developer-resource/specifications-download-request/"
+    match: [matter-commissioning]
+    subtopics:
+      - {id: matter-commissioning-matter-commissioning-flow, name: "Matter commissioning flow", match: [matter-commissioning-flow]}
+      - {id: matter-commissioning-matter-onboarding-payload, name: "Matter onboarding payload and QR code", match: [matter-onboarding-payload]}
+      - {id: matter-commissioning-matter-multi-admin, name: "Matter multi-admin", match: [matter-multi-admin]}
+  - id: matter-interaction
+    name: "Matter interaction model"
+    source: "https://csa-iot.org/developer-resource/specifications-download-request/"
+    match: [matter-interaction]
+    subtopics:
+      - {id: matter-interaction-matter-interaction-model, name: "Matter read write invoke", match: [matter-interaction-model]}
+      - {id: matter-interaction-matter-subscriptions, name: "Matter subscriptions", match: [matter-subscriptions]}
+  - id: matter-development
+    name: "Matter development"
+    source: "https://github.com/project-chip/connectedhomeip"
+    match: [matter-development]
+    subtopics:
+      - {id: matter-development-connectedhomeip-sdk, name: "connectedhomeip SDK", match: [connectedhomeip-sdk]}
+      - {id: matter-development-matter-device-types, name: "Matter device types", match: [matter-device-types]}
+      - {id: matter-development-matter-ecosystems, name: "Matter ecosystems and controllers", match: [matter-ecosystems]}
+  - id: zigbee-stack
+    name: "Zigbee network and application layer"
+    source: "https://csa-iot.org/all-solutions/zigbee/"
+    match: [zigbee-stack]
+    subtopics:
+      - {id: zigbee-stack-zigbee-network-formation, name: "Zigbee network formation and joining", match: [zigbee-network-formation]}
+      - {id: zigbee-stack-zigbee-zcl-clusters, name: "Zigbee Cluster Library clusters", match: [zigbee-zcl-clusters]}
+  - id: zigbee-ops
+    name: "Zigbee security and bridging"
+    source: "https://www.zigbee2mqtt.io/"
+    match: [zigbee-ops]
+    subtopics:
+      - {id: zigbee-ops-zigbee-security-keys, name: "Zigbee security keys", match: [zigbee-security-keys]}
+      - {id: zigbee-ops-zigbee2mqtt-bridge, name: "Zigbee2MQTT bridge", match: [zigbee2mqtt-bridge]}
+  - id: ble-iot
+    name: "BLE for IoT provisioning"
+    source: "https://www.bluetooth.com/specifications/specs/"
+    match: [ble-iot]
+    subtopics:
+      - {id: ble-iot-ble-gatt-provisioning, name: "BLE GATT provisioning service", match: [ble-gatt-provisioning]}
+      - {id: ble-iot-esp-ble-prov, name: "ESP-IDF BLE and SoftAP provisioning", match: [esp-ble-prov]}
+      - {id: ble-iot-ble-pairing-security, name: "BLE pairing and security modes", match: [ble-pairing-security]}
+  - id: iot-ota
+    name: "OTA firmware updates"
+    source: "https://github.com/mcu-tools/mcuboot"
+    match: [iot-ota]
+    subtopics:
+      - {id: iot-ota-ota-update-design, name: "IoT OTA update design", match: [ota-update-design]}
+      - {id: iot-ota-mcuboot-ota, name: "MCUboot image swap and confirm", match: [mcuboot-ota]}
+      - {id: iot-ota-ota-rollback, name: "OTA rollback and anti-rollback", match: [ota-rollback]}
+  - id: iot-provisioning
+    name: "Device provisioning and identity"
+    source: "https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html"
+    match: [iot-provisioning]
+    subtopics:
+      - {id: iot-provisioning-device-identity-x509, name: "Device identity with X.509", match: [device-identity-x509]}
+      - {id: iot-provisioning-aws-fleet-provisioning, name: "AWS IoT fleet provisioning", match: [aws-fleet-provisioning]}
+  - id: aws-iot-core
+    name: "AWS IoT Core"
+    source: "https://docs.aws.amazon.com/iot/latest/developerguide/"
+    match: [aws-iot-core]
+    subtopics:
+      - {id: aws-iot-core-aws-iot-policies, name: "AWS IoT policies and authentication", match: [aws-iot-policies]}
+      - {id: aws-iot-core-aws-iot-device-shadow, name: "AWS IoT Device Shadow", match: [aws-iot-device-shadow]}
+      - {id: aws-iot-core-aws-iot-rules, name: "AWS IoT rules engine", match: [aws-iot-rules]}
+  - id: azure-iot
+    name: "Azure IoT Hub and DPS"
+    source: "https://learn.microsoft.com/azure/iot-hub/"
+    match: [azure-iot]
+    subtopics:
+      - {id: azure-iot-azure-dps, name: "Azure Device Provisioning Service", match: [azure-dps]}
+      - {id: azure-iot-azure-iot-hub-twins-methods, name: "Azure IoT Hub twins and direct methods", match: [azure-iot-hub-twins-methods]}
+  - id: iot-payloads
+    name: "IoT payload formats"
+    source: "https://www.rfc-editor.org/rfc/rfc8949"
+    match: [iot-payloads]
+    subtopics:
+      - {id: iot-payloads-cbor-encoding, name: "CBOR encoding", match: [cbor-encoding]}
+      - {id: iot-payloads-senml-payload, name: "SenML payload format", match: [senml-payload]}
+  - id: protobuf-iot
+    name: "Protobuf on devices"
+    source: "https://jpa.kapsi.fi/nanopb/docs/"
+    match: [protobuf-iot]
+    subtopics:
+      - {id: protobuf-iot-nanopb-protobuf, name: "nanopb on microcontrollers", match: [nanopb-protobuf]}
+      - {id: protobuf-iot-protobuf-schema-evolution, name: "Protobuf schema evolution", match: [protobuf-schema-evolution]}
+  - id: sparkplug
+    name: "Sparkplug B"
+    source: "https://sparkplug.eclipse.org/specification/"
+    match: [sparkplug]
+    subtopics:
+      - {id: sparkplug-sparkplug-topic-namespace, name: "Sparkplug topic namespace", match: [sparkplug-topic-namespace]}
+      - {id: sparkplug-sparkplug-birth-death, name: "Sparkplug birth and death certificates", match: [sparkplug-birth-death]}
+  - id: iot-security
+    name: "IoT device security"
+    source: "https://www.etsi.org/deliver/etsi_en/303600_303699/303645/"
+    match: [iot-security]
+    subtopics:
+      - {id: iot-security-iot-secure-element-keys, name: "Secure element key storage", match: [iot-secure-element-keys]}
+      - {id: iot-security-iot-cert-rotation, name: "Certificate rotation for devices", match: [iot-cert-rotation]}
+  - id: iot-operations
+    name: "IoT operations"
+    source: "https://docs.aws.amazon.com/wellarchitected/latest/iot-lens/"
+    match: [iot-operations]
+    subtopics:
+      - {id: iot-operations-iot-device-telemetry-health, name: "Device health telemetry", match: [iot-device-telemetry-health]}
+      - {id: iot-operations-iot-offline-buffering, name: "Offline buffering and store-and-forward", match: [iot-offline-buffering]}
+  - id: iot-gateway
+    name: "IoT gateways and edge"
+    source: "https://nodered.org/docs/"
+    match: [iot-gateway]
+    subtopics:
+      - {id: iot-gateway-modbus-to-mqtt-gateway, name: "Modbus to MQTT gateway", match: [modbus-to-mqtt-gateway]}
+      - {id: iot-gateway-node-red-flows, name: "Node-RED IoT flows", match: [node-red-flows]}
+  - id: iot-low-power-links
+    name: "Low power WAN connectivity"
+    source: "https://www.gsma.com/solutions-and-impact/technologies/internet-of-things/"
+    match: [iot-low-power-links]
+    subtopics:
+      - {id: iot-low-power-links-nb-iot-lte-m-psm, name: "NB-IoT and LTE-M power saving", match: [nb-iot-lte-m-psm]}
+      - {id: iot-low-power-links-mqtt-sn, name: "MQTT-SN for constrained networks", match: [mqtt-sn]}

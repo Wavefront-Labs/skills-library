@@ -1,0 +1,1311 @@
+# Canonical coverage spec: Observability (Prometheus/Grafana stack, OpenTelemetry, SRE practice).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (not from what we happened to write), so
+# the check measures the library against the subject, not against itself.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (prometheus.io
+# doc sub-headings and config blocks, grafana.com doc sections, opentelemetry.io spec and
+# collector component list, SRE Book / Workbook chapter sub-sections).
+subject: observability
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [observability, prometheus-grafana, site-reliability-engineering]
+sources:
+  - "Prometheus Certified Associate (PCA) curriculum (CNCF/Linux Foundation): Observability Concepts 18%, Prometheus Fundamentals 20%, PromQL 28%, Instrumentation & Exporters 16%, Alerting & Dashboarding 18%"
+  - "prometheus.io/docs table of contents (Getting started, Configuration, Storage, Federation, Agent mode, Management API, Alertmanager, Pushgateway, Exporters, Client libraries, Best practices)"
+  - "prometheus.io/docs sub-headings: configuration.md config blocks (<scrape_config>, <*_sd_config>, <relabel_config>, <remote_write>, <queue_config>, <remote_read>, <tls_config>), querying/functions.md function families, storage.md (compaction, backfilling, out-of-order, snapshots), alerting/configuration.md (route, receivers, inhibit_rules, time_intervals), prometheus/latest/configuration/unit_testing_rules.md"
+  - "opentelemetry.io/docs table of contents (Concepts: signals, instrumentation, context propagation, semantic conventions, sampling, resources; Collector: configuration, deployment, scaling, transforming telemetry, troubleshooting, custom collector; Kubernetes: operator, helm)"
+  - "opentelemetry-collector-contrib component list (receivers, processors, exporters, connectors, extensions) and OTel specification (trace SDK, metrics SDK, logs SDK, propagators)"
+  - "grafana.com/docs table of contents (Dashboards, Panels & visualizations, Alerting, Administration, Data sources, Explore, Setup/Upgrade; Loki, Tempo, Mimir, Pyroscope, Alloy, OnCall/IRM, SLO, Synthetic Monitoring, Faro, Beyla) and each product's Configure / Operate / Query sections"
+  - "Google SRE Book (2016) chapter list and chapter sub-sections: Embracing Risk, SLOs, Eliminating Toil, Monitoring Distributed Systems, Automation, Release Engineering, Practical Alerting, Being On-Call, Effective Troubleshooting, Emergency Response, Managing Incidents, Postmortem Culture, Tracking Outages, Testing for Reliability, Load Balancing, Handling Overload, Cascading Failures, Distributed Consensus, Cron, Data Processing Pipelines, Data Integrity, Reliable Product Launches, Accelerating SREs to On-Call, Dealing with Interrupts, Communication and Collaboration"
+  - "Google SRE Workbook (2018) chapter list and sub-sections: SRE and DevOps, Implementing SLOs, Monitoring, Alerting on SLOs, Eliminating Toil, Simplicity, On-Call, Incident Response, Postmortem Culture, Managing Load, NALSD, Data Processing Pipelines, Configuration Design, Configuration Specifics, Canarying Releases, Engaging with SRE, Organizational Change"
+topics:
+  # --- Observability concepts (PCA 18%; SRE Book Monitoring Distributed Systems; OTel Concepts)
+  - id: signals-tradeoffs
+    name: Metrics vs logs vs traces vs events
+    source: PCA/Observability Concepts; opentelemetry.io/Concepts/Signals
+    match: [three-pillars, telemetry-signals, signal-selection]
+    subtopics:
+      - {id: when-metrics, name: Choosing metrics for a question (aggregatable, cheap, bounded cardinality), match: [when-to-use-metrics, metrics-selection]}
+      - {id: when-logs, name: Choosing logs or events for high-cardinality context, match: [when-to-use-logs, log-events]}
+      - {id: when-traces, name: Choosing traces for request-flow questions, match: [when-to-use-traces, request-flow-analysis]}
+      - {id: wide-events, name: Wide events and canonical log lines, match: [canonical-log-line, wide-event-design]}
+      - {id: profiles-signal, name: Profiles as a fourth signal and when to add them, match: [profiles-signal, when-to-profile]}
+      - {id: metrics-from-signals, name: Deriving metrics from spans and logs instead of double instrumenting, match: [metrics-from-spans, derived-metrics-from-logs]}
+      - {id: signal-cost-comparison, name: Comparing per-signal storage and query cost for a workload, match: [signal-cost-comparison, per-signal-cost]}
+      - {id: observability-maturity, name: Assessing observability maturity and signal coverage gaps, match: [observability-maturity-assessment, signal-coverage-audit]}
+  - id: golden-signals
+    name: Four golden signals / RED / USE
+    source: SRE Book/Monitoring Distributed Systems (latency, traffic, errors, saturation; worrying about the tail; choosing granularity)
+    match: [golden-signals, red-method, use-method]
+    subtopics:
+      - {id: latency-signal, name: Measuring latency correctly (success vs error latency, percentiles), match: [latency-measurement, latency-percentiles]}
+      - {id: traffic-errors-signal, name: Traffic and error-rate measurement, match: [traffic-metrics, error-rate-measurement]}
+      - {id: saturation-signal, name: Saturation measurement and leading indicators, match: [saturation-metrics, saturation-signal]}
+      - {id: tail-latency, name: Worrying about the tail (bucketed latency instead of averages), match: [tail-latency, worrying-about-the-tail]}
+      - {id: measurement-granularity, name: Choosing the appropriate resolution for measurements, match: [measurement-granularity, resolution-choice]}
+      - {id: red-dashboard, name: Building a RED dashboard per service, match: [red-dashboard, rate-errors-duration-dashboard]}
+      - {id: use-checklist, name: USE method checklist per resource (CPU, memory, disk, network), match: [use-method-checklist, resource-utilization-saturation-errors]}
+      - {id: black-white-box, name: Black-box vs white-box monitoring split, match: [black-box-monitoring, white-box-monitoring]}
+      - {id: symptoms-vs-causes, name: Symptoms vs causes split between alerts and dashboards, match: [symptoms-vs-causes, cause-based-dashboards]}
+  - id: slo-basics
+    name: SLI/SLO/SLA basics and SLI implementation
+    source: PCA/Observability Concepts; SRE Workbook/Implementing SLOs (getting started, SLI spec vs implementation, measuring, choosing targets, documenting, dashboards and reports, continuous improvement)
+    match: [slo, sli, sla, sli-implementation]
+    subtopics:
+      - {id: sli-menu, name: Choosing SLI types from the SLI menu (availability, latency, freshness, correctness, throughput), match: [sli-menu, sli-types]}
+      - {id: sli-measurement-sources, name: Picking the measurement point (server logs, LB metrics, client, synthetic), match: [sli-measurement-sources, server-side-vs-client-side-sli]}
+      - {id: slo-target-selection, name: Choosing targets and windows (achievable vs aspirational), match: [slo-target-selection, aspirational-slo]}
+      - {id: slo-documentation, name: Writing the SLO document, match: [slo-documentation, slo-document-template]}
+      - {id: slo-reporting, name: SLO dashboards and periodic reports, match: [slo-dashboard, slo-report]}
+      - {id: slo-review, name: Continuous improvement and SLO review cadence, match: [slo-review-cadence, slo-refinement]}
+      - {id: sli-spec-vs-impl, name: SLI specification vs SLI implementation, match: [sli-specification-vs-implementation, sli-specification]}
+      - {id: window-based-slo, name: Request-based vs window-based (time-slice) SLOs, match: [window-based-slo, time-slice-slo]}
+      - {id: rolling-calendar, name: Rolling vs calendar compliance windows, match: [rolling-window-slo, calendar-window-slo]}
+      - {id: sli-recording-rules, name: Computing SLIs and remaining budget with Prometheus recording rules, match: [sli-recording-rules, error-budget-remaining-query]}
+  - id: instrumentation-strategy
+    name: Instrumentation strategy across services
+    source: PCA/Instrumentation; prometheus.io/Best practices/Instrumentation (online-serving, offline processing, batch jobs, libraries, failures, thread pools, caches)
+    match: [instrumentation, instrumentation-strategy]
+    subtopics:
+      - {id: online-serving, name: Instrumenting online-serving systems, match: [online-serving-instrumentation, request-instrumentation]}
+      - {id: offline-batch, name: Instrumenting offline processing and batch jobs, match: [batch-job-instrumentation, offline-processing-metrics]}
+      - {id: instrumenting-libraries, name: Instrumenting libraries and subsystems, match: [library-instrumentation, instrumenting-libraries]}
+      - {id: failure-counting, name: Counting failures and logging-derived metrics, match: [failure-counting, error-instrumentation]}
+      - {id: pools-caches, name: Instrumenting thread pools, caches and queues, match: [cache-instrumentation, thread-pool-metrics]}
+      - {id: avoid-missing-metrics, name: Avoiding missing metrics by initialising label values, match: [initialize-label-values, avoid-missing-metrics]}
+      - {id: inner-loops, name: Instrumenting inner loops and hot paths cheaply, match: [inner-loop-instrumentation, hot-path-metrics-cost]}
+      - {id: metric-type-choice, name: Choosing counter vs gauge vs histogram for a measurement, match: [metric-type-selection, counter-vs-gauge]}
+      - {id: outbound-calls, name: Instrumenting outbound dependency calls from clients, match: [outbound-call-instrumentation, dependency-call-metrics]}
+      - {id: instrumentation-review, name: Instrumentation code review checklist, match: [instrumentation-review-checklist]}
+  - id: signal-correlation
+    name: Correlating logs, traces and metrics (Explore, correlations, trace ids in logs)
+    source: OTel Concepts/Signals; Grafana docs/Explore and Correlations; data source trace-to-logs/metrics settings; exemplars
+    match: [signal-correlation, log-trace-correlation, trace-id-in-logs, explore, correlations, logs-to-traces]
+    subtopics:
+      - {id: explore-split-view, name: Explore split view and query history workflow, match: [explore-split-view, explore-workflow]}
+      - {id: correlations-editor, name: Correlations editor (source, target, transformations), match: [correlations-editor, correlation-transformations]}
+      - {id: derived-fields-config, name: Loki derived fields and data links to traces, match: [loki-derived-fields, derived-field-regex]}
+      - {id: trace-to-logs-metrics, name: Tempo trace-to-logs and trace-to-metrics configuration, match: [trace-to-logs, trace-to-metrics]}
+      - {id: exemplars-setup, name: Exemplars end to end (client, Prometheus storage, data source), match: [prometheus-exemplars, exemplar-storage, exemplar-config]}
+      - {id: data-links, name: Panel data links and field links across data sources, match: [data-links-config, field-data-links]}
+      - {id: metrics-to-logs, name: Metrics-to-logs jumps and label alignment across signals, match: [metrics-to-logs, label-alignment-across-signals]}
+      - {id: service-map-navigation, name: Service map navigation from traces to RED metrics, match: [service-map-navigation, tempo-service-graph-view]}
+      - {id: correlation-ids, name: Correlation IDs vs trace IDs for business transactions, match: [correlation-id-design, business-transaction-id]}
+  - id: observability-cost
+    name: Telemetry cost and retention control
+    source: OTel Concepts/Sampling; Grafana docs/Adaptive Metrics, Adaptive Logs, Usage insights; prometheus.io/Storage retention
+    match: [cost-of-observability, telemetry-budget, observability-cost]
+    subtopics:
+      - {id: unused-metrics, name: Finding and dropping unused metrics (adaptive metrics, usage analysis), match: [unused-metrics, adaptive-metrics, metric-usage-analysis]}
+      - {id: log-volume, name: Reducing log volume (sampling, drop rules, adaptive logs), match: [log-volume-reduction, adaptive-logs]}
+      - {id: trace-volume, name: Controlling trace volume and sampling ratios by cost, match: [trace-volume, sampling-ratio-cost]}
+      - {id: retention-tiers, name: Tiered retention and downsampling by signal, match: [retention-tiering, tiered-retention]}
+      - {id: usage-attribution, name: Usage insights and cost attribution per team, match: [usage-insights, cost-attribution, billing-dashboards]}
+      - {id: cardinality-budget, name: Per-team cardinality budgets and chargeback, match: [cardinality-budget, telemetry-chargeback]}
+      - {id: span-attribute-pruning, name: Pruning span attributes and events to cut trace bytes, match: [span-attribute-pruning, trace-payload-reduction]}
+      - {id: scrape-interval-cost, name: Scrape interval and resolution vs cost, match: [scrape-interval-cost, resolution-cost-tradeoff]}
+      - {id: pricing-models, name: Modelling SaaS observability pricing (active series, DPM, GB ingested), match: [observability-pricing-model, active-series-billing]}
+  - id: structured-logging
+    name: Structured logging and log pipelines
+    source: OTel Concepts/Logs data model; Grafana Loki docs; logging best practices
+    match: [structured-logging, log-aggregation, log-pipeline]
+    subtopics:
+      - {id: log-schema, name: Designing a log schema and field naming, match: [log-schema-design, field-naming]}
+      - {id: log-levels, name: Log level policy and dynamic level changes, match: [log-level-policy, dynamic-log-level]}
+      - {id: multiline-parsing, name: Multiline and stack-trace parsing, match: [stack-trace-parsing, multiline-parsing]}
+      - {id: log-redaction, name: Redacting PII and secrets in the pipeline, match: [log-redaction-pipeline, pii-scrubbing]}
+      - {id: log-dedup, name: Deduplicating and suppressing repetitive logs, match: [log-deduplication, repetitive-log-suppression]}
+      - {id: log-sampling, name: Log sampling strategies (rate-limited, per-level, tail), match: [log-sampling-strategy, tail-based-log-sampling]}
+      - {id: request-log-context, name: Request-scoped log context (MDC, contextvars, child loggers), match: [mdc-logging, request-scoped-log-context]}
+      - {id: json-logging-libraries, name: Configuring JSON logging in logback, zap, structlog and pino, match: [json-logging-config, structlog, zap-logger, pino-logger]}
+      - {id: audit-logs, name: Audit logs vs operational logs (retention, integrity), match: [audit-log-design, audit-vs-operational-logs]}
+      - {id: log-backpressure, name: Log pipeline buffering and backpressure, match: [log-pipeline-backpressure, log-buffering]}
+  # --- Prometheus fundamentals (PCA 20%; prometheus.io docs)
+  - id: prometheus-architecture
+    name: Prometheus architecture, components, push vs pull and Pushgateway
+    source: PCA/Prometheus Fundamentals; prometheus.io/Pushgateway; prometheus.io/Management API; prometheus.io/Configuration (reload); command-line flags
+    match: [prometheus-architecture, prometheus-components, push-vs-pull, pushgateway]
+    subtopics:
+      - {id: pushgateway-usage, name: When to use the Pushgateway and pushing batch-job metrics, match: [pushgateway-when-to-use, pushgateway-batch-jobs]}
+      - {id: pushgateway-ops, name: Pushgateway grouping keys, admin API and persistence, match: [pushgateway-admin-api, pushgateway-grouping-keys]}
+      - {id: management-api, name: Management API (healthy, ready, reload, quit), match: [management-api, healthy-ready-endpoints]}
+      - {id: config-reload, name: Hot-reloading configuration (SIGHUP, lifecycle endpoint), match: [config-reload-sighup, hot-reload]}
+      - {id: command-line-flags, name: Command-line flags and their defaults, match: [prometheus-flags, command-line-flags]}
+      - {id: prometheus-install, name: Installing Prometheus (binary, systemd unit, container), match: [prometheus-installation, prometheus-systemd-unit]}
+      - {id: global-config, name: global config block (scrape_interval, evaluation_interval, external_labels), match: [global-config-block, external-labels]}
+      - {id: prometheus-ha-pairs, name: Running HA Prometheus replica pairs, match: [prometheus-ha-pair, prometheus-replica-pairs]}
+      - {id: prometheus-3-migration, name: Upgrading Prometheus 2.x to 3.x, match: [prometheus-3-migration, prometheus-upgrade]}
+      - {id: feature-flags, name: Feature flags (--enable-feature), match: [enable-feature-flags, prometheus-feature-flags]}
+      - {id: meta-monitoring, name: Meta-monitoring Prometheus and the dead man's switch, match: [prometheus-meta-monitoring, deadmans-switch]}
+  - id: scrape-config
+    name: Scrape configuration and targets
+    source: prometheus.io/Configuration <scrape_config> (limits, auth, proxy, scrape_protocols, honor_timestamps, track_timestamps_staleness, params, metrics_path)
+    match: [scrape-config, scrape-configs, scrape-interval]
+    subtopics:
+      - {id: scrape-limits, name: Scrape limits (sample_limit, label_limit, target_limit, body_size_limit), match: [scrape-limits, target-limit, sample-limit-tuning]}
+      - {id: scrape-auth, name: Scrape authentication (basic_auth, authorization, oauth2), match: [scrape-auth, scrape-oauth2, scrape-bearer-token]}
+      - {id: scrape-proxy, name: Scraping through proxies (proxy_url, no_proxy, proxy_from_environment), match: [scrape-proxy, proxy-url]}
+      - {id: scrape-protocols, name: scrape_protocols negotiation and classic histograms, match: [scrape-protocols-negotiation, scrape-classic-histograms]}
+      - {id: timestamp-handling, name: honor_timestamps and track_timestamps_staleness, match: [track-timestamps-staleness, timestamp-handling]}
+      - {id: scrape-params, name: Per-job params and metrics_path overrides, match: [scrape-params, metrics-path-override]}
+      - {id: scrape-timeouts, name: scrape_interval vs scrape_timeout tuning, match: [scrape-timeout-tuning, scrape-timeout]}
+      - {id: honor-labels, name: honor_labels conflicts and exported_ labels, match: [honor-labels, exported-labels]}
+      - {id: target-health, name: Diagnosing target health (up, scrape_duration_seconds, targets page errors), match: [target-health-debugging, up-metric]}
+      - {id: scrape-config-files, name: scrape_config_files and splitting large configs, match: [scrape-config-files, split-prometheus-config]}
+  - id: service-discovery-relabeling
+    name: Service discovery and target relabeling
+    source: prometheus.io/Configuration (<kubernetes_sd_config> roles, <ec2_sd_config>, <azure_sd_config>, <gce_sd_config>, <consul_sd_config>, <dns_sd_config>, <http_sd_config>, <docker_sd_config>, <relabel_config> actions)
+    match: [service-discovery, kubernetes-sd, file-sd, relabeling, relabel-configs]
+    subtopics:
+      - {id: kubernetes-sd-roles, name: kubernetes_sd roles (node, service, pod, endpoints, endpointslice, ingress), match: [kubernetes-sd-roles, endpointslice-role, pod-role]}
+      - {id: cloud-sd, name: Cloud provider SD (ec2, azure, gce), match: [ec2-sd-configs, azure-sd-configs, gce-sd-configs]}
+      - {id: consul-dns-sd, name: Consul and DNS service discovery, match: [consul-sd-configs, dns-sd-configs]}
+      - {id: http-sd, name: http_sd and writing a custom discovery endpoint, match: [http-sd-configs, custom-service-discovery]}
+      - {id: docker-sd, name: Docker and Docker Swarm SD, match: [docker-sd-configs, dockerswarm-sd]}
+      - {id: relabel-actions, name: relabel_config actions (replace, keep, drop, hashmod, labelmap, labeldrop, lowercase, keepequal), match: [relabel-actions, labelmap-action, hashmod-action, keepequal]}
+      - {id: file-sd, name: file_sd_configs with generated target files, match: [file-sd-configs, file-sd-refresh]}
+      - {id: kubernetes-sd-selectors, name: kubernetes_sd selectors, namespaces and attach_metadata, match: [kubernetes-sd-selectors, attach-metadata]}
+      - {id: meta-labels, name: __meta_ labels and reserved relabel targets (__address__, __scheme__, __param_), match: [meta-labels, address-relabeling]}
+      - {id: hashmod-sharding, name: Sharding scrape targets across servers with hashmod, match: [hashmod-sharding, scrape-target-sharding]}
+      - {id: relabel-debugging, name: Debugging relabeling (service discovery page, relabel simulators), match: [relabel-debugging, relabeling-debugger]}
+      - {id: other-sd, name: Other SD mechanisms (nomad, eureka, openstack, hetzner), match: [nomad-sd, eureka-sd, openstack-sd]}
+  - id: data-model
+    name: Data model, metric types and exposition format
+    source: PCA/Data Model & Labels; prometheus.io/Concepts/Metric types; prometheus.io/Exposition formats (text, OpenMetrics, protobuf)
+    match: [data-model, exposition-format, openmetrics, text-format]
+    subtopics:
+      - {id: counter-semantics, name: Counter semantics and reset handling, match: [counter-semantics, counter-resets]}
+      - {id: histogram-vs-summary, name: Histogram vs summary choice and quantile aggregation limits, match: [histogram-vs-summary, summary-quantiles]}
+      - {id: openmetrics-features, name: OpenMetrics-only features (exemplars, _created, stateset, info), match: [openmetrics-exemplars, openmetrics-created, stateset-info]}
+      - {id: protobuf-exposition, name: Protobuf exposition and native-histogram scraping, match: [protobuf-exposition, native-histogram-scrape]}
+      - {id: naming-rules, name: Metric and label name rules, reserved labels, UTF-8 names, match: [label-naming-rules, metric-name-regex, reserved-labels, utf8-metric-names]}
+      - {id: gauge-semantics, name: Gauge semantics and pitfalls, match: [gauge-semantics, gauge-pitfalls]}
+      - {id: info-enum-metrics, name: Info and enum-style metrics, match: [info-metrics-pattern, enum-metrics]}
+      - {id: target-labels, name: Target labels vs instrumentation labels (job, instance), match: [job-instance-labels, target-labels]}
+      - {id: promtool-check-metrics, name: Validating exposition with promtool check metrics, match: [promtool-check-metrics, exposition-validation]}
+      - {id: content-negotiation, name: Exposition content negotiation and Accept headers, match: [exposition-content-negotiation, accept-header-negotiation]}
+  - id: metric-naming-cardinality
+    name: Metric naming and cardinality control
+    source: PCA/Structuring & Naming Metrics; prometheus.io/Best practices/Naming (base units, labels); Instrumentation (do not overuse labels)
+    match: [metric-naming, cardinality, high-cardinality]
+    subtopics:
+      - {id: base-units, name: Base units and unit suffixes, match: [base-units, unit-suffixes]}
+      - {id: label-design, name: Deciding what becomes a label, match: [label-design, when-to-use-labels]}
+      - {id: cardinality-analysis, name: Finding cardinality offenders (TSDB status API, top series), match: [cardinality-analysis, tsdb-status-api, top-series]}
+      - {id: cardinality-limits, name: Enforcing series limits per scrape and per tenant, match: [series-limits, enforcing-cardinality-limits]}
+      - {id: dropping-metrics, name: Dropping unused metrics with metric_relabel_configs, match: [metric-dropping, drop-unused-metrics]}
+      - {id: suffix-conventions, name: _total, _count, _sum, _bucket and _info suffix conventions, match: [metric-suffix-conventions, total-suffix]}
+      - {id: label-value-normalisation, name: Normalising label values (route templating, status classes), match: [label-value-normalization, route-templating]}
+      - {id: cardinality-estimation, name: Estimating cardinality before shipping a metric, match: [cardinality-estimation, series-count-estimate]}
+      - {id: otel-name-translation, name: OTel to Prometheus name translation (units, suffixes, dots), match: [otel-prometheus-name-translation, translation-strategy]}
+  - id: tsdb-storage
+    name: TSDB storage, retention, WAL and blocks
+    source: prometheus.io/Storage (local storage layout, compaction, operational aspects, backfilling, out-of-order, snapshots); TSDB admin API
+    match: [tsdb, wal, storage-retention, tsdb-blocks]
+    subtopics:
+      - {id: block-layout, name: Block layout on disk (chunks, index, meta.json), match: [block-layout, chunks-index-meta]}
+      - {id: compaction, name: Compaction behaviour and tuning, match: [compaction-tuning, block-compaction]}
+      - {id: backfilling, name: Backfilling from OpenMetrics and recording rules (promtool tsdb create-blocks-from), match: [backfilling, create-blocks-from-openmetrics, promtool-backfill]}
+      - {id: snapshots-backup, name: Snapshots and backup/restore of the TSDB, match: [tsdb-snapshot, prometheus-backup]}
+      - {id: out-of-order, name: Out-of-order ingestion window, match: [out-of-order-ingestion, out-of-order-time-window]}
+      - {id: wal-recovery, name: WAL corruption and replay recovery, match: [wal-corruption, wal-replay-recovery]}
+      - {id: series-deletion, name: Deleting series and cleaning tombstones, match: [delete-series-api, tombstone-cleanup]}
+      - {id: retention-size, name: Size- vs time-based retention flags, match: [retention-size, storage-tsdb-retention-time]}
+      - {id: disk-sizing, name: Disk capacity planning from bytes per sample, match: [tsdb-disk-sizing, bytes-per-sample]}
+      - {id: promtool-tsdb-analyze, name: promtool tsdb analyze, list and dump, match: [promtool-tsdb-analyze, tsdb-analyze]}
+      - {id: tsdb-filesystem, name: Filesystem and storage medium requirements (no NFS), match: [tsdb-filesystem-requirements, prometheus-nfs]}
+  - id: remote-write
+    name: Remote write/read tuning and agent mode
+    source: prometheus.io/Configuration <remote_write> (<queue_config>, write_relabel_configs, sigv4, azuread, protobuf_message), <remote_read>; Storage/Remote endpoints; Agent mode
+    match: [remote-write-tuning, remote-write-queue, remote-read, agent-mode, prometheus-agent]
+    subtopics:
+      - {id: queue-config, name: queue_config tuning (shards, capacity, max_samples_per_send, batch_send_deadline, backoff), match: [queue-config-tuning, max-shards, batch-send-deadline]}
+      - {id: write-relabel, name: Filtering with write_relabel_configs, match: [write-relabel-filtering, remote-write-filtering]}
+      - {id: remote-write-auth, name: Remote write authentication (sigv4, azuread, oauth2, basic), match: [remote-write-sigv4, remote-write-azuread]}
+      - {id: remote-write-v2, name: Remote Write 2.0 protocol (protobuf_message, metadata, native histograms), match: [remote-write-2-protocol, prw2]}
+      - {id: remote-read-config, name: remote_read configuration (read_recent, required_matchers), match: [remote-read-config, read-recent, required-matchers]}
+      - {id: agent-mode-ops, name: Operating agent mode (WAL retention, flags, limitations), match: [agent-mode-ops, agent-wal]}
+      - {id: remote-write-monitoring, name: Monitoring remote write (lag, failures, shards metrics), match: [remote-write-metrics, remote-write-lag]}
+      - {id: remote-write-receiver, name: Receiving remote write (--web.enable-remote-write-receiver), match: [enable-remote-write-receiver, prometheus-as-remote-write-receiver]}
+      - {id: send-exemplars-metadata, name: Sending exemplars, native histograms and metadata, match: [send-exemplars, metadata-config]}
+      - {id: remote-write-troubleshooting, name: Troubleshooting remote write (429s, out of order, dropped samples), match: [remote-write-troubleshooting, remote-write-429]}
+  - id: federation
+    name: Federation
+    source: prometheus.io/Federation (hierarchical, cross-service, configuring federation)
+    match: [federation, hierarchical-federation]
+    subtopics:
+      - {id: federation-tree, name: Designing a hierarchical federation tree, match: [federation-tree, federation-hierarchy]}
+      - {id: cross-service-federation, name: Cross-service federation for selected series, match: [cross-service-federation-setup, federating-selected-series]}
+      - {id: federate-config, name: Configuring the /federate scrape (match params, honor_labels), match: [federate-match-params, federation-scrape-config]}
+      - {id: federation-pitfalls, name: Federation pitfalls (staleness, timestamp skew, series explosion), match: [federation-staleness, federation-timestamp-skew]}
+      - {id: federation-vs-alternatives, name: Choosing federation vs remote write vs Thanos, match: [federation-vs-remote-write]}
+      - {id: federate-recording-rules, name: Federating only aggregated recording rules, match: [federate-recording-rules, aggregated-federation]}
+      - {id: federation-security, name: Securing /federate across networks, match: [federation-security, federate-endpoint-auth]}
+      - {id: federation-monitoring, name: Monitoring federation scrape size and duration, match: [federation-scrape-duration, federation-monitoring]}
+  - id: prometheus-security
+    name: TLS, basic auth and web config
+    source: prometheus.io/Configuration/web.yml (tls_server_config, http_server_config, basic_auth_users); prometheus.io/Security model; exporter-toolkit
+    match: [prometheus-tls, web-config, prometheus-security]
+    subtopics:
+      - {id: tls-server-config, name: tls_server_config (min_version, cipher_suites, curves), match: [tls-server-config, cipher-suites, min-tls-version]}
+      - {id: mtls-client-auth, name: Client certificate auth (client_auth_type, client_ca_file) and mTLS scraping, match: [client-auth-type, mtls-scraping]}
+      - {id: basic-auth-users, name: basic_auth_users and bcrypt password generation, match: [basic-auth-users, htpasswd-bcrypt]}
+      - {id: http-server-config, name: http_server_config (http2, security headers), match: [http-server-config, security-headers]}
+      - {id: security-model, name: Prometheus security model and hardening the admin/lifecycle APIs, match: [security-model, admin-api-hardening]}
+      - {id: secrets-in-config, name: Secrets in config (credentials_file, password_file), match: [credentials-file, password-file-secrets]}
+      - {id: reverse-proxy-auth, name: Fronting Prometheus with an auth reverse proxy (oauth2-proxy), match: [prometheus-reverse-proxy, oauth2-proxy-prometheus]}
+      - {id: exporter-toolkit-config, name: Securing exporters with exporter-toolkit web config, match: [exporter-toolkit, exporter-web-config]}
+      - {id: prom-label-proxy, name: Label-enforcing query proxy (prom-label-proxy), match: [prom-label-proxy, label-enforcement-proxy]}
+  - id: prometheus-troubleshooting
+    name: Prometheus performance troubleshooting (memory, slow queries, query log)
+    source: PCA/Understanding Limitations; prometheus.io/Querying (query log, active query tracker); command-line flags (query.*); /debug/pprof; TSDB stats
+    match: [prometheus-troubleshooting, query-log, prometheus-memory, slow-queries]
+    subtopics:
+      - {id: query-log-analysis, name: Enabling and analysing the query log and active query tracker, match: [query-log-analysis, active-query-tracker]}
+      - {id: query-limits, name: Query limits (query.max-samples, query.timeout, max-concurrency), match: [query-max-samples, query-timeout-tuning]}
+      - {id: memory-profiling, name: Profiling Prometheus memory with pprof, match: [prometheus-pprof, heap-profile]}
+      - {id: churn-diagnosis, name: Diagnosing series churn, match: [series-churn, churn-diagnosis]}
+      - {id: rule-eval-latency, name: Rule evaluation latency and missed evaluations, match: [rule-evaluation-latency, rule-group-timing]}
+      - {id: debug-endpoints, name: Debug and runtime endpoints (/api/v1/status/*, /-/healthy, /debug), match: [debug-endpoints, runtime-info]}
+      - {id: oom-recovery, name: Recovering an OOM-looping Prometheus, match: [prometheus-oom-recovery, oom-loop]}
+      - {id: wal-replay-time, name: Slow startup and WAL replay time, match: [wal-replay-time, slow-startup-prometheus]}
+      - {id: scrape-failure-diagnosis, name: Diagnosing scrape failures (context deadline exceeded, connection refused), match: [scrape-failure-diagnosis, context-deadline-exceeded]}
+      - {id: gomemlimit, name: GOMEMLIMIT and GOGC tuning, match: [gomemlimit, gogc-tuning]}
+  - id: kubernetes-monitoring
+    name: Prometheus Operator CRDs and kube-prometheus (kube-state-metrics, cAdvisor)
+    source: prometheus-operator API reference (Prometheus, PrometheusRule, Probe, AlertmanagerConfig, ScrapeConfig, sharding); kube-state-metrics docs (CustomResourceStateMetrics); cAdvisor metrics
+    match: [prometheus-operator, servicemonitor, podmonitor, kube-state-metrics, kube-prometheus-stack]
+    subtopics:
+      - {id: prometheus-cr, name: Prometheus custom resource (storage, retention, resources, external labels), match: [prometheus-cr, prometheus-custom-resource, storage-spec]}
+      - {id: prometheusrule-crd, name: PrometheusRule CRD and rule selectors, match: [prometheusrule-crd, rule-selectors]}
+      - {id: probe-crd, name: Probe CRD for blackbox targets, match: [probe-crd, blackbox-probe-crd]}
+      - {id: alertmanagerconfig-crd, name: AlertmanagerConfig CRD (namespaced routing), match: [alertmanagerconfig-crd]}
+      - {id: scrapeconfig-crd, name: ScrapeConfig CRD for non-Kubernetes targets, match: [scrapeconfig-crd]}
+      - {id: operator-sharding, name: Sharding Prometheus with the operator, match: [operator-sharding, prometheus-shards]}
+      - {id: ksm-custom-resource-state, name: kube-state-metrics custom resource state metrics, match: [custom-resource-state, kube-state-metrics-crd-metrics]}
+      - {id: cadvisor-metrics, name: cAdvisor container metrics (CPU throttling, memory working set), match: [cadvisor-metrics, container-cpu-throttling]}
+      - {id: servicemonitor-troubleshooting, name: ServiceMonitor and PodMonitor selectors and discovery troubleshooting, match: [servicemonitor-selectors, servicemonitor-troubleshooting]}
+      - {id: kube-prometheus-stack-values, name: kube-prometheus-stack Helm values and CRD upgrades, match: [kube-prometheus-stack-values, kube-prometheus-crd-upgrade]}
+      - {id: control-plane-monitoring, name: Monitoring control-plane components (etcd, apiserver, scheduler, controller-manager), match: [control-plane-monitoring, apiserver-metrics]}
+      - {id: kubelet-metrics, name: Kubelet, resource and probe metrics endpoints, match: [kubelet-metrics-endpoint, kubelet-resource-metrics]}
+  - id: thanos
+    name: Thanos (sidecar, query, store, receive, compactor)
+    source: "thanos.io docs (Components: sidecar, store gateway, compactor, receiver, ruler, query, query frontend, tools; Features: deduplication, downsampling, retention; Storage config)"
+    match: [thanos-sidecar, thanos-query, thanos-receive, thanos-store]
+    subtopics:
+      - {id: sidecar-upload, name: Sidecar block upload and object storage config, match: [sidecar-upload, thanos-sidecar-setup]}
+      - {id: receive-hashring, name: Receive hashring, router/ingestor split and replication, match: [receive-hashring, receive-router-ingestor]}
+      - {id: compactor-downsampling, name: Compactor retention and downsampling configuration, match: [compactor-retention, downsampling-config]}
+      - {id: store-gateway-caching, name: Store gateway sharding, index cache and bucket cache, match: [store-gateway-sharding, index-cache, bucket-cache]}
+      - {id: query-frontend-tuning, name: Query frontend splitting and response caching, match: [query-splitting, response-caching]}
+      - {id: bucket-tools, name: thanos tools bucket (verify, rewrite, inspect, mark), match: [thanos-tools-bucket, bucket-verify, bucket-rewrite]}
+      - {id: thanos-ruler, name: Thanos Ruler (stateless mode, remote write), match: [thanos-ruler-setup, stateless-ruler]}
+      - {id: thanos-dedup, name: Querier deduplication and replica labels, match: [replica-label-dedup, thanos-dedup]}
+      - {id: objstore-config, name: Object storage configuration (objstore.yml), match: [thanos-objstore-config, objstore-yml]}
+      - {id: thanos-monitoring, name: Monitoring Thanos (mixin, compactor halts), match: [thanos-mixin, compactor-halt]}
+  # --- PromQL (PCA 28%; prometheus.io/Querying)
+  - id: promql-selectors
+    name: Selecting data (selectors, matchers, range vectors)
+    source: prometheus.io/Querying/Basics (instant and range vector selectors, time durations, staleness); HTTP API (query, query_range)
+    match: [promql-selectors, label-matchers, range-vector, instant-vector]
+    subtopics:
+      - {id: regex-matchers, name: Regex matchers (anchoring, alternation, pitfalls), match: [regex-anchoring, regex-matcher-pitfalls]}
+      - {id: name-label-matching, name: Matching on __name__ and UTF-8 quoted names, match: [name-label-matching, metric-name-regex-selector]}
+      - {id: range-durations, name: Choosing range vector durations and duration units, match: [range-duration-choice, duration-units]}
+      - {id: staleness-handling, name: Staleness markers and the lookback window, match: [staleness-markers, lookback-window]}
+      - {id: query-api-usage, name: Using the query and query_range HTTP APIs (step alignment, limits), match: [query-api, query-range-api, step-alignment]}
+      - {id: negative-matchers, name: Negative and empty-label matchers, match: [negative-matchers, empty-label-matcher]}
+      - {id: series-label-apis, name: Series, labels and label values APIs, match: [prometheus-series-api, label-values-api]}
+      - {id: promql-tooling, name: PromQL tooling (promtool query, PromLens, pint), match: [promtool-query, promlens, pint-linter]}
+  - id: promql-rates
+    name: Rates and derivatives
+    source: prometheus.io/Querying/Functions (rate, irate, increase, delta, idelta, deriv, predict_linear, resets, changes)
+    match: [rate, irate, increase]
+    subtopics:
+      - {id: rate-extrapolation, name: rate/increase extrapolation and non-integer results, match: [rate-extrapolation, non-integer-increase]}
+      - {id: irate-vs-rate, name: irate vs rate for spiky counters, match: [irate-vs-rate, spiky-counters]}
+      - {id: predict-linear, name: predict_linear and deriv for forecasting gauges, match: [predict-linear, deriv-forecasting]}
+      - {id: resets-changes, name: resets and changes functions, match: [resets-function, changes-function]}
+      - {id: delta-idelta, name: delta and idelta on gauges, match: [delta-function, idelta]}
+      - {id: rate-interval-sizing, name: Sizing the rate window relative to scrape interval ($__rate_interval), match: [rate-interval-sizing, scrape-interval-multiple]}
+      - {id: rate-then-sum, name: Rate then sum (never sum then rate), match: [rate-then-sum, sum-then-rate-mistake]}
+      - {id: short-lived-series, name: Rates over short-lived series and missed scrapes, match: [short-lived-series-rate, missed-scrape-rate]}
+      - {id: double-exponential-smoothing, name: double_exponential_smoothing (formerly holt_winters), match: [double-exponential-smoothing, holt-winters]}
+  - id: promql-aggregation
+    name: Aggregation operators (sum by/without, topk, count_values)
+    source: prometheus.io/Querying/Operators/Aggregation (sum, min, max, avg, group, stddev, stdvar, count, count_values, bottomk, topk, quantile, limitk, limit_ratio)
+    match: [aggregation, aggregation-operators, sum-by]
+    subtopics:
+      - {id: topk-pitfalls, name: topk/bottomk over time series and graphs, match: [topk-pitfalls, topk-time-series]}
+      - {id: count-values, name: count_values for value distributions, match: [count-values-usage, value-distribution]}
+      - {id: quantile-operator, name: quantile aggregation across series, match: [quantile-operator, aggregated-quantile]}
+      - {id: stddev-stdvar, name: stddev/stdvar for anomaly thresholds, match: [stddev-stdvar, variance-aggregation]}
+      - {id: group-operator, name: group operator and info-metric joins, match: [group-operator, info-metric-join-aggregation]}
+      - {id: limitk, name: limitk and limit_ratio sampling, match: [limitk, limit-ratio]}
+      - {id: by-vs-without, name: by vs without and preserving labels, match: [by-vs-without, without-clause]}
+      - {id: count-series, name: Counting series and targets, match: [count-series, count-by]}
+      - {id: average-of-averages, name: Avoiding average-of-averages, match: [average-of-averages, weighted-average]}
+  - id: promql-binary-ops
+    name: Binary operators and vector matching
+    source: prometheus.io/Querying/Operators (arithmetic, comparison, logical/set, vector matching one-to-one, many-to-one, precedence)
+    match: [vector-matching, binary-operators, group-left]
+    subtopics:
+      - {id: comparison-filtering, name: Comparison operators with and without bool, match: [comparison-filtering, bool-comparison]}
+      - {id: logical-set-operators, name: and/or/unless set operators, match: [logical-set-operators, unless-operator, or-fallback]}
+      - {id: many-to-one, name: Many-to-one matching with group_left label copying, match: [many-to-one-matching, group-left-labels]}
+      - {id: ratio-queries, name: Ratios and percentages (division by zero, label mismatch), match: [ratio-queries, percentage-queries, division-by-zero]}
+      - {id: operator-precedence, name: Operator precedence and parentheses, match: [operator-precedence, promql-precedence]}
+      - {id: absent-defaults, name: absent() and defaulting missing series with or vector(0), match: [absent-function, default-values, or-vector-zero]}
+      - {id: on-ignoring, name: One-to-one matching with on and ignoring, match: [on-ignoring, one-to-one-matching]}
+      - {id: many-to-many-errors, name: Fixing many-to-many and duplicate series errors, match: [many-to-many-error, duplicate-series-error]}
+      - {id: scalar-vector, name: scalar() and vector() conversions, match: [scalar-function, vector-function]}
+      - {id: math-functions, name: Math functions (abs, ln, log2, sgn, exp, trig), match: [promql-math-functions, sgn-function]}
+  - id: promql-histograms
+    name: Histograms and histogram_quantile
+    source: prometheus.io/Querying/Functions (histogram_quantile, histogram_count, histogram_sum, histogram_fraction, histogram_avg); prometheus.io/Native histograms
+    match: [histogram-quantile, native-histograms]
+    subtopics:
+      - {id: histogram-quantile-usage, name: histogram_quantile aggregation by le, match: [histogram-quantile-usage, quantile-aggregation-by-le]}
+      - {id: bucket-design, name: Designing bucket boundaries, match: [bucket-boundaries, bucket-layout]}
+      - {id: native-histogram-functions, name: histogram_fraction, histogram_count, histogram_sum, histogram_avg, match: [histogram-fraction, histogram-count-sum]}
+      - {id: apdex, name: Apdex and SLO fractions from buckets, match: [apdex-score, apdex]}
+      - {id: native-histogram-migration, name: Migrating classic to native histograms, match: [native-histogram-migration, classic-to-native]}
+      - {id: histogram-heatmap, name: Heatmaps from histogram buckets, match: [heatmap-from-buckets, histogram-heatmap]}
+      - {id: histogram-quantile-nan, name: histogram_quantile NaN and Inf results and missing +Inf bucket, match: [histogram-quantile-nan, missing-inf-bucket]}
+      - {id: histogram-stddev, name: histogram_stddev and histogram_stdvar, match: [histogram-stddev, histogram-stdvar]}
+      - {id: average-latency, name: Average latency from _sum and _count, match: [average-latency-sum-count, sum-over-count]}
+  - id: promql-timestamps
+    name: Timestamp metrics and time functions
+    source: prometheus.io/Querying/Functions (time, timestamp, minute, hour, day_of_*, days_in_month, month, year); Best practices/Instrumentation (timestamps not time since)
+    match: [timestamp-metrics, time-functions, timestamp]
+    subtopics:
+      - {id: freshness-alerts, name: Freshness and last-success age alerts, match: [freshness-alerts, last-success-age]}
+      - {id: business-hours, name: Time-of-day and day-of-week conditions, match: [time-of-day-alerts, business-hours-alerts]}
+      - {id: restart-detection, name: Restart and uptime detection from *_start_time_seconds, match: [process-start-time, restart-detection]}
+      - {id: cert-expiry, name: Certificate expiry alerting, match: [certificate-expiry-alerts, cert-expiry]}
+      - {id: timestamp-function, name: timestamp() for sample age and staleness checks, match: [timestamp-function, sample-age]}
+      - {id: calendar-queries, name: Monthly and calendar calculations (days_in_month, month), match: [days-in-month, calendar-month-queries]}
+      - {id: timezone-offsets, name: UTC-only time functions and timezone offsets, match: [promql-timezone, utc-offset-queries]}
+      - {id: event-timestamps, name: Exposing event timestamps instead of time-since, match: [timestamp-not-time-since, event-timestamp-metric]}
+  - id: promql-subqueries
+    name: "Subqueries, offset and @ modifier"
+    source: prometheus.io/Querying/Basics (subquery, offset modifier, @ modifier); Functions (*_over_time, label_replace, label_join, sort, clamp, round)
+    match: [subqueries, offset, at-modifier]
+    subtopics:
+      - {id: subquery-usage, name: Subquery resolution and max_over_time(rate()) patterns, match: [subquery-resolution, max-over-time-subquery]}
+      - {id: offset-comparison, name: Offset for week-over-week comparison, match: [offset-comparison, week-over-week]}
+      - {id: at-modifier-usage, name: At modifier with start() and end(), match: [at-modifier-usage, start-end-modifiers]}
+      - {id: smoothing, name: Smoothing with avg_over_time and *_over_time functions, match: [smoothing-over-time, avg-over-time-smoothing]}
+      - {id: label-manipulation, name: label_replace and label_join, match: [label-replace-usage, label-join-usage]}
+      - {id: sort-clamp-round, name: sort, sort_by_label, clamp and round functions, match: [sort-by-label, clamp-functions, round-function]}
+      - {id: absent-present-over-time, name: absent_over_time and present_over_time, match: [absent-over-time, present-over-time]}
+      - {id: quantile-stddev-over-time, name: quantile_over_time and stddev_over_time on gauges, match: [quantile-over-time, stddev-over-time]}
+      - {id: last-over-time, name: last_over_time for sparse series, match: [last-over-time, sparse-series]}
+  # --- Instrumentation and exporters (PCA 16%)
+  - id: client-libraries
+    name: Client libraries (Go, Python, Java, Node)
+    source: prometheus.io/Instrumenting/Client libraries (Go, Java/JVM, Python, Ruby, Rust, .NET, Node); library READMEs (custom collectors, multiprocess, exemplars)
+    match: [client-libraries, client-library, prometheus-client]
+    subtopics:
+      - {id: go-client, name: client_golang (promauto, registries, Go runtime collectors), match: [client-golang-usage, promauto, go-collector]}
+      - {id: java-micrometer, name: Micrometer and Spring Boot Actuator Prometheus endpoint, match: [micrometer-prometheus, spring-boot-actuator-prometheus]}
+      - {id: python-multiprocess, name: Python client multiprocess mode (gunicorn, uvicorn), match: [python-multiprocess-mode, gunicorn-metrics]}
+      - {id: node-client, name: prom-client for Node.js, match: [prom-client-usage, nodejs-metrics]}
+      - {id: dotnet-client, name: prometheus-net and .NET metrics, match: [prometheus-net, dotnet-metrics]}
+      - {id: custom-collector-impl, name: Implementing a custom Collector (collect-time metrics), match: [custom-collector-implementation, collect-callback]}
+      - {id: client-exemplars, name: Attaching exemplars in client libraries, match: [exemplar-instrumentation, client-exemplars]}
+      - {id: python-client-basics, name: Python prometheus_client (start_http_server, decorators, ASGI and WSGI apps), match: [prometheus-client-python, python-metrics-asgi]}
+      - {id: client-java, name: Prometheus Java client (client_java 1.x), match: [client-java, prometheus-java-client]}
+      - {id: rust-ruby-clients, name: Rust and Ruby client libraries, match: [prometheus-rust-client, prometheus-ruby-client]}
+  - id: exporters
+    name: Exporters (node, blackbox) and writing a custom exporter
+    source: node_exporter collectors list; blackbox_exporter modules (http, tcp, icmp, dns, grpc); snmp_exporter generator; mysqld/postgres/windows/json exporters; prometheus.io/Writing exporters
+    match: [exporters, node-exporter, blackbox-exporter, custom-exporter, writing-exporters]
+    subtopics:
+      - {id: node-exporter-collectors, name: Enabling and disabling node_exporter collectors, match: [node-exporter-collectors, collector-flags]}
+      - {id: textfile-collector, name: Textfile collector for cron and script metrics, match: [textfile-collector-usage, cron-metrics-textfile]}
+      - {id: blackbox-modules, name: Blackbox modules (http, tcp, icmp, dns, grpc), match: [blackbox-modules, icmp-probe, dns-probe, http-probe-config]}
+      - {id: snmp-exporter, name: snmp_exporter and the generator, match: [snmp-exporter-generator, snmp-mibs]}
+      - {id: database-exporters, name: Database exporters (mysqld, postgres), match: [mysqld-exporter-setup, postgres-exporter-setup]}
+      - {id: windows-exporter, name: windows_exporter, match: [windows-exporter-setup, wmi]}
+      - {id: json-exporter, name: json_exporter and JSONPath metrics, match: [json-exporter-config, jsonpath-metrics]}
+      - {id: exporter-guidelines, name: Writing-exporters guidelines (naming, labels, collect-on-scrape, failed scrapes), match: [exporter-guidelines, exporter-labels-naming]}
+      - {id: redis-kafka-exporters, name: Redis and Kafka exporters, match: [redis-exporter, kafka-exporter-prometheus]}
+      - {id: web-server-exporters, name: Web server exporters (nginx, haproxy), match: [nginx-exporter, haproxy-exporter]}
+      - {id: process-exporter, name: process-exporter and per-process metrics, match: [process-exporter, per-process-metrics]}
+      - {id: cloudwatch-exporters, name: Cloud exporters (YACE CloudWatch exporter), match: [yace-cloudwatch-exporter, cloudwatch-exporter]}
+  # --- Alerting and dashboarding (PCA 18%; Alertmanager docs)
+  - id: recording-rules
+    name: Recording rules
+    source: prometheus.io/Recording rules (rule_files, groups, interval, limit); Best practices/Recording rules (naming level:metric:operations); promtool check rules
+    match: [recording-rules]
+    subtopics:
+      - {id: rule-naming, name: Recording rule naming (level:metric:operations), match: [recording-rule-naming, level-metric-operation]}
+      - {id: rule-groups, name: Rule groups, interval and ordering, match: [rule-groups, rule-group-interval, group-ordering]}
+      - {id: promtool-check-rules, name: Linting rules with promtool check rules, match: [promtool-check-rules, rule-linting]}
+      - {id: rule-performance, name: Precomputing expensive queries and rule performance, match: [recording-rule-performance, precompute-expensive-queries]}
+      - {id: rule-labels, name: Labels on recording rules, match: [rule-labels, recording-rule-labels]}
+      - {id: rule-query-offset, name: query_offset and rule evaluation delay, match: [rule-query-offset, evaluation-delay]}
+      - {id: rule-group-limit, name: Rule group limit and series caps, match: [rule-group-limit, recording-rule-series-limit]}
+      - {id: rule-backfill, name: Backfilling recording rules (promtool tsdb create-blocks-from rules), match: [create-blocks-from-rules, rule-backfill]}
+      - {id: layered-rules, name: Layered recording rules (instance to job to cluster), match: [layered-recording-rules, aggregation-hierarchy]}
+  - id: alerting-rules
+    name: Alerting rules and promtool unit tests
+    source: prometheus.io/Alerting rules (for, keep_firing_for, labels, annotations, templating); prometheus.io/Unit testing rules (input_series, alert_rule_test, promql_expr_test)
+    match: [alerting-rules, for-clause, rule-unit-tests, promtool-unit-tests]
+    subtopics:
+      - {id: alert-templating, name: Templating annotations with $labels, $value and $externalLabels, match: [alert-annotation-templating, labels-value-templating]}
+      - {id: keep-firing-for, name: keep_firing_for to suppress flapping, match: [keep-firing-for-usage, flapping-suppression]}
+      - {id: unit-tests-writing, name: Writing promtool test rules files (input_series, alert_rule_test), match: [promtool-test-rules, input-series, alert-rule-test]}
+      - {id: severity-labels, name: Severity and ownership label conventions, match: [severity-labels, alert-label-conventions]}
+      - {id: rules-ci, name: Rules CI pipeline (lint, test, deploy), match: [rules-ci-pipeline, rules-linting-ci]}
+      - {id: absent-alerts, name: Alerting on missing metrics and targets, match: [absent-alerts, missing-metric-alerts]}
+      - {id: for-duration, name: Choosing for durations and pending behaviour, match: [for-duration-choice, pending-state]}
+      - {id: value-in-labels, name: Avoiding $value in labels (alert identity churn), match: [value-in-labels, alert-identity]}
+      - {id: alerts-metric, name: ALERTS and ALERTS_FOR_STATE series, match: [alerts-metric, alerts-for-state]}
+      - {id: promql-expr-test, name: promql_expr_test cases in rule tests, match: [promql-expr-test]}
+  - id: alertmanager-routing
+    name: Alertmanager routing, grouping, inhibition, silences, templates
+    source: Alertmanager configuration (route, receivers per integration, inhibit_rules, time_intervals, templates); Notification template reference and examples; amtool; API v2
+    match: [alertmanager, alert-routing, inhibit-rules, notification-templates]
+    subtopics:
+      - {id: receiver-integrations, name: Receiver integrations (msteams, telegram, sns, discord, webex), match: [receiver-integrations, msteams-receiver, telegram-receiver, sns-receiver]}
+      - {id: webhook-receiver, name: Webhook receiver and payload handling, match: [webhook-receiver, custom-webhook-payload]}
+      - {id: template-customisation, name: Custom notification templates (tmpl files, template functions), match: [template-customization, custom-notification-template]}
+      - {id: amtool-usage, name: amtool (silences, config check, routes test), match: [amtool-usage, amtool-config-routes-test]}
+      - {id: time-intervals-config, name: time_intervals for maintenance windows and business hours, match: [time-intervals-config, maintenance-windows]}
+      - {id: alertmanager-api, name: Alertmanager API v2 (alerts, silences, status), match: [alertmanager-api, alerts-api-v2]}
+      - {id: route-tree-design, name: Route tree design (continue, matchers, nested routes), match: [route-tree-design, continue-routing]}
+      - {id: group-timing, name: group_by, group_wait, group_interval and repeat_interval tuning, match: [group-wait, repeat-interval]}
+      - {id: inhibition-design, name: Inhibition rule design (equal labels, loops), match: [inhibition-design, inhibit-equal-labels]}
+      - {id: pagerduty-slack-receivers, name: PagerDuty, Opsgenie and Slack receivers, match: [pagerduty-receiver, slack-receiver, opsgenie-receiver]}
+  - id: alertmanager-ha
+    name: Alertmanager clustering and HA
+    source: Alertmanager docs/High Availability (cluster flags, gossip, Prometheus pointing to all instances, notification log, silences replication)
+    match: [alertmanager-ha, alertmanager-cluster]
+    subtopics:
+      - {id: cluster-flags, name: --cluster.* flags and gossip tuning, match: [cluster-peer-flags, gossip-settings]}
+      - {id: alertmanagers-config, name: Pointing Prometheus at every Alertmanager instance, match: [alertmanagers-config, all-alertmanager-instances]}
+      - {id: nflog-replication, name: Notification log and silence replication, match: [notification-log, nflog, silence-replication]}
+      - {id: cluster-troubleshooting, name: Diagnosing cluster status and duplicate notifications, match: [cluster-status, gossip-troubleshooting]}
+      - {id: am-kubernetes-ha, name: Alertmanager HA on Kubernetes (StatefulSet, peer discovery), match: [alertmanager-statefulset, alertmanager-peers-kubernetes]}
+      - {id: am-persistence, name: Alertmanager storage.path, data retention and persistence, match: [alertmanager-storage-path, alertmanager-persistence]}
+      - {id: am-meta-monitoring, name: Monitoring Alertmanager (notification failures, cluster health), match: [alertmanager-meta-monitoring, notification-failures]}
+      - {id: am-cluster-tls, name: Cluster gossip TLS, match: [cluster-tls-config, gossip-encryption]}
+  - id: alert-fatigue
+    name: Alert fatigue and symptom-based alerting
+    source: SRE Book/Monitoring Distributed Systems (as simple as possible, pages vs tickets); Practical Alerting; Workbook/Monitoring (alerting philosophy)
+    match: [alert-fatigue, symptom-based-alerting]
+    subtopics:
+      - {id: paging-criteria, name: Paging criteria vs ticket alerts, match: [paging-criteria, ticket-alerts]}
+      - {id: alert-review-process, name: Periodic alert review process, match: [alert-review-process, weekly-alert-review]}
+      - {id: alert-consolidation, name: Consolidating and deduplicating alert rules, match: [alert-consolidation, alert-dedup-rules]}
+      - {id: alert-noise-metrics, name: Measuring alert noise (alerts per shift, actionable ratio), match: [alert-noise-metrics, alerts-per-shift]}
+      - {id: alert-quality-checklist, name: Alert design checklist, match: [alert-quality-checklist, alert-design-checklist]}
+      - {id: flapping-alerts, name: Finding and fixing flapping alerts, match: [flapping-alerts, alert-flap-analysis]}
+      - {id: alert-ownership, name: Alert ownership and routing to owning teams, match: [alert-ownership, team-routing-labels]}
+      - {id: alert-retirement, name: Retiring alerts that never fire or are ignored, match: [alert-retirement, unused-alerts]}
+  - id: slo-alerting
+    name: Multiwindow multi-burn-rate alerting
+    source: SRE Workbook/Alerting on SLOs (burn-rate alerts, multiple burn rates, multiwindow, low-traffic services, extreme availability goals, alerting at scale, alerting on dependencies)
+    match: [slo-based-alerting, burn-rate, multi-burn-rate]
+    subtopics:
+      - {id: burn-rate-thresholds, name: Deriving burn-rate thresholds and windows, match: [burn-rate-thresholds, burn-rate-table]}
+      - {id: low-traffic-slo, name: Low-traffic services (synthetic traffic, combined services), match: [low-traffic-slo, synthetic-traffic-padding]}
+      - {id: extreme-availability, name: Extreme availability goals, match: [extreme-availability-goals, high-availability-slo-alerting]}
+      - {id: slo-alerts-at-scale, name: Alerting at scale with generated rules, match: [slo-alerts-at-scale, generated-slo-rules]}
+      - {id: dependency-alerting, name: Alerting on dependencies, match: [dependency-slo-alerting, alerting-on-dependencies]}
+      - {id: slo-generators, name: Sloth and Pyrra rule generators, match: [sloth-usage, pyrra-usage]}
+      - {id: multiwindow-rules, name: Writing multiwindow burn-rate rules in Prometheus, match: [multiwindow-alert-rules, burn-rate-recording-rules]}
+      - {id: budget-exhaustion, name: Error budget exhaustion ticket alerts, match: [budget-exhaustion-alert, slow-burn-ticket]}
+      - {id: latency-burn-rate, name: Latency SLO burn-rate alerts from histograms, match: [latency-slo-alerting, latency-burn-rate]}
+  - id: monitoring-mixins
+    name: Monitoring mixins (jsonnet rules + dashboards)
+    source: monitoring.mixins.dev (mixin structure, mixtool, config overrides); grafonnet; jsonnet-bundler
+    match: [monitoring-mixins, mixins, kube-prometheus-mixin]
+    subtopics:
+      - {id: mixtool, name: mixtool generate and lint, match: [mixtool-generate, mixtool-lint]}
+      - {id: mixin-config-overrides, name: Overriding _config and selectors, match: [mixin-config-overrides, mixin-selectors]}
+      - {id: grafonnet-dashboards, name: Authoring dashboards with grafonnet, match: [grafonnet-dashboard-authoring, grafonnet-panels]}
+      - {id: jsonnet-bundler, name: Vendoring mixins with jsonnet-bundler, match: [jsonnet-bundler-usage, vendoring-mixins]}
+      - {id: mixin-ci, name: Mixin CI (generated-rules diff, tests), match: [mixin-ci-pipeline, generated-rules-diff]}
+      - {id: kubernetes-mixin, name: kubernetes-mixin and node-mixin customisation, match: [kubernetes-mixin, node-mixin]}
+      - {id: mixin-rendering, name: Rendering mixins to PrometheusRule objects and ConfigMaps, match: [mixin-to-prometheusrule, mixin-rendering]}
+      - {id: writing-a-mixin, name: Writing a new mixin for a service, match: [writing-a-mixin, mixin-authoring]}
+  # --- Grafana (grafana.com/docs: Dashboards, Panels, Alerting, Administration, Data sources, Setup)
+  - id: grafana-dashboards
+    name: Dashboard design, template variables, annotations, sharing
+    source: Grafana docs/Dashboards (Variables types, Annotations, Links, Sharing and export, Public dashboards, Versions and JSON model, Playlists, Reporting, Time range controls)
+    match: [dashboards, dashboard-design, template-variables, annotations, library-panels, public-dashboards]
+    subtopics:
+      - {id: variable-types, name: Variable types (query, custom, textbox, datasource, interval, ad hoc), match: [query-variable, custom-variable, datasource-variable, interval-variable, adhoc-filters]}
+      - {id: annotation-queries, name: Annotation queries, tags and the annotations API, match: [annotation-queries, tagged-annotations, annotations-api]}
+      - {id: dashboard-links, name: Dashboard and panel links with URL variables, match: [dashboard-links, panel-links, url-variables]}
+      - {id: dashboard-sharing, name: Snapshots, export and import, match: [dashboard-snapshots, dashboard-export-import]}
+      - {id: public-dashboards-setup, name: Public (shared externally) dashboards, match: [public-dashboards-setup, shared-dashboards]}
+      - {id: dashboard-versioning, name: Dashboard versions and the JSON model, match: [dashboard-versions, json-model]}
+      - {id: playlists-reporting, name: Playlists and reporting, match: [playlists, grafana-reporting]}
+      - {id: time-controls, name: Time range controls, relative time and time shift, match: [time-range-controls, relative-time-override, time-shift]}
+      - {id: repeating-panels, name: Rows, repeating panels and repeating rows, match: [repeating-panels, repeat-rows]}
+      - {id: library-panel-management, name: Library panels lifecycle, match: [library-panel-management]}
+      - {id: chained-variables, name: Chained and multi-value variables (regex, format options), match: [chained-variables, variable-format-options]}
+      - {id: dashboard-performance, name: Dashboard performance (query count, min interval, max data points), match: [dashboard-performance, max-data-points]}
+  - id: grafana-transformations
+    name: Transformations
+    source: Grafana docs/Panels/Transformations (full list of transformation functions)
+    match: [transformations, join-by-field, transform-data]
+    subtopics:
+      - {id: convert-extract, name: Convert field type, extract fields, format time, match: [convert-field-type, extract-fields, format-time]}
+      - {id: grouping-matrix, name: Grouping to matrix and group to nested table, match: [grouping-to-matrix, group-to-nested-table]}
+      - {id: rows-to-fields, name: Rows to fields, prepare time series, time series to table, match: [rows-to-fields, prepare-time-series, time-series-to-table]}
+      - {id: regression-histogram, name: Regression analysis and histogram transformations, match: [regression-analysis, histogram-transformation]}
+      - {id: transform-ordering, name: Transformation ordering and debugging output, match: [transformation-order, debug-transformation-output]}
+      - {id: concat-merge, name: Concatenate fields and merge series, match: [concatenate-fields, merge-series]}
+      - {id: filter-organize, name: Filter by name or value and organize fields, match: [filter-by-value, organize-fields]}
+      - {id: add-field-calculation, name: Add field from calculation, match: [add-field-from-calculation, binary-operation-field]}
+      - {id: reduce-transform, name: Reduce and series to rows, match: [reduce-transformation, series-to-rows]}
+      - {id: config-from-query, name: Config from query results and partition by values, match: [config-from-query-results, partition-by-values]}
+  - id: grafana-visualizations
+    name: Visualization types (stat, table, state timeline, bar gauge, heatmap)
+    source: Grafana docs/Visualizations (time series, table, stat, gauge, bar gauge, geomap, canvas, flame graph, node graph, XY chart, trend, candlestick, logs, traces) and Configure options (overrides, value mappings)
+    match: [visualizations, panel-types, state-timeline, table-panel]
+    subtopics:
+      - {id: time-series-options, name: Time series options (stacking, fill, axes, thresholds style), match: [time-series-options, stacking, fill-below-to, axis-config]}
+      - {id: table-options, name: Table cell display, colouring and filtering, match: [table-cell-display, cell-coloring, column-filter]}
+      - {id: stat-gauge-options, name: Stat and gauge options (sparklines, text mode, colour mode), match: [stat-options, gauge-thresholds-display, sparkline]}
+      - {id: geomap-canvas, name: Geomap layers and canvas panels, match: [geomap-layers, canvas-panel]}
+      - {id: flame-node-graph, name: Flame graph and node graph panels, match: [flame-graph-panel, node-graph-panel]}
+      - {id: xy-trend-candlestick, name: XY chart, trend and candlestick panels, match: [xy-chart, trend-panel, candlestick]}
+      - {id: value-mappings-overrides, name: Value mappings and field override rules, match: [value-mapping-rules, field-override-rules]}
+      - {id: logs-traces-panels, name: Logs and traces panel options, match: [logs-panel-options, traces-panel-options]}
+      - {id: heatmap-panel, name: Heatmap panel configuration, match: [heatmap-panel-config]}
+      - {id: status-history, name: State timeline and status history configuration, match: [status-history-panel, state-timeline-config]}
+      - {id: bar-pie-charts, name: Bar chart, pie chart and histogram panels, match: [bar-chart-panel, pie-chart-panel]}
+      - {id: text-list-panels, name: Text, dashboard list and alert list panels, match: [text-panel, alert-list-panel]}
+  - id: grafana-as-code
+    name: Provisioning and Grafana as code
+    source: Grafana docs/Administration/Provisioning (data sources, dashboards, alerting, plugins); Terraform provider; Grizzly; grafanactl; Git Sync; Dashboard HTTP API
+    match: [provisioning, dashboards-as-code, grafana-terraform-provider]
+    subtopics:
+      - {id: datasource-yaml, name: Data source provisioning YAML (secureJsonData, deleteDatasources), match: [datasource-yaml, secure-json-data]}
+      - {id: dashboard-provider, name: Dashboard providers (foldersFromFilesStructure, allowUiUpdates), match: [dashboard-provider, folders-from-files-structure]}
+      - {id: alerting-provisioning-files, name: File-provisioned alert rules, contact points, policies and templates, match: [alerting-provisioning-files, file-provisioned-alerts]}
+      - {id: terraform-dashboards, name: Terraform provider for folders, dashboards and data sources, match: [grafana-terraform-dashboards, terraform-grafana-folder]}
+      - {id: grizzly-grafanactl, name: Grizzly and grafanactl, match: [grizzly, grafanactl]}
+      - {id: git-sync, name: Git Sync for dashboards, match: [git-sync, grafana-git-sync]}
+      - {id: dashboard-api, name: Dashboard HTTP API automation, match: [dashboard-api, dashboards-http-api]}
+      - {id: plugin-provisioning, name: Plugin and app provisioning, match: [plugin-provisioning, app-provisioning]}
+      - {id: foundation-sdk, name: Grafana Foundation SDK for dashboards in code, match: [foundation-sdk, grafana-foundation-sdk]}
+      - {id: terraform-alerting, name: Terraform for alert rules, contact points and policies, match: [terraform-grafana-alerting, grafana-rule-group-terraform]}
+  - id: grafana-alert-rules
+    name: Grafana-managed alert rules, state and HA
+    source: "Grafana docs/Alerting (Alert rules: queries and conditions, expressions, evaluation, no data and error handling, annotations templating, recording rules, state history, simplified routing, HA)"
+    match: [grafana-alerting, grafana-managed-alerts, unified-alerting, grafana-alerting-ha]
+    subtopics:
+      - {id: expressions-math, name: Math, resample and reduce expressions, match: [math-expression-usage, resample-expression]}
+      - {id: nodata-error-handling, name: No data and error state handling, match: [no-data-handling, error-state-handling]}
+      - {id: alert-annotations-templating, name: Templating annotations and labels with $values and $labels, match: [grafana-alert-annotations, values-templating]}
+      - {id: grafana-recording-rules, name: Grafana-managed recording rules, match: [grafana-managed-recording-rules]}
+      - {id: alert-state-history, name: Alert state history (Loki backend, annotations), match: [state-history-loki, alert-state-history]}
+      - {id: simplified-routing, name: Simplified routing (notification settings on the rule), match: [simplified-routing, notification-settings-in-rule]}
+      - {id: alerting-ha-config, name: Configuring alerting HA peers, match: [alerting-ha-peers, unified-alerting-ha]}
+      - {id: multi-dimensional-alerts, name: Multi-dimensional alert instances, match: [multi-dimensional-alerts, alert-instances]}
+      - {id: datasource-managed-rules, name: Data source-managed rules (Mimir and Loki ruler) from Grafana, match: [data-source-managed-rules, ruler-managed-rules]}
+      - {id: evaluation-groups, name: Evaluation groups, intervals and pending period, match: [evaluation-group, pending-period]}
+      - {id: rule-export-import, name: Exporting and importing alert rules, match: [alert-rule-export, prometheus-rule-import]}
+  - id: grafana-notification-policies
+    name: Contact points, notification policies, templates, mute timings
+    source: Grafana docs/Alerting (Contact point integrations, Notification policies, Templates and template data, Mute timings, Silences, Test contact points, External Alertmanager)
+    match: [contact-points, notification-policies, grafana-notification-policies, mute-timings, grafana-alert-templates]
+    subtopics:
+      - {id: integration-specific, name: Slack, PagerDuty and Teams integration settings, match: [grafana-slack-integration, grafana-pagerduty-integration, grafana-teams-integration]}
+      - {id: webhook-contact-point, name: Webhook contact point and custom payload, match: [grafana-webhook-contact-point, custom-webhook-template]}
+      - {id: template-functions, name: Notification template functions and template data, match: [notification-template-functions, template-data-reference]}
+      - {id: mute-timings-config, name: Mute timing schedules, match: [mute-timing-schedule, recurring-mute-timings]}
+      - {id: grafana-silences, name: Silences and the silence API, match: [grafana-silences, silence-api]}
+      - {id: testing-contact-points, name: Testing contact points and previewing notifications, match: [test-contact-point, notification-preview]}
+      - {id: external-alertmanager, name: Using an external Alertmanager data source, match: [external-alertmanager-datasource, forward-to-alertmanager]}
+      - {id: nested-policies, name: Policy tree matching, nested policies and grouping, match: [nested-policies, policy-matching]}
+      - {id: email-contact-point, name: Email contact point and email templates, match: [email-contact-point]}
+      - {id: irm-contact-point, name: Grafana IRM contact point integration, match: [irm-contact-point]}
+  - id: grafana-rbac
+    name: Users, teams, folders, RBAC, service accounts and the HTTP API
+    source: Grafana docs/Administration (Roles and permissions, RBAC custom roles, Data source permissions, Service accounts, Teams, Organizations); Developers/HTTP API
+    match: [grafana-rbac, folder-permissions, grafana-permissions, service-accounts, grafana-api]
+    subtopics:
+      - {id: custom-roles-api, name: Custom roles via the RBAC API, match: [custom-roles-api, rbac-api]}
+      - {id: datasource-permissions-config, name: Data source query permissions, match: [datasource-permissions-config, query-permissions]}
+      - {id: service-account-automation, name: Service account tokens and rotation, match: [service-account-tokens-automation, token-rotation]}
+      - {id: org-management, name: Organizations and multi-org management, match: [organizations-management, multi-org, org-api]}
+      - {id: api-usage-patterns, name: HTTP API usage (search, folders, pagination), match: [grafana-api-pagination, api-search, folder-api]}
+      - {id: team-management, name: Teams API and team sync, match: [teams-api, team-sync-config]}
+      - {id: nested-folders, name: Nested folders and folder permission inheritance, match: [nested-folders, folder-permission-inheritance]}
+      - {id: dashboard-permissions, name: Dashboard-level permissions, match: [dashboard-permissions]}
+      - {id: basic-roles, name: Basic roles and Grafana server admin, match: [basic-roles, grafana-server-admin]}
+  - id: grafana-auth
+    name: Authentication and SSO (OAuth, SAML, LDAP)
+    source: Grafana docs/Setup/Configure authentication (SAML, LDAP, OIDC/Keycloak, JWT, auth proxy, role mapping, SSO settings, login security)
+    match: [grafana-sso, grafana-oauth, grafana-saml, grafana-ldap]
+    subtopics:
+      - {id: saml-setup, name: SAML configuration and role mapping, match: [saml-configuration, saml-role-mapping]}
+      - {id: ldap-setup, name: LDAP (ldap.toml, group mapping), match: [ldap-configuration, ldap-toml, ldap-group-mapping]}
+      - {id: oidc-keycloak, name: OIDC with Keycloak or generic OAuth, match: [keycloak-oidc, oidc-configuration]}
+      - {id: jwt-auth, name: JWT authentication, match: [jwt-authentication, jwt-auth]}
+      - {id: auth-proxy-setup, name: Auth proxy header authentication, match: [auth-proxy-setup, header-authentication]}
+      - {id: role-mapping, name: Role and org mapping with JMESPath, match: [role-mapping-jmespath, org-mapping]}
+      - {id: login-security, name: Login security (brute force, sessions, token rotation), match: [brute-force-protection, session-settings]}
+      - {id: provider-oauth, name: GitHub, GitLab, Google and Entra ID OAuth, match: [github-oauth, azure-ad-oauth, google-oauth-grafana]}
+      - {id: anonymous-embedding, name: Anonymous access and embedding, match: [anonymous-access, grafana-embedding]}
+      - {id: scim, name: SCIM user and team provisioning, match: [scim-provisioning]}
+  - id: grafana-setup
+    name: grafana.ini, database, data sources, plugins, HA and upgrades
+    source: Grafana docs/Setup (Install with Helm, Configure grafana.ini, Database, SMTP, Image rendering, Plugins, Backup and migrate, Feature toggles, Monitoring Grafana); Data sources (Prometheus, Loki, CloudWatch, Azure Monitor, PostgreSQL, MySQL)
+    match: [grafana-config, grafana-ini, grafana-ha, grafana-upgrade, data-sources, grafana-plugins]
+    subtopics:
+      - {id: helm-install, name: Installing with the Grafana Helm chart, match: [grafana-helm-chart, grafana-helm-values]}
+      - {id: database-config, name: Database backend configuration (Postgres/MySQL), match: [grafana-database-config, postgres-backend]}
+      - {id: smtp-rendering, name: SMTP and image renderer setup, match: [smtp-config, image-renderer-setup]}
+      - {id: plugin-install, name: Installing plugins (catalog, CLI, unsigned), match: [plugin-install, plugin-catalog, unsigned-plugins]}
+      - {id: datasource-prometheus-loki, name: Prometheus and Loki data source settings, match: [prometheus-datasource-config, loki-datasource-config]}
+      - {id: datasource-cloud, name: CloudWatch and Azure Monitor data sources, match: [cloudwatch-datasource, azure-monitor-datasource]}
+      - {id: datasource-sql, name: SQL data sources (PostgreSQL, MySQL), match: [postgres-datasource, mysql-datasource, sql-datasource]}
+      - {id: backup-migrate, name: Backing up and migrating Grafana, match: [grafana-backup, grafana-migrate-db]}
+      - {id: grafana-self-metrics, name: Monitoring Grafana itself, match: [grafana-self-metrics, monitoring-grafana]}
+      - {id: feature-toggles, name: Feature toggles configuration, match: [feature-toggles-config, feature-flags-grafana]}
+      - {id: upgrade-procedure, name: Upgrade procedure and breaking-change review, match: [grafana-upgrade-procedure]}
+      - {id: multi-instance, name: Running multiple Grafana instances (shared database, remote cache), match: [grafana-remote-cache, grafana-multi-instance]}
+  # --- Grafana Loki
+  - id: loki-architecture
+    name: Loki architecture, deployment modes, storage, retention and ruler
+    source: "Loki docs (Architecture components; Configure: schema_config, storage_config, limits_config, compactor retention; Operations: caching, bloom filters, monitoring; Alert and record rules; Helm install)"
+    match: [loki-architecture, simple-scalable, microservices-mode, loki-retention, loki-compactor, loki-ruler]
+    subtopics:
+      - {id: schema-config, name: schema_config periods and the TSDB shipper, match: [schema-config, period-config, tsdb-shipper]}
+      - {id: storage-config, name: Object storage configuration (S3, GCS, Azure), match: [loki-object-storage-config, s3-config-loki]}
+      - {id: retention-config, name: Compactor retention and per-stream retention, match: [compactor-retention-config, per-stream-retention, retention-stream]}
+      - {id: loki-caching, name: Chunk, index and results caching, match: [loki-caching, chunk-cache, results-cache]}
+      - {id: loki-ruler-rules, name: Loki alerting and recording rules with remote write, match: [loki-alert-rules, loki-recording-rules, ruler-remote-write]}
+      - {id: loki-helm, name: Loki Helm chart deployment, match: [loki-helm-chart, loki-helm-values]}
+      - {id: loki-limits, name: limits_config (ingestion rate, query limits), match: [loki-limits-config, ingestion-rate-limits]}
+      - {id: loki-monitoring, name: Monitoring Loki (metrics, mixin dashboards), match: [loki-metrics, loki-dashboards, loki-mixin]}
+      - {id: bloom-filters, name: Bloom gateway and bloom builder setup, match: [bloom-gateway, bloom-builder]}
+      - {id: deployment-modes, name: Monolithic vs simple scalable vs microservices choice, match: [loki-deployment-modes, monolithic-loki]}
+      - {id: ingester-wal, name: Ingester WAL and replication factor, match: [ingester-wal-loki, loki-replication-factor]}
+      - {id: loki-3-upgrade, name: Upgrading Loki 2.x to 3.x, match: [loki-3-upgrade, loki-upgrade]}
+      - {id: ingestion-errors, name: Troubleshooting ingestion errors (rate limited, stream limit, too far behind), match: [loki-ingestion-errors, loki-429]}
+  - id: logql
+    name: LogQL log and metric queries
+    source: "Loki docs/Query (log queries: parsers, line/label format, drop/keep, IP matching; metric queries: range and unwrapped aggregations; template functions; LogCLI)"
+    match: [logql-parsers, logql-pipeline, logql-metric-queries]
+    subtopics:
+      - {id: pattern-parser, name: Pattern parser syntax, match: [pattern-parser-usage, pattern-syntax]}
+      - {id: unwrap-aggregations, name: Unwrapped range aggregations (quantile_over_time, rate_counter), match: [unwrap-aggregations, quantile-over-time-logs, rate-counter]}
+      - {id: line-format-templates, name: line_format templates and template functions, match: [line-format-templates, logql-template-functions]}
+      - {id: ip-matching, name: IP address matching, match: [ip-matcher, ip-filter]}
+      - {id: drop-keep, name: drop and keep label stages, match: [drop-keep-labels, keep-labels]}
+      - {id: logql-performance, name: LogQL query performance and sharding, match: [logql-query-performance, query-sharding-loki]}
+      - {id: logql-alert-queries, name: Writing alert-grade LogQL metric queries, match: [logql-alert-queries, loki-alerting-queries]}
+      - {id: logcli, name: LogCLI usage, match: [logcli-usage, logcli-query]}
+      - {id: line-filters, name: Line filter expressions and filter ordering, match: [line-filter-expressions, logql-line-filters]}
+      - {id: json-logfmt, name: json and logfmt parsers with parameters, match: [logql-json-parser, logfmt-parser]}
+      - {id: label-filters, name: Label filter expressions and type coercion, match: [logql-label-filters, label-filter-expression]}
+      - {id: regexp-unpack, name: regexp and unpack parsers and decolorize, match: [regexp-parser, unpack-parser]}
+  - id: loki-labels
+    name: Loki labels, stream cardinality and structured metadata
+    source: Loki docs (Labels best practices, Structured metadata, OTLP ingestion attribute mapping, Stream limits, Index stats and volume APIs)
+    match: [loki-labels, stream-cardinality, structured-metadata]
+    subtopics:
+      - {id: structured-metadata-config, name: Configuring structured metadata and OTLP attribute mapping, match: [structured-metadata-config, otlp-attribute-mapping-loki]}
+      - {id: label-volume-analysis, name: Index stats and volume APIs for label analysis, match: [index-stats, volume-api, label-volume]}
+      - {id: stream-limit-tuning, name: Stream and line-size limits, match: [stream-limit-tuning, max-line-size]}
+      - {id: loki-otlp-endpoint, name: Loki OTLP endpoint ingestion, match: [loki-otlp-endpoint, otlp-loki-config]}
+      - {id: ingest-label-extraction, name: Ingest-time label extraction in pipelines, match: [ingest-time-label-extraction, pipeline-label-extraction]}
+      - {id: analyze-labels, name: Diagnosing stream cardinality (logcli series --analyze-labels), match: [analyze-labels, stream-cardinality-diagnosis]}
+      - {id: service-name-discovery, name: service_name discovery and default labels, match: [discover-service-name, service-name-label]}
+      - {id: out-of-order-sharding, name: Out-of-order writes and automatic stream sharding, match: [loki-out-of-order, automatic-stream-sharding]}
+  - id: loki-ingest
+    name: Shipping logs with Alloy / Promtail
+    source: Loki docs/Send data (Alloy loki.source.* and loki.process; Promtail scrape_configs and pipeline_stages; Docker driver; Fluent Bit/Fluentd; OTel Collector; Lambda Promtail; syslog; journal; migration to Alloy)
+    match: [promtail, grafana-alloy, loki-ingest]
+    subtopics:
+      - {id: alloy-loki-config, name: Alloy loki.source.kubernetes and loki.process pipelines, match: [alloy-loki-source-kubernetes, alloy-loki-process]}
+      - {id: promtail-pipeline, name: Promtail scrape_configs and pipeline_stages, match: [promtail-pipeline-stages, promtail-scrape-config]}
+      - {id: syslog-journal, name: Syslog and systemd journal ingestion, match: [syslog-receiver, journal-scraping]}
+      - {id: cloud-logs-loki, name: Cloud logs to Loki (CloudWatch, GCP, Lambda Promtail), match: [cloudwatch-to-loki, gcp-logs-loki, lambda-promtail]}
+      - {id: fluentbit-loki, name: Fluent Bit and Fluentd Loki outputs, match: [fluent-bit-loki-output, fluentd-loki]}
+      - {id: otel-to-loki, name: OTel Collector to Loki via OTLP, match: [otlphttp-to-loki, otel-collector-loki-exporter]}
+      - {id: promtail-to-alloy, name: Migrating Promtail to Alloy (alloy convert), match: [promtail-to-alloy-migration, alloy-convert]}
+      - {id: docker-driver, name: Docker Loki logging driver, match: [docker-loki-driver, docker-logging-driver]}
+      - {id: kafka-to-loki, name: Kafka to Loki ingestion, match: [loki-source-kafka, kafka-to-loki]}
+      - {id: windows-events, name: Windows event logs to Loki, match: [windows-event-log-loki, loki-source-windowsevent]}
+  # --- Grafana Tempo, Mimir, Pyroscope, OnCall, Synthetic Monitoring, Faro, Beyla
+  - id: tempo
+    name: Tempo architecture, deployment and metrics-generator
+    source: "Tempo docs (Set up: Helm tempo-distributed, storage backends; Configure: distributor receivers, metrics-generator, overrides, multitenancy, caching; Operations: monitor, compaction, tuning)"
+    match: [tempo-architecture, tempo-deployment, tempo-storage, metrics-generator, service-graph-metrics]
+    subtopics:
+      - {id: tempo-helm, name: tempo-distributed Helm deployment, match: [tempo-distributed-helm, tempo-helm-values]}
+      - {id: tempo-receivers, name: Distributor receivers (OTLP, Jaeger, Zipkin), match: [tempo-distributor-receivers, tempo-otlp-config]}
+      - {id: metrics-generator-config, name: Metrics-generator processors (span metrics, service graphs, local blocks), match: [metrics-generator-config, span-metrics-config, service-graph-config]}
+      - {id: tempo-overrides, name: Overrides and per-tenant ingestion limits, match: [tempo-overrides, tempo-tenant-limits, ingestion-limits-tempo]}
+      - {id: tempo-caching, name: Caching with memcached or Redis, match: [tempo-caching, tempo-memcached]}
+      - {id: tempo-compaction, name: Compaction and block retention, match: [tempo-compaction, block-retention-tempo]}
+      - {id: tempo-monitoring, name: Monitoring Tempo (metrics, mixin), match: [tempo-metrics, tempo-dashboards, tempo-mixin]}
+      - {id: tempo-multitenancy, name: Multitenancy and tenant headers, match: [tempo-multitenancy, tempo-tenant-header]}
+      - {id: tempo-storage, name: Storage backends and vParquet block format, match: [tempo-object-storage, vparquet]}
+      - {id: tempo-troubleshooting, name: Troubleshooting missing traces and ingestion errors, match: [tempo-missing-traces, tempo-troubleshooting]}
+  - id: traceql
+    name: TraceQL
+    source: Tempo docs/TraceQL (selecting spans, scopes and intrinsics, structural operators, aggregates, metrics queries, select, Grafana query builder, performance)
+    match: [traceql]
+    subtopics:
+      - {id: structural-queries, name: Structural operators (descendant, child, sibling, negated), match: [structural-queries, ancestor-descendant-queries]}
+      - {id: traceql-aggregates, name: Spanset aggregates (count, avg, max, sum), match: [traceql-aggregates, spanset-aggregates]}
+      - {id: traceql-metrics-queries, name: TraceQL metrics (rate, quantile_over_time, histogram_over_time, compare), match: [traceql-metrics-queries, histogram-over-time-traceql, compare-function]}
+      - {id: scopes-intrinsics, name: Span, resource, event, link and instrumentation scopes, match: [span-scopes, event-scope, link-scope, instrumentation-scope]}
+      - {id: traceql-in-grafana, name: TraceQL query builder and trace search in Grafana, match: [traceql-query-builder, trace-search-grafana]}
+      - {id: traceql-performance, name: TraceQL performance and search tuning, match: [traceql-performance, search-tuning]}
+      - {id: traceql-select, name: select() for returning attributes, match: [traceql-select]}
+      - {id: traceql-operators, name: Comparison, regex and attribute existence operators, match: [traceql-comparison-operators, traceql-regex]}
+      - {id: traceql-intrinsics, name: Intrinsics (duration, status, kind, name, rootServiceName, traceDuration), match: [traceql-intrinsics, root-service-name]}
+  - id: mimir
+    name: Grafana Mimir (architecture, tenancy, limits)
+    source: "Mimir docs (Deploy with Helm; Configure: limits and overrides, HA deduplication, shuffle sharding, compactor, Alertmanager, OTLP; Operate: mimirtool, monitoring, scaling)"
+    match: [grafana-mimir, mimir-architecture, mimir-tenancy]
+    subtopics:
+      - {id: mimir-helm, name: mimir-distributed Helm deployment, match: [mimir-distributed-helm, mimir-helm-values]}
+      - {id: mimir-limits, name: Limits, overrides and runtime config, match: [mimir-limits-overrides, runtime-config-mimir]}
+      - {id: mimirtool, name: mimirtool (rules, analyze, backfill), match: [mimirtool-rules, mimirtool-analyze, mimirtool-backfill]}
+      - {id: mimir-ha-dedup, name: HA tracker deduplication, match: [mimir-ha-tracker, ha-dedup-config]}
+      - {id: shuffle-sharding, name: Shuffle sharding, match: [shuffle-sharding, mimir-sharding]}
+      - {id: mimir-compactor, name: Compactor (split-and-merge) operations, match: [mimir-compactor, split-and-merge-compaction]}
+      - {id: mimir-monitoring, name: Monitoring Mimir (mixin, dashboards), match: [mimir-dashboards, mimir-mixin, mimir-metrics]}
+      - {id: mimir-otlp, name: OTLP ingestion into Mimir, match: [mimir-otlp, otlp-to-mimir]}
+      - {id: mimir-alertmanager, name: Mimir multi-tenant Alertmanager, match: [mimir-alertmanager-config, multi-tenant-alertmanager]}
+      - {id: mimir-query-frontend, name: Query frontend, query-scheduler and results cache, match: [mimir-query-frontend, mimir-query-scheduler]}
+      - {id: mimir-store-gateway, name: Store-gateway and blocks storage, match: [mimir-store-gateway, mimir-blocks-storage]}
+      - {id: mimir-ruler, name: Mimir ruler operations, match: [mimir-ruler]}
+  - id: profiling-ebpf
+    name: Continuous profiling (Pyroscope) and eBPF instrumentation (Beyla)
+    source: Pyroscope docs (Configure client SDKs, eBPF via Alloy, deploy with Helm, query and flame graphs, span profiles); Beyla docs (configure, deploy, discovery, network metrics)
+    match: [pyroscope, grafana-pyroscope, ebpf-instrumentation, beyla]
+    subtopics:
+      - {id: pyroscope-sdks, name: Pyroscope SDKs (Go, Java, Python), match: [pyroscope-go-sdk, pyroscope-java-agent, pyroscope-python]}
+      - {id: pyroscope-deploy, name: Deploying Pyroscope with Helm and object storage, match: [pyroscope-helm, pyroscope-storage]}
+      - {id: flame-graph-analysis, name: Reading flame graphs and profile diffs, match: [flame-graph-analysis, profile-diff]}
+      - {id: alloy-ebpf-profiling, name: eBPF profiling with Alloy, match: [alloy-pyroscope-ebpf, pyroscope-ebpf-alloy]}
+      - {id: beyla-deploy, name: Deploying Beyla as DaemonSet or sidecar, match: [beyla-daemonset, beyla-helm]}
+      - {id: beyla-config, name: Beyla configuration (discovery, network metrics, exports), match: [beyla-configuration, beyla-discovery, beyla-network-metrics]}
+      - {id: span-profiles, name: Linking traces to profiles (span profiles), match: [span-profiles-setup, traces-to-profiles]}
+      - {id: profile-types, name: Profile types (CPU, alloc, inuse, mutex, block, goroutine), match: [profile-types, alloc-profile]}
+      - {id: pyroscope-labels, name: Profile labels and dynamic tagging, match: [pyroscope-labels, profile-tagging]}
+      - {id: pprof-pull, name: Pulling pprof endpoints with Alloy pyroscope.scrape, match: [pyroscope-scrape, pprof-pull]}
+      - {id: beyla-routes, name: Beyla route decorators and trace context propagation, match: [beyla-routes, beyla-traces]}
+  - id: grafana-oncall
+    name: Grafana OnCall / IRM schedules and escalation
+    source: Grafana OnCall docs (Integrations and alert templates, Routes, Escalation chains, Schedules web/iCal/Terraform, Outgoing webhooks, Slack/mobile notifications, Maintenance)
+    match: [grafana-oncall, grafana-irm, oncall-schedules]
+    subtopics:
+      - {id: oncall-templates, name: Alert templates (Jinja2) and routes, match: [oncall-alert-templates, jinja2-templates, oncall-routes]}
+      - {id: oncall-escalation-steps, name: Escalation chain steps, match: [escalation-chain-steps, escalation-wait-step]}
+      - {id: oncall-schedules-web, name: Web schedules, layers and overrides, match: [schedule-rotations-web, schedule-layers, oncall-overrides]}
+      - {id: oncall-ical-terraform, name: iCal and Terraform schedules, match: [oncall-ical-schedule, oncall-terraform-schedules]}
+      - {id: oncall-outgoing-webhooks, name: Outgoing webhooks, match: [outgoing-webhooks, oncall-webhooks]}
+      - {id: oncall-chat-mobile, name: Slack, Teams and mobile notifications, match: [oncall-slack-setup, oncall-mobile-notifications]}
+      - {id: oncall-maintenance, name: Maintenance mode and silencing, match: [oncall-maintenance-mode, oncall-silence]}
+      - {id: oncall-terraform-integrations, name: Managing integrations and escalation chains via Terraform, match: [oncall-terraform-integrations]}
+      - {id: oncall-grouping, name: Alert grouping and auto-resolve templates, match: [oncall-grouping-id, oncall-autoresolve]}
+      - {id: shift-swaps, name: Shift swaps and on-call insights, match: [shift-swaps, oncall-insights]}
+  - id: grafana-slo
+    name: Grafana SLO
+    source: "Grafana SLO docs (Create SLO: ratio, threshold, advanced queries; Objectives; Alerting fast/slow burn; API and Terraform; Dashboards)"
+    match: [grafana-slo]
+    subtopics:
+      - {id: slo-creation, name: Creating SLOs with ratio and threshold queries, match: [grafana-slo-ratio-query, grafana-slo-threshold-query]}
+      - {id: slo-burn-alerts, name: Fast-burn and slow-burn alert configuration, match: [grafana-slo-burn-alerts, fast-burn-slow-burn]}
+      - {id: slo-terraform-api, name: SLO API and Terraform, match: [grafana-slo-terraform, slo-api]}
+      - {id: slo-dashboards, name: Generated SLO dashboards and reports, match: [grafana-slo-dashboard, slo-report-grafana]}
+      - {id: slo-objectives, name: Objectives and window configuration, match: [grafana-slo-objective, slo-window-config]}
+      - {id: slo-advanced-query, name: Advanced (freeform) SLI queries, match: [grafana-slo-advanced-query, freeform-sli]}
+      - {id: slo-grouping, name: Grouped SLOs by label dimension, match: [grafana-slo-group-by, slo-dimensions]}
+      - {id: synthetic-slo, name: SLOs from synthetic checks, match: [synthetic-slo]}
+  - id: synthetic-and-rum
+    name: Synthetic monitoring and real user monitoring (Faro, web vitals)
+    source: Grafana Synthetic Monitoring docs (check types, private probes, alerting, Terraform, k6 scripted and browser checks); Faro docs (web SDK, instrumentations, tracing, receiver, source maps)
+    match: [grafana-synthetic-monitoring, synthetic-checks, uptime-checks, real-user-monitoring, faro, browser-telemetry]
+    subtopics:
+      - {id: sm-check-types, name: Ping, DNS, TCP and traceroute checks, match: [ping-check, dns-check, tcp-check, traceroute-check]}
+      - {id: private-probes, name: Private probes, match: [private-probes, probe-deployment]}
+      - {id: scripted-browser-checks, name: k6 scripted and browser checks, match: [k6-scripted-check, browser-check]}
+      - {id: sm-alerting-terraform, name: Synthetic monitoring alerts and Terraform, match: [synthetic-monitoring-alerts, synthetic-monitoring-terraform]}
+      - {id: faro-sdk-setup, name: Faro Web SDK setup and instrumentations, match: [faro-sdk-setup, faro-instrumentations]}
+      - {id: faro-tracing, name: Faro tracing with OTel web, match: [faro-tracing, otel-web-tracing]}
+      - {id: faro-receiver-sourcemaps, name: Alloy Faro receiver and source map upload, match: [faro-receiver-config, source-map-upload]}
+      - {id: web-vitals-slo, name: Web vitals dashboards and frontend SLOs, match: [web-vitals-dashboards, frontend-slo]}
+      - {id: http-check-config, name: HTTP check configuration (assertions, TLS, regex), match: [http-check-config, synthetic-http-assertions]}
+      - {id: multihttp-check, name: MultiHTTP checks with variables, match: [multihttp-check]}
+      - {id: faro-errors-sessions, name: Faro error tracking and session tracking, match: [faro-error-tracking, faro-sessions]}
+  # --- OpenTelemetry (opentelemetry.io/docs: Concepts, Collector, Kubernetes; specification)
+  - id: otel-traces
+    name: Traces, spans and span design
+    source: OTel Concepts/Signals/Traces; Trace SDK spec (span processors, exporters, span limits, id generators); API (span events, links, status, exceptions)
+    match: [distributed-tracing, spans, span-attributes]
+    subtopics:
+      - {id: span-events-links, name: Span events and span links, match: [span-events, span-links-usage]}
+      - {id: span-status, name: Span status and recording exceptions, match: [span-status, recording-exceptions]}
+      - {id: span-processors, name: Simple vs batch span processors, match: [span-processor, batch-span-processor, simple-span-processor]}
+      - {id: span-limits, name: Span and attribute limits, match: [span-limits, attribute-limits]}
+      - {id: span-naming, name: Span naming conventions (low cardinality), match: [span-naming, low-cardinality-span-names]}
+      - {id: messaging-spans, name: Producer/consumer spans for messaging, match: [messaging-spans, producer-consumer-spans]}
+      - {id: tracer-provider, name: TracerProvider and exporter setup, match: [tracer-provider, trace-exporter-config]}
+      - {id: span-kind, name: Choosing span kind (server, client, producer, consumer, internal), match: [span-kind]}
+      - {id: manual-spans, name: Creating manual spans and nesting with context, match: [manual-span-creation, start-as-current-span]}
+      - {id: id-generators, name: ID generators (AWS X-Ray), match: [xray-id-generator, id-generator]}
+  - id: otel-metrics
+    name: OTel metrics SDK (instruments, views, temporality)
+    source: OTel Metrics SDK spec (MeterProvider, instruments, views, readers, exporters, temporality, cardinality limit, exemplars, exponential histograms)
+    match: [otel-metrics, opentelemetry-metrics, aggregation-temporality, otel-views]
+    subtopics:
+      - {id: instrument-selection, name: Choosing instruments (counter vs updowncounter vs gauge vs histogram), match: [instrument-selection, counter-vs-updowncounter]}
+      - {id: view-configuration, name: Views (drop attributes, rename, custom buckets), match: [view-configuration, drop-attributes-view, histogram-buckets-view]}
+      - {id: temporality-selection, name: Delta vs cumulative temporality per backend, match: [temporality-selection, delta-vs-cumulative]}
+      - {id: metric-readers, name: Metric readers and exporters (periodic, Prometheus), match: [metric-reader, prometheus-metric-reader, periodic-reader]}
+      - {id: otel-exemplars, name: Exemplars and exemplar filters, match: [otel-exemplars, exemplar-filter]}
+      - {id: cardinality-limit, name: Cardinality limits and the overflow attribute, match: [metric-cardinality-limit, overflow-attribute]}
+      - {id: exponential-histograms, name: Exponential histograms, match: [exponential-histogram-config, base2-histogram]}
+      - {id: async-instruments, name: Asynchronous instruments and callbacks, match: [observable-instruments, async-instrument-callback]}
+      - {id: meter-provider, name: MeterProvider setup, flush and shutdown, match: [meter-provider]}
+      - {id: otlp-to-prometheus, name: Sending OTel metrics to Prometheus (OTLP receiver, promote resource attributes), match: [prometheus-otlp-receiver, promote-resource-attributes]}
+  - id: otel-logs
+    name: OTel logs and the logs bridge
+    source: OTel Logs spec (data model, bridge API, SDK LoggerProvider and processors); language appenders; Events API; collector filelog receiver
+    match: [otel-logs, logs-bridge, opentelemetry-logs]
+    subtopics:
+      - {id: log-appenders, name: Log appenders (Logback, Log4j, Serilog, Python handler), match: [logback-otel-appender, log4j-otel-appender, serilog-otel]}
+      - {id: logger-provider, name: LoggerProvider and LogRecordProcessor configuration, match: [logger-provider, log-record-processor]}
+      - {id: filelog-receiver-config, name: filelog receiver operators and multiline, match: [filelog-receiver-config, filelog-operators, multiline-filelog]}
+      - {id: events-api, name: Events API, match: [events-api, otel-events]}
+      - {id: severity-mapping, name: Severity number and text mapping, match: [severity-number-mapping, severity-text]}
+      - {id: log-trace-context, name: Injecting trace context into logs, match: [log-trace-context-injection, log-correlation-config]}
+      - {id: otlp-log-export, name: Exporting logs over OTLP (batch log record processor), match: [otlp-log-exporter, batch-log-processor]}
+      - {id: log-data-model, name: Log data model fields (body, attributes, observed timestamp), match: [log-data-model, observed-timestamp]}
+  - id: context-propagation
+    name: Context propagation and baggage
+    source: OTel Concepts/Context propagation; Propagators spec (W3C TraceContext, Baggage, B3, Jaeger, composite); Baggage API; manual inject/extract
+    match: [context-propagation, w3c-trace-context, traceparent, baggage]
+    subtopics:
+      - {id: propagator-configuration, name: Configuring propagators (OTEL_PROPAGATORS, B3, composite), match: [propagator-configuration, otel-propagators-env, b3-propagator]}
+      - {id: manual-inject-extract, name: Manual inject/extract with carriers, match: [manual-inject-extract, carrier-propagation]}
+      - {id: baggage-usage, name: Baggage usage and the baggage span processor, match: [baggage-usage, baggage-span-processor]}
+      - {id: messaging-propagation, name: Propagation through message headers, match: [messaging-propagation, kafka-header-propagation]}
+      - {id: async-context, name: Context across threads and async boundaries, match: [async-context, cross-thread-context]}
+      - {id: proxy-trace-headers, name: Trace headers through proxies and load balancers, match: [trace-context-through-proxies, load-balancer-trace-headers]}
+      - {id: tracestate, name: tracestate handling and vendor entries, match: [tracestate]}
+      - {id: grpc-propagation, name: Propagation over gRPC metadata, match: [grpc-metadata-propagation]}
+  - id: semantic-conventions
+    name: Semantic conventions and resources
+    source: OTel Semantic conventions (general, HTTP, database, messaging, resource); Resource SDK (detectors); stability and schema URLs
+    match: [semantic-conventions, resource-attributes, resource-detection]
+    subtopics:
+      - {id: http-semconv, name: HTTP semantic conventions, match: [http-semantic-conventions, http-server-attributes]}
+      - {id: db-messaging-semconv, name: Database and messaging conventions, match: [db-semantic-conventions, messaging-semantic-conventions]}
+      - {id: resource-detectors, name: Resource detectors (cloud, container, host), match: [resource-detectors-config, cloud-resource-detection]}
+      - {id: service-resource-attrs, name: service.name, service.namespace, deployment.environment, match: [service-name-attribute, deployment-environment-attribute]}
+      - {id: custom-attributes, name: Custom attribute naming and namespaces, match: [custom-attribute-naming, attribute-namespaces]}
+      - {id: semconv-versioning, name: Stability, schema URLs and migration, match: [semconv-stability, schema-url, http-semconv-migration]}
+      - {id: rpc-semconv, name: RPC and gRPC conventions, match: [rpc-semantic-conventions, grpc-semconv]}
+      - {id: k8s-cloud-semconv, name: Kubernetes and cloud resource conventions, match: [k8s-resource-semconv, cloud-semconv]}
+      - {id: exception-semconv, name: Exception conventions, match: [exception-semconv, exception-attributes]}
+  - id: sampling
+    name: Head and tail sampling
+    source: OTel Concepts/Sampling; SDK samplers; collector tailsamplingprocessor policies; probabilisticsamplerprocessor; Jaeger remote sampling
+    match: [head-sampling, tail-sampling]
+    subtopics:
+      - {id: head-sampler-config, name: SDK samplers (TraceIdRatioBased, ParentBased, env config), match: [trace-id-ratio-sampler, parent-based-sampler, otel-traces-sampler-env]}
+      - {id: tail-sampling-policies, name: Tail sampling processor policies, match: [tail-sampling-policies, tail-sampling-processor]}
+      - {id: probabilistic-sampler, name: Probabilistic sampler processor, match: [probabilistic-sampler-processor, hash-seed-sampling]}
+      - {id: composite-policies, name: Composite and and-policies, match: [composite-sampling-policy, and-policy]}
+      - {id: remote-sampling, name: Jaeger remote sampling, match: [jaeger-remote-sampler, remote-sampling]}
+      - {id: sampling-metrics-impact, name: Sampling effects on span metrics and adjusted counts, match: [sampling-adjusted-counts, sampling-and-span-metrics]}
+      - {id: consistent-probability, name: Consistent probability sampling and the tracestate threshold, match: [consistent-probability-sampling, tracestate-threshold]}
+      - {id: tail-sampling-scaling, name: Scaling tail sampling (trace-ID load balancing, decision cache), match: [tail-sampling-scaling, decision-cache]}
+  - id: language-instrumentation
+    name: Zero-code and code-based instrumentation with the SDK
+    source: OTel docs/Zero-code (Java agent, Python, Node, .NET, Go); Code-based; SDK configuration (env vars, declarative config); instrumentation libraries; testing
+    match: [zero-code-instrumentation, auto-instrumentation, java-agent, code-based-instrumentation, manual-instrumentation, otel-sdk]
+    subtopics:
+      - {id: java-agent-config, name: Java agent configuration and extensions, match: [java-agent-configuration, java-agent-extensions, disable-instrumentation-java]}
+      - {id: python-instrument, name: opentelemetry-instrument and Python distros, match: [opentelemetry-instrument-usage, python-distro, python-instrumentation-libraries]}
+      - {id: node-sdk-setup, name: Node SDK and auto-instrumentations-node, match: [node-sdk-setup, auto-instrumentations-node-config]}
+      - {id: dotnet-auto, name: .NET automatic instrumentation, match: [dotnet-auto-instrumentation-setup, otel-dotnet-auto]}
+      - {id: go-instrumentation, name: Go instrumentation (otelhttp, otelgrpc), match: [go-otel-setup, otelhttp, otelgrpc]}
+      - {id: otel-env-config, name: OTEL_* environment configuration, match: [otel-exporter-otlp-env, otel-resource-attributes-env]}
+      - {id: declarative-config, name: Declarative configuration file, match: [declarative-configuration-yaml, otel-config-file]}
+      - {id: instrumentation-testing, name: Testing instrumentation with in-memory exporters, match: [instrumentation-testing, in-memory-exporter]}
+      - {id: java-manual, name: Java manual instrumentation and @WithSpan, match: [withspan-annotation, java-manual-instrumentation]}
+      - {id: python-manual, name: Python manual SDK setup, match: [python-otel-sdk-setup]}
+      - {id: browser-instrumentation, name: Browser JavaScript instrumentation, match: [otel-browser-instrumentation, web-tracer-provider]}
+  - id: collector-config
+    name: Collector configuration and building a custom collector (OCB)
+    source: OTel Collector/Configuration; collector-contrib component list (receivers, processors, exporters, connectors, extensions); exporter helper (queue, retry, TLS); confmap providers; OCB
+    match: [collector-config, collector-pipelines, otelcol-config, ocb, collector-builder]
+    subtopics:
+      - {id: receivers-catalogue, name: Prometheus, hostmetrics and Kafka receivers, match: [prometheus-receiver-config, hostmetrics-receiver, kafka-receiver]}
+      - {id: processors-core, name: batch and memory_limiter tuning, match: [batch-processor-tuning, memory-limiter-tuning]}
+      - {id: exporters-catalogue, name: prometheusremotewrite, Kafka and Elasticsearch exporters, match: [prometheusremotewrite-exporter-config, kafka-exporter, elasticsearch-exporter]}
+      - {id: connectors, name: Connectors (spanmetrics, servicegraph, routing, count), match: [spanmetrics-connector-config, servicegraph-connector, routing-connector, count-connector]}
+      - {id: auth-extensions, name: Auth extensions (basicauth, oauth2client, bearertokenauth), match: [basicauth-extension, oauth2client-extension, bearertokenauth]}
+      - {id: queue-retry-storage, name: Sending queue, retry and persistent file_storage, match: [sending-queue-config, persistent-queue, file-storage-extension]}
+      - {id: config-providers, name: Config providers and env substitution, match: [config-env-provider, confmap-providers, config-merging]}
+      - {id: ocb-build, name: OCB builder manifest and custom distributions, match: [ocb-manifest, builder-config, custom-distribution]}
+      - {id: exporter-tls, name: Exporter and receiver TLS/mTLS settings, match: [exporter-tls-config, mtls-collector]}
+      - {id: otlp-receiver, name: OTLP receiver (grpc and http endpoints, CORS, max message size), match: [otlp-receiver-config, otlp-cors]}
+      - {id: health-pprof-extensions, name: health_check and pprof extensions, match: [health-check-extension, pprof-extension]}
+  - id: collector-deployment
+    name: Collector deployment patterns and scaling
+    source: OTel Collector/Deployment (agent, gateway); Scaling; opentelemetry-collector Helm chart; loadbalancing exporter; Kubernetes modes
+    match: [collector-deployment, agent-gateway, gateway-collector, collector-scaling, loadbalancing-exporter]
+    subtopics:
+      - {id: helm-collector-chart, name: opentelemetry-collector Helm chart and presets, match: [opentelemetry-collector-helm, collector-helm-presets]}
+      - {id: gateway-load-balancer, name: Load balancing OTLP gRPC to gateways, match: [gateway-load-balancer, otlp-grpc-load-balancing]}
+      - {id: loadbalancing-routing-key, name: loadbalancing exporter routing keys and resolvers, match: [loadbalancing-routing-key, loadbalancing-resolver]}
+      - {id: collector-hpa, name: Autoscaling collectors (HPA), match: [collector-hpa, collector-autoscaling]}
+      - {id: kafka-buffering, name: Kafka buffering between collector tiers, match: [kafka-buffering, collector-kafka-pipeline]}
+      - {id: sidecar-collector, name: Sidecar collectors, match: [collector-sidecar, sidecar-collector-injection]}
+      - {id: collector-sizing, name: Resource sizing and benchmarking, match: [collector-resource-sizing, collector-benchmarks]}
+      - {id: multi-cluster, name: Multi-cluster and cross-region telemetry, match: [multi-cluster-collector, cross-cluster-telemetry]}
+      - {id: daemonset-agent, name: DaemonSet agent collector, match: [daemonset-collector, node-agent-collector]}
+      - {id: collector-ha, name: Collector high availability and failover connector, match: [collector-high-availability, failover-connector]}
+  - id: transforming-telemetry
+    name: Transforming telemetry (OTTL, transform/filter/attributes processors)
+    source: OTel Collector/Transforming telemetry; attributes, resource, transform, filter, metricstransform, cumulativetodelta, deltatocumulative, groupbyattrs, resourcedetection, redaction, span processors; OTTL functions and contexts
+    match: [ottl, transform-processor, filter-processor]
+    subtopics:
+      - {id: attributes-processor-actions, name: attributes processor actions (hash, extract, convert), match: [attributes-processor-actions, hash-attribute, extract-attribute-regex]}
+      - {id: ottl-metric-transforms, name: Metric OTTL (convert_gauge_to_sum, aggregate), match: [convert-gauge-to-sum, aggregate-datapoints, metric-ottl-functions]}
+      - {id: ottl-log-parsing, name: Parsing log bodies with OTTL (ParseJSON, regex), match: [parse-json-ottl, parse-logs-ottl, log-body-parsing]}
+      - {id: metricstransform-cumulative, name: metricstransform, cumulativetodelta and deltatocumulative, match: [metricstransform-processor, cumulativetodelta, deltatocumulative]}
+      - {id: groupbyattrs-resourcedetection, name: groupbyattrs and resourcedetection processors, match: [groupbyattrs-processor, resourcedetection-processor]}
+      - {id: span-rename, name: Span processor renaming, match: [span-processor-rename, span-name-from-attributes]}
+      - {id: redaction-processor, name: Redaction processor configuration, match: [redaction-processor-config, sensitive-data-masking]}
+      - {id: filter-conditions, name: Filter processor conditions, match: [filter-processor-conditions, drop-spans-ottl, drop-metrics-ottl]}
+      - {id: resource-processor, name: resource processor actions, match: [resource-processor-config]}
+      - {id: ottl-contexts, name: OTTL contexts, paths and error_mode, match: [ottl-contexts, ottl-error-mode]}
+  - id: collector-troubleshooting
+    name: Collector troubleshooting and internal telemetry
+    source: OTel Collector/Troubleshooting; Internal telemetry; telemetrygen; feature gates; zPages; validate command
+    match: [collector-troubleshooting, collector-internal-telemetry, debug-exporter, zpages]
+    subtopics:
+      - {id: internal-telemetry-config, name: service::telemetry configuration and OTLP export of internal metrics, match: [service-telemetry-config, internal-telemetry-level, internal-telemetry-otlp]}
+      - {id: telemetrygen, name: Generating test data with telemetrygen, match: [telemetrygen-usage, synthetic-otlp-data]}
+      - {id: collector-alerts, name: Alert rules on collector health, match: [collector-alert-rules, collector-dropped-data-alerts]}
+      - {id: feature-gates, name: Feature gates, match: [feature-gates, collector-feature-gates]}
+      - {id: zpages-usage, name: zPages (tracez, pipelinez), match: [zpages-usage, tracez]}
+      - {id: grpc-tls-debugging, name: gRPC and TLS connectivity debugging, match: [grpc-connectivity-debugging, collector-tls-errors]}
+      - {id: validate-dryrun, name: otelcol validate and dry runs, match: [otelcol-validate, config-dry-run]}
+      - {id: memory-oom, name: Collector OOM and memory tuning, match: [collector-oom, memory-ballast-limits]}
+      - {id: debug-exporter, name: debug exporter verbosity and sampling, match: [debug-exporter-verbosity]}
+      - {id: dropped-data, name: Diagnosing refused and dropped data (otelcol failed metrics), match: [refused-spans, otelcol-failed-metrics]}
+  - id: otel-kubernetes
+    name: OpenTelemetry Operator, target allocator and Kubernetes telemetry
+    source: "OTel Kubernetes (Operator: OpenTelemetryCollector CRD, Instrumentation CRD, target allocator, OpAMP bridge; Helm: collector, operator, kube-stack; components: k8sattributes, kubeletstats, k8s_cluster, k8sobjects, filelog)"
+    match: [otel-operator, opentelemetry-operator, target-allocator, k8sattributes, kubeletstats]
+    subtopics:
+      - {id: instrumentation-crd, name: Instrumentation CRD and injection annotations, match: [instrumentation-crd-config, inject-annotations]}
+      - {id: target-allocator-config, name: Target allocator strategies and Prometheus CR discovery, match: [target-allocator-config, allocation-strategy, prometheus-cr-discovery]}
+      - {id: k8sattributes-config, name: k8sattributes pod association and metadata, match: [k8sattributes-config, pod-association, k8s-metadata-enrichment]}
+      - {id: kubeletstats-k8scluster, name: kubeletstats and k8s_cluster receivers, match: [kubeletstats-receiver-config, k8s-cluster-receiver-config]}
+      - {id: k8s-pod-logs, name: Pod logs with filelog, match: [k8s-pod-logs-filelog, container-log-parsing]}
+      - {id: k8sobjects-events, name: k8sobjects receiver for events, match: [k8sobjects-receiver-config, k8s-events-receiver]}
+      - {id: kube-stack-helm, name: opentelemetry-kube-stack chart, match: [kube-stack-chart-install, opentelemetry-kube-stack]}
+      - {id: opamp-bridge, name: OpAMP bridge and remote configuration, match: [opamp-bridge, opamp-remote-config]}
+      - {id: collector-crd-modes, name: OpenTelemetryCollector CRD modes and upgrades, match: [opentelemetrycollector-crd-modes, collector-crd-upgrade]}
+      - {id: operator-install, name: Installing the operator (cert-manager, webhook), match: [operator-cert-manager, otel-operator-install]}
+      - {id: injection-troubleshooting, name: Troubleshooting auto-instrumentation injection, match: [injection-troubleshooting]}
+  # --- SRE practice (Google SRE Book / SRE Workbook)
+  - id: embracing-risk
+    name: Embracing risk and availability targets
+    source: SRE Book/Embracing Risk (managing risk, measuring service risk, risk tolerance of consumer and infrastructure services, motivation for error budgets)
+    match: [embracing-risk, risk-tolerance, availability-targets]
+    subtopics:
+      - {id: cost-of-nines, name: The cost curve of each extra nine, match: [cost-of-nines, reliability-cost-curve]}
+      - {id: measuring-service-risk, name: Measuring service risk (unplanned downtime, request-based), match: [measuring-service-risk, unplanned-downtime-metric]}
+      - {id: consumer-risk-tolerance, name: Identifying consumer-service risk tolerance, match: [consumer-risk-tolerance, product-risk-assessment]}
+      - {id: infrastructure-risk-tolerance, name: Infrastructure service risk tolerance and tiers, match: [infrastructure-risk-tolerance, service-tiers]}
+      - {id: forming-error-budget, name: Forming the error budget, match: [forming-error-budget, error-budget-formation]}
+      - {id: availability-types, name: Time-based vs aggregate (request) availability, match: [time-based-availability, aggregate-availability]}
+      - {id: risk-factors, name: Factors in risk tolerance (revenue, cost, competitors), match: [risk-tolerance-factors, revenue-impact-analysis]}
+      - {id: risk-dimensions, name: Throughput, latency and correctness as risk dimensions, match: [risk-dimensions]}
+  - id: error-budget-policy
+    name: Error budget policy
+    source: "SRE Workbook/Implementing SLOs (Example error budget policy: SLO miss policy, outage policy, escalation policy, background)"
+    match: [error-budget-policy]
+    subtopics:
+      - {id: policy-thresholds, name: Threshold-to-action table, match: [policy-thresholds, budget-freeze-actions]}
+      - {id: outage-policy, name: Single-incident outage policy, match: [outage-policy, single-incident-budget-threshold]}
+      - {id: policy-escalation, name: Escalation on policy disagreement, match: [policy-escalation-path, policy-disagreement]}
+      - {id: budget-exceptions, name: Exceptions and silver bullets, match: [budget-exceptions, silver-bullet-exceptions]}
+      - {id: budget-attribution, name: Budget spend attribution reports, match: [budget-attribution-report, budget-spend-attribution]}
+      - {id: policy-signoff, name: Getting error budget policy signoff, match: [error-budget-policy-signoff]}
+      - {id: budget-review-meeting, name: Error budget reviews in planning, match: [error-budget-review-meeting]}
+      - {id: release-freeze, name: Implementing release freezes, match: [release-freeze]}
+  - id: toil
+    name: Eliminating toil and dealing with interrupts
+    source: SRE Book/Eliminating Toil; Dealing with Interrupts (managing operational load, cognitive flow state, polarizing time); Workbook/Eliminating Toil (taxonomy, measuring, strategies)
+    match: [toil, toil-reduction, interrupts]
+    subtopics:
+      - {id: measuring-toil, name: Measuring toil (surveys, tracking), match: [measuring-toil, toil-survey, toil-tracking]}
+      - {id: toil-taxonomy, name: Toil taxonomy, match: [toil-taxonomy, toil-classification]}
+      - {id: toil-strategies, name: Toil management strategies, match: [toil-management-strategies, automation-prioritisation]}
+      - {id: interrupt-handling, name: Interrupt and ticket rotations, match: [interrupt-handling, interrupts-rotation, ticket-rotation]}
+      - {id: flow-state, name: Protecting flow state and polarizing time, match: [flow-state, polarizing-time, interrupt-shield]}
+      - {id: toil-budget, name: Enforcing the 50% toil cap, match: [toil-budget-enforcement, fifty-percent-rule]}
+      - {id: automation-roi, name: Calculating automation ROI, match: [automation-roi, toil-automation-payback]}
+      - {id: ticket-hygiene, name: Ticket queue hygiene, match: [ticket-queue-hygiene]}
+      - {id: automation-hierarchy, name: Automation evolution toward autonomous systems, match: [automation-hierarchy, autonomous-systems]}
+  - id: capacity-planning
+    name: Capacity planning and demand forecasting
+    source: SRE Book/Software Engineering in SRE (intent-based capacity planning); Introduction (organic vs inorganic growth); Workbook/Managing Load
+    match: [capacity-planning, demand-forecasting]
+    subtopics:
+      - {id: organic-inorganic, name: Organic vs inorganic growth and launch demand, match: [organic-growth, inorganic-growth, launch-demand]}
+      - {id: intent-based-planning, name: Intent-based capacity planning, match: [intent-based-capacity-planning, auxon]}
+      - {id: capacity-load-testing, name: Load testing to establish capacity, match: [capacity-load-testing, capacity-benchmarks]}
+      - {id: forecasting-models, name: Demand forecasting models, match: [demand-forecasting-model, growth-projection]}
+      - {id: headroom-policy, name: Headroom and utilisation targets, match: [headroom-policy, utilisation-targets]}
+      - {id: quota-management, name: Cloud quota management, match: [quota-management, cloud-quota-requests]}
+      - {id: capacity-model, name: Building a capacity model (QPS per core), match: [capacity-model, qps-per-core]}
+      - {id: n-plus-two, name: N+2 redundancy planning, match: [n-plus-two, n-plus-one-redundancy]}
+  - id: release-canarying
+    name: Release engineering and canarying releases
+    source: SRE Book/Release Engineering (hermetic builds, branching, policies, deployment); Workbook/Canarying Releases (population, metrics, non-interactive systems)
+    match: [release-engineering, canarying, canary-analysis, canary-release]
+    subtopics:
+      - {id: hermetic-builds, name: Hermetic and reproducible builds, match: [hermetic-build-setup, reproducible-build-verification]}
+      - {id: branching-strategy, name: Release branching and cherry-pick policy, match: [release-branching-strategy, cherry-pick-policy]}
+      - {id: canary-population, name: Canary population selection and sizing, match: [canary-population, canary-sizing]}
+      - {id: canary-metrics, name: Selecting and evaluating canary metrics, match: [canary-metrics-selection, canary-evaluation]}
+      - {id: canary-non-interactive, name: Canarying non-interactive and batch systems, match: [canary-batch-systems, non-interactive-canary]}
+      - {id: release-policy, name: Enforcing release policies and gates, match: [release-policy-enforcement, deployment-gates]}
+      - {id: rollback, name: Rollback mechanics, match: [rollback-procedure, fast-rollback]}
+      - {id: progressive-delivery, name: Automated canary analysis with Argo Rollouts and Flagger, match: [argo-rollouts-analysis, flagger-canary]}
+      - {id: feature-flag-rollout, name: Feature flags decoupling deploy from release, match: [feature-flag-rollout]}
+      - {id: canary-bake-time, name: Canary duration and bake time, match: [canary-bake-time]}
+  - id: on-call
+    name: On-call rotations, handover and training new on-callers
+    source: SRE Book/Being On-Call (balanced on-call, feeling safe, operational overload and underload); Accelerating SREs to On-Call; Workbook/On-Call (pager load, flexibility, team dynamics)
+    match: [on-call-rotation, on-call-schedule, on-call-handover, on-call-training, wheel-of-misfortune]
+    subtopics:
+      - {id: compensation, name: On-call compensation policy, match: [on-call-compensation-policy, compensation-policy]}
+      - {id: pager-load-cap, name: Pager load caps and operational overload response, match: [pager-load-cap, operational-overload-response]}
+      - {id: underload, name: Preventing operational underload, match: [operational-underload, underload-prevention]}
+      - {id: learning-path, name: On-call learning paths and reverse-engineering training, match: [on-call-learning-path, reverse-engineering-training]}
+      - {id: handover-process, name: Handover process and checklist, match: [handover-process, handover-checklist]}
+      - {id: schedule-design, name: Rotation length and follow-the-sun design, match: [schedule-design, rotation-length, follow-the-sun-design]}
+      - {id: paging-tooling, name: Paging tooling and escalation configuration, match: [paging-tooling, pager-escalation-config]}
+      - {id: wheel-exercise, name: Running a wheel of misfortune exercise, match: [wheel-of-misfortune-exercise]}
+      - {id: secondary-on-call, name: Primary and secondary on-call roles, match: [secondary-on-call]}
+      - {id: on-call-health, name: On-call health metrics and surveys, match: [on-call-health-survey]}
+  - id: troubleshooting
+    name: Effective troubleshooting method
+    source: SRE Book/Effective Troubleshooting (problem report, triage, examine, diagnose, test and treat, negative results, making troubleshooting easier)
+    match: [troubleshooting-method, systematic-troubleshooting, debugging-production]
+    subtopics:
+      - {id: problem-reports, name: Problem report quality, match: [problem-report-template, bug-report-quality]}
+      - {id: triage-mitigation, name: Triage and stop-the-bleeding, match: [triage-and-mitigation, stop-the-bleeding]}
+      - {id: diagnosis-techniques, name: Diagnosis techniques (simplify and reduce, what changed last), match: [diagnosis-techniques, what-changed-last, simplify-and-reduce]}
+      - {id: test-and-treat, name: Test and treat ordering, match: [test-and-treat, hypothesis-testing-order]}
+      - {id: negative-results, name: Recording negative results, match: [negative-results, documenting-dead-ends]}
+      - {id: debuggability, name: Making systems easier to troubleshoot, match: [troubleshooting-tooling, debuggability]}
+      - {id: linux-triage, name: 60-second Linux performance triage, match: [linux-performance-triage, sixty-second-analysis]}
+      - {id: trace-driven-debugging, name: Debugging with traces across services, match: [trace-driven-debugging]}
+  - id: incident-management
+    name: Emergency response and incident command
+    source: SRE Book/Managing Incidents (roles, declaring, live incident state document, handoff); Emergency Response (test-, change-, process-induced); Workbook/Incident Response (ICS, training, drills)
+    match: [incident-management, incident-commander, emergency-response]
+    subtopics:
+      - {id: incident-roles, name: Incident roles (operations, communications, planning leads), match: [incident-roles, operations-lead-role, communications-lead-role, planning-lead-role]}
+      - {id: declaring-incidents, name: Declaring incidents, match: [declaring-incidents, incident-declaration-criteria]}
+      - {id: incident-state-document, name: Live incident state document, match: [incident-state-document, live-incident-doc]}
+      - {id: incident-handoff, name: Incident handoff, match: [incident-handoff, follow-the-sun-handoff]}
+      - {id: incident-communications, name: Stakeholder and status-page communications, match: [incident-communications, stakeholder-updates, status-page-updates]}
+      - {id: incident-drills, name: Incident training and drills, match: [incident-training, incident-drills]}
+      - {id: emergency-types, name: Change- and process-induced emergencies, match: [change-induced-emergency, process-induced-emergency]}
+      - {id: severity-levels, name: Incident severity levels, match: [incident-severity-levels]}
+      - {id: incident-tooling, name: Incident tooling (chat channels and bots), match: [incident-tooling]}
+      - {id: incident-closure, name: Closing an incident, match: [incident-closure-criteria]}
+  - id: postmortems
+    name: Blameless postmortems and outage tracking
+    source: SRE Book/Postmortem Culture (collaborate and share, introducing a culture, ongoing improvement); Tracking Outages (Outalator); Workbook/Postmortem Culture (bad vs good, incentives, tools)
+    match: [postmortem, blameless-postmortem, outage-tracking]
+    subtopics:
+      - {id: postmortem-template, name: Postmortem document template, match: [postmortem-template, postmortem-document-structure]}
+      - {id: postmortem-review, name: Review and publishing process, match: [postmortem-review-process, postmortem-publishing]}
+      - {id: action-items, name: Action item tracking, match: [postmortem-action-items, action-item-tracking]}
+      - {id: outage-tracker, name: Outage tracking and tagging system, match: [outage-tracker, incident-tagging, outage-analysis]}
+      - {id: postmortem-incentives, name: Incentives and culture, match: [postmortem-incentives, postmortem-culture]}
+      - {id: blameless-language, name: Blameless language and counterfactuals, match: [blameless-language, counterfactual-language]}
+      - {id: timeline-reconstruction, name: Building the incident timeline, match: [incident-timeline-reconstruction]}
+      - {id: contributing-factors, name: Contributing factors analysis and five whys limits, match: [contributing-factors-analysis, five-whys]}
+  - id: runbooks
+    name: Runbooks and playbooks
+    source: SRE Book/Practical Alerting and Being On-Call (playbooks); Workbook/On-Call
+    match: [runbooks, runbook, playbooks]
+    subtopics:
+      - {id: runbook-structure, name: Runbook structure and sections, match: [runbook-structure, runbook-sections]}
+      - {id: runbook-automation-tools, name: Executable runbooks and automation tools, match: [runbook-automation-tools, executable-runbooks]}
+      - {id: runbook-maintenance, name: Runbook maintenance and freshness, match: [runbook-maintenance, runbook-freshness]}
+      - {id: runbook-linking, name: Linking alerts to runbooks, match: [runbook-url-annotation, alert-runbook-linking]}
+      - {id: runbook-drills, name: Runbook testing and walkthroughs, match: [runbook-testing-drills, runbook-walkthrough]}
+      - {id: alert-runbook-template, name: Alert-specific runbook template, match: [alert-runbook-template]}
+      - {id: runbook-diagnostic-queries, name: Embedding diagnostic queries and dashboards in runbooks, match: [runbook-diagnostic-queries]}
+      - {id: runbook-escalation, name: Runbook escalation paths, match: [runbook-escalation-paths]}
+  - id: reliability-testing
+    name: Testing for reliability (chaos, DiRT, DR tests)
+    source: "SRE Book/Testing for Reliability (types of software testing, production tests: configuration, stress, canary; testing at scale; disaster; production probes)"
+    match: [reliability-testing, chaos-engineering, disaster-recovery-testing]
+    subtopics:
+      - {id: configuration-tests, name: Configuration tests, match: [configuration-tests, config-file-testing]}
+      - {id: stress-tests, name: Stress tests and breaking points, match: [stress-tests, breaking-point-testing]}
+      - {id: production-probes, name: Production probes, match: [production-probes, probe-tests]}
+      - {id: dirt, name: DiRT disaster exercises, match: [dirt-exercise, disaster-exercise-planning]}
+      - {id: chaos-design, name: Chaos experiment design, match: [chaos-experiment-design, chaos-hypothesis]}
+      - {id: test-environment, name: Test environment fidelity, match: [integration-test-environment, test-environment-fidelity]}
+      - {id: kubernetes-chaos-tools, name: Chaos Mesh and LitmusChaos on Kubernetes, match: [chaos-mesh, litmus-chaos]}
+      - {id: game-days, name: Game day planning and execution, match: [game-day]}
+  - id: load-balancing
+    name: Load balancing (frontend and datacenter)
+    source: SRE Book/Load Balancing at the Frontend (DNS, VIP, Maglev); in the Datacenter (lame duck, subsetting, policies)
+    match: [load-balancing, subsetting, weighted-round-robin]
+    subtopics:
+      - {id: dns-lb, name: DNS load balancing design, match: [dns-load-balancing-design, geo-dns-setup]}
+      - {id: vip-maglev, name: Virtual IPs and Maglev hashing, match: [virtual-ip, maglev-hashing]}
+      - {id: lame-duck, name: Lame duck state and draining, match: [lame-duck-state, lame-duck-draining]}
+      - {id: subsetting-impl, name: Deterministic subsetting implementation, match: [subsetting-implementation, deterministic-subsetting-algorithm]}
+      - {id: lb-policies, name: Least-loaded and weighted round robin policies, match: [least-loaded-round-robin, weighted-round-robin-impl]}
+      - {id: grpc-mesh-lb, name: gRPC and Envoy load balancing configuration, match: [grpc-lb-config, envoy-lb-policy]}
+      - {id: lb-health-checks, name: Load balancer health check design, match: [lb-health-check-design]}
+      - {id: anycast, name: Anycast and global load balancing, match: [anycast-load-balancing]}
+  - id: handling-overload
+    name: Handling overload and managing load (shedding, throttling, autoscaling failure modes)
+    source: SRE Book/Handling Overload (per-customer limits, client-side throttling, criticality, utilization signals, retries, connection load); Workbook/Managing Load (autoscaling)
+    match: [overload, load-shedding, adaptive-throttling, client-side-throttling, managing-load]
+    subtopics:
+      - {id: per-customer-limits, name: Per-customer quotas, match: [per-customer-limits, customer-quota-enforcement]}
+      - {id: adaptive-throttling-impl, name: Implementing adaptive client-side throttling, match: [adaptive-throttling-implementation, client-rejection-probability]}
+      - {id: criticality, name: Request criticality propagation, match: [criticality-propagation, request-criticality-levels]}
+      - {id: utilization-signals, name: Utilization signals, match: [utilization-signals, executor-load-average]}
+      - {id: retry-decisions, name: Deciding when to retry on overload, match: [retry-decisions, retry-on-overload]}
+      - {id: connection-load, name: Connection load and storms, match: [connection-load, connection-storms]}
+      - {id: autoscaling-strategy, name: Autoscaling strategy and failure modes, match: [autoscaling-strategy, autoscaling-with-load-balancing]}
+      - {id: rate-limiting-algorithms, name: Rate limiting algorithms (token bucket, leaky bucket), match: [token-bucket, rate-limiting-algorithms]}
+      - {id: queue-management, name: Server queue management (CoDel, adaptive LIFO), match: [codel-queue, adaptive-lifo]}
+  - id: cascading-failures
+    name: Addressing cascading failures
+    source: SRE Book/Addressing Cascading Failures (causes, preventing server overload, slow startup and cold caching, triggering conditions, testing, immediate steps)
+    match: [cascading-failures, retry-budget, retry-storm, circuit-breaker]
+    subtopics:
+      - {id: resource-exhaustion, name: Resource exhaustion types (CPU, memory, threads, FDs), match: [resource-exhaustion-types, fd-exhaustion, thread-exhaustion]}
+      - {id: health-check-cascade, name: Health check failures that cascade, match: [health-check-storms, health-check-failures-cascade]}
+      - {id: cold-cache, name: Cold cache and slow start mitigation, match: [cold-cache-mitigation, slow-start-protection]}
+      - {id: degraded-mode, name: Degraded-mode design, match: [degraded-mode-design, serve-degraded-results]}
+      - {id: cascade-testing, name: Testing for cascading failures, match: [cascading-failure-testing, overload-testing]}
+      - {id: immediate-steps, name: Immediate steps to address a cascade, match: [cascade-immediate-steps, drop-traffic-recovery]}
+      - {id: retry-policy, name: Retry policy and budget implementation, match: [retry-policy-implementation, retry-budget-config]}
+      - {id: deadline-propagation, name: Deadline propagation, match: [deadline-propagation]}
+      - {id: outlier-detection, name: Circuit breaking and outlier detection configuration, match: [outlier-detection, circuit-breaker-config]}
+  - id: distributed-consensus
+    name: Managing critical state with distributed consensus
+    source: "SRE Book/Managing Critical State (patterns: leader election, locking, queues; performance; deploying; monitoring)"
+    match: [distributed-consensus, paxos, raft, leader-election]
+    subtopics:
+      - {id: leader-election-impl, name: Implementing leader election (Kubernetes Lease, etcd), match: [leader-election-implementation, kubernetes-lease]}
+      - {id: distributed-locking, name: Distributed locking and fencing, match: [distributed-locking, lock-fencing]}
+      - {id: consensus-performance, name: Consensus performance (quorum leases, batching), match: [consensus-performance, quorum-leases, batching-proposals]}
+      - {id: replica-placement, name: Replica placement and quorum composition, match: [replica-placement, quorum-composition]}
+      - {id: consensus-monitoring, name: Monitoring consensus systems, match: [consensus-monitoring-metrics, etcd-monitoring]}
+      - {id: replicated-queues, name: Consensus-based queues and messaging, match: [replicated-queue, consensus-based-messaging]}
+      - {id: etcd-operations, name: etcd operations (defrag, snapshot, restore), match: [etcd-defrag, etcd-snapshot-restore]}
+      - {id: split-brain, name: Split-brain detection and prevention, match: [split-brain]}
+  - id: data-pipelines
+    name: Data processing pipelines and distributed cron
+    source: SRE Book/Cron (at-most-once, state, partial failures); Data Processing Pipelines (periodic pipelines, thundering herd, moire); Workbook/Data Processing Pipelines (SLOs, hotspotting, two-phase mutations, monitoring, lifecycle)
+    match: [data-pipelines, pipeline-reliability, batch-pipelines, distributed-cron]
+    subtopics:
+      - {id: cron-semantics, name: Cron at-most-once vs at-least-once and skipped runs, match: [cron-at-most-once, cron-at-least-once, skipped-runs]}
+      - {id: cron-state, name: Distributed cron state storage, match: [cron-state-storage, distributed-cron-state]}
+      - {id: moire, name: Moire load patterns and staggered schedules, match: [moire-load-pattern, staggered-schedules]}
+      - {id: pipeline-slos, name: Pipeline SLOs (freshness, correctness), match: [pipeline-slos, freshness-correctness-slo]}
+      - {id: hotspotting, name: Hotspotting and work distribution, match: [hotspotting, work-distribution-balancing]}
+      - {id: two-phase-mutations, name: Idempotent and two-phase mutations, match: [two-phase-mutation, idempotent-mutations]}
+      - {id: pipeline-monitoring, name: Pipeline monitoring and lag metrics, match: [pipeline-monitoring, lag-metrics]}
+      - {id: pipeline-lifecycle, name: Pipeline development lifecycle, match: [pipeline-development-lifecycle, pipeline-prototyping]}
+      - {id: pipeline-backfill, name: Pipeline backfill and reprocessing, match: [pipeline-backfill]}
+      - {id: pipeline-thundering-herd, name: Thundering herd in periodic pipelines, match: [pipeline-thundering-herd]}
+  - id: data-integrity
+    name: Data integrity, backups and restore testing
+    source: "SRE Book/Data Integrity (backups vs archives, 24 combinations of failure modes, defense in depth: soft deletion, backups, early detection; restore testing)"
+    match: [data-integrity, backups, backup-restore-testing, soft-deletion]
+    subtopics:
+      - {id: backups-vs-archives, name: Backups vs archives, match: [backups-vs-archives, archive-strategy]}
+      - {id: failure-modes, name: The 24 combinations of data-loss failure modes, match: [data-integrity-failure-modes, data-loss-scenarios]}
+      - {id: soft-deletion-impl, name: Soft and lazy deletion implementation, match: [soft-deletion-implementation, lazy-deletion-pipeline]}
+      - {id: out-of-band-validation, name: Out-of-band data validation, match: [out-of-band-data-validation, data-validation-pipeline]}
+      - {id: restore-drills, name: Restore drills and restore SLOs, match: [restore-drill-schedule, restore-slo]}
+      - {id: backup-tiers, name: Backup tiers and replication vs backup, match: [backup-tiers, replication-vs-backup]}
+      - {id: point-in-time-recovery, name: Point-in-time recovery, match: [point-in-time-recovery]}
+      - {id: backup-verification, name: Backup integrity verification, match: [backup-checksum-verification]}
+  - id: production-readiness
+    name: Production readiness review and launch coordination
+    source: SRE Book/Reliable Product Launches (launch checklist sections, failure modes, client behaviour, rollout planning, load tests, LCE process)
+    match: [production-readiness-review, prr, launch-checklist, launch-coordination]
+    subtopics:
+      - {id: prr-checklist, name: PRR checklist sections and questionnaire, match: [prr-checklist-sections, prr-questionnaire]}
+      - {id: launch-failure-modes, name: Failure mode analysis before launch, match: [launch-failure-modes-review, failure-mode-analysis]}
+      - {id: client-behavior, name: Client behaviour review (abusive clients, retries), match: [client-behavior-review, abusive-clients, thundering-herd-clients]}
+      - {id: rollout-plan, name: Launch rollout plan and phasing, match: [launch-rollout-plan, launch-phasing]}
+      - {id: launch-load-tests, name: Pre-launch load tests, match: [launch-load-tests, pre-launch-stress]}
+      - {id: lce-process, name: The LCE role and launch review process, match: [lce-role, launch-review-process]}
+      - {id: launch-dependencies, name: Launch dependency review, match: [dependency-review-launch]}
+      - {id: launch-monitoring, name: Monitoring readiness before launch, match: [launch-monitoring-readiness]}
+  - id: nalsd
+    name: Non-abstract large system design
+    source: SRE Workbook/NALSD (requirements, one machine, distributed system, iterate, estimate, evaluate)
+    match: [nalsd, non-abstract-large-system-design, system-design-estimation]
+    subtopics:
+      - {id: requirements-quantification, name: Turning requirements into numbers, match: [requirements-quantification, sla-to-qps]}
+      - {id: single-machine, name: Single-machine design first, match: [single-machine-design, is-it-possible]}
+      - {id: distributed-iteration, name: Iterating to a distributed design, match: [distributed-design-iteration, scaling-by-sharding]}
+      - {id: estimation-cheat-sheet, name: Latency numbers and resource estimation, match: [latency-numbers-cheat-sheet, resource-estimation]}
+      - {id: design-evaluation, name: Evaluating a design, match: [design-evaluation, design-review-questions]}
+      - {id: bill-of-materials, name: Bill of materials and cost estimate, match: [nalsd-bill-of-materials]}
+      - {id: failure-domains, name: Failure domains and multi-region design, match: [failure-domain-design]}
+      - {id: nalsd-practice, name: Running a NALSD practice exercise, match: [nalsd-exercise]}
+  - id: configuration-design
+    name: Configuration design and safety
+    source: SRE Workbook/Configuration Design (philosophy, mechanics, language); Configuration Specifics (tooling, ownership, safe change application)
+    match: [configuration-design, config-safety, configuration-best-practices]
+    subtopics:
+      - {id: config-philosophy, name: Configuration philosophy (questions close to user goals), match: [configuration-philosophy, user-goal-questions]}
+      - {id: config-language, name: Choosing a configuration language, match: [configuration-language-choice, jsonnet-vs-yaml]}
+      - {id: config-validation, name: Semantic validation tooling, match: [semantic-validation, config-validation-tooling]}
+      - {id: config-rollout, name: Safe configuration rollout and dry runs, match: [configuration-rollout-safety, config-dry-run]}
+      - {id: config-ownership, name: Ownership and change tracking, match: [config-ownership, config-change-tracking]}
+      - {id: config-datastore, name: Configuration datastores, match: [configuration-datastore, dynamic-config-store]}
+      - {id: config-defaults, name: Defaults and minimising mandatory configuration, match: [config-defaults-design]}
+      - {id: config-change-review, name: Reviewing configuration changes, match: [config-change-review]}
+  - id: sre-engagement
+    name: Engaging with SRE (engagement model, embedding, production meetings)
+    source: SRE Book/Evolving SRE Engagement Model (PRR model, early engagement, frameworks); Communication and Collaboration (production meetings); Workbook/Engaging with SRE; Organizational Change
+    match: [sre-engagement-model, sre-engagement, embedding-sre, production-meetings]
+    subtopics:
+      - {id: production-meeting, name: Production meeting agenda and format, match: [production-meeting-agenda, production-meeting-format]}
+      - {id: prr-engagement, name: The simple PRR engagement model, match: [prr-engagement, simple-prr-model]}
+      - {id: early-engagement, name: Early engagement in design, match: [early-engagement, design-phase-sre]}
+      - {id: sre-platform, name: SRE platforms and frameworks, match: [sre-platform, production-platform-frameworks]}
+      - {id: service-handback, name: Ending the engagement and handback, match: [service-handback, ending-sre-engagement]}
+      - {id: sre-team-structures, name: SRE team structures, match: [sre-team-structures, kitchen-sink-sre, embedded-sre-model]}
+      - {id: sre-charter, name: Writing an SRE team charter, match: [sre-charter]}
+      - {id: sre-vs-devops, name: SRE and DevOps relationship, match: [sre-vs-devops]}

@@ -1,0 +1,289 @@
+# Coverage spec for ExternalDNS (computing-software / cloud-infrastructure-engineering).
+subject: ExternalDNS
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [external-dns]
+sources:
+  - "ExternalDNS documentation (https://github.com/kubernetes-sigs/external-dns/tree/master/docs)"
+topics:
+  # Registries
+  - id: txt-registry-formats
+    name: "TXT registry record formats"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/txt.md
+    match: ["txt-registry", "txt-new-format-only", "txt-owner-id"]
+  - id: txt-prefix-suffix
+    name: "TXT prefix, suffix and wildcard replacement"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/txt.md
+    match: ["txt-prefix", "txt-suffix", "txt-wildcard-replacement"]
+  - id: txt-encryption
+    name: "TXT registry encryption and AES key rotation"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/txt.md
+    match: ["txt-encrypt-enabled", "txt-encrypt-aes-key", "aes-key-rotation"]
+  - id: owner-id-migration
+    name: "Owner ID migration and per-cluster owners"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/txt.md
+    match: ["migrate-from-txt-owner", "per-cluster-owner-id"]
+  - id: txt-cache
+    name: "TXT registry caching"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/txt.md
+    match: ["txt-cache-interval"]
+  - id: dynamodb-registry
+    name: "DynamoDB registry"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/dynamodb.md
+    match: ["dynamodb-registry"]
+  - id: crd-registry
+    name: "CRD registry and DNSRecord"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/registry/crd.md
+    match: ["crd-registry", "dnsrecord"]
+  # Annotations
+  - id: annotation-prefix
+    name: "Annotation prefix and legacy prefix migration"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["annotation-prefix", "enable-legacy-annotation-prefix"]
+  - id: hostname-annotation
+    name: "Hostname annotation"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["hostname-annotation", "ignore-hostname-annotation"]
+  - id: target-ttl-annotations
+    name: "Target and TTL annotations"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["target-annotation", "ttl-annotation"]
+  - id: internal-hostname-annotation
+    name: "Internal hostname, access and endpoints-type annotations"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["internal-hostname", "access-annotation", "endpoints-type"]
+  - id: hostname-source-annotations
+    name: "Hostname source annotations"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["ingress-hostname-source", "gateway-hostname-source", "ingress-annotation"]
+  - id: alias-set-identifier
+    name: "Alias and set-identifier annotations"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["alias-annotation", "prefer-alias", "set-identifier"]
+  - id: annotation-support-matrix
+    name: "Annotation support matrix and controller annotation"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/annotations/annotations.md
+    match: ["controller-annotation"]
+  # Filters, events, operations
+  - id: domain-filters
+    name: "Domain and regex filters"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/domain-filter.md
+    match: ["domain-filter", "exclude-domains", "regex-domain-filter", "regex-domain-exclusion"]
+  - id: kubernetes-events
+    name: "Kubernetes events emission"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/events.md
+    match: ["events-emit", "kubernetes-events"]
+  - id: service-type-filter
+    name: "Service type filter and informer scope"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/service.md
+    match: ["service-type-filter", "informer-scope"]
+  - id: source-preflight
+    name: "Source preflight checks, RBAC and missing CRDs"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/operational-best-practices.md
+    match: ["rbac-watch-permission", "missing-crd", "dry-run-once"]
+  - id: scaling-kube-api
+    name: "Scaling and Kubernetes API limits"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/operational-best-practices.md
+    match: ["kube-api-qps", "kube-api-burst", "split-instances"]
+  - id: state-conflicts
+    name: "State conflicts and crashloops"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/operational-best-practices.md
+    match: ["consecutive-soft-errors", "crashloop-amplification"]
+  - id: configuration-precedence
+    name: "Configuration precedence"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/configuration-precedence.md
+    match: ["configuration-precedence"]
+  - id: import-records
+    name: "Importing existing DNS records"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/import-records.md
+    match: ["import-records"]
+  - id: nat64
+    name: "NAT64 networks"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/nat64.md
+    match: ["nat64-networks"]
+  - id: ptr-records
+    name: "Automatic PTR records"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/ptr-records.md
+    match: ["create-ptr", "ptr-records"]
+  - id: rate-limits
+    name: "Provider rate limits, caching and batching"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/rate-limits.md
+    match: ["rate-limits", "provider-cache-time", "aws-batch-change-size", "min-event-sync-interval"]
+  - id: split-horizon
+    name: "Split horizon DNS"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/split-horizon.md
+    match: ["split-horizon"]
+  - id: ttl-handling
+    name: "TTL handling and minimum TTL"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/ttl.md
+    match: ["min-ttl"]
+  - id: multi-cluster-shared-records
+    name: "Multi-cluster shared DNS records"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/multi-cluster-shared-records.md
+    match: ["multi-cluster"]
+  - id: fqdn-templating
+    name: "FQDN templating basics"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/fqdn-templating.md
+    match: ["fqdn-template", "combine-fqdn-annotation"]
+  - id: fqdn-template-functions
+    name: "FQDN template functions"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/advanced/fqdn-templating.md
+    match: ["issource-function", "haskey", "fromjson"]
+  - id: metrics
+    name: "Prometheus metrics"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/monitoring/metrics.md
+    match: ["prometheus-metrics"]
+  # Sources
+  - id: crd-source
+    name: "CRD source and DNSEndpoint"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/crd.md
+    match: ["crd-source", "dnsendpoint", "managed-record-types", "dname-record"]
+  - id: dnsendpoint-status
+    name: "DNSEndpoint validation and status conditions"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/crd.md
+    match: ["dnsendpoint-validation", "status-conditions"]
+  - id: gateway-api-source
+    name: "Gateway API sources and listener sets"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/gateway-api.md
+    match: ["gateway-api", "gateway-listener-sets", "listenerset"]
+  - id: service-source
+    name: "Service source targets"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/service.md
+    match: ["service-source", "srv-nodeport", "listen-endpoint-events"]
+  - id: node-source
+    name: "Node source"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/nodes.md
+    match: ["node-source", "no-exclude-unschedulable"]
+  - id: multiple-namespaces
+    name: "Watching multiple namespaces"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/multiple-namespaces.md
+    match: ["namespace-flag", "rolebinding"]
+  - id: mx-ns-txt-records
+    name: "MX, NS and TXT records via CRD"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/mx-record.md
+    match: ["mx-record", "ns-record", "txt-record"]
+  - id: pod-source
+    name: "Pod source"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/pod.md
+    match: ["pod-source", "pod-source-domain"]
+  - id: ingress-source
+    name: "Ingress source"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/ingress.md
+    match: ["ingress-source", "ingress-class"]
+  - id: mesh-and-proxy-sources
+    name: "Istio, Contour, Kong, Traefik and OpenShift sources"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/istio.md
+    match: ["istio-source", "contour-httpproxy", "kong-tcpingress", "traefik-ingressroute", "openshift-route"]
+  - id: unstructured-fake-sources
+    name: "Unstructured and fake sources"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/sources/unstructured.md
+    match: ["unstructured-source", "fake-source"]
+  # RFC2136 and PowerDNS
+  - id: rfc2136-bind
+    name: "RFC2136 with BIND and TSIG"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/rfc2136.md
+    match: ["rfc2136", "bind9", "tsig-key"]
+  - id: rfc2136-axfr
+    name: "RFC2136 AXFR and sync policy"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/rfc2136.md
+    match: ["rfc2136-axfr", "rfc2136-axfr-insecure"]
+  - id: rfc2136-tlsa
+    name: "RFC2136 TLSA records"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/rfc2136.md
+    match: ["tlsa-record", "dane"]
+  - id: rfc2136-gss-tsig
+    name: "RFC2136 with Microsoft DNS and GSS-TSIG"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/rfc2136.md
+    match: ["gss-tsig", "microsoft-dns", "kerberos-krb5-conf"]
+  - id: rfc2136-tls-hosts
+    name: "RFC2136 TLS and multiple hosts"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/rfc2136.md
+    match: ["rfc2136-use-tls", "load-balancing-strategy"]
+  - id: pdns-provider
+    name: "PowerDNS provider"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/pdns.md
+    match: ["pdns-provider", "powerdns-api"]
+  # Other providers
+  - id: cloudflare-credentials
+    name: "Cloudflare credentials and throttling"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/cloudflare.md
+    match: ["cloudflare-provider", "cf-api-token"]
+  - id: cloudflare-batch
+    name: "Cloudflare batch API and TLSA"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/cloudflare.md
+    match: ["cloudflare-batch-api", "batch-change-size"]
+  - id: webhook-contract
+    name: "Webhook provider API contract"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/webhook-provider.md
+    match: ["webhook-provider", "adjustendpoints"]
+  - id: webhook-authors
+    name: "Webhook provider author practices"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/webhook-provider.md
+    match: ["webhook-status-codes", "connection-reuse"]
+  - id: coredns-provider
+    name: "CoreDNS provider ownership and groups"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/coredns.md
+    match: ["coredns-provider", "coredns-strictly-owned", "coredns-groups"]
+  - id: externalname-service
+    name: "ExternalName services"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/externalname.md
+    match: ["externalname-service"]
+  - id: headless-hostport
+    name: "Headless services with hostPort"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/hostport.md
+    match: ["headless-service", "hostport"]
+  # AWS
+  - id: aws-iam-credentials
+    name: "AWS IAM policy and credentials"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws.md
+    match: ["aws-provider", "route53-iam-policy", "irsa", "abac-policy"]
+  - id: aws-irsa-pod-identity
+    name: "AWS IRSA and EKS Pod Identity setup"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws.md
+    match: ["irsa-setup", "eks-pod-identity", "oidc-provider"]
+  - id: aws-routing-policies
+    name: "AWS Route53 routing policies"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws.md
+    match: ["aws-weight", "aws-failover", "geolocation-routing"]
+  - id: aws-alias-zones
+    name: "AWS alias records and hosted zone selection"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws.md
+    match: ["aws-zone-type", "aws-target-hosted-zone", "aws-zone-match-parent"]
+  - id: aws-govcloud
+    name: "AWS GovCloud caveats"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws.md
+    match: ["aws-govcloud", "aws-prefer-cname"]
+  - id: aws-service-discovery
+    name: "AWS Cloud Map service discovery"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws-sd.md
+    match: ["aws-sd", "cloud-map"]
+  - id: aws-filters-and-zones
+    name: "AWS zone filters, public and private zones"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws-filters.md
+    match: ["aws-zone-tag-filter", "public-private-route53"]
+  - id: aws-load-balancer-controller
+    name: "AWS Load Balancer Controller"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/aws-load-balancer-controller.md
+    match: ["aws-load-balancer-controller"]
+  # Other clouds and deployment
+  - id: azure-dns
+    name: "Azure DNS and Azure Private DNS"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/azure.md
+    match: ["azure-dns", "azure-private-dns"]
+  - id: gke-dns
+    name: "Google Cloud DNS on GKE"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/gke.md
+    match: ["google-provider", "gke-workload-identity"]
+  - id: pihole-provider
+    name: "Pi-hole provider"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/pihole.md
+    match: ["pihole-provider"]
+  - id: security-context-fips
+    name: "Limited privileges and FIPS builds"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/tutorials/security-context.md
+    match: ["security-context", "fips-build"]
+  - id: faq-flags
+    name: "FAQ and flag reference"
+    source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/master/docs/faq.md
+    match: ["external-dns-faq", "flag-reference"]

@@ -1,0 +1,236 @@
+# Coverage spec: keycloak. Topics from the external structures named in `sources`.
+subject: keycloak
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [keycloak]
+sources:
+  - "Keycloak Server Administration Guide (keycloak.org/docs/latest/server_admin) - table of contents: realms, clients, authentication flows, user federation, identity brokering, events, organizations, admin permissions"
+  - "Keycloak Authorization Services Guide (keycloak.org/docs/latest/authorization_services) - resource server, policies, permissions, UMA, RPT"
+  - "Keycloak Server Developer Guide (keycloak.org/docs/latest/server_development) - SPIs, providers, themes, REST extensions"
+  - "Keycloak Upgrading Guide (keycloak.org/docs/latest/upgrading) - migration and release notes"
+topics:
+  - id: realm-concepts-and-isolation
+    name: realm concepts and isolation
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/overview/concepts.adoc"
+    match: [realm, isolation, roles]
+  - id: realm-signing-keys-and-rotation
+    name: realm signing keys and rotation
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/realms/keys.adoc"
+    match: [realm-keys, key-rotation, rsa-generated]
+  - id: realm-smtp-email-settings
+    name: realm smtp email settings
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/realms/email.adoc"
+    match: [smtp, email, realm-settings]
+  - id: oidc-client-redirect-uris-and-web-origins
+    name: oidc client redirect uris and web origins
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/oidc/con-basic-settings.adoc"
+    match: [redirect-uri, web-origins, cors]
+  - id: client-authentication-and-credentials
+    name: client authentication and credentials
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/oidc/con-confidential-client-credentials.adoc"
+    match: [client-authenticator, client-secret, signed-jwt]
+  - id: client-secret-rotation-policy
+    name: client secret rotation policy
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/oidc/con-secret-rotation.adoc"
+    match: [secret-rotation, client-policies, rotated-secret]
+  - id: service-account-client-credentials
+    name: service account client credentials
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/oidc/proc-using-a-service-account.adoc"
+    match: [service-account, client-credentials, grant-type]
+  - id: saml-client-setup
+    name: saml client setup
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/saml/proc-creating-saml-client.adoc"
+    match: [saml-client, client-id, assertion-consumer]
+  - id: saml-idp-initiated-login
+    name: saml idp initiated login
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/saml/idp-initiated-login.adoc"
+    match: [idp-initiated, saml-binding, acs-url]
+  - id: client-scopes-and-optional-scopes
+    name: client scopes and optional scopes
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/con-client-scopes.adoc"
+    match: [client-scope, default-scope, optional-scope]
+  - id: oidc-token-audience-restriction
+    name: oidc token audience restriction
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/oidc/con-audience.adoc"
+    match: [audience, aud-claim, audience-resolve]
+  - id: client-policies-profiles-and-executors
+    name: client policies profiles and executors
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/clients/client-policies.adoc"
+    match: [client-policies, client-profiles, executors]
+  - id: role-scope-mappings-and-full-scope
+    name: role scope mappings and full scope
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/roles-groups/con-role-scope-mappings.adoc"
+    match: [role-scope-mapping, full-scope-allowed, least-privilege]
+  - id: user-profile-schema-and-validation
+    name: user profile schema and validation
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/users/user-profile.adoc"
+    match: [user-profile, attributes, validators]
+  - id: authentication-flow-requirements
+    name: authentication flow requirements
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/flows.adoc"
+    match: [authentication-flow, execution-requirement, conditional]
+  - id: authentication-flow-conditions
+    name: authentication flow conditions
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/conditions.adoc"
+    match: [conditions, condition-user-role, condition-user-attribute]
+  - id: webauthn-and-passkeys
+    name: webauthn and passkeys
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/passkeys.adoc"
+    match: [webauthn, passkeys, passwordless]
+  - id: recovery-authentication-codes
+    name: recovery authentication codes
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/recovery-codes.adoc"
+    match: [recovery-codes, backup-codes, 2fa]
+  - id: x509-client-certificate-authentication
+    name: x509 client certificate authentication
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/x509.adoc"
+    match: [x509, client-certificate, ocsp]
+  - id: kerberos-spnego-authentication
+    name: kerberos spnego authentication
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/kerberos.adoc"
+    match: [kerberos, spnego, keytab]
+  - id: brute-force-detection
+    name: brute force detection
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/threat/brute-force.adoc"
+    match: [brute-force, lockout, login-failures]
+  - id: password-policy-and-hashing
+    name: password policy and hashing
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/password-policies.adoc"
+    match: [password-policy, hashing, argon2]
+  - id: otp-policy-configuration
+    name: otp policy configuration
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/authentication/otp-policies.adoc"
+    match: [otp, totp, hotp]
+  - id: session-and-token-timeouts
+    name: session and token timeouts
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/sessions/timeouts.adoc"
+    match: [session-idle, sso-session-max, access-token-lifespan]
+  - id: offline-tokens-and-offline-access
+    name: offline tokens and offline access
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/sessions/offline.adoc"
+    match: [offline-token, offline_access, refresh-token]
+  - id: ldap-federation-edit-mode-and-import
+    name: ldap federation edit mode and import
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/user-federation/ldap.adoc"
+    match: [ldap, user-federation, edit-mode]
+  - id: ldap-tls-and-failover
+    name: ldap tls and failover
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/user-federation/ldap.adoc"
+    match: [ldap, ldaps, truststore]
+  - id: required-actions-for-users
+    name: required actions for users
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/users/con-required-actions.adoc"
+    match: [required-actions, update-password, verify-email]
+  - id: forgot-password-reset-flow
+    name: forgot password reset flow
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/login-settings/forgot-password.adoc"
+    match: [forgot-password, reset-credentials, reset-flow]
+  - id: oidc-identity-provider-brokering
+    name: oidc identity provider brokering
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/identity-broker/oidc.adoc"
+    match: [identity-brokering, oidc-idp, client-authentication]
+  - id: first-broker-login-flow
+    name: first broker login flow
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/identity-broker/first-login-flow.adoc"
+    match: [first-broker-login, account-linking, review-profile]
+  - id: post-broker-login-flow
+    name: post broker login flow
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/identity-broker/post-login-flow.adoc"
+    match: [post-login-flow, idp-2fa, identity-brokering]
+  - id: login-events-auditing
+    name: login events auditing
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/events/login.adoc"
+    match: [events, login-events, audit]
+  - id: admin-events-auditing
+    name: admin events auditing
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/events/admin.adoc"
+    match: [admin-events, audit, include-representation]
+  - id: kcadm-cli-basics
+    name: kcadm cli basics
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/admin-cli.adoc"
+    match: [kcadm, admin-cli, config-credentials]
+  - id: kcadm-realm-key-rotation
+    name: kcadm realm key rotation
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/admin-cli.adoc"
+    match: [kcadm, key-rotation, components]
+  - id: vault-secret-references
+    name: vault secret references
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/vault.adoc"
+    match: [vault, secrets, key-resolver]
+  - id: master-realm-admin-roles
+    name: master realm admin roles
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/admin-console-permissions/master-realm.adoc"
+    match: [master-realm, admin, create-realm]
+  - id: fine-grained-admin-permissions
+    name: fine grained admin permissions
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/admin-console-permissions/fine-grain-v2.adoc"
+    match: [fine-grained-permissions, delegated-admin, policy-based-access]
+  - id: organizations-create-and-manage
+    name: organizations create and manage
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/organizations/managing-organization.adoc"
+    match: [organizations, members, alias]
+  - id: organization-domains-and-routing
+    name: organization domains and routing
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/organizations/managing-domains.adoc"
+    match: [organizations, domains, idp-routing]
+  - id: workflows-security-considerations
+    name: workflows security considerations
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_admin/topics/workflows/security-considerations.adoc"
+    match: [workflows, self-registration, user-attributes]
+  - id: authz-resource-server-enforcement-mode
+    name: authz resource server enforcement mode
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/authorization_services/topics/resource-server-enable-authorization.adoc"
+    match: [authorization-services, resource-server, enforcement-mode]
+  - id: uma-permission-ticket-and-rpt
+    name: uma permission ticket and rpt
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/authorization_services/topics/service-authorization-obtaining-permission.adoc"
+    match: [uma, permission-ticket, rpt]
+  - id: rpt-token-introspection
+    name: rpt token introspection
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/authorization_services/topics/service-rpt-token-introspection.adoc"
+    match: [rpt, token-introspection, authorization-services]
+  - id: authz-policy-types-role-time-aggregated
+    name: authz policy types role time aggregated
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/authorization_services/topics/policy-aggregated-policy.adoc"
+    match: [authorization-policies, role-policy, time-policy]
+  - id: authz-js-policy-deployment
+    name: authz js policy deployment
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/authorization_services/topics/policy-js-policy.adoc"
+    match: [javascript-policy, policy-evaluation-api, script-provider]
+  - id: uma-protection-api-permission-tickets
+    name: uma protection api permission tickets
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/authorization_services/topics/service-protection-permission-api-papi.adoc"
+    match: [protection-api, permission-ticket, pat]
+  - id: custom-spi-provider-and-factory
+    name: custom spi provider and factory
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_development/topics/providers.adoc"
+    match: [spi, provider-factory, java]
+  - id: custom-rest-endpoint-extension
+    name: custom rest endpoint extension
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_development/topics/extensions.adoc"
+    match: [rest-endpoint, realm-resource-provider, jax-rs]
+  - id: user-storage-spi-import-vs-federation
+    name: user storage spi import vs federation
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_development/topics/user-storage/import.adoc"
+    match: [user-storage-spi, import-strategy, user-cache]
+  - id: password-policy-spi
+    name: password policy spi
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_development/topics/password-policy-spi.adoc"
+    match: [password-policy-spi, passwordpolicyprovider, validation]
+  - id: action-token-handler-spi
+    name: action token handler spi
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_development/topics/action-token-handler-spi.adoc"
+    match: [action-token, jwt, verify-email]
+  - id: admin-rest-api-authentication
+    name: admin rest api authentication
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/server_development/topics/admin-rest-api.adoc"
+    match: [admin-rest-api, access-token, admin-cli]
+  - id: upgrade-prep-and-db-migration
+    name: upgrade prep and db migration
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/upgrading/topics/migrate_db.adoc"
+    match: [upgrade, database-migration, liquibase]
+  - id: theme-migration-on-upgrade
+    name: theme migration on upgrade
+    source: "https://github.com/keycloak/keycloak/blob/main/docs/documentation/upgrading/topics/migrate_themes.adoc"
+    match: [themes, upgrade, templates]

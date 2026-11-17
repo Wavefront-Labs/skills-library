@@ -1,0 +1,1523 @@
+# Canonical coverage spec: Blender.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (the Blender Manual table of contents and
+# the Blender Foundation Certified Trainer curriculum), not from what we happened to write.
+# Subtopics (depth) come from the Blender Manual's page-level headings under each section: every
+# modifier page, every node family, every brush family, every constraint page, every physics
+# settings panel, every render settings group, every Python API module.
+subject: blender
+scope:
+  category: creative-arts
+  field: animation
+  products: [blender]
+sources:
+  - "Blender 4.x Manual table of contents (docs.blender.org/manual/en/latest) - Getting Started, User Interface, Editors, Scenes & Objects, Modeling, Sculpting & Painting, Grease Pencil, Animation & Rigging, Physics, Rendering, Compositing, Motion Tracking & Masking, Video Editing, Files & Data System, Add-ons, Advanced (Python scripting, command line)"
+  - "Blender 4.x Manual page-level headings (docs.blender.org/manual/en/latest) - modifiers/*, sculpt_paint/*/tools, animation/constraints/*, physics/*/settings, render/cycles/render_settings/*, render/eevee/render_settings/*, compositing/types/*, editors/*"
+  - "Blender Python API reference (docs.blender.org/api/current) - bpy, bmesh, mathutils, gpu, blf, bpy.app.handlers, bpy.app.timers, add-on tutorial, best practices"
+  - "Blender Foundation Certified Trainer (BFCT) programme syllabus - interface, modeling, materials/texturing, lighting, rendering, animation, rigging, simulation, compositing, video editing, scripting"
+  - "Blender Studio training courses (studio.blender.org) - Fundamentals, Scripting for Artists, Procedural Shading, Geometry Nodes from Scratch, Stylized Rendering, Character Animation, Rigging"
+  - "Blender Extensions Platform (extensions.blender.org) and bundled add-on list (Node Wrangler, Rigify, Bool Tool, Import-Export)"
+topics:
+  # --- Interface, editors, data system (Manual/User Interface, Editors, Files & Data System)
+  - id: interface-workspaces
+    name: Window system, areas, workspaces and keymap
+    source: Manual/User Interface
+    match: [workspaces, keymap, interface, window-system, areas, preferences]
+    subtopics:
+      - {id: area-splitting, name: Splitting, joining, swapping and maximising areas, match: [area-splitting, area-join, toggle-maximize-area]}
+      - {id: custom-workspaces, name: Creating and ordering custom workspaces, match: [custom-workspaces, workspace-tabs, workspace-settings]}
+      - {id: keymap-editor, name: Editing the keymap and importing key configs, match: [keymap-editor, keymap-preferences, key-config]}
+      - {id: quick-favorites, name: Quick Favorites and the Search menu, match: [quick-favorites, menu-search, operator-search]}
+      - {id: pie-menus, name: Pie menus and pie menu add-ons, match: [pie-menus, pie-menu]}
+      - {id: themes-ui-scale, name: Themes, resolution scale and interface preferences, match: [themes, ui-scale, resolution-scale, interface-preferences]}
+      - {id: startup-file, name: Startup file, factory settings and app templates, match: [startup-file, factory-settings, app-templates, defaults]}
+  - id: outliner-collections
+    name: Outliner, collections and view layers organisation
+    source: Manual/Editors/Outliner
+    match: [outliner, collections, collection-hierarchy, view-layers]
+    subtopics:
+      - {id: outliner-display-modes, name: Outliner display modes (View Layer, Scenes, Blender File, Orphan Data), match: [outliner-display-modes, blender-file-view, orphan-data]}
+      - {id: outliner-filtering, name: Outliner filter and search, match: [outliner-filter, outliner-search]}
+      - {id: collection-visibility, name: Collection visibility, holdout, indirect-only and exclude from view layer, match: [collection-visibility, exclude-from-view-layer, hide-in-viewport, disable-in-renders]}
+      - {id: collection-color-tags, name: Collection colour tags and the collection manager, match: [collection-color-tags, color-tags, collection-manager]}
+      - {id: outliner-drag-drop, name: Outliner drag and drop, linking, parenting and moving to collections, match: [outliner-drag-drop, move-to-collection, link-to-collection]}
+      - {id: outliner-selection-sync, name: Selection sync, hierarchy expand and context menu operations, match: [outliner-selection-sync, outliner-context-menu, select-hierarchy]}
+  - id: transforms-snapping
+    name: Transform tools, pivot points, snapping and proportional editing
+    source: Manual/Scenes & Objects/Object/Editing
+    match: [snapping, pivot-point, proportional-editing, transform-orientations]
+    subtopics:
+      - {id: snap-targets, name: Snap targets (vertex, edge, face, volume, edge center, perpendicular), match: [snap-targets, snap-to-face, snap-to-vertex, snap-base]}
+      - {id: proportional-falloff, name: Proportional editing falloff types and connected only, match: [proportional-falloff, falloff-types, connected-only]}
+      - {id: custom-orientation, name: Custom transform orientations, match: [custom-orientation, custom-transform-orientation]}
+      - {id: pivot-3d-cursor, name: 3D cursor placement and pivot around cursor, match: [3d-cursor, cursor-pivot, active-element-pivot]}
+      - {id: randomize-transform, name: Randomize transform and align objects, match: [randomize-transform, align-objects]}
+      - {id: shear-to-sphere, name: Shear, To Sphere, Push/Pull, Bend and Warp transforms, match: [shear, to-sphere, push-pull, bend-transform, warp-transform]}
+      - {id: apply-transforms, name: Apply, clear and reset transforms and delta transforms, match: [apply-transforms, clear-transforms, delta-transforms]}
+  - id: linking-appending
+    name: Link, append and library overrides
+    source: Manual/Files/Linked Libraries
+    match: [library-overrides, library-override, linking, append, linked-libraries]
+    subtopics:
+      - {id: append-vs-link, name: Append versus link decision and instance collections, match: [append-vs-link, append-reuse-data, link-vs-append]}
+      - {id: override-hierarchy, name: Library override hierarchy and editable properties, match: [override-hierarchy, override-editable, system-override]}
+      - {id: override-resync, name: Override resync and troubleshooting broken overrides, match: [override-resync, resync, override-troubleshooting]}
+      - {id: relocate-library, name: Relocating, reloading and finding missing libraries, match: [relocate-library, reload-library, missing-libraries]}
+      - {id: make-local, name: Make local and localising linked data, match: [make-local, localize]}
+      - {id: linked-collection-instance, name: Linked collection instances and proxies replacement workflow, match: [linked-collection-instance, link-collection]}
+  - id: asset-browser
+    name: Asset Browser and asset libraries
+    source: Manual/Editors/Asset Browser
+    match: [asset-browser, asset-library, asset-libraries, mark-as-asset]
+    subtopics:
+      - {id: asset-catalogs, name: Asset catalogs and catalog definition files, match: [asset-catalogs, asset-catalog, catalog-definition]}
+      - {id: asset-previews, name: Generating and replacing asset preview images, match: [asset-previews, asset-preview, preview-render]}
+      - {id: asset-library-prefs, name: Asset library preferences and import methods, match: [asset-library-prefs, import-method, asset-import-method]}
+      - {id: asset-metadata, name: Asset metadata, tags, author, licence and copyright, match: [asset-metadata, asset-tags, asset-author]}
+      - {id: asset-drag-drop, name: Dragging assets into the viewport and node editors, match: [asset-drag-drop, drop-asset]}
+      - {id: essentials-library, name: Bundled Essentials library and asset bundles, match: [essentials-library, asset-bundles, bundled-assets]}
+  - id: file-management
+    name: Blend file management, relative paths, packing, recovery and autosave
+    source: Manual/Files/Blend Files
+    match: [relative-paths, pack-resources, file-recovery, autosave, blend-file, external-data]
+    subtopics:
+      - {id: save-versions, name: Save versions, blend1 backups and compression, match: [save-versions, blend1, file-compression]}
+      - {id: find-missing-files, name: Find missing files and report missing files, match: [find-missing-files, missing-files, report-missing]}
+      - {id: make-paths-relative, name: Make paths relative or absolute, match: [make-paths-relative, make-paths-absolute]}
+      - {id: unpack-resources, name: Unpack resources and unpack item methods, match: [unpack-resources, unpack-item]}
+      - {id: recover-last-session, name: Recover last session and auto-save recovery, match: [recover-last-session, recover-auto-save, quit-blend]}
+      - {id: purge-unused-data, name: Purge unused data, fake users and users count, match: [purge-unused-data, fake-user, orphan-purge]}
+  - id: import-export-formats
+    name: Import/export formats (FBX, glTF, USD, Alembic, OBJ, STL)
+    source: Manual/Files/Import & Export
+    match: [fbx, gltf, usd, alembic, obj-export, import-export, stl]
+    subtopics:
+      - {id: fbx-export-settings, name: FBX export settings for game engines, match: [fbx-export-settings, fbx-unity, fbx-unreal, fbx-armature-export]}
+      - {id: gltf-export-settings, name: glTF export settings and extensions, match: [gltf-export-settings, gltf-draco, gltf-materials, glb]}
+      - {id: usd-export-import, name: USD export and import settings, match: [usd-export, usd-import, usdz]}
+      - {id: alembic-export-import, name: Alembic export, import and mesh sequence cache, match: [alembic-export, alembic-import, abc]}
+      - {id: obj-import-export, name: Wavefront OBJ import and export options, match: [obj-import, wavefront-obj, mtl]}
+      - {id: stl-3d-print-export, name: STL and 3MF export for 3D printing, match: [stl-export, 3mf, 3d-print-export]}
+      - {id: ply-collada, name: PLY, Collada and legacy formats, match: [ply, collada, dae, x3d]}
+      - {id: svg-import, name: SVG and PDF import to curves and Grease Pencil, match: [svg-import, pdf-import, svg-to-curve]}
+      - {id: bvh-import-export, name: BVH motion import and export, match: [bvh-import, bvh-export, bvh]}
+  - id: scene-units-setup
+    name: Scene units, frame rate, timeline range and scene settings
+    source: Manual/Scenes & Objects/Scenes
+    match: [scene-units, unit-scale, frame-rate, scene-settings]
+    subtopics:
+      - {id: unit-presets, name: Unit presets, metric, imperial and separate units, match: [unit-presets, imperial-units, metric-units]}
+      - {id: frame-rate-presets, name: Frame rate presets, custom fps and base, match: [frame-rate-presets, custom-fps, fps-base]}
+      - {id: frame-range-preview, name: Frame range, preview range and frame step, match: [frame-range, preview-range, frame-step]}
+      - {id: gravity-settings, name: Scene gravity and physics scene settings, match: [gravity-settings, scene-gravity]}
+      - {id: multiple-scenes, name: Multiple scenes, scene copying and scene linking, match: [multiple-scenes, new-scene, scene-copy, linked-copy]}
+      - {id: scene-audio-settings, name: Scene audio settings, speed of sound and doppler, match: [scene-audio, audio-settings, doppler]}
+  - id: spreadsheet-editor
+    name: Spreadsheet editor and attribute inspection
+    source: Manual/Editors/Spreadsheet
+    match: [spreadsheet, attribute-inspection, viewer-node]
+    subtopics:
+      - {id: spreadsheet-domains, name: Spreadsheet domains (point, edge, face, corner, instance, layer), match: [spreadsheet-domains, spreadsheet-domain]}
+      - {id: spreadsheet-selected-only, name: Selected only filter and edit mode sync, match: [spreadsheet-selected-only, selected-only-filter]}
+      - {id: spreadsheet-row-filters, name: Row filters by value and attribute, match: [spreadsheet-row-filters, row-filter]}
+      - {id: spreadsheet-evaluation-state, name: Original versus evaluated versus viewer node data, match: [spreadsheet-evaluation-state, evaluated-data, original-data]}
+      - {id: viewer-node-attribute, name: Viewer node attribute display and viewer domain, match: [viewer-node-attribute, viewer-domain, viewer-overlay]}
+  - id: custom-properties-ui
+    name: Custom properties and property UI
+    source: Manual/Files/Data System/Custom Properties
+    match: [custom-properties, id-properties]
+    subtopics:
+      - {id: custom-property-types, name: Custom property types and subtypes, match: [custom-property-types, property-subtypes, property-subtype]}
+      - {id: property-soft-limits, name: Min, max, soft limits, step and precision, match: [property-soft-limits, soft-min, soft-max, property-step]}
+      - {id: custom-property-drivers, name: Driving rig and modifier values from custom properties, match: [custom-property-drivers, property-driven, driven-custom-property]}
+      - {id: library-overridable-props, name: Library overridable custom properties, match: [library-overridable, overridable-property]}
+      - {id: rna-paths, name: RNA data paths and copying data paths, match: [rna-paths, data-path, copy-data-path]}
+  # --- Objects (Manual/Scenes & Objects/Object Types)
+  - id: parenting-relations
+    name: Object parenting, relations and transform inheritance
+    source: Manual/Scenes & Objects/Object/Editing/Parent
+    match: [parenting, parent-inverse, child-of, object-relations]
+    subtopics:
+      - {id: parent-keep-transform, name: Parent keep transform and object without inverse, match: [parent-keep-transform, parent-without-inverse, keep-transform]}
+      - {id: vertex-parent, name: Vertex and vertex triangle parenting, match: [vertex-parent, vertex-triangle-parent]}
+      - {id: bone-parent, name: Bone parenting and bone relative parenting, match: [bone-parent, bone-relative-parent]}
+      - {id: clear-parent, name: Clear parent, clear and keep transform, clear parent inverse, match: [clear-parent, clear-parent-inverse]}
+      - {id: parent-to-empty, name: Empty parents, control hierarchies and group transforms, match: [parent-to-empty, parent-empty, control-empty]}
+  - id: object-instancing
+    name: Object instancing (verts, faces, collection instances)
+    source: Manual/Scenes & Objects/Object/Properties/Instancing
+    match: [collection-instance, collection-instances, instancing, instances]
+    subtopics:
+      - {id: instance-on-vertices, name: Instancing on vertices with rotation alignment, match: [instance-on-vertices, verts-instancing, dupliverts]}
+      - {id: instance-on-faces, name: Instancing on faces with scale by face, match: [instance-on-faces, faces-instancing, duplifaces]}
+      - {id: collection-instance-offset, name: Collection instance offset and origin, match: [collection-instance-offset, instance-offset]}
+      - {id: make-instances-real, name: Make instances real and keep hierarchy, match: [make-instances-real, instances-real]}
+      - {id: linked-duplicates, name: Linked duplicates, Alt D and shared mesh data, match: [linked-duplicates, alt-d, shared-mesh-data]}
+  - id: empties-lattices
+    name: Empties and lattices
+    source: Manual/Scenes & Objects/Object Types
+    match: [empties, empty-object, lattice]
+    subtopics:
+      - {id: empty-display-types, name: Empty display types and display size, match: [empty-display-types, empty-display]}
+      - {id: image-empty, name: Image empties and reference images, match: [image-empty, reference-image, background-image]}
+      - {id: lattice-resolution, name: Lattice resolution U V W and outside only, match: [lattice-resolution, lattice-points, lattice-outside]}
+      - {id: lattice-interpolation, name: Lattice interpolation types (linear, cardinal, BSpline), match: [lattice-interpolation, lattice-bspline]}
+      - {id: empty-as-controller, name: Empties as controllers, targets and rig helpers, match: [empty-controller, empty-target, empty-helper]}
+  - id: curves-objects
+    name: Bezier and NURBS curve objects
+    source: Manual/Modeling/Curves
+    match: [bezier, nurbs, curve-object, curve-modeling, path-animation]
+    subtopics:
+      - {id: curve-handle-types, name: Bezier handle types (auto, vector, aligned, free), match: [curve-handle-types, handle-types, vector-handle]}
+      - {id: curve-bevel, name: Curve bevel depth, bevel object and profile, match: [curve-bevel, bevel-object, bevel-profile, curve-geometry]}
+      - {id: curve-taper, name: Curve taper object and taper radius mode, match: [curve-taper, taper-object]}
+      - {id: nurbs-weights-order, name: NURBS order, weights, endpoint and Bezier options, match: [nurbs-weights, nurbs-order, nurbs-endpoint]}
+      - {id: curve-tilt-radius, name: Curve tilt and radius per control point, match: [curve-tilt, curve-radius, tilt]}
+      - {id: follow-path, name: Follow Path constraint and path animation evaluation time, match: [follow-path, follow-path-constraint, evaluation-time]}
+      - {id: curve-to-mesh-conversion, name: Converting curves to mesh and mesh to curve, match: [curve-to-mesh-conversion, convert-curve, mesh-to-curve]}
+      - {id: curve-pen-tool, name: Curve pen, draw and extrude tools, match: [curve-pen, curve-draw-tool, curve-extrude]}
+      - {id: curve-shape-settings, name: Curve 2D/3D, fill mode, resolution and twist, match: [curve-fill-mode, curve-resolution, curve-twist, curve-2d]}
+  - id: text-objects
+    name: Text objects and fonts
+    source: Manual/Modeling/Texts
+    match: [text-object, text-objects, fonts, 3d-text]
+    subtopics:
+      - {id: text-fonts-loading, name: Loading fonts and bold italic variants, match: [text-fonts-loading, load-font, font-variants]}
+      - {id: text-paragraph, name: Paragraph alignment, spacing and offset, match: [text-paragraph, text-alignment, character-spacing, line-spacing]}
+      - {id: text-on-curve, name: Text on curve, match: [text-on-curve, text-curve]}
+      - {id: text-extrude-bevel, name: Text extrude, bevel and geometry, match: [text-extrude, text-bevel, text-geometry]}
+      - {id: text-boxes, name: Text boxes and overflow, match: [text-boxes, text-box, text-overflow]}
+      - {id: text-to-mesh, name: Converting text to mesh or curve and editing characters, match: [text-to-mesh, text-to-curve, text-edit-mode]}
+  - id: metaballs
+    name: Metaballs
+    source: Manual/Modeling/Metaballs
+    match: [metaballs, metaball]
+    subtopics:
+      - {id: metaball-types, name: Metaball types (ball, capsule, plane, ellipsoid, cube) and negative, match: [metaball-types, metaball-negative, metaball-capsule]}
+      - {id: metaball-resolution, name: Viewport and render resolution and threshold, match: [metaball-resolution, metaball-threshold]}
+      - {id: metaball-stiffness, name: Stiffness, radius and influence, match: [metaball-stiffness, metaball-radius]}
+      - {id: metaball-families, name: Metaball families and naming, match: [metaball-families, metaball-family]}
+      - {id: metaball-to-mesh, name: Converting metaballs to mesh and animating, match: [metaball-to-mesh, metaball-animation]}
+  - id: volume-objects
+    name: Volume objects (OpenVDB import and display)
+    source: Manual/Modeling/Volumes
+    match: [volume-object, openvdb, vdb]
+    subtopics:
+      - {id: vdb-sequence-import, name: VDB sequence import, frame offset and sequence modes, match: [vdb-sequence, vdb-sequence-import, volume-sequence]}
+      - {id: volume-display-settings, name: Volume viewport display density, slice and wireframe, match: [volume-display, volume-slice, volume-wireframe]}
+      - {id: volume-render-settings, name: Volume render space, step size and clipping, match: [volume-render-settings, volume-step-size, volume-space]}
+      - {id: mesh-to-volume-modifier, name: Mesh to Volume modifier, match: [mesh-to-volume, mesh-to-volume-modifier]}
+      - {id: volume-to-mesh-modifier, name: Volume to Mesh modifier, match: [volume-to-mesh, volume-to-mesh-modifier]}
+      - {id: volume-displace-modifier, name: Volume Displace modifier, match: [volume-displace, volume-displace-modifier]}
+  - id: cameras-lenses
+    name: Camera objects, lens, sensor, depth of field
+    source: Manual/Rendering/Cameras
+    match: [camera, lens, sensor-size, dof, focal-length]
+    subtopics:
+      - {id: camera-lens-types, name: Perspective, orthographic and panoramic camera types, match: [camera-lens-types, orthographic-camera, panoramic-camera, fisheye]}
+      - {id: camera-shift, name: Lens shift and perspective correction, match: [camera-shift, lens-shift, shift-x]}
+      - {id: camera-clipping, name: Clip start and end and depth precision, match: [camera-clipping, clip-start, clip-end]}
+      - {id: dof-aperture, name: Depth of field f-stop, blades, rotation and focus object, match: [dof-aperture, f-stop, aperture-blades, focus-object]}
+      - {id: composition-guides, name: Passepartout, composition guides and safe areas, match: [composition-guides, passepartout, safe-areas]}
+      - {id: camera-background-images, name: Camera background images and footage, match: [camera-background-images, camera-background, background-footage]}
+      - {id: lock-camera-to-view, name: Lock camera to view, fly and walk navigation, match: [lock-camera-to-view, fly-navigation, walk-navigation]}
+      - {id: camera-sensor-fit, name: Sensor fit, sensor width and matching real cameras, match: [camera-sensor-fit, sensor-fit, sensor-width]}
+  - id: lights
+    name: Light objects (point, sun, spot, area) and light properties
+    source: Manual/Rendering/Lights
+    match: [lighting, lights, area-light, sun-light, spot-light]
+    subtopics:
+      - {id: point-light-radius, name: Point light radius and soft falloff, match: [point-light-radius, point-light, light-radius]}
+      - {id: sun-angle-strength, name: Sun angle, strength in W/m2 and direction, match: [sun-angle, sun-strength, sun-direction]}
+      - {id: spot-shape-blend, name: Spot size, blend and show cone, match: [spot-shape, spot-blend, spot-size]}
+      - {id: area-light-shape-spread, name: Area light shape, size and spread, match: [area-light-shape, area-light-spread, area-light-size]}
+      - {id: light-power-units, name: Light power in watts and real-world conversion, match: [light-power-units, light-watts, light-power]}
+      - {id: ies-lights, name: IES light profiles via the IES Texture node, match: [ies-lights, ies-texture, ies-profile]}
+      - {id: light-shadow-settings, name: Light shadow settings, soft shadows, jitter and shadow resolution, match: [light-shadow-settings, soft-shadows, shadow-jitter, shadow-resolution]}
+      - {id: light-nodes, name: Light node trees, emission strength and light falloff nodes, match: [light-nodes, light-falloff, light-node-tree]}
+  # --- Modeling (Manual/Modeling)
+  - id: mesh-editing-tools
+    name: Mesh editing tools (extrude, inset, loop cut, knife, bevel)
+    source: Manual/Modeling/Meshes/Tools
+    match: [mesh-editing, extrude, inset, loop-cut, knife, bevel]
+    subtopics:
+      - {id: extrude-variants, name: Extrude region, manifold, along normals and individual, match: [extrude-manifold, extrude-along-normals, extrude-individual]}
+      - {id: inset-options, name: Inset thickness, depth, outset, individual and edge rail, match: [inset-options, inset-individual, outset]}
+      - {id: loop-cut-slide, name: Loop cut and slide, offset edge slide and subdivide, match: [loop-cut-slide, offset-edge-slide, subdivide-edges]}
+      - {id: knife-project, name: Knife project, knife options and bisect, match: [knife-project, bisect, knife-options]}
+      - {id: bevel-profile-segments, name: Bevel segments, profile, clamp overlap and harden normals, match: [bevel-profile, bevel-segments, harden-normals, clamp-overlap]}
+      - {id: spin-screw-tools, name: Spin, spin duplicates and screw tools, match: [spin-tool, screw-tool, spin-duplicates]}
+      - {id: bridge-edge-loops, name: Bridge edge loops and grid fill, match: [bridge-edge-loops, grid-fill]}
+      - {id: poly-build, name: Poly Build tool, match: [poly-build, polybuild]}
+      - {id: shrink-fatten-shear, name: Shrink fatten, shear, smooth vertices and randomize, match: [shrink-fatten, smooth-vertices, randomize-vertices]}
+      - {id: edge-vertex-slide, name: Edge slide and vertex slide, match: [edge-slide, vertex-slide]}
+      - {id: separate-join-split, name: Separate, join, split and rip tools, match: [separate-join, split-mesh, rip-tool, rip-fill]}
+      - {id: merge-vertices, name: Merge at center, cursor, collapse and merge by distance, match: [merge-vertices, merge-at-center, collapse]}
+  - id: mesh-selection
+    name: Mesh selection modes and selection tools
+    source: Manual/Modeling/Meshes/Selecting
+    match: [selection, select-loops, select-similar, select-linked]
+    subtopics:
+      - {id: select-edge-ring, name: Edge rings, loop inner region and boundary loop, match: [select-edge-ring, edge-ring, loop-inner-region, boundary-loop]}
+      - {id: checker-deselect, name: Checker deselect and select nth, match: [checker-deselect, select-nth]}
+      - {id: select-by-attribute, name: Select by attribute, trait and sharp edges, match: [select-by-attribute, select-by-trait]}
+      - {id: select-random-more-less, name: Select random, more, less and next/previous active, match: [select-random, select-more-less, select-next]}
+      - {id: select-interior-faces, name: Select interior faces, loose geometry and non-manifold, match: [select-interior-faces, select-loose, select-non-manifold]}
+      - {id: hide-reveal, name: Hide, reveal and selection history, match: [hide-reveal, hide-unselected, selection-history]}
+      - {id: select-mirror, name: Select mirror and X-mirror editing, match: [select-mirror, x-mirror, mirror-editing]}
+  - id: hard-surface
+    name: Hard-surface modeling
+    source: BFCT/Modeling
+    match: [hard-surface, subd-modeling]
+    subtopics:
+      - {id: bevel-weights, name: Bevel weights and bevel modifier weight mode, match: [bevel-weights, bevel-weight, weight-bevel]}
+      - {id: edge-creases, name: Edge creases for subdivision, match: [edge-creases, crease, subsurf-crease]}
+      - {id: holding-edges, name: Holding edges and support loops, match: [holding-edges, support-loops]}
+      - {id: hard-surface-booleans, name: Non-destructive boolean workflow for hard surface, match: [hard-surface-booleans, boolean-cutters, cutter-collection]}
+      - {id: panel-lines, name: Panel lines, greebles and surface detail, match: [panel-lines, greebles, surface-detail]}
+      - {id: kit-bashing, name: Kit-bashing and asset reuse, match: [kit-bashing, kitbash]}
+      - {id: cylinder-topology, name: Cylinder holes, rounded corners and even spacing on curved surfaces, match: [cylinder-topology, cylinder-holes, curved-surface-cuts]}
+  - id: character-modeling
+    name: Character modeling and topology
+    source: BFCT/Modeling
+    match: [character, topology, edge-flow]
+    subtopics:
+      - {id: face-topology, name: Facial topology, eye loops and mouth loops, match: [face-topology, eye-loops, mouth-loops]}
+      - {id: joint-topology, name: Joint topology for elbows, knees and shoulders, match: [joint-topology, joint-loops, shoulder-topology]}
+      - {id: hand-modeling, name: Hand and finger modeling, match: [hand-modeling, finger-topology]}
+      - {id: mouth-interior, name: Mouth interior, teeth and tongue modeling, match: [mouth-interior, teeth-modeling, tongue]}
+      - {id: eye-modeling, name: Eye modeling with cornea and iris, match: [eye-modeling, eyeball, cornea]}
+      - {id: symmetry-modeling, name: Symmetrical modeling with Mirror and symmetrize, match: [symmetry-modeling, symmetrize, mirror-clipping]}
+  - id: environment-modeling
+    name: Environment and set modeling
+    source: BFCT/Modeling
+    match: [environment-modeling, terrain, set-dressing]
+    subtopics:
+      - {id: terrain-displacement, name: Terrain from height maps and displacement, match: [terrain-displacement, heightmap, height-map]}
+      - {id: modular-kit, name: Modular kit and grid-snapped assembly, match: [modular-kit, modular-assets, modular-building]}
+      - {id: ant-landscape, name: A.N.T. Landscape generator, match: [ant-landscape, landscape-addon]}
+      - {id: building-modeling, name: Building and architecture modeling, match: [building-modeling, architecture-modeling, archviz-modeling]}
+      - {id: vegetation-scattering, name: Vegetation placement and scattering, match: [vegetation-scattering, vegetation, plant-scattering]}
+      - {id: rocks-cliffs, name: Rocks and cliffs, match: [rocks, cliffs, rock-generator]}
+  - id: retopology
+    name: Retopology
+    source: Manual/Modeling/Meshes/Retopology
+    match: [retopo, retopology, shrinkwrap-retopo]
+    subtopics:
+      - {id: retopo-snapping-setup, name: Retopology snapping and overlay setup, match: [retopo-snapping, retopology-overlay, snap-to-surface]}
+      - {id: poly-build-retopo, name: Poly Build retopology workflow, match: [poly-build-retopo, polybuild-retopo]}
+      - {id: quadriflow-remesh, name: QuadriFlow remesh for automatic retopology, match: [quadriflow-remesh, quadriflow-settings]}
+      - {id: retopo-addons, name: Retopology add-ons (RetopoFlow, Bsurfaces), match: [retopoflow, bsurfaces, retopo-addons]}
+      - {id: retopo-baking-prep, name: Preparing high and low poly for baking, match: [retopo-baking-prep, highpoly-lowpoly, high-to-low]}
+  - id: uv-unwrapping
+    name: UV unwrapping and UV editor
+    source: Manual/Modeling/Meshes/UV
+    match: [uv, unwrap, uv-editor, seams]
+    subtopics:
+      - {id: seam-marking, name: Marking seams and seams from islands, match: [seam-marking, mark-seam, seams-from-islands]}
+      - {id: smart-uv-project, name: Smart UV Project and lightmap pack, match: [smart-uv-project, lightmap-pack]}
+      - {id: pack-islands, name: Pack islands options, rotation and margin, match: [pack-islands, uv-packing, island-margin]}
+      - {id: uv-stretch-overlay, name: UV stretch overlay and minimize stretch, match: [uv-stretch-overlay, minimize-stretch, uv-stretch]}
+      - {id: uv-pin-live-unwrap, name: Pinning and live unwrap, match: [uv-pin, live-unwrap]}
+      - {id: uv-stitch, name: Stitch, weld and align UVs, match: [uv-stitch, uv-weld, uv-align]}
+      - {id: udim-tiles, name: UDIM tiles setup and painting, match: [udim-tiles, udim]}
+      - {id: uv-sync-selection, name: UV sync selection and sticky selection, match: [uv-sync-selection, sticky-selection]}
+      - {id: uv-projection-methods, name: Cube, cylinder, sphere and project from view, match: [uv-projection-methods, project-from-view, cylinder-projection]}
+      - {id: texel-density, name: Texel density and UV scale, match: [texel-density, uv-scale]}
+      - {id: multiple-uv-maps, name: Multiple UV maps and UV map node, match: [multiple-uv-maps, uv-maps, uv-map-node]}
+  - id: normals-shading
+    name: Normals, custom normals, auto smooth and weighted normals
+    source: Manual/Modeling/Meshes/Editing/Mesh/Normals
+    match: [normals, custom-normals, shade-auto-smooth, weighted-normal, smooth-by-angle]
+    subtopics:
+      - {id: smooth-by-angle-modifier, name: Smooth by Angle node modifier (4.1+), match: [smooth-by-angle-modifier, sharp-edges-attribute]}
+      - {id: recalculate-normals, name: Recalculate outside/inside and flip normals, match: [recalculate-normals, flip-normals, recalculate-outside]}
+      - {id: set-from-faces, name: Set custom normals from faces, point to target and average, match: [set-from-faces, point-to-target, average-normals]}
+      - {id: normal-edit-modifier, name: Normal Edit modifier, match: [normal-edit-modifier, normal-edit]}
+      - {id: clear-custom-split-normals, name: Clear and add custom split normals data, match: [clear-custom-split-normals, custom-split-normals]}
+      - {id: face-orientation-overlay, name: Face orientation overlay and normals display, match: [face-orientation-overlay, face-orientation, normals-display]}
+  - id: mesh-analysis-cleanup
+    name: Mesh analysis, cleanup and non-manifold repair
+    source: Manual/Modeling/Meshes/Mesh Analysis
+    match: [mesh-analysis, mesh-cleanup, non-manifold, cleanup, merge-by-distance]
+    subtopics:
+      - {id: mesh-analysis-overlay, name: Mesh analysis overlay (overhang, thickness, intersect, distort, sharp), match: [mesh-analysis-overlay, overhang, thickness-analysis]}
+      - {id: degenerate-dissolve, name: Degenerate dissolve and delete loose, match: [degenerate-dissolve, delete-loose]}
+      - {id: fill-holes, name: Fill holes and make manifold, match: [fill-holes, make-manifold]}
+      - {id: limited-dissolve, name: Limited dissolve and decimate geometry, match: [limited-dissolve, dissolve]}
+      - {id: 3d-print-toolbox, name: 3D Print Toolbox checks, match: [3d-print-toolbox, print-toolbox, 3d-print-check]}
+      - {id: split-non-planar, name: Split non-planar faces and split concave faces, match: [split-non-planar, split-concave]}
+      - {id: mesh-statistics, name: Statistics overlay and face count, match: [mesh-statistics, statistics-overlay, poly-count]}
+  - id: booleans
+    name: Boolean modifier and Bool Tool
+    source: Manual/Modeling/Modifiers/Generate/Boolean
+    match: [boolean, booleans, bool-tool, exact-solver]
+    subtopics:
+      - {id: boolean-fast-vs-exact, name: Fast versus Exact solver, match: [boolean-fast-vs-exact, fast-solver, solver-options]}
+      - {id: boolean-collection-operand, name: Collection operand type, match: [boolean-collection-operand, collection-operand]}
+      - {id: boolean-self-hole-tolerant, name: Self intersection and hole tolerant options, match: [boolean-self-intersection, hole-tolerant, self-intersection]}
+      - {id: bool-tool-operations, name: Bool Tool auto and brush operations, match: [bool-tool-operations, bool-tool-auto, bool-tool-brush]}
+      - {id: boolean-cleanup, name: Cleaning boolean results and ngons, match: [boolean-cleanup, boolean-ngons, boolean-artifacts]}
+      - {id: boolean-edit-mode, name: Edit mode boolean (intersect, knife intersect), match: [boolean-edit-mode, intersect-knife, intersect-boolean]}
+  - id: modifier-stack-generate
+    name: Generate modifiers (array, mirror, solidify, screw, skin, wireframe)
+    source: Manual/Modeling/Modifiers/Generate
+    match: [modifier-stack, array-modifier, mirror-modifier, screw-modifier, skin-modifier, wireframe-modifier, modifiers]
+    subtopics:
+      - {id: array-offsets, name: Array relative, constant and object offsets, fit types and merge, match: [array-offsets, array-object-offset, array-fit-curve, array-merge]}
+      - {id: mirror-options, name: Mirror bisect, flip, merge, clipping and mirror object, match: [mirror-options, mirror-bisect, mirror-clipping-option, mirror-object]}
+      - {id: solidify-options, name: Solidify simple versus complex mode, rim and thickness, match: [solidify-options, solidify-complex, solidify-rim]}
+      - {id: screw-profile, name: Screw modifier axis, angle, steps and screw offset, match: [screw-profile, screw-steps, screw-axis]}
+      - {id: skin-modifier-roots, name: Skin modifier roots, radius and create armature, match: [skin-modifier-roots, skin-radius, skin-armature]}
+      - {id: wireframe-thickness, name: Wireframe modifier thickness, boundary and replace, match: [wireframe-thickness, wireframe-boundary]}
+      - {id: edge-split-modifier, name: Edge Split modifier, match: [edge-split-modifier, edge-split]}
+      - {id: triangulate-modifier, name: Triangulate modifier methods, match: [triangulate-modifier, triangulate]}
+      - {id: build-modifier, name: Build modifier, match: [build-modifier, build-modifier-setup]}
+      - {id: mask-modifier, name: Mask modifier by vertex group or armature, match: [mask-modifier, mask-vertex-group]}
+      - {id: weld-modifier, name: Weld modifier, match: [weld-modifier, weld]}
+      - {id: modifier-apply-order, name: Applying modifiers, apply order and multi-user data, match: [modifier-apply-order, apply-modifier, modifier-copy-to-selected]}
+  - id: subdivision-multires
+    name: Subdivision Surface and Multiresolution modifiers
+    source: Manual/Modeling/Modifiers/Generate
+    match: [subdivision-surface, subsurf, multiresolution, multires]
+    subtopics:
+      - {id: catmull-clark-simple, name: Catmull-Clark versus Simple subdivision, match: [catmull-clark, simple-subdivision]}
+      - {id: subsurf-creases-boundary, name: Creases, boundary smooth and UV smooth options, match: [subsurf-creases, boundary-smooth, uv-smooth]}
+      - {id: subsurf-gpu-opensubdiv, name: GPU subdivision and OpenSubdiv, match: [gpu-subdivision, opensubdiv]}
+      - {id: subsurf-levels, name: Viewport versus render levels and optimal display, match: [subsurf-levels, render-levels, optimal-display]}
+      - {id: multires-subdivide, name: Multires subdivide, linear subdivide and apply base, match: [multires-subdivide, apply-base, linear-subdivide]}
+      - {id: multires-unsubdivide, name: Multires unsubdivide, rebuild subdivisions and reshape, match: [multires-unsubdivide, rebuild-subdivisions, multires-reshape]}
+      - {id: adaptive-subdivision, name: Adaptive subdivision for Cycles displacement, match: [adaptive-subdivision, dicing-rate]}
+  - id: deform-modifiers
+    name: Deform modifiers (lattice, curve, shrinkwrap, simple deform, surface deform, warp)
+    source: Manual/Modeling/Modifiers/Deform
+    match: [deform-modifiers, shrinkwrap, simple-deform, surface-deform, lattice-modifier, curve-modifier, hook, mesh-deform]
+    subtopics:
+      - {id: shrinkwrap-modifier, name: Shrinkwrap modifier wrap methods and snap modes, match: [shrinkwrap-modifier, wrap-method, snap-mode, target-normal-project]}
+      - {id: simple-deform-modifier, name: Simple Deform twist, bend, taper and stretch, match: [simple-deform-modifier, twist, taper, bend]}
+      - {id: curve-deform-modifier, name: Curve modifier deformation axis and setup, match: [curve-deform-modifier, curve-deform, deformation-axis]}
+      - {id: surface-deform-modifier, name: Surface Deform binding and troubleshooting, match: [surface-deform-modifier, surface-deform-bind, sparse-bind]}
+      - {id: mesh-deform-cage, name: Mesh Deform cage binding, match: [mesh-deform-cage, mesh-deform-bind]}
+      - {id: hook-modifier, name: Hook modifier and hooking to objects or bones, match: [hook-modifier, hook-to-object, hook-to-bone]}
+      - {id: displace-modifier, name: Displace modifier with textures and UV coordinates, match: [displace-modifier, displace-texture]}
+      - {id: warp-modifier, name: Warp modifier, match: [warp-modifier, warp-deform]}
+      - {id: wave-modifier, name: Wave modifier, match: [wave-modifier, wave-deform]}
+      - {id: cast-modifier, name: Cast modifier, match: [cast-modifier, cast-deform]}
+      - {id: smooth-corrective-modifier, name: Smooth Corrective modifier, match: [smooth-corrective-modifier, corrective-smooth, smooth-corrective]}
+      - {id: laplacian-deform-modifier, name: Laplacian Deform and Laplacian Smooth modifiers, match: [laplacian-deform-modifier, laplacian-deform]}
+      - {id: lattice-modifier-setup, name: Lattice modifier setup and animated lattices, match: [lattice-modifier-setup, lattice-deform, lattice-animation]}
+  - id: remesh-decimate
+    name: Remesh, decimate and LOD generation
+    source: Manual/Modeling/Modifiers/Generate
+    match: [remesh, decimate, voxel-remesh, quadriflow, lod]
+    subtopics:
+      - {id: voxel-remesh-modifier, name: Remesh modifier voxel mode, size and adaptivity, match: [voxel-remesh-modifier, voxel-size, adaptivity]}
+      - {id: blocks-sharp-smooth-remesh, name: Blocks, smooth and sharp remesh modes, match: [blocks-remesh, sharp-remesh, smooth-remesh, octree-depth]}
+      - {id: decimate-collapse, name: Decimate collapse ratio, symmetry and vertex group, match: [decimate-collapse, decimate-ratio, decimate-symmetry]}
+      - {id: decimate-unsubdivide, name: Decimate un-subdivide mode, match: [decimate-unsubdivide, un-subdivide]}
+      - {id: decimate-planar, name: Decimate planar mode and angle limit, match: [decimate-planar, planar-decimate]}
+      - {id: lod-generation, name: LOD chain generation for games, match: [lod-generation, lod-chain, game-lods]}
+  - id: data-transfer-modifier
+    name: Data Transfer and vertex-weight modifiers
+    source: Manual/Modeling/Modifiers/Modify
+    match: [data-transfer, vertex-weight-proximity, vertex-weight-mix, normal-transfer]
+    subtopics:
+      - {id: data-transfer-uv, name: Transferring UVs and face corner data, match: [data-transfer-uv, uv-transfer, transfer-uvs]}
+      - {id: data-transfer-vertex-groups, name: Transferring vertex groups and mapping methods, match: [data-transfer-vertex-groups, transfer-weights, weight-transfer]}
+      - {id: data-transfer-custom-normals, name: Transferring custom normals for seamless meshes, match: [data-transfer-custom-normals, transfer-normals]}
+      - {id: vertex-weight-edit, name: Vertex Weight Edit modifier, match: [vertex-weight-edit, weight-edit-modifier]}
+      - {id: weight-mix-modes, name: Vertex Weight Mix set and mix modes, match: [weight-mix-modes, weight-mix]}
+      - {id: weight-proximity-falloff, name: Vertex Weight Proximity distance and falloff, match: [weight-proximity-falloff, weight-proximity]}
+  - id: procedural-modeling-gn
+    name: Procedural modeling with Geometry Nodes
+    source: Manual/Modeling/Geometry Nodes
+    match: [geometry-nodes, procedural-modeling, gn]
+    subtopics:
+      - {id: gn-fields, name: Fields, Position and Index concepts, match: [gn-fields, fields-concept, field-evaluation]}
+      - {id: gn-named-attributes, name: Store, capture and named attributes, match: [gn-named-attributes, store-named-attribute, capture-attribute]}
+      - {id: gn-instances, name: Instance on Points, realize and instance attributes, match: [gn-instances, instance-on-points, realize-instances]}
+      - {id: gn-mesh-primitives, name: Mesh primitive nodes, match: [gn-mesh-primitives, mesh-primitive-nodes]}
+      - {id: gn-curve-nodes, name: Curve nodes, Curve to Mesh and resample, match: [gn-curve-nodes, curve-to-mesh, resample-curve]}
+      - {id: gn-scatter, name: Distribute Points on Faces scattering, match: [gn-scatter, distribute-points, distribute-points-on-faces]}
+      - {id: gn-raycast-proximity, name: Raycast, Geometry Proximity and Sample nodes, match: [gn-raycast, geometry-proximity, sample-nearest]}
+      - {id: gn-mesh-boolean, name: Mesh Boolean node, match: [gn-mesh-boolean, mesh-boolean-node]}
+      - {id: gn-group-interface, name: Group inputs, panels, defaults and modifier UI, match: [gn-group-interface, group-inputs, node-panels]}
+      - {id: gn-sample-index, name: Sample Index and Evaluate at Index, match: [gn-sample-index, sample-index, evaluate-at-index]}
+      - {id: gn-foreach-zone, name: For Each Element zone (4.3+), match: [gn-foreach-zone, for-each-element, foreach-zone]}
+      - {id: gn-volume-nodes, name: Volume nodes, Mesh to Volume and Volume Cube, match: [gn-volume-nodes, volume-cube, points-to-volume]}
+      - {id: gn-string-nodes, name: String to Curves and string nodes, match: [gn-string-nodes, string-to-curves]}
+      - {id: gn-extrude-mesh, name: Extrude Mesh, Scale Elements and mesh operations, match: [gn-extrude-mesh, extrude-mesh-node, scale-elements]}
+      - {id: gn-index-menu-switch, name: Index Switch, Menu Switch and Switch nodes, match: [gn-index-menu-switch, index-switch, menu-switch]}
+      - {id: gn-uv-nodes, name: UV Unwrap, Pack Islands and UV nodes, match: [gn-uv-nodes, uv-unwrap-node, pack-islands-node]}
+      - {id: gn-math-utilities, name: Math, Vector Math, Map Range and Mix nodes, match: [gn-math-utilities, map-range, vector-math-node]}
+      - {id: gn-dual-mesh, name: Dual Mesh, Mesh to Points and topology nodes, match: [gn-dual-mesh, dual-mesh, mesh-to-points]}
+  # --- Sculpting & painting (Manual/Sculpting & Painting)
+  - id: sculpt-brushes
+    name: Sculpt brushes, dyntopo and voxel remesh workflow
+    source: Manual/Sculpting & Painting/Sculpting
+    match: [sculpt, sculpting, dyntopo, brushes]
+    subtopics:
+      - {id: draw-clay-brushes, name: Draw, Draw Sharp, Clay, Clay Strips and Clay Thumb, match: [draw-clay-brushes, clay-strips, draw-sharp, clay-thumb]}
+      - {id: grab-snake-hook, name: Grab, Snake Hook, Thumb and Nudge brushes, match: [grab-snake-hook, snake-hook, grab-brush, nudge]}
+      - {id: crease-pinch-inflate, name: Crease, Pinch, Inflate and Blob brushes, match: [crease-pinch-inflate, crease-brush, pinch-brush, inflate-brush]}
+      - {id: smooth-flatten-scrape, name: Smooth, Flatten, Fill, Scrape and Multiplane Scrape, match: [smooth-flatten-scrape, flatten-brush, scrape-brush, multiplane-scrape]}
+      - {id: brush-settings-falloff, name: Brush settings, falloff curves, stroke methods and stabilizer, match: [brush-settings-falloff, brush-falloff, stroke-method, stabilizer]}
+      - {id: sculpt-symmetry, name: Sculpt symmetry, tiling and radial symmetry, match: [sculpt-symmetry, radial-symmetry, sculpt-tiling]}
+      - {id: dyntopo-detail, name: Dyntopo detail size, refine method and flood fill, match: [dyntopo-detail, detail-size, detail-flood-fill]}
+      - {id: sculpt-voxel-remesh, name: Voxel remesh in sculpt mode with fix poles and preserve, match: [sculpt-voxel-remesh, voxel-remesh-sculpt, fix-poles]}
+      - {id: brush-assets, name: Brush assets and the brush asset shelf (4.3+), match: [brush-assets, brush-asset-shelf]}
+      - {id: sculpt-texture-brush, name: Texture and alpha brushes for surface detail, match: [sculpt-texture-brush, alpha-brush, brush-texture]}
+      - {id: sculpt-trim-tools, name: Trim box, trim lasso and line project, match: [sculpt-trim-tools, trim-lasso, trim-box, line-project]}
+      - {id: mesh-filter, name: Mesh filter, color filter and sculpt filters, match: [mesh-filter, sculpt-filter, color-filter]}
+      - {id: layer-brush, name: Layer brush and persistent base, match: [layer-brush, persistent-base]}
+  - id: sculpt-masking-facesets
+    name: Sculpt masking, face sets and auto-masking
+    source: Manual/Sculpting & Painting/Sculpting/Mask & Face Sets
+    match: [face-sets, sculpt-masking, auto-masking, sculpt-mask]
+    subtopics:
+      - {id: mask-filter, name: Mask filter, grow, shrink, smooth and contrast, match: [mask-filter, mask-grow, mask-shrink]}
+      - {id: mask-by-color, name: Mask by color and mask by cavity, match: [mask-by-color, mask-cavity]}
+      - {id: mask-extract, name: Mask extract and mask slice, match: [mask-extract, mask-slice]}
+      - {id: face-set-edit, name: Face set edit, from visible, from masked and grow/shrink, match: [face-set-edit, face-set-from-masked, face-set-from-visible]}
+      - {id: auto-masking-options, name: Auto-masking topology, face sets, boundary and cavity, match: [auto-masking-options, auto-masking-cavity, auto-masking-topology, view-normal-masking]}
+      - {id: box-lasso-mask, name: Box mask, lasso mask and line mask tools, match: [box-mask, lasso-mask, line-mask]}
+  - id: multires-sculpt-bake
+    name: Multires sculpting and detail baking
+    source: Manual/Sculpting & Painting/Sculpting/Multires
+    match: [multires-sculpting, normal-bake, displacement-bake, multiresolution]
+    subtopics:
+      - {id: multires-levels-workflow, name: Working across multires levels and sculpt level, match: [multires-levels-workflow, sculpt-level, multires-levels]}
+      - {id: multires-apply-base, name: Apply base and base mesh editing, match: [multires-apply-base, base-mesh-edit]}
+      - {id: bake-from-multires-normal, name: Bake from multires normal maps, match: [bake-from-multires-normal, multires-normal-map]}
+      - {id: bake-from-multires-displacement, name: Bake from multires displacement maps, match: [bake-from-multires-displacement, multires-displacement-map]}
+      - {id: multires-shape-keys, name: Multires with shape keys and armature deformation, match: [multires-shape-keys, multires-armature]}
+  - id: texture-painting
+    name: Texture paint mode and image painting
+    source: Manual/Sculpting & Painting/Texture Paint
+    match: [texture-paint, texture-painting, image-paint, stencil-paint]
+    subtopics:
+      - {id: texture-slots, name: Texture slots and adding paint slots, match: [texture-slots, paint-slots, add-paint-slot]}
+      - {id: paint-blend-modes, name: Paint brush blend modes and accumulate, match: [paint-blend-modes, brush-blend-modes]}
+      - {id: clone-brush, name: Clone brush and clone source, match: [clone-brush, clone-source]}
+      - {id: fill-mask-brushes, name: Fill, mask and smear brushes, match: [fill-brush, paint-mask-brush, smear-brush]}
+      - {id: stencil-mapping, name: Stencil mapping and texture mask, match: [stencil-mapping, texture-mask, stencil-texture]}
+      - {id: external-image-edit, name: External edit, quick edit and project paint, match: [external-image-edit, quick-edit, project-paint]}
+      - {id: paint-bleed-seams, name: Bleed, seam fixing and dilate, match: [paint-bleed, seam-bleed, dilate-paint]}
+      - {id: image-save-pack, name: Saving and packing painted images, match: [image-save-pack, save-all-images, pack-images]}
+  - id: vertex-painting
+    name: Vertex paint and color attributes
+    source: Manual/Sculpting & Painting/Vertex Paint
+    match: [vertex-paint, vertex-color, color-attributes, color-attribute]
+    subtopics:
+      - {id: vertex-paint-brush, name: Vertex paint brush blend and vertex selection masking, match: [vertex-paint-brush, vertex-paint-masking]}
+      - {id: color-attribute-domain, name: Color attribute domain and byte versus float colour, match: [color-attribute-domain, byte-color, float-color]}
+      - {id: dirty-vertex-colors, name: Dirty vertex colours and cavity painting, match: [dirty-vertex-colors, cavity-vertex-colors]}
+      - {id: vertex-color-from-weight, name: Vertex color from weight and from attribute, match: [vertex-color-from-weight, weight-to-color]}
+      - {id: color-attribute-node, name: Color Attribute node in shaders, match: [color-attribute-node, vertex-color-node]}
+      - {id: vertex-color-bake, name: Baking to color attributes, match: [vertex-color-bake, bake-to-vertex-colors]}
+  - id: weight-painting
+    name: Weight paint mode and vertex groups
+    source: Manual/Sculpting & Painting/Weight Paint
+    match: [weight-paint, weight-painting, vertex-group, vertex-groups]
+    subtopics:
+      - {id: weight-brush-gradient, name: Weight brush blend, gradient and sample weight, match: [weight-brush-gradient, weight-gradient, sample-weight]}
+      - {id: weight-normalize, name: Normalize, normalize all and auto normalize, match: [weight-normalize, normalize-all, auto-normalize]}
+      - {id: weight-smooth-levels, name: Smooth, levels, quantize and invert weights, match: [weight-smooth, weight-levels, quantize-weights]}
+      - {id: weight-mirror, name: Mirror vertex groups and topology mirror, match: [weight-mirror, mirror-vertex-group]}
+      - {id: weight-limit-clean, name: Limit total and clean weights, match: [weight-limit-total, clean-weights, limit-total]}
+      - {id: lock-relative, name: Locked groups and lock relative, match: [lock-relative, locked-groups]}
+      - {id: vertex-group-assign, name: Assign, remove, select and deselect vertex groups, match: [vertex-group-assign, assign-vertex-group]}
+      - {id: weight-paint-bone-select, name: Bone selection while weight painting and masking, match: [weight-paint-bone-select, weight-paint-face-mask]}
+  - id: sculpt-cloth-pose-brushes
+    name: Cloth, pose and elastic deform brushes
+    source: Manual/Sculpting & Painting/Sculpting/Tools
+    match: [cloth-brush, pose-brush, elastic-deform, sculpt-cloth]
+    subtopics:
+      - {id: cloth-filter, name: Cloth filter gravity, inflate and expand, match: [cloth-filter, cloth-filter-gravity]}
+      - {id: cloth-brush-settings, name: Cloth brush simulation area, mass, damping and deform, match: [cloth-brush-settings, simulation-area, cloth-deformation-type]}
+      - {id: pose-brush-modes, name: Pose brush face sets, IK and squash modes, match: [pose-brush-modes, pose-brush-ik, pose-origin]}
+      - {id: elastic-deform-settings, name: Elastic deform modes and Poisson ratio, match: [elastic-deform-settings, poisson-ratio]}
+      - {id: boundary-brush, name: Boundary brush, match: [boundary-brush]}
+      - {id: sculpt-cloth-collisions, name: Cloth brush collisions and pin boundary, match: [sculpt-cloth-collisions, cloth-pin-boundary]}
+  # --- Grease Pencil (Manual/Grease Pencil)
+  - id: grease-pencil-draw
+    name: Grease Pencil drawing, strokes, layers and materials
+    source: Manual/Grease Pencil
+    match: [grease-pencil, gpencil, gp-materials, 2d]
+    subtopics:
+      - {id: gp-stroke-placement, name: Stroke placement, drawing planes and surface offset, match: [gp-stroke-placement, drawing-plane, gp-surface-offset]}
+      - {id: gp-layers-blend, name: Layer blend modes, opacity and masks, match: [gp-layers-blend, gp-layer-masks, gp-layer-opacity]}
+      - {id: gp-materials-stroke-fill, name: Stroke and fill material settings, match: [gp-materials-stroke-fill, gp-fill-material, gp-stroke-material]}
+      - {id: gp-fill-tool, name: Fill tool, boundary strokes and leak size, match: [gp-fill-tool, gp-fill, gp-boundary-strokes]}
+      - {id: gp-sculpt-mode, name: GP sculpt mode brushes, match: [gp-sculpt-mode, gp-sculpt]}
+      - {id: gp-edit-mode, name: GP edit mode stroke editing and curves, match: [gp-edit-mode, gp-stroke-editing, gp-curve-editing]}
+      - {id: gp-vertex-paint, name: GP vertex paint and tint, match: [gp-vertex-paint, gp-tint]}
+      - {id: gp-weight-paint, name: GP weight paint and armatures, match: [gp-weight-paint, gp-armature]}
+      - {id: gp-guides, name: Drawing guides and canvas, match: [gp-guides, drawing-guides, gp-canvas]}
+      - {id: gp-stroke-thickness, name: Stroke thickness, pressure and brush settings, match: [gp-stroke-thickness, gp-brush-settings, gp-pressure]}
+  - id: grease-pencil-modifiers-fx
+    name: Grease Pencil modifiers and visual effects
+    source: Manual/Grease Pencil/Modifiers
+    match: [gp-modifiers, gp-effects, grease-pencil-modifiers, gp-build-modifier]
+    subtopics:
+      - {id: gp-noise-modifier, name: GP Noise modifier, match: [gp-noise-modifier, gp-noise]}
+      - {id: gp-array-modifier, name: GP Array modifier, match: [gp-array-modifier, gp-array]}
+      - {id: gp-smooth-thickness, name: GP Smooth and Thickness modifiers, match: [gp-smooth-modifier, gp-thickness-modifier]}
+      - {id: gp-tint-color, name: GP Tint, Color and Opacity modifiers, match: [gp-tint-modifier, gp-color-modifier, gp-opacity-modifier]}
+      - {id: gp-blur-glow-fx, name: Blur, Glow and Pixelate effects, match: [gp-blur-fx, gp-glow-fx, gp-pixelate-fx]}
+      - {id: gp-rim-shadow-fx, name: Rim, Shadow and Swirl effects, match: [gp-rim-fx, gp-shadow-fx, gp-swirl-fx]}
+      - {id: gp-lattice-hook, name: GP Lattice, Hook and Armature modifiers, match: [gp-lattice-modifier, gp-hook-modifier, gp-armature-modifier]}
+      - {id: gp-dot-dash, name: GP Dot Dash and Length modifiers, match: [gp-dot-dash, gp-length-modifier]}
+      - {id: gp-outline-modifier, name: GP Outline modifier, match: [gp-outline-modifier, gp-outline]}
+      - {id: gp-envelope-modifier, name: GP Envelope modifier, match: [gp-envelope-modifier, gp-envelope]}
+  - id: grease-pencil-animation
+    name: Grease Pencil frame animation, interpolation and onion skinning
+    source: Manual/Grease Pencil/Animation
+    match: [onion-skinning, gp-interpolate, frame-by-frame, interpolate-sequence]
+    subtopics:
+      - {id: gp-onion-settings, name: Onion skin modes, frames and colours, match: [gp-onion-settings, onion-skin-mode, onion-frames]}
+      - {id: gp-interpolate-tool, name: Interpolate tool and sequence options, match: [gp-interpolate-tool, interpolate-options, gp-interpolate-flip]}
+      - {id: gp-keyframe-types, name: GP keyframe types and extremes, match: [gp-keyframe-types, gp-extremes, gp-breakdown]}
+      - {id: gp-multiframe, name: Multiframe editing and falloff, match: [gp-multiframe, multiframe-editing]}
+      - {id: gp-layer-parenting, name: Parenting GP layers to bones and objects, match: [gp-layer-parenting, gp-bone-parent]}
+      - {id: gp-timing, name: GP timing on twos and holding frames in the dope sheet, match: [gp-timing, gp-on-twos, hold-frames]}
+  - id: line-art
+    name: Line Art modifier and Freestyle lines
+    source: Manual/Grease Pencil/Modifiers/Line Art
+    match: [line-art, freestyle, outline]
+    subtopics:
+      - {id: line-art-edge-types, name: Line Art edge types (contour, crease, material, intersection), match: [line-art-edge-types, line-art-contour, line-art-crease]}
+      - {id: line-art-occlusion, name: Occlusion levels and transparency masks, match: [line-art-occlusion, occlusion-levels]}
+      - {id: line-art-source, name: Scene, collection and object source types, match: [line-art-source, line-art-collection]}
+      - {id: line-art-shadow, name: Light contour and shadow lines, match: [line-art-shadow, light-contour]}
+      - {id: line-art-baking, name: Baking Line Art and performance, match: [line-art-baking, bake-line-art, line-art-performance]}
+      - {id: line-art-vertex-weight, name: Line Art vertex weight transfer and stroke thickness, match: [line-art-vertex-weight, line-art-thickness]}
+  # --- Animation & rigging (Manual/Animation & Rigging)
+  - id: keyframes-fcurves
+    name: Keyframes, F-curves, interpolation and the Graph Editor
+    source: Manual/Animation & Rigging/Keyframes
+    match: [keyframe, f-curve, graph-editor, interpolation]
+    subtopics:
+      - {id: auto-keying, name: Auto keying, only insert available and keyframe insert preferences, match: [auto-keying, auto-key, only-insert-available]}
+      - {id: keying-sets, name: Keying sets and relative keying sets, match: [keying-sets, keying-set]}
+      - {id: fcurve-handle-types, name: F-curve handle types and auto-clamped, match: [fcurve-handle-types, auto-clamped, aligned-handles]}
+      - {id: fcurve-extrapolation, name: Extrapolation modes, match: [fcurve-extrapolation, extrapolation, constant-extrapolation]}
+      - {id: graph-editor-normalize, name: Graph Editor normalize, view and channel display, match: [graph-editor-normalize, normalize-curves]}
+      - {id: keyframe-types, name: Keyframe types (breakdown, extreme, jitter, moving hold), match: [keyframe-types, breakdown-keyframe, extreme-keyframe]}
+      - {id: easing-types, name: Easing types and dynamic interpolation (elastic, bounce, back), match: [easing-types, easing, elastic-interpolation, bounce-interpolation]}
+      - {id: fcurve-snap-mirror, name: Snapping and mirroring keyframes, match: [fcurve-snap, mirror-keyframes, snap-keyframes]}
+      - {id: bake-sound-fcurve, name: Bake sound to F-curves, match: [bake-sound, sound-to-fcurve]}
+      - {id: keyframe-jump-selection, name: Jump to keyframes, columns and select channel keys, match: [keyframe-jump, select-columns]}
+  - id: dope-sheet-timeline
+    name: Dope Sheet, Timeline and Action Editor
+    source: Manual/Editors/Dope Sheet
+    match: [dope-sheet, timeline, action-editor]
+    subtopics:
+      - {id: dope-sheet-channels, name: Channels, groups, lock, mute and only show selected, match: [dope-sheet-channels, channel-groups, only-show-selected]}
+      - {id: timeline-playback, name: Playback settings, sync mode and audio scrubbing, match: [timeline-playback, sync-mode, audio-scrubbing]}
+      - {id: breakdown-slide, name: Breakdowner, push pull and blend to neighbour, match: [breakdown-slide, breakdowner, push-pull-keys]}
+      - {id: dope-sheet-filters, name: Dope Sheet filters and modes (mask, shape key, grease pencil, cache file), match: [dope-sheet-filters, dope-sheet-modes, shape-key-editor]}
+      - {id: action-editor-assign, name: Assigning, stashing and unlinking actions, match: [action-editor-assign, stash-action, unlink-action]}
+      - {id: dope-sheet-mirror-snap, name: Mirror, snap and extend keys in the dope sheet, match: [dope-sheet-mirror, dope-sheet-snap, extend-keys]}
+  - id: fcurve-modifiers
+    name: F-curve modifiers (cycles, noise, envelope)
+    source: Manual/Editors/Graph Editor/F-Curves/Modifiers
+    match: [fcurve-modifiers, cycles-modifier, noise-modifier, envelope-modifier]
+    subtopics:
+      - {id: cycles-modes, name: Cycles before and after modes with offset, match: [cycles-modes, repeat-with-offset, cycles-before-after]}
+      - {id: noise-phase-offset, name: Noise scale, strength, phase, offset and depth, match: [noise-phase-offset, noise-strength, noise-phase]}
+      - {id: envelope-control-points, name: Envelope control points and reference value, match: [envelope-control-points, envelope-reference]}
+      - {id: limits-modifier, name: Limits modifier, match: [limits-modifier, fcurve-limits]}
+      - {id: stepped-modifier, name: Stepped interpolation modifier, match: [stepped-modifier, stepped-interpolation]}
+      - {id: generator-modifier, name: Generator and Built-in Function modifiers, match: [generator-modifier, built-in-function]}
+      - {id: fmodifier-frame-range, name: Restrict frame range and influence, match: [fmodifier-frame-range, modifier-influence, restrict-frame-range]}
+  - id: actions-nla
+    name: Actions, NLA editor and strip blending
+    source: Manual/Editors/NLA
+    match: [nla, actions, action-strips, nla-strips]
+    subtopics:
+      - {id: nla-blending-modes, name: Strip blending modes (replace, combine, add, subtract, multiply), match: [nla-blending-modes, nla-combine, nla-replace]}
+      - {id: nla-extrapolation, name: Strip extrapolation and hold modes, match: [nla-extrapolation, hold-forward, nla-hold]}
+      - {id: nla-push-down, name: Push down and track management, match: [nla-push-down, push-down, nla-tracks]}
+      - {id: nla-tweak-mode, name: Tweak mode and editing stashed actions, match: [nla-tweak-mode, tweak-mode]}
+      - {id: nla-transitions, name: Transition strips and blend in/out, match: [nla-transitions, transition-strip, blend-in-out]}
+      - {id: nla-strip-time, name: Strip time, repeat, scale and reverse, match: [nla-strip-time, strip-repeat, strip-scale, reverse-strip]}
+      - {id: nla-meta-strips, name: Meta strips and strip groups, match: [nla-meta-strips, meta-strips]}
+      - {id: nla-animated-influence, name: Animated influence and animated strip time, match: [nla-animated-influence, animated-strip-time]}
+      - {id: action-slots, name: Action slots and slotted actions (4.4+), match: [action-slots, slotted-actions]}
+      - {id: fake-user-actions, name: Fake users, orphan actions and action management, match: [fake-user-actions, orphan-actions, action-management]}
+  - id: drivers
+    name: Drivers and driver expressions
+    source: Manual/Animation & Rigging/Drivers
+    match: [drivers, driver, driver-expressions]
+    subtopics:
+      - {id: driver-variable-types, name: Driver variable types (single property, transform, rotational difference, distance, context), match: [driver-variable-types, single-property, rotational-difference, distance-variable]}
+      - {id: scripted-expression, name: Scripted expressions and simple expression evaluation, match: [scripted-expression, simple-expression]}
+      - {id: transform-channel-driver, name: Transform channel drivers with space options, match: [transform-channel-driver, transform-channel]}
+      - {id: driver-fcurve-shaping, name: Shaping driver output with the driver F-curve, match: [driver-fcurve-shaping, driver-curve]}
+      - {id: drivers-editor, name: Drivers editor and driver debugging, match: [drivers-editor, driver-debugging, invalid-python-expression]}
+      - {id: driver-auto-run, name: Auto run Python scripts and trusted sources, match: [driver-auto-run, auto-run-scripts, trusted-source]}
+      - {id: copy-paste-drivers, name: Copy, paste and copy as new driver, match: [copy-paste-drivers, copy-as-new-driver, paste-driver]}
+      - {id: driver-python-functions, name: Custom Python functions in driver namespace, match: [driver-python-functions, driver-namespace]}
+  - id: markers-motion-paths
+    name: Markers and motion paths
+    source: Manual/Animation & Rigging/Markers
+    match: [markers, motion-paths, motion-path]
+    subtopics:
+      - {id: marker-camera-binding, name: Binding cameras to markers, match: [marker-camera-binding, bind-camera-to-markers, camera-switching]}
+      - {id: marker-naming-jump, name: Naming, jumping to and moving markers, match: [marker-naming, jump-to-marker, move-marker]}
+      - {id: motion-path-range, name: Motion path calculation range and update, match: [motion-path-range, calculate-motion-path, update-motion-paths]}
+      - {id: motion-path-display, name: Motion path display, frame numbers and keyframe dots, match: [motion-path-display, motion-path-frame-numbers]}
+      - {id: pose-markers, name: Pose markers in the action editor, match: [pose-markers, pose-marker]}
+  - id: shape-keys
+    name: Shape keys and corrective shapes
+    source: Manual/Animation & Rigging/Shape Keys
+    match: [shape-keys, blendshapes, corrective-shape-keys]
+    subtopics:
+      - {id: relative-shape-keys, name: Relative shape keys, basis and relative to, match: [relative-shape-keys, shape-key-basis, relative-to]}
+      - {id: absolute-shape-keys, name: Absolute shape keys and evaluation time, match: [absolute-shape-keys, shape-key-evaluation-time]}
+      - {id: shape-key-drivers, name: Driving shape keys from bones, match: [shape-key-drivers, driven-shape-key]}
+      - {id: shape-key-mirror, name: Mirror shape key and mirror topology, match: [shape-key-mirror, mirror-shape-key]}
+      - {id: join-as-shapes, name: Join as shapes, transfer shape key and blend from shape, match: [join-as-shapes, transfer-shape-key, blend-from-shape]}
+      - {id: shape-key-range-group, name: Slider range and vertex group masking, match: [shape-key-range, shape-key-vertex-group, slider-min-max]}
+      - {id: shape-key-animation, name: Animating shape key values and the shape key editor, match: [shape-key-animation, shape-key-keyframes]}
+      - {id: shape-key-from-modifier, name: Apply modifier as shape key and sculpt to shape key, match: [shape-key-from-modifier, apply-as-shape-key]}
+  - id: armature-bones
+    name: Armature structure, bone properties, bendy bones
+    source: Manual/Animation & Rigging/Armatures
+    match: [armature, bones, bendy-bones, b-bones, bone-collections]
+    subtopics:
+      - {id: bone-roll, name: Bone roll, recalculate roll and roll alignment, match: [bone-roll, recalculate-roll, roll-alignment]}
+      - {id: bone-collections-management, name: Bone collections, visibility, solo and assignment, match: [bone-collections-management, bone-collection-solo, bone-collection-assign]}
+      - {id: custom-bone-shapes, name: Custom bone shapes and display types, match: [custom-bone-shapes, bone-display-types, bone-shape]}
+      - {id: bbone-segments-handles, name: B-Bone segments, handles, ease and curve, match: [bbone-segments, bbone-handles, bbone-ease]}
+      - {id: bone-envelope-settings, name: Bone envelope radius and distance, match: [bone-envelope-settings, envelope-radius, envelope-distance]}
+      - {id: armature-symmetrize, name: Symmetrize, mirror and naming for left/right bones, match: [armature-symmetrize, bone-naming, left-right-naming, auto-name]}
+      - {id: bone-inherit-scale, name: Inherit rotation, inherit scale modes and local location, match: [bone-inherit-scale, inherit-rotation, local-location]}
+      - {id: bone-extrude-subdivide, name: Extruding, subdividing, filling and merging bones, match: [bone-extrude, bone-subdivide, fill-between-joints]}
+      - {id: armature-display, name: Armature display (in front, axes, names, shape display), match: [armature-display, bone-axes, in-front]}
+      - {id: bone-deform-settings, name: Deform toggle, connected bones and head/tail, match: [bone-deform-settings, connected-bones, bone-head-tail]}
+  - id: constraints
+    name: Object and bone constraints (tracking, transform, relationship)
+    source: Manual/Animation & Rigging/Constraints
+    match: [constraints, copy-transforms, damped-track, child-of, limit-constraints]
+    subtopics:
+      - {id: copy-location-rotation-scale, name: Copy Location, Rotation and Scale constraints, match: [copy-location, copy-rotation, copy-scale]}
+      - {id: limit-location-rotation, name: Limit Location, Rotation, Scale and Distance constraints, match: [limit-location, limit-rotation, limit-scale, limit-distance]}
+      - {id: track-to-locked-track, name: Track To and Locked Track constraints, match: [track-to, locked-track, track-to-constraint]}
+      - {id: stretch-to, name: Stretch To constraint and volume preservation, match: [stretch-to, stretch-to-constraint, volume-variation]}
+      - {id: floor-shrinkwrap-constraint, name: Floor and Shrinkwrap constraints, match: [floor-constraint, shrinkwrap-constraint]}
+      - {id: action-constraint, name: Action constraint, match: [action-constraint]}
+      - {id: armature-constraint, name: Armature constraint, match: [armature-constraint]}
+      - {id: transformation-constraint, name: Transformation constraint mapping, match: [transformation-constraint, transform-mapping]}
+      - {id: clamp-to, name: Clamp To and Follow Path constraints, match: [clamp-to, clamp-to-constraint]}
+      - {id: constraint-spaces, name: Owner and target spaces, match: [constraint-spaces, owner-space, target-space, pose-space]}
+      - {id: constraint-influence, name: Animating influence and constraint order, match: [constraint-influence, constraint-order, disable-and-keep-transform]}
+      - {id: child-of-set-inverse, name: Child Of set inverse and dynamic parenting, match: [child-of-set-inverse, set-inverse, dynamic-parenting]}
+      - {id: pivot-constraint, name: Pivot constraint, match: [pivot-constraint]}
+      - {id: camera-solver-constraints, name: Camera Solver, Object Solver and Follow Track constraints, match: [camera-solver-constraint, follow-track-constraint, object-solver-constraint]}
+  - id: ik-fk-rigging
+    name: IK, FK and IK/FK switching
+    source: Manual/Animation & Rigging/Armatures/Posing/Inverse Kinematics
+    match: [ik-fk, inverse-kinematics, ik, spline-ik, pole-target]
+    subtopics:
+      - {id: ik-chain-length, name: IK chain length and target setup, match: [ik-chain-length, chain-length, ik-target]}
+      - {id: ik-pole-angle, name: Pole angle and pole target placement, match: [ik-pole-angle, pole-angle, pole-placement]}
+      - {id: ik-stretch, name: IK stretch and stretchy limbs, match: [ik-stretch, stretchy-ik]}
+      - {id: ik-fk-snapping, name: IK FK switching and snapping scripts, match: [ik-fk-snapping, ik-fk-switch, ik-fk-snap]}
+      - {id: spline-ik-setup, name: Spline IK setup and scaling modes, match: [spline-ik-setup, spline-ik-scaling, spline-ik-chain]}
+      - {id: ik-limits-stiffness, name: IK rotation limits, stiffness and lock, match: [ik-limits, ik-stiffness, ik-lock]}
+      - {id: itasc-solver, name: iTaSC solver settings, match: [itasc, itasc-solver]}
+      - {id: foot-roll-rig, name: Foot roll and reverse foot IK rig, match: [foot-roll, reverse-foot]}
+  - id: rigify
+    name: Rigify metarigs and rig generation
+    source: Manual/Add-ons/Rigging/Rigify
+    match: [rigify, metarig]
+    subtopics:
+      - {id: rigify-metarig-types, name: Metarig types (human, basic human, quadruped, bird, horse), match: [rigify-metarig-types, rigify-quadruped, rigify-human]}
+      - {id: rigify-rig-types, name: Rig types, samples and bone type assignment, match: [rigify-rig-types, rigify-samples, rigify-bone-type]}
+      - {id: rigify-face-rig, name: Rigify face rig and skin system, match: [rigify-face-rig, rigify-face, rigify-skin]}
+      - {id: rigify-generate-options, name: Generate, regenerate, overwrite and rig name options, match: [rigify-generate-options, rigify-regenerate, rigify-overwrite]}
+      - {id: rigify-rig-ui, name: Rigify rig UI, IK/FK switching and snapping panel, match: [rigify-rig-ui, rigify-ikfk, rigify-snap]}
+      - {id: rigify-widgets-layers, name: Widgets, bone collections and UI layers in Rigify, match: [rigify-widgets, rigify-bone-collections, rigify-layers]}
+      - {id: rigify-feature-sets, name: Rigify feature sets and custom rig types, match: [rigify-feature-sets, custom-rig-types, rigify-python]}
+      - {id: rigify-game-export, name: Rigify game-ready export and deform bone extraction, match: [rigify-game-export, rigify-deform-bones, game-rig]}
+  - id: skinning-weights
+    name: Skinning, automatic weights and envelope deformation
+    source: Manual/Animation & Rigging/Armatures/Skinning
+    match: [skinning, automatic-weights, weight-painting, envelope]
+    subtopics:
+      - {id: bone-heat-failed, name: Bone heat weighting failed troubleshooting, match: [bone-heat-failed, bone-heat, heat-weighting]}
+      - {id: envelope-weights, name: Parent with envelope weights, match: [envelope-weights, with-envelope-weights]}
+      - {id: deform-bones-only, name: Deform bones only and weight to selected bones, match: [deform-bones-only, selected-bones-weights]}
+      - {id: preserve-volume, name: Preserve volume (dual quaternion) armature option, match: [preserve-volume, dual-quaternion]}
+      - {id: empty-groups, name: Parent with empty groups and manual weighting, match: [empty-groups, with-empty-groups]}
+      - {id: armature-modifier-options, name: Armature modifier vertex groups, envelopes and multi modifier, match: [armature-modifier-options, multi-modifier, bone-envelopes-option]}
+  - id: pose-library
+    name: Pose library and pose assets
+    source: Manual/Animation & Rigging/Armatures/Pose Library
+    match: [pose-library, pose-assets]
+    subtopics:
+      - {id: pose-asset-creation, name: Creating pose assets from selected bones, match: [pose-asset-creation, create-pose-asset]}
+      - {id: pose-blend-flipped, name: Blend pose, apply flipped and pose blending, match: [pose-blend-flipped, blend-pose, apply-pose-flipped]}
+      - {id: pose-asset-thumbnails, name: Pose asset thumbnails and metadata, match: [pose-asset-thumbnails, pose-thumbnail]}
+      - {id: legacy-pose-library, name: Converting legacy pose libraries, match: [legacy-pose-library, convert-pose-library]}
+      - {id: copy-paste-pose, name: Copy, paste and paste flipped pose, match: [copy-paste-pose, paste-flipped, copy-pose]}
+      - {id: relax-pose, name: Relax pose, push pose and pose breakdowner, match: [relax-pose, push-pose, pose-breakdowner]}
+  - id: character-animation
+    name: Character animation (blocking to polish)
+    source: BFCT/Animation
+    match: [character-animation, blocking, polish, body-mechanics]
+    subtopics:
+      - {id: walk-cycle, name: Walk cycle, match: [walk-cycle, walk]}
+      - {id: run-cycle, name: Run cycle, match: [run-cycle, run]}
+      - {id: jump-animation, name: Jump and landing animation, match: [jump-animation, jump, landing]}
+      - {id: weight-shift, name: Weight shift and anticipation, match: [weight-shift, anticipation]}
+      - {id: overlap-follow-through, name: Overlapping action and follow through, match: [overlap-follow-through, overlapping-action, follow-through]}
+      - {id: arcs-tracking, name: Arcs tracking and smoothing, match: [arcs-tracking, arc-tracking]}
+      - {id: moving-holds, name: Moving holds and settles, match: [moving-holds, moving-hold, settle]}
+      - {id: animation-layers, name: Animation layering with NLA and additive layers, match: [animation-layers, additive-layer]}
+      - {id: stepped-blocking, name: Stepped blocking and constant interpolation workflow, match: [stepped-blocking, stepped-keys]}
+      - {id: character-interaction, name: Character to prop and two-character interaction, match: [character-interaction, prop-interaction, contact-animation]}
+  - id: facial-animation
+    name: Facial animation and lip sync
+    source: Blender Studio/Character Animation
+    match: [facial-animation, lip-sync, facial-rig]
+    subtopics:
+      - {id: facial-shape-key-rig, name: Facial shape key rig with sliders, match: [facial-shape-key-rig, shape-key-face-rig]}
+      - {id: visemes, name: Phoneme shapes and visemes, match: [visemes, viseme, phonemes]}
+      - {id: eye-blinks, name: Eye darts, blinks and eyelid animation, match: [eye-blinks, blinks, eye-darts, eyelid]}
+      - {id: brow-animation, name: Brow and forehead animation, match: [brow-animation, brows]}
+      - {id: audio-scrubbing-lipsync, name: Audio waveform scrubbing and timing dialogue, match: [audio-scrubbing-lipsync, dialogue-timing, waveform-display]}
+      - {id: facial-bone-rig, name: Bone-based facial rig, match: [facial-bone-rig, face-bones]}
+      - {id: jaw-animation, name: Jaw and mouth corners, match: [jaw-animation, jaw, mouth-corners]}
+  - id: motion-capture
+    name: Motion capture import and retargeting
+    source: BFCT/Animation
+    match: [mocap, motion-capture, retarget]
+    subtopics:
+      - {id: bvh-import-settings, name: BVH import settings and rotation modes, match: [bvh-import-settings, bvh-rotation-mode]}
+      - {id: bone-mapping-retarget, name: Bone mapping and retargeting workflows, match: [bone-mapping-retarget, bone-mapping]}
+      - {id: mocap-cleanup, name: Mocap cleanup, smoothing and jitter removal, match: [mocap-cleanup, jitter-removal, mocap-smoothing]}
+      - {id: mixamo-import, name: Mixamo and Rokoko import, match: [mixamo-import, mixamo, rokoko]}
+      - {id: root-motion, name: Root motion and in-place conversion, match: [root-motion, in-place]}
+      - {id: mocap-layering, name: Layering hand-keyed animation over mocap, match: [mocap-layering, mocap-override]}
+  - id: camera-animation
+    name: Camera animation and cinematography
+    source: BFCT/Animation
+    match: [camera-animation, cinematography, camera-rig]
+    subtopics:
+      - {id: camera-dolly-track, name: Dolly and track moves on paths, match: [camera-dolly, dolly, camera-track-move]}
+      - {id: handheld-camera, name: Handheld camera noise, match: [handheld-camera, camera-shake, handheld]}
+      - {id: focus-pull, name: Focus pull and rack focus, match: [focus-pull, rack-focus]}
+      - {id: camera-switching, name: Camera switching with markers, match: [camera-switching, multi-camera]}
+      - {id: lens-animation, name: Lens and dolly zoom animation, match: [lens-animation, dolly-zoom, zoom]}
+      - {id: crane-rig, name: Crane and camera rig add-on, match: [crane-rig, camera-rigs-addon, dolly-rig]}
+  - id: animation-cleanup-baking
+    name: Baking actions, cleaning keys and animation export prep
+    source: Manual/Animation & Rigging/Actions/Bake Action
+    match: [bake-action, animation-baking, key-cleanup, clean-keyframes, animation-export]
+    subtopics:
+      - {id: visual-keying, name: Bake action with visual keying and clear constraints, match: [visual-keying, bake-visual-keying, clear-constraints]}
+      - {id: decimate-fcurves, name: Decimate F-curves by ratio or error, match: [decimate-fcurves, decimate-keyframes]}
+      - {id: smooth-keys, name: Smooth keys and sample keyframes, match: [smooth-keys, sample-keyframes]}
+      - {id: clean-channels, name: Clean channels and clean keyframes, match: [clean-channels]}
+      - {id: nla-bake, name: Bake NLA stack to a single action, match: [nla-bake, bake-nla]}
+      - {id: fbx-animation-export, name: FBX animation export, baked actions and NLA strips, match: [fbx-animation-export, export-nla-strips, fbx-actions]}
+      - {id: euler-filter, name: Euler filter and discontinuity fixing, match: [euler-filter, discontinuity, gimbal-fix]}
+  # --- Physics (Manual/Physics)
+  - id: rigid-body
+    name: Rigid body simulation and constraints
+    source: Manual/Physics/Rigid Body
+    match: [rigid-body, rbd, rigid-body-constraints, destruction]
+    subtopics:
+      - {id: rigid-body-active-passive, name: Active, passive and animated rigid bodies, match: [rigid-body-active-passive, animated-rigid-body, kinematic]}
+      - {id: rigid-body-collision-shapes, name: Collision shapes (box, sphere, convex hull, mesh, compound), match: [rigid-body-collision-shapes, convex-hull, compound-shape]}
+      - {id: rigid-body-mass-friction, name: Mass, friction, bounciness and collision margin, match: [rigid-body-mass-friction, calculate-mass, bounciness]}
+      - {id: rigid-body-constraint-types, name: Constraint types (fixed, hinge, slider, motor, generic spring), match: [rigid-body-constraint-types, hinge, motor-constraint, generic-spring]}
+      - {id: rigid-body-world, name: Rigid body world substeps, iterations and collection, match: [rigid-body-world, substeps, solver-iterations]}
+      - {id: cell-fracture, name: Cell Fracture add-on, match: [cell-fracture, fracture]}
+      - {id: rigid-body-deactivation, name: Deactivation, damping and sleeping, match: [rigid-body-deactivation, rigid-body-damping, sleeping]}
+      - {id: bake-to-keyframes, name: Bake rigid bodies to keyframes, match: [bake-to-keyframes, rigid-body-bake]}
+      - {id: connect-rigid-bodies, name: Connect rigid bodies and breakable constraints, match: [connect-rigid-bodies, breakable-constraints, breaking-threshold]}
+  - id: cloth
+    name: Cloth simulation
+    source: Manual/Physics/Cloth
+    match: [cloth, cloth-simulation]
+    subtopics:
+      - {id: cloth-stiffness-presets, name: Cloth presets, stiffness, tension, compression and bending, match: [cloth-stiffness-presets, cloth-presets, cloth-stiffness, bending-stiffness]}
+      - {id: cloth-pinning, name: Pinning with vertex groups and pin stiffness, match: [cloth-pinning, pin-group, pin-stiffness]}
+      - {id: cloth-collisions, name: Object and self collisions, distance and quality, match: [cloth-collisions, cloth-self-collision, collision-quality]}
+      - {id: cloth-pressure, name: Cloth pressure and target volume, match: [cloth-pressure, pressure, target-volume]}
+      - {id: cloth-internal-springs, name: Internal springs for thick cloth, match: [cloth-internal-springs, internal-springs]}
+      - {id: cloth-sewing, name: Sewing springs and garment assembly, match: [cloth-sewing, sewing-springs]}
+      - {id: cloth-shape-settings, name: Shape settings, shrink and dynamic mesh, match: [cloth-shape-settings, cloth-shrink, dynamic-mesh]}
+      - {id: cloth-damping, name: Damping, air viscosity and quality steps, match: [cloth-damping, air-viscosity]}
+      - {id: cloth-field-weights, name: Cloth field weights and effector collection, match: [cloth-field-weights, effector-collection]}
+      - {id: cloth-property-weights, name: Property weights with vertex groups (shrink, bending, stiffness), match: [cloth-property-weights, stiffness-vertex-group]}
+  - id: soft-body
+    name: Soft body simulation
+    source: Manual/Physics/Soft Body
+    match: [soft-body, softbody]
+    subtopics:
+      - {id: soft-body-goal, name: Goal strength, goal vertex group and goal settings, match: [soft-body-goal, goal-strength, goal-vertex-group]}
+      - {id: soft-body-edges, name: Edges pull, push, damp, plastic and bending, match: [soft-body-edges, soft-body-springs, soft-body-bending]}
+      - {id: soft-body-self-collision, name: Self collision ball size and stiffness, match: [soft-body-self-collision, ball-size]}
+      - {id: soft-body-solver, name: Solver step size, error limit and choke, match: [soft-body-solver, soft-body-step-size, error-limit]}
+      - {id: soft-body-aerodynamics, name: Aerodynamics and stiff quads, match: [soft-body-aerodynamics, stiff-quads, aerodynamics]}
+      - {id: soft-body-mass-friction, name: Mass, friction and speed object settings, match: [soft-body-mass, soft-body-friction, soft-body-speed]}
+  - id: fluid-liquid
+    name: Mantaflow liquid simulation
+    source: Manual/Physics/Fluid
+    match: [fluid, liquid, mantaflow, flip]
+    subtopics:
+      - {id: fluid-domain-resolution, name: Domain resolution divisions and time scale, match: [fluid-domain-resolution, resolution-divisions, cfl]}
+      - {id: fluid-flow-objects, name: Flow objects inflow, outflow and geometry, match: [fluid-flow-objects, inflow, outflow, flow-behavior]}
+      - {id: fluid-effectors, name: Effector collision and guide objects, match: [fluid-effectors, effector, fluid-guide]}
+      - {id: flip-particle-settings, name: FLIP particle radius, sampling and narrow band, match: [flip-particle-settings, particle-radius, narrow-band]}
+      - {id: fluid-mesh-generation, name: Mesh generation, upres factor and smoothing, match: [fluid-mesh-generation, fluid-mesh, upres-factor]}
+      - {id: fluid-viscosity, name: Viscosity and diffusion settings, match: [fluid-viscosity, viscosity, diffusion]}
+      - {id: spray-foam-bubbles, name: Spray, foam and bubble secondary particles, match: [spray-foam-bubbles, secondary-particles, foam]}
+      - {id: fluid-cache-types, name: Cache types (replay, modular, all) and formats, match: [fluid-cache-types, replay-cache, modular-cache]}
+      - {id: fluid-initial-velocity, name: Initial velocity and flow source settings, match: [fluid-initial-velocity, initial-velocity]}
+      - {id: fluid-shader, name: Water shading for liquid sims, match: [fluid-shader, water-shader, liquid-material]}
+  - id: fluid-gas
+    name: Mantaflow smoke and fire
+    source: Manual/Physics/Fluid
+    match: [smoke, fire, gas-sim]
+    subtopics:
+      - {id: smoke-domain-settings, name: Gas domain settings, buoyancy and heat, match: [smoke-domain-settings, buoyancy, heat-density]}
+      - {id: adaptive-domain, name: Adaptive domain, match: [adaptive-domain]}
+      - {id: fire-settings, name: Fire fuel, flame rate, ignition and smoke colour, match: [fire-settings, flame-rate, fuel, ignition-temperature]}
+      - {id: smoke-noise-upres, name: Noise upres and wavelet noise, match: [smoke-noise-upres, noise-upres, wavelet-noise]}
+      - {id: smoke-dissolve, name: Dissolve and smoke lifetime, match: [smoke-dissolve, dissolve-smoke]}
+      - {id: smoke-shader, name: Smoke and fire shader with Principled Volume, match: [smoke-shader, fire-shader, smoke-material]}
+      - {id: smoke-flow-types, name: Flow types (smoke, fire, both) and flow sources, match: [smoke-flow-types, flow-source, flow-type]}
+      - {id: smoke-vorticity, name: Vorticity and velocity settings, match: [smoke-vorticity, vorticity]}
+      - {id: smoke-vdb-export, name: Exporting smoke caches as OpenVDB, match: [smoke-vdb-export, vdb-cache]}
+  - id: particles
+    name: Particle systems (emitter and hair)
+    source: Manual/Physics/Particles
+    match: [particles, particle-system, emitter]
+    subtopics:
+      - {id: particle-emission, name: Emission number, lifetime, frame range and source, match: [particle-emission, particle-lifetime, emission-source]}
+      - {id: particle-velocity, name: Velocity normal, tangent, object and randomize, match: [particle-velocity, normal-velocity]}
+      - {id: particle-physics-newtonian, name: Newtonian physics, forces, size and brownian, match: [particle-physics-newtonian, newtonian, brownian]}
+      - {id: particle-render-objects, name: Render as object or collection, match: [particle-render-objects, render-as-collection, render-as-object]}
+      - {id: particle-children, name: Children simple and interpolated, match: [particle-children, children-interpolated, child-particles]}
+      - {id: particle-boids, name: Boids physics and rules, match: [particle-boids, boids]}
+      - {id: keyed-particles, name: Keyed particles and targets, match: [keyed-particles, keyed-physics]}
+      - {id: particle-texture-influence, name: Texture influence on particles, match: [particle-texture-influence, particle-texture]}
+      - {id: particle-edit-mode, name: Particle edit mode and combing, match: [particle-edit-mode, particle-edit, combing]}
+      - {id: particle-instance-modifier, name: Particle Instance modifier, match: [particle-instance-modifier, particle-instance]}
+  - id: hair-curves
+    name: Hair curves grooming and hair dynamics
+    source: Manual/Modeling/Curves/Hair Curves
+    match: [hair, grooming, hair-curves, hair-dynamics]
+    subtopics:
+      - {id: hair-sculpt-mode, name: Curves sculpt mode brushes (comb, snake hook, pinch, puff), match: [hair-sculpt-mode, comb-brush, puff-brush]}
+      - {id: hair-density-brush, name: Density and add brushes, match: [hair-density-brush, density-brush, add-hair-brush]}
+      - {id: hair-node-groups, name: Bundled hair node groups and procedural hair assets, match: [hair-node-groups, hair-assets, procedural-hair]}
+      - {id: hair-interpolate, name: Interpolate hair curves and duplicate, match: [hair-interpolate, interpolate-hair, duplicate-hair-curves]}
+      - {id: hair-clump-noise, name: Clump, noise, curl and frizz node groups, match: [hair-clump-noise, clump-hair, curl-hair, frizz-hair]}
+      - {id: hair-to-mesh, name: Hair curves to mesh and hair cards, match: [hair-to-mesh, hair-cards]}
+      - {id: hair-dynamics-settings, name: Hair dynamics settings in the particle system, match: [hair-dynamics-settings, hair-stiffness]}
+      - {id: principled-hair-bsdf, name: Principled Hair BSDF and Hair BSDF shading, match: [principled-hair-bsdf, hair-bsdf, hair-shader]}
+      - {id: hair-surface-attachment, name: Surface attachment and deform on surface, match: [hair-surface-attachment, surface-deform-hair, snap-to-surface-hair]}
+      - {id: hair-convert-particles, name: Converting particle hair to curves and back, match: [hair-convert-particles, convert-hair]}
+  - id: force-fields-collision
+    name: Force fields and collision
+    source: Manual/Physics/Force Fields
+    match: [force-fields, force-field, collision, turbulence]
+    subtopics:
+      - {id: wind-force, name: Wind force field, match: [wind-force, wind-force-field]}
+      - {id: vortex-harmonic, name: Vortex, harmonic and magnetic fields, match: [vortex-harmonic, vortex, harmonic]}
+      - {id: force-field-falloff, name: Force field falloff and shape, match: [force-field-falloff, field-shape]}
+      - {id: collision-damping-friction, name: Collision damping, friction and stickiness, match: [collision-damping, collision-friction, stickiness]}
+      - {id: collision-thickness, name: Collision thickness outer and inner, match: [collision-thickness, outer-thickness]}
+      - {id: field-weights, name: Field weights per effector type, match: [field-weights]}
+      - {id: curve-guide-force, name: Curve guide and drag fields, match: [curve-guide-force, curve-guide, drag-field]}
+  - id: dynamic-paint
+    name: Dynamic Paint
+    source: Manual/Physics/Dynamic Paint
+    match: [dynamic-paint, dynamic-paint-canvas]
+    subtopics:
+      - {id: dynamic-paint-brush, name: Brush settings and source types, match: [dynamic-paint-brush, dp-brush]}
+      - {id: dynamic-paint-image-sequence, name: Image sequence canvas baking, match: [dynamic-paint-image-sequence, dp-image-sequence]}
+      - {id: dynamic-paint-waves, name: Wave surface type, match: [dynamic-paint-waves, dp-waves]}
+      - {id: dynamic-paint-displace, name: Displace surface type, match: [dynamic-paint-displace, dp-displace]}
+      - {id: dynamic-paint-weight, name: Weight surface type for driving effects, match: [dynamic-paint-weight, dp-weight]}
+      - {id: dynamic-paint-wetmap, name: Wetmap, drying and spreading, match: [dynamic-paint-wetmap, wetmap, paint-drying]}
+  - id: physics-baking-caches
+    name: Physics baking, point caches and disk caches
+    source: Manual/Physics/Baking Physics
+    match: [point-cache, physics-bake, cache, disk-cache]
+    subtopics:
+      - {id: bake-all-dynamics, name: Bake all dynamics and free all bakes, match: [bake-all-dynamics, free-all-bakes]}
+      - {id: calculate-to-frame, name: Calculate to frame and current cache to bake, match: [calculate-to-frame, current-cache-to-bake]}
+      - {id: external-cache, name: External cache files and library paths, match: [external-cache, cache-path]}
+      - {id: cache-library-override, name: Caches on linked and overridden objects, match: [cache-library-override, linked-cache]}
+      - {id: cache-step, name: Cache step and frame range, match: [cache-step, cache-frame-range]}
+      - {id: mesh-sequence-cache, name: Mesh Sequence Cache modifier and cache files, match: [mesh-sequence-cache, cache-file]}
+      - {id: multiple-caches, name: Multiple point caches per object, match: [multiple-caches, cache-list]}
+  - id: simulation-nodes
+    name: Simulation zones and repeat zones in Geometry Nodes
+    source: Manual/Modeling/Geometry Nodes/Zones
+    match: [simulation-zone, simulation-nodes, repeat-zone, simulation-zones]
+    subtopics:
+      - {id: simulation-zone-items, name: Simulation zone items and state, match: [simulation-zone-items, simulation-state, zone-items]}
+      - {id: simulation-delta-time, name: Delta time and frame-rate independence, match: [simulation-delta-time, delta-time]}
+      - {id: simulation-skip, name: Skip input and pausing simulations, match: [simulation-skip, skip-input]}
+      - {id: repeat-zone-iterations, name: Repeat zone iterations and accumulation, match: [repeat-zone-iterations, iterations]}
+      - {id: simulation-bake-range, name: Simulation frame range and bake settings, match: [simulation-bake-range, simulation-frame-range]}
+      - {id: gn-particle-system, name: Building a particle system in simulation nodes, match: [gn-particle-system, gn-particles]}
+      - {id: gn-collision-simulation, name: Collisions and raycast in simulation zones, match: [gn-collision-simulation, gn-collisions]}
+  - id: gn-bake-node
+    name: Geometry Nodes bake node and node tools
+    source: Manual/Modeling/Geometry Nodes/Bake
+    match: [bake-node, node-tools, node-tool, gn-bake]
+    subtopics:
+      - {id: bake-still-animation, name: Still versus animation bake modes, match: [bake-still-animation, bake-still, bake-animation-mode]}
+      - {id: bake-path-packed, name: Bake path, packed bakes and directory, match: [bake-path-packed, packed-bake, bake-directory]}
+      - {id: node-tool-menus, name: Node tool catalogs and menu placement, match: [node-tool-menus, tool-catalog]}
+      - {id: tool-selection-node, name: Selection and Set Selection nodes in tools, match: [tool-selection-node, set-selection]}
+      - {id: tool-mouse-position, name: Mouse Position, 3D Cursor and viewport nodes in tools, match: [tool-mouse-position, mouse-position, viewport-transform]}
+      - {id: node-tool-operators, name: Running node tools from Python and keymaps, match: [node-tool-operators, execute-node-group]}
+  # --- Rendering (Manual/Rendering)
+  - id: cycles-sampling-denoise
+    name: Cycles sampling, adaptive sampling and denoising
+    source: Manual/Rendering/Cycles/Render Settings
+    match: [cycles, samples, denoise, adaptive-sampling, light-paths]
+    subtopics:
+      - {id: noise-threshold, name: Noise threshold and min/max samples, match: [noise-threshold, min-samples, max-samples]}
+      - {id: time-limit, name: Time limit sampling, match: [time-limit, render-time-limit]}
+      - {id: light-bounces, name: Max bounces (diffuse, glossy, transmission, volume, transparent), match: [light-bounces, max-bounces, transparent-bounces]}
+      - {id: clamping, name: Direct and indirect clamping for fireflies, match: [clamping, fireflies, clamp-indirect]}
+      - {id: caustics-settings, name: Caustics, filter glossy and shadow caustics, match: [caustics-settings, filter-glossy, shadow-caustics, caustics]}
+      - {id: oidn-vs-optix, name: OpenImageDenoise versus OptiX denoiser and prefilter, match: [oidn-vs-optix, openimagedenoise, oidn, prefilter]}
+      - {id: path-guiding, name: Path guiding, match: [path-guiding]}
+      - {id: fast-gi, name: Fast GI approximation, match: [fast-gi, fast-gi-approximation]}
+      - {id: light-tree, name: Light tree and many lights sampling, match: [light-tree, many-lights]}
+      - {id: viewport-denoise, name: Viewport denoising and sampling, match: [viewport-denoise, viewport-samples]}
+      - {id: seed-animation, name: Seed, animated seed and pattern, match: [seed-animation, animated-seed, sampling-pattern]}
+  - id: cycles-gpu
+    name: Cycles GPU rendering (CUDA, OptiX, HIP, Metal, oneAPI)
+    source: Manual/Rendering/Cycles/GPU Rendering
+    match: [gpu, optix, cuda, hip, metal-gpu, oneapi]
+    subtopics:
+      - {id: cuda-setup, name: CUDA device setup and driver requirements, match: [cuda-setup, cuda-driver]}
+      - {id: optix-setup, name: OptiX setup and OptiX-only features, match: [optix-setup, optix-denoiser-gpu]}
+      - {id: hip-setup, name: HIP and HIP RT on AMD, match: [hip-setup, hip-rt]}
+      - {id: metal-setup, name: Metal on Apple silicon, match: [metal-setup, apple-silicon]}
+      - {id: oneapi-setup, name: oneAPI on Intel Arc, match: [oneapi-setup, intel-arc]}
+      - {id: hybrid-cpu-gpu, name: Hybrid CPU plus GPU rendering, match: [hybrid-cpu-gpu, cpu-gpu]}
+      - {id: gpu-out-of-memory, name: GPU out of memory troubleshooting, match: [gpu-out-of-memory, out-of-memory, vram]}
+      - {id: multi-gpu, name: Multi-GPU rendering and device selection, match: [multi-gpu, device-selection]}
+  - id: eevee
+    name: EEVEE Next (raytracing, shadows, light probes, volumetrics)
+    source: Manual/Rendering/EEVEE
+    match: [eevee, eevee-next, light-probes, irradiance-volume]
+    subtopics:
+      - {id: eevee-raytracing, name: Raytracing settings, resolution and denoising, match: [eevee-raytracing, screen-trace, raytrace-resolution]}
+      - {id: eevee-shadows, name: Shadow settings, rays, steps and jittered shadows, match: [eevee-shadows, shadow-rays, jittered-shadows]}
+      - {id: eevee-volume-probe, name: Light probe volume baking, match: [eevee-volume-probe, volume-probe, probe-bake]}
+      - {id: eevee-sphere-probe, name: Sphere and plane reflection probes, match: [eevee-sphere-probe, sphere-probe, plane-probe]}
+      - {id: eevee-volumetrics, name: EEVEE volumetrics resolution and steps, match: [eevee-volumetrics, volume-resolution]}
+      - {id: eevee-motion-blur, name: EEVEE motion blur settings, match: [eevee-motion-blur]}
+      - {id: eevee-dof, name: EEVEE depth of field settings, match: [eevee-dof, dof-max-size]}
+      - {id: eevee-film, name: Film filter size, transparent and overscan, match: [eevee-film, overscan, film-transparent]}
+      - {id: eevee-material-settings, name: Material render method, transparent shadows and backface, match: [eevee-material-settings, render-method, dithered, blended]}
+      - {id: eevee-world-lighting, name: World lighting and sun extraction, match: [eevee-world-lighting, sun-extraction]}
+      - {id: eevee-sampling-clamp, name: EEVEE sampling, clamping and shadow clamp, match: [eevee-sampling-clamp, eevee-samples, eevee-clamp]}
+      - {id: eevee-fast-gi, name: EEVEE fast GI and horizon scan, match: [eevee-fast-gi, horizon-scan]}
+  - id: workbench
+    name: Workbench render engine and viewport playblasts
+    source: Manual/Rendering/Workbench
+    match: [workbench, playblast, viewport-render]
+    subtopics:
+      - {id: workbench-lighting, name: Studio lights, matcaps and flat lighting, match: [workbench-lighting, matcap, studio-light]}
+      - {id: workbench-color-modes, name: Colour modes (material, object, attribute, single, random, texture), match: [workbench-color-modes, random-color, single-color]}
+      - {id: workbench-cavity-outline, name: Cavity, outline and shadow options, match: [workbench-cavity-outline, cavity, outline-option]}
+      - {id: workbench-dof, name: Workbench depth of field and anti-aliasing, match: [workbench-dof, workbench-aa]}
+      - {id: viewport-render-animation, name: Viewport render image and animation, match: [viewport-render-animation, viewport-render-image]}
+      - {id: xray-wireframe, name: X-ray, wireframe and shading popover, match: [xray-wireframe, x-ray, wireframe-opacity]}
+  - id: shader-nodes-principled
+    name: Shader nodes and the Principled BSDF
+    source: Manual/Rendering/Shader Nodes
+    match: [shader, principled-bsdf, shader-nodes, lookdev, pbr]
+    subtopics:
+      - {id: principled-subsurface, name: Principled subsurface scattering methods, match: [principled-subsurface, subsurface-scattering, sss, random-walk]}
+      - {id: principled-coat-sheen, name: Principled coat and sheen layers, match: [principled-coat-sheen, coat, sheen]}
+      - {id: principled-transmission, name: Transmission, IOR and thin film, match: [principled-transmission, transmission, ior, thin-film]}
+      - {id: principled-emission-alpha, name: Emission strength and alpha transparency, match: [principled-emission-alpha, alpha-transparency, emission-strength]}
+      - {id: mix-shader-layering, name: Mix Shader and Add Shader layering, match: [mix-shader-layering, mix-shader, add-shader]}
+      - {id: glass-refraction-bsdf, name: Glass, Refraction and Transparent BSDFs, match: [glass-refraction-bsdf, glass-bsdf, refraction-bsdf, transparent-bsdf]}
+      - {id: normal-bump-nodes, name: Normal Map and Bump nodes, match: [normal-bump-nodes, normal-map-node, bump-node]}
+      - {id: displacement-node, name: Displacement and Vector Displacement nodes, match: [displacement-node, vector-displacement, true-displacement]}
+      - {id: shader-node-groups, name: Shader node groups and reusable material libraries, match: [shader-node-groups, material-library, shader-group]}
+      - {id: material-slots, name: Material slots and per-face assignment, match: [material-slots, material-assignment]}
+      - {id: image-texture-node, name: Image Texture node interpolation, extension and projection, match: [image-texture-node, box-projection, image-extension]}
+      - {id: color-ramp-node, name: Color Ramp and Map Range in shaders, match: [color-ramp-node, color-ramp]}
+      - {id: mapping-node, name: Mapping node and texture transforms, match: [mapping-node, texture-mapping]}
+      - {id: layer-weight-fresnel, name: Layer Weight and Fresnel nodes, match: [layer-weight-fresnel, layer-weight, fresnel-node]}
+      - {id: ambient-occlusion-node, name: Ambient Occlusion and Bevel nodes, match: [ambient-occlusion-node, bevel-node, ao-node]}
+      - {id: light-path-node, name: Light Path node tricks, match: [light-path-node, light-path, is-camera-ray]}
+      - {id: object-info-node, name: Object Info, Attribute and Geometry nodes, match: [object-info-node, object-info, geometry-input-node]}
+      - {id: wireframe-node, name: Wireframe node, match: [wireframe-node]}
+      - {id: velvet-toon-bsdf, name: Sheen BSDF, Toon BSDF and specialised BSDFs, match: [velvet-toon-bsdf, sheen-bsdf, metallic-bsdf]}
+  - id: procedural-texturing
+    name: Procedural texturing and texture coordinates
+    source: Blender Studio/Procedural Shading
+    match: [procedural-texturing, texture-coordinate, noise-texture, procedural-shader]
+    subtopics:
+      - {id: noise-texture-settings, name: Noise texture detail, roughness, lacunarity and distortion, match: [noise-texture-settings, noise-detail, noise-roughness, lacunarity]}
+      - {id: voronoi-texture, name: Voronoi texture features and distance metrics, match: [voronoi-texture, voronoi]}
+      - {id: wave-texture, name: Wave texture bands and rings, match: [wave-texture]}
+      - {id: musgrave-fractal, name: Musgrave and fractal noise types, match: [musgrave-fractal, musgrave, fractal-noise]}
+      - {id: brick-checker, name: Brick and Checker textures, match: [brick-checker, brick-texture, checker-texture]}
+      - {id: gradient-texture, name: Gradient texture types, match: [gradient-texture]}
+      - {id: magic-white-noise, name: Magic and White Noise textures, match: [magic-white-noise, magic-texture, white-noise]}
+      - {id: generated-object-coords, name: Generated, Object and UV coordinate choices, match: [generated-object-coords, generated-coordinates, object-coordinates]}
+      - {id: procedural-wood, name: Procedural wood, match: [procedural-wood, wood-shader]}
+      - {id: procedural-rust-wear, name: Procedural rust, wear and edge damage, match: [procedural-rust-wear, procedural-rust, edge-wear]}
+      - {id: procedural-tiles, name: Procedural tiles and grout, match: [procedural-tiles, tiles-shader]}
+      - {id: procedural-fabric, name: Procedural fabric and weave, match: [procedural-fabric, weave]}
+  - id: texture-baking
+    name: Texture baking (AO, normals, combined, selected-to-active)
+    source: Manual/Rendering/Cycles/Baking
+    match: [texture-baking, bake, baking, selected-to-active]
+    subtopics:
+      - {id: bake-ao, name: Baking ambient occlusion, match: [bake-ao, ao-bake]}
+      - {id: bake-normal-map, name: Baking normal maps and tangent space, match: [bake-normal-map, tangent-space, object-space-normal]}
+      - {id: bake-combined, name: Baking combined and lighting, match: [bake-combined, combined-bake, lightmap-bake]}
+      - {id: bake-diffuse-glossy, name: Baking diffuse, glossy, roughness and emit passes, match: [bake-diffuse-glossy, bake-diffuse, bake-roughness, bake-emit]}
+      - {id: bake-cage, name: Cage and extrusion for selected to active, match: [bake-cage, cage-extrusion, max-ray-distance]}
+      - {id: bake-margin, name: Bake margin and margin type, match: [bake-margin, margin-type]}
+      - {id: bake-to-vertex-colors, name: Baking to color attributes, match: [bake-to-color-attributes, active-color-bake]}
+      - {id: bake-udim-multiple, name: Baking UDIMs and multiple objects, match: [bake-udim, bake-multiple-objects]}
+      - {id: bake-clear-image, name: Bake target image setup, clear and float images, match: [bake-clear-image, bake-image-setup, bake-target]}
+  - id: osl
+    name: Open Shading Language scripts
+    source: Manual/Rendering/Shader Nodes/OSL
+    match: [osl, open-shading-language, script-node]
+    subtopics:
+      - {id: osl-shader-structure, name: OSL shader structure, parameters and metadata, match: [osl-shader-structure, osl-metadata, osl-parameters]}
+      - {id: osl-noise-functions, name: OSL noise and pattern functions, match: [osl-noise-functions, osl-noise]}
+      - {id: osl-closures, name: OSL closures and BSDF output, match: [osl-closures, closure]}
+      - {id: osl-trace, name: OSL trace and getattribute, match: [osl-trace, trace, getattribute]}
+      - {id: osl-gpu, name: OSL on OptiX GPU, match: [osl-gpu, osl-optix]}
+      - {id: osl-external-file, name: External OSL files versus internal text, match: [osl-external-file, osl-text]}
+  - id: lighting-studio
+    name: Lighting setups, HDRI and three-point lighting
+    source: BFCT/Lighting
+    match: [lighting, hdri, three-point, world-lighting]
+    subtopics:
+      - {id: three-point-setup, name: Three-point setup with key, fill and rim, match: [three-point-setup, key-fill-rim, key-light]}
+      - {id: hdri-world-setup, name: HDRI world setup with rotation and strength, match: [hdri-world-setup, hdri-rotation, hdri-strength]}
+      - {id: sun-position-addon, name: Sun Position add-on, match: [sun-position-addon, sun-position]}
+      - {id: light-portals, name: Light portals for interiors, match: [light-portals, light-portal]}
+      - {id: product-lighting, name: Product and studio lighting with softboxes, match: [product-lighting, softbox, studio-lighting]}
+      - {id: sky-texture-nishita, name: Sky Texture Nishita sun and atmosphere, match: [sky-texture-nishita, sky-texture, nishita]}
+      - {id: light-groups, name: Light groups for relighting in comp, match: [light-groups, lightgroups]}
+      - {id: gobos-cookies, name: Gobos, cookies and projected light textures, match: [gobos-cookies, gobo, cookie]}
+      - {id: mesh-lights, name: Mesh lights and emission materials, match: [mesh-lights, emissive-mesh]}
+      - {id: hdri-backplate, name: HDRI backplates, hidden environment and visibility, match: [hdri-backplate, backplate, world-visibility]}
+  - id: light-linking
+    name: Light linking and shadow linking
+    source: Manual/Rendering/Cycles/Light Linking
+    match: [light-linking, shadow-linking]
+    subtopics:
+      - {id: light-linking-collections, name: Receiver collections and include/exclude states, match: [light-linking-collections, receiver-collection, light-linking-exclude]}
+      - {id: shadow-linking-setup, name: Shadow linking blocker collections, match: [shadow-linking-setup, blocker-collection]}
+      - {id: light-linking-python, name: Light linking from Python, match: [light-linking-python, light-linking-api]}
+      - {id: light-linking-limitations, name: Light linking limitations and EEVEE, match: [light-linking-limitations, light-linking-eevee]}
+  - id: color-management
+    name: Color management (AgX, Filmic, view transforms, OCIO)
+    source: Manual/Rendering/Color Management
+    match: [color-management, agx, filmic, view-transform, ocio]
+    subtopics:
+      - {id: agx-vs-filmic, name: AgX versus Filmic versus Standard, match: [agx-vs-filmic, standard-transform]}
+      - {id: look-contrast, name: Looks and contrast presets, match: [look-contrast, looks, contrast-preset]}
+      - {id: display-device, name: Display device and HDR output, match: [display-device, hdr-display]}
+      - {id: exposure-gamma, name: Exposure and gamma controls, match: [exposure-gamma, exposure-control, gamma-control]}
+      - {id: sequencer-color-space, name: Sequencer colour space, match: [sequencer-color-space, sequencer-colorspace]}
+      - {id: image-color-space, name: Image colour space and non-color data, match: [image-color-space, non-color, srgb-vs-linear]}
+      - {id: custom-ocio-config, name: Custom OCIO config and environment variable, match: [custom-ocio-config, ocio-config, ocio-environment]}
+      - {id: aces-ocio, name: ACES workflow in Blender, match: [aces-ocio, aces]}
+      - {id: white-balance, name: White balance settings (4.3+), match: [white-balance, white-point]}
+      - {id: curves-view, name: Use curves for colour management, match: [curves-view, color-management-curves]}
+  - id: render-output-settings
+    name: Output settings, resolution, file formats, EXR, stamp
+    source: Manual/Rendering/Output
+    match: [output-settings, render-output, multilayer-exr, file-format, stamp, exr]
+    subtopics:
+      - {id: resolution-aspect, name: Resolution, percentage and pixel aspect, match: [resolution-aspect, resolution-percentage, pixel-aspect]}
+      - {id: png-jpeg-settings, name: PNG, JPEG, TIFF settings and colour depth, match: [png-jpeg-settings, color-depth, png-compression]}
+      - {id: exr-codecs, name: EXR codecs, half float and DWAA, match: [exr-codecs, half-float-exr, dwaa, zip-codec]}
+      - {id: ffmpeg-encoding, name: FFmpeg video encoding, H.264, ProRes and audio codecs, match: [ffmpeg-encoding, h264-encoding, prores, video-codec]}
+      - {id: stamp-metadata, name: Stamp metadata, burn into image and note, match: [stamp-metadata, burn-into-image, metadata-note]}
+      - {id: frame-step-overwrite, name: Frame step, overwrite, placeholders and file extensions, match: [frame-step-overwrite, placeholders, overwrite]}
+      - {id: render-region, name: Render region and crop to region, match: [render-region, crop-to-region, border-render]}
+      - {id: output-path-tokens, name: Output path, frame padding and tokens, match: [output-path-tokens, frame-padding, output-path]}
+      - {id: image-sequence-to-video, name: Converting image sequences to video in Blender, match: [image-sequence-to-video, sequence-to-video]}
+      - {id: time-stretching, name: Time stretching and frame remapping, match: [time-stretching, frame-remapping]}
+  - id: view-layers-passes
+    name: View layers, render passes and Cryptomatte
+    source: Manual/Rendering/Layers
+    match: [render-passes, aov, cryptomatte, render-layers, view-layer]
+    subtopics:
+      - {id: data-passes, name: Z, mist, normal, position, UV and vector passes, match: [data-passes, z-pass, mist-pass, normal-pass, vector-pass]}
+      - {id: light-passes, name: Diffuse, glossy, transmission and volume direct/indirect/color passes, match: [light-passes, diffuse-pass, glossy-pass, direct-indirect]}
+      - {id: shadow-catcher, name: Shadow catcher pass and object, match: [shadow-catcher]}
+      - {id: cryptomatte-setup, name: Cryptomatte object, material and asset levels, match: [cryptomatte-setup, cryptomatte-levels, cryptomatte-accurate]}
+      - {id: aov-shader-output, name: Shader AOV output node and view layer AOVs, match: [aov-shader-output, aov-output, shader-aov]}
+      - {id: holdout-indirect-only, name: Holdout and indirect only collections, match: [holdout-indirect-only, holdout-collection, indirect-only]}
+      - {id: view-layer-override, name: View layer material override and samples override, match: [view-layer-override, material-override, samples-override]}
+      - {id: light-group-passes, name: Light group passes, match: [light-group-passes, lightgroup-pass]}
+      - {id: collection-exclude-layer, name: Per view layer collection exclusion and visibility, match: [collection-exclude-layer, per-layer-visibility]}
+      - {id: denoising-data-passes, name: Denoising data passes and denoise in comp, match: [denoising-data-passes, denoising-albedo, denoising-normal]}
+  - id: render-optimization
+    name: Render time optimisation and memory
+    source: Manual/Rendering/Cycles/Optimizing Renders
+    match: [render-optimization, render-cost, persistent-data, tile-size, memory]
+    subtopics:
+      - {id: simplify-settings, name: Simplify subdivision, child particles, texture limit and culling, match: [simplify-settings, simplify-subdivision, texture-limit]}
+      - {id: camera-distance-culling, name: Camera and distance culling, match: [camera-distance-culling, camera-culling, distance-culling]}
+      - {id: render-benchmark, name: Benchmarking renders and reading render stats, match: [render-benchmark, render-stats, benchmark]}
+      - {id: instancing-memory, name: Instancing for memory savings, match: [instancing-memory, instance-memory]}
+      - {id: motion-blur-cost, name: Motion blur shutter, steps and cost, match: [motion-blur-cost, motion-blur, shutter-curve]}
+      - {id: volume-step-size-render, name: Volume step rate and max steps, match: [volume-step-size-render, step-rate, max-steps]}
+      - {id: subdivision-render-levels, name: Subdivision render levels and dicing budget, match: [subdivision-render-levels, dicing-budget]}
+      - {id: light-threshold, name: Light threshold and light sampling, match: [light-threshold, light-sampling-threshold]}
+      - {id: denoise-samples-tradeoff, name: Trading samples for denoising, match: [denoise-samples-tradeoff, samples-tradeoff]}
+      - {id: texture-memory, name: Texture memory, image resolution and texture caching, match: [texture-memory, texture-cache, image-resolution]}
+  - id: freestyle
+    name: Freestyle NPR line rendering
+    source: Manual/Rendering/Freestyle
+    match: [freestyle, freestyle-lines, line-sets]
+    subtopics:
+      - {id: freestyle-line-set-selection, name: Line set selection by visibility, edge types and collection, match: [freestyle-line-set-selection, freestyle-edge-types, freestyle-visibility]}
+      - {id: freestyle-thickness-color, name: Line style thickness, colour and alpha modifiers, match: [freestyle-thickness, freestyle-color, freestyle-alpha]}
+      - {id: freestyle-geometry-modifiers, name: Line style geometry modifiers and strokes, match: [freestyle-geometry-modifiers, freestyle-strokes, freestyle-chaining]}
+      - {id: freestyle-edge-face-marks, name: Freestyle edge marks and face marks, match: [freestyle-edge-marks, freestyle-face-marks, edge-marks]}
+      - {id: freestyle-pass, name: Freestyle as separate render pass, match: [freestyle-pass, freestyle-as-render-pass]}
+      - {id: freestyle-svg, name: Freestyle SVG export, match: [freestyle-svg, svg-export]}
+      - {id: freestyle-python, name: Freestyle Python scripting and parameter editor, match: [freestyle-python, freestyle-scripting]}
+  - id: volumetrics-rendering
+    name: Volume rendering, principled volume and world volumes
+    source: Manual/Rendering/Shader Nodes/Shader/Principled Volume
+    match: [volumetrics, principled-volume, volume, fog]
+    subtopics:
+      - {id: world-volume-fog, name: World volume fog and atmosphere, match: [world-volume-fog, world-volume, atmosphere]}
+      - {id: volume-scatter-absorption, name: Volume Scatter and Volume Absorption nodes, match: [volume-scatter-absorption, volume-scatter, volume-absorption]}
+      - {id: volume-density-attribute, name: Density, flame and colour attributes in volume shaders, match: [volume-density-attribute, density-attribute, flame-attribute]}
+      - {id: volume-anisotropy, name: Anisotropy and phase functions, match: [volume-anisotropy, anisotropy, phase-function]}
+      - {id: god-rays, name: God rays and light shafts, match: [god-rays, light-shafts, crepuscular]}
+      - {id: volume-object-settings, name: Volume object render settings and interpolation, match: [volume-object-settings, volume-interpolation, homogeneous]}
+      - {id: eevee-volume-shadows, name: EEVEE volumetric shadows and lighting, match: [eevee-volume-shadows, volumetric-shadows]}
+      - {id: volume-clouds, name: Procedural clouds, match: [volume-clouds, procedural-clouds]}
+  - id: npr-toon
+    name: Toon and stylized shading
+    source: Blender Studio/Stylized Rendering
+    match: [toon, cel-shading, npr, shader-to-rgb]
+    subtopics:
+      - {id: shader-to-rgb-ramp, name: Shader to RGB with Color Ramp banding, match: [shader-to-rgb-ramp, color-ramp-banding]}
+      - {id: inverted-hull-outline, name: Inverted hull outlines, match: [inverted-hull-outline, inverted-hull, hull-outline]}
+      - {id: toon-bsdf-settings, name: Toon BSDF size and smooth, match: [toon-bsdf-settings, toon-bsdf]}
+      - {id: cel-light-direction, name: Light direction control for cel shading, match: [cel-light-direction, light-vector, custom-light-direction]}
+      - {id: halftone-hatching, name: Halftone and hatching effects, match: [halftone-hatching, halftone, hatching]}
+      - {id: npr-rim-light, name: NPR rim light and fresnel highlights, match: [npr-rim-light, stylized-rim]}
+      - {id: stylized-specular, name: Stylized specular and anisotropic highlights, match: [stylized-specular, toon-specular]}
+      - {id: normal-editing-toon, name: Normal editing for anime faces, match: [normal-editing-toon, anime-face-normals]}
+  - id: command-line-rendering
+    name: Command-line and background rendering
+    source: Manual/Advanced/Command Line
+    match: [command-line, background-rendering, headless, cli, render-farm]
+    subtopics:
+      - {id: cli-render-flags, name: Render flags (-b, -a, -f, -s, -e, -o), match: [cli-render-flags, cli-render-animation]}
+      - {id: cli-python-expr, name: Python expression and script arguments, match: [cli-python-expr, python-expr, python-script-arg]}
+      - {id: cli-engine-override, name: Engine, format and threads overrides, match: [cli-engine-override, cli-engine, cli-threads]}
+      - {id: flamenco, name: Flamenco render farm, match: [flamenco]}
+      - {id: cli-logging, name: Logging, debug flags and exit codes, match: [cli-logging, cli-debug, debug-flags]}
+      - {id: cli-factory-startup, name: Factory startup and addon disabling, match: [cli-factory-startup, factory-startup]}
+      - {id: cli-argument-parsing, name: Passing custom arguments after double dash, match: [cli-argument-parsing, double-dash, argv]}
+      - {id: cli-environment-vars, name: Blender environment variables, match: [cli-environment-vars, blender-env-vars]}
+  - id: stereoscopy-vr
+    name: Stereoscopy and multi-view rendering
+    source: Manual/Rendering/Output/Stereoscopy
+    match: [stereoscopy, stereo-3d, multi-view, vr-render, equirectangular]
+    subtopics:
+      - {id: stereo-views-setup, name: Stereo 3D view setup and multi-view format, match: [stereo-views-setup, views-format]}
+      - {id: stereo-convergence, name: Camera convergence, interocular distance and pivot, match: [stereo-convergence, interocular, convergence-plane]}
+      - {id: stereo-output-modes, name: Anaglyph, side by side and interlace output, match: [stereo-output-modes, anaglyph, side-by-side]}
+      - {id: vr180-360, name: VR180 and 360 equirectangular rendering, match: [vr180-360, vr180, 360-render]}
+      - {id: multi-view-exr, name: Multi-view EXR and view suffixes, match: [multi-view-exr, view-suffix]}
+      - {id: vr-scene-inspection, name: VR Scene Inspection add-on and OpenXR, match: [vr-scene-inspection, openxr]}
+  # --- Compositing (Manual/Compositing)
+  - id: compositor-basics
+    name: Compositor node tree, render layers and viewer
+    source: Manual/Compositing
+    match: [compositor, compositing, multipass]
+    subtopics:
+      - {id: render-layers-node, name: Render Layers node and multiple view layers, match: [render-layers-node, render-layers-input]}
+      - {id: viewer-backdrop, name: Viewer node and backdrop, match: [viewer-backdrop, backdrop]}
+      - {id: composite-node, name: Composite output node, match: [composite-node, composite-output]}
+      - {id: image-sequence-input, name: Image and movie clip input nodes, match: [image-sequence-input, movie-clip-node, image-input-node]}
+      - {id: compositor-node-groups, name: Compositor node groups, match: [compositor-node-groups]}
+      - {id: compositor-gpu, name: GPU compositor and realtime viewport compositing, match: [compositor-gpu, realtime-compositor, viewport-compositor]}
+      - {id: alpha-over, name: Alpha Over and premultiplied alpha, match: [alpha-over, premultiplied, straight-alpha]}
+      - {id: scale-transform-nodes, name: Scale, Transform, Translate and Crop nodes, match: [scale-transform-nodes, scale-node, transform-node, crop-node]}
+      - {id: mix-color-comp, name: Mix node blend modes in the compositor, match: [mix-color-comp, mix-node-compositor]}
+      - {id: comp-performance, name: Compositor performance, pixel size and precision, match: [comp-performance, compositor-precision, pixel-size]}
+  - id: compositor-keying-mattes
+    name: Keying, mattes and masks in the compositor
+    source: Manual/Compositing/Types/Matte
+    match: [keying, keyer, mattes, mask-node, chroma-key]
+    subtopics:
+      - {id: keying-node-settings, name: Keying node settings and pre/post blur, match: [keying-node-settings, keying-node, despill-factor]}
+      - {id: keying-screen, name: Keying Screen node with tracked points, match: [keying-screen]}
+      - {id: channel-key, name: Channel Key and Luminance Key, match: [channel-key, luminance-key]}
+      - {id: color-spill, name: Color Spill node, match: [color-spill, spill-suppression]}
+      - {id: mask-node-feather, name: Mask node, feather and size source, match: [mask-node-feather, mask-feather]}
+      - {id: double-edge-mask, name: Double Edge Mask and Box/Ellipse masks, match: [double-edge-mask, box-mask, ellipse-mask]}
+      - {id: dilate-erode, name: Dilate Erode and matte cleanup, match: [dilate-erode, matte-cleanup]}
+      - {id: cryptomatte-node, name: Cryptomatte node picking, match: [cryptomatte-node, cryptomatte-picker]}
+      - {id: distance-key, name: Distance Key and Difference Key, match: [distance-key, difference-key]}
+  - id: compositor-grade-effects
+    name: Grading, glare, lens effects and denoise nodes
+    source: Manual/Compositing/Types/Filter
+    match: [color-grade, glare, lens-distortion, defocus, vignette]
+    subtopics:
+      - {id: color-balance-node, name: Color Balance lift gamma gain and offset power slope, match: [color-balance-node, lift-gamma-gain, offset-power-slope]}
+      - {id: rgb-curves, name: RGB Curves and Hue Correct, match: [rgb-curves, hue-correct]}
+      - {id: hue-saturation-node, name: Hue Saturation Value and Bright/Contrast, match: [hue-saturation-node, bright-contrast]}
+      - {id: glare-types, name: Glare bloom, fog glow, streaks and ghosts, match: [glare-types, fog-glow, glare-streaks, glare-ghosts]}
+      - {id: lens-distortion-node, name: Lens Distortion and dispersion, match: [lens-distortion-node, dispersion]}
+      - {id: defocus-node, name: Defocus with Z depth and bokeh, match: [defocus-node, bokeh, z-defocus]}
+      - {id: vignette-mask, name: Vignette via ellipse mask and blur, match: [vignette-mask, vignette-ellipse]}
+      - {id: denoise-node, name: Denoise node in comp, match: [denoise-node, comp-denoise]}
+      - {id: vector-blur, name: Vector Blur motion blur in comp, match: [vector-blur, speed-vector]}
+      - {id: filter-sharpen, name: Filter node sharpen, soften and edge detect, match: [filter-sharpen, soften, edge-detect]}
+      - {id: bilateral-blur, name: Bilateral Blur and Blur node types, match: [bilateral-blur, blur-node, blur-types]}
+      - {id: chromatic-aberration, name: Chromatic aberration and film grain, match: [chromatic-aberration, film-grain]}
+      - {id: tonemap-node, name: Tonemap and Exposure nodes, match: [tonemap-node, tonemap]}
+  - id: compositor-file-output
+    name: File Output node, EXR passes and external comp handoff
+    source: Manual/Compositing/Types/Output
+    match: [file-output, exr-handoff, comp-handoff, nuke-handoff]
+    subtopics:
+      - {id: file-output-slots, name: File Output node slots and per-slot formats, match: [file-output-slots, file-slots, per-slot-format]}
+      - {id: file-output-exr-layers, name: Multilayer EXR layer naming in File Output, match: [file-output-exr-layers, exr-layer-naming]}
+      - {id: file-output-base-path, name: Base path and subfolder structure, match: [file-output-base-path, base-path]}
+      - {id: nuke-naming, name: Naming conventions for Nuke and Resolve handoff, match: [nuke-naming, resolve-handoff, pass-naming]}
+      - {id: cryptomatte-handoff, name: Cryptomatte metadata preservation in handoff, match: [cryptomatte-handoff, cryptomatte-metadata]}
+  # --- Motion tracking & masking (Manual/Movie Clip Editor)
+  - id: camera-tracking
+    name: Camera motion tracking and solving
+    source: Manual/Movie Clip Editor/Tracking
+    match: [camera-tracking, motion-tracking, camera-solve, tracking]
+    subtopics:
+      - {id: tracking-marker-settings, name: Marker pattern, search size, motion model and correlation, match: [tracking-marker-settings, pattern-size, search-size, motion-model]}
+      - {id: detect-features, name: Detect features and auto tracking, match: [detect-features, auto-track]}
+      - {id: solve-keyframes, name: Solve keyframes selection and keyframe A/B, match: [solve-keyframes, keyframe-a-b]}
+      - {id: refine-solve, name: Refine focal length, optical center and distortion, match: [refine-solve, refine-intrinsics, refine-focal-length]}
+      - {id: tripod-solve, name: Tripod solver for nodal pans, match: [tripod-solve, tripod-solver, nodal-pan]}
+      - {id: set-scene-orientation, name: Set floor, origin, X axis and scale, match: [set-scene-orientation, set-floor, set-origin, set-scale]}
+      - {id: lens-distortion-tracking, name: Lens distortion models and undistort, match: [lens-distortion-tracking, undistort, distortion-model]}
+      - {id: setup-tracking-scene, name: Setup tracking scene and shadow catcher comp, match: [setup-tracking-scene, tracking-scene]}
+      - {id: clean-up-tracks, name: Clean up tracks by error and frames, match: [clean-up-tracks, solve-error, filter-tracks]}
+      - {id: clip-proxies-prefetch, name: Clip proxies, prefetch and cache, match: [clip-proxies, prefetch, clip-cache]}
+  - id: object-tracking-stabilization
+    name: Object tracking and 2D stabilization
+    source: Manual/Movie Clip Editor/Tracking
+    match: [object-tracking, stabilization, 2d-stabilization]
+    subtopics:
+      - {id: object-solve, name: Object solve with tracking objects, match: [object-solve, tracking-object]}
+      - {id: stabilization-settings, name: Stabilization location, rotation and scale tracks, match: [stabilization-settings, stabilization-tracks, autoscale]}
+      - {id: tracks-to-empties, name: Link empties to tracks and 3D markers, match: [tracks-to-empties, link-empty-to-track]}
+      - {id: plane-track, name: Plane track and corner pin, match: [plane-track, corner-pin]}
+      - {id: stabilize-2d-node, name: Stabilize 2D node in comp and expected position, match: [stabilize-2d-node, stabilize-2d]}
+      - {id: movie-distortion-node, name: Movie Distortion node undistort and distort, match: [movie-distortion-node, movie-distortion]}
+  - id: masking-rotoscoping
+    name: Mask editor and rotoscoping
+    source: Manual/Movie Clip Editor/Masking
+    match: [masking, rotoscoping, roto, mask-editor]
+    subtopics:
+      - {id: mask-splines-feather, name: Mask splines, feather points and handle types, match: [mask-splines-feather, mask-spline, feather-points]}
+      - {id: mask-layers-blend, name: Mask layers blend modes and opacity, match: [mask-layers-blend, mask-layer]}
+      - {id: mask-keyframes, name: Animating masks with shape keyframes, match: [mask-keyframes, mask-shape-key]}
+      - {id: mask-parent-track, name: Parenting masks to tracks, match: [mask-parent-track, mask-parenting]}
+      - {id: mask-in-compositor, name: Using masks in the compositor and VSE, match: [mask-in-compositor, mask-vse]}
+      - {id: mask-holes, name: Holes, self intersection and overlap, match: [mask-holes, mask-overlap]}
+  # --- Video editing (Manual/Video Editing)
+  - id: vse-editing
+    name: Video Sequence Editor cutting, strips and proxies
+    source: Manual/Video Editing/Sequencer
+    match: [vse, sequencer, video-sequencer, video-editing, proxies]
+    subtopics:
+      - {id: vse-split-slip, name: Split, hold split, slip and strip handles, match: [vse-split, slip, hold-split, strip-handles]}
+      - {id: vse-proxy-setup, name: Proxy setup, sizes and timecode, match: [vse-proxy-setup, proxy-sizes, proxy-timecode]}
+      - {id: vse-channels, name: Channels, muting, locking and channel names, match: [vse-channels, mute-channel, lock-channel]}
+      - {id: vse-strip-transform-crop, name: Strip transform, crop and image fit, match: [vse-strip-transform, strip-crop, image-fit]}
+      - {id: vse-retiming, name: Retiming tool and speed keys, match: [vse-retiming, retiming, speed-keys]}
+      - {id: vse-scopes, name: Preview scopes (histogram, waveform, vectorscope), match: [vse-scopes, histogram, waveform, vectorscope]}
+      - {id: vse-cache, name: Sequencer cache settings and prefetch, match: [vse-cache, sequencer-cache]}
+      - {id: vse-meta-strips, name: Meta strips, match: [vse-meta-strips, meta-strip]}
+      - {id: vse-snapping, name: Sequencer snapping and overlap handling, match: [vse-snapping, overlap-mode]}
+      - {id: vse-import-media, name: Importing movies, image sequences and sound, match: [vse-import-media, add-movie-strip, image-strip]}
+  - id: vse-effects-transitions
+    name: VSE effect strips, transitions, text and sound
+    source: Manual/Video Editing/Sequencer/Strips
+    match: [vse-effects, transitions, sound-strips, text-strip, audio-mixing]
+    subtopics:
+      - {id: vse-crossfade-wipe, name: Cross, gamma cross and wipe transitions, match: [vse-crossfade, gamma-cross, wipe]}
+      - {id: vse-text-styling, name: Text strip font, shadow, box and alignment, match: [vse-text-styling, text-strip-font, text-shadow]}
+      - {id: vse-sound-volume, name: Sound strip volume, pan, pitch and animation, match: [vse-sound-volume, sound-pan, sound-pitch]}
+      - {id: vse-color-modifiers, name: Strip modifiers (color balance, curves, hue correct, bright/contrast), match: [vse-color-modifiers, strip-modifiers, strip-color-balance]}
+      - {id: vse-speed-control, name: Speed Control effect, match: [vse-speed-control, speed-control]}
+      - {id: vse-glow-blur, name: Glow and Gaussian Blur effects, match: [vse-glow, gaussian-blur-strip]}
+      - {id: vse-transform-effect, name: Transform effect strip and animation, match: [vse-transform-effect, transform-strip]}
+      - {id: vse-multicam, name: Multicam selector, match: [vse-multicam, multicam]}
+      - {id: vse-adjustment-layer, name: Adjustment layer strip, match: [vse-adjustment-layer, adjustment-layer]}
+      - {id: vse-color-mix, name: Color Mix effect and blend modes, match: [vse-color-mix, color-mix-strip]}
+  - id: scene-strips-render
+    name: Scene strips and rendering an edit
+    source: Manual/Video Editing/Sequencer/Strips/Scene
+    match: [scene-strips, scene-strip, edit-render, ffmpeg-output]
+    subtopics:
+      - {id: scene-strip-camera-override, name: Scene strip camera override, match: [scene-strip-camera-override, camera-override]}
+      - {id: scene-strip-input, name: Scene strip input (camera versus sequencer), match: [scene-strip-input, sequencer-input]}
+      - {id: vse-render-settings, name: Render settings for a VSE output, match: [vse-render-settings, sequencer-render]}
+      - {id: audio-mixdown, name: Audio mixdown and export, match: [audio-mixdown, mixdown]}
+      - {id: vse-post-processing, name: Post processing sequencer and compositor toggles, match: [vse-post-processing, post-processing]}
+      - {id: render-edit-export, name: Exporting the final edit with FFmpeg presets, match: [render-edit-export, ffmpeg-presets]}
+  # --- Add-ons and extensions (Manual/Add-ons, extensions.blender.org)
+  - id: extensions-addons
+    name: Installing and managing extensions and add-ons
+    source: Manual/Add-ons
+    match: [extensions, add-ons, addons, extensions-platform]
+    subtopics:
+      - {id: extension-repositories, name: Extension repositories and custom repos, match: [extension-repositories, custom-repository, remote-repository]}
+      - {id: install-from-disk, name: Install from disk and drag and drop install, match: [install-from-disk, install-addon-zip]}
+      - {id: legacy-addon-conversion, name: Legacy add-on to extension conversion, match: [legacy-addon-conversion, legacy-addon]}
+      - {id: extension-updates, name: Updating and version pinning extensions, match: [extension-updates, update-extensions]}
+      - {id: addon-preferences-panel, name: Add-on preferences and enabling per startup, match: [addon-preferences-panel, enable-addon]}
+      - {id: offline-extensions, name: Offline mode and extension permissions, match: [offline-extensions, extension-permissions, offline-mode]}
+      - {id: extension-cli, name: Extension command line (blender --command extension), match: [extension-cli, command-extension]}
+  - id: node-wrangler
+    name: Node Wrangler
+    source: Manual/Add-ons/Node/Node Wrangler
+    match: [node-wrangler]
+    subtopics:
+      - {id: nw-principled-setup, name: Principled texture setup from image files, match: [nw-principled-setup, principled-texture-setup]}
+      - {id: nw-preview, name: Preview node output with Ctrl Shift click, match: [nw-preview, preview-node, ctrl-shift-click]}
+      - {id: nw-lazy-connect, name: Lazy connect and lazy mix, match: [nw-lazy-connect, lazy-connect, lazy-mix]}
+      - {id: nw-merge-nodes, name: Merge selected nodes, match: [nw-merge-nodes, merge-nodes]}
+      - {id: nw-switch-type, name: Switch node type and swap links, match: [nw-switch-type, switch-node-type, swap-links]}
+      - {id: nw-reroutes-frames, name: Add reroutes, frames and align nodes, match: [nw-reroutes-frames, add-reroutes, align-nodes]}
+  - id: bundled-addons-tools
+    name: Bundled tool add-ons (LoopTools, Bool Tool, Extra Objects, Measureit, Copy Attributes)
+    source: Manual/Add-ons
+    match: [looptools, bool-tool, extra-objects, copy-attributes, bundled-addons]
+    subtopics:
+      - {id: looptools-ops, name: LoopTools circle, bridge, relax, space and flatten, match: [looptools-ops, looptools-circle, looptools-relax]}
+      - {id: extra-mesh-objects, name: Extra Mesh Objects (gears, pipes, rocks), match: [extra-mesh-objects, add-mesh-extra]}
+      - {id: extra-curve-objects, name: Extra Curve Objects (spirals, braids, profiles), match: [extra-curve-objects, add-curve-extra, spirals]}
+      - {id: measureit-dimensions, name: MeasureIt dimensions and annotations, match: [measureit-dimensions, measureit]}
+      - {id: copy-attributes-menu, name: Copy Attributes menu, match: [copy-attributes-menu]}
+      - {id: material-utilities, name: Material Utilities, match: [material-utilities]}
+      - {id: object-align-tools, name: Align Tools and Object Alignment add-ons, match: [object-align-tools, align-tools]}
+      - {id: images-as-planes, name: Import Images as Planes, match: [images-as-planes, image-as-plane]}
+      - {id: tiny-cad, name: tinyCAD mesh tools, match: [tiny-cad, tinycad]}
+      - {id: edit-mesh-tools, name: Edit Mesh Tools add-on, match: [edit-mesh-tools, mesh-tools-addon]}
+      - {id: archimesh-archipack, name: Archimesh and Archipack, match: [archimesh, archipack]}
+      - {id: precision-drawing-tools, name: Precision Drawing Tools (PDT), match: [precision-drawing-tools, pdt]}
+  # --- Python scripting (Manual/Advanced/Scripting, API docs)
+  - id: bpy-scripting
+    name: bpy scripting fundamentals and the Python console
+    source: API/Quickstart
+    match: [bpy, python, scripting, python-console]
+    subtopics:
+      - {id: bpy-context-data, name: bpy.context versus bpy.data, match: [bpy-context-data, bpy-context, bpy-data]}
+      - {id: bpy-ops-vs-data, name: Operators versus direct data access and context overrides, match: [bpy-ops-vs-data, bpy-ops, temp-override]}
+      - {id: python-console-autocomplete, name: Python console autocomplete and info editor, match: [python-console-autocomplete, info-editor, console-autocomplete]}
+      - {id: text-editor-scripts, name: Text editor run script and script reload, match: [text-editor-scripts, run-script, text-editor-run]}
+      - {id: bpy-datablock-creation, name: Creating and removing datablocks and linking to collections, match: [bpy-datablock-creation, datablock-creation, bpy-data-new]}
+      - {id: bpy-selection-active, name: Selection and active object from Python, match: [bpy-selection-active, select-set, view-layer-active]}
+      - {id: bpy-material-nodes-api, name: Building material node trees from Python, match: [bpy-material-nodes-api, node-tree-api, nodes-new]}
+      - {id: bpy-keyframe-api, name: Keyframe insertion and animation data from Python, match: [bpy-keyframe-api, keyframe-insert, animation-data-api]}
+      - {id: bpy-mesh-from-pydata, name: Mesh from pydata and mesh data API, match: [bpy-mesh-from-pydata, from-pydata]}
+      - {id: bpy-matrix-transforms, name: Object transforms, matrix_world and parenting in Python, match: [bpy-matrix-transforms, matrix-world, matrix-parent-inverse]}
+      - {id: bpy-render-api, name: Render settings and rendering from Python, match: [bpy-render-api, render-api, bpy-render]}
+      - {id: bpy-debugging, name: Debugging scripts, logging and external IDE, match: [bpy-debugging, script-debugging, vscode-blender]}
+      - {id: bpy-collections-api, name: Collections and view layer API, match: [bpy-collections-api, collection-api]}
+      - {id: bpy-images-api, name: Image and texture API, pixels and saving, match: [bpy-images-api, image-pixels, image-api]}
+  - id: addon-development
+    name: Add-on and extension development (operators, panels, properties)
+    source: API/Add-on Tutorial
+    match: [addon-development, operators, panels, property-groups, extension-manifest]
+    subtopics:
+      - {id: operator-invoke-execute, name: Operator invoke, execute, modal and poll, match: [operator-invoke-execute, operator-poll, operator-execute]}
+      - {id: panel-layout, name: Panel layout, rows, columns, boxes and props, match: [panel-layout, ui-layout, layout-props]}
+      - {id: property-group-registration, name: PropertyGroup registration and pointer properties, match: [property-group-registration, pointer-property, register-classes]}
+      - {id: manifest-toml, name: blender_manifest.toml and extension build, match: [manifest-toml, blender-manifest, extension-build]}
+      - {id: addon-preferences-class, name: AddonPreferences class, match: [addon-preferences-class, addonpreferences]}
+      - {id: menu-registration, name: Menus, submenus and menu append, match: [menu-registration, menu-append, submenu]}
+      - {id: addon-keymap, name: Add-on keymap registration, match: [addon-keymap, keymap-registration]}
+      - {id: operator-undo-redo, name: Operator undo, redo panel and bl_options, match: [operator-undo-redo, bl-options, redo-panel]}
+      - {id: ui-list-template, name: UIList and template_list, match: [ui-list-template, uilist, template-list]}
+      - {id: addon-wheels, name: Bundling Python wheels in extensions, match: [addon-wheels, python-wheels, wheels]}
+      - {id: addon-testing, name: Testing and reloading add-ons during development, match: [addon-testing, addon-reload, script-reload]}
+      - {id: operator-file-browser, name: File browser operators and ImportHelper, match: [operator-file-browser, importhelper, exporthelper]}
+  - id: bmesh-mathutils
+    name: bmesh and mathutils for geometry scripting
+    source: API/bmesh
+    match: [bmesh, mathutils, geometry-scripting]
+    subtopics:
+      - {id: bmesh-edit-mesh, name: bmesh from edit mesh and from mesh round trips, match: [bmesh-edit-mesh, from-edit-mesh, bmesh-to-mesh]}
+      - {id: bmesh-ops, name: bmesh.ops operators, match: [bmesh-ops, bmesh-operators]}
+      - {id: bmesh-layers, name: bmesh custom data layers (UV, deform, colour), match: [bmesh-layers, bmesh-custom-data, bmesh-uv-layer]}
+      - {id: mathutils-matrix-vector, name: Matrix and Vector operations, match: [mathutils-matrix-vector, matrix, vector]}
+      - {id: mathutils-rotation, name: Quaternion, Euler and rotation conversions, match: [mathutils-rotation, quaternion, euler]}
+      - {id: mathutils-geometry-kdtree, name: mathutils.geometry, kdtree and bvhtree, match: [mathutils-geometry, kdtree, bvhtree]}
+      - {id: mathutils-noise, name: mathutils.noise, match: [mathutils-noise]}
+      - {id: bmesh-selection-history, name: bmesh selection, hide flags and select history, match: [bmesh-selection, select-history]}
+  - id: handlers-timers
+    name: Application handlers, timers and modal operators
+    source: API/bpy.app.handlers
+    match: [handlers, app-handlers, timers, modal-operator, frame-change]
+    subtopics:
+      - {id: frame-change-handlers, name: frame_change_pre and frame_change_post, match: [frame-change-handlers, frame-change-pre, frame-change-post]}
+      - {id: depsgraph-update, name: depsgraph_update_post handler, match: [depsgraph-update, depsgraph-update-post]}
+      - {id: load-save-handlers, name: load_post, save_pre and persistent handlers, match: [load-save-handlers, load-post, save-pre, persistent]}
+      - {id: timer-register, name: bpy.app.timers register and return intervals, match: [timer-register, app-timers]}
+      - {id: modal-timer, name: Modal operator with window manager timer, match: [modal-timer, event-timer-add]}
+      - {id: render-handlers, name: render_pre, render_complete and render_cancel handlers, match: [render-handlers, render-complete, render-pre]}
+      - {id: msgbus, name: bpy.msgbus subscribe_rna, match: [msgbus, subscribe-rna]}
+  - id: pipeline-automation
+    name: Pipeline automation and batch processing in background mode
+    source: Blender Studio/Scripting for Artists
+    match: [automation, batch, pipeline, background-mode]
+    subtopics:
+      - {id: background-script, name: Background mode script with arguments, match: [background-script, background-python]}
+      - {id: batch-export-script, name: Batch export of many files, match: [batch-export-script, batch-export]}
+      - {id: asset-ingest-script, name: Asset ingest and library generation scripts, match: [asset-ingest-script, asset-ingest]}
+      - {id: scene-build-script, name: Scene assembly from JSON or CSV manifests, match: [scene-build-script, scene-assembly, manifest-driven]}
+      - {id: batch-render-script, name: Batch rendering across files and cameras, match: [batch-render-script, batch-render]}
+      - {id: subprocess-blender, name: Driving Blender from external Python via subprocess, match: [subprocess-blender, external-python]}
+      - {id: qa-validation-script, name: Validation and QA scripts for scenes, match: [qa-validation-script, scene-validation]}
+      - {id: bpy-pip-module, name: bpy as a pip module and bundled Python packages, match: [bpy-pip-module, bpy-wheel, pip-install-blender]}
+  - id: gpu-module-drawing
+    name: GPU module overlays and custom viewport drawing
+    source: API/gpu
+    match: [gpu-module, draw-handler, viewport-overlay, bgl]
+    subtopics:
+      - {id: draw-handler-add, name: draw_handler_add and draw callbacks, match: [draw-handler-add, draw-callback]}
+      - {id: gpu-builtin-shaders, name: Built-in shaders (UNIFORM_COLOR, SMOOTH_COLOR, IMAGE), match: [gpu-builtin-shaders, uniform-color, shader-from-builtin]}
+      - {id: gpu-batch, name: GPU batches and batch_for_shader, match: [gpu-batch, batch-for-shader]}
+      - {id: gpu-offscreen, name: GPUOffScreen rendering, match: [gpu-offscreen, offscreen-render]}
+      - {id: blf-text, name: blf text drawing, match: [blf-text, blf]}
+      - {id: gpu-state, name: gpu.state blend, depth test and line width, match: [gpu-state, blend-state, depth-test]}
+      - {id: draw-handler-cleanup, name: Draw handler removal and cleanup on unregister, match: [draw-handler-cleanup, draw-handler-remove]}
+      - {id: gpu-custom-shader, name: Custom GLSL shaders with GPUShaderCreateInfo, match: [gpu-custom-shader, glsl, shader-create-info]}

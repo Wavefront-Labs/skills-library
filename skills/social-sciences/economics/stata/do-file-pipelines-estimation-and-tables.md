@@ -1,0 +1,91 @@
+---
+id: social-sciences.economics.stata.do-file-pipelines-estimation-and-tables
+name: do-file-pipelines-estimation-and-tables
+category: social-sciences
+field: economics
+product: stata
+tags: [stata, do-files, master-do-file, ado-files, globals, locals, macros, log-files, version-control, reproducibility, merge, reshape, egen, collapse, assert, isid, reghdfe, ivreghdfe, ppmlhdfe, csdid, boottest, margins, esttab, estout, etable, collect, coefplot, tempfile, preserve-restore, ssc-install, net-install, replication-package, aea-data-editor]
+level: practitioner
+status: draft
+description: "Run applied-economics work in Stata: a master do-file pipeline, safe merges and reshapes, reghdfe estimation, margins, publication tables with esttab/etable, and a replication-ready package."
+sources: ["Stata Base Reference Manual and User's Guide (StataCorp)", "DIME Analytics Data Handbook (World Bank 2021)", "AEA Data Editor guidance on replication packages (aeadataeditor.github.io)", "Correia, reghdfe documentation"]
+licence: Apache-2.0
+version: 2
+updated: 2026-11-17
+---
+
+# Stata for applied economics — pipelines, estimation, tables
+
+**Goal:** a project where `do master.do` rebuilds every dataset, table and figure from raw
+data, on someone else's machine, without editing anything but one path.
+
+## 1. Master do-file
+```stata
+version 18                       // set to your version; locks command behaviour
+clear all
+set more off
+set varabbrev off                // abbreviations hide typos
+global root "<PROJECT_ROOT>"     // the only line a replicator edits
+global raw  "$root/data/raw"
+global der  "$root/data/derived"
+global out  "$root/output"
+* project-local ado folder so package versions travel with the project
+sysdir set PLUS "$root/code/ado"
+do "$root/code/01_clean.do"
+do "$root/code/02_construct.do"
+do "$root/code/03_analysis.do"
+```
+Install packages once into the project ado folder (`ssc install reghdfe`, `ftools`,
+`estout`, `boottest`, `coefplot`) and commit that folder — SSC versions change.
+
+## 2. Data management that fails loudly
+- `isid hhid year` — confirm the key before every merge.
+- `merge 1:1 id using ..., assert(match master) keep(match master) nogen` — make the
+  expected result an assertion. Never use `merge m:m`; it is almost never what you want.
+- `reshape long inc, i(id) j(year)` — then `isid id year`.
+- `assert` liberally after construction steps (ranges, non-missing, uniqueness).
+- `tempfile` + `preserve/restore` for intermediate steps instead of saving clutter.
+- `label variable` everything constructed; tables can then use labels automatically.
+- Use `local` for loop lists, `global` only for paths.
+
+## 3. Estimation
+- `regress y x, vce(cluster state)`.
+- High-dimensional FE: `reghdfe y x controls, absorb(firm year) vce(cluster firm)`;
+  IV: `ivreghdfe`; Poisson: `ppmlhdfe`. Singletons are dropped by default — report N after.
+- Few clusters: `boottest x, cluster(state) reps(9999)` after estimation (wild cluster bootstrap).
+- Staggered DiD: `csdid`, `did_imputation`, `eventstudyinteract` — see
+  social-sciences.economics.causal-inference-economics.staggered-did-rdd-and-synthetic-control.
+- `margins, dydx(x)` for marginal effects after nonlinear models; `marginsplot` for visuals.
+- Store results: `eststo m1: reghdfe ...` or `estimates store m1`.
+- Set the seed before any bootstrap/simulation: `set seed 20261014`.
+
+## 4. Tables and figures
+- **estout/esttab:**
+  `esttab m1 m2 m3 using "$out/tables/main.tex", replace se star(* 0.10 ** 0.05 *** 0.01) label b(3) se(3) stats(N r2_within, labels("Observations" "Within R²")) keep(x) booktabs`
+- Stata 17+: `etable` and the `collect` system build tables natively; export to
+  LaTeX/Word/Excel.
+- Add rows for fixed effects and clustering with `indicate()` or `estadd local`.
+- Figures: `coefplot` for coefficients/event studies; export with `graph export "$out/figures/es.pdf", replace`.
+- Write numbers used in the text to a `.tex` macros file so text and tables agree.
+
+## 5. Replication package
+Following the AEA Data Editor template: README (data sources with access conditions,
+software version, packages, runtime, hardware), the code tree, and either the data or
+precise instructions to obtain it. Test by running on a clean machine (or a colleague's)
+from an empty `derived/` and `output/` folder.
+
+## Gotchas
+- `if` vs `in` and missing values: missing (`.`) is larger than any number, so
+  `if x > 100` includes missing. Write `if x > 100 & !missing(x)`.
+- `egen` vs `gen`: `egen mean_x = mean(x), by(g)`; `gen` does row-level only.
+- Float precision: store IDs as `long`/`double` or strings; `float` corrupts large IDs.
+- `sort` with ties is not stable — use `sort id, stable` or add a tie-breaker before `by`.
+
+## Verify
+- [ ] Fresh clone + changing `$root` + `do master.do` regenerates all output.
+- [ ] Every merge has `assert()`; every key checked with `isid`.
+- [ ] Packages vendored in the project ado folder; `version` set.
+- [ ] Tables generated by code, never edited by hand.
+- [ ] README lists data sources, runtime and software versions.
+
+*Draft: `version 18` and the etable/collect details assume a recent Stata; adjust for older releases.*

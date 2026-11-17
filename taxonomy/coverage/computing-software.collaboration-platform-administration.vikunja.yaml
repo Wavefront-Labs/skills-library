@@ -1,0 +1,238 @@
+# Coverage spec: vikunja. Topics from the Vikunja docs (vikunja.io/docs, github.com/go-vikunja/website) and the config reference (config-raw.json).
+subject: vikunja
+scope:
+  category: computing-software
+  field: collaboration-platform-administration
+  products: [vikunja]
+sources:
+  - "Vikunja docs (vikunja.io/docs, github.com/go-vikunja/website)"
+  - "https://raw.githubusercontent.com/go-vikunja/vikunja/main/config-raw.json"
+topics:
+  - id: docker-install
+    name: "Docker quickstart and compose with a database"
+    source: "https://vikunja.io/docs/full-docker-example"
+    match: [docker-run, docker-compose, postgres-container, port-3456]
+  - id: docker-permissions-troubleshooting
+    name: "Docker file permissions and troubleshooting"
+    source: "https://vikunja.io/docs/full-docker-example"
+    match: [uid-1000, permission-denied, rootless-docker, db-connection-refused, docker-logs]
+  - id: docker-mysql-sqlite
+    name: "MariaDB, MySQL and SQLite container setups"
+    source: "https://vikunja.io/docs/full-docker-example"
+    match: [mariadb-container, mysql-backend, sqlite-container, bind-mount-db]
+  - id: docker-reverse-proxy
+    name: "Traefik and Caddy in front of Vikunja"
+    source: "https://vikunja.io/docs/full-docker-example"
+    match: [traefik-labels, caddy-reverse-proxy, publicurl-https]
+  - id: redis-cache
+    name: "Redis as key-value store"
+    source: "https://vikunja.io/docs/config-options"
+    match: [redis-enabled, keyvalue-storage]
+  - id: binary-systemd-install
+    name: "Binary install with systemd"
+    source: "https://vikunja.io/docs/install"
+    match: [binary-install, systemd-unit, gpg-signature]
+  - id: linux-packages
+    name: "Linux package repositories"
+    source: "https://vikunja.io/docs/install"
+    match: [apt-repository, dnf-repository, alpine-apk]
+  - id: kubernetes-helm
+    name: "Kubernetes and Helm deployment"
+    source: "https://vikunja.io/docs/install"
+    match: [helm-chart, kubernetes-deploy]
+  - id: build-from-source
+    name: "Building from source"
+    source: "https://vikunja.io/docs/build-from-source"
+    match: [mage-build, go-toolchain, cross-compile, pnpm-build]
+  - id: reverse-proxy-web-servers
+    name: "nginx and Apache reverse proxies"
+    source: "https://vikunja.io/docs/reverse-proxies"
+    match: [nginx-proxy-pass, apache-proxypass, nginx-proxy-manager, client-max-body-size]
+  - id: client-ip-handling
+    name: "Real client IP and trusted proxies"
+    source: "https://vikunja.io/docs/config-options"
+    match: [trustedproxies, ipextractionmethod, x-forwarded-for, real-client-ip]
+  - id: subpath-hosting
+    name: "Hosting under a subdirectory"
+    source: "https://vikunja.io/docs/subdirectory"
+    match: [subpath-hosting, frontend-base]
+  - id: release-channels
+    name: "Stable and unstable releases"
+    source: "https://vikunja.io/docs/versions"
+    match: [stable-release, unstable-build, docker-tags, semantic-versioning]
+  - id: backup-restore
+    name: "Backup and restore of data and database"
+    source: "https://vikunja.io/docs/backups"
+    match: [mysqldump, pg-dump, sqlite-file-copy, attachments-backup, restore-test]
+  - id: config-sources
+    name: "Config files, environment variables and precedence"
+    source: "https://vikunja.io/docs/config-options"
+    match: [config-yml, env-var-mapping, env-beats-config, config-search-path]
+  - id: config-secrets
+    name: "Secrets from files and credentials"
+    source: "https://vikunja.io/docs/config-options"
+    match: [file-suffix-env, docker-secrets, load-credential, secret-file-path]
+  - id: config-service
+    name: "Service section options"
+    source: "https://vikunja.io/docs/config-options"
+    match: [service-section, jwt-ttl, feature-toggles, unix-socket]
+  - id: config-database
+    name: "Database section options"
+    source: "https://vikunja.io/docs/config-options"
+    match: [database-section, postgres-ssl, connection-pool, pg-schema]
+  - id: config-logging
+    name: "Logging configuration"
+    source: "https://vikunja.io/docs/config-options"
+    match: [log-section, log-level, structured-json-logs, log-database-queries]
+  - id: config-mailer
+    name: "Mailer and SMTP"
+    source: "https://vikunja.io/docs/config-options"
+    match: [mailer-section, smtp-authtype, forcessl, testmail, email-reminders]
+  - id: config-rate-limits
+    name: "Rate limiting"
+    source: "https://vikunja.io/docs/config-options"
+    match: [ratelimit-section, noauthlimit, basicauthlimit, rate-limit-store]
+  - id: config-file-storage
+    name: "File storage and S3"
+    source: "https://vikunja.io/docs/config-options"
+    match: [files-section, s3-backend, usepathstyle, max-upload-size]
+  - id: config-cors
+    name: "CORS and public URL"
+    source: "https://vikunja.io/docs/config-options"
+    match: [cors-section, cors-origins, publicurl-required, separate-frontend-domain]
+  - id: config-defaults-branding
+    name: "New user defaults, backgrounds and branding"
+    source: "https://vikunja.io/docs/config-options"
+    match: [new-user-defaults, project-backgrounds, unsplash-provider, custom-logo, legal-links]
+  - id: metrics-health
+    name: "Prometheus metrics and health checks"
+    source: "https://vikunja.io/docs/metrics"
+    match: [prometheus-metrics, health-endpoint, basic-auth-monitoring]
+  - id: oidc-setup
+    name: "OpenID Connect provider setup"
+    source: "https://vikunja.io/docs/openid"
+    match: [openid-connect, oidc-provider-key, authurl-discovery, confidential-client]
+  - id: oidc-claims
+    name: "OIDC claims, userinfo and username handling"
+    source: "https://vikunja.io/docs/openid"
+    match: [oidc-claims, preferred-username, forceuserinfo, usernamefallback, emailfallback]
+  - id: oidc-accounts
+    name: "OIDC account linking and local fallback"
+    source: "https://vikunja.io/docs/openid"
+    match: [account-linking, disable-local-auth, duplicate-accounts, redirecttoprovider]
+  - id: oidc-teams
+    name: "OIDC team sync"
+    source: "https://vikunja.io/docs/openid"
+    match: [team-sync, vikunja-groups-claim, vikunja-scope]
+  - id: oidc-troubleshooting
+    name: "OIDC login troubleshooting"
+    source: "https://vikunja.io/docs/openid"
+    match: [well-known-openid-configuration, oidc-mobile-webview, email-verified]
+  - id: ldap-auth
+    name: "LDAP authentication"
+    source: "https://vikunja.io/docs/ldap"
+    match: [ldap-bind, userfilter, binddn-service-account, ldap-tls]
+  - id: ldap-groups
+    name: "LDAP group sync and avatars"
+    source: "https://vikunja.io/docs/ldap"
+    match: [groupsyncfilter, ldap-teams, avatarsyncattribute, immutable-ldap-id]
+  - id: outgoing-proxy
+    name: "Outgoing requests proxy and SSRF protection"
+    source: "https://vikunja.io/docs/outgoing-proxy"
+    match: [outgoingrequests, forward-proxy, ssrf-protection, mole-proxy]
+  - id: fail2ban
+    name: "Fail2Ban for login brute force"
+    source: "https://vikunja.io/docs/fail2ban"
+    match: [fail2ban-jail, failregex-login, brute-force-protection]
+  - id: hardening
+    name: "Security hardening checklist"
+    source: "https://vikunja.io/docs/security"
+    match: [security-checklist, least-privilege, attack-surface, tls-termination]
+  - id: hardening-auth
+    name: "Hardening authentication and sessions"
+    source: "https://vikunja.io/docs/security"
+    match: [session-lifetime, jwtttlshort, totp-limits, sso-only]
+  - id: systemd-sandbox
+    name: "systemd sandboxing and dedicated user"
+    source: "https://vikunja.io/docs/security"
+    match: [systemd-hardening, dedicated-service-user, protectsystem-strict, readwritepaths]
+  - id: paradedb-search
+    name: "ParadeDB full-text search"
+    source: "https://vikunja.io/docs/paradedb"
+    match: [paradedb, pg-search-extension, bm25-index, typesense-migration]
+  - id: mysql-utf8mb4
+    name: "MySQL utf8mb4 conversion"
+    source: "https://vikunja.io/docs/utf-8"
+    match: [utf8mb4, latin1-database, emoji-support]
+  - id: migration-importers
+    name: "Importers from other tools"
+    source: "https://vikunja.io/docs/migration"
+    match: [migrators, oauth-importers, planka-import, migration-limits]
+  - id: todoist-import
+    name: "Todoist importer setup"
+    source: "https://vikunja.io/docs/todoist"
+    match: [todoist-import, todoist-app-console, redirect-uri-not-configured]
+  - id: desktop-app
+    name: "Desktop app"
+    source: "https://vikunja.io/docs/desktop"
+    match: [electron-desktop, flatpak, desktop-cors]
+  - id: plugins
+    name: "Backend plugins"
+    source: "https://vikunja.io/docs/plugins"
+    match: [plugins-enabled, yaegi-loader, native-plugin-deprecated, plugin-routes]
+  - id: cli-admin
+    name: "CLI usage and diagnostics"
+    source: "https://vikunja.io/docs/cli"
+    match: [cli-docker-exec, doctor-command, testmail-command]
+  - id: cli-users
+    name: "CLI user management"
+    source: "https://vikunja.io/docs/cli"
+    match: [user-create-cli, user-reset-password, user-delete-now, set-admin-pro]
+  - id: cli-repair
+    name: "CLI repair commands"
+    source: "https://vikunja.io/docs/cli"
+    match: [repair-dry-run, orphan-projects, task-positions, file-mime-types]
+  - id: cli-dump-restore
+    name: "CLI dump, restore and migrations"
+    source: "https://vikunja.io/docs/cli"
+    match: [dump-command, restore-command, preserve-config, migrate-rollback]
+  - id: caldav-auth
+    name: "CalDAV authentication and rate limits"
+    source: "https://vikunja.io/help/caldav"
+    match: [caldav-token, caldav-api-token, caldav-429, caldav-2fa]
+  - id: caldav-clients
+    name: "CalDAV clients, URLs and iOS"
+    source: "https://vikunja.io/help/caldav"
+    match: [caldav-urls, caldav-ios-reminders, vtodo-properties, caldav-tested-clients]
+  - id: webhooks
+    name: "Webhooks API, payload and signature"
+    source: "https://vikunja.io/docs/webhooks"
+    match: [webhook-endpoints, webhook-payload, hmac-signature, webhook-delivery]
+  - id: api-access
+    name: "API documentation and tokens"
+    source: "https://vikunja.io/docs/api-documentation"
+    match: [api-swagger-docs, api-tokens, bearer-auth, api-v2]
+  - id: api-filters
+    name: "Filter queries and saved filters API"
+    source: "https://vikunja.io/docs/filters"
+    match: [filter-query-api, filter-date-math, saved-filters-api, filter-field-names]
+  - id: bot-users
+    name: "Bot users for automation"
+    source: "https://vikunja.io/docs/bot-users"
+    match: [bot-users, bot-prefix, bot-api-token, bot-labels]
+  - id: oauth-server
+    name: "OAuth 2.0 authorization server with PKCE"
+    source: "https://vikunja.io/docs/oauth-server"
+    match: [oauth-server, pkce-s256, vikunja-redirect-scheme, refresh-token-rotation]
+  - id: two-factor
+    name: "TOTP two-factor authentication"
+    source: "https://vikunja.io/help/two-factor-authentication"
+    match: [totp-enroll, no-recovery-codes, totp-caldav, totp-reenroll]
+  - id: project-sharing
+    name: "Project sharing and link shares"
+    source: "https://vikunja.io/help/sharing-and-teams"
+    match: [project-sharing, link-shares, permission-levels, share-with-team]
+  - id: teams
+    name: "Teams and team admins"
+    source: "https://vikunja.io/help/sharing-and-teams"
+    match: [teams, team-admin, team-members, team-sharing]

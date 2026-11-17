@@ -1,0 +1,1594 @@
+# Canonical coverage spec: Amazon Web Services.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (AWS certification exam guides and the
+# Well-Architected Framework), not from what we happened to write.
+# Subtopics (depth) come from each service's User Guide table of contents on docs.aws.amazon.com
+# and the exam-guide task statements under each domain.
+subject: aws
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [aws]
+sources:
+  - "AWS Certified Solutions Architect – Associate (SAA-C03) exam guide: Design Secure Architectures 30%, Resilient 26%, High-Performing 24%, Cost-Optimized 20%"
+  - "AWS Certified Solutions Architect – Professional (SAP-C02): Organizational Complexity, New Solutions, Continuous Improvement, Migration & Modernization"
+  - "AWS Certified SysOps Administrator – Associate (SOA-C02): Monitoring/Logging/Remediation, Reliability & BC, Deployment/Provisioning/Automation, Security & Compliance, Networking & Content Delivery, Cost & Performance"
+  - "AWS Certified Developer – Associate (DVA-C02): Development, Security, Deployment, Troubleshooting & Optimization"
+  - "AWS Well-Architected Framework pillars: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability"
+  - "Per-service User Guide tables of contents on docs.aws.amazon.com (subtopics)"
+  - "Depth round 2: each service User Guide second-level ToC entries, AWS CLI v2 command groups (docs.aws.amazon.com/cli/latest/reference), and SAA-C03/SAP-C02/SOA-C02/DVA-C02 task-statement skill bullets"
+topics:
+  # --- Identity, accounts, organisation (SAA Secure; SAP Organizational Complexity)
+  - id: iam-policies
+    name: IAM policy design and evaluation logic
+    source: SAA/Design Secure Architectures; IAM User Guide / Policies and permissions
+    match: [iam, iam-policy, iam-policies, policy-evaluation, least-privilege]
+    subtopics:
+      - {id: iam-condition-keys, name: Condition keys and operators (global and service-specific), match: [condition-keys, condition-operators, global-condition-keys]}
+      - {id: iam-abac, name: Attribute-based access control with principal and resource tags, match: [abac, principaltag, resourcetag]}
+      - {id: iam-access-analyzer, name: IAM Access Analyzer findings, policy validation and unused access, match: [access-analyzer, policy-validation, unused-access]}
+      - {id: iam-policy-simulator, name: Policy simulator and troubleshooting access denied, match: [policy-simulator, simulate-principal-policy, access-denied-troubleshooting]}
+      - {id: iam-managed-vs-inline, name: Managed vs inline policies, versions and size limits, match: [managed-policies, inline-policies, policy-versions, policy-size-limits]}
+      - {id: iam-credential-hygiene, name: Access key rotation, credential reports and last-accessed data, match: [access-key-rotation, credential-report, last-accessed]}
+      - {id: iam-policy-variables, name: Policy variables in resource ARNs and conditions, match: [policy-variables, aws-username-variable]}
+      - {id: iam-notaction-notresource, name: NotAction and NotResource and NotPrincipal pitfalls, match: [notaction, notresource, notprincipal]}
+      - {id: iam-resource-based-policies, name: Resource-based vs identity-based policy evaluation across accounts, match: [resource-based-policy, identity-based-policy]}
+      - {id: iam-root-user, name: Root user lockdown and centralized root access, match: [root-user-mfa, centralized-root-access, root-credentials]}
+      - {id: iam-mfa-enforcement, name: MFA-protected API access with aws MultiFactorAuthPresent, match: [mfa-protected-api, multifactorauthpresent]}
+      - {id: iam-policy-generation, name: Generating least-privilege policies from CloudTrail activity, match: [policy-generation, generate-policy-from-cloudtrail]}
+  - id: iam-roles-sts
+    name: IAM roles, STS assume-role and cross-account access
+    source: SAA/Design Secure Architectures; IAM User Guide / Roles
+    match: [iam-role, assume-role, sts, cross-account]
+    subtopics:
+      - {id: sts-trust-policies, name: Trust policies, external ID and confused deputy, match: [trust-policy, external-id, confused-deputy]}
+      - {id: sts-role-chaining, name: Role chaining, session duration and session tags, match: [role-chaining, session-duration, session-tags]}
+      - {id: sts-web-identity, name: AssumeRoleWithWebIdentity and OIDC federation for CI (GitHub Actions), match: [assume-role-with-web-identity, github-actions-oidc, oidc-provider]}
+      - {id: sts-service-roles, name: Service roles, service-linked roles and PassRole, match: [service-linked-role, passrole, service-role]}
+      - {id: sts-instance-profiles, name: Instance profiles and task/execution roles for compute, match: [instance-profile, task-role, execution-role]}
+      - {id: sts-source-identity, name: SourceIdentity, role session names and CloudTrail attribution, match: [source-identity, role-session-name, session-attribution]}
+      - {id: sts-saml-federation, name: AssumeRoleWithSAML and SAML 2.0 console federation, match: [assume-role-with-saml, saml-federation-console]}
+      - {id: sts-regional-endpoints, name: STS regional endpoints and session token versions, match: [sts-regional-endpoints, global-endpoint-tokens]}
+      - {id: sts-revoke-sessions, name: Revoking active role sessions with TokenIssueTime deny, match: [revoke-sessions, tokenissuetime]}
+      - {id: sts-roles-anywhere, name: IAM Roles Anywhere trust anchors and profiles, match: [roles-anywhere, trust-anchor]}
+      - {id: sts-get-session-token, name: GetSessionToken and GetFederationToken for MFA CLI sessions, match: [get-session-token, get-federation-token]}
+  - id: permission-boundaries-scp
+    name: Permission boundaries and service control policies
+    source: SAP/Organizational Complexity; Organizations User Guide / Policies
+    match: [permission-boundary, scp, service-control-policy, service-control-policies]
+    subtopics:
+      - {id: scp-deny-list, name: Deny-list SCPs for region, service and root-user restrictions, match: [region-deny, deny-list-scp, root-user-restriction]}
+      - {id: scp-inheritance, name: SCP inheritance, OU attachment and the FullAWSAccess default, match: [scp-inheritance, fullawsaccess, ou-attachment]}
+      - {id: rcp, name: Resource control policies, match: [rcp, resource-control-policy, resource-control-policies]}
+      - {id: pb-delegated-admin, name: Permission boundaries for delegated IAM administration, match: [delegated-iam-admin, boundary-delegation, boundary-enforcement]}
+      - {id: scp-testing, name: Testing SCP changes safely and reading SCP denials in CloudTrail, match: [scp-testing, scp-denial, scp-rollout]}
+      - {id: declarative-policies, name: Declarative policies for service-level configuration baselines, match: [declarative-policies, declarative-policy]}
+      - {id: scp-allow-list, name: Allow-list SCP strategy with explicit service allows, match: [allow-list-scp, scp-allow-strategy]}
+      - {id: scp-size-limits, name: SCP size limits and policy consolidation, match: [scp-size-limit, scp-quota]}
+      - {id: scp-exempt-roles, name: Exempting break-glass and pipeline roles via PrincipalArn conditions, match: [break-glass-role, scp-exemption]}
+      - {id: pb-boundary-policy-design, name: Writing a permissions boundary and the effective-permissions intersection, match: [boundary-policy-design, effective-permissions]}
+      - {id: scp-protect-security-services, name: SCPs protecting CloudTrail and GuardDuty and Config from disablement, match: [protect-security-services, guardrail-scp]}
+  - id: organizations-landing-zone
+    name: AWS Organizations, Control Tower and landing zones
+    source: SAP/Organizational Complexity; Control Tower User Guide
+    match: [organizations, control-tower, landing-zone, multi-account, account-structure]
+    subtopics:
+      - {id: ct-account-factory, name: Account Factory and Account Factory for Terraform, match: [account-factory, aft, account-vending]}
+      - {id: ct-controls, name: Control Tower controls (preventive, detective, proactive), match: [ct-controls, proactive-controls, detective-controls]}
+      - {id: ct-drift, name: Landing zone drift, updates and account enrolment, match: [landing-zone-drift, enroll-account, landing-zone-update]}
+      - {id: org-delegated-admin, name: Delegated administrator for security and management services, match: [delegated-administrator, delegated-admin]}
+      - {id: org-ou-design, name: OU design (security, infrastructure, workloads, sandbox), match: [ou-design, organizational-units, ou-structure]}
+      - {id: org-account-closure, name: Account creation, invitation, moving and closure, match: [account-closure, close-account, move-account, invite-account]}
+      - {id: org-backup-tag-policies, name: Organizations management policies (backup, tag, AI opt-out), match: [management-policies, backup-policy, ai-opt-out-policy]}
+      - {id: org-all-features, name: Enabling all features and trusted access for services, match: [trusted-access]}
+      - {id: org-management-account, name: Management account hardening and minimal workloads, match: [payer-account-hardening]}
+      - {id: ct-customizations, name: Customizations for Control Tower (CfCT) and Landing Zone Accelerator, match: [cfct, landing-zone-accelerator]}
+      - {id: org-resource-sharing, name: RAM resource shares within the organization, match: [ram-org-sharing, resource-share]}
+      - {id: ct-log-archive-audit, name: Log Archive and Audit account setup, match: [log-archive-account]}
+  - id: identity-center-sso
+    name: IAM Identity Center (SSO) and federation
+    source: SAA/Design Secure Architectures; IAM Identity Center User Guide
+    match: [identity-center, sso, federation, saml, oidc]
+    subtopics:
+      - {id: ic-permission-sets, name: Permission sets and account assignments, match: [permission-sets, permission-set, account-assignment]}
+      - {id: ic-external-idp, name: External identity provider (Entra ID, Okta) and SCIM provisioning, match: [scim, external-idp, entra-id, okta]}
+      - {id: ic-cli-sso, name: CLI and SDK access with aws sso login, match: [aws-sso-login, sso-session, sso-cli]}
+      - {id: ic-abac, name: ABAC with Identity Center user attributes, match: [identity-center-abac, attributes-for-access-control]}
+      - {id: ic-application-assignments, name: Customer managed and AWS managed application assignments, match: [application-assignments, trusted-identity-propagation]}
+      - {id: ic-delegated-admin, name: Delegated administration and multi-region considerations, match: [identity-center-delegated-admin, identity-center-region]}
+      - {id: ic-identity-source, name: Choosing and changing the identity source, match: [identity-source, ad-connector-identity-center]}
+      - {id: ic-session-duration, name: Access portal session duration and settings, match: [portal-session-duration, access-portal]}
+      - {id: ic-mfa, name: Identity Center MFA settings and enforcement, match: [identity-center-mfa, mfa-enforcement-sso]}
+      - {id: ic-temporary-elevated, name: Temporary elevated access (TEAM) for Identity Center, match: [temporary-elevated-access, just-in-time-access]}
+      - {id: ic-audit, name: Auditing Identity Center sign-ins and assignments in CloudTrail, match: [sso-cloudtrail-audit, signin-events]}
+  - id: kms-encryption
+    name: KMS keys, envelope encryption and key policies
+    source: SAA/Design Secure Architectures; KMS Developer Guide
+    match: [kms, envelope-encryption, key-policy, cmk, encryption-at-rest]
+    subtopics:
+      - {id: kms-key-rotation, name: Automatic and on-demand key rotation, match: [key-rotation, rotate-key-on-demand, rotation-period]}
+      - {id: kms-grants, name: Grants and kms ViaService conditions, match: [grants, kms-grant, kms-viaservice]}
+      - {id: kms-multi-region, name: Multi-region keys, match: [multi-region-keys, replica-key, mrk]}
+      - {id: kms-encryption-context, name: Encryption context and additional authenticated data, match: [encryption-context, aad]}
+      - {id: kms-key-deletion, name: Key deletion scheduling, disabling and recovery, match: [schedule-key-deletion, key-deletion, disable-key]}
+      - {id: kms-asymmetric-hmac, name: Asymmetric keys, signing and HMAC keys, match: [asymmetric-keys, kms-signing, hmac]}
+      - {id: kms-external-key-store, name: CloudHSM key store and external key store (XKS), match: [cloudhsm, external-key-store, xks, custom-key-store]}
+      - {id: kms-throttling-cost, name: KMS request quotas, throttling, data-key caching and S3 bucket keys, match: [kms-throttling, data-key-caching, s3-bucket-keys]}
+      - {id: kms-key-policy-default, name: Default key policy and enabling IAM policies on a key, match: [default-key-policy, kms-root-principal]}
+      - {id: kms-cross-account, name: Cross-account KMS key use, match: [cross-account-kms, external-account-key-use]}
+      - {id: kms-import-key-material, name: Importing key material (BYOK) and expiration, match: [import-key-material, byok]}
+      - {id: kms-aliases, name: Key aliases and key identification in applications, match: [kms-alias]}
+      - {id: kms-encrypt-cli, name: Encrypting and decrypting with the CLI and the Encryption SDK, match: [encryption-sdk, kms-encrypt-decrypt]}
+  - id: secrets-parameter-store
+    name: Secrets Manager and SSM Parameter Store
+    source: DVA/Security; Secrets Manager User Guide
+    match: [secrets-manager, parameter-store, secret-rotation]
+    subtopics:
+      - {id: sm-rotation-lambda, name: Rotation functions, staging labels and multi-user rotation, match: [rotation-lambda, staging-labels, alternating-users]}
+      - {id: sm-caching, name: Client-side secret caching and the Lambda/ECS extension, match: [secrets-caching, lambda-extension, parameters-secrets-extension]}
+      - {id: sm-cross-account, name: Cross-account secret access and replication, match: [cross-account-secrets, secret-replication]}
+      - {id: sm-cfn-references, name: Dynamic references in CloudFormation and CDK, match: [dynamic-references, resolve-ssm, resolve-secretsmanager]}
+      - {id: ssm-parameter-tiers, name: Parameter tiers, SecureString, hierarchies and policies, match: [securestring, advanced-parameters, parameter-hierarchy, parameter-policies]}
+      - {id: sm-managed-secrets, name: Managed secrets for RDS, Redshift and DocumentDB, match: [managed-master-password, managed-secrets, rds-managed-secret]}
+      - {id: sm-resource-policy, name: Secret resource policies and BlockPublicPolicy, match: [secret-resource-policy, block-public-policy]}
+      - {id: sm-rotation-troubleshoot, name: Troubleshooting secret rotation failures, match: [rotation-failure, rotation-troubleshooting]}
+      - {id: ssm-parameter-api, name: GetParametersByPath and parameter versions and labels, match: [parameter-labels]}
+      - {id: sm-cost-limits, name: Secrets Manager quotas and BatchGetSecretValue and cost, match: [batch-get-secret-value, secrets-cost]}
+      - {id: sm-delete-restore, name: Deleting secrets with a recovery window and restoring them, match: [recovery-window, restore-secret]}
+  - id: security-services
+    name: GuardDuty, Security Hub, Inspector, Macie, Detective
+    source: SysOps/Security & Compliance; GuardDuty and Security Hub User Guides
+    match: [guardduty, security-hub, inspector, macie, detective]
+    subtopics:
+      - {id: gd-protection-plans, name: GuardDuty protection plans (S3, EKS runtime, malware, RDS, Lambda), match: [guardduty-protection-plans, malware-protection, runtime-monitoring]}
+      - {id: gd-findings-response, name: GuardDuty finding types, suppression and automated response, match: [guardduty-findings, finding-types, suppression-rules]}
+      - {id: sh-standards, name: Security Hub standards (FSBP, CIS, NIST, PCI) and control customisation, match: [security-standards, fsbp, control-customization]}
+      - {id: sh-automation-rules, name: Security Hub automation rules and cross-region aggregation, match: [automation-rules, finding-aggregation, cross-region-aggregation]}
+      - {id: inspector-scanning, name: Inspector EC2, ECR and Lambda scanning and CIS scans, match: [vulnerability-scanning, inspector-v2, cis-scan, sbom-export]}
+      - {id: macie-discovery, name: Macie sensitive data discovery jobs and automated discovery, match: [sensitive-data-discovery, macie-jobs, automated-discovery]}
+      - {id: detective-investigation, name: Detective behaviour graphs and investigation, match: [behavior-graph, investigation, finding-groups]}
+      - {id: gd-multi-account, name: GuardDuty organization admin and auto-enable for members, match: [guardduty-org-admin, auto-enable-members]}
+      - {id: gd-threat-lists, name: GuardDuty trusted IP lists and threat intel sets, match: [trusted-ip-list, threat-intel-set]}
+      - {id: sh-integrations, name: Security Hub ASFF integrations and importing findings, match: [batch-import-findings]}
+      - {id: inspector-suppression, name: Inspector suppression rules and Inspector score prioritization, match: [inspector-suppression, inspector-score]}
+      - {id: security-lake, name: Amazon Security Lake sources and subscribers (OCSF), match: [security-lake, ocsf]}
+  - id: cloudtrail-config
+    name: CloudTrail and AWS Config for audit and compliance
+    source: SysOps/Security & Compliance; CloudTrail and Config User Guides
+    match: [cloudtrail, aws-config, config-rules, audit-trail]
+    subtopics:
+      - {id: ct-org-trail, name: Organization trails, log file validation and S3 delivery, match: [organization-trail, log-file-validation, trail-delivery]}
+      - {id: ct-data-events, name: Data events, Insights events and advanced event selectors, match: [data-events, insights-events, advanced-event-selectors]}
+      - {id: ct-lake, name: CloudTrail Lake event data stores and queries, match: [cloudtrail-lake, event-data-store, lake-query]}
+      - {id: ct-lookup, name: Searching events with lookup-events and Athena, match: [lookup-events, cloudtrail-athena, who-did-what]}
+      - {id: config-recorder, name: Config recorder, delivery channel and aggregators, match: [config-recorder, delivery-channel, config-aggregator]}
+      - {id: config-custom-rules, name: Custom Config rules (Lambda and Guard) and conformance packs, match: [custom-rules, conformance-packs, guard-rules]}
+      - {id: config-timeline, name: Resource timeline, configuration history and advanced queries, match: [configuration-history, resource-timeline, config-advanced-query]}
+      - {id: ct-cloudwatch-integration, name: CloudTrail to CloudWatch Logs with CIS metric alarms, match: [cloudtrail-cloudwatch]}
+      - {id: ct-encryption, name: Trail encryption with KMS and trail bucket policies, match: [trail-kms-encryption, trail-bucket-policy]}
+      - {id: config-org-rules, name: Organization Config rules and organization conformance packs, match: [organization-config-rules, org-conformance-pack]}
+      - {id: config-recording-scope, name: Recording scope and periodic recording and Config cost, match: [periodic-recording, config-cost]}
+      - {id: ct-network-activity, name: Network activity events for VPC endpoints, match: [network-activity-events]}
+  - id: certificate-manager
+    name: ACM certificates and private CA
+    source: SysOps/Networking; ACM User Guide
+    match: [acm, certificate-manager, private-ca]
+    subtopics:
+      - {id: acm-dns-validation, name: Requesting public certificates with DNS and email validation, match: [dns-validation, email-validation, certificate-request]}
+      - {id: acm-renewal, name: Managed renewal, expiry monitoring and renewal failures, match: [certificate-renewal, certificate-expiry, renewal-eligibility]}
+      - {id: acm-import, name: Importing certificates and importing renewals, match: [imported-certificates, import-certificate, reimport]}
+      - {id: acm-private-ca-hierarchy, name: Private CA hierarchy, templates and issuance, match: [ca-hierarchy, subordinate-ca, certificate-templates]}
+      - {id: acm-revocation, name: CRL and OCSP revocation for private CA, match: [crl, ocsp, revocation]}
+      - {id: acm-exportable, name: Exportable public certificates and ACM to EC2/Nitro, match: [exportable-certificates, nitro-enclaves-acm, certificate-export]}
+      - {id: acm-integrated-services, name: Attaching ACM certificates to ALB and CloudFront (us-east-1) and API Gateway, match: [acm-us-east-1, certificate-association]}
+      - {id: acm-in-use-deletion, name: Certificate in-use errors and replacing certificates, match: [certificate-in-use, replace-certificate]}
+      - {id: acm-caa, name: CAA records and domain validation failures, match: [validation-failure]}
+      - {id: acm-pca-short-lived, name: Short-lived certificate mode and Private CA connectors for AD and Kubernetes, match: [short-lived-certificates, pca-connector]}
+  # --- Networking (SAA Resilient/Secure; SysOps Networking & Content Delivery)
+  - id: vpc-design
+    name: VPC design, subnets, CIDR and route tables
+    source: SAA/Design Secure Architectures; VPC User Guide
+    match: [vpc, vpc-design, subnet, cidr, route-table]
+    subtopics:
+      - {id: vpc-ipam, name: IPAM pools, allocations and CIDR planning, match: [ipam, ipam-pool, cidr-planning]}
+      - {id: vpc-ipv6, name: IPv6 and dual-stack VPCs with egress-only internet gateways, match: [ipv6, dual-stack, egress-only-internet-gateway]}
+      - {id: vpc-secondary-cidr, name: Secondary CIDRs and non-routable (100.64) address space, match: [secondary-cidr, non-routable-cidr, carrier-grade-nat]}
+      - {id: vpc-dhcp-dns, name: DHCP option sets, Route 53 Resolver (.2) and DNS hostnames, match: [dhcp-options, amazon-provided-dns, enable-dns-hostnames]}
+      - {id: vpc-route-tables, name: Route table priorities, local routes and route propagation, match: [route-propagation, longest-prefix-match, local-route]}
+      - {id: vpc-lattice, name: VPC Lattice service networks, match: [vpc-lattice, service-network, lattice]}
+      - {id: vpc-shared, name: VPC sharing with Resource Access Manager, match: [shared-vpc, vpc-sharing, resource-access-manager]}
+      - {id: vpc-subnet-tiers, name: Public and private and isolated subnet tiers per AZ, match: [subnet-tiers, isolated-subnets]}
+      - {id: vpc-reserved-ips, name: Reserved IPs per subnet and subnet sizing, match: [subnet-sizing, reserved-ip-addresses]}
+      - {id: vpc-block-public-access, name: VPC Block Public Access and exclusions, match: [vpc-bpa-mode, bpa-exclusions]}
+      - {id: vpc-eni-management, name: ENIs and secondary private IPs and Elastic IPs, match: [elastic-network-interface, secondary-private-ip, elastic-ip-management]}
+      - {id: vpc-quotas, name: VPC quotas (routes per table and SGs per ENI), match: [vpc-quotas]}
+  - id: security-groups-nacls
+    name: Security groups and network ACLs
+    source: SAA/Design Secure Architectures; VPC User Guide / Security
+    match: [security-group, security-groups, nacl, network-acl]
+    subtopics:
+      - {id: sg-referencing, name: Security group referencing and cross-VPC references, match: [sg-referencing, security-group-reference, prefix-list]}
+      - {id: sg-managed-prefix-lists, name: Managed prefix lists in rules, match: [managed-prefix-list, prefix-lists, customer-managed-prefix-list]}
+      - {id: sg-stateful-vs-stateless, name: Stateful vs stateless rules and ephemeral ports, match: [ephemeral-ports, stateless-rules, stateful-rules]}
+      - {id: sg-quotas, name: Security group quotas and rule explosion, match: [security-group-quotas, rules-per-group, sg-limits]}
+      - {id: sg-audit, name: Auditing open security groups with Config, Firewall Manager and Access Analyzer, match: [security-group-audit, unused-security-groups, open-ports-audit]}
+      - {id: network-firewall, name: AWS Network Firewall rule groups and stateful inspection, match: [network-firewall, firewall-policy, suricata-rules]}
+      - {id: nacl-rule-ordering, name: NACL rule numbering and ordering and the default deny, match: [nacl-rule-number, nacl-ordering]}
+      - {id: sg-default-group, name: Default security group lockdown, match: [default-security-group, sg-default-lockdown]}
+      - {id: sg-vpc-associations, name: Security group VPC associations and shared security groups, match: [sg-vpc-association, shared-security-groups]}
+      - {id: sg-connection-tracking, name: Connection tracking and untracked flows and conntrack allowance, match: [connection-tracking, conntrack-allowance]}
+      - {id: nacl-troubleshooting, name: Troubleshooting NACL blocks with flow logs, match: [nacl-troubleshooting]}
+  - id: nat-igw-egress
+    name: NAT gateways, internet gateways and egress control
+    source: SAA/Design Secure Architectures; VPC User Guide / NAT gateways
+    match: [nat-gateway, internet-gateway, egress]
+    subtopics:
+      - {id: nat-per-az, name: NAT gateway per AZ and zonal independence, match: [nat-per-az, zonal-nat, az-independent-egress]}
+      - {id: nat-private, name: Private NAT gateways for overlapping address spaces, match: [private-nat-gateway, private-nat]}
+      - {id: nat-metrics, name: NAT gateway metrics (ErrorPortAllocation, PacketsDropCount) and scaling, match: [errorportallocation, nat-port-exhaustion, nat-metrics]}
+      - {id: nat-instance, name: NAT instances and fck-nat as cost alternative, match: [nat-instance, fck-nat, source-dest-check]}
+      - {id: egress-centralised, name: Centralised egress via Transit Gateway, match: [centralized-egress, egress-vpc, inspection-vpc]}
+      - {id: egress-filtering, name: Egress filtering with Network Firewall domain lists and proxies, match: [egress-filtering, domain-allowlist, egress-proxy]}
+      - {id: nat-eip-allowlist, name: Static egress IPs for partner allowlisting via NAT EIPs, match: [static-egress-ip, nat-eip]}
+      - {id: nat-regional, name: Regional NAT gateway availability mode, match: [regional-nat-gateway]}
+      - {id: igw-public-ip, name: Public IPv4 auto-assign and public IPv4 charges, match: [auto-assign-public-ip, public-ipv4-charges]}
+      - {id: nat-troubleshooting, name: Troubleshooting NAT connectivity and the 350-second idle timeout, match: [nat-idle-timeout, nat-troubleshooting]}
+      - {id: egress-ipv6, name: IPv6-only egress with DNS64 and NAT64, match: [nat64, dns64]}
+  - id: vpc-endpoints-privatelink
+    name: VPC endpoints and PrivateLink
+    source: SAA/Design Secure Architectures; PrivateLink Guide
+    match: [vpc-endpoint, vpc-endpoints, privatelink]
+    subtopics:
+      - {id: vpce-gateway, name: Gateway endpoints for S3 and DynamoDB with route tables, match: [gateway-endpoint, s3-gateway-endpoint, dynamodb-endpoint]}
+      - {id: vpce-interface, name: Interface endpoints, private DNS and ENI placement, match: [interface-endpoint, private-dns, endpoint-eni]}
+      - {id: vpce-policies, name: Endpoint policies and aws PrincipalOrgID restrictions, match: [endpoint-policy, endpoint-policies, vpce-condition]}
+      - {id: vpce-endpoint-service, name: Creating an endpoint service behind NLB/GWLB and acceptance, match: [endpoint-service, service-provider, acceptance-required]}
+      - {id: vpce-centralised, name: Centralised interface endpoints shared across VPCs via Route 53, match: [centralized-endpoints, shared-endpoints, endpoint-phz]}
+      - {id: vpce-cross-region, name: Cross-region PrivateLink and endpoint service DNS verification, match: [cross-region-privatelink, private-dns-verification]}
+      - {id: vpce-troubleshooting, name: Troubleshooting interface endpoint DNS and connectivity, match: [endpoint-troubleshooting, endpoint-dns-resolution]}
+      - {id: vpce-resource-endpoints, name: Resource endpoints and resource gateways (PrivateLink for resources), match: [resource-endpoint, resource-gateway]}
+      - {id: vpce-s3-interface, name: S3 interface endpoints for on-premises access, match: [s3-interface-endpoint]}
+      - {id: vpce-gwlb, name: Gateway Load Balancer endpoints for inspection, match: [gwlb-endpoint]}
+      - {id: vpce-service-permissions, name: Endpoint service allowed principals and connection notifications, match: [allowed-principals, connection-notifications]}
+  - id: transit-gateway-peering
+    name: Transit Gateway and VPC peering
+    source: SAP/Organizational Complexity; Transit Gateway Guide
+    match: [transit-gateway, vpc-peering, hub-and-spoke]
+    subtopics:
+      - {id: tgw-route-tables, name: TGW route tables, associations and propagations for segmentation, match: [tgw-route-table, tgw-association, tgw-propagation]}
+      - {id: tgw-attachments, name: VPC, VPN, DX and peering attachments and appliance mode, match: [tgw-attachment, appliance-mode, tgw-peering]}
+      - {id: tgw-sharing, name: Sharing a TGW across accounts with RAM, match: [tgw-ram-sharing, tgw-cross-account]}
+      - {id: tgw-network-manager, name: Network Manager, Cloud WAN and global network, match: [network-manager, cloud-wan, core-network]}
+      - {id: tgw-connect, name: TGW Connect (GRE) attachments for SD-WAN, match: [tgw-connect, gre-attachment, sd-wan]}
+      - {id: peering-limits, name: VPC peering non-transitivity, overlapping CIDR and route limits, match: [peering-non-transitive, overlapping-cidr, peering-routes]}
+      - {id: tgw-flow-logs, name: Transit Gateway flow logs and route analyzer, match: [tgw-flow-logs, route-analyzer]}
+      - {id: tgw-multicast, name: Transit Gateway multicast domains, match: [tgw-multicast, multicast-domain]}
+      - {id: tgw-blackhole, name: Blackhole and static routes in TGW route tables, match: [blackhole-route, tgw-static-route]}
+      - {id: tgw-quotas-mtu, name: TGW MTU and bandwidth and quotas, match: [tgw-mtu, tgw-bandwidth]}
+      - {id: tgw-migration-peering, name: Migrating from a VPC peering mesh to Transit Gateway, match: [peering-to-tgw-migration]}
+      - {id: peering-dns, name: VPC peering DNS resolution and security group references, match: [peering-dns-resolution, peering-sg-reference]}
+  - id: hybrid-connectivity
+    name: Site-to-Site VPN and Direct Connect
+    source: SAP/Organizational Complexity; Direct Connect User Guide
+    match: [direct-connect, site-to-site-vpn, vpn, hybrid-connectivity]
+    subtopics:
+      - {id: dx-vifs, name: Private, public and transit virtual interfaces, match: [virtual-interface, private-vif, transit-vif, public-vif]}
+      - {id: dx-gateway, name: Direct Connect gateway and multi-region association, match: [direct-connect-gateway, dx-gateway]}
+      - {id: dx-resiliency, name: DX resiliency models, LAG and failover testing, match: [dx-resiliency, lag, dx-failover-test]}
+      - {id: vpn-bgp, name: BGP, ECMP and route prioritisation over VPN and DX, match: [bgp, ecmp, as-path-prepend, bgp-communities]}
+      - {id: vpn-accelerated, name: Accelerated VPN and VPN over Transit Gateway, match: [accelerated-vpn, transit-gateway-vpn]}
+      - {id: client-vpn, name: AWS Client VPN endpoints and authentication, match: [client-vpn, client-vpn-endpoint, split-tunnel]}
+      - {id: dx-macsec-sitelink, name: MACsec encryption and SiteLink, match: [macsec, sitelink]}
+      - {id: vpn-tunnel-options, name: VPN tunnel options (IKE version and DPD and phase settings), match: [tunnel-options, ike-version, dead-peer-detection]}
+      - {id: vpn-troubleshooting, name: Troubleshooting VPN tunnels down with tunnel logs, match: [vpn-tunnel-logs, tunnel-down]}
+      - {id: dx-provisioning, name: Ordering DX connections and LOA-CFA and hosted connections, match: [cross-connect]}
+      - {id: dx-monitoring, name: Direct Connect monitoring (ConnectionState and BGP status alarms), match: [dx-monitoring, connection-state]}
+      - {id: vpn-cgw, name: Customer gateway device configuration and static vs dynamic routing, match: [static-routing-vpn]}
+  - id: route53
+    name: Route 53 routing policies and health checks
+    source: SAA/Design Resilient Architectures; Route 53 Developer Guide
+    match: [route53, route-53, dns-routing, health-check, failover-routing]
+    subtopics:
+      - {id: r53-routing-policies, name: Weighted, latency, geolocation, geoproximity and multivalue routing, match: [weighted-routing, latency-routing, geolocation-routing, geoproximity-routing]}
+      - {id: r53-alias, name: Alias records and evaluate target health, match: [alias-record, evaluate-target-health]}
+      - {id: r53-private-zones, name: Private hosted zones and cross-VPC association, match: [private-hosted-zone, phz-association, split-horizon-dns]}
+      - {id: r53-resolver, name: Route 53 Resolver inbound/outbound endpoints and rules for hybrid DNS, match: [route53-resolver, resolver-endpoints, resolver-rules, hybrid-dns]}
+      - {id: r53-dnssec, name: DNSSEC signing and validation, match: [dnssec, ksk, dnssec-validation]}
+      - {id: r53-query-logging, name: Query logging and Resolver DNS Firewall, match: [query-logging, dns-firewall, resolver-query-logs]}
+      - {id: r53-arc, name: Application Recovery Controller routing controls and zonal shift, match: [application-recovery-controller, routing-control, readiness-check]}
+      - {id: r53-domains, name: Domain registration, transfer and delegation, match: [domain-registration, domain-transfer, ns-delegation]}
+      - {id: r53-health-check-types, name: Calculated and CloudWatch-alarm and endpoint health checks, match: [calculated-health-check, health-check-alarm]}
+      - {id: r53-ttl-records, name: TTL tuning and CNAME vs alias and record types, match: [dns-ttl, cname-record]}
+      - {id: r53-profiles, name: Route 53 Profiles for sharing DNS configuration, match: [route53-profiles]}
+      - {id: r53-traffic-flow, name: Traffic flow policies and policy records, match: [traffic-flow, traffic-policy]}
+      - {id: r53-migration, name: Migrating DNS hosting to Route 53, match: [route53-dns-migration]}
+  - id: load-balancing
+    name: ALB, NLB and Gateway Load Balancer
+    source: SAA/Design High-Performing Architectures; ELB User Guide
+    match: [alb, nlb, elb, load-balancer, application-load-balancer]
+    subtopics:
+      - {id: alb-listener-rules, name: Listener rules, host/path routing, weighted target groups and redirects, match: [listener-rules, weighted-target-groups, path-based-routing, host-based-routing]}
+      - {id: alb-auth, name: ALB authentication with Cognito and OIDC, match: [alb-authentication, alb-oidc, alb-cognito]}
+      - {id: elb-health-checks, name: Target group health checks and deregistration delay, match: [target-group-health, deregistration-delay, unhealthy-threshold]}
+      - {id: elb-tls, name: TLS termination, SNI, security policies and mutual TLS, match: [tls-termination, security-policy, mtls, mutual-tls]}
+      - {id: elb-access-logs, name: Access logs, connection logs and 5xx troubleshooting, match: [access-logs, http-502, http-504, elb-5xx]}
+      - {id: nlb-static-ip, name: NLB static IPs, client IP preservation and cross-zone, match: [client-ip-preservation, nlb-static-ip, cross-zone-load-balancing]}
+      - {id: gwlb-geneve, name: Gateway Load Balancer, GENEVE and appliance insertion, match: [gwlb, geneve, appliance-insertion]}
+      - {id: alb-lambda-targets, name: Lambda and IP targets, sticky sessions and slow start, match: [lambda-target, sticky-sessions, slow-start]}
+      - {id: alb-fixed-response, name: HTTP to HTTPS redirects and fixed responses, match: [http-to-https-redirect, fixed-response]}
+      - {id: elb-capacity-reservation, name: LCU capacity reservation and pre-warming, match: [lcu-reservation, pre-warming]}
+      - {id: alb-desync, name: Desync mitigation mode and X-Forwarded-For handling, match: [desync-mitigation, x-forwarded-for]}
+      - {id: nlb-tcp-udp, name: NLB TCP/UDP/TLS listeners and idle timeout and proxy protocol, match: [proxy-protocol, nlb-idle-timeout]}
+      - {id: alb-grpc-idle, name: ALB idle timeout and keep-alive and gRPC/HTTP2 targets, match: [grpc-target, alb-idle-timeout]}
+  - id: cloudfront
+    name: CloudFront distributions, caching and origin access
+    source: SysOps/Networking & Content Delivery; CloudFront Developer Guide
+    match: [cloudfront, cdn, origin-access-control, edge-caching]
+    subtopics:
+      - {id: cf-cache-policies, name: Cache policies, origin request policies and cache key design, match: [cache-policy, origin-request-policy, cache-key]}
+      - {id: cf-signed-urls, name: Signed URLs, signed cookies and key groups, match: [signed-urls, signed-cookies, key-groups]}
+      - {id: cf-functions-edge, name: CloudFront Functions and Lambda at Edge, match: [cloudfront-functions, lambda-at-edge, edge-functions]}
+      - {id: cf-origin-failover, name: Origin groups, failover and Origin Shield, match: [origin-groups, origin-failover, origin-shield]}
+      - {id: cf-invalidation, name: Invalidations, versioned file names and TTL tuning, match: [invalidation, cache-invalidation, versioned-filenames]}
+      - {id: cf-logging, name: Standard, real-time logs and cache-hit-ratio reports, match: [real-time-logs, cache-hit-ratio, cloudfront-logs]}
+      - {id: cf-geo-restriction, name: Geo restriction, WAF association and response headers policies, match: [geo-restriction, response-headers-policy, cloudfront-waf]}
+      - {id: cf-vpc-origins, name: VPC origins and private ALB origins, match: [vpc-origins, private-origin, custom-origin-header]}
+      - {id: cf-custom-error, name: Custom error responses and SPA routing, match: [custom-error-responses, spa-routing]}
+      - {id: cf-continuous-deployment, name: Continuous deployment with staging distributions, match: [continuous-deployment, staging-distribution]}
+      - {id: cf-protocol-policies, name: Viewer protocol and origin protocol policies and TLS settings, match: [viewer-protocol-policy, origin-protocol-policy]}
+      - {id: cf-kvs, name: CloudFront KeyValueStore, match: [keyvaluestore]}
+      - {id: cf-price-class, name: Price classes and flat-rate plans, match: [cloudfront-price-class, flat-rate-pricing]}
+  - id: waf-shield
+    name: WAF and Shield DDoS protection
+    source: SAA/Design Secure Architectures; WAF Developer Guide
+    match: [waf, shield, ddos-protection]
+    subtopics:
+      - {id: waf-managed-rules, name: Managed rule groups, versioning and false-positive tuning, match: [managed-rule-groups, rule-group-version, false-positives]}
+      - {id: waf-rate-based, name: Rate-based rules and scope-down statements, match: [rate-based-rule, scope-down-statement, rate-limiting]}
+      - {id: waf-bot-control, name: Bot Control, CAPTCHA, Challenge and ATP, match: [bot-control, captcha, challenge, account-takeover-prevention]}
+      - {id: waf-logging, name: WAF logging, sampled requests and metrics, match: [waf-logging, sampled-requests, waf-metrics]}
+      - {id: waf-custom-rules, name: Custom rules, labels and WCU budgeting, match: [waf-labels, wcu, custom-rules-waf]}
+      - {id: shield-advanced, name: Shield Advanced, SRT engagement and proactive engagement, match: [shield-advanced, srt, proactive-engagement]}
+      - {id: firewall-manager, name: Firewall Manager policies across the organisation, match: [firewall-manager, fms-policy, waf-policy-org]}
+      - {id: waf-ip-sets, name: IP sets and regex pattern sets, match: [ip-set, regex-pattern-set]}
+      - {id: waf-count-mode, name: Count mode testing and rule action overrides, match: [rule-action-override]}
+      - {id: waf-body-inspection, name: Body inspection size limits and oversize handling, match: [body-inspection-limit, oversize-handling]}
+      - {id: waf-geo-match, name: Geo match and ASN match statements, match: [geo-match, asn-match]}
+      - {id: shield-health-checks, name: Shield Advanced health-based detection and automatic application layer mitigation, match: [health-based-detection, automatic-application-layer-mitigation]}
+  - id: global-accelerator
+    name: Global Accelerator
+    source: SAA/Design High-Performing Architectures; Global Accelerator Developer Guide
+    match: [global-accelerator]
+    subtopics:
+      - {id: ga-endpoint-groups, name: Endpoint groups, traffic dials and endpoint weights, match: [endpoint-group, traffic-dial, endpoint-weights]}
+      - {id: ga-client-affinity, name: Client affinity and client IP preservation, match: [client-affinity, ga-client-ip-preservation]}
+      - {id: ga-custom-routing, name: Custom routing accelerators, match: [custom-routing-accelerator, custom-routing]}
+      - {id: ga-byoip, name: BYOIP and static anycast IP management, match: [byoip, anycast-ip]}
+      - {id: ga-flow-logs, name: Accelerator flow logs and health check settings, match: [accelerator-flow-logs, ga-health-checks]}
+      - {id: ga-create, name: Creating standard accelerators with listeners and port ranges, match: [accelerator-listener, port-ranges]}
+      - {id: ga-failover, name: Global Accelerator failover for multi-region active-passive, match: [ga-failover]}
+      - {id: ga-dual-stack, name: Dual-stack accelerators, match: [dual-stack-accelerator]}
+      - {id: ga-endpoint-types, name: EC2 and ALB and NLB and EIP endpoints and internal ALBs, match: [ga-endpoint-types, internal-alb-endpoint]}
+      - {id: ga-cost, name: Data transfer premium and accelerator pricing, match: [dt-premium, accelerator-pricing]}
+  - id: vpc-flow-logs-reachability
+    name: VPC Flow Logs and Reachability Analyzer
+    source: SysOps/Networking; VPC User Guide / Flow logs
+    match: [flow-logs, vpc-flow-logs, reachability-analyzer, network-troubleshooting]
+    subtopics:
+      - {id: fl-custom-format, name: Custom flow log formats, fields and aggregation intervals, match: [flow-log-format, custom-fields, aggregation-interval]}
+      - {id: fl-athena, name: Querying flow logs in Athena and Logs Insights, match: [flow-logs-athena, flow-log-queries, rejected-traffic]}
+      - {id: fl-reachability, name: Reachability Analyzer paths and Network Access Analyzer, match: [reachability-path, network-access-analyzer, path-analysis]}
+      - {id: fl-traffic-mirroring, name: Traffic Mirroring sessions and filters, match: [traffic-mirroring, mirror-session, packet-capture]}
+      - {id: fl-ssh-troubleshoot, name: Troubleshooting connectivity (timeouts vs refused, MTU, asymmetric routing), match: [connection-timeout, asymmetric-routing, mtu-troubleshooting]}
+      - {id: fl-destinations, name: Flow log destinations (CloudWatch Logs and S3 and Firehose) and IAM, match: [flow-log-destination, flow-logs-s3]}
+      - {id: fl-subnet-eni, name: Subnet and ENI and TGW level flow log scope, match: [eni-flow-logs, subnet-flow-logs]}
+      - {id: fl-cost, name: Flow log cost control, match: [flow-log-cost]}
+      - {id: fl-ip-tracing, name: Tracing traffic through NAT with pkt-srcaddr and pkt-dstaddr, match: [pkt-srcaddr, nat-traffic-tracing]}
+      - {id: fl-network-performance, name: Network performance monitoring (Infrastructure Performance), match: [infrastructure-performance, network-latency-metrics]}
+  # --- Compute (SAA High-Performing; SysOps Deployment)
+  - id: ec2-instance-selection
+    name: EC2 instance families, sizing and placement groups
+    source: SAA/Design High-Performing Architectures; EC2 User Guide / Instance types
+    match: [ec2, instance-type, instance-types, placement-group, graviton]
+    subtopics:
+      - {id: ec2-families, name: Instance family selection (C/M/R/T/I/G) and burstable credits, match: [instance-family, burstable, cpu-credits, t-unlimited]}
+      - {id: ec2-placement-groups, name: Cluster, spread and partition placement groups, match: [cluster-placement, spread-placement, partition-placement]}
+      - {id: ec2-nitro-ena, name: Nitro, ENA, EFA and enhanced networking, match: [ena, efa, enhanced-networking, nitro]}
+      - {id: ec2-dedicated, name: Dedicated Hosts, Dedicated Instances and BYOL licensing, match: [dedicated-hosts, dedicated-instances, byol, license-manager]}
+      - {id: ec2-hibernate-stop, name: Stop, hibernate, reboot and instance lifecycle, match: [hibernate, instance-lifecycle, stop-start]}
+      - {id: ec2-capacity-reservations, name: On-Demand Capacity Reservations and capacity blocks, match: [capacity-reservation, capacity-reservations, capacity-blocks]}
+      - {id: ec2-troubleshoot-boot, name: Troubleshooting unreachable instances (console output, screenshot, rescue volume), match: [instance-console-output, rescue-volume, status-checks, ec2-serial-console]}
+      - {id: ec2-instance-type-discovery, name: Discovering instance types with describe-instance-types and offerings, match: [describe-instance-types, instance-type-offerings]}
+      - {id: ec2-cpu-options, name: CPU options (cores and threads per core), match: [cpu-options, threads-per-core]}
+      - {id: ec2-accelerated, name: GPU and Inferentia and Trainium accelerated computing instances, match: [accelerated-computing, gpu-instances, inferentia]}
+      - {id: ec2-instance-store, name: Instance store volumes and ephemeral data, match: [nvme-instance-store]}
+      - {id: ec2-change-type, name: Changing instance type and driver compatibility (ENA and NVMe), match: [change-instance-type, resize-instance]}
+  - id: ec2-purchasing
+    name: On-Demand, Reserved, Savings Plans and Spot
+    source: SAA/Design Cost-Optimized Architectures; EC2 User Guide / Billing
+    match: [spot, spot-instances, reserved-instances, savings-plans, purchasing-options]
+    subtopics:
+      - {id: spot-fleet, name: Spot Fleet and EC2 Fleet allocation strategies, match: [spot-fleet, ec2-fleet, allocation-strategy]}
+      - {id: spot-interruption, name: Spot interruption notices, rebalance recommendations and graceful drain, match: [spot-interruption, rebalance-recommendation, interruption-handling]}
+      - {id: ri-types, name: Standard vs Convertible RIs, scope and RI marketplace, match: [convertible-ri, ri-marketplace, zonal-ri]}
+      - {id: sp-compute-vs-ec2, name: Compute vs EC2 Instance Savings Plans and purchase recommendations, match: [compute-savings-plan, ec2-instance-savings-plan, savings-plan-recommendations]}
+      - {id: ri-sp-coverage, name: Tracking coverage and utilisation reports, match: [savings-plans-coverage, savings-plans-utilization, ri-utilization]}
+      - {id: spot-placement-score, name: Spot placement score and price history, match: [spot-placement-score, spot-price-history, spot-advisor]}
+      - {id: spot-requests, name: One-time and persistent Spot requests and max price, match: [spot-request, persistent-spot]}
+      - {id: sp-database, name: Database Savings Plans and RDS reserved instances, match: [database-savings-plans, rds-reserved-instances]}
+      - {id: ri-modify-exchange, name: Modifying and exchanging Reserved Instances, match: [ri-exchange, modify-reserved-instances]}
+      - {id: sp-sharing, name: RI and Savings Plans discount sharing across the organization, match: [discount-sharing, ri-sharing]}
+      - {id: spot-capacity-rebalance, name: Capacity rebalancing for Spot in Auto Scaling groups, match: [capacity-rebalance]}
+  - id: auto-scaling
+    name: EC2 Auto Scaling groups, policies and lifecycle hooks
+    source: SAA/Design Resilient Architectures; EC2 Auto Scaling User Guide
+    match: [auto-scaling, autoscaling, auto-scaling-group, asg, lifecycle-hook]
+    subtopics:
+      - {id: asg-target-tracking, name: Target tracking, step and simple scaling policies, match: [target-tracking, step-scaling, simple-scaling]}
+      - {id: asg-predictive, name: Predictive and scheduled scaling, match: [predictive-scaling, scheduled-scaling]}
+      - {id: asg-instance-refresh, name: Instance refresh and launch template versions, match: [instance-refresh, launch-template-version, rolling-replacement]}
+      - {id: asg-warm-pools, name: Warm pools and default instance warmup, match: [warm-pools, default-instance-warmup]}
+      - {id: asg-mixed-instances, name: Mixed instances policy and attribute-based instance selection, match: [mixed-instances-policy, attribute-based-instance-selection, instance-requirements]}
+      - {id: asg-health, name: Health checks, grace period and instance replacement, match: [health-check-grace-period, elb-health-check, unhealthy-replacement]}
+      - {id: asg-termination-policies, name: Termination policies, scale-in protection and AZ rebalancing, match: [termination-policy, scale-in-protection, az-rebalance]}
+      - {id: asg-lifecycle-hooks-impl, name: Implementing lifecycle hooks with SSM/Lambda and heartbeats, match: [lifecycle-hooks, heartbeat-timeout, complete-lifecycle-action]}
+      - {id: asg-launch-templates, name: Launch templates and migrating off launch configurations, match: [launch-configuration-migration, launch-template-asg]}
+      - {id: asg-standby-detach, name: Standby and detach and suspending scaling processes, match: [standby-state, suspend-processes]}
+      - {id: asg-scaling-activities, name: Scaling activities and troubleshooting failed launches, match: [scaling-activities, failed-launch-troubleshooting]}
+      - {id: asg-custom-metric-scaling, name: Scaling on custom metrics and SQS backlog per instance, match: [backlog-per-instance, custom-metric-scaling]}
+      - {id: asg-az-distribution, name: AZ distribution and capacity distribution strategy, match: [az-distribution, capacity-distribution-strategy]}
+  - id: ami-image-builder
+    name: AMI management and EC2 Image Builder
+    source: SysOps/Deployment; EC2 Image Builder User Guide
+    match: [ami, image-builder, golden-image]
+    subtopics:
+      - {id: ib-pipelines, name: Image pipelines, recipes and components, match: [image-pipeline, image-recipe, image-component]}
+      - {id: ib-tests, name: Test components and image validation, match: [image-tests, test-component, image-validation]}
+      - {id: ib-distribution, name: Distribution across regions/accounts and launch template updates, match: [ami-distribution, ami-sharing, launch-template-update]}
+      - {id: ami-lifecycle, name: AMI deprecation, deregistration and snapshot cleanup, match: [ami-deprecation, deregister-ami, ami-lifecycle]}
+      - {id: ami-encrypted-copy, name: Copying and encrypting AMIs across regions and keys, match: [copy-image, encrypted-ami, ami-copy]}
+      - {id: ami-ssm-parameter, name: Publishing latest AMI IDs via SSM parameters, match: [ssm-parameter-ami, latest-ami, ami-lookup]}
+      - {id: ami-create, name: Creating AMIs from instances (no-reboot and consistency), match: [no-reboot]}
+      - {id: ami-block-public, name: Block public access for AMIs and Allowed AMIs, match: [block-public-ami, allowed-amis]}
+      - {id: ib-lifecycle-policies, name: Image Builder lifecycle policies, match: [image-lifecycle-policy]}
+      - {id: ami-import-export, name: VM Import/Export, match: [vm-import, vm-export]}
+      - {id: ib-image-scanning, name: Image Builder vulnerability scanning with Inspector, match: [ib-image-scan-findings, image-builder-scanning]}
+  - id: ec2-user-data-metadata
+    name: User data, IMDSv2 and instance metadata
+    source: SysOps/Security; EC2 User Guide / Instance metadata
+    match: [user-data, imdsv2, instance-metadata, cloud-init]
+    subtopics:
+      - {id: imds-enforce-v2, name: Enforcing IMDSv2 and hop limits across the fleet, match: [imds-hop-limit, http-tokens-required, imdsv2-enforcement]}
+      - {id: cloud-init-debug, name: cloud-init modules, logs and re-running user data, match: [cloud-init-log, user-data-rerun, cloud-config]}
+      - {id: imds-tags, name: Instance tags in metadata and dynamic data, match: [tags-in-metadata, dynamic-data, instance-identity-document]}
+      - {id: user-data-secrets, name: Keeping secrets out of user data and fetching at boot, match: [user-data-secrets, bootstrap-secrets]}
+      - {id: ec2-instance-connect, name: EC2 Instance Connect and key pair management, match: [instance-connect, key-pairs, ec2-instance-connect-endpoint]}
+      - {id: ec2-windows-userdata, name: Windows EC2Launch v2 and PowerShell user data, match: [ec2launch, windows-user-data, sysprep]}
+      - {id: imds-ipv6-endpoint, name: IMDS IPv6 endpoint and disabling IMDS, match: [imds-ipv6, disable-imds]}
+      - {id: imds-credentials, name: Role credentials from IMDS and credential exfiltration protection, match: [imds-credentials, credential-exfiltration]}
+      - {id: user-data-mime, name: User data size limit and MIME multipart and gzip, match: [mime-multipart, user-data-limit]}
+      - {id: imds-sdk-config, name: SDK and CLI IMDS configuration and timeouts, match: [imds-timeout, aws-ec2-metadata-disabled]}
+      - {id: ec2-modify-user-data, name: Changing user data on an existing instance, match: [modify-user-data]}
+  - id: lambda
+    name: Lambda functions, concurrency and cold starts
+    source: DVA/Development; Lambda Developer Guide
+    match: [lambda, serverless, cold-start, provisioned-concurrency, reserved-concurrency]
+    subtopics:
+      - {id: lambda-layers, name: Layers, container images and dependency packaging, match: [lambda-layers, container-image-lambda, lambda-packaging]}
+      - {id: lambda-versions-aliases, name: Versions, aliases and weighted traffic shifting, match: [lambda-versions, lambda-alias, alias-routing]}
+      - {id: lambda-vpc, name: Lambda in a VPC, Hyperplane ENIs and NAT access, match: [lambda-in-vpc, hyperplane-eni, lambda-vpc-networking]}
+      - {id: lambda-snapstart, name: SnapStart and cold start tuning, match: [snapstart, cold-start-tuning, init-duration]}
+      - {id: lambda-function-urls, name: Function URLs and response streaming, match: [function-url, response-streaming]}
+      - {id: lambda-memory-tuning, name: Memory sizing with Power Tuning and cost-per-invocation, match: [power-tuning, memory-sizing, lambda-cost]}
+      - {id: lambda-env-config, name: Environment variables, ephemeral storage and EFS mounts, match: [environment-variables, ephemeral-storage, lambda-efs]}
+      - {id: lambda-logging, name: Structured logging, log levels and Powertools, match: [lambda-logging, powertools, advanced-logging-controls]}
+      - {id: lambda-runtime-mgmt, name: Runtime management, deprecation and runtime versions, match: [runtime-management, runtime-deprecation, runtime-update]}
+      - {id: lambda-errors-troubleshoot, name: Troubleshooting Lambda timeouts and out-of-memory errors and throttles, match: [lambda-timeout, lambda-throttling, out-of-memory]}
+      - {id: lambda-concurrency-scaling, name: Concurrency scaling rate and unreserved concurrency, match: [concurrency-scaling-rate, unreserved-concurrency]}
+      - {id: lambda-arm64, name: arm64 (Graviton) functions, match: [lambda-arm64]}
+      - {id: lambda-code-signing, name: Code signing configurations, match: [code-signing]}
+      - {id: lambda-extensions-telemetry, name: Extensions API and Telemetry API, match: [extensions-api, telemetry-api]}
+  - id: lambda-triggers-eventing
+    name: Lambda event sources and integration patterns
+    source: DVA/Development; Lambda Developer Guide / Invoking
+    match: [event-source-mapping, lambda-trigger, lambda-triggers, lambda-destinations]
+    subtopics:
+      - {id: esm-sqs, name: SQS event source mapping, batching and partial batch failures, match: [sqs-esm, partial-batch-response, reportbatchitemfailures]}
+      - {id: esm-streams, name: Kinesis and DynamoDB Streams mappings, bisect and parallelisation, match: [stream-esm, bisect-on-error, parallelization-factor, tumbling-window]}
+      - {id: esm-filtering, name: Event filtering patterns on mappings, match: [event-filtering, filter-criteria]}
+      - {id: lambda-async-invoke, name: Asynchronous invocation, retries and on-failure destinations, match: [async-invocation, on-failure-destination, event-invoke-config]}
+      - {id: esm-kafka, name: Kafka (MSK and self-managed) event source mappings, match: [kafka-esm, msk-trigger, self-managed-kafka]}
+      - {id: lambda-recursion, name: Recursive loop detection and recursion prevention, match: [recursive-loop-detection, recursion-prevention]}
+      - {id: esm-scaling, name: Event source mapping scaling and maximum concurrency and provisioned mode, match: [maximum-concurrency, provisioned-mode-esm]}
+      - {id: lambda-sync-invoke, name: Synchronous invocation and function error types, match: [synchronous-invocation, function-error]}
+      - {id: lambda-scheduled, name: Scheduled functions via EventBridge Scheduler, match: [scheduled-lambda]}
+      - {id: esm-mq-docdb, name: Amazon MQ and DocumentDB change stream event sources, match: [mq-trigger, documentdb-change-streams]}
+      - {id: lambda-resource-policy, name: Function resource-based policies with add-permission, match: [add-permission, function-policy]}
+  - id: ecs-fargate
+    name: ECS and Fargate task definitions and services
+    source: SAA/Design High-Performing Architectures; ECS Developer Guide
+    match: [ecs, fargate, task-definition]
+    subtopics:
+      - {id: ecs-capacity-providers, name: Capacity providers, Fargate Spot and managed scaling, match: [capacity-provider, fargate-spot, managed-scaling]}
+      - {id: ecs-deployments, name: Rolling, blue/green and circuit-breaker deployments, match: [deployment-circuit-breaker, ecs-blue-green, rolling-deployment]}
+      - {id: ecs-service-autoscaling, name: Service auto scaling on CPU/memory/ALB request count, match: [service-auto-scaling, alb-request-count-per-target]}
+      - {id: ecs-exec, name: ECS Exec and container debugging, match: [ecs-exec, container-debugging]}
+      - {id: ecs-logging, name: awslogs, FireLens and log routing, match: [awslogs, firelens, fluent-bit]}
+      - {id: ecs-service-connect, name: Service Connect and service discovery, match: [service-connect, cloud-map, service-discovery]}
+      - {id: ecs-task-networking, name: awsvpc networking, task ENIs and security groups, match: [awsvpc, task-eni, ecs-security-groups]}
+      - {id: ecs-secrets-env, name: Secrets and environment files in task definitions, match: [ecs-secrets, environment-files, valuefrom]}
+      - {id: ecs-task-def-params, name: Task size and container definitions and essential containers, match: [container-definition, essential-container]}
+      - {id: ecs-health-checks, name: Container health checks and container dependencies, match: [container-health-check, depends-on]}
+      - {id: ecs-ec2-launch, name: EC2 launch type and the ECS agent and ECS-optimized AMI, match: [ecs-agent, ecs-optimized-ami]}
+      - {id: ecs-troubleshooting, name: Stopped task reasons and CannotPullContainerError, match: [stopped-task-reason, cannotpullcontainer]}
+      - {id: ecs-task-placement, name: Task placement strategies and constraints, match: [placement-strategy, placement-constraints]}
+      - {id: ecs-scheduled-tasks, name: Scheduled tasks and standalone run-task, match: [scheduled-tasks, run-task]}
+  - id: eks
+    name: EKS cluster operations
+    source: SAA/Design High-Performing Architectures; EKS User Guide
+    match: [eks, eks-cluster]
+    subtopics:
+      - {id: eks-node-groups, name: Managed node groups, launch templates and Bottlerocket, match: [managed-node-group, bottlerocket, node-group-update]}
+      - {id: eks-karpenter, name: Karpenter and EKS Auto Mode, match: [karpenter, eks-auto-mode, nodepool]}
+      - {id: eks-pod-identity, name: IRSA and EKS Pod Identity, match: [irsa, pod-identity, pod-identity-agent]}
+      - {id: eks-access-entries, name: Access entries and cluster authentication, match: [eks-access-entries, aws-auth, access-policy]}
+      - {id: eks-vpc-cni, name: VPC CNI, prefix delegation and IP exhaustion, match: [vpc-cni, prefix-delegation, ip-exhaustion]}
+      - {id: eks-upgrades, name: Cluster and add-on version upgrades, match: [cluster-upgrade, eks-addons, upgrade-insights]}
+      - {id: eks-lb-controller, name: AWS Load Balancer Controller and ingress, match: [aws-load-balancer-controller, eks-ingress, target-group-binding]}
+      - {id: eks-storage-csi, name: EBS and EFS CSI drivers, match: [ebs-csi, efs-csi, eks-storage]}
+      - {id: eks-observability, name: Control plane logging and Container Insights, match: [control-plane-logging, container-insights, eks-observability]}
+      - {id: eks-fargate-profiles, name: EKS Fargate profiles, match: [eks-fargate-profile]}
+      - {id: eks-endpoint-access, name: Cluster endpoint public and private access, match: [cluster-endpoint-access, private-cluster]}
+      - {id: eks-secrets-encryption, name: Envelope encryption of Kubernetes secrets with KMS, match: [secrets-encryption-eks, kms-envelope-secrets]}
+      - {id: eks-network-policies, name: Network policies and security groups for pods, match: [network-policies-eks, security-groups-for-pods]}
+      - {id: eks-hybrid-nodes, name: EKS Hybrid Nodes and EKS Anywhere, match: [hybrid-nodes, eks-anywhere]}
+  - id: elastic-beanstalk
+    name: Elastic Beanstalk
+    source: DVA/Deployment; Elastic Beanstalk Developer Guide
+    match: [elastic-beanstalk, beanstalk]
+    subtopics:
+      - {id: eb-deployment-policies, name: Deployment policies (all at once, rolling, immutable, traffic splitting), match: [deployment-policy, immutable-deployment, traffic-splitting]}
+      - {id: eb-ebextensions, name: ebextensions and platform hooks, match: [ebextensions, platform-hooks]}
+      - {id: eb-blue-green, name: Blue/green with CNAME swap, match: [swap-environment-cnames, eb-blue-green]}
+      - {id: eb-managed-updates, name: Managed platform updates and platform retirement, match: [managed-updates, platform-update, platform-retirement]}
+      - {id: eb-worker, name: Worker environments and SQS daemons, match: [worker-environment, sqsd, cron-yaml]}
+      - {id: eb-cli, name: EB CLI workflows and saved configurations, match: [eb-cli, saved-configuration, eb-deploy]}
+      - {id: eb-env-config, name: Environment configuration options and precedence, match: [option-settings, configuration-precedence]}
+      - {id: eb-health, name: Enhanced health reporting and log retrieval, match: [enhanced-health, eb-logs]}
+      - {id: eb-rds, name: Decoupling an RDS database from an environment, match: [eb-rds-decouple]}
+      - {id: eb-docker, name: Docker platforms on Elastic Beanstalk, match: [eb-docker]}
+      - {id: eb-troubleshoot, name: Troubleshooting failed deployments and Severe health, match: [eb-troubleshooting]}
+  - id: batch-hpc
+    name: AWS Batch and HPC workloads
+    source: SAP/New Solutions; AWS Batch User Guide
+    match: [aws-batch, batch, hpc, parallelcluster]
+    subtopics:
+      - {id: batch-compute-env, name: Compute environments (EC2, Spot, Fargate) and job queues, match: [compute-environment, job-queue, batch-fargate]}
+      - {id: batch-job-defs, name: Job definitions, array jobs and dependencies, match: [job-definition, array-job, job-dependencies]}
+      - {id: batch-retry, name: Retry strategies and Spot reclamation handling, match: [retry-strategy, batch-spot]}
+      - {id: batch-scheduling, name: Fair-share scheduling policies, match: [fair-share-scheduling, scheduling-policy]}
+      - {id: hpc-parallelcluster, name: ParallelCluster, Slurm and EFA, match: [slurm, efa-hpc, parallelcluster-config]}
+      - {id: batch-multi-node, name: Multi-node parallel jobs, match: [multi-node-parallel, mnp-jobs]}
+      - {id: batch-troubleshoot, name: Troubleshooting jobs stuck in RUNNABLE, match: [runnable-stuck, batch-troubleshooting]}
+      - {id: batch-eks, name: AWS Batch on EKS, match: [batch-on-eks]}
+      - {id: batch-triggers, name: Submitting Batch jobs from EventBridge and Step Functions, match: [batch-job-trigger, submit-job]}
+      - {id: hpc-pcs, name: AWS Parallel Computing Service, match: [parallel-computing-service]}
+      - {id: batch-gpu, name: GPU jobs and resource requirements, match: [batch-gpu, resource-requirements]}
+  # --- Storage (SAA all domains)
+  - id: s3-buckets-policies
+    name: S3 bucket policies, ACLs and public access blocks
+    source: SAA/Design Secure Architectures; S3 User Guide / Access management
+    match: [s3, bucket-policy, bucket-policies, block-public-access]
+    subtopics:
+      - {id: s3-object-ownership, name: Object Ownership and disabling ACLs, match: [object-ownership, bucket-owner-enforced, disable-acls]}
+      - {id: s3-access-points, name: S3 Access Points and Multi-Region Access Points, match: [s3-access-points, multi-region-access-point]}
+      - {id: s3-encryption-defaults, name: Default encryption (SSE-S3, SSE-KMS, DSSE) and enforcing in policy, match: [sse-kms, default-encryption, enforce-encryption]}
+      - {id: s3-cross-account, name: Cross-account bucket access and VPC endpoint conditions, match: [cross-account-s3, s3-vpce-condition, aws-sourcevpce]}
+      - {id: s3-access-grants, name: S3 Access Grants and identity-based access, match: [s3-access-grants, access-grants]}
+      - {id: s3-access-logging, name: Server access logging and CloudTrail data events for S3, match: [server-access-logging, s3-access-logs]}
+      - {id: s3-static-website, name: Static website hosting and CORS configuration, match: [static-website, cors, website-hosting]}
+      - {id: s3-requester-pays, name: Requester Pays and object tagging, match: [requester-pays, object-tagging]}
+      - {id: s3-policy-conditions, name: Bucket policy conditions for SecureTransport and TLS version, match: [tls-version-condition]}
+      - {id: s3-bucket-naming, name: Bucket naming rules and namespaces, match: [bucket-naming]}
+      - {id: s3-policy-lockout, name: Recovering from a bucket policy lockout, match: [bucket-policy-lockout]}
+      - {id: s3-acl-migration, name: Migrating ACL-dependent workloads before disabling ACLs, match: [acl-migration]}
+      - {id: s3-access-denied, name: Troubleshooting S3 403 Access Denied, match: [s3-access-denied, s3-403]}
+  - id: s3-storage-classes-lifecycle
+    name: S3 storage classes and lifecycle rules
+    source: SAA/Design Cost-Optimized Architectures; S3 User Guide / Storage classes
+    match: [storage-class, storage-classes, lifecycle-rule, s3-lifecycle, intelligent-tiering, glacier]
+    subtopics:
+      - {id: s3-glacier-restore, name: Restoring from Glacier (expedited, standard, bulk) and restore notifications, match: [glacier-restore, restore-object, restore-tiers]}
+      - {id: s3-intelligent-tiering-config, name: Intelligent-Tiering archive access tier configuration, match: [intelligent-tiering-config, archive-access-tier, deep-archive-access]}
+      - {id: s3-storage-lens, name: Storage Lens dashboards and metrics export, match: [storage-lens, storage-lens-metrics]}
+      - {id: s3-inventory, name: S3 Inventory reports, match: [s3-inventory, inventory-report]}
+      - {id: s3-lifecycle-filters, name: Lifecycle filters by prefix, tag and object size and incomplete uploads, match: [lifecycle-filters, abort-incomplete-multipart, noncurrent-version-expiration]}
+      - {id: s3-express, name: S3 Express One Zone directory buckets, match: [s3-express-one-zone, directory-bucket]}
+      - {id: s3-transition-costs, name: Minimum storage duration and transition request costs, match: [minimum-storage-duration, transition-cost]}
+      - {id: s3-glacier-classes, name: Glacier Instant and Flexible Retrieval and Deep Archive selection, match: [glacier-instant-retrieval]}
+      - {id: s3-storage-class-analysis, name: Storage class analysis, match: [storage-class-analysis-export]}
+      - {id: s3-one-zone-ia, name: One Zone-IA for re-creatable data, match: [one-zone-ia]}
+      - {id: s3-lifecycle-troubleshoot, name: Troubleshooting lifecycle rules that do not apply, match: [lifecycle-troubleshooting]}
+  - id: s3-versioning-replication
+    name: S3 versioning, replication and Object Lock
+    source: SAA/Design Resilient Architectures; S3 User Guide / Replication
+    match: [versioning, s3-replication, cross-region-replication, object-lock]
+    subtopics:
+      - {id: s3-rtc, name: Replication Time Control and replication metrics, match: [replication-time-control, rtc, replication-metrics]}
+      - {id: s3-batch-replication, name: Batch Replication for existing objects, match: [batch-replication, replicate-existing-objects]}
+      - {id: s3-srr, name: Same-region replication and cross-account replication with owner override, match: [same-region-replication, owner-override, replica-ownership]}
+      - {id: s3-object-lock-modes, name: Object Lock governance vs compliance modes and legal holds, match: [governance-mode, compliance-mode, legal-hold]}
+      - {id: s3-mfa-delete, name: MFA delete and delete marker handling, match: [mfa-delete, delete-marker-replication]}
+      - {id: s3-batch-operations, name: S3 Batch Operations jobs and manifests, match: [s3-batch-operations, batch-operations-manifest]}
+      - {id: s3-versioning-ops, name: Restoring previous versions and suspending versioning, match: [restore-previous-version, versioning-suspended]}
+      - {id: s3-replication-kms, name: Replicating KMS-encrypted objects, match: [replicate-kms-objects, replication-kms]}
+      - {id: s3-replication-troubleshoot, name: Troubleshooting replication status FAILED, match: [replication-status, replication-failure]}
+      - {id: s3-two-way-replication, name: Bidirectional replication and replica modification sync, match: [bidirectional-replication, replica-modification-sync]}
+      - {id: s3-object-lock-retention, name: Default retention and enabling Object Lock on existing buckets, match: [default-retention, object-lock-existing-bucket]}
+  - id: s3-performance-presigned
+    name: S3 performance, multipart upload and presigned URLs
+    source: DVA/Development; S3 User Guide / Performance
+    match: [multipart-upload, presigned-url, presigned-urls, s3-performance, transfer-acceleration]
+    subtopics:
+      - {id: s3-presigned-post, name: Presigned POST policies for browser uploads, match: [presigned-post, post-policy]}
+      - {id: s3-byte-range, name: Byte-range fetches and parallel downloads, match: [byte-range-fetch, parallel-download]}
+      - {id: s3-request-rate, name: Request rate scaling, prefix design and 503 Slow Down, match: [request-rate, 503-slowdown, prefix-parallelism]}
+      - {id: s3-checksums, name: Additional checksums and integrity verification, match: [checksum, crc32c, integrity-verification]}
+      - {id: s3-crt-transfer-manager, name: CRT-based clients and Transfer Manager, match: [crt, s3-transfer-manager]}
+      - {id: s3-select-object-lambda, name: Object Lambda and S3 Select, match: [object-lambda, s3-select]}
+      - {id: s3-mountpoint, name: Mountpoint for S3 and file-interface access, match: [mountpoint, mount-s3]}
+      - {id: s3-presigned-expiry, name: Presigned URL expiry and SigV4 signature errors, match: [presigned-url-expiry]}
+      - {id: s3-multipart-ops, name: Listing and aborting multipart uploads and part sizing, match: [list-multipart-uploads, part-size]}
+      - {id: s3-conditional-writes, name: Conditional writes with If-None-Match and If-Match, match: [conditional-writes, if-none-match]}
+      - {id: s3-acceleration-test, name: Transfer Acceleration endpoints and speed comparison, match: [accelerate-endpoint]}
+      - {id: s3-consistency, name: Strong read-after-write consistency semantics, match: [read-after-write, strong-consistency]}
+  - id: s3-event-notifications
+    name: S3 event notifications
+    source: DVA/Development; S3 User Guide / Event notifications
+    match: [s3-event, s3-events, event-notifications]
+    subtopics:
+      - {id: s3-eb-events, name: S3 to EventBridge events and content filtering, match: [s3-eventbridge, eventbridge-s3-pattern]}
+      - {id: s3-notif-filters, name: Prefix/suffix filters and overlapping rule limits, match: [prefix-filter, suffix-filter, overlapping-rules]}
+      - {id: s3-notif-permissions, name: Destination permissions and validation errors, match: [notification-permissions, destination-validation]}
+      - {id: s3-notif-idempotency, name: At-least-once delivery and idempotent processing, match: [at-least-once, url-encoded-key, sequencer]}
+      - {id: s3-notif-recursion, name: Preventing recursive triggers and runaway invocations, match: [recursive-triggers, s3-lambda-loop]}
+      - {id: s3-notif-sqs, name: S3 to SQS with queue policies and encrypted queues, match: [s3-to-sqs, queue-policy-s3]}
+      - {id: s3-notif-sns-fanout, name: S3 to SNS fan-out, match: [s3-to-sns]}
+      - {id: s3-notif-event-types, name: Event types (ObjectCreated and ObjectRemoved and Restore and Replication), match: [event-types-s3, objectcreated]}
+      - {id: s3-notif-test-event, name: s3 TestEvent and debugging missing notifications, match: [test-event, missing-notifications]}
+      - {id: s3-notif-iac, name: Managing notification configuration in IaC and overwrite pitfalls, match: [notification-configuration, put-bucket-notification]}
+  - id: ebs
+    name: EBS volume types, snapshots and encryption
+    source: SAA/Design High-Performing Architectures; EBS User Guide
+    match: [ebs, ebs-snapshot, ebs-snapshots, gp3, io2]
+    subtopics:
+      - {id: ebs-dlm, name: Data Lifecycle Manager snapshot policies, match: [data-lifecycle-manager, dlm, snapshot-policy]}
+      - {id: ebs-fsr, name: Fast Snapshot Restore and snapshot copy, match: [fast-snapshot-restore, snapshot-copy, cross-region-snapshot]}
+      - {id: ebs-elastic-volumes, name: Elastic Volumes resize and filesystem growth, match: [elastic-volumes, volume-resize, growpart]}
+      - {id: ebs-encryption-default, name: Encryption by default and re-encrypting unencrypted volumes, match: [encryption-by-default, encrypt-existing-volume]}
+      - {id: ebs-multi-attach, name: Multi-Attach io2 and cluster filesystems, match: [multi-attach, clustered-filesystem]}
+      - {id: ebs-performance, name: IOPS/throughput, EBS-optimized and burst balance, match: [burst-balance, ebs-optimized, iops-throughput]}
+      - {id: ebs-recycle-bin, name: Recycle Bin for snapshots and AMIs, match: [recycle-bin, retention-rule]}
+      - {id: ebs-snapshot-archive, name: Snapshot archive tier and snapshot lock, match: [snapshot-archive, snapshot-lock]}
+      - {id: ebs-volume-types, name: gp2 to gp3 migration and st1 and sc1 selection, match: [gp2-to-gp3]}
+      - {id: ebs-snapshot-ops, name: Crash-consistent and multi-volume snapshots, match: [multi-volume-snapshot, crash-consistent]}
+      - {id: ebs-direct-apis, name: EBS direct APIs, match: [ebs-direct-apis]}
+      - {id: ebs-monitoring, name: Volume status checks and VolumeQueueLength metrics, match: [volume-status-checks, volumequeuelength]}
+      - {id: ebs-attach-nvme, name: Attaching and detaching volumes and NVMe device naming, match: [nvme-device-naming, attach-volume]}
+      - {id: ebs-initialization, name: Initializing volumes restored from snapshots, match: [volume-initialization, fio-initialize]}
+  - id: efs
+    name: EFS file systems and access points
+    source: SAA/Design High-Performing Architectures; EFS User Guide
+    match: [efs, elastic-file-system]
+    subtopics:
+      - {id: efs-throughput-modes, name: Elastic, bursting and provisioned throughput modes, match: [elastic-throughput, bursting-throughput, provisioned-throughput]}
+      - {id: efs-lifecycle, name: EFS lifecycle to IA and Archive, match: [efs-lifecycle, efs-archive, efs-infrequent-access]}
+      - {id: efs-mount-helper, name: efs-utils mount helper and TLS mounts, match: [efs-utils, tls-mount, mount-helper]}
+      - {id: efs-replication, name: EFS replication and backup, match: [efs-replication, efs-backup]}
+      - {id: efs-policy, name: File system policies and IAM authorisation, match: [file-system-policy, iam-authorization, efs-root-squash]}
+      - {id: efs-one-zone, name: One Zone file systems and cost, match: [one-zone, efs-cost]}
+      - {id: efs-performance, name: Performance modes, metadata IO and metrics, match: [efs-performance-mode, efs-metrics, percentiolimit]}
+      - {id: efs-access-points, name: Access points for POSIX identity and root directory enforcement, match: [access-point-posix, efs-access-point]}
+      - {id: efs-mount-targets, name: Mount targets per AZ and NFS security groups, match: [nfs-port-2049]}
+      - {id: efs-troubleshooting, name: Troubleshooting EFS mount hangs and NFS errors, match: [efs-mount-troubleshooting]}
+      - {id: efs-cross-vpc, name: Cross-account and cross-VPC EFS mounts, match: [efs-cross-vpc]}
+      - {id: efs-migration, name: Migrating data into EFS, match: [efs-migration]}
+  - id: fsx
+    name: FSx for Windows, Lustre, NetApp ONTAP
+    source: SAA/Design High-Performing Architectures; FSx User Guides
+    match: [fsx, fsx-lustre, fsx-windows, fsx-ontap]
+    subtopics:
+      - {id: fsx-windows-ad, name: FSx for Windows Active Directory integration and DFS namespaces, match: [fsx-active-directory, dfs-namespaces, self-managed-ad]}
+      - {id: fsx-windows-shadow, name: Shadow copies, SMB shares and user quotas, match: [shadow-copies, smb-shares, user-quotas]}
+      - {id: fsx-lustre-dra, name: Lustre data repository associations with S3, match: [data-repository-association, lustre-s3, hsm-release]}
+      - {id: fsx-lustre-deploy, name: Scratch vs persistent Lustre deployment types, match: [scratch, persistent, lustre-throughput]}
+      - {id: fsx-ontap-snapmirror, name: ONTAP SnapMirror, FlexCache and multi-protocol, match: [snapmirror, flexcache, multi-protocol]}
+      - {id: fsx-ontap-svm, name: ONTAP SVMs, volumes, iSCSI and tiering, match: [svm, iscsi, ontap-tiering]}
+      - {id: fsx-openzfs, name: FSx for OpenZFS snapshots and clones, match: [fsx-openzfs, openzfs-snapshot]}
+      - {id: fsx-backups, name: FSx backups and restore, match: [fsx-backup]}
+      - {id: fsx-windows-multi-az, name: FSx for Windows Multi-AZ and throughput capacity scaling, match: [fsx-multi-az, throughput-capacity]}
+      - {id: fsx-lustre-tuning, name: Lustre striping and client tuning, match: [lustre-striping]}
+      - {id: fsx-selection, name: Choosing between FSx file systems, match: [fsx-selection]}
+      - {id: fsx-file-cache, name: Amazon File Cache, match: [file-cache]}
+  - id: storage-gateway-datasync
+    name: Storage Gateway and DataSync
+    source: SAP/Migration; Storage Gateway and DataSync User Guides
+    match: [storage-gateway, datasync, hybrid-storage]
+    subtopics:
+      - {id: sgw-file-gateway, name: S3 File Gateway shares and cache refresh, match: [s3-file-gateway, refresh-cache, file-share]}
+      - {id: sgw-volume, name: Volume Gateway cached vs stored and snapshots, match: [volume-gateway, cached-volumes, stored-volumes]}
+      - {id: sgw-tape, name: Tape Gateway and VTL, match: [tape-gateway, vtl]}
+      - {id: datasync-agent, name: DataSync agents, locations and activation, match: [datasync-agent, datasync-location, agent-activation]}
+      - {id: datasync-tasks, name: DataSync task options, filters and bandwidth limits, match: [datasync-task, task-filters, bandwidth-throttling]}
+      - {id: datasync-verify, name: DataSync verification, task reports and scheduling, match: [datasync-verification, task-report, datasync-schedule]}
+      - {id: sgw-deploy, name: Gateway appliance deployment and activation, match: [gateway-activation, gateway-vm]}
+      - {id: sgw-monitoring, name: Gateway cache utilization and upload buffer monitoring, match: [cache-utilization, upload-buffer]}
+      - {id: sgw-fsx-file, name: FSx File Gateway, match: [amazon-fsx-file-gateway]}
+      - {id: datasync-enhanced, name: DataSync Enhanced mode and cross-cloud transfers, match: [datasync-enhanced-mode, cross-cloud-transfer]}
+      - {id: datasync-troubleshoot, name: DataSync task failures and performance troubleshooting, match: [datasync-troubleshooting]}
+  - id: aws-backup
+    name: AWS Backup plans and vaults
+    source: SysOps/Reliability & BC; AWS Backup Developer Guide
+    match: [aws-backup, backup-plan, backup-vault]
+    subtopics:
+      - {id: backup-vault-lock, name: Vault Lock and logically air-gapped vaults, match: [vault-lock, logically-air-gapped-vault, immutable-backup]}
+      - {id: backup-selections, name: Tag-based backup selections and resource assignment, match: [backup-selection, tag-based-backup]}
+      - {id: backup-cross-account, name: Cross-account and cross-region copy, match: [cross-region-backup, cross-account-backup, backup-copy]}
+      - {id: backup-restore-testing, name: Restore testing plans, match: [restore-testing, restore-validation]}
+      - {id: backup-audit, name: Backup Audit Manager frameworks and reports, match: [backup-audit-manager, backup-reports]}
+      - {id: backup-policies-org, name: Organization backup policies, match: [backup-policies, org-backup-policy]}
+      - {id: backup-continuous, name: Continuous backup and point-in-time restore, match: [continuous-backup, backup-pitr]}
+      - {id: backup-restore-ops, name: Restoring resources from recovery points, match: [recovery-point-restore, restore-job]}
+      - {id: backup-monitoring, name: Backup job monitoring and notifications, match: [backup-job-monitoring, backup-notifications]}
+      - {id: backup-lifecycle-cold, name: Lifecycle to cold storage and retention settings, match: [cold-storage-transition, backup-retention]}
+      - {id: backup-vault-access, name: Vault access policies and vault KMS keys, match: [vault-access-policy, backup-vault-kms]}
+      - {id: backup-legal-hold, name: Legal holds and backup search, match: [backup-legal-hold, backup-search]}
+  # --- Databases (SAA High-Performing; SysOps Reliability)
+  - id: rds-operations
+    name: RDS Multi-AZ, read replicas and parameter groups
+    source: SAA/Design Resilient Architectures; RDS User Guide
+    match: [rds, multi-az, read-replica, read-replicas, parameter-group]
+    subtopics:
+      - {id: rds-multi-az-cluster, name: Multi-AZ DB cluster vs Multi-AZ instance, match: [multi-az-cluster, multi-az-instance]}
+      - {id: rds-backups-pitr, name: Automated backups, snapshots and point-in-time restore, match: [rds-snapshots, automated-backups, point-in-time-recovery]}
+      - {id: rds-blue-green, name: Blue/green deployments and major version upgrades, match: [blue-green-deployment, major-version-upgrade]}
+      - {id: rds-performance-insights, name: Performance Insights and Enhanced Monitoring, match: [performance-insights, enhanced-monitoring]}
+      - {id: rds-storage, name: Storage autoscaling, gp3 and IOPS, match: [storage-autoscaling, rds-storage, rds-gp3]}
+      - {id: rds-iam-auth, name: IAM database authentication and Kerberos, match: [iam-database-authentication, kerberos-auth]}
+      - {id: rds-maintenance, name: Maintenance windows, minor upgrades and pending modifications, match: [maintenance-window, auto-minor-version-upgrade, apply-immediately]}
+      - {id: rds-option-groups, name: Option groups and engine-specific features, match: [option-group, option-groups]}
+      - {id: rds-cross-region-replica, name: Cross-region read replicas and promotion, match: [cross-region-read-replica, replica-promotion]}
+      - {id: rds-encryption, name: Encrypting an unencrypted DB and sharing encrypted snapshots, match: [rds-encryption, encrypted-snapshot-copy]}
+      - {id: rds-events, name: RDS event notifications and log export, match: [rds-events, rds-log-export]}
+      - {id: rds-extended-support, name: RDS Extended Support and engine end of life, match: [extended-support]}
+      - {id: rds-network, name: DB subnet groups and connectivity troubleshooting, match: [db-subnet-group, rds-connectivity]}
+      - {id: rds-custom, name: RDS Custom, match: [rds-custom]}
+  - id: aurora
+    name: Aurora clusters, Serverless v2 and Global Database
+    source: SAA/Design High-Performing Architectures; Aurora User Guide
+    match: [aurora, aurora-serverless, global-database]
+    subtopics:
+      - {id: aurora-endpoints, name: Cluster, reader and custom endpoints, match: [reader-endpoint, custom-endpoint, cluster-endpoint]}
+      - {id: aurora-serverless-v2, name: Serverless v2 ACU scaling and min/max capacity, match: [aurora-serverless-v2, acu, capacity-range]}
+      - {id: aurora-global-failover, name: Global Database switchover and failover, match: [cross-region-failover, switchover, managed-failover]}
+      - {id: aurora-backtrack-clone, name: Backtrack and fast database cloning, match: [backtrack, fast-clone, copy-on-write]}
+      - {id: aurora-io-optimized, name: I/O-Optimized vs Standard storage pricing, match: [aurora-io-optimized, aurora-storage-pricing]}
+      - {id: aurora-data-api, name: RDS Data API and HTTP access, match: [rds-data-api, data-api]}
+      - {id: aurora-das, name: Database Activity Streams, match: [database-activity-streams, das]}
+      - {id: aurora-zero-etl, name: Zero-ETL to Redshift and Aurora Limitless, match: [zero-etl, aurora-limitless]}
+      - {id: aurora-failover-priority, name: Failover priority tiers and reader promotion, match: [promotion-tier]}
+      - {id: aurora-replica-scaling, name: Aurora replica auto scaling, match: [aurora-replica-auto-scaling]}
+      - {id: aurora-parameter-groups, name: Cluster vs instance parameter groups, match: [cluster-parameter-group]}
+      - {id: aurora-dsql, name: Aurora DSQL, match: [aurora-dsql]}
+      - {id: aurora-export-s3, name: Exporting snapshots and cluster data to S3, match: [snapshot-export-s3]}
+  - id: rds-proxy
+    name: RDS Proxy connection pooling
+    source: DVA/Development; RDS User Guide / RDS Proxy
+    match: [rds-proxy, connection-pooling]
+    subtopics:
+      - {id: proxy-pinning, name: Session pinning diagnosis and avoidance, match: [session-pinning, pinning]}
+      - {id: proxy-iam-auth, name: Proxy IAM authentication and Secrets Manager setup, match: [proxy-iam-auth, iam-authentication]}
+      - {id: proxy-endpoints, name: Read-only and cross-VPC proxy endpoints, match: [proxy-endpoint, read-only-endpoint]}
+      - {id: proxy-pool-sizing, name: Pool sizing (MaxConnectionsPercent, borrow timeout), match: [max-connections-percent, connection-borrow-timeout]}
+      - {id: proxy-lambda, name: Lambda with RDS Proxy connection reuse, match: [lambda-database, lambda-rds-proxy]}
+      - {id: proxy-create, name: Creating a proxy with target groups and networking, match: [proxy-target-group, create-db-proxy]}
+      - {id: proxy-failover, name: Failover behaviour through RDS Proxy, match: [proxy-failover]}
+      - {id: proxy-monitoring, name: RDS Proxy CloudWatch metrics and logs, match: [proxy-metrics]}
+      - {id: proxy-tls, name: RDS Proxy TLS enforcement, match: [proxy-tls]}
+      - {id: proxy-troubleshoot, name: Troubleshooting RDS Proxy connection errors, match: [proxy-troubleshooting]}
+  - id: dynamodb-modeling
+    name: DynamoDB data modelling, keys and indexes
+    source: DVA/Development; DynamoDB Developer Guide / Best practices
+    match: [dynamodb, single-table-design, partition-key, gsi, lsi]
+    subtopics:
+      - {id: ddb-hot-partition, name: Hot partitions and write sharding, match: [hot-partition, write-sharding, adaptive-capacity]}
+      - {id: ddb-sparse-index, name: Sparse, inverted and overloaded indexes, match: [sparse-index, inverted-index, key-overloading]}
+      - {id: ddb-transactions, name: Transactions and condition expressions, match: [transactions, condition-expression, optimistic-locking]}
+      - {id: ddb-query-patterns, name: Query vs scan, pagination and filter expressions, match: [query-vs-scan, pagination, filter-expression]}
+      - {id: ddb-item-size, name: Item size limits and large attribute offloading, match: [item-size-limit, large-items, attribute-compression]}
+      - {id: ddb-partiql, name: PartiQL and NoSQL Workbench, match: [partiql, nosql-workbench]}
+      - {id: ddb-time-series, name: Time-series and versioning patterns, match: [time-series-pattern, version-history-pattern]}
+      - {id: ddb-access-patterns, name: Access pattern inventory and entity charts, match: [entity-chart]}
+      - {id: ddb-gsi-design, name: GSI projections and write amplification and back-pressure, match: [gsi-projection, gsi-backpressure]}
+      - {id: ddb-adjacency-list, name: Adjacency list and many-to-many relationships, match: [many-to-many]}
+      - {id: ddb-batch-ops, name: BatchGetItem and BatchWriteItem and UnprocessedItems, match: [batch-write-item, unprocessed-items]}
+      - {id: ddb-consistency, name: Strongly vs eventually consistent reads, match: [strongly-consistent-reads]}
+  - id: dynamodb-operations
+    name: DynamoDB capacity, streams, TTL and DAX
+    source: DVA/Development; DynamoDB Developer Guide
+    match: [dynamodb-streams, dax, on-demand-capacity, provisioned-capacity, ttl]
+    subtopics:
+      - {id: ddb-autoscaling, name: Provisioned capacity auto scaling and throttling, match: [dynamodb-auto-scaling, rcu, wcu, throttling]}
+      - {id: ddb-global-tables, name: Global tables and multi-region replication, match: [global-tables, multi-region-replication]}
+      - {id: ddb-pitr-backup, name: PITR, on-demand backups and AWS Backup integration, match: [dynamodb-backup, pitr, dynamodb-pitr]}
+      - {id: ddb-export-import, name: Export to S3 and import from S3, match: [export-to-s3, import-from-s3]}
+      - {id: ddb-streams-lambda, name: Streams to Lambda and Kinesis Data Streams for DynamoDB, match: [streams-lambda, kinesis-for-dynamodb]}
+      - {id: ddb-dax-cluster, name: DAX cluster sizing and consistency, match: [dax-cluster, dax-consistency]}
+      - {id: ddb-table-class, name: Table classes and warm throughput, match: [table-class, standard-ia, warm-throughput]}
+      - {id: ddb-ttl-impl, name: TTL implementation and expired item handling, match: [time-to-live, ttl-expiry]}
+      - {id: ddb-capacity-mode-switch, name: Switching capacity modes and on-demand maximum throughput, match: [capacity-mode-switch, on-demand-throughput-limit]}
+      - {id: ddb-monitoring, name: DynamoDB metrics and CloudWatch Contributor Insights, match: [contributor-insights-dynamodb, throttled-requests]}
+      - {id: ddb-fine-grained, name: Fine-grained access with dynamodb LeadingKeys, match: [leadingkeys, fine-grained-access-dynamodb]}
+      - {id: ddb-resource-policy, name: Resource-based policies and deletion protection, match: [dynamodb-resource-policy, deletion-protection]}
+      - {id: ddb-zero-etl, name: DynamoDB zero-ETL to OpenSearch and Redshift, match: [dynamodb-zero-etl]}
+  - id: elasticache
+    name: ElastiCache Redis/Memcached caching strategies
+    source: SAA/Design High-Performing Architectures; ElastiCache User Guide
+    match: [elasticache, redis, memcached, caching-strategy]
+    subtopics:
+      - {id: ec-cluster-mode, name: Cluster mode, shards and resharding, match: [cluster-mode, resharding, slots]}
+      - {id: ec-failover, name: Multi-AZ automatic failover and replication groups, match: [automatic-failover, replication-group]}
+      - {id: ec-serverless, name: ElastiCache Serverless, match: [elasticache-serverless, serverless-cache]}
+      - {id: ec-global-datastore, name: Global Datastore cross-region replication, match: [global-datastore]}
+      - {id: ec-auth, name: AUTH, RBAC and in-transit encryption, match: [redis-auth, rbac, in-transit-encryption]}
+      - {id: ec-eviction, name: Eviction policies and memory management, match: [eviction-policy, maxmemory-policy, reserved-memory]}
+      - {id: ec-valkey-migration, name: Valkey migration and engine upgrades, match: [valkey, engine-upgrade]}
+      - {id: ec-patterns, name: Cache-aside, write-through and TTL patterns, match: [cache-aside, lazy-loading, write-through]}
+      - {id: ec-scaling, name: Online vertical and horizontal scaling and node types, match: [node-type, online-scaling]}
+      - {id: ec-backups, name: ElastiCache backups and restore, match: [elasticache-backup]}
+      - {id: ec-monitoring, name: Key metrics (EngineCPUUtilization and evictions and hit rate), match: [enginecpuutilization, cache-hit-rate]}
+      - {id: ec-memcached, name: Memcached auto discovery, match: [auto-discovery]}
+      - {id: ec-client-connection, name: Cluster-aware clients and connection pooling, match: [cluster-client, connection-pooling-redis]}
+  - id: redshift
+    name: Redshift warehousing, Spectrum and WLM
+    source: SAA/Design High-Performing Architectures; Redshift Management Guide
+    match: [redshift, redshift-spectrum]
+    subtopics:
+      - {id: rs-dist-sort-keys, name: Distribution styles and sort keys, match: [distribution-key, sort-key, distkey]}
+      - {id: rs-wlm, name: Workload management, queues and concurrency scaling, match: [workload-management, wlm, concurrency-scaling]}
+      - {id: rs-copy-unload, name: COPY and UNLOAD best practices, match: [copy-command, unload]}
+      - {id: rs-vacuum, name: VACUUM, ANALYZE and table maintenance, match: [vacuum, analyze, auto-vacuum]}
+      - {id: rs-serverless, name: Redshift Serverless workgroups and namespaces, match: [redshift-serverless, workgroup, rpu]}
+      - {id: rs-data-sharing, name: Data sharing and zero-ETL integrations, match: [data-sharing, datashare]}
+      - {id: rs-spectrum-external, name: Spectrum external schemas and partitioned external tables, match: [external-schema, external-table]}
+      - {id: rs-query-tuning, name: Query tuning with EXPLAIN and system tables, match: [query-plan, stl-tables, svl-query-report]}
+      - {id: rs-snapshots-resize, name: Snapshots, restore and elastic/classic resize, match: [redshift-snapshot, elastic-resize, classic-resize]}
+      - {id: rs-security, name: Redshift RBAC and IAM roles and encryption, match: [redshift-rbac, redshift-iam-role]}
+      - {id: rs-materialized-views, name: Materialized views and auto refresh, match: [redshift-materialized-views]}
+      - {id: rs-ra3-managed-storage, name: RA3 node types and managed storage, match: [ra3-node-migration, managed-storage]}
+      - {id: rs-monitoring, name: Query monitoring rules and Redshift Advisor, match: [query-monitoring-rules, redshift-advisor]}
+      - {id: rs-streaming-ingestion, name: Streaming ingestion from Kinesis and MSK, match: [streaming-ingestion]}
+  - id: purpose-built-databases
+    name: DocumentDB, Neptune, Keyspaces, Timestream, QLDB
+    source: SAP/New Solutions; respective Developer Guides
+    match: [documentdb, neptune, keyspaces, timestream, qldb]
+    subtopics:
+      - {id: docdb-ops, name: DocumentDB clusters, indexes and MongoDB compatibility, match: [mongodb-compatible, documentdb-cluster, documentdb-indexes]}
+      - {id: neptune-queries, name: Neptune Gremlin, openCypher and SPARQL, match: [gremlin, opencypher, sparql]}
+      - {id: neptune-loader, name: Neptune bulk loader and Neptune Analytics, match: [neptune-loader, neptune-analytics]}
+      - {id: keyspaces-ops, name: Keyspaces CQL, capacity modes and migration from Cassandra, match: [cql, cassandra-compatible, keyspaces-capacity]}
+      - {id: timestream-ops, name: Timestream tables, retention and queries, match: [time-series, timestream-retention, timestream-query]}
+      - {id: memorydb, name: MemoryDB durable Redis, match: [memorydb]}
+      - {id: qldb-migration, name: QLDB ledger and migration off QLDB, match: [ledger, migration-off-qldb]}
+      - {id: docdb-elastic, name: DocumentDB elastic clusters, match: [elastic-clusters]}
+      - {id: neptune-serverless, name: Neptune Serverless and read replicas, match: [neptune-serverless]}
+      - {id: timestream-influxdb, name: Timestream for InfluxDB, match: [timestream-influxdb]}
+      - {id: docdb-migration, name: Migrating MongoDB to DocumentDB, match: [mongodb-migration]}
+  - id: dms-migration
+    name: Database Migration Service and Schema Conversion Tool
+    source: SAP/Migration & Modernization; DMS User Guide
+    match: [dms, database-migration, schema-conversion, sct]
+    subtopics:
+      - {id: dms-replication-instance, name: Replication instances vs DMS Serverless sizing, match: [replication-instance, dms-serverless]}
+      - {id: dms-task-types, name: Full load, CDC and full load + CDC tasks, match: [full-load, cdc, ongoing-replication]}
+      - {id: dms-table-mappings, name: Table mappings and transformation rules, match: [table-mappings, transformation-rules, selection-rules]}
+      - {id: dms-lob, name: LOB handling and performance tuning, match: [lob-handling, dms-performance]}
+      - {id: dms-validation, name: Data validation and task monitoring, match: [dms-validation, data-validation, task-monitoring]}
+      - {id: dms-sct-conversion, name: SCT assessment reports and schema conversion, match: [assessment-report, schema-conversion-tool, dms-schema-conversion]}
+      - {id: dms-sources, name: Source prerequisites (binlog, supplemental logging, CDC on SQL Server), match: [binlog, supplemental-logging, source-prerequisites]}
+      - {id: dms-cutover, name: Cutover planning and rollback, match: [cutover, migration-cutover]}
+      - {id: dms-endpoints, name: Source and target endpoint settings and test connections, match: [dms-endpoint, test-connection]}
+      - {id: dms-troubleshooting, name: Troubleshooting DMS task errors with task logs, match: [dms-troubleshooting, task-logs]}
+      - {id: dms-homogeneous, name: DMS homogeneous data migrations and Fleet Advisor, match: [homogeneous-migration, fleet-advisor]}
+      - {id: dms-premigration, name: Premigration assessments, match: [premigration-assessment]}
+      - {id: dms-streaming-targets, name: CDC to S3 and Kinesis targets, match: [dms-s3-target, dms-kinesis-target]}
+  # --- Application integration & messaging (DVA; SAA Resilient)
+  - id: sqs
+    name: SQS standard/FIFO queues, DLQs and visibility timeout
+    source: DVA/Development; SQS Developer Guide
+    match: [sqs, fifo-queue, dead-letter-queue, dlq, visibility-timeout]
+    subtopics:
+      - {id: sqs-fifo-dedup, name: FIFO deduplication, message groups and high throughput mode, match: [message-group-id, deduplication, high-throughput-fifo]}
+      - {id: sqs-dlq-redrive, name: DLQ redrive and maxReceiveCount tuning, match: [dlq-redrive, maxreceivecount, redrive-policy]}
+      - {id: sqs-long-polling, name: Long polling, batching and cost, match: [long-polling, batch-actions, sqs-cost]}
+      - {id: sqs-delay-timers, name: Delay queues and message timers, match: [delay-queue, message-timer]}
+      - {id: sqs-encryption-policy, name: SSE-KMS, access policies and VPC endpoints, match: [sqs-sse, sqs-policy, sqs-vpc-endpoint]}
+      - {id: sqs-fair-queues, name: Fair queues and noisy-neighbour tenants, match: [fair-queues, tenant-isolation-sqs]}
+      - {id: sqs-extended-client, name: Large messages with the Extended Client Library, match: [extended-client, large-messages]}
+      - {id: sqs-visibility-tuning, name: Visibility timeout tuning and ChangeMessageVisibility, match: [visibility-heartbeat, visibility-extension]}
+      - {id: sqs-monitoring, name: Queue depth and ApproximateAgeOfOldestMessage alarms, match: [approximateageofoldestmessage, queue-depth]}
+      - {id: sqs-retention-purge, name: Message retention and purge and message size, match: [message-retention, purge-queue]}
+      - {id: sqs-idempotent-consumers, name: Idempotent consumers and duplicate handling, match: [idempotent-consumer]}
+      - {id: sqs-consumer-scaling, name: Scaling consumers on queue backlog, match: [consumer-scaling]}
+  - id: sns
+    name: SNS topics, fan-out and filtering
+    source: DVA/Development; SNS Developer Guide
+    match: [sns, fan-out, fanout, message-filtering]
+    subtopics:
+      - {id: sns-filter-policies, name: Filter policies on attributes and body, match: [filter-policy, filter-policy-scope]}
+      - {id: sns-fifo, name: FIFO topics and ordering with SQS FIFO, match: [sns-fifo, fifo-topic]}
+      - {id: sns-delivery-retries, name: Delivery policies, retries and delivery status logging, match: [delivery-policy, delivery-status, sns-retries]}
+      - {id: sns-raw-delivery, name: Raw message delivery and envelope format, match: [raw-message-delivery, sns-envelope]}
+      - {id: sns-sms-mobile, name: SMS, mobile push and email endpoints, match: [sns-sms, mobile-push, sms-sandbox]}
+      - {id: sns-data-protection, name: Data protection policies and encryption, match: [sns-data-protection, sns-encryption]}
+      - {id: sns-cross-account, name: Cross-account and cross-region subscriptions, match: [sns-cross-account, cross-region-subscription]}
+      - {id: sns-subscription-confirm, name: Subscription confirmation and HTTPS endpoints, match: [https-endpoint]}
+      - {id: sns-message-archiving, name: FIFO message archiving and replay, match: [message-archiving, sns-replay]}
+      - {id: sns-dlq, name: Subscription dead-letter queues, match: [subscription-dlq]}
+      - {id: sns-signature, name: Verifying SNS message signatures, match: [message-signature, signature-version]}
+      - {id: sns-monitoring, name: SNS delivery metrics and failure alarms, match: [numberofnotificationsfailed]}
+  - id: eventbridge
+    name: EventBridge buses, rules and schedulers
+    source: DVA/Development; EventBridge User Guide
+    match: [eventbridge, event-bus, event-rule, eventbridge-scheduler]
+    subtopics:
+      - {id: eb-event-patterns, name: Event patterns (prefix, numeric, anything-but, wildcard), match: [event-pattern, content-filtering, anything-but]}
+      - {id: eb-input-transformer, name: Input transformers and target input paths, match: [input-transformer, input-path]}
+      - {id: eb-pipes, name: EventBridge Pipes with enrichment, match: [eventbridge-pipes, pipes, enrichment]}
+      - {id: eb-schema-registry, name: Schema registry and discovery, match: [schema-registry, schema-discovery]}
+      - {id: eb-archive-replay, name: Archive and replay, match: [archive-replay, event-replay]}
+      - {id: eb-api-destinations, name: API destinations and connections, match: [api-destinations, eb-connection]}
+      - {id: eb-cross-account, name: Cross-account and cross-region buses, match: [cross-account-bus, cross-region-events]}
+      - {id: eb-scheduler, name: Scheduler schedules, time zones and flexible windows, match: [scheduler, schedule-group, flexible-time-window]}
+      - {id: eb-dlq-retry, name: Target retries, DLQs and failed invocations, match: [eb-dlq, failed-invocations, retry-policy]}
+      - {id: eb-aws-events, name: AWS service events and API calls via CloudTrail, match: [aws-service-events, aws-api-call-via-cloudtrail]}
+      - {id: eb-partner-sources, name: SaaS partner event sources, match: [partner-event-source]}
+      - {id: eb-testing-patterns, name: Testing event patterns with test-event-pattern and the sandbox, match: [test-event-pattern]}
+      - {id: eb-global-endpoints, name: Global endpoints and regional failover, match: [global-endpoints]}
+      - {id: eb-monitoring, name: Rule metrics and debugging rules that do not fire, match: [matchedevents, eventbridge-debugging]}
+  - id: step-functions
+    name: Step Functions state machines
+    source: DVA/Development; Step Functions Developer Guide
+    match: [step-functions, state-machine, workflow-orchestration]
+    subtopics:
+      - {id: sfn-standard-express, name: Standard vs Express workflows, match: [express-workflows, standard-workflows]}
+      - {id: sfn-error-handling, name: Retry, Catch and error handling, match: [sfn-retry, sfn-catch, error-handling]}
+      - {id: sfn-map-distributed, name: Map and Distributed Map, match: [distributed-map, map-state, inline-map]}
+      - {id: sfn-sdk-integrations, name: SDK integrations and optimised integrations, match: [sdk-integrations, optimized-integrations, arn-states]}
+      - {id: sfn-callbacks, name: Callback patterns with task tokens and .sync, match: [task-token, wait-for-task-token, run-a-job]}
+      - {id: sfn-jsonata-variables, name: JSONata, variables and JSONPath data flow, match: [jsonata, sfn-variables, intrinsic-functions-sfn]}
+      - {id: sfn-testing, name: TestState API, Workflow Studio and local testing, match: [teststate, workflow-studio, sfn-local]}
+      - {id: sfn-observability, name: Execution history, X-Ray and CloudWatch logging, match: [execution-history, sfn-logging]}
+      - {id: sfn-flow-states, name: Choice and Wait and Parallel and Pass states, match: [choice-state, parallel-state, wait-state]}
+      - {id: sfn-activities, name: Activities and activity workers, match: [activity-worker]}
+      - {id: sfn-versions-aliases, name: State machine versions and aliases and gradual deployment, match: [sfn-versions, sfn-aliases]}
+      - {id: sfn-redrive, name: Redriving failed executions, match: [sfn-redrive]}
+      - {id: sfn-iam, name: Execution roles and starting executions from API Gateway, match: [sfn-execution-role]}
+  - id: api-gateway
+    name: API Gateway REST/HTTP/WebSocket APIs
+    source: DVA/Development; API Gateway Developer Guide
+    match: [api-gateway, rest-api, http-api, usage-plan, api-keys]
+    subtopics:
+      - {id: apigw-authorizers, name: Lambda, Cognito and IAM authorisers, match: [lambda-authorizer, cognito-authorizer, iam-authorization-apigw]}
+      - {id: apigw-mapping-templates, name: Mapping templates and VTL integration requests, match: [mapping-template, vtl-mapping, integration-request]}
+      - {id: apigw-stages, name: Stages, stage variables, deployments and canary releases, match: [stage-variables, canary-release, apigw-deployment]}
+      - {id: apigw-throttling, name: Throttling, usage plans and API keys, match: [throttling-limits, usage-plans, burst-limit]}
+      - {id: apigw-caching, name: Stage caching and cache invalidation, match: [stage-cache, api-caching]}
+      - {id: apigw-private, name: Private APIs and VPC links, match: [private-api, vpc-link]}
+      - {id: apigw-custom-domains, name: Custom domains, base path mapping and mTLS, match: [custom-domain, base-path-mapping, apigw-mtls]}
+      - {id: apigw-websocket, name: WebSocket APIs and connection management, match: [websocket-api, connection-management]}
+      - {id: apigw-logging, name: Access logs, execution logs and CORS, match: [apigw-access-logs, execution-logs, apigw-cors]}
+      - {id: apigw-request-validation, name: Request validation and models, match: [request-validation, json-schema-models]}
+      - {id: apigw-openapi, name: Importing and exporting OpenAPI definitions, match: [openapi-import, api-export]}
+      - {id: apigw-errors, name: Gateway responses and integration timeout troubleshooting, match: [gateway-responses, integration-timeout]}
+      - {id: apigw-proxy-integrations, name: Lambda proxy vs non-proxy and HTTP proxy integrations, match: [lambda-proxy-integration, http-proxy]}
+      - {id: apigw-resource-policies, name: API resource policies (IP and VPC and account), match: [apigw-resource-policy]}
+  - id: kinesis-streaming
+    name: Kinesis Data Streams and Firehose
+    source: SAA/Design High-Performing Architectures; Kinesis Developer Guide
+    match: [kinesis, kinesis-data-streams, firehose, streaming]
+    subtopics:
+      - {id: kds-sharding, name: Shard sizing, resharding and on-demand mode, match: [shards, resharding, on-demand-mode]}
+      - {id: kds-efo, name: Enhanced fan-out consumers, match: [enhanced-fan-out, efo]}
+      - {id: kds-kcl-kpl, name: KCL and KPL producers/consumers, match: [kcl, kpl, aggregation]}
+      - {id: kds-iterator-age, name: Monitoring iterator age and hot shards, match: [iterator-age, hot-shard, provisionedthroughputexceeded]}
+      - {id: firehose-transform, name: Firehose transformation, format conversion and dynamic partitioning, match: [dynamic-partitioning, format-conversion, firehose-transformation]}
+      - {id: firehose-destinations, name: Firehose destinations and buffering, match: [s3-delivery, buffering-hints, firehose-destinations]}
+      - {id: managed-flink, name: Managed Service for Apache Flink, match: [managed-flink, kinesis-data-analytics]}
+      - {id: kds-retention-encryption, name: Stream retention and server-side encryption, match: [stream-retention, kds-encryption]}
+      - {id: kds-producer-retries, name: PutRecords partial failures and partition key design, match: [putrecords, partition-key-design]}
+      - {id: firehose-error-handling, name: Firehose error output prefixes and source backup, match: [firehose-error-output, firehose-backup]}
+      - {id: kvs, name: Kinesis Video Streams, match: [kinesis-video-streams]}
+  - id: msk-mq
+    name: Amazon MSK and Amazon MQ
+    source: SAP/New Solutions; MSK and MQ Developer Guides
+    match: [msk, amazon-mq, managed-kafka]
+    subtopics:
+      - {id: msk-auth, name: MSK IAM, SASL/SCRAM and mTLS authentication, match: [iam-auth, sasl-scram, msk-mtls]}
+      - {id: msk-serverless, name: MSK Serverless and Express brokers, match: [msk-serverless, express-brokers]}
+      - {id: msk-connect, name: MSK Connect connectors, match: [msk-connect, kafka-connect]}
+      - {id: msk-storage, name: Broker storage, tiered storage and scaling, match: [broker-storage, tiered-storage, msk-scaling]}
+      - {id: msk-replicator, name: MSK Replicator cross-region, match: [msk-replicator, cross-region-kafka]}
+      - {id: mq-activemq, name: Amazon MQ ActiveMQ active/standby brokers, match: [activemq, active-standby]}
+      - {id: mq-rabbitmq, name: Amazon MQ RabbitMQ clusters and quorum queues, match: [rabbitmq, quorum-queues]}
+      - {id: msk-config, name: MSK cluster configurations and broker properties, match: [msk-configuration, broker-properties]}
+      - {id: msk-monitoring, name: Consumer lag and monitoring levels and Open Monitoring, match: [consumer-lag, open-monitoring]}
+      - {id: msk-networking, name: Bootstrap brokers and public access and multi-VPC connectivity, match: [bootstrap-brokers, multi-vpc-connectivity]}
+      - {id: msk-upgrades, name: Kafka version upgrades on MSK, match: [kafka-version-upgrade]}
+      - {id: mq-network-of-brokers, name: Amazon MQ network of brokers and migration, match: [network-of-brokers]}
+  - id: cognito
+    name: Cognito user pools and identity pools
+    source: DVA/Security; Cognito Developer Guide
+    match: [cognito, user-pool, identity-pool]
+    subtopics:
+      - {id: cognito-hosted-ui, name: Hosted UI, managed login and OAuth flows, match: [hosted-ui, managed-login, oauth2]}
+      - {id: cognito-triggers, name: Lambda triggers (pre sign-up, pre token generation, custom auth), match: [pre-token-generation, custom-auth-flow, cognito-lambda-triggers]}
+      - {id: cognito-mfa, name: MFA, passkeys and adaptive authentication, match: [mfa, passkeys, adaptive-authentication]}
+      - {id: cognito-federation, name: SAML and social identity providers, match: [social-login, saml-idp, cognito-federation]}
+      - {id: cognito-tokens, name: JWT verification, refresh tokens and token revocation, match: [jwt, refresh-token, token-revocation]}
+      - {id: cognito-identity-pool-roles, name: Identity pool role mapping and enhanced flow, match: [role-mapping, enhanced-flow, unauthenticated-identities]}
+      - {id: cognito-groups, name: Groups, custom attributes and user migration, match: [cognito-groups, custom-attributes, user-migration]}
+      - {id: cognito-app-clients, name: App clients and client secrets and auth flows, match: [auth-flows]}
+      - {id: cognito-sdk-auth, name: SRP and USER_PASSWORD_AUTH flows with InitiateAuth, match: [srp-auth, initiate-auth]}
+      - {id: cognito-email-sms, name: Email and SMS configuration with SES and verification messages, match: [cognito-ses, verification-messages]}
+      - {id: cognito-security, name: Threat protection and WAF and Cognito quotas, match: [threat-protection, cognito-waf]}
+      - {id: cognito-m2m, name: Client credentials M2M and resource servers, match: [client-credentials, resource-server]}
+  - id: appsync-amplify
+    name: AppSync GraphQL and Amplify
+    source: DVA/Development; AppSync and Amplify Developer Guides
+    match: [appsync, amplify, graphql]
+    subtopics:
+      - {id: appsync-resolvers, name: JavaScript and pipeline resolvers, match: [js-resolvers, pipeline-resolvers, resolvers]}
+      - {id: appsync-auth, name: Authorisation modes and multi-auth, match: [authorization-modes, multi-auth]}
+      - {id: appsync-subscriptions, name: Subscriptions and AppSync Events, match: [subscriptions, appsync-events]}
+      - {id: appsync-caching, name: Resolver caching, match: [appsync-caching, resolver-cache]}
+      - {id: amplify-hosting, name: Amplify Hosting and branch deployments, match: [amplify-hosting, branch-deployments]}
+      - {id: amplify-gen2, name: Amplify Gen 2 data and auth definitions, match: [amplify-gen2, amplify-data]}
+      - {id: appsync-merged-apis, name: Merged APIs and data sources, match: [merged-apis, data-sources]}
+      - {id: appsync-direct-lambda, name: Direct Lambda resolvers and batch invoke, match: [direct-lambda-resolver, batch-invoke]}
+      - {id: appsync-monitoring, name: AppSync logging and X-Ray and enhanced metrics, match: [appsync-logging]}
+      - {id: appsync-private-api, name: AppSync private APIs and custom domains, match: [appsync-private-api]}
+      - {id: amplify-redirects, name: Amplify custom domains and redirects and environment variables, match: [amplify-redirects, amplify-custom-domain]}
+      - {id: appsync-conflict, name: Conflict detection and offline sync, match: [conflict-detection, datastore]}
+  # --- Deployment, IaC, automation (SysOps Deployment; DVA Deployment)
+  - id: cloudformation
+    name: CloudFormation stacks, change sets and drift
+    source: SysOps/Deployment; CloudFormation User Guide
+    match: [cloudformation, change-set, change-sets, stack-drift, stacksets, stackset]
+    subtopics:
+      - {id: cfn-nested-stacks, name: Nested stacks and cross-stack exports, match: [nested-stacks, cross-stack-references, exports]}
+      - {id: cfn-stacksets-ops, name: StackSets deployment targets and operation preferences, match: [stackset-operations, deployment-targets, service-managed-stacksets]}
+      - {id: cfn-custom-resources, name: Custom resources and the resource provider framework, match: [custom-resources, cfn-response, resource-provider]}
+      - {id: cfn-policies, name: Stack policies, DeletionPolicy and UpdateReplacePolicy, match: [stack-policy, deletion-policy, update-replace-policy]}
+      - {id: cfn-import, name: Importing existing resources and IaC generator, match: [import-resources, iac-generator]}
+      - {id: cfn-rollback, name: Rollback triggers, failed updates and continue-update-rollback, match: [rollback, continue-update-rollback, rollback-triggers]}
+      - {id: cfn-lint-guard, name: cfn-lint and cfn-guard validation, match: [cfn-lint, cfn-guard]}
+      - {id: cfn-helper-scripts, name: cfn-init, cfn-signal and creation policies, match: [cfn-init, cfn-signal, creation-policy]}
+      - {id: cfn-hooks, name: CloudFormation Hooks, match: [cfn-hooks, cloudformation-hooks]}
+      - {id: cfn-modules-macros, name: Macros, modules and transforms, match: [cfn-macros, cfn-modules, transform]}
+      - {id: cfn-parameters-mappings, name: Parameters and SSM parameter types and mappings and conditions, match: [ssm-parameter-types, cfn-mappings, cfn-conditions]}
+      - {id: cfn-intrinsic, name: Intrinsic functions (Sub and GetAtt and ImportValue and ForEach), match: [fn-sub-getatt, intrinsic-function-reference]}
+      - {id: cfn-stack-troubleshooting, name: Troubleshooting CREATE_FAILED and DELETE_FAILED stacks, match: [delete-failed, create-failed]}
+      - {id: cfn-git-sync, name: CloudFormation Git sync, match: [git-sync]}
+      - {id: cfn-termination-protection, name: Termination protection and stack refactoring, match: [stack-refactoring]}
+  - id: cdk
+    name: AWS CDK constructs and pipelines
+    source: DVA/Deployment; CDK Developer Guide
+    match: [cdk, aws-cdk, cdk-constructs]
+    subtopics:
+      - {id: cdk-bootstrap, name: Bootstrapping and cross-account trust, match: [cdk-bootstrap, bootstrap-stack]}
+      - {id: cdk-pipelines, name: CDK Pipelines self-mutating pipelines, match: [cdk-pipelines, self-mutating]}
+      - {id: cdk-assertions, name: Assertions and snapshot tests, match: [assertions, snapshot-tests, cdk-testing]}
+      - {id: cdk-aspects-nag, name: Aspects and cdk-nag, match: [aspects, cdk-nag]}
+      - {id: cdk-context, name: Context lookups and cdk.context.json, match: [context, context-lookup]}
+      - {id: cdk-escape-hatches, name: Escape hatches and L1 overrides, match: [escape-hatch, cfn-override, l1-constructs]}
+      - {id: cdk-construct-library, name: Publishing a construct library with projen/jsii, match: [construct-library, jsii, projen]}
+      - {id: cdk-migrate-watch, name: cdk migrate, cdk watch and hotswap, match: [cdk-migrate, cdk-watch, hotswap]}
+      - {id: cdk-diff-deploy, name: cdk synth and diff and deploy flags and approvals, match: [require-approval]}
+      - {id: cdk-assets, name: Asset bundling with Docker and esbuild, match: [asset-bundling, docker-assets]}
+      - {id: cdk-stages-envs, name: Stages and environments for multi-account apps, match: [cdk-stage, cdk-environments]}
+      - {id: cdk-refactor, name: Logical ID stability and refactoring constructs, match: [cdk-refactor]}
+      - {id: cdk-upgrades, name: Feature flags and CDK v2 migration, match: [feature-flags, cdk-v2-migration]}
+  - id: sam
+    name: SAM templates and local testing
+    source: DVA/Deployment; SAM Developer Guide
+    match: [sam, serverless-application-model, sam-cli]
+    subtopics:
+      - {id: sam-local, name: sam local invoke and start-api, match: [sam-local, local-testing]}
+      - {id: sam-sync, name: sam sync and Accelerate, match: [sam-sync, sam-accelerate]}
+      - {id: sam-build, name: sam build with containers and layers, match: [sam-build, build-in-container]}
+      - {id: sam-gradual, name: Gradual deployments with CodeDeploy aliases, match: [gradual-deployment, codedeploy-alias]}
+      - {id: sam-globals-policies, name: Globals and policy templates, match: [globals, policy-templates]}
+      - {id: sam-pipelines, name: sam pipeline bootstrap and samconfig, match: [sam-pipeline, samconfig]}
+      - {id: sam-template-resources, name: AWS Serverless resource types and event sources, match: [serverless-function, sam-events]}
+      - {id: sam-logs-traces, name: sam logs and sam traces, match: [sam-logs, sam-traces]}
+      - {id: sam-remote-invoke, name: sam remote invoke and shared test events, match: [remote-invoke, shared-test-events]}
+      - {id: sam-nested-apps, name: Nested applications and the Serverless Application Repository, match: [nested-applications, serverless-application-repository]}
+      - {id: sam-terraform, name: SAM CLI with Terraform projects, match: [sam-terraform]}
+  - id: ssm-automation
+    name: Systems Manager - Session Manager, Run Command, Patch Manager, State Manager
+    source: SysOps/Deployment; Systems Manager User Guide
+    match: [systems-manager, ssm, session-manager, run-command, patch-manager, state-manager]
+    subtopics:
+      - {id: ssm-session-logging, name: Session Manager logging, port forwarding and KMS, match: [session-logging, port-forwarding, session-preferences]}
+      - {id: ssm-patch-baselines, name: Patch baselines, patch groups and maintenance windows, match: [patch-baseline, patch-group, maintenance-windows]}
+      - {id: ssm-documents, name: Authoring SSM documents and Automation runbooks, match: [ssm-documents, automation-runbooks, automation-document]}
+      - {id: ssm-inventory-compliance, name: Inventory and compliance, match: [inventory, compliance-summary]}
+      - {id: ssm-hybrid, name: Hybrid activations and managed nodes, match: [hybrid-activations, managed-nodes, ssm-agent]}
+      - {id: ssm-opscenter, name: OpsCenter, Incident Manager and Explorer, match: [opscenter, incident-manager, opsitems]}
+      - {id: ssm-quick-setup, name: Quick Setup and default host management, match: [quick-setup, default-host-management]}
+      - {id: ssm-fleet-manager, name: Fleet Manager, match: [fleet-manager]}
+      - {id: ssm-run-command-ops, name: Run Command targets and rate control and S3 output, match: [rate-control, send-command]}
+      - {id: ssm-state-manager-assoc, name: State Manager associations, match: [state-manager-association]}
+      - {id: ssm-distributor, name: Distributor packages, match: [distributor]}
+      - {id: ssm-change-calendar, name: Change Calendar and Change Manager, match: [change-calendar, change-manager]}
+      - {id: ssm-unmanaged-nodes, name: Troubleshooting unmanaged nodes and SSM Agent connectivity, match: [ssm-agent-troubleshooting, unmanaged-instance]}
+  - id: codepipeline-codedeploy
+    name: CodePipeline, CodeBuild and CodeDeploy
+    source: DVA/Deployment; CodePipeline, CodeBuild and CodeDeploy User Guides
+    match: [codepipeline, codebuild, codedeploy, blue-green-deployment, canary-deployment]
+    subtopics:
+      - {id: cb-buildspec, name: buildspec phases, environment variables and caching, match: [buildspec, build-cache]}
+      - {id: cb-batch-builds, name: Batch builds, reports and test reporting, match: [batch-builds, test-reports]}
+      - {id: cd-appspec-hooks, name: appspec hooks for EC2/on-prem, match: [appspec, deployment-hooks]}
+      - {id: cd-ecs-bluegreen, name: ECS blue/green with CodeDeploy, match: [ecs-blue-green-codedeploy, ecs-codedeploy]}
+      - {id: cd-lambda-shift, name: Lambda alias traffic shifting, match: [lambda-alias-shift, linear-deployment]}
+      - {id: cp-v2, name: Pipeline V2, triggers and variables, match: [pipeline-v2, pipeline-triggers, pipeline-variables]}
+      - {id: cp-cross-account, name: Cross-account pipelines and artifact encryption, match: [cross-account-deploy, artifact-bucket]}
+      - {id: cp-approvals, name: Manual approvals and stage conditions, match: [manual-approval, stage-conditions]}
+      - {id: cp-codeconnections, name: CodeConnections to GitHub/GitLab, match: [codeconnections, github-connection]}
+      - {id: cb-vpc-images, name: CodeBuild in a VPC and custom build images, match: [codebuild-vpc, custom-build-image]}
+      - {id: cb-runners, name: CodeBuild GitHub Actions runners and webhooks, match: [codebuild-runner, codebuild-webhook]}
+      - {id: cd-deployment-configs, name: CodeDeploy deployment configurations and alarm auto-rollback, match: [deployment-configuration, auto-rollback]}
+      - {id: cd-agent-troubleshoot, name: CodeDeploy agent troubleshooting, match: [codedeploy-agent]}
+      - {id: cp-notifications, name: Pipeline notifications and execution monitoring, match: [pipeline-notifications]}
+  - id: ecr
+    name: ECR registries, scanning and lifecycle policies
+    source: DVA/Deployment; ECR User Guide
+    match: [ecr, container-registry, image-scanning]
+    subtopics:
+      - {id: ecr-lifecycle, name: Lifecycle policies and image expiry, match: [lifecycle-policy, image-expiry]}
+      - {id: ecr-pull-through, name: Pull-through cache rules, match: [pull-through-cache, upstream-registry]}
+      - {id: ecr-replication, name: Cross-region and cross-account replication, match: [ecr-replication, registry-replication]}
+      - {id: ecr-immutable, name: Immutable tags and tag mutability exclusions, match: [immutable-tags, tag-mutability]}
+      - {id: ecr-policies, name: Repository and registry permissions, match: [repository-policy, registry-policy]}
+      - {id: ecr-signing, name: Image signing with Signer and cosign, match: [image-signing, cosign, aws-signer]}
+      - {id: ecr-scan-findings, name: Enhanced scanning findings and scan-on-push, match: [enhanced-scanning, scan-on-push]}
+      - {id: ecr-auth, name: ECR docker login and credential helper and token expiry, match: [credential-helper]}
+      - {id: ecr-multi-arch, name: Multi-architecture images and manifest lists, match: [multi-arch-images, manifest-list]}
+      - {id: ecr-oci-artifacts, name: Helm charts and OCI artifacts in ECR, match: [helm-ecr]}
+      - {id: ecr-vpc-endpoints, name: Private ECR pulls via VPC endpoints, match: [ecr-vpc-endpoints]}
+      - {id: ecr-public, name: ECR Public repositories and gallery, match: [ecr-public-gallery]}
+  - id: aws-cli-sdk
+    name: AWS CLI profiles, pagination and SDK retries
+    source: DVA/Development; CLI User Guide
+    match: [aws-cli, cli-profiles, sdk, exponential-backoff, retries]
+    subtopics:
+      - {id: cli-credential-chain, name: Credential provider chain and credential_process, match: [credential-provider-chain, credential-process]}
+      - {id: cli-jmespath, name: Query with JMESPath and output formats, match: [jmespath, output-format]}
+      - {id: cli-pagination, name: Pagination and page size, match: [pagination, page-size]}
+      - {id: sdk-retry-modes, name: Retry modes (standard, adaptive) and timeouts, match: [retry-mode, adaptive-retry, sdk-timeouts]}
+      - {id: cli-waiters, name: Waiters and polling, match: [waiters, wait-command]}
+      - {id: cli-config-files, name: Config and credentials files, env vars and assume-role profiles, match: [config-file, environment-variables, source-profile]}
+      - {id: sdk-endpoints, name: Custom endpoints, FIPS and dual-stack, match: [custom-endpoint, fips-endpoint, dualstack-endpoint]}
+      - {id: cli-s3-commands, name: aws s3 high-level commands and sync, match: [s3-sync, s3-cp, s3-commands]}
+      - {id: cli-v2-features, name: CLI v2 aliases and auto-prompt, match: [cli-aliases, auto-prompt]}
+      - {id: cli-skeleton-input, name: generate-cli-skeleton and cli-input-json/yaml, match: [cli-skeleton, cli-input-json]}
+      - {id: cli-debug, name: CLI debug output and dry-run and error troubleshooting, match: [cli-debug, dry-run]}
+      - {id: sdk-client-config, name: SDK client configuration and connection pools and region resolution, match: [sdk-client-config, region-resolution]}
+      - {id: cli-cloudshell, name: AWS CloudShell, match: [cloudshell]}
+  - id: tagging-strategy
+    name: Resource tagging strategy and tag policies
+    source: SysOps/Cost & Performance; Tagging Best Practices whitepaper
+    match: [tagging, tag-policy, tag-policies, resource-tags]
+    subtopics:
+      - {id: tag-cost-allocation, name: Activating cost allocation tags, match: [cost-allocation-tags, activate-tags]}
+      - {id: tag-enforcement, name: Enforcing tags with SCPs and Config, match: [enforce-tags, required-tags, tag-compliance]}
+      - {id: tag-editor, name: Tag Editor and bulk tagging, match: [tag-editor, bulk-tagging]}
+      - {id: tag-resource-groups, name: Resource Groups and Resource Explorer, match: [resource-groups, resource-explorer]}
+      - {id: tag-abac-link, name: Tags for ABAC and automation, match: [tag-based-access, automation-tags]}
+      - {id: tag-policy-syntax, name: Tag policy syntax and compliance reports, match: [tag-policy-syntax, tag-compliance-report]}
+      - {id: tag-naming, name: Tag key naming conventions and case sensitivity, match: [tag-naming-convention, tag-keys]}
+      - {id: tag-propagation, name: Tag propagation from ASGs and ECS and CloudFormation stacks, match: [tag-propagation, propagate-tags]}
+      - {id: tag-on-create, name: Tag-on-create with RequestTag and TagKeys conditions, match: [tag-on-create]}
+      - {id: tag-cleanup, name: Backfilling tags on untagged resources, match: [untagged-resources, tag-backfill]}
+  # --- Monitoring, logging, remediation (SysOps 20%; Well-Architected Operational Excellence)
+  - id: cloudwatch-metrics-alarms
+    name: CloudWatch metrics, alarms and composite alarms
+    source: SysOps/Monitoring; CloudWatch User Guide
+    match: [cloudwatch, cloudwatch-alarm, cloudwatch-alarms, custom-metrics, composite-alarm]
+    subtopics:
+      - {id: cw-metric-math, name: Metric math and search expressions, match: [metric-math, search-expression]}
+      - {id: cw-anomaly, name: Anomaly detection alarms, match: [anomaly-detection, anomaly-band]}
+      - {id: cw-emf, name: Embedded Metric Format, match: [embedded-metric-format, emf]}
+      - {id: cw-missing-data, name: Treat missing data and datapoints to alarm, match: [treat-missing-data, datapoints-to-alarm]}
+      - {id: cw-high-res, name: High-resolution and percentile metrics, match: [high-resolution-metrics, percentile]}
+      - {id: cw-alarm-actions, name: Alarm actions (SNS, Auto Scaling, EC2, SSM), match: [alarm-actions, sns-actions]}
+      - {id: cw-metric-streams, name: Metric streams and cross-account observability, match: [metric-streams, cross-account-observability, oam]}
+      - {id: cw-metrics-insights, name: Metrics Insights queries, match: [metrics-insights]}
+      - {id: cw-put-metric-data, name: PutMetricData and dimensions and metric cardinality cost, match: [put-metric-data, metric-dimensions, metric-cardinality]}
+      - {id: cw-alarm-tuning, name: Alarm periods and evaluation and alarm fatigue, match: [evaluation-periods, alarm-fatigue]}
+      - {id: cw-mute-rules, name: Alarm mute rules and actions suppression, match: [alarm-mute, actions-suppressor]}
+      - {id: cw-metric-retention, name: Metric retention and statistics aggregation, match: [metric-retention, metric-statistics]}
+      - {id: cw-contributor-insights, name: Contributor Insights rules, match: [contributor-insights-rules]}
+  - id: cloudwatch-logs
+    name: CloudWatch Logs groups, Insights and subscription filters
+    source: SysOps/Monitoring; CloudWatch Logs User Guide
+    match: [cloudwatch-logs, logs-insights, subscription-filter, log-retention]
+    subtopics:
+      - {id: cwl-metric-filters, name: Metric filters, match: [metric-filters, metric-filter]}
+      - {id: cwl-log-classes, name: Log classes and retention policies, match: [log-class, infrequent-access, retention-policy]}
+      - {id: cwl-data-protection, name: Data protection policies and masking, match: [data-protection-policy, log-masking]}
+      - {id: cwl-export, name: Export to S3 and Firehose delivery, match: [export-to-s3, logs-to-firehose]}
+      - {id: cwl-live-tail, name: Live Tail and anomaly detection, match: [live-tail, log-anomaly-detection]}
+      - {id: cwl-insights-queries, name: Logs Insights query language and saved queries, match: [insights-query, saved-queries, parse-fields]}
+      - {id: cwl-cross-account, name: Cross-account log delivery and resource policies, match: [cross-account-logs, logs-resource-policy]}
+      - {id: cwl-vended-logs, name: Vended logs delivery (ELB, WAF, Lambda) and encryption, match: [vended-logs, logs-kms]}
+      - {id: cwl-ingestion, name: PutLogEvents and log streams and ingestion quotas, match: [put-log-events, log-streams]}
+      - {id: cwl-field-indexes, name: Field indexes and log transformation, match: [field-indexes, log-transformer]}
+      - {id: cwl-cost, name: Reducing CloudWatch Logs cost, match: [logs-cost]}
+      - {id: cwl-centralization, name: Cross-account cross-region log centralization, match: [log-centralization]}
+      - {id: cwl-pattern-analysis, name: Pattern analysis and comparing time ranges, match: [pattern-analysis]}
+  - id: cloudwatch-agent-dashboards
+    name: CloudWatch agent, dashboards and Synthetics
+    source: SysOps/Monitoring; CloudWatch User Guide / Agent
+    match: [cloudwatch-agent, dashboards, synthetics, canaries]
+    subtopics:
+      - {id: cwa-config, name: Agent configuration file and SSM distribution, match: [agent-config, memory-metrics, disk-metrics]}
+      - {id: cwa-statsd-collectd, name: StatsD, collectd and procstat, match: [statsd, collectd, procstat]}
+      - {id: cw-dashboard-json, name: Dashboard JSON and sharing, match: [dashboard-json, dashboard-sharing]}
+      - {id: cw-synthetics-canaries, name: Synthetics canary blueprints and scripts, match: [heartbeat-canary, api-canary, canary-script]}
+      - {id: cw-rum, name: Real User Monitoring, match: [rum, real-user-monitoring]}
+      - {id: cw-container-insights, name: Container Insights, match: [container-insights-enhanced, container-metrics]}
+      - {id: cw-application-signals, name: Application Signals and SLOs, match: [application-signals, slo]}
+      - {id: cwa-windows, name: Agent on Windows with performance counters and event logs, match: [windows-performance-counters, windows-event-logs]}
+      - {id: cwa-logs-collection, name: Agent log file collection configuration, match: [agent-logs-collection, log-file-collection]}
+      - {id: cw-synthetics-vpc, name: Canaries in a VPC and canary artifacts and alarms, match: [canary-vpc, canary-artifacts]}
+      - {id: cw-internet-monitor, name: Internet Monitor and Network Flow Monitor, match: [internet-monitor, network-flow-monitor]}
+      - {id: cw-dashboard-variables, name: Dashboard variables and cross-account dashboards, match: [dashboard-variables, cross-account-dashboard]}
+  - id: xray-tracing
+    name: X-Ray distributed tracing
+    source: DVA/Troubleshooting; X-Ray Developer Guide
+    match: [x-ray, xray, distributed-tracing]
+    subtopics:
+      - {id: xray-sampling, name: Sampling rules, match: [sampling-rules, sampling-rate]}
+      - {id: xray-segments, name: Segments, subsegments and annotations, match: [segments, subsegments, annotations]}
+      - {id: xray-adot, name: ADOT and OpenTelemetry instrumentation, match: [adot, opentelemetry]}
+      - {id: xray-lambda, name: Lambda and API Gateway tracing, match: [lambda-tracing, api-gateway-tracing]}
+      - {id: xray-service-map, name: Service map and trace analytics, match: [service-map, trace-analytics, transaction-search]}
+      - {id: xray-daemon, name: X-Ray daemon and sidecar on ECS/EC2, match: [x-ray-daemon, xray-sidecar]}
+      - {id: xray-sdk-instrumentation, name: X-Ray SDK instrumentation of HTTP and AWS SDK calls, match: [xray-sdk, sdk-instrumentation]}
+      - {id: xray-groups-insights, name: Filter expressions and groups and X-Ray Insights, match: [filter-expressions, xray-insights, xray-groups]}
+      - {id: xray-adot-collector, name: ADOT collector on EKS and ECS, match: [adot-collector]}
+      - {id: xray-cost, name: X-Ray cost control and trace encryption, match: [xray-cost]}
+      - {id: xray-trace-header, name: Trace header propagation (X-Amzn-Trace-Id), match: [x-amzn-trace-id]}
+  - id: health-trusted-advisor
+    name: AWS Health and Trusted Advisor
+    source: SysOps/Monitoring; Health and Trusted Advisor User Guides
+    match: [trusted-advisor, aws-health, health-dashboard]
+    subtopics:
+      - {id: health-eventbridge, name: Health events to EventBridge, match: [eventbridge-health-events, health-events]}
+      - {id: health-org-view, name: Organizational view and Health API, match: [organizational-view, health-api]}
+      - {id: health-planned-lifecycle, name: Planned lifecycle events and scheduled changes, match: [planned-lifecycle-events, scheduled-changes]}
+      - {id: ta-checks, name: Trusted Advisor checks and priority, match: [trusted-advisor-checks, trusted-advisor-priority]}
+      - {id: ta-automation, name: Trusted Advisor automation via EventBridge and API, match: [trusted-advisor-api, ta-refresh]}
+      - {id: support-plans, name: Support plans and Support API, match: [support-plan, aws-support-api]}
+      - {id: health-notifications, name: AWS User Notifications for Health events, match: [user-notifications]}
+      - {id: ta-organizational-view, name: Trusted Advisor organizational view reports, match: [ta-organizational-view]}
+      - {id: support-cases, name: Creating and escalating support cases, match: [support-case, case-severity]}
+      - {id: health-account-events, name: Account-specific events and abuse reports, match: [abuse-report, account-specific-events]}
+  - id: eventbridge-remediation
+    name: Automated remediation with EventBridge, SSM and Config
+    source: SysOps/Monitoring; Config User Guide / Remediation
+    match: [auto-remediation, automated-remediation, remediation]
+    subtopics:
+      - {id: config-remediation-actions, name: Config remediation actions with SSM Automation, match: [config-remediation, remediation-action]}
+      - {id: gd-response, name: GuardDuty finding response automation, match: [guardduty-response, isolate-instance]}
+      - {id: sh-automation, name: Security Hub custom actions and automation, match: [security-hub-automation, custom-actions]}
+      - {id: self-healing, name: Self-healing with alarms and SSM, match: [self-healing, alarm-remediation]}
+      - {id: incident-manager-response, name: Incident Manager response plans, match: [response-plan, incident-manager-plan]}
+      - {id: remediation-safety, name: Remediation safety, dry runs and rate limits, match: [remediation-safety, remediation-dry-run]}
+      - {id: config-auto-remediation-retry, name: Automatic remediation retries and manual remediation, match: [automatic-remediation, remediation-retry]}
+      - {id: s3-public-remediation, name: Auto-remediating public S3 buckets, match: [public-bucket-remediation]}
+      - {id: sg-remediation, name: Auto-remediating open security groups, match: [open-sg-remediation]}
+      - {id: iam-key-remediation, name: Responding to exposed access keys, match: [exposed-access-key, compromised-credentials]}
+      - {id: remediation-org, name: Organization-wide remediation across accounts, match: [multi-account-remediation]}
+  # --- Reliability, DR, migration (SAA Resilient; SAP Migration)
+  - id: multi-az-multi-region
+    name: Multi-AZ and multi-region architecture
+    source: SAA/Design Resilient Architectures; Well-Architected Reliability pillar
+    match: [multi-region, availability-zones, fault-isolation, active-active, active-passive]
+    subtopics:
+      - {id: static-stability, name: Static stability and AZ-independent design, match: [static-stability, az-independence]}
+      - {id: cell-architecture, name: Cell-based architecture and shuffle sharding, match: [cell-based-architecture, shuffle-sharding]}
+      - {id: zonal-shift, name: ARC zonal shift and zonal autoshift, match: [zonal-shift, zonal-autoshift]}
+      - {id: multi-region-data, name: Multi-region data replication choices, match: [multi-region-data, data-replication-strategy]}
+      - {id: multi-region-routing, name: Global routing and failover for multi-region, match: [global-routing, regional-failover]}
+      - {id: control-plane-data-plane, name: Control plane vs data plane dependencies, match: [control-plane-dependency, data-plane]}
+      - {id: dependency-isolation, name: Dependency isolation, bulkheads and circuit breakers, match: [bulkhead, circuit-breaker, dependency-isolation]}
+      - {id: mr-write-conflicts, name: Multi-region active-active write conflicts, match: [write-conflicts, multi-region-writes]}
+      - {id: mr-region-evacuation, name: Region evacuation runbooks, match: [region-evacuation]}
+      - {id: mr-az-ids, name: AZ IDs vs AZ names, match: [az-id, availability-zone-id]}
+      - {id: mr-health-checks-deep, name: Deep vs shallow health checks, match: [deep-health-check, shallow-health-check]}
+      - {id: mr-retries-jitter, name: Timeouts and retries with jitter and retry storms, match: [jitter, retry-storm]}
+  - id: disaster-recovery
+    name: DR strategies - backup/restore, pilot light, warm standby
+    source: SAA/Design Resilient Architectures; DR whitepaper
+    match: [disaster-recovery, pilot-light, warm-standby, rto, rpo]
+    subtopics:
+      - {id: dr-backup-restore, name: Backup and restore strategy implementation, match: [backup-and-restore, dr-backup]}
+      - {id: dr-pilot-light-impl, name: Pilot light implementation, match: [pilot-light-implementation, pilot-light-design]}
+      - {id: dr-warm-standby-impl, name: Warm standby implementation, match: [warm-standby-implementation, warm-standby-design]}
+      - {id: dr-multi-site, name: Multi-site active/active, match: [multi-site-active-active, active-active-dr]}
+      - {id: dr-runbooks, name: DR runbooks and failover automation, match: [dr-runbook, failover-automation]}
+      - {id: dr-testing, name: DR testing and game days, match: [dr-testing, dr-game-day]}
+      - {id: dr-failback, name: Failback planning, match: [failback, failback-plan]}
+      - {id: dr-rto-rpo-define, name: Defining RTO and RPO with business impact analysis, match: [business-impact-analysis, rto-rpo-targets]}
+      - {id: dr-data-corruption, name: Recovering from data corruption and ransomware, match: [ransomware-recovery, data-corruption]}
+      - {id: dr-dns-failover, name: DNS-based DR failover, match: [dns-failover]}
+      - {id: dr-iac-rebuild, name: Rebuilding environments via IaC in the recovery region, match: [infrastructure-rebuild, iac-recovery]}
+  - id: elastic-dr
+    name: Elastic Disaster Recovery and Application Migration Service
+    source: SAP/Migration; DRS and MGN User Guides
+    match: [elastic-disaster-recovery, drs, application-migration-service, mgn]
+    subtopics:
+      - {id: drs-agent, name: Replication agent installation and staging area, match: [replication-agent, staging-area]}
+      - {id: drs-launch-settings, name: Launch settings and launch templates, match: [launch-settings, drs-launch-template]}
+      - {id: drs-drills, name: Recovery drills and point-in-time snapshots, match: [recovery-drill, point-in-time-snapshots]}
+      - {id: drs-failback, name: Failback and reverse replication, match: [drs-failback, reverse-replication]}
+      - {id: mgn-cutover, name: MGN test and cutover instances, match: [test-instance, mgn-cutover]}
+      - {id: mgn-post-launch, name: Post-launch actions and modernisation, match: [post-launch-actions, mgn-post-launch]}
+      - {id: mgn-waves, name: Wave planning and source server management, match: [source-servers, mgn-waves]}
+      - {id: drs-replication-settings, name: DRS replication settings and bandwidth throttling, match: [replication-settings, drs-bandwidth]}
+      - {id: drs-cross-region, name: DRS cross-region and cross-AZ recovery for EC2, match: [drs-cross-region]}
+      - {id: mgn-replication-troubleshoot, name: Troubleshooting replication lag and stalled replication, match: [replication-lag, stalled-replication]}
+      - {id: mgn-import, name: MGN bulk import and templates, match: [mgn-import]}
+      - {id: drs-network-replication, name: DRS network replication of VPC configuration, match: [network-replication]}
+  - id: migration-strategy
+    name: Migration strategies (7 Rs), Migration Hub and Application Discovery
+    source: SAP/Migration & Modernization; Migration Hub User Guide
+    match: [migration, 7rs, migration-hub, application-discovery, rehost, replatform]
+    subtopics:
+      - {id: mig-discovery-agent, name: Discovery agent and agentless collector, match: [discovery-agent, agentless-collector]}
+      - {id: mig-evaluator, name: Migration Evaluator and business case, match: [migration-evaluator, business-case]}
+      - {id: mig-strategy-recs, name: Strategy Recommendations, match: [strategy-recommendations]}
+      - {id: mig-wave-planning, name: Wave planning and dependency mapping, match: [wave-planning, dependency-mapping]}
+      - {id: mig-refactor-spaces, name: Refactor Spaces and strangler fig, match: [refactor-spaces, strangler-fig]}
+      - {id: mig-orchestrator, name: Migration Hub Orchestrator and journeys, match: [migration-hub-orchestrator, migration-journeys]}
+      - {id: mig-maps, name: Migration Acceleration Program and readiness assessment, match: [map-program, readiness-assessment, cart]}
+      - {id: mig-portfolio, name: Portfolio assessment and 7R decisions, match: [portfolio-assessment, retire-retain]}
+      - {id: mig-tco, name: TCO modelling for migration, match: [tco]}
+      - {id: mig-transform, name: AWS Transform for .NET and VMware and mainframe, match: [aws-transform-jobs, vmware-migration, mainframe-modernization]}
+      - {id: mig-db-modernization, name: Database modernisation paths, match: [database-modernization]}
+      - {id: mig-cutover-runbooks, name: Application cutover runbooks and rollback, match: [application-cutover]}
+  - id: snow-family-transfer
+    name: Snow family and Transfer Family bulk data movement
+    source: SAP/Migration; Snowball and Transfer Family User Guides
+    match: [snowball, snow-family, transfer-family, bulk-transfer]
+    subtopics:
+      - {id: snow-job-lifecycle, name: Snowball Edge job creation, unlock and return, match: [snowball-job, opshub, snowball-unlock]}
+      - {id: snow-interfaces, name: NFS interface, S3 adapter and S3-compatible storage, match: [nfs-interface, s3-adapter, s3-compatible-storage]}
+      - {id: snow-compute, name: Snowball Edge compute and EC2 on Snow, match: [snowball-compute, ec2-on-snow]}
+      - {id: tf-servers, name: Transfer Family SFTP/FTPS/AS2 servers, match: [sftp, ftps, as2]}
+      - {id: tf-identity, name: Custom identity providers and managed users, match: [custom-identity-provider, managed-users, service-managed-users]}
+      - {id: tf-workflows, name: Transfer workflows and SFTP connectors, match: [transfer-workflows, sftp-connector]}
+      - {id: snow-alternatives, name: Snowball availability changes and alternatives (DataSync and Data Transfer Terminal), match: [data-transfer-terminal, snowball-alternatives]}
+      - {id: tf-web-apps, name: Transfer Family web apps, match: [transfer-web-apps]}
+      - {id: tf-logging, name: Transfer Family logging and monitoring, match: [transfer-logging]}
+      - {id: tf-endpoint-types, name: Transfer Family endpoint types and custom hostnames, match: [transfer-endpoint, vpc-hosted-endpoint]}
+  - id: service-quotas
+    name: Service quotas and limit management
+    source: SysOps/Reliability; Service Quotas User Guide
+    match: [service-quotas, quotas, service-limits]
+    subtopics:
+      - {id: quota-requests, name: Requesting increases and tracking requests, match: [limit-increase, quota-request]}
+      - {id: quota-templates, name: Organization quota request templates, match: [quota-request-template, organizations-quota-templates]}
+      - {id: quota-monitoring, name: Quota utilisation alarms, match: [quota-monitoring, quota-alarms, quota-utilization]}
+      - {id: quota-common-limits, name: Common limits (vCPU, Lambda concurrency, ENI, EIP), match: [vcpu-limits, lambda-concurrency-limit, eip-limit]}
+      - {id: quota-api-throttling, name: API throttling and request rate limits, match: [api-throttling, request-rate-limit]}
+      - {id: quota-list, name: Listing applied vs default quotas with the CLI, match: [list-service-quotas, applied-quota]}
+      - {id: quota-unadjustable, name: Non-adjustable quotas and architectural workarounds, match: [non-adjustable-quotas]}
+      - {id: quota-new-accounts, name: New account quotas and pre-requests during account vending, match: [new-account-quotas]}
+      - {id: quota-ta-integration, name: Trusted Advisor service limits checks, match: [ta-service-limits-check]}
+      - {id: quota-automatic-management, name: Service Quotas automatic management, match: [automatic-quota-management]}
+  - id: resilience-hub-fis
+    name: Resilience Hub and Fault Injection Service
+    source: Well-Architected/Reliability; Resilience Hub and FIS User Guides
+    match: [resilience-hub, fault-injection, fis, chaos-engineering]
+    subtopics:
+      - {id: fis-templates, name: Experiment templates, actions and targets, match: [fis-experiment-template, fis-actions, fis-targets]}
+      - {id: fis-stop-conditions, name: Stop conditions and safety, match: [stop-condition, fis-safety]}
+      - {id: fis-az-power, name: AZ availability power interruption scenarios, match: [az-availability-power-interruption, az-failure-simulation]}
+      - {id: fis-ssm-actions, name: SSM-based fault actions (CPU, latency, disk), match: [ssm-fault-actions, cpu-stress, network-latency-injection]}
+      - {id: rh-assessment, name: Resilience Hub assessments and policies, match: [resilience-assessment, resiliency-policy]}
+      - {id: rh-recommendations, name: Resilience Hub recommendations and alarms, match: [resilience-recommendations, rto-rpo-assessment]}
+      - {id: fis-eks-ecs, name: EKS and ECS fault experiments, match: [eks-fault-injection, ecs-fault-injection, pod-delete]}
+      - {id: fis-scenarios, name: FIS scenario library (AZ and cross-region connectivity), match: [scenario-library, cross-region-connectivity]}
+      - {id: fis-iam, name: FIS experiment roles and multi-account experiments, match: [fis-role, multi-account-experiment]}
+      - {id: fis-reports, name: FIS experiment reports and logs, match: [experiment-report]}
+      - {id: rh-app-import, name: Defining applications in Resilience Hub, match: [resilience-hub-application, app-components]}
+      - {id: fis-rds-network, name: RDS failover and network disruption actions, match: [rds-failover-action]}
+  # --- Cost (SAA 20%; Well-Architected Cost Optimization)
+  - id: cost-explorer-budgets
+    name: Cost Explorer, Budgets and Cost and Usage Reports
+    source: SysOps/Cost & Performance; Billing and Cost Management User Guide
+    match: [cost-explorer, budgets, cost-and-usage-report, cur, cost-allocation]
+    subtopics:
+      - {id: cur-athena, name: CUR 2.0 data exports to Athena, match: [cur-2, data-exports, athena-cur]}
+      - {id: budget-actions, name: Budget actions and alerts, match: [budget-actions, budget-alerts]}
+      - {id: cost-categories, name: Cost categories and showback, match: [cost-categories, showback, chargeback]}
+      - {id: billing-conductor, name: Billing Conductor and consolidated billing, match: [billing-conductor, consolidated-billing]}
+      - {id: ce-api, name: Cost Explorer API and saved reports, match: [cost-explorer-api, get-cost-and-usage]}
+      - {id: cost-unblended, name: Unblended, amortized and net amortized costs, match: [unblended-amortized-net, amortized-cost]}
+      - {id: cost-free-tier, name: Free tier tracking and billing alarms, match: [free-tier, billing-alarm]}
+      - {id: ce-filters-grouping, name: Filtering and grouping and usage type analysis in Cost Explorer, match: [cost-explorer-filters, group-by]}
+      - {id: budgets-types, name: Usage and RI and Savings Plans budgets, match: [usage-budget, savings-plans-budget]}
+      - {id: ce-forecasting, name: Cost forecasting, match: [cost-forecast]}
+      - {id: billing-access, name: Billing console access for IAM and billing permissions, match: [billing-access, iam-billing-permissions]}
+      - {id: pricing-calculator, name: AWS Pricing Calculator estimates, match: [pricing-calculator]}
+  - id: cost-anomaly-rightsizing
+    name: Cost anomaly detection and Compute Optimizer rightsizing
+    source: Well-Architected/Cost Optimization; Compute Optimizer User Guide
+    match: [cost-anomaly, compute-optimizer, rightsizing, right-sizing]
+    subtopics:
+      - {id: ca-monitors, name: Anomaly monitors and alert subscriptions, match: [anomaly-monitor, alert-subscription]}
+      - {id: co-ec2-recs, name: Compute Optimizer EC2 and ASG recommendations, match: [ec2-recommendations, asg-recommendations]}
+      - {id: co-ebs-lambda, name: EBS, Lambda and ECS recommendations, match: [ebs-rightsizing, lambda-rightsizing, ecs-rightsizing]}
+      - {id: co-memory-metrics, name: Enabling memory metrics for recommendations, match: [memory-metrics-co, enhanced-infrastructure-metrics]}
+      - {id: cost-optimization-hub, name: Cost Optimization Hub, match: [cost-optimization-hub]}
+      - {id: idle-resources, name: Finding idle and unused resources, match: [idle-resources, unused-resources]}
+      - {id: graviton-migration, name: Graviton migration recommendations, match: [graviton-recommendations, graviton-migration]}
+      - {id: ca-root-cause, name: Cost anomaly root cause analysis, match: [anomaly-root-cause]}
+      - {id: co-rds, name: RDS and Aurora rightsizing recommendations, match: [rds-rightsizing]}
+      - {id: co-preferences, name: Recommendation preferences (lookback and headroom and external metrics), match: [recommendation-preferences, external-metrics]}
+      - {id: co-licenses, name: Compute Optimizer license recommendations, match: [license-recommendations]}
+      - {id: scheduling-nonprod, name: Scheduling non-production resources off-hours, match: [instance-scheduler, non-production-scheduling]}
+  - id: data-transfer-costs
+    name: Data transfer and egress cost design
+    source: Well-Architected/Cost Optimization; Data transfer pricing
+    match: [data-transfer, egress-cost, egress-costs, transfer-costs]
+    subtopics:
+      - {id: dt-cross-az, name: Cross-AZ transfer and AZ affinity, match: [cross-az-transfer, az-affinity]}
+      - {id: dt-nat-cost, name: NAT gateway processing cost and gateway endpoints, match: [nat-gateway-cost, nat-cost-reduction]}
+      - {id: dt-cloudfront, name: CloudFront egress vs direct egress, match: [cloudfront-egress, internet-egress]}
+      - {id: dt-cross-region, name: Cross-region transfer and replication cost, match: [cross-region-transfer, replication-cost]}
+      - {id: dt-privatelink-cost, name: PrivateLink and Transit Gateway data processing cost, match: [privatelink-cost, tgw-data-processing]}
+      - {id: dt-usage-types, name: Analysing data transfer usage types in CUR, match: [usage-types, data-transfer-pricing]}
+      - {id: dt-s3-transfer, name: S3 data transfer pricing and same-region transfer, match: [s3-data-transfer]}
+      - {id: dt-dx-vs-internet, name: Direct Connect vs internet data transfer out pricing, match: [dx-data-transfer]}
+      - {id: dt-architecture-patterns, name: Reducing transfer with compression and caching and data locality, match: [transfer-compression, data-locality]}
+      - {id: dt-monitoring, name: Monitoring data transfer with flow logs and CUR, match: [transfer-monitoring]}
+  # --- Analytics, ML, edge (SAP New Solutions)
+  - id: glue-athena-lakeformation
+    name: Glue, Athena and Lake Formation data lakes
+    source: SAP/New Solutions; Glue and Athena User Guides
+    match: [glue, athena, lake-formation, data-lake]
+    subtopics:
+      - {id: glue-crawlers, name: Glue crawlers and Data Catalog, match: [glue-crawler, glue-data-catalog]}
+      - {id: glue-etl-jobs, name: Glue ETL jobs, bookmarks and workers, match: [glue-jobs, job-bookmarks, glue-workers]}
+      - {id: athena-partitions, name: Athena partitioning and partition projection, match: [partition-projection, partitioning]}
+      - {id: athena-workgroups, name: Athena workgroups and cost controls, match: [athena-workgroups, query-cost-control]}
+      - {id: athena-ctas, name: CTAS, INSERT INTO and Parquet conversion, match: [ctas, parquet]}
+      - {id: iceberg-tables, name: Iceberg tables and S3 Tables, match: [iceberg, s3-tables]}
+      - {id: lf-permissions, name: Lake Formation permissions and LF-Tags, match: [lf-tags, fine-grained-access, lake-formation-permissions]}
+      - {id: athena-federated, name: Athena federated queries, match: [federated-query, athena-connectors]}
+      - {id: glue-data-quality, name: Glue Data Quality and schema registry, match: [glue-data-quality, glue-schema-registry]}
+      - {id: athena-query-tuning, name: Athena query optimization (file sizes and compression and pushdown), match: [athena-performance, predicate-pushdown]}
+      - {id: glue-connections, name: Glue connections and JDBC and VPC networking, match: [glue-connection, jdbc]}
+      - {id: glue-workflows-triggers, name: Glue workflows and triggers, match: [glue-workflows, glue-triggers]}
+      - {id: athena-spark, name: Athena for Apache Spark, match: [athena-spark]}
+      - {id: lf-cross-account, name: Lake Formation cross-account sharing, match: [lf-cross-account]}
+  - id: emr-opensearch
+    name: EMR and OpenSearch Service
+    source: SAP/New Solutions; EMR and OpenSearch User Guides
+    match: [emr, opensearch]
+    subtopics:
+      - {id: emr-serverless, name: EMR Serverless applications, match: [emr-serverless]}
+      - {id: emr-fleets-scaling, name: Instance fleets and managed scaling, match: [instance-fleets, managed-scaling]}
+      - {id: emr-on-eks, name: EMR on EKS, match: [emr-on-eks]}
+      - {id: emr-steps, name: Steps, Spark submit and EMRFS, match: [emr-steps, spark-submit, emrfs]}
+      - {id: os-domain-sizing, name: OpenSearch domain sizing and dedicated masters, match: [opensearch-domains, dedicated-master-nodes, shards]}
+      - {id: os-ism, name: Index State Management, UltraWarm and cold storage, match: [index-state-management, ultrawarm, cold-storage]}
+      - {id: os-fgac, name: Fine-grained access control and SAML for Dashboards, match: [fine-grained-access-control, opensearch-saml]}
+      - {id: os-serverless, name: OpenSearch Serverless collections, match: [opensearch-serverless, collections]}
+      - {id: os-ingestion, name: OpenSearch Ingestion pipelines, match: [opensearch-ingestion, data-prepper]}
+      - {id: emr-security, name: EMR security configurations and Kerberos, match: [security-configuration, emr-kerberos]}
+      - {id: emr-bootstrap, name: Bootstrap actions and configuration classifications, match: [bootstrap-actions, configuration-classifications]}
+      - {id: os-snapshots, name: OpenSearch snapshots and restore, match: [opensearch-snapshots]}
+      - {id: os-cluster-health, name: OpenSearch red and yellow cluster health and JVM memory pressure, match: [cluster-health-red, jvm-memory-pressure]}
+      - {id: os-vector, name: OpenSearch vector search (k-NN), match: [vector-search, knn]}
+  - id: sagemaker-bedrock
+    name: SageMaker and Bedrock
+    source: SAP/New Solutions; SageMaker and Bedrock User Guides
+    match: [sagemaker, bedrock]
+    subtopics:
+      - {id: sm-endpoints, name: Real-time, serverless and async inference endpoints, match: [sagemaker-endpoints, serverless-inference, async-inference]}
+      - {id: sm-training, name: Training jobs, spot training and hyperparameter tuning, match: [training-jobs, spot-training, hyperparameter-tuning]}
+      - {id: sm-pipelines-registry, name: SageMaker Pipelines and Model Registry, match: [sagemaker-pipelines, model-registry]}
+      - {id: sm-studio, name: SageMaker Studio domains and users, match: [sagemaker-studio, studio-domain]}
+      - {id: br-knowledge-bases, name: Bedrock Knowledge Bases and RAG, match: [bedrock-knowledge-bases, rag]}
+      - {id: br-agents, name: Bedrock Agents and action groups, match: [bedrock-agents, action-groups]}
+      - {id: br-guardrails, name: Bedrock Guardrails, match: [bedrock-guardrails]}
+      - {id: br-converse, name: Converse API, inference profiles and model access, match: [converse-api, inference-profiles, model-access]}
+      - {id: br-batch-provisioned, name: Batch inference and provisioned throughput, match: [batch-inference, provisioned-throughput]}
+      - {id: br-prompt-caching, name: Bedrock prompt caching and prompt management, match: [prompt-caching, prompt-management]}
+      - {id: br-model-customization, name: Bedrock fine-tuning and model distillation, match: [model-customization, fine-tuning]}
+      - {id: br-evaluation, name: Bedrock model evaluation, match: [model-evaluation]}
+      - {id: sm-model-monitor, name: SageMaker Model Monitor and Clarify, match: [model-monitor, clarify]}
+      - {id: br-agentcore, name: Bedrock AgentCore, match: [agentcore]}
+  - id: iot-core-greengrass
+    name: IoT Core and Greengrass
+    source: SAP/New Solutions; IoT Core Developer Guide
+    match: [iot-core, greengrass]
+    subtopics:
+      - {id: iot-provisioning, name: Fleet provisioning and JIT provisioning, match: [fleet-provisioning, just-in-time-provisioning]}
+      - {id: iot-rules, name: Rules engine and actions, match: [iot-rules-engine, rule-actions]}
+      - {id: iot-shadows, name: Device shadows, match: [device-shadow, named-shadows]}
+      - {id: iot-policies, name: IoT policies and X.509 certificates, match: [iot-policies, x509-certificates]}
+      - {id: iot-jobs, name: IoT Jobs and OTA updates, match: [iot-jobs, ota-updates]}
+      - {id: iot-defender, name: Device Defender audit and detect, match: [device-defender, iot-audit]}
+      - {id: gg-components, name: Greengrass v2 components and deployments, match: [iot-components, greengrass-deployments]}
+      - {id: iot-mqtt, name: MQTT topics and QoS and retained messages, match: [retained-messages]}
+      - {id: iot-sitewise, name: IoT SiteWise, match: [sitewise]}
+      - {id: iot-logging, name: IoT Core logging and metrics, match: [iot-logging]}
+      - {id: iot-registry, name: Thing types and thing groups and fleet indexing, match: [fleet-indexing]}
+      - {id: gg-stream-manager, name: Greengrass stream manager and local MQTT, match: [stream-manager]}
+  - id: outposts-local-zones
+    name: Outposts, Local Zones and Wavelength
+    source: SAP/New Solutions; Outposts User Guide
+    match: [outposts, local-zones, wavelength]
+    subtopics:
+      - {id: outposts-lgw, name: Local gateway routing and customer-owned IPs, match: [local-gateway, lgw, customer-owned-ip]}
+      - {id: outposts-services, name: Services on Outposts (EC2, EBS, S3, RDS, EKS), match: [s3-on-outposts, rds-on-outposts, outposts-rack]}
+      - {id: outposts-service-link, name: Service link and connectivity requirements, match: [service-link, outposts-connectivity]}
+      - {id: local-zones-enable, name: Enabling Local Zones and subnet placement, match: [local-zone-subnet, enable-local-zone]}
+      - {id: wavelength-carrier, name: Wavelength carrier gateways and carrier IPs, match: [carrier-gateway, carrier-ip]}
+      - {id: outposts-capacity, name: Outposts capacity management and monitoring, match: [outposts-capacity, capacity-tasks]}
+      - {id: outposts-ordering, name: Ordering Outposts and site requirements, match: [outposts-ordering, site-requirements]}
+      - {id: outposts-placement, name: Placement groups and instance capacity on Outposts, match: [outposts-placement]}
+      - {id: local-zones-latency, name: Low-latency workload placement in Local Zones, match: [low-latency-placement]}
+      - {id: dedicated-local-zones, name: Dedicated Local Zones, match: [dedicated-local-zone-deployment]}
+  # --- Well-Architected practice
+  - id: well-architected-review
+    name: Well-Architected Framework reviews
+    source: Well-Architected; WA Tool User Guide
+    match: [well-architected, well-architected-review, war]
+    subtopics:
+      - {id: wa-tool-workloads, name: WA Tool workloads, milestones and sharing, match: [well-architected-tool, milestones, workload-sharing]}
+      - {id: wa-lenses, name: Lenses (serverless, SaaS, ML) and custom lenses, match: [lenses, custom-lens]}
+      - {id: wa-hri, name: High-risk issues and improvement plans, match: [high-risk-issues, improvement-plan]}
+      - {id: wa-pillar-ops, name: Operational Excellence pillar practices, match: [operational-excellence, runbooks-playbooks]}
+      - {id: wa-pillar-sustainability, name: Sustainability pillar practices, match: [sustainability, carbon-footprint]}
+      - {id: wa-pillar-performance, name: Performance Efficiency pillar practices, match: [performance-efficiency, performance-testing]}
+      - {id: wa-review-facilitation, name: Facilitating a review workshop, match: [review-facilitation, architecture-review]}
+      - {id: wa-pillar-security, name: Security pillar practices, match: [security-pillar-practices]}
+      - {id: wa-pillar-reliability, name: Reliability pillar practices, match: [reliability-pillar-practices]}
+      - {id: wa-pillar-cost, name: Cost Optimization pillar practices, match: [cost-optimization-pillar]}
+      - {id: wa-profiles-templates, name: WA Tool profiles and review templates, match: [review-templates, wa-profiles]}
+      - {id: wa-tool-api, name: Well-Architected Tool API and integrations, match: [wa-tool-api]}
+  - id: shared-responsibility
+    name: Shared responsibility model
+    source: SAA/Design Secure Architectures; Shared Responsibility Model page
+    match: [shared-responsibility]
+    subtopics:
+      - {id: sr-artifact, name: AWS Artifact reports and agreements, match: [aws-artifact, compliance-reports]}
+      - {id: sr-managed-services, name: Responsibility split for managed vs unmanaged services, match: [managed-services-responsibility, patching-responsibility]}
+      - {id: sr-audit-manager, name: Audit Manager assessments, match: [audit-manager, audit-evidence]}
+      - {id: sr-compliance-programs, name: Compliance programs (SOC, PCI, HIPAA, ISO) mapping, match: [soc2, pci-dss, hipaa]}
+      - {id: sr-data-residency, name: Data residency and region selection, match: [data-residency, region-selection]}
+      - {id: sr-security-of-in, name: Security of vs in the cloud by service type, match: [security-of-vs-in-the-cloud]}
+      - {id: sr-inherited-controls, name: Inherited and shared and customer-specific controls, match: [inherited-control-mapping]}
+      - {id: sr-compliance-guides, name: Customer compliance guides and control mapping, match: [compliance-guides]}
+      - {id: sr-penetration-testing, name: Penetration testing policy and permitted services, match: [penetration-testing]}
+      - {id: sr-sovereign, name: European Sovereign Cloud and digital sovereignty, match: [sovereign-cloud, european-sovereign-cloud]}

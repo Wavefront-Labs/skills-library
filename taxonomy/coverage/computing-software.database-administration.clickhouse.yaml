@@ -1,0 +1,177 @@
+# Coverage spec: clickhouse. Topics from the external structures named in `sources`.
+subject: clickhouse
+scope:
+  category: computing-software
+  field: database-administration
+  products: [clickhouse]
+sources:
+  - "ClickHouse Best Practices (clickhouse.com/docs/best-practices) - primary key, partitioning, data types, inserts, JOINs, materialized views, JSON, mutations, sizing"
+  - "ClickHouse Managing Data and Core Concepts (clickhouse.com/docs/managing-data) - parts, merges, partitions, shards, drop partition, truncate"
+  - "ClickHouse Operations Backup and Restore (clickhouse.com/docs/operations/backup) - local disk, S3, incremental"
+  - "ClickHouse SRE Guides (clickhouse.com/docs/guides/sre) - user management, Keeper, network ports"
+  - "ClickHouse Developer Guides (clickhouse.com/docs/guides/developer) - TTL, deduplication, cascading views, merge table function, WITH FILL, UDFs, memory debugging"
+topics:
+  - id: mergetree-order-by-primary-key
+    name: mergetree order by primary key
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/choosing_a_primary_key.md"
+    match: [order-by, primary-key, sorting-key]
+  - id: sparse-primary-index-granules
+    name: sparse primary index granules
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/managing-data/core-concepts/primary-indexes.mdx"
+    match: [granules, sparse-index, mergeTreeIndex]
+  - id: partitioning-keys-low-cardinality
+    name: partitioning keys low cardinality
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/partitioning_keys.mdx"
+    match: [partition-by, partitioning, parts]
+  - id: parts-merges-and-monitoring
+    name: parts merges and monitoring
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/managing-data/core-concepts/merges.mdx"
+    match: [data-parts, merges, system-parts]
+  - id: data-skipping-indexes
+    name: data skipping indexes
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/using_data_skipping_indices.md"
+    match: [skip-index, minmax, bloom-filter]
+  - id: data-type-selection-lowcardinality
+    name: data type selection lowcardinality
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/select_data_type.md"
+    match: [data-types, lowcardinality, nullable]
+  - id: replacingmergetree-upserts-and-final
+    name: replacingmergetree upserts and final
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/replacing-merge-tree.md"
+    match: [replacingmergetree, final, version-column]
+  - id: projections-alternate-ordering
+    name: projections alternate ordering
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/data-modeling/projections/1_projections.md"
+    match: [projections, add-projection, materialize-projection]
+  - id: materialized-views-vs-projections
+    name: materialized views vs projections
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/data-modeling/projections/2_materialized-views-versus-projections.md"
+    match: [materialized-views, projections, comparison]
+  - id: incremental-materialized-views
+    name: incremental materialized views
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/materialized-view/incremental-materialized-view.md"
+    match: [materialized-view, summingmergetree, to-table]
+  - id: ttl-row-column-and-tiering
+    name: ttl row column and tiering
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/ttl.md"
+    match: [ttl, delete-where, group-by-ttl]
+  - id: dictionaries-layouts-and-dictget
+    name: dictionaries layouts and dictget
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/dictionary/index.md"
+    match: [dictionary, dictget, layout]
+  - id: compression-codecs-per-column
+    name: compression codecs per column
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/data-compression/compression-in-clickhouse.md"
+    match: [compression, codec, delta]
+  - id: async-inserts-and-batching
+    name: async inserts and batching
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/selecting_an_insert_strategy.md"
+    match: [async-insert, batching, wait-for-async-insert]
+  - id: deduplicating-inserts-on-retry
+    name: deduplicating inserts on retry
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/deduplicating-inserts-on-retries.md"
+    match: [deduplication, insert-deduplicate, retries]
+  - id: delete-update-mutations
+    name: delete update mutations
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/managing-data/deleting-data/overview.mdx"
+    match: [mutations, lightweight-delete, alter-delete]
+  - id: join-best-practices-and-algorithms
+    name: join best practices and algorithms
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/minimize_optimize_joins.md"
+    match: [join, join-algorithm, parallel-hash]
+  - id: prewhere-optimization
+    name: prewhere optimization
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/best-practices/prewhere.md"
+    match: [prewhere, filtering, io-reduction]
+  - id: backup-to-local-disk
+    name: backup to local disk
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/operations_/backup_restore/01_local_disk.md"
+    match: [backup, restore, disk]
+  - id: backup-to-s3-and-incremental
+    name: backup to s3 and incremental
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/operations_/backup_restore/02_s3_endpoint.md"
+    match: [backup, s3, incremental]
+  - id: rbac-users-roles-and-grants
+    name: rbac users roles and grants
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/sre/user-management/index.md"
+    match: [rbac, grant, revoke]
+  - id: row-policies-and-settings-profiles
+    name: row policies and settings profiles
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/sre/user-management/index.md"
+    match: [row-policy, settings-profile, constraints]
+  - id: keeper-cluster-configuration
+    name: keeper cluster configuration
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/sre/keeper/index.md"
+    match: [keeper, raft, server_id]
+  - id: keeper-monitoring-four-letter-words
+    name: keeper monitoring four letter words
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/sre/keeper/index.md"
+    match: [keeper, mntr, ruok]
+  - id: network-ports-and-firewall
+    name: network ports and firewall
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/sre/network-ports.md"
+    match: [ports, 8123, 9000]
+  - id: refreshable-materialized-views
+    name: refreshable materialized views
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/materialized-view/refreshable-materialized-view.md"
+    match: [refreshable, materialized-view, refresh-every]
+  - id: cascading-materialized-views
+    name: cascading materialized views
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/cascading-materialized-views.md"
+    match: [cascading, materialized-view, null-engine]
+  - id: json-column-type-usage
+    name: json column type usage
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/json_type.md"
+    match: [json, dynamic-paths, type-hints]
+  - id: query-performance-find-slow-queries
+    name: query performance find slow queries
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/best-practices/query-optimization.md"
+    match: [query_log, normalized_query_hash, slow-queries]
+  - id: memory-debugging-queries-and-tables
+    name: memory debugging queries and tables
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/debugging-memory-issues.md"
+    match: [memory, system.processes, peak_memory_usage]
+  - id: too-many-parts-diagnosis
+    name: too many parts diagnosis
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/tips-and-tricks/too-many-parts.md"
+    match: [too-many-parts, system.parts, small-inserts]
+  - id: aggregating-and-summing-mergetree
+    name: aggregating and summing mergetree
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/materialized-view/incremental-materialized-view.md"
+    match: [summingmergetree, aggregatingmergetree, state]
+  - id: with-fill-time-series-gaps
+    name: with fill time series gaps
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/time-series-filling-gaps.md"
+    match: [with-fill, step, gaps]
+  - id: merge-table-function-across-tables
+    name: merge table function across tables
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/merge-table-function.md"
+    match: [merge, table-function, _table]
+  - id: udfs-and-parameterized-views
+    name: udfs and parameterized views
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/developer/stored-procedures-and-prepared-statements.md"
+    match: [udf, create-function, parameterized-view]
+  - id: drop-partition-and-truncate
+    name: drop partition and truncate
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/managing-data/drop_partition.mdx"
+    match: [drop-partition, truncate, partition-expression]
+  - id: hardware-sizing-disk-cpu-memory
+    name: hardware sizing disk cpu memory
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/sizing-and-hardware-recommendations.md"
+    match: [sizing, hardware, cpu]
+  - id: distributed-tables-and-sharding
+    name: distributed tables and sharding
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/managing-data/core-concepts/shards.mdx"
+    match: [sharding, distributed, shards]
+  - id: query-parallelism-max-threads
+    name: query parallelism max threads
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/best-practices/query-parallelism.md"
+    match: [max_threads, parallelism, processing-lanes]
+  - id: array-join-and-arrays
+    name: array join and arrays
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/guides/starter_guides/working_with_arrays.md"
+    match: [array-join, arrayJoin, arrays]
+  - id: selecting-insert-strategy-and-format
+    name: selecting insert strategy and format
+    source: "https://github.com/ClickHouse/clickhouse-docs/blob/main/docs/best-practices/selecting_an_insert_strategy.md"
+    match: [insert, strategy, batch]

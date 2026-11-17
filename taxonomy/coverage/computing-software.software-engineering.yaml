@@ -1,0 +1,1562 @@
+# Canonical coverage spec: Software Engineering (whole field, 15 products).
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (SWEBOK v4 knowledge areas, the official
+# language/tool documentation tables of contents, the Pro Git book, Fowler's Refactoring catalog,
+# the GoF Design Patterns catalog, Google's engineering-practices review guide, platform developer
+# guides), not from what we happened to write, so the check measures the library against the subject.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (book chapter
+# sub-sections, docs page headings, catalog entries, CLI sub-commands).
+subject: software-engineering
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [git, python, java, typescript, csharp-dotnet, go, rust, cpp, api-design, software-architecture, refactoring, debugging, code-review, concurrency, mobile-development]
+sources:
+  - "SWEBOK v4 (IEEE Computer Society) knowledge areas - Software Requirements, Software Architecture (concepts, description/views, styles and patterns, evaluation), Software Design (principles, design patterns, quality analysis), Software Construction (construction for reuse, languages, coding, testing, tooling), Software Testing, Software Maintenance (refactoring, reengineering, migration), Software Configuration Management (version control, release management), Software Quality (reviews), Software Security; sub-areas used for architecture, review and debugging subtopics"
+  - "Pro Git, 2nd ed. (Chacon & Straub, git-scm.com/book) - 2 Git Basics (recording changes, viewing history, undoing things, remotes, tagging, aliases), 3 Branching (basic branching and merging, branch management, workflows, remote branches, rebasing), 5 Distributed Git (workflows, contributing, maintaining), 7 Git Tools (revision selection, interactive staging, stashing, signing, searching, rewriting history, reset demystified, advanced merging, rerere, debugging, submodules, bundling, credential storage), 8 Customizing Git (config, attributes, hooks), 10 Git Internals (objects, references, packfiles, refspec, transfer protocols, maintenance and data recovery); plus git-scm.com reference for worktree, sparse-checkout, scalar, maintenance, filter-repo"
+  - "Python docs (docs.python.org/3) - Language Reference (data model, execution model, compound statements), Library Reference (logging, pathlib, argparse, datetime/zoneinfo, json, re, collections, itertools, functools, concurrent.futures, multiprocessing, threading, subprocess, unittest.mock, typing), HOWTOs (logging, descriptors, regex, sorting, free-threading); typing spec and mypy docs; Python Packaging User Guide; PEP 8, PEP 621, PEP 703"
+  - "dev.java Learn ToC and the Java Language Specification - records, sealed classes, pattern matching, generics, enums, exceptions, lambdas/streams, Optional, modules (JPMS); JDK Tools reference (jcmd, jfr, jmap, jstack, jlink); Maven docs (POM, lifecycle, dependency management/BOM, multi-module); Gradle docs (Kotlin DSL, version catalogs, multi-project builds); Spring Boot / Spring Data / Spring Security reference; JUnit 5 user guide, Mockito, Testcontainers"
+  - "TypeScript Handbook and TSConfig reference (typescriptlang.org) - everyday types, narrowing, functions, object types, type manipulation (generics, keyof, typeof, indexed access, conditional, mapped, template literal types), classes, modules, declaration files, project references; Node.js docs (event loop, streams, worker_threads, process, test runner); npm docs (package.json, scripts, workspaces, publish, audit, overrides); MDN JavaScript guide (promises, closures, this, prototypes, iterators/generators)"
+  - "Microsoft Learn .NET / C# docs ToC - C# language (nullable reference types, records, pattern matching, LINQ, generics, Span<T>, IDisposable), asynchronous programming, ASP.NET Core fundamentals (middleware, DI, configuration, options, logging, authentication, health checks), EF Core (migrations, change tracking, performance, concurrency, raw SQL), .NET CLI, MSBuild, NuGet (packing, central package management), deployment (trimming, Native AOT), diagnostics tools (dotnet-counters, dotnet-trace, dotnet-dump), BenchmarkDotNet, xUnit testing"
+  - "Go docs (go.dev/doc) - Effective Go, The Go Programming Language Specification, go command reference (build, test, mod, work, vet, generate, env), Go Modules Reference, Go blog (errors, context, generics, pipelines, fuzzing, slog, PGO), net/http, encoding/json, database/sql, log/slog, runtime/pprof package docs, govulncheck"
+  - "The Rust Programming Language book chapters (ownership, structs/enums, modules, collections, error handling, generics/traits/lifetimes, tests, closures/iterators, smart pointers, fearless concurrency, async, OOP features, patterns, advanced features/unsafe, macros), The Cargo Book (workspaces, features, profiles, build scripts, publishing), The Rustonomicon (unsafe, FFI, Send/Sync), Rust API Guidelines, Clippy docs, tokio tutorial"
+  - "C++ Core Guidelines (isocpp) sections R (resource management), C (classes), T (templates/concepts), CP (concurrency), ES (expressions), P (philosophy); cppreference.com language/library sections (templates, constraints/concepts, constexpr, lambdas, optional/variant, ranges, string_view, thread, atomic, memory_order); CMake documentation (targets, presets, toolchains, find_package); GCC/Clang warning and sanitizer docs; SEI CERT C Coding Standard"
+  - "API design - Google API Improvement Proposals (AIP-121 resource-oriented design, 131-135 standard methods, 136 custom methods, 132 list/pagination, 160 filtering, 180 backwards compatibility, 185 versioning, 151 long-running operations, 193 errors, 155 request id), Microsoft REST API Guidelines, RFC 9110 HTTP Semantics, RFC 9457 problem details, RFC 8594 Sunset, gRPC docs (core concepts, deadlines, status codes, error handling, streaming), Protocol Buffers language guide, OpenAPI 3.1 spec, GraphQL spec and best practices"
+  - "Software architecture - ISO/IEC/IEEE 42010 (architecture description, views, viewpoints), arc42 template, C4 model (context/container/component/code), ATAM (SEI) and quality attribute scenarios, Fundamentals of Software Architecture (Richards & Ford) styles chapters, Domain-Driven Design (Evans) strategic and tactical patterns, microservices.io pattern catalog (saga, outbox, CQRS, event sourcing, API gateway), Release It! stability patterns, Design Patterns (Gamma, Helm, Johnson, Vlissides) creational/structural/behavioral catalog"
+  - "Refactoring, 2nd ed. (Fowler, refactoring.com/catalog) - ch3 bad smells, ch6 first set, ch7 encapsulation, ch8 moving features, ch9 organizing data, ch10 simplifying conditional logic, ch11 refactoring APIs, ch12 dealing with inheritance; Working Effectively with Legacy Code (Feathers) - seams, characterisation tests, sprout/wrap, dependency-breaking techniques; Strangler Fig, Branch by Abstraction, Parallel Change (martinfowler.com); The Mikado Method"
+  - "Debugging - Why Programs Fail (Zeller) chapters (tracking problems, reproducing, simplifying, scientific debugging, observing facts, tracking origins, isolating causes); GDB manual (breakpoints, watchpoints, catchpoints, examining stack/data, core files, remote debugging); rr record-replay docs; VS Code / debugpy / Delve / JDWP remote debugging docs; Valgrind manual (memcheck, massif); strace/ltrace man pages; Brendan Gregg Systems Performance observability tools"
+  - "Code review - Google Engineering Practices (google.github.io/eng-practices) reviewer guide (standard of code review, what to look for, navigating a CL, speed of reviews, how to write comments, handling pushback) and author guide (writing good CL descriptions, small CLs, handling reviewer comments); SWEBOK v4 Software Quality reviews and inspections; GitHub CODEOWNERS and required reviews docs; OWASP Code Review Guide"
+  - "Concurrency and performance - Java Concurrency in Practice (thread safety, sharing objects, composing, building blocks, task execution, cancellation, thread pools, liveness hazards, performance and scalability, explicit locks, atomics and nonblocking sync, memory model); The Art of Multiprocessor Programming (Herlihy & Shavit); Systems Performance 2nd ed. (Gregg) - methodologies (USE, workload characterisation), CPU, memory, file system, disk, network chapters, benchmarking; Little's law and queueing theory; k6/Gatling load-testing docs"
+  - "Mobile development - Android Developers guides (app fundamentals, activity/process lifecycle, Jetpack Compose state, navigation, WorkManager background work, App Links, app signing and Android App Bundles, Play Console release tracks, accessibility, LeakCanary/baseline profiles); Apple Developer Documentation (UIKit/SwiftUI app life cycle, SwiftUI state, BackgroundTasks, Universal Links, code signing and provisioning, TestFlight, privacy manifests, App Tracking Transparency, StoreKit, APNs); App Store Review Guidelines; Google Play policy; Firebase Cloud Messaging and Crashlytics docs; React Native and Flutter docs"
+topics:
+  # --- Git (Pro Git book chapters + git-scm reference)
+  - id: git-recording-and-undoing
+    name: Recording changes, viewing history and undoing things
+    source: Pro Git ch2 Git Basics
+    match: [git-basics, staging-area, undoing-changes]
+    subtopics:
+      - {id: git-rec-restore-reset, name: Undo with git restore / reset / revert, match: [git-restore, git-revert, undo-commit]}
+      - {id: git-rec-gitignore, name: gitignore patterns and untracking files, match: [gitignore, git-rm-cached]}
+      - {id: git-rec-stash, name: Stashing and cleaning, match: [git-stash, git-clean]}
+      - {id: git-rec-log-search, name: Searching history with log -S / -G / --grep and pickaxe, match: [git-log-search, pickaxe, git-log]}
+      - {id: git-rec-tags, name: Lightweight vs annotated tags and pushing tags, match: [git-tag, annotated-tags]}
+      - {id: git-rec-amend, name: Amending the last commit safely, match: [git-commit-amend, amend-commit]}
+      - {id: git-rec-diff, name: Viewing staged and unstaged changes with git diff (--staged / --word-diff / --stat), match: [git-diff, word-diff]}
+      - {id: git-rec-mv-rm, name: Removing and moving files (git rm / git mv / rename detection), match: [git-mv, rename-detection]}
+      - {id: git-rec-log-format, name: Formatting history (log --oneline --graph / --pretty placeholders / --since), match: [git-log-format, pretty-format]}
+      - {id: git-rec-remotes, name: Working with remotes (remote add / set-url / rename / show), match: [git-remote, remote-set-url]}
+  - id: git-branching-and-merging
+    name: Branching, merging and remote branches
+    source: Pro Git ch3 Git Branching
+    match: [git-merge, git-branching, merge-strategies]
+    subtopics:
+      - {id: git-br-conflicts, name: Resolving merge conflicts (conflict markers / mergetool / diff3 / zdiff3), match: [merge-conflicts, conflict-resolution, zdiff3]}
+      - {id: git-br-strategy-options, name: Merge strategies and options (ort / ours / -X theirs / octopus), match: [merge-strategy-ort, strategy-option-theirs]}
+      - {id: git-br-ff, name: Fast-forward vs --no-ff merges and squash merges, match: [fast-forward, no-ff, squash-merge]}
+      - {id: git-br-remote-tracking, name: Remote-tracking branches, upstream and fetch --prune, match: [remote-tracking-branches, git-upstream, fetch-prune]}
+      - {id: git-br-rebase, name: Rebasing a branch onto another, match: [git-rebase, rebase]}
+      - {id: git-br-rerere, name: Reusing recorded resolutions (rerere), match: [rerere]}
+      - {id: git-br-switch, name: Creating and switching branches with git switch / checkout -b, match: [git-switch, git-checkout]}
+      - {id: git-br-manage, name: Branch management (branch -d / -D / --merged / --no-merged / -m rename), match: [branch-management, delete-branches]}
+      - {id: git-br-push-delete, name: Publishing branches and deleting remote branches (push -u / push --delete), match: [push-upstream, delete-remote-branch]}
+      - {id: git-br-force-with-lease, name: Safe force pushes with --force-with-lease and --force-if-includes, match: [force-with-lease]}
+      - {id: git-br-rebase-onto, name: Transplanting a range with rebase --onto, match: [rebase-onto]}
+  - id: git-distributed-workflows
+    name: Distributed workflows, contributing and maintaining a project
+    source: Pro Git ch5 Distributed Git
+    match: [distributed-workflows, git-workflow]
+    subtopics:
+      - {id: git-dw-fork-pr, name: Forking / integration-manager workflow and syncing a fork, match: [forking-workflow, sync-fork, integration-manager]}
+      - {id: git-dw-patches, name: Email patches with format-patch / am / send-email, match: [git-format-patch, git-am]}
+      - {id: git-dw-commit-messages, name: Commit message conventions (50/72 / Conventional Commits / trailers), match: [commit-messages, conventional-commits, git-trailers]}
+      - {id: git-dw-cherry-pick, name: Cherry-picking and backporting fixes, match: [cherry-pick, backporting]}
+      - {id: git-dw-release, name: Preparing a release (describe / shortlog / archive), match: [git-describe, git-archive, git-shortlog]}
+      - {id: git-dw-trunk, name: Trunk-based development and branching strategies, match: [trunk-based-development, gitflow, branching-strategy]}
+      - {id: git-dw-request-pull, name: Generating pull requests with git request-pull, match: [git-request-pull]}
+      - {id: git-dw-range-diff, name: Comparing patch series revisions with git range-diff, match: [git-range-diff]}
+      - {id: git-dw-applying, name: Applying contributed patches (git apply --check / am -3), match: [git-apply]}
+      - {id: git-dw-notes, name: Annotating commits with git notes, match: [git-notes]}
+      - {id: git-dw-maintainer, name: Maintainer integration of topic branches (merge vs rebase vs cherry-pick), match: [integrating-contributions, topic-branches]}
+  - id: git-tools-history
+    name: Revision selection, rewriting history, reset and debugging with Git
+    source: Pro Git ch7 Git Tools (7.1, 7.2, 7.6, 7.7, 7.10)
+    match: [git-tools, rewriting-history]
+    subtopics:
+      - {id: git-th-revisions, name: Revision selection (ranges / ^ / ~ / A...B / upstream), match: [revision-selection, commit-ranges]}
+      - {id: git-th-interactive-staging, name: Interactive and partial staging (add -p), match: [git-add-patch, interactive-staging]}
+      - {id: git-th-interactive-rebase, name: Interactive rebase (fixup / autosquash / split commits), match: [interactive-rebase, autosquash]}
+      - {id: git-th-reset, name: Reset demystified (soft / mixed / hard) and reflog recovery, match: [git-reset-modes, git-reflog, reflog]}
+      - {id: git-th-bisect, name: Finding regressions with git bisect run, match: [git-bisect]}
+      - {id: git-th-blame, name: Blame with -w / -C / ignore-revs-file, match: [git-blame, ignore-revs]}
+      - {id: git-th-mailmap, name: Fixing authorship (mailmap / rewriting author and email), match: [git-mailmap, rewrite-author]}
+      - {id: git-th-undo-merge, name: Undoing merges (reset vs revert -m and reverting a revert), match: [revert-merge, undo-merge]}
+      - {id: git-th-grep, name: Searching the tree with git grep, match: [git-grep]}
+      - {id: git-th-replace, name: Grafting and replacing history with git replace, match: [git-replace]}
+      - {id: git-th-split-commit, name: Splitting a commit into several during an interactive rebase, match: [split-commit]}
+      - {id: git-th-update-refs, name: Stacked branches with rebase --update-refs, match: [update-refs, stacked-branches]}
+  - id: git-tools-repositories
+    name: Submodules, worktrees, signing, credentials and bundles
+    source: Pro Git ch7 Git Tools (7.4, 7.11, 7.12, 7.14) + git-worktree reference
+    match: [git-repository-tools]
+    subtopics:
+      - {id: git-tr-submodules, name: Submodules (add / update --init --recursive / foreach), match: [git-submodules, submodule]}
+      - {id: git-tr-worktree, name: Multiple working trees with git worktree, match: [git-worktree]}
+      - {id: git-tr-signing, name: Signing commits and tags with GPG or SSH keys, match: [commit-signing, ssh-signing, gpg-signing]}
+      - {id: git-tr-credentials, name: Credential helpers and HTTPS / SSH auth, match: [credential-helper, git-credentials]}
+      - {id: git-tr-subtree, name: Subtree merging as a submodule alternative, match: [git-subtree]}
+      - {id: git-tr-bundle, name: Bundling repositories for offline transfer, match: [git-bundle]}
+      - {id: git-tr-ssh-accounts, name: SSH keys and multiple Git accounts per host (ssh config / core.sshCommand), match: [ssh-config-git, multiple-git-accounts]}
+      - {id: git-tr-submodule-maintenance, name: Updating and removing submodules (update --remote / deinit / absorbgitdirs), match: [submodule-update-remote, submodule-deinit]}
+      - {id: git-tr-safe-directory, name: safe.directory and dubious ownership errors, match: [safe-directory, dubious-ownership]}
+      - {id: git-tr-clone-options, name: Clone options (--depth / --single-branch / --mirror / --reference), match: [shallow-clone, git-clone-mirror]}
+  - id: git-customizing
+    name: Customizing Git - config, attributes and hooks
+    source: Pro Git ch8 Customizing Git
+    match: [git-config, git-customization]
+    subtopics:
+      - {id: git-cu-config, name: Config scopes / includeIf / aliases, match: [git-aliases, includeif, git-config-scopes]}
+      - {id: git-cu-line-endings, name: Line endings with core.autocrlf and .gitattributes eol, match: [line-endings, autocrlf, gitattributes]}
+      - {id: git-cu-client-hooks, name: Client-side hooks and the pre-commit framework, match: [git-hooks, pre-commit-hooks, pre-commit-framework]}
+      - {id: git-cu-server-hooks, name: Server-side hooks and branch protection policy, match: [server-side-hooks, pre-receive, branch-protection]}
+      - {id: git-cu-diff-drivers, name: Custom diff and merge drivers (binary / lockfiles), match: [diff-driver, merge-driver]}
+      - {id: git-cu-core-config, name: Core settings (core.editor / excludesFile / pull.rebase / init.defaultBranch), match: [pull-rebase, init-default-branch]}
+      - {id: git-cu-filters, name: Clean and smudge filters and keyword expansion, match: [clean-smudge-filter]}
+      - {id: git-cu-export-ignore, name: Export and linguist attributes in .gitattributes, match: [export-ignore, linguist-attributes]}
+      - {id: git-cu-commit-template, name: commit.template and prepare-commit-msg hooks, match: [commit-template, prepare-commit-msg]}
+      - {id: git-cu-fsmonitor, name: Performance config (core.fsmonitor / untrackedCache / feature.manyFiles), match: [fsmonitor, untracked-cache]}
+      - {id: git-cu-difftool, name: External diff and merge tools (difftool / mergetool config), match: [git-difftool, git-mergetool]}
+  - id: git-internals
+    name: Git internals, maintenance and data recovery
+    source: Pro Git ch10 Git Internals
+    match: [git-internals, git-plumbing]
+    subtopics:
+      - {id: git-in-objects, name: Objects, trees, commits and refs with cat-file / rev-parse, match: [git-objects, git-cat-file]}
+      - {id: git-in-refspec, name: Refspecs and fetching / pushing arbitrary refs, match: [refspec, git-refspec]}
+      - {id: git-in-recovery, name: Data recovery with fsck and dangling objects, match: [git-fsck, dangling-commits, data-recovery]}
+      - {id: git-in-remove-secrets, name: Removing sensitive data with git filter-repo, match: [git-filter-repo, remove-secrets-from-history]}
+      - {id: git-in-gc, name: gc, repack and maintenance, match: [git-gc, git-maintenance, maintenance]}
+      - {id: git-in-large-repos, name: Large repos (sparse-checkout / partial clone / LFS), match: [sparse-checkout, partial-clone, git-lfs]}
+      - {id: git-in-packfiles, name: Packfiles / delta compression and verify-pack, match: [packfiles, git-verify-pack]}
+      - {id: git-in-transfer, name: Transfer protocols (smart HTTP / SSH / protocol v2) and GIT_TRACE debugging, match: [git-trace, git-protocol-v2]}
+      - {id: git-in-refs-plumbing, name: Scripting refs with update-ref / for-each-ref / symbolic-ref, match: [git-update-ref, for-each-ref]}
+      - {id: git-in-hash-object, name: Writing objects by hand (hash-object / write-tree / commit-tree), match: [git-hash-object, commit-tree]}
+      - {id: git-in-corruption, name: Repairing repository corruption (missing objects / broken refs / corrupt index), match: [repository-corruption, corrupt-index]}
+
+  # --- Python (docs.python.org ToC, typing spec, Packaging User Guide)
+  - id: py-data-model
+    name: Python data model and language features
+    source: Python Language Reference ch3 Data model + Descriptor HOWTO
+    match: [python-data-model, dunder-methods]
+    subtopics:
+      - {id: py-dm-dataclasses, name: dataclasses (frozen / slots / field defaults), match: [dataclasses, python-dataclass]}
+      - {id: py-dm-descriptors, name: Descriptors and properties, match: [descriptors, python-property]}
+      - {id: py-dm-generators, name: Iterators, generators and yield from, match: [python-generators, python-iterators]}
+      - {id: py-dm-context-managers, name: Context managers and contextlib, match: [context-managers, contextlib]}
+      - {id: py-dm-decorators, name: Writing decorators with functools.wraps, match: [python-decorators, functools-wraps]}
+      - {id: py-dm-pattern-matching, name: Structural pattern matching (match / case), match: [structural-pattern-matching, match-statement]}
+      - {id: py-dm-metaclass, name: __init_subclass__, class decorators and metaclasses, match: [metaclasses, init-subclass]}
+      - {id: py-dm-slots, name: __slots__ and instance memory layout, match: [python-slots]}
+      - {id: py-dm-operator-overloading, name: Rich comparisons and operator overloading (__eq__ / __hash__ / total_ordering), match: [operator-overloading, total-ordering]}
+      - {id: py-dm-exceptions, name: Exception groups / except* / chaining and add_note, match: [exception-groups, python-exception-chaining]}
+      - {id: py-dm-enum, name: Enum / IntEnum / Flag / StrEnum, match: [python-enum]}
+      - {id: py-dm-import-system, name: Import system / packages and circular imports, match: [import-system, circular-imports]}
+  - id: py-typing
+    name: Type hints and static type checking
+    source: typing module docs + typing spec + mypy docs
+    match: [python-typing, type-hints]
+    subtopics:
+      - {id: py-ty-mypy-config, name: Configuring mypy / pyright strictness and gradual adoption, match: [mypy, pyright]}
+      - {id: py-ty-protocols, name: Protocols and structural subtyping, match: [typing-protocol, structural-subtyping]}
+      - {id: py-ty-typeddict, name: TypedDict, NamedTuple and Literal, match: [typeddict, typing-literal]}
+      - {id: py-ty-generics, name: Generics, TypeVar, ParamSpec and PEP 695 syntax, match: [typevar, paramspec, pep-695]}
+      - {id: py-ty-overload, name: overload, TypeGuard / TypeIs and narrowing, match: [typing-overload, typeguard, typeis]}
+      - {id: py-ty-runtime, name: Runtime validation with pydantic, match: [pydantic, runtime-validation]}
+      - {id: py-ty-callable, name: Typing callables and decorators (Callable / Concatenate), match: [typing-callable, concatenate]}
+      - {id: py-ty-stubs, name: Stub files (.pyi) / py.typed and typeshed, match: [stub-files, pyi-stubs]}
+      - {id: py-ty-self-final, name: Self / Final / ClassVar and typing.override, match: [typing-self, typing-final, typing-override]}
+      - {id: py-ty-type-aliases, name: Type aliases / NewType and the type statement, match: [python-newtype, type-alias]}
+  - id: py-packaging
+    name: Packaging, environments and distribution
+    source: Python Packaging User Guide
+    match: [python-packaging, pyproject-toml]
+    subtopics:
+      - {id: py-pk-uv, name: Environments and lockfiles with uv / venv, match: [uv, venv, uv-lock]}
+      - {id: py-pk-publish, name: Publishing to PyPI with trusted publishing, match: [pypi-publishing, trusted-publishing]}
+      - {id: py-pk-entry-points, name: Entry points and console scripts, match: [entry-points, console-scripts]}
+      - {id: py-pk-native-wheels, name: Building wheels with C extensions (cibuildwheel), match: [cibuildwheel, binary-wheels]}
+      - {id: py-pk-src-layout, name: src layout and editable installs, match: [src-layout, editable-install]}
+      - {id: py-pk-versions, name: Dependency specifiers and version pinning, match: [version-pinning, dependency-specifiers]}
+      - {id: py-pk-build-backends, name: Choosing a build backend (hatchling / setuptools / flit / maturin), match: [build-backend, hatchling]}
+      - {id: py-pk-optional-deps, name: Optional dependencies / extras and dependency groups (PEP 735), match: [python-extras, dependency-groups]}
+      - {id: py-pk-dynamic-version, name: Single-sourcing the version (setuptools-scm / importlib.metadata), match: [setuptools-scm, dynamic-version]}
+      - {id: py-pk-package-data, name: Package data and importlib.resources, match: [package-data, importlib-resources]}
+      - {id: py-pk-pipx, name: Installing Python applications with pipx / uv tool, match: [pipx, uv-tool]}
+  - id: py-concurrency
+    name: Concurrency - asyncio, threads, processes and subprocesses
+    source: Library Reference - Concurrent Execution + asyncio docs + free-threading HOWTO
+    match: [python-concurrency]
+    subtopics:
+      - {id: py-cc-asyncio, name: asyncio tasks, TaskGroup and cancellation, match: [asyncio, taskgroup]}
+      - {id: py-cc-threads-gil, name: Threads, the GIL and concurrent.futures, match: [python-threading, concurrent-futures, gil]}
+      - {id: py-cc-multiprocessing, name: multiprocessing and ProcessPoolExecutor pitfalls, match: [multiprocessing, processpoolexecutor]}
+      - {id: py-cc-subprocess, name: Running external commands with subprocess safely, match: [python-subprocess]}
+      - {id: py-cc-free-threading, name: Free-threaded CPython (PEP 703) builds, match: [free-threading, pep-703]}
+      - {id: py-cc-async-queues, name: asyncio queues / semaphores and bounded concurrency, match: [asyncio-queue, asyncio-semaphore]}
+      - {id: py-cc-blocking-in-async, name: Running blocking code from asyncio (to_thread / run_in_executor), match: [asyncio-to-thread, run-in-executor]}
+      - {id: py-cc-async-timeouts, name: Timeouts with asyncio.timeout and wait_for, match: [asyncio-timeout]}
+      - {id: py-cc-thread-sync, name: Thread synchronisation (Lock / Event / Condition / queue.Queue), match: [threading-lock, python-queue]}
+      - {id: py-cc-debug-asyncio, name: Debugging asyncio (debug mode / never-awaited / slow callbacks), match: [asyncio-debug-mode]}
+  - id: py-stdlib
+    name: Standard library essentials
+    source: Python Library Reference ToC
+    match: [python-stdlib]
+    subtopics:
+      - {id: py-sl-logging, name: logging configuration (dictConfig / handlers / library logging), match: [python-logging, dictconfig]}
+      - {id: py-sl-pathlib, name: Files and paths with pathlib, match: [pathlib]}
+      - {id: py-sl-argparse, name: CLIs with argparse, match: [argparse, python-cli]}
+      - {id: py-sl-datetime, name: datetime, timezones and zoneinfo, match: [zoneinfo, python-datetime]}
+      - {id: py-sl-regex, name: Regular expressions with re, match: [python-regex]}
+      - {id: py-sl-collections, name: collections, itertools and functools idioms, match: [itertools, python-collections, functools]}
+      - {id: py-sl-json, name: json and csv data handling, match: [python-json, python-csv]}
+      - {id: py-sl-sqlite, name: sqlite3 connections / transactions and row factories, match: [sqlite3]}
+      - {id: py-sl-http, name: HTTP clients (urllib.request / httpx) with timeouts and retries, match: [urllib, httpx]}
+      - {id: py-sl-tempfile-shutil, name: tempfile and shutil file operations, match: [tempfile, shutil]}
+      - {id: py-sl-decimal, name: decimal and fractions for exact arithmetic, match: [python-decimal]}
+      - {id: py-sl-config, name: Reading configuration with tomllib / configparser, match: [tomllib, configparser]}
+  - id: py-testing
+    name: Testing Python code
+    source: unittest / unittest.mock docs + pytest docs + Hypothesis docs
+    match: [python-testing, pytest]
+    subtopics:
+      - {id: py-te-fixtures, name: pytest fixtures and conftest, match: [pytest-fixtures, conftest]}
+      - {id: py-te-parametrize, name: Parametrized tests, match: [parametrize]}
+      - {id: py-te-mock, name: Mocking with unittest.mock and monkeypatch, match: [unittest-mock, monkeypatch, pytest-mock]}
+      - {id: py-te-hypothesis, name: Property-based testing with Hypothesis, match: [python-hypothesis, property-based-testing]}
+      - {id: py-te-coverage, name: Coverage measurement and branch coverage, match: [coverage-py]}
+      - {id: py-te-nox, name: Multi-version test matrices with nox / tox, match: [nox, tox]}
+      - {id: py-te-markers, name: Markers / skip / xfail and test selection (-k / -m), match: [pytest-markers, xfail]}
+      - {id: py-te-async, name: Testing async code (pytest-asyncio / anyio), match: [pytest-asyncio]}
+      - {id: py-te-xdist-config, name: pytest configuration and parallel runs with pytest-xdist, match: [pytest-xdist, pytest-config]}
+      - {id: py-te-builtin-fixtures, name: Built-in fixtures (tmp_path / capsys / caplog), match: [tmp-path, caplog, capsys]}
+      - {id: py-te-doctest, name: doctest for executable documentation, match: [doctest]}
+  - id: py-quality-performance
+    name: Code quality and performance tooling
+    source: PEP 8 + ruff docs + Python profilers docs
+    match: [python-quality, python-performance]
+    subtopics:
+      - {id: py-qp-ruff, name: Linting and formatting with ruff, match: [ruff, python-linting]}
+      - {id: py-qp-profiling, name: CPU profiling with cProfile / py-spy, match: [cprofile, py-spy]}
+      - {id: py-qp-memory, name: Memory profiling with tracemalloc, match: [tracemalloc, memory-profiler]}
+      - {id: py-qp-vectorize, name: Speeding up with NumPy vectorisation / Cython / native extensions, match: [numpy-vectorization, cython]}
+      - {id: py-qp-docstrings, name: Docstrings and API docs with Sphinx / mkdocstrings, match: [docstrings, sphinx]}
+      - {id: py-qp-line-profiler, name: Line-level profiling (line_profiler / scalene), match: [line-profiler, scalene]}
+      - {id: py-qp-timeit, name: Microbenchmarks with timeit / pyperf, match: [timeit, pyperf]}
+      - {id: py-qp-caching, name: Memoisation with functools.cache / lru_cache, match: [lru-cache, functools-cache]}
+      - {id: py-qp-perf-idioms, name: CPython performance idioms (comprehensions / str.join / local lookups), match: [python-performance-idioms]}
+      - {id: py-qp-dead-code, name: Dead code and complexity metrics (vulture / radon), match: [vulture, radon]}
+
+  # --- Java (dev.java, JLS, JDK tools, Maven/Gradle, Spring, JUnit)
+  - id: java-language
+    name: Modern Java language features
+    source: dev.java Learn + JLS
+    match: [java-language, modern-java]
+    subtopics:
+      - {id: java-la-records, name: Records and compact constructors, match: [java-records]}
+      - {id: java-la-sealed, name: Sealed types and pattern matching for switch, match: [sealed-classes, pattern-matching-switch]}
+      - {id: java-la-generics, name: Generics, wildcards and PECS, match: [java-generics, pecs]}
+      - {id: java-la-streams, name: Streams API and collectors, match: [java-streams, collectors]}
+      - {id: java-la-optional, name: Optional usage rules, match: [java-optional]}
+      - {id: java-la-exceptions, name: Exceptions and try-with-resources, match: [try-with-resources, java-exceptions]}
+      - {id: java-la-equals-hashcode, name: equals / hashCode / Comparable contracts, match: [equals-hashcode, comparable]}
+      - {id: java-la-enums, name: Enums / EnumMap and EnumSet, match: [java-enums, enummap]}
+      - {id: java-la-lambdas, name: Lambdas / functional interfaces and method references, match: [java-lambdas, functional-interfaces]}
+      - {id: java-la-text-blocks, name: Text blocks and string formatting, match: [text-blocks]}
+      - {id: java-la-collections, name: Collections framework and immutable collection factories, match: [java-collections, immutable-collections]}
+      - {id: java-la-interfaces, name: Interfaces with default / static / private methods, match: [default-methods]}
+  - id: java-build
+    name: Builds with Maven and Gradle
+    source: Maven docs + Gradle docs + JPMS
+    match: [java-build, maven, gradle]
+    subtopics:
+      - {id: java-bu-maven-lifecycle, name: Maven POM, lifecycle and plugins, match: [maven-lifecycle, pom-xml]}
+      - {id: java-bu-bom, name: Dependency management, BOMs and conflict resolution, match: [maven-bom, dependency-mediation]}
+      - {id: java-bu-gradle-kotlin, name: Gradle Kotlin DSL builds and tasks, match: [gradle-kotlin-dsl]}
+      - {id: java-bu-version-catalogs, name: Gradle version catalogs and convention plugins, match: [version-catalogs, convention-plugins]}
+      - {id: java-bu-multimodule, name: Multi-module projects, match: [multi-module, multi-project-build]}
+      - {id: java-bu-jpms, name: Java Platform Module System and jlink, match: [jpms, jlink]}
+      - {id: java-bu-maven-profiles, name: Maven profiles and properties, match: [maven-profiles]}
+      - {id: java-bu-wrapper, name: Maven and Gradle wrappers for reproducible builds, match: [gradle-wrapper, maven-wrapper]}
+      - {id: java-bu-gradle-cache, name: Gradle build cache and configuration cache, match: [gradle-build-cache, configuration-cache]}
+      - {id: java-bu-publishing, name: Publishing artifacts to Maven Central, match: [maven-central, maven-publish]}
+      - {id: java-bu-dependency-insight, name: Diagnosing dependency trees (dependency-tree goal / dependencyInsight), match: [dependency-tree, dependencyinsight]}
+  - id: java-concurrency
+    name: Java concurrency
+    source: java.util.concurrent docs + JEP 444/453
+    match: [java-concurrency]
+    subtopics:
+      - {id: java-cc-executors, name: ExecutorService and thread pools, match: [executorservice]}
+      - {id: java-cc-completablefuture, name: CompletableFuture composition, match: [completablefuture]}
+      - {id: java-cc-virtual-threads, name: Virtual threads and pinning, match: [virtual-threads]}
+      - {id: java-cc-locks-atomics, name: Locks, atomics and concurrent collections, match: [reentrantlock, concurrenthashmap, java-atomics]}
+      - {id: java-cc-structured, name: Structured concurrency and scoped values, match: [structured-concurrency, scoped-values]}
+      - {id: java-cc-jmm, name: synchronized / volatile and the Java Memory Model, match: [synchronized, volatile, java-memory-model]}
+      - {id: java-cc-blocking-queues, name: BlockingQueue producer-consumer, match: [blockingqueue]}
+      - {id: java-cc-coordination, name: CountDownLatch / Semaphore / Phaser / CyclicBarrier, match: [countdownlatch, java-semaphore]}
+      - {id: java-cc-forkjoin, name: ForkJoinPool and parallel streams, match: [forkjoinpool, parallel-streams]}
+      - {id: java-cc-interruption, name: Thread interruption and cancellation, match: [thread-interruption, interruptedexception]}
+      - {id: java-cc-threadlocal, name: ThreadLocal usage and leaks, match: [threadlocal]}
+  - id: java-jvm
+    name: JVM tuning and diagnostics
+    source: JDK Tools reference + HotSpot GC tuning guide
+    match: [jvm, jvm-tuning]
+    subtopics:
+      - {id: java-jv-gc, name: Garbage collector selection and tuning, match: [gc-tuning, g1gc, zgc]}
+      - {id: java-jv-jfr, name: Java Flight Recorder and JDK Mission Control, match: [jfr, java-flight-recorder]}
+      - {id: java-jv-heap-dump, name: Heap dumps and memory leak analysis (jcmd / Eclipse MAT), match: [heap-dump, eclipse-mat, jcmd]}
+      - {id: java-jv-thread-dump, name: Thread dumps with jstack / jcmd Thread.print, match: [thread-dump, jstack]}
+      - {id: java-jv-containers, name: JVM memory in containers (MaxRAMPercentage), match: [maxrampercentage, jvm-containers]}
+      - {id: java-jv-native-image, name: Startup - CDS / AppCDS / GraalVM native image, match: [graalvm-native-image, appcds]}
+      - {id: java-jv-jit, name: JIT / tiered compilation and warmup, match: [jit-compilation, tiered-compilation]}
+      - {id: java-jv-gc-logs, name: Unified GC logging (-Xlog gc) and log analysis, match: [gc-logging, xlog]}
+      - {id: java-jv-oom-types, name: Diagnosing OutOfMemoryError variants (heap / Metaspace / direct / native threads), match: [metaspace, direct-memory-oom]}
+      - {id: java-jv-nmt, name: Native Memory Tracking, match: [native-memory-tracking]}
+      - {id: java-jv-async-profiler, name: Profiling with async-profiler, match: [async-profiler]}
+  - id: java-spring
+    name: Spring Boot services
+    source: Spring Boot / Spring Data / Spring Security reference
+    match: [spring-boot, spring-framework]
+    subtopics:
+      - {id: java-sp-config, name: Configuration properties and profiles, match: [configurationproperties, spring-profiles]}
+      - {id: java-sp-data-jpa, name: Spring Data JPA repositories and N+1, match: [spring-data-jpa, jpa]}
+      - {id: java-sp-transactions, name: Transactional boundaries and propagation, match: [transactional, spring-transactions]}
+      - {id: java-sp-security, name: Spring Security filter chain and JWT resource server, match: [spring-security]}
+      - {id: java-sp-actuator, name: Actuator, health probes and Micrometer, match: [actuator, micrometer]}
+      - {id: java-sp-testing, name: Test slices (WebMvcTest / DataJpaTest / SpringBootTest), match: [webmvctest, springboottest]}
+      - {id: java-sp-di, name: Beans / component scanning and constructor injection, match: [spring-beans, spring-dependency-injection]}
+      - {id: java-sp-auto-config, name: Auto-configuration and conditional beans, match: [auto-configuration, conditionalonproperty]}
+      - {id: java-sp-mvc, name: REST controllers / validation and ControllerAdvice error handling, match: [spring-mvc, controlleradvice]}
+      - {id: java-sp-http-clients, name: HTTP clients (RestClient / WebClient) with timeouts, match: [restclient, webclient]}
+      - {id: java-sp-cache-scheduling, name: Caching and scheduled tasks (Cacheable / Scheduled), match: [spring-cache, scheduled-tasks]}
+      - {id: java-sp-flyway, name: Database migrations with Flyway / Liquibase, match: [flyway, liquibase]}
+  - id: java-testing
+    name: Testing Java code
+    source: JUnit 5 user guide + Mockito + Testcontainers + AssertJ docs
+    match: [java-testing]
+    subtopics:
+      - {id: java-te-junit5, name: JUnit 5 parameterized and nested tests, match: [junit5, parameterized-tests]}
+      - {id: java-te-mockito, name: Mocking with Mockito, match: [mockito]}
+      - {id: java-te-testcontainers, name: Integration tests with Testcontainers, match: [testcontainers]}
+      - {id: java-te-assertj, name: Fluent assertions with AssertJ, match: [assertj]}
+      - {id: java-te-jmh, name: Microbenchmarks with JMH, match: [jmh]}
+      - {id: java-te-extensions, name: JUnit 5 lifecycle / extensions and tags, match: [junit5-extensions, junit-tags]}
+      - {id: java-te-surefire, name: Running tests with Surefire / Failsafe and Gradle test tasks, match: [surefire, failsafe]}
+      - {id: java-te-jacoco, name: Code coverage with JaCoCo, match: [jacoco]}
+      - {id: java-te-wiremock, name: Stubbing HTTP dependencies with WireMock, match: [wiremock]}
+      - {id: java-te-pitest, name: Mutation testing with PIT, match: [mutation-testing, pitest]}
+
+  # --- TypeScript / JavaScript (TS Handbook, TSConfig, Node.js, npm, MDN)
+  - id: ts-type-system
+    name: TypeScript type system and type manipulation
+    source: TypeScript Handbook - Narrowing, Generics, Type Manipulation
+    match: [typescript-types, type-manipulation]
+    subtopics:
+      - {id: ts-ts-narrowing, name: Narrowing and discriminated unions, match: [type-narrowing, discriminated-unions]}
+      - {id: ts-ts-generics, name: Generic functions and constraints, match: [typescript-generics]}
+      - {id: ts-ts-utility, name: Utility types (Partial / Pick / Omit / Record / ReturnType), match: [utility-types]}
+      - {id: ts-ts-mapped, name: Mapped types and key remapping, match: [mapped-types, keyof]}
+      - {id: ts-ts-conditional, name: Conditional types and infer, match: [conditional-types, infer]}
+      - {id: ts-ts-template-literal, name: Template literal types, match: [template-literal-types]}
+      - {id: ts-ts-branded, name: Branded / nominal types and enums vs unions, match: [branded-types, typescript-enums]}
+      - {id: ts-ts-object-types, name: Object types / interfaces vs type aliases / readonly and index signatures, match: [interfaces-vs-types, index-signatures]}
+      - {id: ts-ts-functions, name: Function types / overloads and this parameters, match: [function-overloads, typescript-functions]}
+      - {id: ts-ts-satisfies, name: satisfies / as const and literal inference, match: [satisfies-operator, as-const]}
+      - {id: ts-ts-type-guards, name: User-defined type guards and assertion functions, match: [type-guards, assertion-functions]}
+      - {id: ts-ts-classes, name: Classes / access modifiers and abstract classes, match: [typescript-classes]}
+  - id: ts-config-build
+    name: tsconfig, compilation and declaration files
+    source: TSConfig reference + Handbook Declaration Files + Project References
+    match: [tsconfig, typescript-build]
+    subtopics:
+      - {id: ts-cb-strict, name: Strict mode flags and migrating to strict, match: [strict, strict-migration]}
+      - {id: ts-cb-project-refs, name: Project references and composite builds, match: [project-references, composite-projects]}
+      - {id: ts-cb-dts, name: Writing and publishing declaration files (.d.ts), match: [declaration-files, d-ts]}
+      - {id: ts-cb-module-augmentation, name: Declaration merging and module augmentation, match: [module-augmentation, declaration-merging]}
+      - {id: ts-cb-paths, name: Path aliases and baseUrl pitfalls, match: [path-aliases, tsconfig-paths]}
+      - {id: ts-cb-modules, name: ESM / CJS module resolution and exports field, match: [module-resolution, exports-field, esm]}
+      - {id: ts-cb-emit, name: Type-check only builds with bundlers (noEmit / isolatedModules / verbatimModuleSyntax), match: [isolatedmodules, noemit]}
+      - {id: ts-cb-target-lib, name: target / lib and downlevel emit, match: [tsconfig-target, tsconfig-lib]}
+      - {id: ts-cb-incremental, name: Compiler performance (incremental / skipLibCheck / extendedDiagnostics), match: [incremental-build, extendeddiagnostics]}
+      - {id: ts-cb-js-migration, name: Migrating JavaScript to TypeScript (allowJs / checkJs / JSDoc), match: [allowjs, checkjs, js-to-ts-migration]}
+      - {id: ts-cb-type-stripping, name: Running TypeScript directly (node type stripping / tsx / erasableSyntaxOnly), match: [type-stripping, erasablesyntaxonly]}
+  - id: ts-node-runtime
+    name: Node.js runtime
+    source: Node.js docs (event loop, streams, worker_threads, process, test runner)
+    match: [nodejs, node-runtime]
+    subtopics:
+      - {id: ts-nr-event-loop, name: Event loop phases and blocking detection, match: [event-loop, event-loop-lag]}
+      - {id: ts-nr-streams, name: Streams, pipeline and backpressure, match: [node-streams, stream-pipeline]}
+      - {id: ts-nr-workers, name: worker_threads for CPU-bound work, match: [worker-threads]}
+      - {id: ts-nr-errors, name: Unhandled rejections and process error handling, match: [unhandled-rejection, uncaughtexception]}
+      - {id: ts-nr-shutdown, name: Graceful shutdown on SIGTERM, match: [graceful-shutdown, sigterm]}
+      - {id: ts-nr-test-runner, name: node --test built-in test runner, match: [node-test-runner]}
+      - {id: ts-nr-fs, name: File system API (fs/promises / watch / streams), match: [node-fs]}
+      - {id: ts-nr-child-process, name: child_process spawn / exec / fork safely, match: [child-process]}
+      - {id: ts-nr-http-server, name: node http servers / keep-alive and server timeouts, match: [node-http-server]}
+      - {id: ts-nr-diagnostics, name: Node diagnostics (--inspect / --cpu-prof / heap snapshots / diagnostic reports), match: [node-inspect, cpu-prof]}
+      - {id: ts-nr-env-config, name: Configuration with process.env / --env-file / util.parseArgs, match: [env-file, parseargs]}
+      - {id: ts-nr-async-context, name: Request context with AsyncLocalStorage, match: [asynclocalstorage]}
+  - id: ts-npm-tooling
+    name: npm packages, workspaces and dependency hygiene
+    source: npm docs (package.json, scripts, workspaces, publish, audit, overrides)
+    match: [npm, package-json]
+    subtopics:
+      - {id: ts-np-lockfiles, name: Lockfiles and npm ci reproducibility, match: [npm-ci, package-lock]}
+      - {id: ts-np-workspaces, name: Workspaces monorepos (npm / pnpm), match: [npm-workspaces, pnpm-workspaces]}
+      - {id: ts-np-publish, name: Publishing packages (files / provenance / prepublish), match: [npm-publish, npm-provenance]}
+      - {id: ts-np-semver, name: Semver ranges and peer dependencies, match: [semver-ranges, peer-dependencies]}
+      - {id: ts-np-audit, name: npm audit, overrides and supply-chain safety, match: [npm-audit, npm-overrides]}
+      - {id: ts-np-scripts, name: npm scripts / lifecycle hooks and npx, match: [npm-scripts, npx]}
+      - {id: ts-np-package-json-fields, name: package.json fields (main / module / types / engines / sideEffects), match: [package-json-fields, engines-field]}
+      - {id: ts-np-registries, name: Private registries and .npmrc authentication, match: [npmrc, private-registry]}
+      - {id: ts-np-updating, name: Updating dependencies (npm outdated / update / dedupe / Renovate), match: [npm-outdated, npm-dedupe]}
+      - {id: ts-np-link, name: Local package development (npm link / file deps / npm pack), match: [npm-link, npm-pack]}
+  - id: ts-quality
+    name: Testing, linting and runtime validation
+    source: Vitest / Jest / typescript-eslint / Zod docs
+    match: [typescript-testing, typescript-quality]
+    subtopics:
+      - {id: ts-qu-vitest, name: Unit tests with Vitest / Jest and mocking modules, match: [vitest, jest]}
+      - {id: ts-qu-eslint, name: typescript-eslint type-aware linting, match: [typescript-eslint, eslint]}
+      - {id: ts-qu-prettier, name: Formatting with Prettier / Biome, match: [prettier, biome]}
+      - {id: ts-qu-zod, name: Runtime validation at boundaries with Zod, match: [zod, schema-validation]}
+      - {id: ts-qu-type-tests, name: Testing types with expect-type / tsd, match: [type-testing, expect-type]}
+      - {id: ts-qu-playwright, name: End-to-end tests with Playwright, match: [playwright]}
+      - {id: ts-qu-msw, name: Mocking the network with Mock Service Worker, match: [msw, mock-service-worker]}
+      - {id: ts-qu-coverage, name: Coverage with v8 / istanbul in Vitest and Jest, match: [vitest-coverage, istanbul]}
+      - {id: ts-qu-knip, name: Finding unused files / exports and dependencies with knip, match: [knip, unused-exports]}
+      - {id: ts-qu-bundling, name: Bundling libraries with tsup / esbuild / Rollup, match: [tsup, esbuild]}
+  - id: js-language
+    name: JavaScript language semantics
+    source: MDN JavaScript Guide
+    match: [javascript]
+    subtopics:
+      - {id: js-la-promises, name: Promises, async/await and concurrency combinators, match: [promises, promise-all]}
+      - {id: js-la-this, name: this binding, closures and arrow functions, match: [this-binding, closures]}
+      - {id: js-la-equality, name: Equality, coercion and numeric pitfalls, match: [type-coercion, floating-point-js]}
+      - {id: js-la-iterators, name: Iterators, generators and async iteration, match: [js-generators, async-iterators]}
+      - {id: js-la-abort, name: Cancellation with AbortController, match: [abortcontroller]}
+      - {id: js-la-prototypes, name: Prototypes / classes and inheritance, match: [prototypes, prototype-chain]}
+      - {id: js-la-modules, name: ES modules / dynamic import and top-level await, match: [es-modules, dynamic-import]}
+      - {id: js-la-collections, name: Map / Set / WeakMap and WeakRef, match: [weakmap, js-map-set]}
+      - {id: js-la-errors, name: Error handling (custom errors / Error.cause / finally), match: [error-cause, js-errors]}
+      - {id: js-la-dates, name: Dates / Temporal and Intl formatting, match: [temporal-api, intl]}
+      - {id: js-la-copying, name: Copying and immutability (structuredClone / spread / Object.freeze), match: [structuredclone, object-freeze]}
+      - {id: js-la-regex, name: JavaScript regular expressions (named groups / flags / lookbehind), match: [js-regex]}
+
+  # --- C# / .NET (Microsoft Learn)
+  - id: cs-language
+    name: C# language features
+    source: Microsoft Learn - C# language reference
+    match: [csharp]
+    subtopics:
+      - {id: cs-la-nullable, name: Nullable reference types adoption, match: [nullable-reference-types]}
+      - {id: cs-la-records, name: Records and value equality, match: [csharp-records]}
+      - {id: cs-la-patterns, name: Pattern matching and switch expressions, match: [csharp-pattern-matching, switch-expressions]}
+      - {id: cs-la-linq, name: LINQ and deferred execution, match: [linq, deferred-execution]}
+      - {id: cs-la-span, name: Span<T> / Memory<T> and allocation-free code, match: [span-t, stackalloc]}
+      - {id: cs-la-dispose, name: IDisposable / IAsyncDisposable and using, match: [idisposable, iasyncdisposable]}
+      - {id: cs-la-generics, name: Generics / constraints and variance, match: [csharp-generics, covariance]}
+      - {id: cs-la-delegates, name: Delegates / events and lambdas, match: [csharp-delegates, csharp-events]}
+      - {id: cs-la-exceptions, name: Exception handling and exception filters, match: [csharp-exceptions, exception-filters]}
+      - {id: cs-la-collections, name: Collections (List / Dictionary / immutable and frozen collections), match: [frozen-collections, csharp-collections]}
+      - {id: cs-la-source-generators, name: Source generators, match: [source-generators]}
+      - {id: cs-la-structs, name: Structs / ref structs and in / ref parameters, match: [csharp-structs, readonly-struct]}
+  - id: cs-async
+    name: Asynchronous programming in .NET
+    source: Microsoft Learn - Asynchronous programming with async and await
+    match: [async-await]
+    subtopics:
+      - {id: cs-as-deadlock, name: Sync-over-async deadlocks and ConfigureAwait, match: [configureawait, sync-over-async]}
+      - {id: cs-as-cancellation, name: CancellationToken propagation, match: [cancellationtoken]}
+      - {id: cs-as-valuetask, name: ValueTask and async performance, match: [valuetask]}
+      - {id: cs-as-channels, name: System.Threading.Channels producer-consumer, match: [system-threading-channels]}
+      - {id: cs-as-async-streams, name: IAsyncEnumerable async streams, match: [iasyncenumerable]}
+      - {id: cs-as-whenall, name: Task.WhenAll / WhenAny and concurrent awaits, match: [task-whenall]}
+      - {id: cs-as-parallel, name: Parallel.ForEachAsync and the TPL, match: [parallel-foreachasync, tpl]}
+      - {id: cs-as-async-void, name: async void / fire-and-forget and unobserved exceptions, match: [async-void, fire-and-forget]}
+      - {id: cs-as-timeouts, name: Timeouts with CancelAfter / WaitAsync, match: [cancelafter, waitasync]}
+      - {id: cs-as-semaphoreslim, name: Async mutual exclusion with SemaphoreSlim, match: [semaphoreslim]}
+  - id: cs-aspnet-core
+    name: ASP.NET Core web services
+    source: Microsoft Learn - ASP.NET Core fundamentals
+    match: [aspnet-core]
+    subtopics:
+      - {id: cs-ap-middleware, name: Middleware pipeline ordering, match: [middleware-pipeline, aspnet-middleware]}
+      - {id: cs-ap-di, name: Dependency injection lifetimes, match: [di-lifetimes]}
+      - {id: cs-ap-config, name: Configuration and the options pattern, match: [options-pattern, ioptions]}
+      - {id: cs-ap-auth, name: Authentication and authorization (JWT bearer / policies), match: [jwt-bearer, authorization-policies]}
+      - {id: cs-ap-minimal, name: Minimal APIs vs controllers, match: [minimal-apis]}
+      - {id: cs-ap-health, name: Health checks and graceful shutdown, match: [aspnet-health-checks]}
+      - {id: cs-ap-logging, name: Logging with ILogger / Serilog and log scopes, match: [ilogger, serilog]}
+      - {id: cs-ap-validation-errors, name: Model validation and ProblemDetails error responses, match: [model-validation, aspnet-problem-details]}
+      - {id: cs-ap-httpclient, name: IHttpClientFactory and resilience handlers, match: [ihttpclientfactory, http-resilience]}
+      - {id: cs-ap-hosted-services, name: Background work with BackgroundService / IHostedService, match: [backgroundservice, ihostedservice]}
+      - {id: cs-ap-rate-limit-cors, name: Rate limiting and CORS middleware, match: [aspnet-rate-limiting, cors]}
+      - {id: cs-ap-openapi, name: OpenAPI document generation in ASP.NET Core, match: [aspnet-openapi, swashbuckle]}
+  - id: cs-ef-core
+    name: Entity Framework Core
+    source: Microsoft Learn - EF Core docs
+    match: [ef-core, entity-framework-core]
+    subtopics:
+      - {id: cs-ef-migrations, name: Migrations and deployment of schema changes, match: [ef-migrations]}
+      - {id: cs-ef-tracking, name: Change tracking and AsNoTracking, match: [change-tracking, asnotracking]}
+      - {id: cs-ef-perf, name: Query performance (N+1 / split queries / compiled queries), match: [query-splitting, compiled-queries]}
+      - {id: cs-ef-concurrency, name: Optimistic concurrency tokens, match: [ef-concurrency-tokens, rowversion]}
+      - {id: cs-ef-raw-sql, name: Raw SQL and ExecuteUpdate / ExecuteDelete bulk ops, match: [executeupdate, ef-raw-sql]}
+      - {id: cs-ef-modeling, name: Model configuration (fluent API / conventions / owned types), match: [ef-fluent-api, owned-types]}
+      - {id: cs-ef-relationships, name: Relationships and loading related data (Include / lazy / explicit), match: [ef-relationships, eager-loading]}
+      - {id: cs-ef-dbcontext-lifetime, name: DbContext lifetime and pooling, match: [dbcontext-pooling, dbcontext-lifetime]}
+      - {id: cs-ef-logging, name: Logging generated SQL and interceptors, match: [ef-logging, ef-interceptors]}
+      - {id: cs-ef-testing, name: Testing EF Core data access, match: [ef-core-testing]}
+      - {id: cs-ef-transactions, name: Transactions and SaveChanges behaviour, match: [ef-transactions]}
+  - id: cs-toolchain
+    name: .NET CLI, MSBuild, NuGet and deployment
+    source: Microsoft Learn - .NET CLI, MSBuild, NuGet, deployment
+    match: [dotnet-cli, msbuild]
+    subtopics:
+      - {id: cs-tc-directory-build, name: Directory.Build.props and shared build settings, match: [directory-build-props]}
+      - {id: cs-tc-cpm, name: Central package management, match: [central-package-management]}
+      - {id: cs-tc-nuget-pack, name: Packing and publishing NuGet packages, match: [nuget-pack, nuget]}
+      - {id: cs-tc-aot, name: Trimming, single-file and Native AOT publish, match: [native-aot, trimming]}
+      - {id: cs-tc-global-json, name: SDK pinning with global.json, match: [global-json]}
+      - {id: cs-tc-msbuild-targets, name: Custom MSBuild targets and properties, match: [msbuild-targets]}
+      - {id: cs-tc-dotnet-tools, name: .NET global and local tools (tool manifests), match: [dotnet-tools]}
+      - {id: cs-tc-multitarget, name: Multi-targeting (TargetFrameworks / conditional compilation), match: [multi-targeting, targetframeworks]}
+      - {id: cs-tc-containers, name: Publishing container images with dotnet publish, match: [dotnet-container-publish]}
+      - {id: cs-tc-binlog, name: Diagnosing builds with MSBuild binary logs, match: [msbuild-binlog]}
+      - {id: cs-tc-nuget-config, name: nuget.config sources / package source mapping and lock files, match: [nuget-config, package-source-mapping]}
+  - id: cs-testing-diagnostics
+    name: Testing and diagnostics in .NET
+    source: Microsoft Learn - Testing + Diagnostics tools + BenchmarkDotNet docs
+    match: [dotnet-testing, dotnet-diagnostics]
+    subtopics:
+      - {id: cs-td-xunit, name: Unit tests with xUnit and WebApplicationFactory, match: [xunit, webapplicationfactory]}
+      - {id: cs-td-counters, name: dotnet-counters and dotnet-trace, match: [dotnet-counters, dotnet-trace]}
+      - {id: cs-td-dump, name: dotnet-dump memory analysis, match: [dotnet-dump]}
+      - {id: cs-td-benchmark, name: BenchmarkDotNet microbenchmarks, match: [benchmarkdotnet]}
+      - {id: cs-td-analyzers, name: Roslyn analyzers and .editorconfig severity, match: [roslyn-analyzers, editorconfig]}
+      - {id: cs-td-mocking, name: Mocking with NSubstitute / Moq, match: [nsubstitute, moq]}
+      - {id: cs-td-coverage, name: Code coverage with coverlet, match: [coverlet]}
+      - {id: cs-td-gcdump, name: dotnet-gcdump and GC heap analysis, match: [dotnet-gcdump]}
+      - {id: cs-td-telemetry, name: Metrics and tracing with Meter and ActivitySource, match: [activitysource, system-diagnostics-metrics]}
+      - {id: cs-td-testcontainers, name: Integration tests with Testcontainers for .NET, match: [testcontainers-dotnet]}
+      - {id: cs-td-verify, name: Snapshot testing with Verify, match: [verify-snapshot]}
+
+  # --- Go (Effective Go, spec, go command, Go blog)
+  - id: go-language
+    name: Go language idioms
+    source: Effective Go + Go spec
+    match: [effective-go, go-idioms]
+    subtopics:
+      - {id: go-la-interfaces, name: Interface design (small / consumer-side / accept interfaces), match: [go-interfaces]}
+      - {id: go-la-generics, name: Type parameters and constraints, match: [go-generics, type-parameters]}
+      - {id: go-la-slices-maps, name: Slices and maps gotchas (aliasing / append / nil map), match: [go-slices, slice-aliasing]}
+      - {id: go-la-receivers, name: Value vs pointer receivers and method sets, match: [pointer-receivers, method-sets]}
+      - {id: go-la-defer, name: defer semantics and embedding, match: [go-defer, struct-embedding]}
+      - {id: go-la-panic, name: panic / recover and when to use them, match: [go-panic, recover]}
+      - {id: go-la-strings, name: Strings / bytes / runes and UTF-8, match: [go-strings, runes]}
+      - {id: go-la-iterators, name: Range-over-func iterators (iter.Seq), match: [range-over-func, iter-seq]}
+      - {id: go-la-options, name: Zero values / constructors and functional options, match: [functional-options, zero-values]}
+      - {id: go-la-type-switch, name: Type assertions and type switches, match: [type-switch, type-assertion]}
+      - {id: go-la-loopvar, name: Closures and per-iteration loop variables (Go 1.22), match: [loopvar, go-closures]}
+  - id: go-modules
+    name: Go modules and dependencies
+    source: Go Modules Reference + go command docs
+    match: [go-modules, go-mod]
+    subtopics:
+      - {id: go-mo-major, name: Major version suffixes (v2+) and semantic import versioning, match: [semantic-import-versioning]}
+      - {id: go-mo-workspaces, name: go work workspaces and replace directives, match: [go-work, replace-directive]}
+      - {id: go-mo-private, name: Private modules (GOPRIVATE / GOPROXY / GONOSUMDB), match: [goprivate, goproxy]}
+      - {id: go-mo-vuln, name: govulncheck and dependency upgrades, match: [govulncheck]}
+      - {id: go-mo-tools, name: Tool dependencies and go generate, match: [go-generate, go-tool-directive]}
+      - {id: go-mo-tidy, name: go mod tidy / why / graph and go.sum, match: [go-mod-tidy, go-sum]}
+      - {id: go-mo-retract, name: Releasing module versions / tags and retract, match: [retract, module-release]}
+      - {id: go-mo-toolchain, name: go and toolchain directives, match: [toolchain-directive]}
+      - {id: go-mo-vendor, name: Vendoring dependencies with go mod vendor, match: [go-mod-vendor]}
+      - {id: go-mo-mvs, name: Minimal version selection and go get upgrades, match: [minimal-version-selection, go-get]}
+  - id: go-concurrency
+    name: Go concurrency
+    source: Go blog (pipelines, context) + sync / errgroup docs
+    match: [goroutines, channels]
+    subtopics:
+      - {id: go-cc-context, name: context cancellation and deadlines, match: [context-cancellation]}
+      - {id: go-cc-errgroup, name: errgroup and bounded parallelism, match: [errgroup]}
+      - {id: go-cc-pipelines, name: Pipelines and fan-out / fan-in, match: [fan-out-fan-in, go-pipelines]}
+      - {id: go-cc-sync, name: sync.Mutex / Once / Pool / atomic, match: [sync-once, sync-pool]}
+      - {id: go-cc-leaks, name: Goroutine leaks and goleak, match: [goroutine-leak, goleak]}
+      - {id: go-cc-select, name: select / timeouts and time.After pitfalls, match: [go-select]}
+      - {id: go-cc-waitgroup, name: sync.WaitGroup patterns, match: [waitgroup]}
+      - {id: go-cc-worker-pool, name: Worker pools and semaphores, match: [worker-pool, go-semaphore]}
+      - {id: go-cc-race, name: The race detector (-race), match: [go-race-detector]}
+      - {id: go-cc-rwmutex, name: RWMutex and sync.Cond, match: [rwmutex, sync-cond]}
+      - {id: go-cc-rate, name: Rate limiting with x/time/rate and tickers, match: [x-time-rate, time-ticker]}
+  - id: go-errors-testing
+    name: Errors and testing in Go
+    source: Go blog (errors, fuzzing) + testing package docs
+    match: [go-errors, go-testing]
+    subtopics:
+      - {id: go-et-wrapping, name: Error wrapping and errors.Is / As, match: [error-wrapping, errors-is]}
+      - {id: go-et-table-tests, name: Table-driven tests and subtests, match: [table-driven-tests, subtests]}
+      - {id: go-et-fuzzing, name: Native fuzzing, match: [go-fuzzing]}
+      - {id: go-et-httptest, name: httptest servers and golden files, match: [httptest, golden-files]}
+      - {id: go-et-benchmarks, name: Benchmarks and benchstat, match: [go-benchmarks, benchstat]}
+      - {id: go-et-sentinel, name: Sentinel errors vs custom error types and errors.Join, match: [sentinel-errors, errors-join]}
+      - {id: go-et-helpers, name: Test helpers / t.Cleanup / t.Parallel and testdata, match: [t-parallel, t-cleanup]}
+      - {id: go-et-coverage, name: Coverage profiles and integration coverage, match: [go-coverage, coverprofile]}
+      - {id: go-et-fakes, name: Fakes and mocks for interfaces (gomock / hand-written fakes), match: [gomock, go-fakes]}
+      - {id: go-et-examples, name: Example tests and TestMain, match: [example-tests, testmain]}
+      - {id: go-et-synctest, name: Testing concurrent code with testing/synctest, match: [synctest]}
+  - id: go-tooling
+    name: Building, profiling and linting Go
+    source: go command docs + runtime/pprof + Go blog (PGO)
+    match: [go-tooling, go-build]
+    subtopics:
+      - {id: go-to-cross, name: Cross-compilation, CGO_ENABLED and build tags, match: [cross-compilation, build-tags]}
+      - {id: go-to-ldflags, name: Embedding version info with -ldflags / debug.BuildInfo, match: [ldflags, buildinfo]}
+      - {id: go-to-pprof, name: Profiling with pprof (CPU / heap / goroutine), match: [pprof]}
+      - {id: go-to-lint, name: go vet, staticcheck and golangci-lint, match: [golangci-lint, staticcheck, go-vet]}
+      - {id: go-to-pgo, name: Profile-guided optimisation, match: [pgo, profile-guided-optimization]}
+      - {id: go-to-layout, name: Project layout (cmd / internal) and embed, match: [go-project-layout, go-embed]}
+      - {id: go-to-escape, name: Escape analysis and inlining (-gcflags=-m), match: [go-escape-analysis, gcflags]}
+      - {id: go-to-gc, name: GC tuning with GOGC / GOMEMLIMIT, match: [gomemlimit, gogc]}
+      - {id: go-to-trace, name: Execution tracing with go tool trace, match: [go-tool-trace]}
+      - {id: go-to-delve, name: Debugging Go with Delve, match: [delve-debugger, dlv]}
+      - {id: go-to-gofmt, name: gofmt / goimports and generated-code conventions, match: [gofmt, goimports]}
+  - id: go-stdlib-services
+    name: Services with the Go standard library
+    source: net/http, encoding/json, log/slog, database/sql package docs
+    match: [go-stdlib, net-http]
+    subtopics:
+      - {id: go-ss-server-timeouts, name: http.Server timeouts and graceful Shutdown, match: [http-server-timeouts, go-graceful-shutdown]}
+      - {id: go-ss-routing, name: ServeMux pattern routing (Go 1.22) and middleware, match: [servemux, go-middleware]}
+      - {id: go-ss-client, name: http.Client timeouts, transport reuse and body closing, match: [http-client, go-http-client]}
+      - {id: go-ss-json, name: encoding/json tags, decoding strictness and streaming, match: [encoding-json, json-struct-tags]}
+      - {id: go-ss-slog, name: Structured logging with log/slog, match: [slog]}
+      - {id: go-ss-sql, name: database/sql connection pools and transactions, match: [database-sql, connection-pool]}
+      - {id: go-ss-tls, name: TLS servers and clients with crypto/tls, match: [crypto-tls]}
+      - {id: go-ss-io, name: io.Reader / io.Writer composition, match: [io-reader, io-writer]}
+      - {id: go-ss-time, name: time package (monotonic clock / Duration / locations), match: [go-time]}
+      - {id: go-ss-exec-signal, name: os/exec and os/signal handling, match: [os-exec, os-signal]}
+      - {id: go-ss-templates, name: html/template and text/template, match: [html-template, text-template]}
+      - {id: go-ss-sqlc, name: Type-safe SQL with sqlc / sqlx, match: [sqlc-queries, sqlx]}
+
+  # --- Rust (The Book, Cargo Book, Rustonomicon, API Guidelines)
+  - id: rust-ownership
+    name: Ownership, borrowing and lifetimes
+    source: The Rust Book ch4, ch10.3, ch15
+    match: [ownership, borrowing]
+    subtopics:
+      - {id: rs-ow-lifetimes, name: Lifetime annotations and elision, match: [lifetimes]}
+      - {id: rs-ow-smart-pointers, name: Box / Rc / Arc / RefCell smart pointers, match: [smart-pointers, refcell]}
+      - {id: rs-ow-borrow-errors, name: Fixing common borrow-checker errors, match: [borrow-checker]}
+      - {id: rs-ow-cow, name: Cow and avoiding clones, match: [cow]}
+      - {id: rs-ow-self-ref, name: Self-referential structs and Pin, match: [pin, self-referential]}
+      - {id: rs-ow-strings, name: String vs &str and slices, match: [rust-strings, string-slices]}
+      - {id: rs-ow-copy-clone, name: Move / Copy and Clone semantics, match: [copy-clone]}
+      - {id: rs-ow-interior, name: Interior mutability (Cell / RefCell / OnceCell / OnceLock), match: [interior-mutability, oncecell]}
+      - {id: rs-ow-drop, name: Drop and RAII guards in Rust, match: [drop-trait]}
+      - {id: rs-ow-weak, name: Reference cycles and Weak, match: [rust-weak, reference-cycles]}
+  - id: rust-traits-generics
+    name: Traits, generics and iterators
+    source: The Rust Book ch10, ch13, ch17-19 + Rust API Guidelines
+    match: [traits, rust-generics]
+    subtopics:
+      - {id: rs-tg-trait-objects, name: Trait objects (dyn) vs generics and object safety, match: [trait-objects, dyn-trait]}
+      - {id: rs-tg-assoc-types, name: Associated types and generic traits, match: [associated-types]}
+      - {id: rs-tg-iterators, name: Implementing Iterator and iterator adaptors, match: [rust-iterators, iterator-adaptors]}
+      - {id: rs-tg-closures, name: Closures and Fn / FnMut / FnOnce, match: [rust-closures, fn-traits]}
+      - {id: rs-tg-std-traits, name: Conventional std traits (From / Display / Default / derive), match: [from-into, derive-traits]}
+      - {id: rs-tg-newtype, name: Newtype pattern and orphan rule, match: [newtype-pattern, orphan-rule]}
+      - {id: rs-tg-operators, name: Operator overloading (std ops) and PartialEq / Ord, match: [std-ops, partialord]}
+      - {id: rs-tg-blanket, name: Blanket implementations / extension traits and supertraits, match: [blanket-impl, extension-traits]}
+      - {id: rs-tg-impl-trait, name: impl Trait in argument and return position, match: [impl-trait]}
+      - {id: rs-tg-patterns, name: Patterns and matching (let-else / match ergonomics / bindings), match: [let-else, rust-patterns]}
+      - {id: rs-tg-proc-macros, name: Procedural macros with syn and quote, match: [proc-macros, syn]}
+      - {id: rs-tg-modules, name: Modules / visibility and crate structure, match: [rust-modules, pub-crate]}
+  - id: rust-errors
+    name: Error handling in Rust
+    source: The Rust Book ch9 + thiserror / anyhow docs
+    match: [rust-error-handling, result]
+    subtopics:
+      - {id: rs-er-thiserror, name: Library errors with thiserror, match: [thiserror]}
+      - {id: rs-er-anyhow, name: Application errors with anyhow and context, match: [anyhow]}
+      - {id: rs-er-panic, name: When to panic vs return Result, match: [rust-panic, unwrap]}
+      - {id: rs-er-question, name: The question-mark operator and From conversions, match: [question-mark-operator]}
+      - {id: rs-er-custom, name: Implementing std error Error by hand (Display / source), match: [std-error-trait, error-source]}
+      - {id: rs-er-option, name: Option combinators (ok_or / and_then / map), match: [rust-option, option-combinators]}
+      - {id: rs-er-main, name: Returning errors from main and ExitCode, match: [exitcode, main-result]}
+      - {id: rs-er-backtrace, name: Backtraces and error reports (RUST_BACKTRACE / color-eyre), match: [rust-backtrace, eyre]}
+      - {id: rs-er-design, name: Library error design (non_exhaustive / error kinds), match: [non-exhaustive, error-kinds]}
+  - id: rust-cargo
+    name: Cargo projects and crates
+    source: The Cargo Book
+    match: [cargo]
+    subtopics:
+      - {id: rs-ca-workspaces, name: Cargo workspaces, match: [cargo-workspaces]}
+      - {id: rs-ca-features, name: Feature flags and additive features, match: [cargo-features]}
+      - {id: rs-ca-profiles, name: Build profiles (release / LTO / codegen-units), match: [cargo-profiles, lto]}
+      - {id: rs-ca-publish, name: Publishing crates and semver checks, match: [crates-io, cargo-publish, cargo-semver-checks]}
+      - {id: rs-ca-build-rs, name: Build scripts (build.rs), match: [build-rs, build-script]}
+      - {id: rs-ca-supply-chain, name: cargo-deny / cargo-audit supply chain checks, match: [cargo-deny, cargo-audit]}
+      - {id: rs-ca-dependencies, name: Specifying dependencies (git / path / version requirements / patch), match: [cargo-dependencies, cargo-patch]}
+      - {id: rs-ca-msrv, name: Cargo.lock / MSRV and rust-version, match: [msrv, rust-version]}
+      - {id: rs-ca-rustup, name: rustup toolchains and rust-toolchain.toml, match: [rustup, rust-toolchain-toml]}
+      - {id: rs-ca-cross, name: Cross-compiling Rust (targets / cross / cargo-zigbuild), match: [rust-cross-compilation, cargo-zigbuild]}
+      - {id: rs-ca-build-speed, name: Faster Rust builds (sccache / mold / cargo-chef), match: [sccache, cargo-build-speed]}
+      - {id: rs-ca-rustdoc, name: Documentation with rustdoc and docs.rs, match: [rustdoc, docs-rs]}
+  - id: rust-concurrency-async
+    name: Fearless concurrency and async Rust
+    source: The Rust Book ch16-17 + tokio tutorial + Rustonomicon Send/Sync
+    match: [rust-concurrency, async-rust]
+    subtopics:
+      - {id: rs-ca-send-sync, name: Send / Sync and sharing state with Arc<Mutex>, match: [send-sync]}
+      - {id: rs-ca-channels, name: Message passing with mpsc / crossbeam channels, match: [mpsc, crossbeam]}
+      - {id: rs-ca-rayon, name: Data parallelism with rayon, match: [rayon]}
+      - {id: rs-ca-tokio, name: tokio runtime, tasks and cancellation safety, match: [tokio, cancellation-safety]}
+      - {id: rs-ca-spawn-blocking, name: Blocking work in async (spawn_blocking), match: [spawn-blocking]}
+      - {id: rs-ca-atomics, name: Atomics and memory ordering in Rust, match: [rust-atomics]}
+      - {id: rs-ca-scoped-threads, name: Scoped threads with thread scope, match: [scoped-threads]}
+      - {id: rs-ca-select, name: tokio select! / join! and JoinSet, match: [tokio-select, joinset]}
+      - {id: rs-ca-async-traits, name: Async functions in traits and Send bounds, match: [async-fn-in-trait]}
+      - {id: rs-ca-tokio-sync, name: tokio sync primitives (Mutex / Semaphore / broadcast / watch), match: [tokio-sync, tokio-mutex]}
+      - {id: rs-ca-streams, name: Async streams (futures Stream / tokio-stream), match: [rust-streams, futures-stream]}
+  - id: rust-quality-unsafe
+    name: Testing, linting, unsafe and FFI
+    source: The Rust Book ch11, ch20 + Clippy docs + Rustonomicon FFI
+    match: [rust-testing, unsafe-rust]
+    subtopics:
+      - {id: rs-qu-tests, name: Unit, integration and doc tests, match: [doc-tests, cargo-test]}
+      - {id: rs-qu-clippy, name: Clippy lints and rustfmt in CI, match: [clippy, rustfmt]}
+      - {id: rs-qu-proptest, name: Property testing with proptest, match: [proptest]}
+      - {id: rs-qu-criterion, name: Benchmarks with criterion, match: [criterion]}
+      - {id: rs-qu-unsafe, name: Writing sound unsafe code and checking it with Miri, match: [miri, unsafe-code]}
+      - {id: rs-qu-ffi, name: C FFI with bindgen / cbindgen, match: [ffi, bindgen]}
+      - {id: rs-qu-macros, name: Declarative macros (macro_rules), match: [macro-rules, declarative-macros]}
+      - {id: rs-qu-profiling, name: Profiling Rust (cargo flamegraph / samply), match: [cargo-flamegraph, samply]}
+      - {id: rs-qu-fuzz, name: Fuzzing with cargo-fuzz, match: [cargo-fuzz]}
+      - {id: rs-qu-coverage, name: Coverage with cargo-llvm-cov, match: [cargo-llvm-cov]}
+      - {id: rs-qu-nextest, name: Test runners and snapshots (cargo-nextest / insta), match: [cargo-nextest, insta]}
+      - {id: rs-qu-bindings, name: Python and WASM bindings (PyO3 / wasm-bindgen), match: [rust-python-bindings, wasm-bindgen]}
+
+  # --- C / C++ (Core Guidelines, cppreference, CMake)
+  - id: cpp-resource-management
+    name: Resource management and ownership
+    source: C++ Core Guidelines R + C sections
+    match: [raii, resource-management]
+    subtopics:
+      - {id: cpp-rm-smart-pointers, name: unique_ptr / shared_ptr / weak_ptr, match: [unique-ptr, shared-ptr]}
+      - {id: cpp-rm-rule-of-zero, name: Rule of zero / five, match: [rule-of-zero, rule-of-five]}
+      - {id: cpp-rm-move, name: Move semantics and perfect forwarding, match: [move-semantics, perfect-forwarding]}
+      - {id: cpp-rm-exceptions, name: Exception safety guarantees and noexcept, match: [exception-safety, noexcept]}
+      - {id: cpp-rm-c-memory, name: Manual memory management in C (malloc / free / ownership conventions), match: [c-memory-management, malloc]}
+      - {id: cpp-rm-pimpl, name: Pimpl idiom and compilation firewalls, match: [pimpl-idiom]}
+      - {id: cpp-rm-class-design, name: Class design (explicit constructors / invariants / special members), match: [cpp-class-design, explicit-constructors]}
+      - {id: cpp-rm-custom-deleters, name: Custom deleters and wrapping C APIs, match: [custom-deleters]}
+      - {id: cpp-rm-pmr, name: Allocators and std pmr, match: [pmr, cpp-allocators]}
+      - {id: cpp-rm-lifetime, name: Dangling references and object lifetime, match: [dangling-references, object-lifetime]}
+  - id: cpp-modern-features
+    name: Modern C++ language and library features
+    source: cppreference language + library sections; Core Guidelines T, ES
+    match: [modern-cpp, cpp17, cpp20]
+    subtopics:
+      - {id: cpp-mf-concepts, name: Templates and concepts, match: [cpp-concepts, cpp-templates]}
+      - {id: cpp-mf-constexpr, name: constexpr / consteval compile-time code, match: [constexpr]}
+      - {id: cpp-mf-lambdas, name: Lambdas and captures, match: [cpp-lambdas]}
+      - {id: cpp-mf-optional-variant, name: std optional / variant / expected, match: [std-optional, std-variant, std-expected]}
+      - {id: cpp-mf-ranges, name: Ranges and views, match: [cpp-ranges]}
+      - {id: cpp-mf-string-view, name: string_view / span lifetimes, match: [string-view, std-span]}
+      - {id: cpp-mf-modules, name: C++20 modules, match: [cpp-modules]}
+      - {id: cpp-mf-coroutines, name: Coroutines (co_await / std generator), match: [cpp-coroutines]}
+      - {id: cpp-mf-format, name: std format and std print, match: [std-format]}
+      - {id: cpp-mf-bindings, name: Structured bindings / auto and CTAD, match: [structured-bindings, ctad]}
+      - {id: cpp-mf-containers, name: Choosing containers and iterator invalidation, match: [stl-containers, iterator-invalidation]}
+      - {id: cpp-mf-algorithms, name: STL algorithms and execution policies, match: [stl-algorithms, execution-policies]}
+  - id: cpp-safety
+    name: Undefined behaviour and safety tooling
+    source: cppreference UB page + Clang sanitizer docs + SEI CERT C
+    match: [undefined-behavior, memory-safety]
+    subtopics:
+      - {id: cpp-sa-sanitizers, name: ASan / UBSan / TSan, match: [sanitizers, asan, ubsan]}
+      - {id: cpp-sa-valgrind, name: Valgrind memcheck, match: [valgrind]}
+      - {id: cpp-sa-warnings, name: Compiler warnings as errors (-Wall -Wextra -Werror), match: [compiler-warnings, wall-wextra]}
+      - {id: cpp-sa-clang-tidy, name: Static analysis with clang-tidy, match: [clang-tidy, static-analysis]}
+      - {id: cpp-sa-fuzzing, name: Fuzzing with libFuzzer, match: [libfuzzer]}
+      - {id: cpp-sa-c-strings, name: Safe string and buffer handling in C, match: [c-strings, buffer-overflow]}
+      - {id: cpp-sa-hardening, name: Hardening flags (_FORTIFY_SOURCE / stack protector / hardened libc++), match: [fortify-source, hardening-flags]}
+      - {id: cpp-sa-integer, name: Integer overflow and narrowing conversions, match: [integer-overflow, narrowing-conversions]}
+      - {id: cpp-sa-cppcheck, name: Other static analyzers (cppcheck / Clang Static Analyzer / MSVC analyze), match: [cppcheck, clang-static-analyzer]}
+      - {id: cpp-sa-msan, name: MemorySanitizer and uninitialised reads, match: [msan, uninitialized-memory]}
+      - {id: cpp-sa-gsl, name: Bounds safety with GSL and hardened containers, match: [gsl, bounds-safety]}
+  - id: cpp-build
+    name: Build systems and toolchains
+    source: CMake documentation + vcpkg / Conan docs
+    match: [cmake, cpp-build]
+    subtopics:
+      - {id: cpp-bu-targets, name: Target-based CMake (target_link_libraries / PUBLIC / PRIVATE), match: [cmake-targets, modern-cmake]}
+      - {id: cpp-bu-presets, name: CMakePresets.json, match: [cmake-presets]}
+      - {id: cpp-bu-packages, name: Dependencies with vcpkg / Conan and find_package, match: [vcpkg, conan, find-package]}
+      - {id: cpp-bu-toolchains, name: Cross-compiling with toolchain files, match: [toolchain-file, cpp-cross-compiling]}
+      - {id: cpp-bu-linking, name: Static vs shared linking, symbol visibility and ABI, match: [shared-libraries, symbol-visibility, abi]}
+      - {id: cpp-bu-ccache, name: Faster builds with ccache / unity builds / PCH, match: [ccache, precompiled-headers]}
+      - {id: cpp-bu-install-export, name: install() / export and package config files, match: [cmake-install, cmake-package-config]}
+      - {id: cpp-bu-fetchcontent, name: FetchContent and CPM.cmake, match: [fetchcontent]}
+      - {id: cpp-bu-ctest-cpack, name: CTest and CPack, match: [ctest, cpack]}
+      - {id: cpp-bu-generators, name: Generators (Ninja / Visual Studio / multi-config), match: [ninja, cmake-generators]}
+      - {id: cpp-bu-compile-commands, name: compile_commands.json and clangd, match: [compile-commands-json, clangd]}
+      - {id: cpp-bu-msvc, name: MSVC toolchain specifics (runtime library / permissive- / vcvars), match: [msvc]}
+  - id: cpp-concurrency-testing
+    name: C++ concurrency and testing
+    source: Core Guidelines CP + cppreference thread/atomic + GoogleTest docs
+    match: [cpp-concurrency, cpp-testing]
+    subtopics:
+      - {id: cpp-ct-threads, name: std jthread, mutex and condition_variable, match: [std-thread, condition-variable]}
+      - {id: cpp-ct-atomics, name: std atomic and memory_order, match: [memory-ordering, std-atomic]}
+      - {id: cpp-ct-gtest, name: Unit tests with GoogleTest / Catch2, match: [googletest, catch2]}
+      - {id: cpp-ct-format, name: clang-format and include hygiene, match: [clang-format, include-what-you-use]}
+      - {id: cpp-ct-futures, name: std async / futures and promises, match: [std-async, std-future]}
+      - {id: cpp-ct-gmock, name: Mocking with gMock, match: [gmock]}
+      - {id: cpp-ct-benchmark, name: Microbenchmarks with Google Benchmark, match: [google-benchmark]}
+      - {id: cpp-ct-coverage, name: Coverage with gcov / llvm-cov, match: [gcov, llvm-cov]}
+      - {id: cpp-ct-tsa, name: Clang thread safety analysis annotations, match: [thread-safety-analysis]}
+      - {id: cpp-ct-latch, name: C++20 latch / barrier / semaphore and stop_token, match: [std-latch, std-counting-semaphore]}
+
+  # --- API design (Google AIP, MS REST guidelines, RFCs, gRPC, OpenAPI, GraphQL)
+  - id: api-rest-resources
+    name: Resource-oriented REST design
+    source: AIP-121..136 + RFC 9110 + Microsoft REST API Guidelines
+    match: [rest, resource-modelling]
+    subtopics:
+      - {id: api-rr-methods, name: Standard methods and HTTP verb semantics, match: [http-methods, standard-methods]}
+      - {id: api-rr-status, name: Status code selection, match: [http-status-codes]}
+      - {id: api-rr-errors, name: Error payloads (RFC 9457 problem details), match: [problem-details, rfc-9457]}
+      - {id: api-rr-custom-methods, name: Custom methods and actions, match: [custom-methods]}
+      - {id: api-rr-naming, name: Resource naming and URL design, match: [resource-naming, url-design]}
+      - {id: api-rr-caching, name: HTTP caching headers (Cache-Control / ETag / conditional GET), match: [http-caching, cache-control]}
+      - {id: api-rr-content-negotiation, name: Content negotiation and media types, match: [content-negotiation, media-types]}
+      - {id: api-rr-relationships, name: Modelling relationships and sub-resources, match: [sub-resources, resource-relationships]}
+      - {id: api-rr-hateoas, name: Hypermedia links (HATEOAS / Link header), match: [hateoas, link-header]}
+      - {id: api-rr-field-design, name: Field naming / types and timestamps (AIP-140 / AIP-142), match: [field-naming, rfc-3339]}
+      - {id: api-rr-soft-delete, name: Singleton resources and soft delete (AIP-156 / AIP-164), match: [soft-delete, singleton-resources]}
+      - {id: api-rr-patch, name: PUT vs PATCH and JSON Merge Patch / JSON Patch, match: [json-merge-patch, json-patch]}
+  - id: api-evolution
+    name: Versioning, compatibility and deprecation
+    source: AIP-180, AIP-185 + RFC 8594 Sunset
+    match: [api-versioning, versioning]
+    subtopics:
+      - {id: api-ev-breaking, name: What counts as a breaking change, match: [breaking-changes, backward-compatibility]}
+      - {id: api-ev-deprecation, name: Deprecation and Sunset headers, match: [deprecation, sunset-header]}
+      - {id: api-ev-strategy, name: URL vs header vs date-based versioning, match: [versioning-strategy]}
+      - {id: api-ev-tolerant-reader, name: Tolerant reader and additive change, match: [tolerant-reader]}
+      - {id: api-ev-changelog, name: API changelogs and change communication, match: [api-changelog]}
+      - {id: api-ev-schema-diff, name: Detecting breaking changes in OpenAPI specs (oasdiff), match: [oasdiff, openapi-diff]}
+      - {id: api-ev-stability, name: Alpha / beta / GA stability levels (AIP-181), match: [api-stability-levels, aip-181]}
+      - {id: api-ev-migration, name: Migrating clients off a deprecated version, match: [api-client-migration]}
+      - {id: api-ev-enums, name: Evolving enums and handling unknown values, match: [enum-evolution]}
+  - id: api-collections
+    name: Pagination, filtering and bulk operations
+    source: AIP-132, 158, 160, 231-235, 151
+    match: [pagination]
+    subtopics:
+      - {id: api-co-cursor, name: Cursor / keyset pagination, match: [cursor-pagination, keyset-pagination]}
+      - {id: api-co-filtering, name: Filtering and sorting syntax, match: [api-filtering, api-sorting]}
+      - {id: api-co-field-masks, name: Partial responses and field masks, match: [field-masks, sparse-fieldsets]}
+      - {id: api-co-batch, name: Batch and bulk operations, match: [batch-operations, bulk-api]}
+      - {id: api-co-lro, name: Long-running operations (202 + operation resource), match: [long-running-operations]}
+      - {id: api-co-offset, name: Offset pagination and total count trade-offs, match: [offset-pagination, total-count]}
+      - {id: api-co-search, name: Search endpoints and query parameters, match: [search-api]}
+      - {id: api-co-export, name: Bulk export and import jobs, match: [bulk-export, data-import-api]}
+      - {id: api-co-read-across, name: Reading across collections (AIP-159 wildcard parents), match: [aip-159, reading-across-collections]}
+      - {id: api-co-expand, name: Embedding related resources (expand / include), match: [resource-expansion]}
+  - id: api-reliability
+    name: Reliability contracts - idempotency, concurrency, rate limits, webhooks
+    source: AIP-155 + IETF Idempotency-Key draft + RFC 6585 + Standard Webhooks spec
+    match: [idempotency]
+    subtopics:
+      - {id: api-re-idempotency-key, name: Idempotency keys for unsafe methods, match: [idempotency-key]}
+      - {id: api-re-etag, name: Optimistic concurrency with ETag / If-Match, match: [etag, optimistic-locking]}
+      - {id: api-re-rate-limit, name: Rate limiting and 429 / Retry-After, match: [rate-limiting, retry-after]}
+      - {id: api-re-webhooks, name: Webhook delivery, signing and retries, match: [webhooks, webhook-signatures]}
+      - {id: api-re-retries, name: Client retry and backoff guidance, match: [retries, exponential-backoff]}
+      - {id: api-re-timeouts, name: Request timeouts and deadline propagation across hops, match: [request-timeouts, http-timeout-budget]}
+      - {id: api-re-quotas, name: Quotas and usage plans, match: [api-quotas]}
+      - {id: api-re-async-events, name: Event APIs with CloudEvents / AsyncAPI, match: [cloudevents, asyncapi]}
+      - {id: api-re-health, name: Health and status endpoints for API consumers, match: [api-health-endpoint, api-sla]}
+      - {id: api-re-request-ids, name: Request IDs and correlation headers, match: [request-id, correlation-id]}
+  - id: api-grpc
+    name: gRPC and Protocol Buffers
+    source: gRPC docs + Protocol Buffers language guide + buf docs
+    match: [grpc, protobuf]
+    subtopics:
+      - {id: api-gr-proto-design, name: Proto schema design and field numbering, match: [proto-design, protobuf-schema]}
+      - {id: api-gr-evolution, name: Proto evolution and buf breaking checks, match: [buf-breaking, proto-evolution]}
+      - {id: api-gr-deadlines, name: Deadlines, cancellation and status codes, match: [grpc-deadlines, grpc-status-codes]}
+      - {id: api-gr-streaming, name: Streaming RPCs, match: [grpc-streaming]}
+      - {id: api-gr-gateway, name: HTTP/JSON transcoding (grpc-gateway), match: [grpc-gateway, http-transcoding]}
+      - {id: api-gr-interceptors, name: Interceptors for auth / logging / metrics, match: [grpc-interceptors]}
+      - {id: api-gr-error-details, name: Rich error model (google.rpc.Status details), match: [grpc-error-details, google-rpc-status]}
+      - {id: api-gr-load-balancing, name: Client-side load balancing and keepalive, match: [grpc-load-balancing, grpc-keepalive]}
+      - {id: api-gr-health, name: Health checking and server reflection with grpcurl, match: [grpc-health-checking, grpcurl]}
+      - {id: api-gr-codegen, name: Code generation with buf generate / protoc, match: [buf-generate, protoc]}
+      - {id: api-gr-retry, name: Retry and hedging policies in service config, match: [grpc-retry-policy]}
+  - id: api-graphql
+    name: GraphQL API design
+    source: GraphQL spec + graphql.org best practices
+    match: [graphql]
+    subtopics:
+      - {id: api-gq-schema, name: Schema design and nullability, match: [schema-design]}
+      - {id: api-gq-dataloader, name: N+1 and DataLoader batching, match: [dataloader]}
+      - {id: api-gq-complexity, name: Query depth / complexity limits, match: [query-complexity]}
+      - {id: api-gq-persisted, name: Persisted queries, match: [persisted-queries]}
+      - {id: api-gq-federation, name: Federation and schema composition, match: [graphql-federation]}
+      - {id: api-gq-mutations, name: Mutation design and input types, match: [graphql-mutations]}
+      - {id: api-gq-pagination, name: Relay connections and cursor pagination, match: [relay-connections]}
+      - {id: api-gq-errors, name: Error handling (errors array vs result unions), match: [graphql-errors]}
+      - {id: api-gq-subscriptions, name: Subscriptions, match: [graphql-subscriptions]}
+      - {id: api-gq-authz, name: Field-level authorization, match: [graphql-authorization]}
+      - {id: api-gq-evolution, name: Schema evolution and deprecation, match: [graphql-schema-evolution]}
+  - id: api-contracts-security
+    name: Contracts, documentation and API security
+    source: OpenAPI 3.1 spec + Pact docs + OWASP API Security Top 10
+    match: [openapi, api-contracts]
+    subtopics:
+      - {id: api-cs-openapi-design-first, name: Design-first OpenAPI and Spectral linting, match: [design-first, spectral]}
+      - {id: api-cs-contract-tests, name: Consumer-driven contract tests with Pact, match: [pact, contract-testing]}
+      - {id: api-cs-sdk-gen, name: Client SDK generation, match: [sdk-generation, openapi-generator]}
+      - {id: api-cs-auth, name: OAuth 2 scopes and API keys, match: [oauth2-scopes, api-keys]}
+      - {id: api-cs-bola, name: Object-level authorization (BOLA / IDOR), match: [bola, idor]}
+      - {id: api-cs-docs, name: Reference docs and developer portals (Redoc / Scalar), match: [api-reference-docs, redoc]}
+      - {id: api-cs-mocking, name: Mock servers from specs (Prism), match: [prism-mock, api-mocking]}
+      - {id: api-cs-mass-assignment, name: Mass assignment and excessive data exposure, match: [mass-assignment]}
+      - {id: api-cs-request-validation, name: Validating requests against the schema, match: [request-validation]}
+      - {id: api-cs-jwt, name: JWT validation for APIs (aud / iss / exp / alg pitfalls), match: [jwt-validation]}
+      - {id: api-cs-ssrf, name: SSRF and unsafe consumption of third-party APIs, match: [ssrf]}
+
+  # --- Software architecture (SWEBOK KA2, ISO 42010, arc42, C4, ATAM, DDD, microservices.io, GoF)
+  - id: arch-styles
+    name: Architecture styles
+    source: SWEBOK v4 Software Architecture - styles and patterns; Fundamentals of Software Architecture
+    match: [architecture-styles, choosing-architecture-styles]
+    subtopics:
+      - {id: arch-st-microservices, name: Microservices and when not to use them, match: [microservices]}
+      - {id: arch-st-modular-monolith, name: Modular monolith, match: [modular-monolith]}
+      - {id: arch-st-event-driven, name: Event-driven architecture, match: [event-driven-architecture]}
+      - {id: arch-st-hexagonal, name: Hexagonal / ports-and-adapters / clean architecture, match: [hexagonal-architecture, ports-and-adapters]}
+      - {id: arch-st-layered, name: Layered architecture, match: [layered-architecture]}
+      - {id: arch-st-serverless, name: Serverless architecture trade-offs, match: [serverless-architecture]}
+      - {id: arch-st-microkernel, name: Microkernel / plugin architecture, match: [microkernel-architecture, plugin-architecture]}
+      - {id: arch-st-pipeline, name: Pipes and filters architecture, match: [pipes-and-filters]}
+      - {id: arch-st-space-based, name: Space-based architecture, match: [space-based-architecture]}
+      - {id: arch-st-service-based, name: Service-based architecture and SOA, match: [service-based-architecture]}
+      - {id: arch-st-cell-based, name: Cell-based architecture, match: [cell-based-architecture]}
+      - {id: arch-st-presentation, name: Presentation patterns (MVC / MVVM / MVP), match: [mvc, mvvm]}
+  - id: arch-description
+    name: Architecture description and decisions
+    source: ISO/IEC/IEEE 42010 + arc42 + C4 model
+    match: [architecture-description, architecture-documentation]
+    subtopics:
+      - {id: arch-de-c4, name: C4 model diagrams, match: [c4-model]}
+      - {id: arch-de-adr, name: Architecture decision records, match: [adr, architecture-decision-records]}
+      - {id: arch-de-arc42, name: arc42 documentation template, match: [arc42]}
+      - {id: arch-de-views, name: Views and viewpoints (4+1 / 42010), match: [architecture-views, 4-plus-1-views]}
+      - {id: arch-de-diagrams-as-code, name: Diagrams as code (Structurizr / Mermaid / PlantUML), match: [structurizr, diagrams-as-code]}
+      - {id: arch-de-stakeholders, name: Stakeholders and concerns, match: [architecture-stakeholders]}
+      - {id: arch-de-design-docs, name: Design docs and the RFC process, match: [design-docs, rfc-process]}
+      - {id: arch-de-deployment-view, name: Deployment and runtime views, match: [deployment-view, runtime-view]}
+      - {id: arch-de-context, name: System context and scope definition, match: [system-context]}
+      - {id: arch-de-principles, name: Architecture principles and constraints, match: [architecture-principles]}
+  - id: arch-evaluation
+    name: Architecture evaluation and quality attributes
+    source: SEI ATAM + SWEBOK v4 architecture evaluation
+    match: [architecture-evaluation, quality-attributes]
+    subtopics:
+      - {id: arch-ev-scenarios, name: Quality attribute scenarios and utility trees, match: [quality-attribute-scenarios, utility-tree]}
+      - {id: arch-ev-atam, name: ATAM trade-off analysis, match: [atam, trade-off-analysis]}
+      - {id: arch-ev-fitness, name: Architectural fitness functions, match: [fitness-functions, archunit]}
+      - {id: arch-ev-tech-debt, name: Technical debt identification and management, match: [technical-debt]}
+      - {id: arch-ev-risk-storming, name: Risk storming, match: [risk-storming]}
+      - {id: arch-ev-characteristics, name: Identifying architecture characteristics, match: [architecture-characteristics]}
+      - {id: arch-ev-modularity, name: Measuring modularity (coupling / cohesion / connascence), match: [coupling-metrics, connascence]}
+      - {id: arch-ev-reviews, name: Lightweight architecture reviews, match: [architecture-review]}
+      - {id: arch-ev-spikes, name: Spikes and proofs of concept to retire risk, match: [architecture-spike, proof-of-concept]}
+      - {id: arch-ev-dsm, name: Dependency structure analysis and cycle breaking, match: [dependency-structure-matrix]}
+  - id: arch-ddd
+    name: Domain-driven design
+    source: Domain-Driven Design (Evans) + DDD Reference
+    match: [domain-driven-design, ddd]
+    subtopics:
+      - {id: arch-dd-bounded-contexts, name: Bounded contexts, match: [bounded-context]}
+      - {id: arch-dd-context-mapping, name: Context mapping and anti-corruption layer, match: [context-mapping, anti-corruption-layer]}
+      - {id: arch-dd-aggregates, name: Aggregates and invariants, match: [aggregates, aggregate-root]}
+      - {id: arch-dd-domain-events, name: Domain events, match: [domain-events]}
+      - {id: arch-dd-event-storming, name: Event storming workshops, match: [event-storming]}
+      - {id: arch-dd-language, name: Ubiquitous language, match: [ubiquitous-language]}
+      - {id: arch-dd-entities, name: Entities and value objects, match: [entities-and-value-objects]}
+      - {id: arch-dd-repositories, name: Repositories and factories, match: [repository-pattern]}
+      - {id: arch-dd-services, name: Domain services and application services, match: [domain-services, application-services]}
+      - {id: arch-dd-subdomains, name: Core / supporting / generic subdomains, match: [core-domain, subdomains]}
+  - id: arch-distributed-data
+    name: Distributed data patterns
+    source: microservices.io pattern catalog + Designing Data-Intensive Applications
+    match: [distributed-data, data-consistency]
+    subtopics:
+      - {id: arch-dd-saga, name: Sagas (orchestration / choreography), match: [saga-pattern]}
+      - {id: arch-dd-outbox, name: Transactional outbox, match: [transactional-outbox, outbox-pattern]}
+      - {id: arch-dd-cqrs, name: CQRS, match: [cqrs]}
+      - {id: arch-dd-event-sourcing, name: Event sourcing, match: [event-sourcing]}
+      - {id: arch-dd-idempotent-consumer, name: Idempotent consumers and at-least-once delivery, match: [idempotent-consumer, at-least-once-delivery]}
+      - {id: arch-dd-db-per-service, name: Database per service vs shared database, match: [database-per-service]}
+      - {id: arch-dd-cdc, name: Change data capture with Debezium, match: [change-data-capture, debezium]}
+      - {id: arch-dd-api-composition, name: API composition for cross-service queries, match: [api-composition]}
+      - {id: arch-dd-consistency, name: Consistency models and eventual consistency, match: [eventual-consistency, consistency-models]}
+      - {id: arch-dd-schema-registry, name: Event schema evolution and schema registries, match: [schema-registry, event-schema-evolution]}
+      - {id: arch-dd-2pc, name: Distributed transactions and why to avoid 2PC, match: [two-phase-commit]}
+  - id: arch-scalability-resilience
+    name: Scalability and resilience
+    source: Release It! stability patterns + Systems Performance
+    match: [scalability, resilience]
+    subtopics:
+      - {id: arch-sr-caching, name: Caching strategies and invalidation, match: [caching, cache-invalidation]}
+      - {id: arch-sr-sharding, name: Sharding and read replicas, match: [sharding, read-replicas]}
+      - {id: arch-sr-circuit-breaker, name: Circuit breakers, timeouts and bulkheads, match: [circuit-breaker, bulkhead]}
+      - {id: arch-sr-backpressure, name: Backpressure and load shedding, match: [backpressure, load-shedding]}
+      - {id: arch-sr-queues, name: Asynchronous messaging and queues, match: [message-queues]}
+      - {id: arch-sr-retry-budget, name: Timeouts / retry budgets and jitter, match: [retry-budget, jitter]}
+      - {id: arch-sr-token-bucket, name: Rate limiting algorithms (token bucket / sliding window), match: [token-bucket]}
+      - {id: arch-sr-gateway, name: API gateway and backend-for-frontend, match: [api-gateway, backend-for-frontend]}
+      - {id: arch-sr-horizontal, name: Horizontal scaling and stateless services, match: [horizontal-scaling, stateless-services]}
+      - {id: arch-sr-degradation, name: Graceful degradation and fallbacks, match: [graceful-degradation]}
+      - {id: arch-sr-multi-region, name: Multi-region and failover design, match: [multi-region, failover]}
+  - id: arch-patterns-creational
+    name: Creational design patterns
+    source: Design Patterns (GoF) creational catalog
+    match: [creational-patterns, design-patterns]
+    subtopics:
+      - {id: arch-pc-factory-method, name: Factory Method, match: [factory-method]}
+      - {id: arch-pc-abstract-factory, name: Abstract Factory, match: [abstract-factory]}
+      - {id: arch-pc-builder, name: Builder, match: [builder-pattern]}
+      - {id: arch-pc-singleton, name: Singleton and its alternatives, match: [singleton-pattern]}
+      - {id: arch-pc-prototype, name: Prototype, match: [prototype-pattern]}
+      - {id: arch-pc-di, name: Dependency injection and inversion of control, match: [dependency-injection, inversion-of-control]}
+      - {id: arch-pc-object-pool, name: Object Pool, match: [object-pool-pattern]}
+      - {id: arch-pc-service-locator, name: Service Locator vs dependency injection, match: [service-locator]}
+      - {id: arch-pc-lazy, name: Lazy initialisation, match: [lazy-initialization]}
+  - id: arch-patterns-structural
+    name: Structural design patterns
+    source: Design Patterns (GoF) structural catalog
+    match: [structural-patterns]
+    subtopics:
+      - {id: arch-ps-adapter, name: Adapter, match: [adapter-pattern]}
+      - {id: arch-ps-decorator, name: Decorator, match: [decorator-pattern]}
+      - {id: arch-ps-facade, name: Facade, match: [facade-pattern]}
+      - {id: arch-ps-proxy, name: Proxy, match: [proxy-pattern]}
+      - {id: arch-ps-composite, name: Composite, match: [composite-pattern]}
+      - {id: arch-ps-bridge, name: Bridge, match: [bridge-pattern]}
+      - {id: arch-ps-flyweight, name: Flyweight, match: [flyweight-pattern]}
+      - {id: arch-ps-gateway, name: Gateway for external systems (PoEAA), match: [gateway-pattern]}
+      - {id: arch-ps-mixins, name: Mixins and traits for composition, match: [mixins]}
+  - id: arch-patterns-behavioral
+    name: Behavioral design patterns
+    source: Design Patterns (GoF) behavioral catalog
+    match: [behavioral-patterns]
+    subtopics:
+      - {id: arch-pb-strategy, name: Strategy, match: [strategy-pattern]}
+      - {id: arch-pb-observer, name: Observer, match: [observer-pattern]}
+      - {id: arch-pb-command, name: Command, match: [command-pattern]}
+      - {id: arch-pb-state, name: State, match: [state-pattern]}
+      - {id: arch-pb-template-method, name: Template Method, match: [template-method]}
+      - {id: arch-pb-visitor, name: Visitor, match: [visitor-pattern]}
+      - {id: arch-pb-chain, name: Chain of Responsibility, match: [chain-of-responsibility]}
+      - {id: arch-pb-mediator, name: Mediator, match: [mediator-pattern]}
+      - {id: arch-pb-memento, name: Memento, match: [memento-pattern]}
+      - {id: arch-pb-iterator, name: Iterator, match: [iterator-pattern]}
+      - {id: arch-pb-interpreter, name: Interpreter, match: [interpreter-pattern]}
+
+  # --- Refactoring (Fowler catalog chapters + Feathers)
+  - id: ref-first-set
+    name: A first set of refactorings
+    source: Refactoring 2nd ed. ch6
+    match: [refactoring-first-set]
+    subtopics:
+      - {id: ref-fs-extract-function, name: Extract Function / Inline Function, match: [extract-method, extract-function, inline-function]}
+      - {id: ref-fs-extract-variable, name: Extract Variable / Inline Variable, match: [extract-variable]}
+      - {id: ref-fs-change-declaration, name: Change Function Declaration (rename / add parameter migration), match: [change-function-declaration, rename-function]}
+      - {id: ref-fs-encapsulate-variable, name: Encapsulate Variable, match: [encapsulate-variable]}
+      - {id: ref-fs-parameter-object, name: Introduce Parameter Object, match: [introduce-parameter-object]}
+      - {id: ref-fs-combine-into-class, name: Combine Functions into Class / Transform, match: [combine-functions-into-class]}
+      - {id: ref-fs-split-phase, name: Split Phase, match: [split-phase]}
+      - {id: ref-fs-rename-variable, name: Rename Variable, match: [rename-variable]}
+      - {id: ref-fs-workflow, name: Refactoring workflow (small steps / tests / commits per ch2 principles), match: [refactoring-workflow, refactoring-principles]}
+      - {id: ref-fs-ide, name: Automated IDE refactorings and their safety limits, match: [ide-refactoring]}
+  - id: ref-encapsulation
+    name: Encapsulation refactorings
+    source: Refactoring 2nd ed. ch7
+    match: [encapsulation]
+    subtopics:
+      - {id: ref-en-encapsulate-collection, name: Encapsulate Record / Collection, match: [encapsulate-collection, encapsulate-record]}
+      - {id: ref-en-primitive-object, name: Replace Primitive with Object, match: [replace-primitive-with-object, primitive-obsession]}
+      - {id: ref-en-temp-query, name: Replace Temp with Query, match: [replace-temp-with-query]}
+      - {id: ref-en-extract-class, name: Extract Class / Inline Class, match: [extract-class, inline-class]}
+      - {id: ref-en-hide-delegate, name: Hide Delegate / Remove Middle Man, match: [hide-delegate, remove-middle-man]}
+      - {id: ref-en-substitute-algorithm, name: Substitute Algorithm, match: [substitute-algorithm]}
+      - {id: ref-en-tell-dont-ask, name: Tell Don't Ask and the Law of Demeter, match: [tell-dont-ask, law-of-demeter]}
+      - {id: ref-en-remove-setter, name: Remove Setting Method, match: [remove-setting-method]}
+  - id: ref-moving-features
+    name: Moving features
+    source: Refactoring 2nd ed. ch8
+    match: [moving-features]
+    subtopics:
+      - {id: ref-mf-move-function, name: Move Function / Move Field, match: [move-function, move-field]}
+      - {id: ref-mf-slide-statements, name: Slide Statements / Move Statements into Function, match: [slide-statements, move-statements]}
+      - {id: ref-mf-split-loop, name: Split Loop, match: [split-loop]}
+      - {id: ref-mf-loop-pipeline, name: Replace Loop with Pipeline, match: [replace-loop-with-pipeline]}
+      - {id: ref-mf-dead-code, name: Remove Dead Code, match: [dead-code-removal, remove-dead-code]}
+      - {id: ref-mf-to-callers, name: Move Statements to Callers, match: [move-statements-to-callers]}
+      - {id: ref-mf-inline-call, name: Replace Inline Code with Function Call, match: [replace-inline-code-with-function-call]}
+      - {id: ref-mf-move-module, name: Moving code between modules and packages, match: [move-module]}
+  - id: ref-organizing-data
+    name: Organizing data
+    source: Refactoring 2nd ed. ch9
+    match: [organizing-data]
+    subtopics:
+      - {id: ref-od-split-variable, name: Split Variable, match: [split-variable]}
+      - {id: ref-od-rename-field, name: Rename Field across a codebase and persisted data, match: [rename-field]}
+      - {id: ref-od-derived-variable, name: Replace Derived Variable with Query, match: [replace-derived-variable-with-query]}
+      - {id: ref-od-reference-value, name: Change Reference to Value / Value to Reference, match: [change-reference-to-value, value-objects]}
+      - {id: ref-od-value-to-reference, name: Change Value to Reference, match: [change-value-to-reference]}
+      - {id: ref-od-magic-literal, name: Replace Magic Literal, match: [replace-magic-literal, magic-numbers]}
+      - {id: ref-od-data-clumps, name: Data clumps, match: [data-clumps]}
+      - {id: ref-od-mutable-data, name: Reducing mutable and global data, match: [mutable-data, global-data]}
+  - id: ref-conditional-logic
+    name: Simplifying conditional logic
+    source: Refactoring 2nd ed. ch10
+    match: [conditional-logic]
+    subtopics:
+      - {id: ref-cl-decompose, name: Decompose / Consolidate Conditional Expression, match: [decompose-conditional, consolidate-conditional]}
+      - {id: ref-cl-guard-clauses, name: Replace Nested Conditional with Guard Clauses, match: [guard-clauses]}
+      - {id: ref-cl-polymorphism, name: Replace Conditional with Polymorphism, match: [replace-conditional-with-polymorphism]}
+      - {id: ref-cl-special-case, name: Introduce Special Case (Null Object), match: [special-case, null-object]}
+      - {id: ref-cl-assertion, name: Introduce Assertion, match: [introduce-assertion]}
+      - {id: ref-cl-control-flag, name: Replace Control Flag with Break, match: [replace-control-flag]}
+      - {id: ref-cl-lookup-table, name: Replacing switches with lookup tables, match: [lookup-table, table-driven-methods]}
+      - {id: ref-cl-boolean, name: Simplifying boolean expressions, match: [boolean-simplification]}
+  - id: ref-apis
+    name: Refactoring APIs
+    source: Refactoring 2nd ed. ch11
+    match: [refactoring-apis]
+    subtopics:
+      - {id: ref-ap-query-modifier, name: Separate Query from Modifier, match: [separate-query-from-modifier, command-query-separation]}
+      - {id: ref-ap-parameterize, name: Parameterize Function / Remove Flag Argument, match: [parameterize-function, remove-flag-argument]}
+      - {id: ref-ap-whole-object, name: Preserve Whole Object / Replace Parameter with Query, match: [preserve-whole-object, replace-parameter-with-query]}
+      - {id: ref-ap-factory, name: Replace Constructor with Factory Function, match: [replace-constructor-with-factory]}
+      - {id: ref-ap-command, name: Replace Function with Command / Command with Function, match: [replace-function-with-command]}
+      - {id: ref-ap-error-code, name: Replace Error Code with Exception, match: [replace-error-code-with-exception]}
+      - {id: ref-ap-query-with-param, name: Replace Query with Parameter, match: [replace-query-with-parameter]}
+      - {id: ref-ap-command-to-function, name: Replace Command with Function, match: [replace-command-with-function]}
+      - {id: ref-ap-deprecate, name: Deprecating and removing library API, match: [api-deprecation-refactoring]}
+  - id: ref-inheritance
+    name: Dealing with inheritance
+    source: Refactoring 2nd ed. ch12
+    match: [inheritance-refactoring]
+    subtopics:
+      - {id: ref-in-pull-push, name: Pull Up / Push Down Method and Field, match: [pull-up-method, push-down-method]}
+      - {id: ref-in-type-code, name: Replace Type Code with Subclasses, match: [replace-type-code-with-subclasses]}
+      - {id: ref-in-delegate, name: Replace Subclass / Superclass with Delegate, match: [replace-subclass-with-delegate, composition-over-inheritance]}
+      - {id: ref-in-extract-superclass, name: Extract Superclass / Collapse Hierarchy, match: [extract-superclass, collapse-hierarchy]}
+      - {id: ref-in-remove-subclass, name: Remove Subclass, match: [remove-subclass]}
+      - {id: ref-in-pull-up-constructor, name: Pull Up Constructor Body, match: [pull-up-constructor-body]}
+      - {id: ref-in-superclass-delegate, name: Replace Superclass with Delegate, match: [replace-superclass-with-delegate]}
+      - {id: ref-in-extract-interface, name: Extract Interface, match: [extract-interface]}
+  - id: ref-legacy-code
+    name: Working with legacy code
+    source: Working Effectively with Legacy Code (Feathers)
+    match: [legacy-code]
+    subtopics:
+      - {id: ref-lc-characterisation, name: Characterisation / approval tests, match: [characterisation-tests, approval-tests]}
+      - {id: ref-lc-seams, name: Finding seams and breaking dependencies, match: [seams, dependency-breaking]}
+      - {id: ref-lc-sprout-wrap, name: Sprout and wrap method / class, match: [sprout-method, wrap-method]}
+      - {id: ref-lc-god-class, name: Decomposing god classes, match: [god-class]}
+      - {id: ref-lc-scratch, name: Scratch refactoring and effect sketches to understand code, match: [scratch-refactoring, effect-sketch]}
+      - {id: ref-lc-test-harness, name: Getting a class into a test harness, match: [test-harness]}
+      - {id: ref-lc-extract-override, name: Subclass and override / extract and override call, match: [subclass-and-override, extract-and-override]}
+      - {id: ref-lc-monster-method, name: Breaking up monster methods, match: [monster-method]}
+      - {id: ref-lc-parameterize-constructor, name: Parameterize constructor and introduce instance setter, match: [parameterize-constructor]}
+      - {id: ref-lc-globals, name: Breaking static and global dependencies, match: [encapsulate-global-references]}
+  - id: ref-large-scale
+    name: Large-scale and incremental change
+    source: martinfowler.com (Strangler Fig, Branch by Abstraction, Parallel Change) + Mikado Method
+    match: [large-scale-change, incremental-refactoring]
+    subtopics:
+      - {id: ref-ls-strangler, name: Strangler fig migration, match: [strangler-fig]}
+      - {id: ref-ls-branch-by-abstraction, name: Branch by abstraction, match: [branch-by-abstraction]}
+      - {id: ref-ls-parallel-change, name: Parallel change (expand / migrate / contract), match: [parallel-change, expand-contract]}
+      - {id: ref-ls-codemods, name: Codemods and automated refactors, match: [codemod, automated-refactoring]}
+      - {id: ref-ls-mikado, name: The Mikado method, match: [mikado-method]}
+      - {id: ref-ls-smells, name: Recognising code smells (Fowler ch3), match: [code-smell, code-smells]}
+      - {id: ref-ls-feature-toggles, name: Feature toggles for incremental change, match: [feature-toggles]}
+      - {id: ref-ls-dark-launch, name: Dark launching and shadow traffic comparison, match: [dark-launch, shadow-traffic]}
+      - {id: ref-ls-upgrade, name: Major framework and language version upgrades, match: [framework-upgrade, language-upgrade]}
+      - {id: ref-ls-rewrite, name: Rewrite vs refactor decisions, match: [rewrite-vs-refactor]}
+
+  # --- Debugging (Zeller, GDB manual, rr, Valgrind, strace)
+  - id: dbg-process
+    name: Systematic debugging process
+    source: Why Programs Fail ch2-6 (tracking, reproducing, simplifying, scientific debugging)
+    match: [systematic-debugging, scientific-method]
+    subtopics:
+      - {id: dbg-pr-reproduce, name: Reproducing failures reliably, match: [reproduce, minimal-reproduction]}
+      - {id: dbg-pr-delta, name: Simplifying inputs with delta debugging, match: [delta-debugging]}
+      - {id: dbg-pr-bisect, name: Isolating changes with bisection, match: [bisection]}
+      - {id: dbg-pr-hypothesis, name: Hypothesis-driven debugging and a debugging log, match: [hypothesis-driven-debugging]}
+      - {id: dbg-pr-bug-reports, name: Writing and triaging bug reports, match: [bug-reports, bug-triage]}
+      - {id: dbg-pr-origins, name: Tracking origins of bad values (backward slicing / infection chains), match: [backward-slicing, infection-chain]}
+      - {id: dbg-pr-rubber-duck, name: Explaining the problem (rubber duck debugging), match: [rubber-duck-debugging]}
+      - {id: dbg-pr-rca, name: Root cause analysis and five whys, match: [root-cause-analysis, five-whys]}
+      - {id: dbg-pr-regression-test, name: Verifying fixes with regression tests, match: [regression-test]}
+      - {id: dbg-pr-stack-traces, name: Reading stack traces and error messages, match: [stack-traces]}
+  - id: dbg-debuggers
+    name: Using debuggers
+    source: GDB manual + VS Code debugging docs + rr docs
+    match: [debuggers, breakpoints]
+    subtopics:
+      - {id: dbg-de-gdb, name: gdb / lldb essentials, match: [gdb, lldb]}
+      - {id: dbg-de-conditional, name: Conditional breakpoints, watchpoints and logpoints, match: [watchpoints, conditional-breakpoints, logpoints]}
+      - {id: dbg-de-remote, name: Remote debugging (debugpy / JDWP / dlv headless / gdbserver), match: [remote-debugging, debugpy, jdwp]}
+      - {id: dbg-de-rr, name: Record-and-replay with rr, match: [rr, record-replay]}
+      - {id: dbg-de-core-dumps, name: Post-mortem debugging with core dumps, match: [core-dump]}
+      - {id: dbg-de-vscode, name: IDE launch configurations (VS Code launch.json), match: [launch-json, vscode-debugging]}
+      - {id: dbg-de-pdb, name: Python debugging with pdb and breakpoint(), match: [pdb-debugger, breakpoint-function]}
+      - {id: dbg-de-java, name: Java debugging (IntelliJ / jdb / hot swap), match: [java-debugging, hot-swap]}
+      - {id: dbg-de-devtools, name: Node.js and browser DevTools debugging, match: [chrome-devtools, node-debugging]}
+      - {id: dbg-de-windbg, name: Windows debugging with WinDbg / Visual Studio, match: [windbg]}
+      - {id: dbg-de-attach, name: Attaching to running processes (ptrace_scope / permissions), match: [attach-to-process, ptrace-scope]}
+      - {id: dbg-de-symbols, name: Debug symbols / split DWARF and debuginfod, match: [debug-symbols, debuginfod]}
+  - id: dbg-observation
+    name: Observing program behaviour
+    source: Why Programs Fail ch8 Observing facts + strace / ltrace / tcpdump man pages
+    match: [observing-execution]
+    subtopics:
+      - {id: dbg-ob-logging, name: Diagnostic logging and assertions, match: [diagnostic-logging, assertions]}
+      - {id: dbg-ob-strace, name: System call tracing with strace / dtruss / Process Monitor, match: [strace, syscall-tracing]}
+      - {id: dbg-ob-network, name: Network debugging with tcpdump / Wireshark / curl -v, match: [tcpdump, wireshark]}
+      - {id: dbg-ob-ebpf, name: Dynamic tracing with bpftrace, match: [bpftrace, ebpf-tracing]}
+      - {id: dbg-ob-tracing, name: Distributed tracing for request flow, match: [distributed-tracing]}
+      - {id: dbg-ob-ltrace, name: Library call tracing (ltrace / LD_PRELOAD interposition), match: [ltrace, ld-preload]}
+      - {id: dbg-ob-proc, name: Inspecting processes via /proc / lsof and ss, match: [lsof, proc-filesystem]}
+      - {id: dbg-ob-printf, name: Printf debugging and temporary instrumentation, match: [printf-debugging]}
+      - {id: dbg-ob-tls, name: Inspecting TLS traffic (SSLKEYLOGFILE / mitmproxy), match: [sslkeylogfile, mitmproxy]}
+      - {id: dbg-ob-dns, name: Debugging DNS resolution (dig / getent / resolv.conf), match: [dns-debugging]}
+  - id: dbg-memory
+    name: Memory bugs and leaks
+    source: Valgrind manual (memcheck / massif) + heaptrack docs + language heap tools
+    match: [memory-debugging, memory-leaks]
+    subtopics:
+      - {id: dbg-me-native-leaks, name: Native leaks with Valgrind / LeakSanitizer / heaptrack, match: [leaksanitizer, heaptrack]}
+      - {id: dbg-me-corruption, name: Use-after-free and buffer overflow with ASan, match: [use-after-free]}
+      - {id: dbg-me-managed-leaks, name: Managed-runtime leaks via heap snapshots (JVM / .NET / Node), match: [heap-snapshot, managed-memory-leak]}
+      - {id: dbg-me-oom, name: OOM kills and container memory limits, match: [oom-killer, oomkilled]}
+      - {id: dbg-me-massif, name: Heap profiling with Valgrind massif, match: [massif, heap-profiling]}
+      - {id: dbg-me-fragmentation, name: Allocator fragmentation and RSS growth (jemalloc / malloc_trim), match: [memory-fragmentation, jemalloc]}
+      - {id: dbg-me-python, name: Python memory leaks (tracemalloc snapshots / objgraph / gc referrers), match: [objgraph, python-memory-leak]}
+      - {id: dbg-me-node, name: Node.js memory leaks with heap snapshots, match: [node-memory-leak]}
+      - {id: dbg-me-stack-overflow, name: Stack overflows and deep recursion, match: [stack-overflow]}
+  - id: dbg-production
+    name: Debugging in production and hard bug classes
+    source: SWEBOK v4 Software Maintenance + Google SRE book (effective troubleshooting)
+    match: [production-debugging, troubleshooting]
+    subtopics:
+      - {id: dbg-pd-incident, name: Production incident debugging and observability, match: [production-incident, observability]}
+      - {id: dbg-pd-containers, name: Debugging inside containers (kubectl debug / ephemeral containers / nsenter), match: [kubectl-debug, ephemeral-containers]}
+      - {id: dbg-pd-flaky-tests, name: Diagnosing flaky tests, match: [flaky-tests]}
+      - {id: dbg-pd-heisenbugs, name: Heisenbugs and timing-dependent failures, match: [heisenbug]}
+      - {id: dbg-pd-environment, name: Works-on-my-machine environment differences, match: [environment-drift, works-on-my-machine]}
+      - {id: dbg-pd-time-bugs, name: Time, timezone and locale bugs, match: [timezone-bugs, locale-bugs]}
+      - {id: dbg-pd-crashes, name: Analysing crashes and segfaults (signals / dmesg / coredumpctl), match: [segfault, coredumpctl]}
+      - {id: dbg-pd-hangs, name: Diagnosing hung processes, match: [hung-process, process-hang]}
+      - {id: dbg-pd-latency, name: Debugging latency spikes and slow requests, match: [latency-spikes, slow-requests]}
+      - {id: dbg-pd-postmortem, name: Writing blameless postmortems, match: [postmortem]}
+      - {id: dbg-pd-encoding, name: Character encoding and mojibake bugs, match: [character-encoding, mojibake]}
+      - {id: dbg-pd-dependency-conflicts, name: Dependency version conflicts (diamond dependencies / classpath conflicts), match: [dependency-conflicts, classpath-conflicts]}
+
+  # --- Code review (Google eng-practices, SWEBOK reviews, OWASP)
+  - id: cr-reviewer
+    name: Reviewing a change
+    source: Google eng-practices reviewer guide (standard, what to look for, navigating a CL, speed)
+    match: [code-review, reviewing-a-diff]
+    subtopics:
+      - {id: cr-rv-standard, name: The standard of code review (approve when it improves code health), match: [code-health, approval-standard]}
+      - {id: cr-rv-navigating, name: Navigating a change and reading order, match: [reading-order]}
+      - {id: cr-rv-tests, name: Reviewing tests, match: [reviewing-tests]}
+      - {id: cr-rv-design, name: Reviewing design and complexity, match: [design-review, complexity-review]}
+      - {id: cr-rv-speed, name: Review speed and turnaround, match: [review-turnaround]}
+      - {id: cr-rv-look-for, name: What to look for (functionality / naming / comments / style / docs), match: [what-to-look-for]}
+      - {id: cr-rv-naming, name: Reviewing naming and comments, match: [naming-review, code-comments]}
+      - {id: cr-rv-large, name: Reviewing large or generated changes, match: [large-pr-review]}
+      - {id: cr-rv-emergency, name: Emergency and hotfix reviews, match: [emergency-review, hotfix-review]}
+      - {id: cr-rv-errors, name: Reviewing error handling and edge cases, match: [error-handling-review]}
+  - id: cr-comments
+    name: Writing review comments and handling pushback
+    source: Google eng-practices - How to write code review comments, Handling pushback
+    match: [review-comments, feedback]
+    subtopics:
+      - {id: cr-cm-severity, name: Severity labels and conventional comments, match: [conventional-comments, severity-labels]}
+      - {id: cr-cm-pushback, name: Handling pushback and disagreement, match: [handling-pushback, review-disagreement]}
+      - {id: cr-cm-nits, name: Nits and style vs substance, match: [nit, nitpick]}
+      - {id: cr-cm-culture, name: Review culture and psychological safety, match: [review-culture, psychological-safety]}
+      - {id: cr-cm-tone, name: Courtesy and explaining why in comments, match: [review-tone]}
+      - {id: cr-cm-suggestions, name: Suggested changes in GitHub and GitLab, match: [suggested-changes]}
+      - {id: cr-cm-mentoring, name: Mentoring through review, match: [mentoring-review]}
+      - {id: cr-cm-praise, name: Praise and positive feedback in review, match: [review-praise]}
+  - id: cr-author
+    name: Preparing changes for review
+    source: Google eng-practices author guide (CL descriptions, small CLs, handling reviewer comments)
+    match: [pr-author, change-author]
+    subtopics:
+      - {id: cr-au-small, name: Small changes and stacked PRs, match: [small-prs, stacked-prs]}
+      - {id: cr-au-description, name: Writing PR descriptions, match: [pr-description]}
+      - {id: cr-au-responding, name: Responding to reviewer comments, match: [responding-to-review]}
+      - {id: cr-au-self-review, name: Self-review before requesting review, match: [self-review]}
+      - {id: cr-au-splitting, name: Splitting a large change (refactor first / by layer / by feature), match: [splitting-changes]}
+      - {id: cr-au-reviewers, name: Choosing reviewers and getting attention, match: [choosing-reviewers]}
+      - {id: cr-au-fixups, name: Commit hygiene during review (fixup commits / force-push etiquette), match: [fixup-commits]}
+      - {id: cr-au-draft, name: Draft PRs and early feedback, match: [draft-pr]}
+      - {id: cr-au-evidence, name: Including evidence (test results / screenshots / benchmarks), match: [pr-evidence]}
+  - id: cr-specialised
+    name: Specialised review focuses
+    source: OWASP Code Review Guide + SWEBOK v4 Software Quality reviews
+    match: [specialised-review]
+    subtopics:
+      - {id: cr-sp-security, name: Security-focused review, match: [security-review]}
+      - {id: cr-sp-performance, name: Performance-focused review, match: [performance-review]}
+      - {id: cr-sp-migrations, name: Reviewing database migrations, match: [migration-review]}
+      - {id: cr-sp-dependencies, name: Reviewing dependency updates, match: [dependency-review]}
+      - {id: cr-sp-concurrency, name: Reviewing concurrent code, match: [concurrency-review]}
+      - {id: cr-sp-api, name: Reviewing public API changes, match: [api-review]}
+      - {id: cr-sp-iac, name: Reviewing infrastructure-as-code changes, match: [iac-review]}
+      - {id: cr-sp-a11y, name: Accessibility-focused review, match: [accessibility-review]}
+      - {id: cr-sp-observability, name: Reviewing logging / metrics and alerts, match: [observability-review]}
+      - {id: cr-sp-docs, name: Reviewing documentation changes, match: [docs-review]}
+  - id: cr-process
+    name: Review process and tooling
+    source: GitHub CODEOWNERS / required reviews docs + SWEBOK v4 inspections
+    match: [review-process]
+    subtopics:
+      - {id: cr-pr-codeowners, name: CODEOWNERS and required reviewers, match: [codeowners]}
+      - {id: cr-pr-automation, name: Automating style checks out of review (linters / bots), match: [review-automation]}
+      - {id: cr-pr-metrics, name: Review metrics and healthy SLAs, match: [review-metrics]}
+      - {id: cr-pr-ai-review, name: AI-assisted code review, match: [ai-code-review]}
+      - {id: cr-pr-inspection, name: Formal inspections and checklists, match: [code-inspection, review-checklist]}
+      - {id: cr-pr-gitlab, name: GitLab merge request approval rules, match: [merge-request-approvals]}
+      - {id: cr-pr-gerrit, name: Gerrit review workflow (Change-Id / votes / patch sets), match: [gerrit]}
+      - {id: cr-pr-merge-queue, name: Merge queues and required status checks, match: [merge-queue, required-status-checks]}
+      - {id: cr-pr-pairing, name: Pair and mob programming as review, match: [pair-programming]}
+
+  # --- Concurrency & performance (JCIP, Herlihy & Shavit, Systems Performance)
+  - id: conc-profiling
+    name: Profiling and performance analysis
+    source: Systems Performance (Gregg) ch2 methodologies, ch6 CPU, ch7 memory
+    match: [profiling, performance]
+    subtopics:
+      - {id: conc-pf-flame-graphs, name: CPU flame graphs, match: [flame-graphs]}
+      - {id: conc-pf-off-cpu, name: Off-CPU analysis, match: [off-cpu]}
+      - {id: conc-pf-use-method, name: The USE method, match: [use-method]}
+      - {id: conc-pf-allocation, name: Allocation profiling and GC pressure, match: [allocation-profiling]}
+      - {id: conc-pf-perf, name: Linux perf and hardware counters, match: [linux-perf, perf]}
+      - {id: conc-pf-methodologies, name: Workload characterisation and drill-down analysis, match: [workload-characterization]}
+      - {id: conc-pf-continuous, name: Continuous profiling in production (Pyroscope / Parca), match: [continuous-profiling]}
+      - {id: conc-pf-cache-numa, name: CPU cache misses and NUMA effects, match: [numa, cache-misses]}
+      - {id: conc-pf-disk, name: Disk I/O analysis (iostat / biolatency), match: [iostat, disk-io]}
+      - {id: conc-pf-network, name: Network performance analysis (TCP retransmits / ss / sar), match: [tcp-retransmits, network-performance]}
+  - id: conc-benchmarking
+    name: Benchmarking and load testing
+    source: Systems Performance ch12 Benchmarking + k6 docs
+    match: [benchmarking]
+    subtopics:
+      - {id: conc-bm-micro, name: Microbenchmark methodology (warmup / variance / dead-code elimination), match: [microbenchmarks]}
+      - {id: conc-bm-load, name: Load testing with k6 / Gatling, match: [load-testing, k6]}
+      - {id: conc-bm-coordinated-omission, name: Latency percentiles and coordinated omission, match: [coordinated-omission, tail-latency]}
+      - {id: conc-bm-littles-law, name: Capacity planning with Little's law and queueing, match: [littles-law, capacity-planning]}
+      - {id: conc-bm-stats, name: Benchmark statistics and comparing runs, match: [benchmark-statistics]}
+      - {id: conc-bm-environment, name: Controlling the benchmark environment (CPU frequency scaling / isolation), match: [benchmark-environment, cpu-frequency-scaling]}
+      - {id: conc-bm-ci, name: Performance regression testing in CI, match: [performance-regression-testing]}
+      - {id: conc-bm-soak, name: Soak / stress and spike tests, match: [soak-testing, stress-testing]}
+      - {id: conc-bm-gatling, name: Load testing with Gatling / Locust, match: [gatling, locust]}
+  - id: conc-locking
+    name: Locks, races and liveness
+    source: Java Concurrency in Practice ch2-3, ch10, ch13
+    match: [concurrency, locking]
+    subtopics:
+      - {id: conc-lk-deadlock, name: Deadlock prevention and lock ordering, match: [deadlock, lock-ordering]}
+      - {id: conc-lk-races, name: Data races and race detectors, match: [data-race, race-detector]}
+      - {id: conc-lk-contention, name: Reducing lock contention (striping / sharding / RW locks), match: [lock-contention, lock-striping]}
+      - {id: conc-lk-immutability, name: Immutability and safe publication, match: [immutability, safe-publication]}
+      - {id: conc-lk-condition, name: Condition variables and producer-consumer, match: [producer-consumer]}
+      - {id: conc-lk-liveness, name: Livelock / starvation and priority inversion, match: [livelock, starvation, priority-inversion]}
+      - {id: conc-lk-confinement, name: Thread confinement and thread-safe class design, match: [thread-confinement, thread-safety]}
+      - {id: conc-lk-check-then-act, name: Check-then-act and compound action races, match: [check-then-act, atomicity-violation]}
+      - {id: conc-lk-distributed, name: Distributed locks and fencing tokens, match: [distributed-locks, fencing-tokens]}
+      - {id: conc-lk-dcl, name: Double-checked locking and lazy initialisation races, match: [double-checked-locking]}
+  - id: conc-lock-free
+    name: Atomics and lock-free techniques
+    source: The Art of Multiprocessor Programming + C++ / Java memory models
+    match: [lock-free, atomics]
+    subtopics:
+      - {id: conc-lf-cas, name: Compare-and-swap loops, match: [compare-and-swap]}
+      - {id: conc-lf-ordering, name: Memory ordering and happens-before, match: [happens-before, memory-barrier]}
+      - {id: conc-lf-false-sharing, name: False sharing and padding, match: [false-sharing]}
+      - {id: conc-lf-aba, name: ABA problem and safe memory reclamation, match: [aba-problem, hazard-pointers]}
+      - {id: conc-lf-queues, name: Lock-free queues and SPSC ring buffers, match: [ring-buffer, spsc-queue]}
+      - {id: conc-lf-progress, name: Progress guarantees and linearizability, match: [linearizability, wait-free]}
+      - {id: conc-lf-rcu, name: Read-copy-update and epoch-based reclamation, match: [rcu, epoch-based-reclamation]}
+      - {id: conc-lf-seqlock, name: Seqlocks and versioned reads, match: [seqlock]}
+      - {id: conc-lf-testing, name: Testing concurrent code exhaustively (loom / jcstress), match: [loom, jcstress]}
+  - id: conc-models
+    name: Concurrency models
+    source: Seven Concurrency Models in Seven Weeks + JCIP ch6-8
+    match: [concurrency-models]
+    subtopics:
+      - {id: conc-mo-pool-sizing, name: Thread pool sizing and saturation policies, match: [thread-pool-sizing]}
+      - {id: conc-mo-actors, name: Actor model, match: [actor-model]}
+      - {id: conc-mo-fork-join, name: Fork-join and work stealing, match: [fork-join, work-stealing]}
+      - {id: conc-mo-cancellation, name: Cancellation and shutdown of concurrent tasks, match: [task-cancellation]}
+      - {id: conc-mo-async-io, name: Event loops and async I/O vs threads, match: [async-io]}
+      - {id: conc-mo-csp, name: Communicating sequential processes (CSP), match: [csp]}
+      - {id: conc-mo-stm, name: Software transactional memory, match: [software-transactional-memory]}
+      - {id: conc-mo-reactive, name: Reactive streams and backpressure (Reactor / RxJava), match: [reactive-streams, project-reactor]}
+      - {id: conc-mo-structured, name: Structured concurrency across languages, match: [structured-concurrency-patterns]}
+      - {id: conc-mo-data-parallel, name: Data parallelism (parallel map / reduce), match: [data-parallelism]}
+  - id: conc-optimisation
+    name: Code-level optimisation
+    source: Systems Performance ch6-7 + Agner Fog optimisation manuals
+    match: [optimisation, optimization]
+    subtopics:
+      - {id: conc-op-cache-layout, name: Cache-friendly data layout (SoA / locality), match: [cache-friendly, data-oriented-design]}
+      - {id: conc-op-algorithmic, name: Algorithmic complexity wins first, match: [algorithmic-complexity, big-o]}
+      - {id: conc-op-allocations, name: Reducing allocations (pooling / arenas / reuse), match: [object-pooling, arena-allocation]}
+      - {id: conc-op-simd, name: SIMD and auto-vectorisation, match: [simd, vectorization]}
+      - {id: conc-op-io-batching, name: Batching I/O and syscalls, match: [io-batching]}
+      - {id: conc-op-branch, name: Branch prediction and branchless code, match: [branch-prediction]}
+      - {id: conc-op-compiler-flags, name: Compiler optimisation flags (-O2 / -O3 / -march / LTO), match: [compiler-optimization-flags]}
+      - {id: conc-op-strings, name: String building and parsing efficiency, match: [string-performance]}
+      - {id: conc-op-memoization, name: Memoization of computed results, match: [memoization]}
+      - {id: conc-op-database, name: Database access optimisation from application code (N+1 / EXPLAIN), match: [n-plus-one, query-optimization]}
+
+  # --- Mobile development (Android guides, Apple docs, store policies)
+  - id: mob-lifecycle
+    name: App lifecycle, state and background work
+    source: Android app fundamentals + Apple app life cycle + WorkManager / BackgroundTasks docs
+    match: [app-lifecycle, mobile-lifecycle]
+    subtopics:
+      - {id: mob-lc-process-death, name: Process death and state restoration, match: [process-death, state-restoration]}
+      - {id: mob-lc-offline, name: Offline-first local storage and sync, match: [offline-first]}
+      - {id: mob-lc-background, name: Background work (WorkManager / BGTaskScheduler), match: [workmanager, bgtaskscheduler]}
+      - {id: mob-lc-deep-links, name: Deep links (App Links / Universal Links), match: [deep-links, universal-links, app-links]}
+      - {id: mob-lc-config-changes, name: Configuration changes and ViewModel scoping, match: [configuration-changes, viewmodel]}
+      - {id: mob-lc-android-lifecycle, name: Android activity and fragment lifecycle, match: [activity-lifecycle, fragment-lifecycle]}
+      - {id: mob-lc-ios-lifecycle, name: iOS app and scene life cycle (ScenePhase / delegates), match: [scene-lifecycle, scenephase]}
+      - {id: mob-lc-foreground-service, name: Foreground services and background execution limits, match: [foreground-service, background-execution-limits]}
+      - {id: mob-lc-local-db, name: Local databases (Room / Core Data / SwiftData), match: [room-database, core-data, swiftdata]}
+      - {id: mob-lc-intents, name: Intents and share sheets, match: [android-intents, share-sheet]}
+      - {id: mob-lc-networking, name: Mobile networking (Retrofit / OkHttp / URLSession), match: [retrofit, urlsession]}
+  - id: mob-ui
+    name: Mobile UI
+    source: Jetpack Compose docs + SwiftUI docs + platform accessibility guides
+    match: [mobile-ui]
+    subtopics:
+      - {id: mob-ui-compose-state, name: Jetpack Compose state and recomposition, match: [jetpack-compose, recomposition]}
+      - {id: mob-ui-swiftui-state, name: SwiftUI state and data flow, match: [swiftui, swiftui-state]}
+      - {id: mob-ui-navigation, name: Navigation architecture, match: [mobile-navigation]}
+      - {id: mob-ui-accessibility, name: Accessibility (TalkBack / VoiceOver / dynamic type), match: [talkback, voiceover, mobile-accessibility]}
+      - {id: mob-ui-localization, name: Localization and RTL, match: [localization, rtl-layout]}
+      - {id: mob-ui-lists, name: Lazy lists (LazyColumn / RecyclerView / SwiftUI List), match: [lazycolumn, recyclerview]}
+      - {id: mob-ui-theming, name: Theming / dark mode and Material 3, match: [material-design, dark-mode]}
+      - {id: mob-ui-adaptive, name: Adaptive layouts (tablets / foldables / size classes), match: [adaptive-layout, size-classes]}
+      - {id: mob-ui-animation, name: Animations and gestures, match: [mobile-animations]}
+      - {id: mob-ui-testing, name: UI testing (Espresso / Compose tests / XCUITest), match: [espresso, xcuitest]}
+      - {id: mob-ui-images, name: Image loading and caching (Coil / Glide / Kingfisher), match: [image-loading, coil]}
+  - id: mob-performance
+    name: Mobile performance
+    source: Android performance guides + Apple Instruments docs
+    match: [mobile-performance]
+    subtopics:
+      - {id: mob-pf-startup, name: Cold start and baseline profiles, match: [cold-start, baseline-profiles]}
+      - {id: mob-pf-jank, name: Jank and main-thread work, match: [jank, main-thread]}
+      - {id: mob-pf-battery, name: Battery and wakelocks, match: [battery]}
+      - {id: mob-pf-memory-leaks, name: Memory leaks (LeakCanary / Instruments Leaks), match: [leakcanary]}
+      - {id: mob-pf-app-size, name: App size reduction (R8 / app thinning), match: [app-size, r8]}
+      - {id: mob-pf-profilers, name: Android Studio Profiler and Xcode Instruments, match: [android-profiler, xcode-instruments]}
+      - {id: mob-pf-anr, name: ANRs and watchdog terminations, match: [anr, watchdog-termination]}
+      - {id: mob-pf-network, name: Network efficiency on mobile, match: [mobile-network-efficiency]}
+      - {id: mob-pf-rendering, name: Rendering performance (Compose stability / overdraw), match: [compose-stability, overdraw]}
+      - {id: mob-pf-macrobenchmark, name: Macrobenchmark and performance tests in CI, match: [macrobenchmark]}
+  - id: mob-security
+    name: Mobile security and permissions
+    source: OWASP MASVS + platform security docs
+    match: [mobile-security]
+    subtopics:
+      - {id: mob-se-secure-storage, name: Keychain / Keystore secure storage, match: [keychain, keystore, secure-storage]}
+      - {id: mob-se-permissions, name: Runtime permissions, match: [runtime-permissions]}
+      - {id: mob-se-biometrics, name: Biometric authentication, match: [biometric-auth]}
+      - {id: mob-se-pinning, name: Certificate pinning and network security config, match: [certificate-pinning, network-security-config]}
+      - {id: mob-se-tamper, name: App integrity (Play Integrity / App Attest), match: [play-integrity, app-attest]}
+      - {id: mob-se-masvs, name: Testing against OWASP MASVS / MASTG, match: [masvs, mastg]}
+      - {id: mob-se-obfuscation, name: Obfuscation and reverse-engineering resistance, match: [obfuscation, proguard]}
+      - {id: mob-se-webview, name: WebView security, match: [webview-security]}
+      - {id: mob-se-ipc, name: Exported components and IPC security, match: [exported-components]}
+      - {id: mob-se-oauth, name: OAuth on mobile (AppAuth / PKCE), match: [appauth, pkce]}
+  - id: mob-release
+    name: Signing, testing tracks and store release
+    source: Android app signing + Play Console release docs + Apple code signing / TestFlight + App Store Review Guidelines
+    match: [app-store-release, mobile-release]
+    subtopics:
+      - {id: mob-re-ios-signing, name: iOS code signing and provisioning profiles, match: [ios-code-signing, provisioning-profiles]}
+      - {id: mob-re-android-signing, name: Android app signing and App Bundles, match: [android-app-signing, android-app-bundle]}
+      - {id: mob-re-beta, name: TestFlight and Play testing tracks, match: [testflight, play-testing-tracks]}
+      - {id: mob-re-review, name: Passing App Store / Play review, match: [app-review-guidelines]}
+      - {id: mob-re-staged, name: Staged / phased rollouts and versioning, match: [staged-rollout, phased-release]}
+      - {id: mob-re-fastlane, name: Release automation with fastlane, match: [fastlane]}
+      - {id: mob-re-versioning, name: versionCode and build number management, match: [version-code, build-numbers]}
+      - {id: mob-re-ci, name: Mobile CI (Xcode Cloud / macOS runners / Gradle Play Publisher), match: [mobile-ci, xcode-cloud]}
+      - {id: mob-re-listing, name: Store listings and app store optimisation, match: [app-store-optimization, store-listing]}
+      - {id: mob-re-rejections, name: Handling review rejections and appeals, match: [app-rejection]}
+      - {id: mob-re-ota, name: Over-the-air updates and store policy limits, match: [ota-updates]}
+  - id: mob-services
+    name: Platform services
+    source: APNs / FCM docs + StoreKit / Play Billing + Crashlytics + Apple privacy docs
+    match: [mobile-platform-services]
+    subtopics:
+      - {id: mob-sv-push, name: Push notifications (APNs / FCM), match: [push-notifications, fcm, apns]}
+      - {id: mob-sv-iap, name: In-app purchases and subscriptions, match: [in-app-purchases, storekit]}
+      - {id: mob-sv-crash, name: Crash reporting and symbolication, match: [crash-reporting, symbolication]}
+      - {id: mob-sv-privacy, name: Privacy manifests, ATT and data safety forms, match: [privacy-manifest, app-tracking-transparency]}
+      - {id: mob-sv-analytics, name: Product analytics and event tracking, match: [mobile-analytics, firebase-analytics]}
+      - {id: mob-sv-remote-config, name: Remote config and feature flags, match: [remote-config]}
+      - {id: mob-sv-location, name: Location services and geofencing, match: [location-services, geofencing]}
+      - {id: mob-sv-camera, name: Camera and media capture (CameraX / AVFoundation), match: [camerax, avfoundation]}
+      - {id: mob-sv-widgets, name: Home screen widgets (WidgetKit / Glance), match: [widgetkit, glance-widgets]}
+      - {id: mob-sv-sign-in, name: Sign in with Apple and Credential Manager, match: [sign-in-with-apple, credential-manager]}
+  - id: mob-cross-platform
+    name: Cross-platform frameworks
+    source: React Native docs + Flutter docs + Kotlin Multiplatform docs
+    match: [cross-platform-mobile]
+    subtopics:
+      - {id: mob-cp-react-native, name: React Native architecture and native modules, match: [react-native]}
+      - {id: mob-cp-flutter, name: Flutter widgets and state management, match: [flutter]}
+      - {id: mob-cp-kmp, name: Kotlin Multiplatform shared logic, match: [kotlin-multiplatform]}
+      - {id: mob-cp-choosing, name: Choosing native vs cross-platform, match: [native-vs-cross-platform]}
+      - {id: mob-cp-expo, name: Expo and EAS builds, match: [expo, eas-build]}
+      - {id: mob-cp-rn-new-arch, name: React Native New Architecture (Fabric / TurboModules / JSI), match: [turbomodules, fabric-renderer]}
+      - {id: mob-cp-flutter-channels, name: Flutter platform channels and plugins, match: [platform-channels, flutter-plugins]}
+      - {id: mob-cp-rn-performance, name: React Native performance (Hermes / FlatList / Reanimated), match: [hermes, react-native-performance]}
+      - {id: mob-cp-flutter-state, name: Flutter state management (Riverpod / Bloc), match: [riverpod, flutter-bloc]}
+      - {id: mob-cp-compose-mp, name: Compose Multiplatform UI, match: [compose-multiplatform]}

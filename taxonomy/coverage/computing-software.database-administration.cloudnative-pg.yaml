@@ -1,0 +1,186 @@
+# Coverage spec: cloudnative-pg. Topics from the CloudNativePG docs (cloudnative-pg/cloudnative-pg, docs/src).
+subject: cloudnative-pg
+scope:
+  category: computing-software
+  field: database-administration
+  products: [cloudnative-pg]
+sources:
+  - "CloudNativePG docs (github.com/cloudnative-pg/cloudnative-pg, docs/src)"
+topics:
+  # --- Getting started ---
+  - id: cloudnative-pg-quickstart
+    name: "Quickstart"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/quickstart.md"
+    match: [quickstart,kind,minikube,kubectl,cluster-example,labels,prometheus,grafana,podmonitor,helm,kube-prometheus-stack]
+  # --- Installation and upgrades ---
+  - id: cloudnative-pg-installation
+    name: "Installation"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/installation_upgrade.md"
+    match: [installation,operator,manifest,helm,olm,cnpg-system]
+  - id: cloudnative-pg-operator-upgrade
+    name: "Operator upgrade"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/installation_upgrade.md"
+    match: [upgrade,operator,instance-manager,primaryupdatestrategy,rollout-delay,in-place,security,cve,scram-sha-256,passwordpassthrough,search-path]
+  - id: cloudnative-pg-release-verification
+    name: "Release verification"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/installation_upgrade.md"
+    match: [supply-chain,cosign,sbom,slsa,provenance,signature]
+  # --- Architecture and topology ---
+  - id: cloudnative-pg-architecture
+    name: "Architecture"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/architecture.md"
+    match: [architecture,availability-zones,high-availability,disaster-recovery,shared-nothing,stretched-cluster]
+  - id: cloudnative-pg-node-isolation
+    name: "Node isolation"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/architecture.md"
+    match: [scheduling,node-labels,taints,tolerations,nodeselector,dedicated-nodes]
+  - id: cloudnative-pg-services
+    name: "Services"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/architecture.md"
+    match: [services,rw,ro,read-only,hot-standby,failover]
+  - id: cloudnative-pg-replica-clusters
+    name: "Replica clusters"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/architecture.md"
+    match: [replica-cluster,distributed-topology,designated-primary,disaster-recovery,rpo,rto]
+  # --- Failure and recovery behaviour ---
+  - id: cloudnative-pg-self-healing
+    name: "Self healing"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/failure_modes.md"
+    match: [failover,self-healing,pg-rewind,primary-failure,standby-failure,promotion]
+  - id: cloudnative-pg-emergency
+    name: "Emergency"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/failure_modes.md"
+    match: [reconciliation,annotation,emergency,manual-intervention,self-healing]
+  # --- Backup and recovery ---
+  - id: cloudnative-pg-wal-archiving
+    name: "Wal archiving"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/wal_archiving.md"
+    match: [wal-archiving,barman-cloud-plugin,archive-timeout,iswalarchiver,pitr,rpo]
+  - id: cloudnative-pg-backup-strategy
+    name: "Backup strategy"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/backup.md"
+    match: [backup,wal-archive,hot-backup,cold-backup,volume-snapshot,object-store]
+  - id: cloudnative-pg-scheduled-backups
+    name: "Scheduled backups"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/backup.md"
+    match: [scheduledbackup,cron,backup-schedule,backupownerreference,immediate,suspend]
+  - id: cloudnative-pg-on-demand-backup
+    name: "On demand backup"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/backup.md"
+    match: [backup,on-demand,backup-resource,kubectl-describe,secrets,phase]
+  - id: cloudnative-pg-backup-target
+    name: "Backup target"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/backup.md"
+    match: [backup,standby,prefer-standby,backup-target,primary,cold-backup]
+  - id: cloudnative-pg-backup-methods-retention
+    name: "Backup methods retention"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/backup.md"
+    match: [backup,method,plugin,volumesnapshot,barmanobjectstore,retention-policy]
+  - id: cloudnative-pg-recovery
+    name: "Recovery"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/recovery.md"
+    match: [recovery,barman-cloud-plugin,objectstore,externalclusters,bootstrap-recovery,servername,volumesnapshot,backup-object,walstorage,pg-basebackup,replica-cluster,application-database,skipemptywalarchivecheck,wal-archive,safety-check]
+  - id: cloudnative-pg-pitr
+    name: "Pitr"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/recovery.md"
+    match: [pitr,recovery-target,targettime,targetlsn,targetname,targetxid]
+  # --- Bootstrap and import ---
+  - id: cloudnative-pg-bootstrap
+    name: "Bootstrap"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/bootstrap.md"
+    match: [bootstrap,initdb,recovery,pg-basebackup,externalclusters,postgres-user]
+  - id: cloudnative-pg-bootstrap-initdb
+    name: "Bootstrap initdb"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/bootstrap.md"
+    match: [initdb,bootstrap,app-database,locale,data-checksums,encoding,postinitsql,postinitapplicationsql,postinittemplatesql,superuser,configmap]
+  - id: cloudnative-pg-bootstrap-pg-basebackup
+    name: "Bootstrap pg basebackup"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/bootstrap.md"
+    match: [pg-basebackup,bootstrap,streaming-replication,clone,tablespacemapping,additionalargs]
+  # --- Instance pod configuration ---
+  - id: cloudnative-pg-pod-configuration
+    name: "Pod configuration"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/cluster_conf.md"
+    match: [projected-volume,projectedvolumetemplate,secret,configmap,mount,pods,ephemeral-volumes,emptydir,shm,temporary-data,ephemeralvolumesizelimit,posix,environment-variables,env,envfrom,tz,rolling-update,automountserviceaccounttoken]
+  # --- PostgreSQL configuration ---
+  - id: cloudnative-pg-postgresql-configuration
+    name: "Postgresql configuration"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/postgresql_conf.md"
+    match: [postgresql-conf,parameters,custom-conf,fixed-parameters,webhook,guc,wal-level,wal-keep-size,replication-slots,standby,logical,tcp-user-timeout,shared-preload-libraries,auto-explain,pg-stat-statements,pgaudit,pg-failover-slots,extensions,alter-system,allow-alter-system,configuration-changes,reload,rolling-update,enablealtersystem,dynamic-shared-memory,shm,posix,sysv,shmmax,parallel-queries]
+  - id: cloudnative-pg-pg-hba-and-auth
+    name: "Pg hba and auth"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/postgresql_conf.md"
+    match: [pg-hba,authentication,hostssl,scram-sha-256,streaming-replica,access-control,podselectorrefs,label-selector,pod-ip,dynamic-access,reload,ldap,pg-ident,user-name-maps,search-bind,simple-bind]
+  # --- Replication and synchronous commit ---
+  - id: cloudnative-pg-replication
+    name: "Replication"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/replication.md"
+    match: [streaming-replication,streaming-replica,instances,restore-command,hot-standby,tls-client-cert]
+  - id: cloudnative-pg-synchronous-replication
+    name: "Synchronous replication"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/replication.md"
+    match: [synchronous-replication,quorum,priority,synchronous-standby-names,standbynamespre,maxstandbynamesfromcluster,datadurability,required,preferred,self-healing,rpo-zero,failure-domain,podfailuredomainkeys,nodefailuredomainkeys,availability-zone,topology]
+  - id: cloudnative-pg-replication-slots
+    name: "Replication slots"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/replication.md"
+    match: [replication-slots,high-availability,synchronizereplicas,slotprefix,updateinterval,failover,logical-decoding,synchronizelogicaldecoding,sync-replication-slots,hot-standby-feedback,subscription]
+  # --- Failover and primary safety ---
+  - id: cloudnative-pg-failover
+    name: "Failover"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/failover.md"
+    match: [failover,failoverdelay,switchoverdelay,fast-shutdown,immediate-shutdown,rto,primary-lease,lease,leaseduration,split-brain,primary-isolation,promotion,node-failure,unreachable-taint,node-monitor-grace-period,isolation-check,kubelet]
+  - id: cloudnative-pg-failover-quorum
+    name: "Failover quorum"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/failover.md"
+    match: [failover-quorum,synchronous-replication,quorum,promotion,failoverquorum,data-loss]
+  # --- Replica clusters and disaster recovery ---
+  - id: cloudnative-pg-replica-cluster-switchover
+    name: "Replica cluster switchover"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/replica_cluster.md"
+    match: [replica-cluster,distributed-topology,demotiontoken,promotiontoken,switchover,disaster-recovery]
+  - id: cloudnative-pg-standalone-replica
+    name: "Standalone replica"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/replica_cluster.md"
+    match: [replica-cluster,standalone-replica,pg-basebackup,streaming,continuous-recovery,read-only]
+  - id: cloudnative-pg-delayed-replica
+    name: "Delayed replica"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/replica_cluster.md"
+    match: [delayed-replica,minapplydelay,recovery-min-apply-delay,human-error,replica-cluster,promotiontoken]
+  # --- Connection pooling ---
+  - id: cloudnative-pg-pooler-basics
+    name: "Pooler basics"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/connection_pooling.md"
+    match: [pooler,pgbouncer,connection-pooling,poolmode,rw-service,lifecycle]
+  - id: cloudnative-pg-pooler-auth
+    name: "Pooler auth"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/connection_pooling.md"
+    match: [pooler,pgbouncer,auth-query,auth-user,cnpg-pooler-pgbouncer,tls]
+  - id: cloudnative-pg-pooler-template
+    name: "Pooler template"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/connection_pooling.md"
+    match: [pooler,pgbouncer,pod-template,image-catalog,servicetemplate,anti-affinity]
+  - id: cloudnative-pg-pooler-operations
+    name: "Pooler operations"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/connection_pooling.md"
+    match: [pooler,pgbouncer,podmonitor,metrics,pause,resume]
+  # --- Operations and day-2 ---
+  - id: cloudnative-pg-fencing
+    name: "Fencing"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/fencing.md"
+    match: [fencing,fencedinstances,postmaster,crashloop,kubectl-cnpg,troubleshooting]
+  - id: cloudnative-pg-rolling-update
+    name: "Rolling update"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/rolling_update.md"
+    match: [rolling-update,primaryupdatestrategy,primaryupdatemethod,switchover,restart,supervised]
+  - id: cloudnative-pg-hibernation
+    name: "Hibernation"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/declarative_hibernation.md"
+    match: [hibernation,cnpg-hibernation,annotation,rehydration,pvc,batch-workloads]
+  - id: cloudnative-pg-resource-management
+    name: "Resource management"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/resource_management.md"
+    match: [resources,qos,guaranteed,requests,limits,oom]
+  - id: cloudnative-pg-autoscaling
+    name: "Autoscaling"
+    source: "https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/resource_management.md"
+    match: [vpa,hpa,autoscaling,recommendation-only,scale-subresource,updatemode]

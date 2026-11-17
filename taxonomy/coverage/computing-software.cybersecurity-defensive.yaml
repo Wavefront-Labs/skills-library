@@ -1,0 +1,1747 @@
+# Canonical coverage spec: Cybersecurity (defensive) - whole field.
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (CompTIA Security+ SY0-701 and CySA+ CS0-003
+# exam objectives, NIST CSF 2.0 functions/categories, CIS Controls v8 safeguards, MITRE D3FEND
+# tactics, NIST SP 800-61/800-63/800-207/SSDF, OWASP projects, SIEM/EDR/scanner vendor docs ToCs),
+# not from what the library happened to contain.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (objective bullet
+# lists, CIS safeguards, CSF subcategories, D3FEND techniques, vendor docs page headings).
+# Depth round 2 (r2-* subtopics): next level of the same sources - Security+ SY0-701 and CySA+ CS0-003
+# objective sub-bullets, NIST CSF 2.0 subcategories, CIS Controls v8 safeguards, MITRE D3FEND techniques,
+# Splunk/Sentinel/Elastic/Nessus/Qualys/Greenbone docs sub-pages, OWASP ASVS requirements and cheat sheets.
+# Out of scope: offensive security (exploit development, attack tooling) and governance/risk/
+# compliance programmes (business-finance/risk-management).
+subject: cybersecurity-defensive
+scope:
+  category: computing-software
+  field: cybersecurity-defensive
+  products: [splunk, nessus, security-operations, vulnerability-management, security-architecture, threat-modelling, identity-access-management, network-defence, endpoint-security, cloud-security, application-security, system-hardening, threat-intelligence]
+sources:
+  - "CompTIA Security+ SY0-701 exam objectives - 1.0 General Security Concepts (1.2 zero trust, deception; 1.4 cryptographic solutions, PKI, certificates), 2.0 Threats/Vulnerabilities/Mitigations (2.5 mitigation techniques), 3.0 Security Architecture (3.1 architecture models, 3.2 enterprise infrastructure - device placement, zones, firewalls, IPS, VPN, SASE, port security, 3.3 data protection, 3.4 resilience and recovery), 4.0 Security Operations (4.1 baselines/hardening/wireless/mobile/app security, 4.2 asset management, 4.3 vulnerability management, 4.4 alerting and monitoring, 4.5 enterprise capabilities - firewall, IDS/IPS, web filter, OS security, DNS filtering, email security, FIM, DLP, NAC, EDR/XDR, 4.6 IAM, 4.7 automation, 4.8 incident response, 4.9 investigation data sources)"
+  - "CompTIA CySA+ CS0-003 exam objectives - 1.0 Security Operations (architecture concepts, indicators of malicious activity, tools - Wireshark/tcpdump/SIEM/SOAR/EDR/sandbox/file analysis, threat intelligence and hunting, process improvement), 2.0 Vulnerability Management (scanning methods, output analysis, CVSS prioritisation, controls, response/SLOs/ASM), 3.0 Incident Response and Management (kill chain, Diamond, ATT&CK; detection, evidence acquisition, containment/eradication/recovery; post-incident), 4.0 Reporting and Communication (VM reporting, metrics, IR reporting)"
+  - "NIST Cybersecurity Framework 2.0 - Identify (ID.AM, ID.RA, ID.IM), Protect (PR.AA, PR.AT, PR.DS, PR.PS, PR.IR), Detect (DE.CM, DE.AE), Respond (RS.MA, RS.AN, RS.CO, RS.MI), Recover (RC.RP, RC.CO) categories and subcategories"
+  - "CIS Critical Security Controls v8 - 1 enterprise asset inventory, 2 software inventory, 3 data protection, 4 secure configuration, 5 account management, 6 access control, 7 continuous vulnerability management, 8 audit log management, 9 email and browser protections, 10 malware defenses, 11 data recovery, 12 network infrastructure management, 13 network monitoring and defense, 16 application software security, 17 incident response; safeguards as subtopics"
+  - "MITRE D3FEND matrix - Model, Harden (application/credential/message/platform hardening), Detect (file/identifier/message/network traffic/platform/process/user behaviour analysis), Isolate (execution/network isolation), Deceive (decoy environment/objects), Evict, Restore"
+  - "NIST SP 800-61r3 (incident response), SP 800-86 (forensics in IR), SP 800-63B (authenticators), SP 800-207 (zero trust), SP 800-218 SSDF, SP 800-92 (log management), SP 800-40r4 (patch management)"
+  - "Vendor docs ToCs - Splunk Enterprise (Getting Data In, Search Reference, Distributed Deployment, Dashboard Studio) and Enterprise Security admin manual; Microsoft Sentinel docs; Elastic Security docs; Tenable Nessus user guide; Qualys VMDR docs; Greenbone/OpenVAS docs; Microsoft Defender for Endpoint and App Control for Business docs; AWS/Azure/GCP security docs"
+  - "OWASP - Top 10 2021, API Security Top 10 2023, ASVS 4.0, Cheat Sheet Series, SAMM; Microsoft Threat Modeling / Threat Modeling Manifesto; CIS Benchmarks and DISA STIGs"
+topics:
+  # ===== Splunk & SIEM platforms (product: splunk)
+  - id: siem-data-onboarding
+    name: SIEM data onboarding and parsing
+    source: Splunk Getting Data In manual; Sec+ 4.9
+    match: [data-onboarding, props-conf]
+    subtopics:
+      - {id: sdo-forwarder-deployment, name: Universal forwarder rollout via deployment server, match: [deployment-server, universal-forwarder]}
+      - {id: sdo-hec, name: HTTP Event Collector tokens and indexer acknowledgement, match: [http-event-collector]}
+      - {id: sdo-syslog, name: Syslog ingestion with SC4S or a syslog tier, match: [syslog-ingestion, sc4s]}
+      - {id: sdo-wineventlog, name: Windows event log collection (WEF or forwarder inputs), match: [windows-event-forwarding]}
+      - {id: sdo-linebreak-time, name: Line breaking and timestamp extraction, match: [line-breaking, timestamp-extraction]}
+      - {id: sdo-ingest-health, name: Monitoring data source health and silent log loss, match: [log-source-health]}
+      - {id: r2-splunk-add-on-for-aws, name: Cloud log ingestion with the Splunk Add-on for AWS and Microsoft Cloud Services, match: [splunk-add-on-for-aws]}
+      - {id: r2-nullqueue-filtering, name: Index-time filtering and routing with transforms.conf and nullQueue, match: [nullqueue-filtering]}
+      - {id: r2-ingest-actions, name: Ingest Actions rulesets (mask, filter, route to S3), match: [ingest-actions]}
+      - {id: r2-edge-processor, name: Edge Processor and Ingest Processor SPL2 pipelines, match: [edge-processor]}
+      - {id: r2-cim-validation, name: CIM compliance validation of a new sourcetype, match: [cim-validation]}
+      - {id: r2-heavy-forwarder, name: Heavy forwarder tier and modular inputs, match: [heavy-forwarder]}
+      - {id: r2-monitor-input, name: File monitor inputs, crcSalt and initCrcLength, match: [monitor-input]}
+  - id: spl-search-language
+    name: SPL search language for investigation
+    source: Splunk Search Reference
+    match: [spl]
+    subtopics:
+      - {id: spl-streamstats, name: stats eventstats and streamstats patterns, match: [streamstats, eventstats]}
+      - {id: spl-transaction, name: Grouping events - transaction vs stats, match: [transaction-command]}
+      - {id: spl-lookups, name: Lookup tables and KV store, match: [lookup-tables, kv-store]}
+      - {id: spl-subsearch, name: Subsearches and join alternatives, match: [subsearch]}
+      - {id: spl-rex, name: rex and inline field extraction, match: [rex-command]}
+      - {id: spl-timechart, name: timechart and statistical outlier detection, match: [timechart, outlier-detection]}
+      - {id: r2-tstats-command, name: tstats against accelerated data models, match: [tstats-command]}
+      - {id: r2-eval-functions, name: eval functions and conditional logic, match: [eval-functions]}
+      - {id: r2-search-macros, name: Search macros, eventtypes and tags, match: [search-macros]}
+      - {id: r2-multivalue-fields, name: Multivalue fields and JSON with spath and mvexpand, match: [multivalue-fields, spath]}
+      - {id: r2-cidrmatch, name: Network investigation with cidrmatch, iplocation and geostats, match: [cidrmatch]}
+      - {id: r2-job-inspector, name: Search optimisation with the Job Inspector, match: [job-inspector]}
+      - {id: r2-summary-indexing, name: Summary indexing with collect, match: [summary-indexing]}
+  - id: splunk-enterprise-security
+    name: Splunk Enterprise Security operation
+    source: Splunk ES admin and use manuals
+    match: [splunk-enterprise-security]
+    subtopics:
+      - {id: es-incident-review, name: Notable events and Incident Review workflow, match: [incident-review, notable-events]}
+      - {id: es-asset-identity, name: Asset and identity framework, match: [asset-and-identity]}
+      - {id: es-rba, name: Risk-based alerting, match: [risk-based-alerting]}
+      - {id: es-threat-intel, name: ES threat intelligence framework, match: [es-threat-intelligence-framework]}
+      - {id: es-content, name: ES content management and ESCU detections, match: [es-content-update]}
+      - {id: r2-adaptive-response, name: Correlation searches with adaptive response actions, match: [adaptive-response]}
+      - {id: r2-es-investigation-workbench, name: Investigation workbench and investigations, match: [es-investigation-workbench]}
+      - {id: r2-data-model-acceleration, name: Data model acceleration for ES, match: [data-model-acceleration]}
+      - {id: r2-notable-suppression, name: Notable event suppression and throttling, match: [notable-suppression]}
+      - {id: r2-mission-control, name: Mission Control analyst queue and findings (ES 8), match: [mission-control]}
+      - {id: r2-urgency-matrix, name: Urgency matrix and notable severity, match: [urgency-matrix]}
+      - {id: r2-splunk-uba, name: Splunk UBA integration, match: [splunk-uba]}
+  - id: splunk-platform-admin
+    name: Splunk platform architecture and administration
+    source: Splunk Distributed Deployment and Admin manuals
+    match: [splunk-architecture]
+    subtopics:
+      - {id: spa-indexer-cluster, name: Indexer clustering, replication and search factor, match: [indexer-clustering]}
+      - {id: spa-shc, name: Search head clustering, match: [search-head-clustering]}
+      - {id: spa-rbac, name: Roles, capabilities and index access, match: [splunk-rbac]}
+      - {id: spa-license, name: License usage monitoring, match: [license-usage]}
+      - {id: spa-smartstore, name: SmartStore remote storage, match: [smartstore]}
+      - {id: spa-mc, name: Monitoring Console health checks, match: [monitoring-console]}
+      - {id: r2-bucket-lifecycle, name: indexes.conf design, bucket lifecycle and retention, match: [bucket-lifecycle]}
+      - {id: r2-splunk-upgrade, name: Upgrade order and rolling upgrades, match: [splunk-upgrade]}
+      - {id: r2-splunk-tls-certificates, name: TLS certificates for splunkd, Splunk Web and forwarders, match: [splunk-tls-certificates]}
+      - {id: r2-splunk-saml-authentication, name: SAML and LDAP authentication, match: [splunk-saml-authentication]}
+      - {id: r2-btool, name: Configuration precedence and btool troubleshooting, match: [btool]}
+      - {id: r2-kvstore-backup, name: Backing up configuration and the KV store, match: [kvstore-backup]}
+      - {id: r2-admin-config-service, name: Splunk Cloud administration with the Admin Config Service, match: [admin-config-service]}
+  - id: siem-dashboards
+    name: SIEM dashboards and reporting
+    source: Splunk Dashboard Studio docs; Sentinel workbooks
+    match: [siem-dashboards]
+    subtopics:
+      - {id: dash-studio, name: Dashboard Studio JSON dashboards, match: [dashboard-studio]}
+      - {id: dash-base-search, name: Base searches and chained searches, match: [base-search]}
+      - {id: dash-drilldown, name: Drilldowns and tokens, match: [drilldown]}
+      - {id: dash-soc-metrics, name: SOC metrics dashboard, match: [soc-metrics-dashboard]}
+      - {id: r2-scheduled-reports, name: Scheduled reports and PDF delivery, match: [scheduled-reports]}
+      - {id: r2-sentinel-workbooks, name: Microsoft Sentinel workbooks, match: [sentinel-workbooks]}
+      - {id: r2-kibana-dashboards, name: Kibana dashboards and Lens for security, match: [kibana-dashboards]}
+      - {id: r2-executive-security-dashboard, name: Executive security posture dashboard, match: [executive-security-dashboard]}
+      - {id: r2-dashboard-inputs, name: Dashboard inputs (time picker, multiselect, dynamic dropdowns), match: [dashboard-inputs]}
+      - {id: r2-alert-actions, name: Alert actions (email, webhook, scripted), match: [alert-actions]}
+  - id: microsoft-sentinel
+    name: Microsoft Sentinel operation
+    source: Microsoft Sentinel docs ToC
+    match: [microsoft-sentinel]
+    subtopics:
+      - {id: sent-connectors, name: Data connectors and DCR-based ingestion, match: [sentinel-data-connectors]}
+      - {id: sent-analytics, name: Scheduled and NRT analytics rules, match: [sentinel-analytics-rules]}
+      - {id: sent-kql-hunting, name: KQL hunting queries, match: [kql-hunting]}
+      - {id: sent-automation, name: Automation rules and Logic Apps playbooks, match: [logic-apps-playbooks]}
+      - {id: sent-watchlists, name: Watchlists, match: [sentinel-watchlists]}
+      - {id: sent-cost, name: Log tiers and ingestion cost (Basic/Auxiliary logs), match: [sentinel-cost-management]}
+      - {id: r2-sentinel-ueba, name: UEBA and entity pages, match: [sentinel-ueba]}
+      - {id: r2-sentinel-threat-intelligence, name: Threat intelligence indicators and TI matching, match: [sentinel-threat-intelligence]}
+      - {id: r2-sentinel-repositories, name: Repositories and content-as-code deployment, match: [sentinel-repositories]}
+      - {id: r2-sentinel-incident-investigation, name: Incident investigation and investigation graph, match: [sentinel-incident-investigation]}
+      - {id: r2-asim, name: ASIM normalisation parsers, match: [asim]}
+      - {id: r2-sentinel-workspace-design, name: Workspace design and multi-tenant management with Lighthouse, match: [sentinel-workspace-design]}
+      - {id: r2-sentinel-health-monitoring, name: Health and audit monitoring (SentinelHealth), match: [sentinel-health-monitoring]}
+      - {id: r2-unified-security-operations, name: Unified security operations in the Defender portal, match: [unified-security-operations]}
+  - id: elastic-security
+    name: Elastic Security operation
+    source: Elastic Security docs ToC
+    match: [elastic-security]
+    subtopics:
+      - {id: es-fleet, name: Elastic Agent and Fleet policies, match: [elastic-agent-fleet]}
+      - {id: es-rules, name: Detection rules (query, EQL, threshold, ML), match: [elastic-detection-rules]}
+      - {id: es-ecs, name: ECS field mapping for custom sources, match: [ecs-mapping]}
+      - {id: es-timeline, name: Timeline investigations, match: [elastic-timeline]}
+      - {id: es-ilm, name: Index lifecycle management and retention, match: [index-lifecycle-management]}
+      - {id: r2-elastic-cases, name: Cases and external connectors, match: [elastic-cases]}
+      - {id: r2-rule-exceptions, name: Rule exceptions and value lists, match: [rule-exceptions]}
+      - {id: r2-elastic-ml-jobs, name: Machine learning anomaly detection jobs, match: [elastic-ml-jobs]}
+      - {id: r2-entity-risk-scoring, name: Entity analytics and risk scoring, match: [entity-risk-scoring]}
+      - {id: r2-osquery-manager, name: Osquery Manager live queries, match: [osquery-manager]}
+      - {id: r2-elastic-response-actions, name: Elastic Defend response actions, match: [elastic-response-actions]}
+      - {id: r2-esql-hunting, name: ES|QL hunting queries, match: [esql-hunting]}
+      - {id: r2-cross-cluster-search, name: Cross-cluster search for security, match: [cross-cluster-search]}
+  - id: detection-as-code
+    name: Detection-as-code and Sigma
+    source: SigmaHQ specification; pySigma docs
+    match: [sigma, detection-as-code]
+    subtopics:
+      - {id: dac-sigma-authoring, name: Writing Sigma rules, match: [sigma-rule-authoring]}
+      - {id: dac-pysigma, name: Converting with pySigma backends and pipelines, match: [pysigma]}
+      - {id: dac-ci, name: Detection CI with unit tests and replayed data, match: [detection-testing-ci]}
+      - {id: dac-versioning, name: Detection repository structure and versioning, match: [detection-repository]}
+      - {id: r2-sigma-correlation, name: Sigma correlation rules and filters, match: [sigma-correlation]}
+      - {id: r2-sigma-check, name: Sigma rule validation and linting, match: [sigma-check]}
+      - {id: r2-detection-deployment-api, name: Deploying detections through SIEM APIs, match: [detection-deployment-api]}
+      - {id: r2-atomic-test-validation, name: Validating detections with Atomic Red Team tests, match: [atomic-test-validation]}
+      - {id: r2-detection-metadata, name: Detection metadata schema, match: [detection-metadata]}
+      - {id: r2-detection-peer-review, name: Peer review of detection pull requests, match: [detection-peer-review]}
+
+  # ===== Nessus & vulnerability scanners (product: nessus)
+  - id: nessus-deployment
+    name: Nessus deployment and administration
+    source: Tenable Nessus user guide - Install, Settings, nessuscli
+    match: [nessus-deployment]
+    subtopics:
+      - {id: nd-install, name: Install, activation and initial setup, match: [nessus-installation]}
+      - {id: nd-nessuscli, name: nessuscli administration, match: [nessuscli]}
+      - {id: nd-offline, name: Offline plugin updates for air-gapped scanners, match: [offline-plugin-update]}
+      - {id: nd-agents, name: Nessus Agents linking and agent groups, match: [nessus-agent]}
+      - {id: nd-scanner-link, name: Linking scanners to Tenable VM or Tenable Security Center, match: [scanner-linking]}
+      - {id: r2-nessus-ssl-certificate, name: Custom TLS certificate for the Nessus web server, match: [nessus-ssl-certificate]}
+      - {id: r2-nessus-advanced-settings, name: Advanced settings and scan performance limits, match: [nessus-advanced-settings]}
+      - {id: r2-nessus-user-management, name: User accounts and roles in Nessus Manager, match: [nessus-user-management]}
+      - {id: r2-nessus-proxy-settings, name: Proxy and plugin update settings, match: [nessus-proxy-settings]}
+      - {id: r2-nessus-upgrade, name: Upgrades and migration from Nessus Manager, match: [nessus-upgrade]}
+      - {id: r2-nessusd-troubleshooting, name: Troubleshooting nessusd with logs and debug output, match: [nessusd-troubleshooting]}
+      - {id: r2-agent-scan-windows, name: Agent scans and agent scan windows, match: [agent-scan-windows]}
+      - {id: r2-scanner-placement, name: Scanner placement and network requirements, match: [scanner-placement]}
+  - id: scan-configuration
+    name: Scan configuration and templates
+    source: Tenable Nessus user guide - Scan templates and settings
+    match: [scan-policy, scan-templates]
+    subtopics:
+      - {id: sc-discovery, name: Host discovery scans, match: [host-discovery-scan]}
+      - {id: sc-ports, name: Port scanning settings, match: [port-scan-settings]}
+      - {id: sc-compliance, name: Compliance audits with .audit files, match: [compliance-audit-files]}
+      - {id: sc-web, name: Web application scanning, match: [web-app-scanning]}
+      - {id: sc-schedule, name: Scan scheduling and blackout windows, match: [scan-scheduling]}
+      - {id: sc-credentials, name: Credentialed scan setup, match: [credentialed-scan]}
+      - {id: r2-plugin-families, name: Plugin family selection and safe checks, match: [plugin-families]}
+      - {id: r2-advanced-dynamic-scan, name: Advanced Dynamic scans with plugin filters, match: [advanced-dynamic-scan]}
+      - {id: r2-cloud-infrastructure-audit, name: Cloud infrastructure audits, match: [cloud-infrastructure-audit]}
+      - {id: r2-fragile-device-scanning, name: Safe scanning of fragile and OT devices, match: [fragile-device-scanning]}
+      - {id: r2-scan-exclusions, name: Target lists and scan exclusions, match: [scan-exclusions]}
+      - {id: r2-cve-targeted-scan, name: Targeted scans for a specific CVE or emerging threat, match: [cve-targeted-scan]}
+      - {id: r2-pci-asv-scan, name: PCI DSS quarterly external (ASV) scans, match: [pci-asv-scan]}
+  - id: scan-results
+    name: Scan results, reporting and automation
+    source: Tenable docs - results, reports, API; CySA+ 2.2
+    match: [scan-reporting]
+    subtopics:
+      - {id: sr-export, name: Exporting .nessus and CSV results, match: [nessus-export]}
+      - {id: sr-api, name: Automation with pyTenable and the Tenable API, match: [pytenable]}
+      - {id: sr-recast, name: Recast and accept rules, match: [recast-rules]}
+      - {id: sr-fp, name: False-positive triage of findings, match: [false-positive]}
+      - {id: sr-tsc-dash, name: Tenable Security Center dashboards and repositories, match: [tenable-sc]}
+      - {id: r2-plugin-output, name: Reading plugin output and detection logic, match: [plugin-output]}
+      - {id: r2-remediation-report, name: Remediation summary reports and patch rollups, match: [remediation-report]}
+      - {id: r2-scan-diff, name: Comparing scans and trending, match: [scan-diff]}
+      - {id: r2-tenable-siem-integration, name: Sending Tenable findings to a SIEM, match: [tenable-siem-integration]}
+      - {id: r2-tenable-vpr, name: Tenable VPR and Asset Criticality Rating, match: [tenable-vpr]}
+      - {id: r2-remediation-verification, name: Remediation verification rescans, match: [remediation-verification]}
+      - {id: r2-tenable-explore, name: Tenable Vulnerability Management Explore views, match: [tenable-explore]}
+      - {id: r2-asset-deduplication, name: Duplicate assets between agents and network scans, match: [asset-deduplication]}
+  - id: qualys-vmdr
+    name: Qualys VMDR operation
+    source: Qualys VMDR and Cloud Agent docs
+    match: [qualys]
+    subtopics:
+      - {id: q-agent, name: Qualys Cloud Agent deployment and activation keys, match: [qualys-cloud-agent]}
+      - {id: q-option, name: Option profiles and authentication records, match: [qualys-option-profile]}
+      - {id: q-tags, name: Asset tagging rules, match: [qualys-asset-tagging]}
+      - {id: q-truerisk, name: TruRisk prioritisation and patch detection, match: [qualys-trurisk]}
+      - {id: r2-qualys-scanner-appliance, name: Virtual scanner appliance deployment, match: [qualys-scanner-appliance]}
+      - {id: r2-qualys-report-templates, name: Report templates and scorecards, match: [qualys-report-templates]}
+      - {id: r2-qql, name: QQL queries in VMDR, match: [qql]}
+      - {id: r2-qualys-api, name: Qualys API automation, match: [qualys-api]}
+      - {id: r2-qualys-patch-management, name: Qualys Patch Management deployment jobs, match: [qualys-patch-management]}
+      - {id: r2-qualys-cloud-connectors, name: Cloud connectors and TotalCloud, match: [qualys-cloud-connectors]}
+      - {id: r2-qualys-remediation-policy, name: Remediation policies and tickets, match: [qualys-remediation-policy]}
+      - {id: r2-qualys-agent-configuration-profile, name: Cloud Agent configuration profiles, match: [qualys-agent-configuration-profile]}
+  - id: openvas-greenbone
+    name: OpenVAS / Greenbone operation
+    source: Greenbone Community docs
+    match: [openvas, greenbone]
+    subtopics:
+      - {id: gvm-install, name: Greenbone Community Edition container install, match: [greenbone-community-edition]}
+      - {id: gvm-config, name: Scan configs, targets and port lists, match: [gvm-scan-config]}
+      - {id: gvm-tools, name: Automation with gvm-tools and GMP, match: [gvm-tools]}
+      - {id: gvm-feed, name: Feed synchronisation, match: [greenbone-feed-sync]}
+      - {id: r2-gvm-credentials, name: Credentials for authenticated scans, match: [gvm-credentials]}
+      - {id: r2-gvm-reports, name: Reports, report formats and delta reports, match: [gvm-reports]}
+      - {id: r2-gvm-alerts, name: Schedules and alerts, match: [gvm-alerts]}
+      - {id: r2-gvm-overrides, name: Overrides and notes for false positives, match: [gvm-overrides]}
+      - {id: r2-gvm-user-roles, name: Users, roles and permissions, match: [gvm-user-roles]}
+      - {id: r2-ospd-openvas, name: Distributed scanning with ospd-openvas sensors, match: [ospd-openvas]}
+      - {id: r2-gvm-troubleshooting, name: Troubleshooting interrupted and stalled scans, match: [gvm-troubleshooting]}
+      - {id: r2-gvm-compliance-policies, name: Compliance policies and audits, match: [gvm-compliance-policies]}
+
+  # ===== Security operations (product: security-operations)
+  - id: alert-triage
+    name: Alert triage
+    source: CySA+ 1.2/1.3; Sec+ 4.4
+    match: [alert-triage]
+    subtopics:
+      - {id: at-phishing, name: Reported phishing email triage, match: [phishing-triage]}
+      - {id: at-malware, name: Malware and EDR alert triage, match: [malware-alert-triage]}
+      - {id: at-login, name: Suspicious sign-in alert triage, match: [suspicious-login-triage]}
+      - {id: at-enrichment, name: Alert enrichment (reputation, asset, identity context), match: [alert-enrichment]}
+      - {id: at-notes, name: Case notes and triage documentation, match: [case-notes]}
+      - {id: r2-dlp-alert-triage, name: DLP alert triage, match: [dlp-alert-triage]}
+      - {id: r2-cloud-alert-triage, name: Cloud security alert triage, match: [cloud-alert-triage]}
+      - {id: r2-network-alert-triage, name: IDS and network alert triage, match: [network-alert-triage]}
+      - {id: r2-insider-threat-triage, name: Insider threat alert triage, match: [insider-threat-triage]}
+      - {id: r2-alert-disposition, name: Alert disposition taxonomy, match: [alert-disposition]}
+      - {id: r2-alert-queue-prioritisation, name: Alert queue prioritisation, match: [alert-queue-prioritisation]}
+      - {id: r2-waf-alert-triage, name: WAF and web attack alert triage, match: [waf-alert-triage]}
+      - {id: r2-privileged-change-triage, name: Privileged group change alert triage, match: [privileged-change-triage]}
+  - id: incident-response
+    name: Incident response lifecycle
+    source: NIST SP 800-61r3; CSF RS.MA/RS.MI; CySA+ 3.2-3.3; CIS 17
+    match: [incident-response]
+    subtopics:
+      - {id: ir-plan, name: Incident response plan and roles, match: [incident-response-plan]}
+      - {id: ir-severity, name: Incident classification and severity, match: [incident-severity-classification]}
+      - {id: ir-containment, name: Containment strategy selection, match: [containment-strategy]}
+      - {id: ir-eradication, name: Eradication and persistence removal, match: [eradication]}
+      - {id: ir-recovery, name: Recovery and restoration validation, match: [incident-recovery]}
+      - {id: ir-tabletop, name: Tabletop exercises, match: [tabletop-exercise]}
+      - {id: ir-bec, name: Business email compromise response, match: [business-email-compromise]}
+      - {id: r2-ransomware-response, name: Ransomware incident response, match: [ransomware-response]}
+      - {id: r2-insider-incident-response, name: Insider threat incident handling, match: [insider-incident-response]}
+      - {id: r2-ir-retainer, name: IR retainer and third-party DFIR engagement, match: [ir-retainer]}
+      - {id: r2-lessons-learned, name: Post-incident lessons learned review, match: [lessons-learned]}
+      - {id: r2-incident-scoping, name: Incident scoping and blast radius, match: [incident-scoping]}
+      - {id: r2-web-shell-response, name: Web server compromise and web shell response, match: [web-shell-response]}
+      - {id: r2-supplier-breach-response, name: Supplier and third-party breach response, match: [supplier-breach-response]}
+      - {id: r2-domain-compromise-recovery, name: Domain compromise recovery, match: [domain-compromise-recovery]}
+  - id: digital-forensics
+    name: Digital forensics for incident response
+    source: NIST SP 800-86; CySA+ 3.2 evidence acquisition
+    match: [digital-forensics]
+    subtopics:
+      - {id: df-custody, name: Evidence handling and chain of custody, match: [chain-of-custody]}
+      - {id: df-disk, name: Disk imaging and verification, match: [disk-imaging]}
+      - {id: df-memory, name: Memory analysis with Volatility, match: [volatility]}
+      - {id: df-windows, name: Windows forensic artefacts, match: [windows-forensic-artifacts]}
+      - {id: df-linux, name: Linux incident triage, match: [linux-incident-triage]}
+      - {id: df-timeline, name: Super-timelines with Plaso, match: [plaso, super-timeline]}
+      - {id: df-kape, name: Triage collection with KAPE or Velociraptor, match: [kape, velociraptor]}
+      - {id: r2-macos-forensics, name: macOS forensic artefacts, match: [macos-forensics]}
+      - {id: r2-browser-forensics, name: Browser history forensics, match: [browser-forensics]}
+      - {id: r2-email-forensics, name: Email forensics, match: [email-forensics]}
+      - {id: r2-hayabusa, name: Event log triage with Hayabusa and Chainsaw, match: [hayabusa, chainsaw]}
+      - {id: r2-mobile-forensics, name: Mobile device acquisition, match: [mobile-forensics]}
+      - {id: r2-forensic-report, name: Forensic report writing, match: [forensic-report]}
+      - {id: r2-ntfs-mft-analysis, name: NTFS MFT and USN journal analysis, match: [ntfs-mft-analysis]}
+  - id: investigation-data-sources
+    name: Investigation data sources and log analysis
+    source: Sec+ 4.9; CySA+ 1.2; NIST SP 800-92
+    match: [log-analysis]
+    subtopics:
+      - {id: ds-win-events, name: Windows security event IDs, match: [windows-event-ids]}
+      - {id: ds-sysmon, name: Sysmon configuration and events, match: [sysmon-config]}
+      - {id: ds-linux, name: Linux auth and journal log analysis, match: [linux-log-analysis]}
+      - {id: ds-web, name: Web server and proxy log analysis, match: [web-log-analysis]}
+      - {id: ds-m365, name: Microsoft 365 unified audit log, match: [unified-audit-log]}
+      - {id: r2-firewall-log-analysis, name: Firewall log analysis, match: [firewall-log-analysis]}
+      - {id: r2-vpn-log-analysis, name: VPN and remote access log analysis, match: [vpn-log-analysis]}
+      - {id: r2-entra-sign-in-logs, name: Entra ID sign-in and audit logs, match: [entra-sign-in-logs]}
+      - {id: r2-cloudtrail-log-analysis, name: CloudTrail log analysis for investigations, match: [cloudtrail-log-analysis]}
+      - {id: r2-edr-telemetry, name: EDR telemetry for investigations, match: [edr-telemetry]}
+      - {id: r2-file-metadata-analysis, name: File metadata analysis, match: [file-metadata-analysis]}
+      - {id: r2-osquery-investigation, name: osquery for endpoint investigation, match: [osquery-investigation]}
+      - {id: r2-message-trace, name: Exchange Online message trace, match: [message-trace]}
+  - id: detection-engineering
+    name: Detection engineering lifecycle
+    source: CySA+ 1.5 process improvement; Palantir ADS framework
+    match: [detection-engineering]
+    subtopics:
+      - {id: de-ads, name: Alerting and Detection Strategy documentation, match: [alerting-detection-strategy]}
+      - {id: de-backtest, name: Backtesting detections against history, match: [detection-backtesting]}
+      - {id: de-tuning, name: Tuning and allowlist management, match: [detection-tuning]}
+      - {id: de-health, name: Detection health and silent-failure monitoring, match: [detection-health-monitoring]}
+      - {id: de-coverage, name: ATT&CK detection coverage measurement, match: [detection-coverage]}
+      - {id: r2-attack-range, name: Generating test telemetry with attack ranges, match: [attack-range]}
+      - {id: r2-anomaly-based-detection, name: Anomaly-based behavioural detections, match: [anomaly-based-detection]}
+      - {id: r2-correlation-rules, name: Multi-stage correlation rules, match: [correlation-rules]}
+      - {id: r2-alert-severity-design, name: Alert severity and risk score design, match: [alert-severity-design]}
+      - {id: r2-detection-retirement, name: Detection retirement and lifecycle, match: [detection-retirement]}
+      - {id: r2-detection-requirements, name: Detection requirements intake, match: [detection-requirements]}
+      - {id: r2-purple-team, name: Purple team validation of detections, match: [purple-team]}
+      - {id: r2-dettect, name: Data source coverage with DeTT&CT, match: [dettect]}
+  - id: soar-automation
+    name: Security orchestration and automation
+    source: Sec+ 4.7; CySA+ 1.5
+    match: [soar]
+    subtopics:
+      - {id: soar-playbook, name: SOAR playbook design, match: [soar-playbook-design]}
+      - {id: soar-enrich, name: Automated enrichment, match: [automated-enrichment]}
+      - {id: soar-response, name: Automated response with guardrails, match: [automated-response]}
+      - {id: soar-ticketing, name: Ticketing and case management integration, match: [ticketing-integration]}
+      - {id: r2-splunk-soar-apps, name: Splunk SOAR apps and assets, match: [splunk-soar-apps]}
+      - {id: r2-cortex-xsoar, name: Cortex XSOAR integrations and playbooks, match: [cortex-xsoar]}
+      - {id: r2-tines, name: No-code automation with Tines or Shuffle, match: [tines]}
+      - {id: r2-phishing-automation, name: Automated phishing response playbook, match: [phishing-automation]}
+      - {id: r2-automation-metrics, name: Automation metrics and ROI, match: [automation-metrics]}
+      - {id: r2-soar-credential-management, name: Credential handling for automation accounts, match: [soar-credential-management]}
+      - {id: r2-playbook-testing, name: Testing and versioning playbooks, match: [playbook-testing]}
+      - {id: r2-ai-assisted-triage, name: LLM-assisted triage with guardrails, match: [ai-assisted-triage]}
+  - id: threat-hunting
+    name: Threat hunting
+    source: CySA+ 1.4; D3FEND Detect
+    match: [threat-hunting]
+    subtopics:
+      - {id: th-stack, name: Stack counting and long-tail analysis, match: [stack-counting]}
+      - {id: th-beacon, name: Beaconing detection, match: [beaconing-detection]}
+      - {id: th-lolbin, name: Living-off-the-land binary hunting, match: [lolbin-hunting]}
+      - {id: th-persist, name: Persistence hunting, match: [persistence-hunting]}
+      - {id: th-report, name: Hunt documentation and conversion to detections, match: [hunt-reporting]}
+      - {id: r2-lateral-movement-hunting, name: Lateral movement hunting, match: [lateral-movement-hunting]}
+      - {id: r2-credential-access-hunting, name: Credential access hunting, match: [credential-access-hunting]}
+      - {id: r2-exfiltration-hunting, name: Data exfiltration hunting, match: [exfiltration-hunting]}
+      - {id: r2-dns-hunting, name: DNS hunting for DGA and tunnelling, match: [dns-hunting]}
+      - {id: r2-cloud-hunting, name: Cloud control-plane hunting, match: [cloud-hunting]}
+      - {id: r2-web-shell-hunting, name: Web shell hunting, match: [web-shell-hunting]}
+      - {id: r2-kerberos-attack-hunting, name: Kerberos attack hunting, match: [kerberos-attack-hunting]}
+      - {id: r2-process-lineage-analysis, name: Process lineage anomaly analysis, match: [process-lineage-analysis]}
+  - id: soc-management
+    name: SOC operations management
+    source: CySA+ 4.1-4.2; CSF RS.MA
+    match: [soc-management]
+    subtopics:
+      - {id: soc-handover, name: Shift handover, match: [shift-handover]}
+      - {id: soc-metrics, name: SOC metrics (MTTD, MTTR, dwell time), match: [soc-metrics]}
+      - {id: soc-escalation, name: Escalation matrix, match: [escalation-matrix]}
+      - {id: soc-runbooks, name: Runbook authoring, match: [runbook-authoring]}
+      - {id: soc-tiers, name: SOC tiering and staffing model, match: [soc-tiers]}
+      - {id: r2-soc-capacity-planning, name: SOC capacity planning, match: [soc-capacity-planning]}
+      - {id: r2-mdr-provider-management, name: MDR and MSSP provider management, match: [mdr-provider-management]}
+      - {id: r2-soc-analyst-training, name: Analyst onboarding and training, match: [soc-analyst-training]}
+      - {id: r2-case-quality-review, name: Case quality assurance reviews, match: [case-quality-review]}
+      - {id: r2-soc-cmm, name: SOC maturity assessment with SOC-CMM, match: [soc-cmm]}
+      - {id: r2-soc-tool-rationalisation, name: SOC tool stack rationalisation, match: [soc-tool-rationalisation]}
+      - {id: r2-soc-service-report, name: Monthly SOC service report, match: [soc-service-report]}
+  - id: malware-analysis-triage
+    name: Malware triage analysis
+    source: CySA+ 1.3 file analysis and sandboxing; D3FEND File Analysis
+    match: [malware-analysis]
+    subtopics:
+      - {id: ma-static, name: Static triage (hashes, strings, PE headers), match: [static-malware-triage]}
+      - {id: ma-sandbox, name: Sandbox detonation, match: [sandbox-detonation]}
+      - {id: ma-yara, name: YARA rule authoring, match: [yara-rule-authoring]}
+      - {id: ma-maldoc, name: Malicious document analysis, match: [maldoc-analysis]}
+      - {id: ma-script, name: Script deobfuscation, match: [script-deobfuscation]}
+      - {id: r2-malware-lab, name: Safe malware analysis lab, match: [malware-lab]}
+      - {id: r2-procmon-analysis, name: Behavioural analysis with Procmon and Regshot, match: [procmon-analysis]}
+      - {id: r2-fakenet, name: Network behaviour simulation with FakeNet-NG and INetSim, match: [fakenet]}
+      - {id: r2-packer-detection, name: Packer identification and basic unpacking, match: [packer-detection]}
+      - {id: r2-malware-config-extraction, name: Malware configuration extraction, match: [malware-config-extraction]}
+      - {id: r2-dotnet-malware-analysis, name: .NET malware decompilation, match: [dotnet-malware-analysis]}
+      - {id: r2-malware-analysis-report, name: Malware analysis report, match: [malware-analysis-report]}
+  - id: incident-reporting
+    name: Incident reporting and communication
+    source: CySA+ 4.2; CSF RS.CO/RC.CO
+    match: [incident-reporting]
+    subtopics:
+      - {id: rep-exec, name: Executive incident report, match: [executive-incident-report]}
+      - {id: rep-stakeholder, name: Stakeholder communication during incidents, match: [stakeholder-communication]}
+      - {id: rep-regulatory, name: Regulatory notification timelines, match: [regulatory-notification]}
+      - {id: rep-rca, name: Root cause analysis, match: [root-cause-analysis]}
+      - {id: r2-incident-timeline, name: Incident timeline documentation, match: [incident-timeline]}
+      - {id: r2-technical-incident-report, name: Technical incident report, match: [technical-incident-report]}
+      - {id: r2-incident-metrics, name: Incident metrics reporting, match: [incident-metrics]}
+      - {id: r2-customer-breach-notification, name: Customer breach notification letters, match: [customer-breach-notification]}
+      - {id: r2-cyber-insurance-notification, name: Cyber insurance claim notification, match: [cyber-insurance-notification]}
+      - {id: r2-law-enforcement-reporting, name: Law enforcement reporting, match: [law-enforcement-reporting]}
+      - {id: r2-after-action-report, name: After-action report, match: [after-action-report]}
+
+  # ===== Vulnerability management (product: vulnerability-management)
+  - id: vm-programme
+    name: Vulnerability management programme
+    source: CIS Control 7; CSF ID.RA; CySA+ 2.5
+    match: [vulnerability-management]
+    subtopics:
+      - {id: vmp-policy, name: Vulnerability management policy and SLAs, match: [vulnerability-management-policy]}
+      - {id: vmp-coverage, name: Scan coverage measurement, match: [scan-coverage]}
+      - {id: vmp-metrics, name: Vulnerability metrics and reporting, match: [vulnerability-metrics]}
+      - {id: vmp-ticketing, name: Remediation ticketing and ownership, match: [remediation-ticketing]}
+      - {id: vmp-exceptions, name: Exceptions and risk acceptance, match: [risk-acceptance]}
+      - {id: r2-asset-criticality, name: Asset criticality tiers, match: [asset-criticality]}
+      - {id: r2-vulnerability-remediation-raci, name: Remediation RACI with IT operations, match: [vulnerability-remediation-raci]}
+      - {id: r2-vm-maturity, name: Vulnerability management maturity assessment, match: [vm-maturity]}
+      - {id: r2-remediation-validation, name: Remediation validation and closure, match: [remediation-validation]}
+      - {id: r2-zero-day-response, name: Zero-day emerging threat response process, match: [zero-day-response]}
+      - {id: r2-ephemeral-asset-scanning, name: Ephemeral and cloud asset vulnerability management, match: [ephemeral-asset-scanning]}
+      - {id: r2-virtual-patching, name: Virtual patching when no fix exists, match: [virtual-patching]}
+  - id: vuln-prioritisation
+    name: Vulnerability prioritisation
+    source: CySA+ 2.3; FIRST CVSS/EPSS; CISA KEV/SSVC
+    match: [rbvm]
+    subtopics:
+      - {id: vp-cvss, name: CVSS v4 scoring with environmental metrics, match: [cvss-v4]}
+      - {id: vp-epss, name: EPSS, match: [epss]}
+      - {id: vp-kev, name: CISA KEV, match: [cisa-kev]}
+      - {id: vp-ssvc, name: SSVC decision trees, match: [ssvc]}
+      - {id: vp-vex, name: VEX statements, match: [vex]}
+      - {id: r2-cvss-vector-analysis, name: Reading CVSS vectors, match: [cvss-vector-analysis]}
+      - {id: r2-exposure-context, name: Exposure context (internet-facing, data sensitivity), match: [exposure-context]}
+      - {id: r2-exploit-availability, name: Exploit availability intelligence, match: [exploit-availability]}
+      - {id: r2-bod-22-01, name: BOD 22-01 compliance, match: [bod-22-01]}
+      - {id: r2-remediation-sla, name: Remediation SLA tiers, match: [remediation-sla]}
+      - {id: r2-attack-path-prioritisation, name: Attack path based prioritisation, match: [attack-path-prioritisation]}
+      - {id: r2-aspm, name: Finding deduplication across tools with ASPM, match: [aspm]}
+  - id: patch-management
+    name: Patch management
+    source: NIST SP 800-40r4; CIS 7.3-7.4
+    match: [patch-management]
+    subtopics:
+      - {id: pm-wufb, name: Windows Update rings with Intune or WUfB, match: [windows-update-rings]}
+      - {id: pm-linux, name: Linux patch automation, match: [linux-patch-automation]}
+      - {id: pm-third-party, name: Third-party application patching, match: [third-party-patching]}
+      - {id: pm-compliance, name: Patch compliance reporting, match: [patch-compliance-reporting]}
+      - {id: pm-emergency, name: Emergency patching, match: [emergency-patching]}
+      - {id: r2-wsus-administration, name: WSUS administration, match: [wsus-administration]}
+      - {id: r2-configmgr-software-updates, name: ConfigMgr software update deployment, match: [configmgr-software-updates]}
+      - {id: r2-macos-update-enforcement, name: macOS update enforcement, match: [macos-update-enforcement]}
+      - {id: r2-patch-testing, name: Patch testing and pilot groups, match: [patch-testing]}
+      - {id: r2-patch-rollback, name: Patch rollback, match: [patch-rollback]}
+      - {id: r2-hotpatch, name: Hotpatching and livepatching, match: [hotpatch]}
+      - {id: r2-network-os-upgrade, name: Network device OS upgrades, match: [network-os-upgrade]}
+      - {id: r2-autopatch, name: Windows Autopatch, match: [autopatch]}
+  - id: attack-surface-management
+    name: External attack surface management
+    source: CySA+ 2.5 attack surface management
+    match: [attack-surface-management]
+    subtopics:
+      - {id: asm-discovery, name: External asset discovery, match: [external-asset-discovery]}
+      - {id: asm-ct, name: Certificate transparency monitoring, match: [certificate-transparency-monitoring]}
+      - {id: asm-exposed, name: Exposed service review, match: [exposed-services]}
+      - {id: asm-shadow, name: Shadow IT discovery, match: [shadow-it-discovery]}
+      - {id: r2-easm-platform, name: EASM platform operation, match: [easm-platform]}
+      - {id: r2-subdomain-takeover, name: Subdomain takeover prevention, match: [subdomain-takeover]}
+      - {id: r2-public-cloud-exposure, name: Public cloud resource exposure review, match: [public-cloud-exposure]}
+      - {id: r2-external-port-scanning, name: Continuous external port scanning, match: [external-port-scanning]}
+      - {id: r2-public-repo-monitoring, name: Public code repository leak monitoring, match: [public-repo-monitoring]}
+      - {id: r2-acquisition-attack-surface, name: Acquisition attack surface assessment, match: [acquisition-attack-surface]}
+      - {id: r2-external-tls-audit, name: External TLS and certificate hygiene audit, match: [external-tls-audit]}
+  - id: container-vuln-scanning
+    name: Container and artefact vulnerability scanning
+    source: CySA+ 2.1 scanning methods; Trivy/Grype docs
+    match: [container-image-scanning]
+    subtopics:
+      - {id: cvs-trivy, name: Trivy image and filesystem scanning, match: [trivy]}
+      - {id: cvs-registry, name: Registry scanning, match: [registry-scanning]}
+      - {id: cvs-k8s, name: Kubernetes cluster vulnerability scanning, match: [kubernetes-vulnerability-scanning]}
+      - {id: cvs-sbom, name: SBOM-based vulnerability matching, match: [sbom-vulnerability-matching]}
+      - {id: r2-syft, name: SBOM generation and scanning with Syft and Grype, match: [syft]}
+      - {id: r2-ci-gate, name: CI pipeline vulnerability gates, match: [ci-gate]}
+      - {id: r2-base-image-updates, name: Base image update strategy, match: [base-image-updates]}
+      - {id: r2-amazon-inspector, name: Amazon Inspector container scanning, match: [amazon-inspector]}
+      - {id: r2-dockerfile-scanning, name: Dockerfile and manifest misconfiguration scanning, match: [dockerfile-scanning]}
+      - {id: r2-runtime-reachability, name: Runtime reachability prioritisation, match: [runtime-reachability]}
+      - {id: r2-language-package-scanning, name: Language package scanning with osv-scanner, match: [language-package-scanning]}
+      - {id: r2-vulnerability-admission-policy, name: Blocking vulnerable images at admission, match: [vulnerability-admission-policy]}
+  - id: asset-inventory
+    name: Asset inventory for security
+    source: CIS Controls 1 and 2; CSF ID.AM; Sec+ 4.2
+    match: [asset-inventory]
+    subtopics:
+      - {id: ai-hw, name: Enterprise asset inventory, match: [enterprise-asset-inventory]}
+      - {id: ai-sw, name: Software inventory, match: [software-inventory]}
+      - {id: ai-unauth, name: Unauthorised asset detection, match: [unauthorized-asset-detection]}
+      - {id: ai-cmdb, name: CMDB reconciliation, match: [cmdb-reconciliation]}
+      - {id: r2-passive-asset-discovery, name: Passive network asset discovery, match: [passive-asset-discovery]}
+      - {id: r2-caasm, name: CAASM aggregation, match: [caasm]}
+      - {id: r2-cloud-asset-inventory, name: Cloud asset inventory, match: [cloud-asset-inventory]}
+      - {id: r2-eol-software, name: End-of-life software tracking, match: [eol-software]}
+      - {id: r2-asset-ownership, name: Asset ownership attribution, match: [asset-ownership]}
+      - {id: r2-ot-asset-inventory, name: OT asset inventory, match: [ot-asset-inventory]}
+      - {id: r2-data-inventory, name: Data asset inventory, match: [data-inventory]}
+      - {id: r2-ipam, name: IP address management for security, match: [ipam]}
+  - id: vulnerability-disclosure
+    name: Vulnerability disclosure handling
+    source: ISO/IEC 29147 and 30111; CISA VDP guidance
+    match: [vulnerability-disclosure]
+    subtopics:
+      - {id: vd-securitytxt, name: security.txt, match: [security-txt]}
+      - {id: vd-policy, name: Vulnerability disclosure policy, match: [vulnerability-disclosure-policy]}
+      - {id: vd-bounty, name: Bug bounty report triage, match: [bug-bounty-triage]}
+      - {id: vd-advisory, name: Publishing security advisories and CVEs, match: [security-advisory]}
+      - {id: r2-psirt, name: PSIRT operation, match: [psirt]}
+      - {id: r2-embargo-management, name: Embargo management in coordinated disclosure, match: [embargo-management]}
+      - {id: r2-cert-cc-vince, name: Multi-party coordination through CERT/CC VINCE, match: [cert-cc-vince]}
+      - {id: r2-csaf, name: CSAF advisories, match: [csaf]}
+      - {id: r2-cna, name: CVE Numbering Authority operation, match: [cna]}
+      - {id: r2-researcher-communication, name: Researcher communication, match: [researcher-communication]}
+      - {id: r2-safe-harbour, name: Safe harbour terms, match: [safe-harbour]}
+
+  # ===== Security architecture (product: security-architecture)
+  - id: zero-trust
+    name: Zero trust architecture
+    source: NIST SP 800-207; CISA ZTMM; Sec+ 1.2
+    match: [zero-trust]
+    subtopics:
+      - {id: zt-ztna, name: ZTNA replacing VPN, match: [ztna]}
+      - {id: zt-device-trust, name: Device trust signals, match: [device-trust]}
+      - {id: zt-microseg, name: Microsegmentation, match: [microsegmentation]}
+      - {id: zt-maturity, name: CISA zero trust maturity assessment, match: [cisa-zero-trust-maturity-model]}
+      - {id: zt-sase, name: SASE and SSE architecture, match: [sase]}
+      - {id: r2-policy-enforcement-point, name: Policy enforcement and decision points, match: [policy-enforcement-point]}
+      - {id: r2-identity-aware-proxy, name: Identity-aware proxy, match: [identity-aware-proxy]}
+      - {id: r2-zero-trust-roadmap, name: Zero trust migration roadmap, match: [zero-trust-roadmap]}
+      - {id: r2-continuous-access-evaluation, name: Continuous access evaluation, match: [continuous-access-evaluation]}
+      - {id: r2-legacy-app-zero-trust, name: Legacy application integration in zero trust, match: [legacy-app-zero-trust]}
+      - {id: r2-remote-browser-isolation, name: Remote browser isolation, match: [remote-browser-isolation]}
+  - id: network-segmentation
+    name: Network segmentation and security zones
+    source: Sec+ 3.2; CIS 12; D3FEND Network Isolation
+    match: [network-segmentation]
+    subtopics:
+      - {id: ns-dmz, name: DMZ design, match: [dmz]}
+      - {id: ns-ot, name: OT segmentation (Purdue / IEC 62443 zones), match: [purdue-model]}
+      - {id: ns-pci, name: PCI DSS scope reduction by segmentation, match: [pci-segmentation]}
+      - {id: ns-bastion, name: Bastion hosts and jump servers, match: [bastion-host]}
+      - {id: ns-mgmt, name: Out-of-band management network, match: [management-network]}
+      - {id: r2-vlan-segmentation, name: VLAN and ACL segmentation design, match: [vlan-segmentation]}
+      - {id: r2-private-vlan, name: Private VLANs, match: [private-vlan]}
+      - {id: r2-hub-and-spoke-network, name: Cloud hub-and-spoke network segmentation, match: [hub-and-spoke-network]}
+      - {id: r2-segmentation-testing, name: Segmentation testing, match: [segmentation-testing]}
+      - {id: r2-east-west-traffic, name: East-west traffic control, match: [east-west-traffic]}
+      - {id: r2-iot-segmentation, name: IoT device segmentation, match: [iot-segmentation]}
+      - {id: r2-vrf-segmentation, name: VRF segmentation in the data centre, match: [vrf-segmentation]}
+      - {id: r2-data-diode, name: Air-gapped networks and data diodes, match: [data-diode]}
+  - id: architecture-models
+    name: Security of architecture models
+    source: Sec+ 3.1
+    match: [security-architecture]
+    subtopics:
+      - {id: am-shared, name: Shared responsibility model, match: [shared-responsibility-model]}
+      - {id: am-service-auth, name: Service-to-service authentication, match: [service-to-service-auth]}
+      - {id: am-iot, name: IoT and embedded device security, match: [iot-security]}
+      - {id: am-ics, name: ICS/SCADA security architecture, match: [ics-security]}
+      - {id: r2-microservices-security, name: Microservices security patterns, match: [microservices-security]}
+      - {id: r2-hypervisor-security, name: Hypervisor and virtualisation security, match: [hypervisor-security]}
+      - {id: r2-hybrid-cloud-security, name: Hybrid cloud connectivity security, match: [hybrid-cloud-security]}
+      - {id: r2-sdn-security, name: Software-defined networking security, match: [sdn-security]}
+      - {id: r2-tenant-isolation, name: Multi-tenant SaaS isolation, match: [tenant-isolation]}
+  - id: data-protection
+    name: Data protection
+    source: Sec+ 3.3; CIS 3; CSF PR.DS
+    match: [data-protection]
+    subtopics:
+      - {id: dp-classification, name: Data classification scheme, match: [data-classification]}
+      - {id: dp-dlp, name: Data loss prevention, match: [data-loss-prevention]}
+      - {id: dp-at-rest, name: Encryption at rest, match: [encryption-at-rest]}
+      - {id: dp-masking, name: Masking and tokenisation, match: [data-masking]}
+      - {id: dp-disposal, name: Data retention and secure disposal, match: [data-disposal]}
+      - {id: r2-data-residency, name: Data residency and sovereignty, match: [data-residency]}
+      - {id: r2-confidential-computing, name: Confidential computing for data in use, match: [confidential-computing]}
+      - {id: r2-sensitivity-labels, name: Sensitivity labels, match: [sensitivity-labels]}
+      - {id: r2-rights-management, name: Rights management encryption, match: [rights-management]}
+      - {id: r2-dspm, name: Data security posture management, match: [dspm]}
+      - {id: r2-data-minimisation, name: Data minimisation, match: [data-minimisation]}
+      - {id: r2-database-activity-monitoring, name: Database activity monitoring, match: [database-activity-monitoring]}
+      - {id: r2-insider-risk-management, name: Insider risk management, match: [insider-risk-management]}
+  - id: resilience-recovery
+    name: Resilience and recovery
+    source: Sec+ 3.4; CIS 11; CSF RC.RP
+    match: [resilience]
+    subtopics:
+      - {id: rr-immutable, name: Immutable and offline backups, match: [immutable-backups]}
+      - {id: rr-restore, name: Restore testing, match: [restore-testing]}
+      - {id: rr-dr, name: Disaster recovery site strategy, match: [disaster-recovery-sites]}
+      - {id: rr-rto, name: RTO/RPO and business impact analysis, match: [rto-rpo]}
+      - {id: rr-ha, name: High availability design, match: [high-availability-design]}
+      - {id: r2-business-continuity-plan, name: Business continuity plan, match: [business-continuity-plan]}
+      - {id: r2-clean-room-recovery, name: Clean-room ransomware recovery, match: [clean-room-recovery]}
+      - {id: r2-dr-failover-test, name: DR failover testing, match: [dr-failover-test]}
+      - {id: r2-power-resilience, name: Power resilience (UPS and generators), match: [power-resilience]}
+      - {id: r2-capacity-planning, name: Capacity planning for resilience, match: [capacity-planning]}
+      - {id: r2-backup-hardening, name: Backup infrastructure hardening, match: [backup-hardening]}
+      - {id: r2-saas-backup, name: SaaS backup, match: [saas-backup]}
+      - {id: r2-point-in-time-recovery, name: Database point-in-time recovery, match: [point-in-time-recovery]}
+      - {id: r2-crisis-management, name: Crisis management team, match: [crisis-management]}
+  - id: cryptography-pki
+    name: Cryptographic solutions and PKI
+    source: Sec+ 1.4; NIST SP 800-57
+    match: [cryptography]
+    subtopics:
+      - {id: cr-pki, name: Internal PKI and certificate authorities, match: [internal-pki]}
+      - {id: cr-certlife, name: Certificate lifecycle management, match: [certificate-lifecycle-management]}
+      - {id: cr-tls, name: TLS configuration, match: [tls-configuration]}
+      - {id: cr-kms, name: Key management (KMS/HSM), match: [key-management]}
+      - {id: cr-pwhash, name: Password hashing, match: [password-hashing]}
+      - {id: cr-pqc, name: Post-quantum migration planning, match: [post-quantum-migration]}
+      - {id: r2-ssh-certificates, name: SSH certificate authorities, match: [ssh-certificates]}
+      - {id: r2-code-signing, name: Code signing, match: [code-signing]}
+      - {id: r2-s-mime, name: S/MIME email encryption, match: [s-mime]}
+      - {id: r2-key-ceremony, name: Root CA key ceremony, match: [key-ceremony]}
+      - {id: r2-ocsp, name: Certificate revocation with OCSP and CRLs, match: [ocsp]}
+      - {id: r2-fips-140-3, name: FIPS 140-3 validated modules, match: [fips-140-3]}
+      - {id: r2-acme, name: ACME automation, match: [acme]}
+  - id: secure-design-review
+    name: Security design review
+    source: Sec+ 3.1; CSF PR.PS
+    match: [security-design-review]
+    subtopics:
+      - {id: sdr-adr, name: Architecture decision records for security, match: [architecture-decision-record]}
+      - {id: sdr-compensating, name: Compensating controls design, match: [compensating-controls]}
+      - {id: sdr-failure, name: Failure modes (fail-open vs fail-closed), match: [fail-closed]}
+      - {id: sdr-vendor, name: Third-party integration security review, match: [vendor-integration-review]}
+      - {id: r2-architecture-review-checklist, name: Security architecture review checklist, match: [architecture-review-checklist]}
+      - {id: r2-defense-in-depth, name: Defence in depth assessment, match: [defense-in-depth]}
+      - {id: r2-security-logging-requirements, name: Security logging requirements, match: [security-logging-requirements]}
+      - {id: r2-security-patterns, name: Security design patterns, match: [security-patterns]}
+      - {id: r2-ai-system-security-review, name: AI system security review, match: [ai-system-security-review]}
+      - {id: r2-sspm, name: SaaS security posture management, match: [sspm]}
+
+  # ===== Threat modelling (product: threat-modelling)
+  - id: stride
+    name: STRIDE threat modelling
+    source: Microsoft SDL Threat Modeling; Threat Modeling Manifesto
+    match: [stride]
+    subtopics:
+      - {id: st-per-element, name: STRIDE per element, match: [stride-per-element]}
+      - {id: st-mitigation, name: Mapping threats to mitigations, match: [threat-mitigation-mapping]}
+      - {id: st-linddun, name: LINDDUN privacy threats, match: [linddun]}
+      - {id: st-continuous, name: Continuous threat modelling in agile teams, match: [continuous-threat-modelling]}
+      - {id: r2-microsoft-threat-modeling-tool, name: Microsoft Threat Modeling Tool, match: [microsoft-threat-modeling-tool]}
+      - {id: r2-elevation-of-privilege-card-game, name: Elevation of Privilege card game, match: [elevation-of-privilege-card-game]}
+      - {id: r2-four-question-framework, name: Four question framework, match: [four-question-framework]}
+      - {id: r2-threat-model-report, name: Threat model report, match: [threat-model-report]}
+      - {id: r2-stride-lm, name: STRIDE-LM, match: [stride-lm]}
+      - {id: r2-cornucopia, name: OWASP Cornucopia, match: [cornucopia]}
+  - id: dfd-modelling
+    name: System modelling with data flow diagrams
+    source: Microsoft Threat Modeling Tool docs; OWASP Threat Dragon
+    match: [data-flow-diagram]
+    subtopics:
+      - {id: dfd-trust, name: Trust boundaries, match: [trust-boundary]}
+      - {id: dfd-code, name: Threat model as code (pytm), match: [pytm]}
+      - {id: dfd-dragon, name: OWASP Threat Dragon, match: [owasp-threat-dragon]}
+      - {id: r2-decomposition, name: Decomposition and DFD levels, match: [decomposition]}
+      - {id: r2-c4-model, name: C4 model diagrams for threat modelling, match: [c4-model]}
+      - {id: r2-threagile, name: Threagile, match: [threagile]}
+      - {id: r2-iriusrisk, name: IriusRisk, match: [iriusrisk]}
+      - {id: r2-entry-points, name: Entry points and asset enumeration, match: [entry-points]}
+  - id: attack-trees-risk
+    name: Attack trees and threat risk rating
+    source: Schneier attack trees; PASTA; OWASP risk rating
+    match: [attack-trees]
+    subtopics:
+      - {id: atr-pasta, name: PASTA, match: [pasta]}
+      - {id: atr-abuse, name: Abuse and misuse cases, match: [abuse-cases]}
+      - {id: atr-rating, name: OWASP risk rating methodology, match: [owasp-risk-rating]}
+      - {id: r2-dread, name: DREAD, match: [dread]}
+      - {id: r2-attack-defense-trees, name: Attack-defence trees, match: [attack-defense-trees]}
+      - {id: r2-octave-allegro, name: OCTAVE Allegro, match: [octave-allegro]}
+      - {id: r2-trike, name: Trike, match: [trike]}
+      - {id: r2-vast-methodology, name: VAST, match: [vast-methodology]}
+      - {id: r2-stpa-sec, name: STPA-Sec, match: [stpa-sec]}
+  - id: domain-threat-models
+    name: Threat modelling specific system types
+    source: OWASP threat modeling cheat sheet; OWASP LLM Top 10; cloud provider threat model guidance
+    match: [threat-modelling]
+    subtopics:
+      - {id: dtm-cloud, name: Cloud workload threat modelling, match: [cloud-threat-modelling]}
+      - {id: dtm-api, name: API threat modelling, match: [api-threat-modelling]}
+      - {id: dtm-ai, name: AI/LLM system threat modelling, match: [ai-threat-modelling]}
+      - {id: dtm-mobile, name: Mobile app threat modelling, match: [mobile-threat-modelling]}
+      - {id: r2-iot-threat-modelling, name: IoT threat modelling, match: [iot-threat-modelling]}
+      - {id: r2-kubernetes-threat-modelling, name: Kubernetes threat modelling, match: [kubernetes-threat-modelling]}
+      - {id: r2-cicd-threat-modelling, name: CI/CD pipeline threat modelling, match: [cicd-threat-modelling]}
+      - {id: r2-web-app-threat-modelling, name: Web application threat modelling, match: [web-app-threat-modelling]}
+      - {id: r2-ics-threat-modelling, name: ICS threat modelling, match: [ics-threat-modelling]}
+      - {id: r2-microservices-threat-modelling, name: Microservices threat modelling, match: [microservices-threat-modelling]}
+      - {id: r2-payment-threat-modelling, name: Payment flow threat modelling, match: [payment-threat-modelling]}
+  - id: threat-model-process
+    name: Threat modelling process and governance
+    source: Threat Modeling Manifesto; OWASP SAMM Threat Assessment
+    match: [threat-modelling-process]
+    subtopics:
+      - {id: tmp-triggers, name: When to threat model (triggers), match: [threat-model-triggers]}
+      - {id: tmp-workshop, name: Running a threat modelling workshop, match: [threat-modelling-workshop]}
+      - {id: tmp-requirements, name: Turning threats into security requirements, match: [security-requirements]}
+      - {id: tmp-validate, name: Validating a threat model, match: [threat-model-validation]}
+      - {id: r2-threat-backlog, name: Tracking threats in the backlog, match: [threat-backlog]}
+      - {id: r2-threat-modelling-metrics, name: Threat modelling programme metrics, match: [threat-modelling-metrics]}
+      - {id: r2-threat-modelling-training, name: Training developers to threat model, match: [threat-modelling-training]}
+      - {id: r2-rapid-threat-model, name: Rapid threat modelling, match: [rapid-threat-model]}
+      - {id: r2-ai-assisted-threat-modelling, name: AI-assisted threat modelling, match: [ai-assisted-threat-modelling]}
+
+  # ===== Identity & access management (product: identity-access-management)
+  - id: federation-protocols
+    name: Authentication and federation protocols
+    source: Sec+ 4.6; SAML 2.0, OIDC, Kerberos specs
+    match: [sso]
+    subtopics:
+      - {id: fp-saml, name: SAML configuration and troubleshooting, match: [saml-troubleshooting]}
+      - {id: fp-oidc, name: OIDC client configuration, match: [oidc-client-configuration]}
+      - {id: fp-kerberos, name: Kerberos hardening, match: [kerberos-hardening]}
+      - {id: fp-ldaps, name: LDAP signing and LDAPS, match: [ldaps]}
+      - {id: r2-oauth-grant-types, name: OAuth 2.0 grant type selection, match: [oauth-grant-types]}
+      - {id: r2-saml-certificate-rollover, name: SAML signing certificate rollover, match: [saml-certificate-rollover]}
+      - {id: r2-adfs-hardening, name: AD FS hardening and migration, match: [adfs-hardening]}
+      - {id: r2-kerberos-delegation, name: Kerberos delegation, match: [kerberos-delegation]}
+      - {id: r2-token-lifetime, name: Token lifetimes and refresh token revocation, match: [token-lifetime]}
+      - {id: r2-certificate-based-authentication, name: Certificate-based authentication, match: [certificate-based-authentication]}
+  - id: mfa
+    name: Multi-factor authentication
+    source: NIST SP 800-63B; CISA phishing-resistant MFA
+    match: [mfa]
+    subtopics:
+      - {id: mfa-passkeys, name: Passkeys and FIDO2 rollout, match: [passkeys]}
+      - {id: mfa-reset, name: MFA reset and help-desk identity verification, match: [mfa-reset-process]}
+      - {id: mfa-keys, name: Hardware security keys, match: [hardware-security-keys]}
+      - {id: mfa-fatigue, name: MFA fatigue defences, match: [number-matching]}
+      - {id: r2-authentication-strength, name: Authentication strengths in conditional access, match: [authentication-strength]}
+      - {id: r2-legacy-authentication, name: Blocking legacy authentication, match: [legacy-authentication]}
+      - {id: r2-aitm, name: Adversary-in-the-middle phishing defences, match: [aitm]}
+      - {id: r2-mfa-registration, name: Secure MFA registration, match: [mfa-registration]}
+      - {id: r2-windows-hello-for-business, name: Windows Hello for Business, match: [windows-hello-for-business]}
+      - {id: r2-totp, name: TOTP and push authenticator management, match: [totp]}
+      - {id: r2-sms-mfa-deprecation, name: SMS and voice MFA deprecation, match: [sms-mfa-deprecation]}
+      - {id: r2-ssh-mfa, name: MFA for SSH and servers, match: [ssh-mfa]}
+      - {id: r2-temporary-access-pass, name: Temporary Access Pass, match: [temporary-access-pass]}
+  - id: identity-lifecycle
+    name: Identity lifecycle and governance
+    source: CIS 5 and 6; CSF PR.AA
+    match: [identity-lifecycle]
+    subtopics:
+      - {id: il-jml, name: Joiner-mover-leaver process, match: [joiner-mover-leaver]}
+      - {id: il-scim, name: SCIM provisioning, match: [scim]}
+      - {id: il-reviews, name: Access reviews and certification, match: [access-reviews]}
+      - {id: il-rbac, name: Role engineering for RBAC, match: [role-engineering]}
+      - {id: il-orphans, name: Orphaned and dormant accounts, match: [orphaned-accounts]}
+      - {id: r2-access-packages, name: Entitlement management access packages, match: [access-packages]}
+      - {id: r2-separation-of-duties, name: Separation of duties, match: [separation-of-duties]}
+      - {id: r2-hr-driven-provisioning, name: HR-driven provisioning, match: [hr-driven-provisioning]}
+      - {id: r2-third-party-identities, name: Contractor and third-party identities, match: [third-party-identities]}
+      - {id: r2-iga-platform, name: IGA platform operation, match: [iga-platform]}
+      - {id: r2-shared-accounts, name: Shared and generic accounts, match: [shared-accounts]}
+      - {id: r2-entra-connect, name: Entra Connect and Cloud Sync hardening, match: [entra-connect]}
+      - {id: r2-abac, name: ABAC, match: [abac]}
+  - id: privileged-access
+    name: Privileged access management
+    source: CIS 5.4/6.5; Microsoft enterprise access model
+    match: [pam]
+    subtopics:
+      - {id: pa-jit, name: Just-in-time access, match: [just-in-time-access]}
+      - {id: pa-svc, name: Service account governance, match: [service-accounts]}
+      - {id: pa-laps, name: Windows LAPS, match: [laps]}
+      - {id: pa-gmsa, name: Group managed service accounts, match: [gmsa]}
+      - {id: pa-breakglass, name: Break-glass accounts, match: [break-glass]}
+      - {id: r2-vaulting, name: Password vaulting, match: [vaulting]}
+      - {id: r2-privileged-access-workstation, name: Privileged access workstations, match: [privileged-access-workstation]}
+      - {id: r2-tiered-admin-model, name: Tiered administration model, match: [tiered-admin-model]}
+      - {id: r2-machine-identity, name: Machine identity management, match: [machine-identity]}
+      - {id: r2-root-account-protection, name: Cloud root account protection, match: [root-account-protection]}
+      - {id: r2-local-admin-removal, name: Local admin rights removal, match: [local-admin-removal]}
+      - {id: r2-endpoint-privilege-management, name: Endpoint privilege management, match: [endpoint-privilege-management]}
+      - {id: r2-session-recording, name: Privileged session recording, match: [session-recording]}
+  - id: active-directory-security
+    name: Active Directory security
+    source: Microsoft AD security best practices; D3FEND Credential Hardening
+    match: [active-directory-security]
+    subtopics:
+      - {id: ad-paths, name: AD attack path analysis for defenders, match: [ad-attack-paths]}
+      - {id: ad-krbtgt, name: krbtgt password rotation, match: [krbtgt-rotation]}
+      - {id: ad-protected, name: Protected Users and credential protection, match: [protected-users]}
+      - {id: ad-adcs, name: AD CS hardening, match: [adcs-hardening]}
+      - {id: ad-audit, name: AD audit policy and DC monitoring, match: [ad-audit-policy]}
+      - {id: r2-adminsdholder, name: AdminSDHolder and privileged groups, match: [adminsdholder]}
+      - {id: r2-ad-forest-recovery, name: AD forest recovery, match: [ad-forest-recovery]}
+      - {id: r2-gpo-security-review, name: GPO security review, match: [gpo-security-review]}
+      - {id: r2-domain-controller-hardening, name: Domain controller hardening, match: [domain-controller-hardening]}
+      - {id: r2-ad-trusts, name: Domain and forest trust security, match: [ad-trusts]}
+      - {id: r2-machine-account-quota, name: MachineAccountQuota and unconstrained delegation, match: [machine-account-quota]}
+      - {id: r2-acl-abuse, name: AD ACL abuse review, match: [acl-abuse]}
+      - {id: r2-defender-for-identity, name: Defender for Identity, match: [defender-for-identity]}
+  - id: cloud-identity
+    name: Cloud identity provider security
+    source: Microsoft Entra docs; Okta security docs
+    match: [entra-id]
+    subtopics:
+      - {id: ci-ca, name: Conditional access policy design, match: [conditional-access]}
+      - {id: ci-pim, name: Entra Privileged Identity Management, match: [entra-pim]}
+      - {id: ci-consent, name: App consent policies, match: [app-consent-policy]}
+      - {id: ci-workload, name: Workload identity federation, match: [workload-identity-federation]}
+      - {id: ci-guests, name: Guest and B2B access governance, match: [guest-access-governance]}
+      - {id: r2-entra-id-protection, name: Entra ID Protection risk policies, match: [entra-id-protection]}
+      - {id: r2-okta-hardening, name: Okta org security hardening, match: [okta-hardening]}
+      - {id: r2-cross-tenant-access, name: Cross-tenant access settings, match: [cross-tenant-access]}
+      - {id: r2-service-principal-credentials, name: Service principal credential hygiene, match: [service-principal-credentials]}
+      - {id: r2-administrative-units, name: Administrative units and role scoping, match: [administrative-units]}
+      - {id: r2-google-workspace-security, name: Google Workspace identity hardening, match: [google-workspace-security]}
+      - {id: r2-token-protection, name: Token protection, match: [token-protection]}
+  - id: password-policy
+    name: Password policy
+    source: NIST SP 800-63B section 5.1.1
+    match: [password-policy]
+    subtopics:
+      - {id: pp-nist, name: NIST 800-63B memorised secret rules, match: [nist-800-63b]}
+      - {id: pp-banned, name: Banned password lists and breach checks, match: [banned-password-list]}
+      - {id: pp-manager, name: Enterprise password manager rollout, match: [enterprise-password-manager]}
+      - {id: r2-fine-grained-password-policy, name: Fine-grained password policies, match: [fine-grained-password-policy]}
+      - {id: r2-account-lockout, name: Account lockout and smart lockout, match: [account-lockout]}
+      - {id: r2-password-spray-detection, name: Password spray detection, match: [password-spray-detection]}
+      - {id: r2-password-audit, name: Auditing AD password hashes, match: [password-audit]}
+      - {id: r2-sspr, name: Self-service password reset, match: [sspr]}
+      - {id: r2-password-expiry, name: Removing forced password expiry, match: [password-expiry]}
+
+  # ===== Network defence (product: network-defence)
+  - id: firewalls
+    name: Firewall policy and operation
+    source: Sec+ 3.2/4.5; CIS 12-13; NIST SP 800-41
+    match: [firewall]
+    subtopics:
+      - {id: fw-review, name: Firewall rule review and recertification, match: [firewall-rule-review]}
+      - {id: fw-appid, name: Application-aware NGFW policy, match: [app-id-policy]}
+      - {id: fw-host, name: Host-based firewalls, match: [host-based-firewall]}
+      - {id: fw-waf, name: Web application firewall, match: [web-application-firewall]}
+      - {id: fw-egress, name: Egress filtering, match: [egress-filtering]}
+      - {id: r2-firewall-change-management, name: Firewall change management, match: [firewall-change-management]}
+      - {id: r2-rule-cleanup, name: Shadowed and unused rule cleanup, match: [rule-cleanup]}
+      - {id: r2-firewall-high-availability, name: Firewall high availability, match: [firewall-high-availability]}
+      - {id: r2-nat-policy, name: NAT policy security, match: [nat-policy]}
+      - {id: r2-external-dynamic-lists, name: External dynamic lists, match: [external-dynamic-lists]}
+      - {id: r2-aws-network-firewall, name: Cloud-native firewalls, match: [aws-network-firewall]}
+      - {id: r2-geo-blocking, name: Geo-blocking, match: [geo-blocking]}
+      - {id: r2-firewall-policy-analysis, name: Firewall policy analysis tools, match: [firewall-policy-analysis]}
+  - id: ids-ips
+    name: Intrusion detection and prevention
+    source: Sec+ 4.5; Suricata and Zeek docs
+    match: [ids, ips]
+    subtopics:
+      - {id: ids-suricata-rules, name: Writing Suricata rules, match: [suricata-rule-writing]}
+      - {id: ids-zeek, name: Zeek network logging, match: [zeek]}
+      - {id: ids-tuning, name: Signature tuning, match: [signature-tuning]}
+      - {id: ids-placement, name: Sensor placement (TAP vs SPAN), match: [tap-vs-span]}
+      - {id: r2-snort3, name: Snort 3, match: [snort3]}
+      - {id: r2-suricata-update, name: Ruleset management with suricata-update, match: [suricata-update]}
+      - {id: r2-zeek-intel-framework, name: Zeek Intelligence Framework, match: [zeek-intel-framework]}
+      - {id: r2-security-onion, name: Security Onion deployment, match: [security-onion]}
+      - {id: r2-suricata-performance, name: Suricata performance tuning, match: [suricata-performance]}
+      - {id: r2-inline-blocking, name: Inline IPS mode, match: [inline-blocking]}
+      - {id: r2-eve-json, name: Suricata EVE JSON output, match: [eve-json]}
+      - {id: r2-host-intrusion-detection, name: Host intrusion detection, match: [host-intrusion-detection]}
+  - id: network-security-monitoring
+    name: Network security monitoring
+    source: CIS 13; CySA+ 1.3; D3FEND Network Traffic Analysis
+    match: [network-security-monitoring]
+    subtopics:
+      - {id: nsm-flow, name: NetFlow/IPFIX analysis, match: [netflow-analysis]}
+      - {id: nsm-pcap, name: Packet analysis with Wireshark and tcpdump, match: [packet-analysis]}
+      - {id: nsm-fpc, name: Full packet capture retention, match: [full-packet-capture]}
+      - {id: nsm-ja4, name: TLS fingerprinting (JA3/JA4), match: [ja4-fingerprinting]}
+      - {id: nsm-ndr, name: Network detection and response, match: [ndr]}
+      - {id: r2-traffic-baselining, name: Traffic baselining, match: [traffic-baselining]}
+      - {id: r2-zeek-log-analysis, name: Zeek log analysis for hunting, match: [zeek-log-analysis]}
+      - {id: r2-traffic-mirroring, name: Cloud traffic mirroring, match: [traffic-mirroring]}
+      - {id: r2-protocol-anomaly-detection, name: Protocol anomaly detection, match: [protocol-anomaly-detection]}
+      - {id: r2-encrypted-traffic-analysis, name: Encrypted traffic analysis, match: [encrypted-traffic-analysis]}
+      - {id: r2-data-exfiltration-detection, name: Data exfiltration detection, match: [data-exfiltration-detection]}
+      - {id: r2-ot-network-monitoring, name: OT network monitoring, match: [ot-network-monitoring]}
+      - {id: r2-file-carving-pcap, name: File carving from PCAP, match: [file-carving-pcap]}
+  - id: vpn-remote-access
+    name: VPN and secure remote access
+    source: Sec+ 3.2 secure communication
+    match: [vpn]
+    subtopics:
+      - {id: vpn-ipsec, name: IPsec site-to-site VPN, match: [ipsec-vpn]}
+      - {id: vpn-ra, name: Remote access VPN hardening, match: [remote-access-vpn]}
+      - {id: vpn-wg, name: WireGuard, match: [wireguard]}
+      - {id: r2-always-on-vpn, name: Always On VPN, match: [always-on-vpn]}
+      - {id: r2-split-tunnelling, name: Split tunnelling, match: [split-tunnelling]}
+      - {id: r2-vpn-appliance-vulnerability, name: VPN appliance vulnerability response, match: [vpn-appliance-vulnerability]}
+      - {id: r2-openvpn, name: OpenVPN, match: [openvpn]}
+      - {id: r2-tailscale, name: Mesh VPN with Tailscale or Headscale, match: [tailscale]}
+      - {id: r2-rd-gateway, name: Remote Desktop Gateway, match: [rd-gateway]}
+      - {id: r2-ssh-tunnelling, name: SSH tunnelling control, match: [ssh-tunnelling]}
+  - id: network-access-control
+    name: Network access control and port security
+    source: Sec+ 3.2 port security; Sec+ 4.5 NAC
+    match: [network-access-control]
+    subtopics:
+      - {id: nac-dot1x, name: 802.1X wired authentication, match: [802-1x]}
+      - {id: nac-mab, name: MAC authentication bypass, match: [mac-authentication-bypass]}
+      - {id: nac-port, name: Switch port security, match: [port-security]}
+      - {id: nac-dhcp, name: DHCP snooping and dynamic ARP inspection, match: [dhcp-snooping]}
+      - {id: r2-posture-assessment, name: Posture assessment, match: [posture-assessment]}
+      - {id: r2-radius-server-hardening, name: RADIUS server hardening, match: [radius-server-hardening]}
+      - {id: r2-cisco-ise, name: Cisco ISE policy sets, match: [cisco-ise]}
+      - {id: r2-macsec, name: MACsec, match: [macsec]}
+      - {id: r2-downloadable-acl, name: Downloadable ACLs and dynamic VLANs, match: [downloadable-acl]}
+      - {id: r2-change-of-authorization, name: RADIUS change of authorization, match: [change-of-authorization]}
+      - {id: r2-ra-guard, name: IPv6 first-hop security and RA Guard, match: [ra-guard]}
+  - id: wireless-security
+    name: Wireless security
+    source: Sec+ 4.1 wireless devices
+    match: [wireless-security]
+    subtopics:
+      - {id: wl-wpa3, name: WPA3-Enterprise configuration, match: [wpa3-enterprise]}
+      - {id: wl-eaptls, name: EAP-TLS certificate authentication, match: [eap-tls]}
+      - {id: wl-rogue, name: Rogue access point detection, match: [rogue-ap-detection]}
+      - {id: wl-guest, name: Guest Wi-Fi isolation, match: [guest-wifi-isolation]}
+      - {id: r2-wpa3-sae, name: WPA3-Personal SAE, match: [wpa3-sae]}
+      - {id: r2-wireless-survey, name: Wireless survey, match: [wireless-survey]}
+      - {id: r2-wireless-controller-hardening, name: Wireless controller hardening, match: [wireless-controller-hardening]}
+      - {id: r2-pmf, name: Protected management frames, match: [pmf]}
+      - {id: r2-bluetooth-security, name: Bluetooth security, match: [bluetooth-security]}
+      - {id: r2-server-certificate-validation, name: Server certificate validation on Wi-Fi clients, match: [server-certificate-validation]}
+  - id: email-security
+    name: Email security
+    source: Sec+ 4.5 email security; CIS 9
+    match: [email-security]
+    subtopics:
+      - {id: em-spf, name: SPF, match: [spf]}
+      - {id: em-dkim, name: DKIM, match: [dkim]}
+      - {id: em-dmarc, name: DMARC rollout, match: [dmarc]}
+      - {id: em-mtasts, name: MTA-STS and TLS-RPT, match: [mta-sts]}
+      - {id: em-seg, name: Secure email gateway policy, match: [secure-email-gateway]}
+      - {id: em-report, name: Phishing report button pipeline, match: [phishing-report-pipeline]}
+      - {id: r2-bimi, name: BIMI, match: [bimi]}
+      - {id: r2-arc, name: ARC, match: [arc]}
+      - {id: r2-dane, name: DANE for SMTP, match: [dane]}
+      - {id: r2-safe-attachments, name: Safe attachments sandboxing, match: [safe-attachments]}
+      - {id: r2-mail-flow-rules, name: Mail flow rules, match: [mail-flow-rules]}
+      - {id: r2-external-forwarding, name: Blocking external auto-forwarding, match: [external-forwarding]}
+      - {id: r2-parked-domains, name: Protecting parked domains, match: [parked-domains]}
+  - id: web-filtering
+    name: Web filtering and secure web gateway
+    source: Sec+ 4.5 web filter; CIS 9
+    match: [web-filtering]
+    subtopics:
+      - {id: wf-swg, name: Secure web gateway deployment, match: [secure-web-gateway]}
+      - {id: wf-tls, name: TLS inspection, match: [ssl-inspection]}
+      - {id: wf-url, name: URL category filtering, match: [url-filtering]}
+      - {id: wf-browser, name: Enterprise browser security policy, match: [browser-security-policy]}
+      - {id: r2-pac-file, name: PAC files, match: [pac-file]}
+      - {id: r2-casb, name: CASB, match: [casb]}
+      - {id: r2-squid, name: Squid proxy filtering, match: [squid]}
+      - {id: r2-safesearch-enforcement, name: SafeSearch enforcement, match: [safesearch-enforcement]}
+      - {id: r2-proxy-bypass-detection, name: Proxy bypass detection, match: [proxy-bypass-detection]}
+      - {id: r2-download-controls, name: File download controls, match: [download-controls]}
+      - {id: r2-protective-dns, name: Protective DNS, match: [protective-dns]}
+  - id: dns-security
+    name: DNS security
+    source: Sec+ 4.5 DNS filtering; CIS 9.2
+    match: [dns-security, dns-sinkhole]
+    subtopics:
+      - {id: dns-rpz, name: Response policy zones, match: [rpz]}
+      - {id: dns-dnssec, name: DNSSEC signing and validation, match: [dnssec]}
+      - {id: dns-logging, name: DNS query logging, match: [dns-query-logging]}
+      - {id: dns-doh, name: Controlling encrypted DNS (DoH/DoT), match: [doh]}
+      - {id: r2-dns-tunneling, name: DNS tunnelling detection, match: [dns-tunneling]}
+      - {id: r2-dga-detection, name: DGA detection, match: [dga-detection]}
+      - {id: r2-dns-resolver-hardening, name: Resolver hardening, match: [dns-resolver-hardening]}
+      - {id: r2-registry-lock, name: Registry lock and domain hijack protection, match: [registry-lock]}
+      - {id: r2-zone-transfer, name: Zone transfer restriction, match: [zone-transfer]}
+      - {id: r2-passive-dns, name: Passive DNS, match: [passive-dns]}
+      - {id: r2-caa-records, name: CAA records, match: [caa-records]}
+  - id: ddos-mitigation
+    name: DDoS mitigation
+    source: Sec+ 2.4/3.4; CISA DDoS guidance
+    match: [ddos-mitigation]
+    subtopics:
+      - {id: dd-rate, name: Rate limiting, match: [rate-limiting]}
+      - {id: dd-scrub, name: CDN and scrubbing services, match: [ddos-scrubbing]}
+      - {id: dd-syn, name: SYN flood protections, match: [syn-cookies]}
+      - {id: dd-runbook, name: DDoS response runbook, match: [ddos-response-runbook]}
+      - {id: r2-rtbh, name: RTBH and FlowSpec, match: [rtbh]}
+      - {id: r2-application-layer-ddos, name: Application-layer DDoS, match: [application-layer-ddos]}
+      - {id: r2-aws-shield-advanced, name: AWS Shield Advanced, match: [aws-shield-advanced]}
+      - {id: r2-ddos-testing, name: DDoS simulation testing, match: [ddos-testing]}
+      - {id: r2-amplification-prevention, name: Amplification and reflection prevention, match: [amplification-prevention]}
+      - {id: r2-ddos-detection, name: DDoS detection with flow telemetry, match: [ddos-detection]}
+  - id: deception
+    name: Deception technology
+    source: Sec+ 1.2 deception; D3FEND Deceive
+    match: [deception-technology]
+    subtopics:
+      - {id: dc-honeypot, name: Honeypots, match: [honeypot]}
+      - {id: dc-honeytoken, name: Honeytokens and honey accounts, match: [honeytokens]}
+      - {id: dc-canary, name: Canary tokens, match: [canarytokens]}
+      - {id: r2-fake-spn, name: Decoy service accounts with fake SPNs, match: [fake-spn]}
+      - {id: r2-aws-honey-keys, name: Cloud honey keys, match: [aws-honey-keys]}
+      - {id: r2-decoy-documents, name: Decoy documents, match: [decoy-documents]}
+      - {id: r2-deception-strategy, name: Deception strategy and placement, match: [deception-strategy]}
+      - {id: r2-tarpit, name: Tarpits, match: [tarpit]}
+      - {id: r2-deception-breadcrumbs, name: Deception breadcrumbs and lures, match: [deception-breadcrumbs]}
+
+  # ===== Endpoint security (product: endpoint-security)
+  - id: edr-operations
+    name: EDR deployment and operation
+    source: Sec+ 4.5 EDR/XDR; Microsoft Defender for Endpoint docs
+    match: [edr]
+    subtopics:
+      - {id: edr-exclusions, name: Exclusions management, match: [exclusions]}
+      - {id: edr-rings, name: Ring deployment of sensor and policy, match: [ring-deployment]}
+      - {id: edr-hunting, name: Defender advanced hunting, match: [advanced-hunting]}
+      - {id: edr-ioc, name: Custom indicator blocking, match: [custom-ioc-blocking]}
+      - {id: edr-isolation, name: Host isolation, match: [host-isolation]}
+      - {id: r2-tamper-protection, name: Tamper protection, match: [tamper-protection]}
+      - {id: r2-sensor-health, name: Sensor health, match: [sensor-health]}
+      - {id: r2-live-response, name: Live response, match: [live-response]}
+      - {id: r2-falcon-prevention-policy, name: CrowdStrike Falcon prevention policies, match: [falcon-prevention-policy]}
+      - {id: r2-sentinelone-policy, name: SentinelOne policy configuration, match: [sentinelone-policy]}
+      - {id: r2-linux-edr, name: EDR on Linux servers, match: [linux-edr]}
+      - {id: r2-macos-edr, name: EDR on macOS, match: [macos-edr]}
+      - {id: r2-edr-migration, name: EDR vendor migration, match: [edr-migration]}
+      - {id: r2-automated-investigation, name: Automated investigation and remediation, match: [automated-investigation]}
+  - id: application-control
+    name: Application control
+    source: CIS 2.5-2.7; D3FEND Executable Allowlisting; Microsoft App Control docs
+    match: [application-control]
+    subtopics:
+      - {id: ac-wdac, name: App Control for Business (WDAC), match: [wdac]}
+      - {id: ac-applocker, name: AppLocker, match: [applocker]}
+      - {id: ac-santa, name: Santa on macOS, match: [santa]}
+      - {id: ac-fapolicyd, name: fapolicyd on Linux, match: [fapolicyd]}
+      - {id: r2-managed-installer, name: Managed installer, match: [managed-installer]}
+      - {id: r2-isg, name: Intelligent Security Graph, match: [isg]}
+      - {id: r2-vulnerable-driver-blocklist, name: Vulnerable driver blocklist, match: [vulnerable-driver-blocklist]}
+      - {id: r2-code-integrity-events, name: CodeIntegrity audit event analysis, match: [code-integrity-events]}
+      - {id: r2-script-enforcement, name: Script enforcement, match: [script-enforcement]}
+      - {id: r2-ima-evm, name: IMA and EVM on Linux, match: [ima-evm]}
+      - {id: r2-allowlisting-rollout, name: Allowlisting rollout methodology, match: [allowlisting-rollout]}
+      - {id: r2-catalog-signing, name: Catalog signing for internal apps, match: [catalog-signing]}
+  - id: antimalware
+    name: Anti-malware configuration
+    source: CIS 10; Microsoft Defender Antivirus docs
+    match: [antimalware]
+    subtopics:
+      - {id: am-defender, name: Microsoft Defender Antivirus configuration, match: [microsoft-defender-antivirus]}
+      - {id: am-cloud, name: Cloud-delivered protection and block at first sight, match: [cloud-delivered-protection]}
+      - {id: am-amsi, name: AMSI, match: [amsi]}
+      - {id: am-clamav, name: ClamAV on Linux servers, match: [clamav]}
+      - {id: r2-network-protection, name: Network protection, match: [network-protection]}
+      - {id: r2-pua-protection, name: PUA protection, match: [pua-protection]}
+      - {id: r2-scheduled-scans, name: Scheduled scans, match: [scheduled-scans]}
+      - {id: r2-av-exclusions, name: Antivirus exclusions for servers, match: [av-exclusions]}
+      - {id: r2-xprotect, name: XProtect and macOS anti-malware, match: [xprotect]}
+      - {id: r2-signature-updates, name: Security intelligence update management, match: [signature-updates]}
+      - {id: r2-offline-scan, name: Offline scanning and remediation, match: [offline-scan]}
+      - {id: r2-quarantine-management, name: Quarantine management, match: [quarantine-management]}
+  - id: mobile-device-management
+    name: Mobile and device management
+    source: Sec+ 4.1 mobile solutions; CIS 4.10-4.12
+    match: [mobile-device-management]
+    subtopics:
+      - {id: mdm-compliance, name: Intune compliance policies, match: [intune-compliance-policy]}
+      - {id: mdm-mam, name: App protection for BYOD, match: [mobile-application-management]}
+      - {id: mdm-macos, name: macOS management with an MDM, match: [macos-mdm]}
+      - {id: mdm-wipe, name: Lost device and remote wipe, match: [remote-wipe]}
+      - {id: r2-autopilot, name: Windows Autopilot enrolment, match: [autopilot]}
+      - {id: r2-android-enterprise, name: Android Enterprise work profile, match: [android-enterprise]}
+      - {id: r2-ios-supervision, name: iOS supervised device policies, match: [ios-supervision]}
+      - {id: r2-configuration-profiles, name: Configuration profiles, match: [configuration-profiles]}
+      - {id: r2-mobile-threat-defense, name: Mobile threat defense, match: [mobile-threat-defense]}
+      - {id: r2-declarative-device-management, name: Declarative device management, match: [declarative-device-management]}
+      - {id: r2-intune-security-baselines, name: Intune security baselines, match: [intune-security-baselines]}
+      - {id: r2-automated-device-enrollment, name: Apple automated device enrollment, match: [automated-device-enrollment]}
+  - id: disk-encryption
+    name: Full-disk encryption
+    source: CIS 3.6; Sec+ 1.4
+    match: [full-disk-encryption]
+    subtopics:
+      - {id: fde-bitlocker, name: BitLocker, match: [bitlocker]}
+      - {id: fde-filevault, name: FileVault, match: [filevault]}
+      - {id: fde-luks, name: LUKS, match: [luks]}
+      - {id: fde-escrow, name: Recovery key escrow, match: [recovery-key-escrow]}
+      - {id: r2-network-bound-disk-encryption, name: Network-bound disk encryption, match: [network-bound-disk-encryption]}
+      - {id: r2-pre-boot-authentication, name: Pre-boot authentication, match: [pre-boot-authentication]}
+      - {id: r2-encryption-compliance-reporting, name: Encryption compliance reporting, match: [encryption-compliance-reporting]}
+      - {id: r2-bitlocker-to-go, name: BitLocker To Go, match: [bitlocker-to-go]}
+      - {id: r2-vm-disk-encryption, name: Server and VM disk encryption, match: [vm-disk-encryption]}
+      - {id: r2-self-encrypting-drives, name: Self-encrypting drives, match: [self-encrypting-drives]}
+      - {id: r2-kernel-dma-protection, name: Kernel DMA protection, match: [kernel-dma-protection]}
+  - id: device-control
+    name: Removable media and device control
+    source: CIS 10.3; D3FEND Device Hardening
+    match: [device-control]
+    subtopics:
+      - {id: dvc-usb, name: USB device control policy, match: [usb-device-control]}
+      - {id: dvc-autorun, name: Disabling autorun and autoplay, match: [autorun]}
+      - {id: r2-printer-control, name: Printer device control, match: [printer-control]}
+      - {id: r2-wpd-device-control, name: WPD and MTP device control, match: [wpd-device-control]}
+      - {id: r2-usbguard, name: USBGuard on Linux, match: [usbguard]}
+      - {id: r2-macos-removable-media, name: macOS removable media restriction, match: [macos-removable-media]}
+      - {id: r2-usb-exception-process, name: USB exception process, match: [usb-exception-process]}
+      - {id: r2-device-installation-restrictions, name: Device installation restrictions, match: [device-installation-restrictions]}
+      - {id: r2-removable-storage, name: Removable storage, match: [removable-storage]}
+  - id: windows-endpoint-protections
+    name: Windows platform protections
+    source: Microsoft Windows security docs; D3FEND Platform Hardening
+    match: [windows-security-features]
+    subtopics:
+      - {id: wep-credguard, name: Credential Guard, match: [credential-guard]}
+      - {id: wep-asr, name: Attack surface reduction rules, match: [asr-rules]}
+      - {id: wep-exploit, name: Exploit protection, match: [exploit-protection]}
+      - {id: wep-pslog, name: PowerShell logging, match: [powershell-logging]}
+      - {id: wep-clm, name: PowerShell constrained language mode, match: [constrained-language-mode]}
+      - {id: r2-hvci, name: HVCI memory integrity, match: [hvci]}
+      - {id: r2-lsa-protection, name: LSA protection, match: [lsa-protection]}
+      - {id: r2-smartscreen, name: SmartScreen, match: [smartscreen]}
+      - {id: r2-controlled-folder-access, name: Controlled folder access, match: [controlled-folder-access]}
+      - {id: r2-jea, name: Just Enough Administration, match: [jea]}
+      - {id: r2-smart-app-control, name: Smart App Control, match: [smart-app-control]}
+      - {id: r2-print-spooler-hardening, name: Print spooler hardening, match: [print-spooler-hardening]}
+      - {id: r2-uac-hardening, name: UAC hardening, match: [uac-hardening]}
+
+  # ===== Cloud security (product: cloud-security)
+  - id: cloud-iam
+    name: Cloud IAM least privilege
+    source: AWS IAM / Azure RBAC / GCP IAM docs; CSF PR.AA
+    match: [iam-least-privilege]
+    subtopics:
+      - {id: ciam-analyzer, name: IAM Access Analyzer, match: [iam-access-analyzer]}
+      - {id: ciam-boundaries, name: Permission boundaries, match: [permission-boundaries]}
+      - {id: ciam-scp, name: Service control policies, match: [scp]}
+      - {id: ciam-azure, name: Azure RBAC least privilege, match: [azure-rbac]}
+      - {id: ciam-gcp, name: GCP organisation policies, match: [gcp-org-policy]}
+      - {id: r2-iam-identity-center, name: IAM Identity Center permission sets, match: [iam-identity-center]}
+      - {id: r2-resource-control-policies, name: Resource control policies, match: [resource-control-policies]}
+      - {id: r2-iam-passrole, name: IAM PassRole control, match: [iam-passrole]}
+      - {id: r2-service-account-key-restriction, name: GCP service account key restriction, match: [service-account-key-restriction]}
+      - {id: r2-irsa, name: EKS IRSA and Pod Identity, match: [irsa]}
+      - {id: r2-cross-account-roles, name: Cross-account role trust policies, match: [cross-account-roles]}
+      - {id: r2-aws-abac, name: Tag-based ABAC in AWS, match: [aws-abac]}
+      - {id: r2-iam-privilege-escalation, name: IAM privilege escalation path review, match: [iam-privilege-escalation]}
+  - id: cloud-logging
+    name: Cloud logging and threat detection
+    source: AWS/Azure/GCP logging docs; CIS 8
+    match: [cloud-detection]
+    subtopics:
+      - {id: cl-trail, name: CloudTrail organisation trail, match: [cloudtrail]}
+      - {id: cl-flow, name: VPC flow logs, match: [vpc-flow-logs]}
+      - {id: cl-guardduty, name: GuardDuty findings triage, match: [guardduty-findings-triage]}
+      - {id: cl-lake, name: Amazon Security Lake, match: [amazon-security-lake]}
+      - {id: r2-aws-config, name: AWS Config, match: [aws-config]}
+      - {id: r2-diagnostic-settings, name: Azure diagnostic settings, match: [diagnostic-settings]}
+      - {id: r2-gcp-cloud-audit-logs, name: GCP Cloud Audit Logs, match: [gcp-cloud-audit-logs]}
+      - {id: r2-amazon-detective, name: Amazon Detective, match: [amazon-detective]}
+      - {id: r2-defender-for-cloud-alerts, name: Defender for Cloud alerts triage, match: [defender-for-cloud-alerts]}
+      - {id: r2-security-command-center, name: Security Command Center, match: [security-command-center]}
+      - {id: r2-cloudtrail-lake, name: CloudTrail Lake and data events, match: [cloudtrail-lake]}
+      - {id: r2-kubernetes-audit-logs, name: Kubernetes control plane audit logs, match: [kubernetes-audit-logs]}
+      - {id: r2-log-archive-account, name: Log archive account, match: [log-archive-account]}
+  - id: cspm
+    name: Cloud security posture management
+    source: CSA CCM; AWS Security Hub/Azure Defender for Cloud docs
+    match: [cspm]
+    subtopics:
+      - {id: cspm-prowler, name: Prowler assessments, match: [prowler]}
+      - {id: cspm-iac, name: IaC scanning, match: [iac-scanning]}
+      - {id: cspm-securescore, name: Defender for Cloud secure score, match: [secure-score]}
+      - {id: cspm-hub, name: Security Hub standards, match: [security-hub]}
+      - {id: r2-conformance-packs, name: AWS Config conformance packs, match: [conformance-packs]}
+      - {id: r2-checkov, name: Checkov, match: [checkov]}
+      - {id: r2-azure-policy, name: Azure Policy, match: [azure-policy]}
+      - {id: r2-cnapp, name: CNAPP, match: [cnapp]}
+      - {id: r2-cspm-auto-remediation, name: Auto-remediation of posture findings, match: [cspm-auto-remediation]}
+      - {id: r2-policy-as-code, name: Policy as code, match: [policy-as-code]}
+      - {id: r2-cis-aws-foundations, name: CIS AWS Foundations Benchmark, match: [cis-aws-foundations]}
+      - {id: r2-steampipe, name: Steampipe and Powerpipe, match: [steampipe]}
+      - {id: r2-attack-path-analysis, name: Attack path analysis, match: [attack-path-analysis]}
+  - id: cloud-workload-protection
+    name: Cloud workload protection
+    source: CNCF security whitepaper; CKS; CSF PR.PS
+    match: [cloud-workload-protection]
+    subtopics:
+      - {id: cwp-k8s, name: Kubernetes security hardening, match: [kubernetes-security-hardening]}
+      - {id: cwp-falco, name: Runtime detection with Falco, match: [falco]}
+      - {id: cwp-pss, name: Pod Security Standards, match: [pod-security-standards]}
+      - {id: cwp-serverless, name: Serverless function security, match: [serverless-security]}
+      - {id: cwp-admission, name: Image signature admission control, match: [image-signing-admission]}
+      - {id: r2-defender-for-servers, name: Defender for Servers, match: [defender-for-servers]}
+      - {id: r2-opa-gatekeeper, name: OPA Gatekeeper, match: [opa-gatekeeper]}
+      - {id: r2-network-policies, name: Kubernetes network policies, match: [network-policies]}
+      - {id: r2-external-secrets, name: External secrets operators and CSI secrets, match: [external-secrets]}
+      - {id: r2-tetragon, name: Tetragon, match: [tetragon]}
+      - {id: r2-bottlerocket, name: Bottlerocket node hardening, match: [bottlerocket]}
+      - {id: r2-gvisor, name: Sandboxed runtimes with gVisor or Kata, match: [gvisor]}
+      - {id: r2-service-mesh, name: Service mesh mTLS, match: [service-mesh]}
+  - id: cloud-network-security
+    name: Cloud network security
+    source: AWS/Azure/GCP network security docs
+    match: [cloud-network-security]
+    subtopics:
+      - {id: cns-sg, name: Security group audit, match: [security-group-audit]}
+      - {id: cns-private, name: Private endpoints for PaaS, match: [private-endpoints]}
+      - {id: cns-waf, name: AWS WAF, match: [aws-waf]}
+      - {id: cns-imds, name: Instance metadata protection (IMDSv2), match: [imdsv2]}
+      - {id: r2-nacl, name: NACLs, match: [nacl]}
+      - {id: r2-azure-firewall, name: Azure Firewall, match: [azure-firewall]}
+      - {id: r2-centralized-inspection, name: Centralised inspection with Transit Gateway, match: [centralized-inspection]}
+      - {id: r2-route53-dns-firewall, name: Route 53 Resolver DNS Firewall, match: [route53-dns-firewall]}
+      - {id: r2-gcp-firewall-policies, name: GCP hierarchical firewall policies, match: [gcp-firewall-policies]}
+      - {id: r2-vpc-reachability-analyzer, name: VPC Reachability Analyzer, match: [vpc-reachability-analyzer]}
+      - {id: r2-cloud-egress-control, name: Cloud egress control, match: [cloud-egress-control]}
+      - {id: r2-azure-waf, name: Azure Front Door and Application Gateway WAF, match: [azure-waf]}
+  - id: cloud-data-protection
+    name: Cloud data protection
+    source: AWS KMS/S3/Macie docs; Azure Key Vault docs
+    match: [cloud-data-protection]
+    subtopics:
+      - {id: cdp-kms, name: KMS key policies, match: [kms-key-policy]}
+      - {id: cdp-s3, name: S3 Block Public Access, match: [s3-block-public-access]}
+      - {id: cdp-macie, name: Sensitive data discovery with Macie, match: [amazon-macie]}
+      - {id: cdp-secrets, name: Secrets rotation, match: [secrets-rotation]}
+      - {id: r2-key-vault-hardening, name: Azure Key Vault hardening, match: [key-vault-hardening]}
+      - {id: r2-cmek, name: CMEK in Google Cloud, match: [cmek]}
+      - {id: r2-backup-vault-lock, name: AWS Backup Vault Lock, match: [backup-vault-lock]}
+      - {id: r2-storage-account-security, name: Azure storage account security, match: [storage-account-security]}
+      - {id: r2-snapshot-sharing-controls, name: Snapshot sharing controls, match: [snapshot-sharing-controls]}
+      - {id: r2-data-perimeter, name: Data perimeter controls, match: [data-perimeter]}
+      - {id: r2-object-lock, name: S3 Object Lock, match: [object-lock]}
+  - id: cloud-incident-response
+    name: Cloud incident response
+    source: AWS Security Incident Response Guide; Azure IR docs
+    match: [cloud-incident-response]
+    subtopics:
+      - {id: cir-keys, name: Access key compromise, match: [access-key-compromise]}
+      - {id: cir-snapshot, name: Snapshot forensics, match: [snapshot-forensics]}
+      - {id: cir-ec2, name: EC2 instance isolation, match: [ec2-isolation]}
+      - {id: cir-entra, name: Entra / M365 tenant compromise response, match: [tenant-compromise-response]}
+      - {id: r2-iam-role-compromise, name: IAM role compromise, match: [iam-role-compromise]}
+      - {id: r2-container-escape, name: Container escape, match: [container-escape]}
+      - {id: r2-ir-access-roles, name: Pre-provisioned IR access roles, match: [ir-access-roles]}
+      - {id: r2-azure-vm-forensics, name: Azure VM forensics, match: [azure-vm-forensics]}
+      - {id: r2-gcp-incident-response, name: GCP incident response, match: [gcp-incident-response]}
+      - {id: r2-s3-exfiltration-investigation, name: S3 exfiltration investigation, match: [s3-exfiltration-investigation]}
+      - {id: r2-cryptomining-response, name: Cryptomining compromise response, match: [cryptomining-response]}
+      - {id: r2-saas-incident-response, name: SaaS application incident response, match: [saas-incident-response]}
+      - {id: r2-kubernetes-incident-response, name: Kubernetes incident response, match: [kubernetes-incident-response]}
+
+  # ===== Application security (product: application-security)
+  - id: owasp-top-10
+    name: OWASP Top 10 weaknesses
+    source: OWASP Top 10 2021; ASVS
+    match: [owasp-top-10]
+    subtopics:
+      - {id: ot-bac, name: Broken access control, match: [broken-access-control]}
+      - {id: ot-injection, name: Injection, match: [injection]}
+      - {id: ot-ssrf, name: SSRF, match: [ssrf]}
+      - {id: ot-deser, name: Insecure deserialization, match: [deserialization]}
+      - {id: ot-misconfig, name: Security misconfiguration, match: [security-misconfiguration]}
+      - {id: r2-xss, name: Cross-site scripting, match: [xss]}
+      - {id: r2-cryptographic-failures, name: Cryptographic failures, match: [cryptographic-failures]}
+      - {id: r2-insecure-design, name: Insecure design, match: [insecure-design]}
+      - {id: r2-vulnerable-and-outdated-components, name: Vulnerable and outdated components, match: [vulnerable-and-outdated-components]}
+      - {id: r2-authentication-failures, name: Identification and authentication failures, match: [authentication-failures]}
+      - {id: r2-integrity-failures, name: Software and data integrity failures, match: [integrity-failures]}
+      - {id: r2-security-logging-failures, name: Security logging and monitoring failures, match: [security-logging-failures]}
+      - {id: r2-xxe, name: XML external entities, match: [xxe]}
+  - id: secure-sdlc
+    name: Secure software development lifecycle
+    source: NIST SP 800-218 SSDF; OWASP SAMM; CIS 16
+    match: [secure-sdlc]
+    subtopics:
+      - {id: ssdlc-ssdf, name: NIST SSDF practices, match: [nist-ssdf]}
+      - {id: ssdlc-samm, name: OWASP SAMM assessment, match: [owasp-samm]}
+      - {id: ssdlc-champions, name: Security champions programme, match: [security-champions]}
+      - {id: ssdlc-standard, name: Secure coding standard, match: [secure-coding-standard]}
+      - {id: r2-owasp-asvs, name: ASVS-based security requirements, match: [owasp-asvs]}
+      - {id: r2-secure-code-review, name: Secure code review, match: [secure-code-review]}
+      - {id: r2-developer-security-training, name: Developer security training, match: [developer-security-training]}
+      - {id: r2-bsimm, name: BSIMM, match: [bsimm]}
+      - {id: r2-security-release-criteria, name: Security release criteria, match: [security-release-criteria]}
+      - {id: r2-pentest-management, name: Application penetration test management, match: [pentest-management]}
+      - {id: r2-appsec-vulnerability-management, name: AppSec vulnerability backlog management, match: [appsec-vulnerability-management]}
+      - {id: r2-ai-coding-assistant-security, name: Secure use of AI coding assistants, match: [ai-coding-assistant-security]}
+      - {id: r2-appsec-metrics, name: AppSec programme metrics, match: [appsec-metrics]}
+  - id: api-security
+    name: API security
+    source: OWASP API Security Top 10 2023
+    match: [api-security]
+    subtopics:
+      - {id: api-top10, name: OWASP API Top 10 review, match: [owasp-api-top-10]}
+      - {id: api-authz, name: Object and function level authorisation, match: [api-authorization]}
+      - {id: api-inventory, name: API inventory, match: [api-inventory]}
+      - {id: api-rate, name: API rate limiting and resource consumption, match: [api-rate-limiting]}
+      - {id: r2-api-gateway, name: API gateway security, match: [api-gateway]}
+      - {id: r2-mass-assignment, name: Mass assignment, match: [mass-assignment]}
+      - {id: r2-graphql-security, name: GraphQL security, match: [graphql-security]}
+      - {id: r2-schema-validation, name: OpenAPI schema validation, match: [schema-validation]}
+      - {id: r2-api-key-management, name: API key management, match: [api-key-management]}
+      - {id: r2-api-security-testing, name: API security testing, match: [api-security-testing]}
+      - {id: r2-webhook-security, name: Webhook security, match: [webhook-security]}
+      - {id: r2-grpc-security, name: gRPC security, match: [grpc-security]}
+      - {id: r2-unsafe-api-consumption, name: Unsafe consumption of APIs, match: [unsafe-api-consumption]}
+  - id: app-secrets
+    name: Secrets in source code
+    source: OWASP Secrets Management Cheat Sheet; GitHub secret scanning docs
+    match: [secrets-scanning]
+    subtopics:
+      - {id: as-push, name: Push protection, match: [push-protection]}
+      - {id: as-leak, name: Leaked secret response, match: [leaked-secret-response]}
+      - {id: r2-hashicorp-vault, name: HashiCorp Vault for application secrets, match: [hashicorp-vault]}
+      - {id: r2-gitleaks, name: Gitleaks, match: [gitleaks]}
+      - {id: r2-git-history-rewrite, name: Git history rewrite after a leak, match: [git-history-rewrite]}
+      - {id: r2-trufflehog, name: TruffleHog verified secret scanning, match: [trufflehog]}
+      - {id: r2-pre-commit, name: Pre-commit secret hooks, match: [pre-commit]}
+      - {id: r2-ci-secrets, name: CI/CD secrets handling, match: [ci-secrets]}
+      - {id: r2-sops, name: SOPS encrypted secrets, match: [sops]}
+      - {id: r2-environment-secrets, name: Environment variable secrets, match: [environment-secrets]}
+      - {id: r2-custom-patterns, name: Custom secret patterns, match: [custom-patterns]}
+  - id: browser-security-controls
+    name: Browser security controls
+    source: OWASP HTTP Headers and Cookie cheat sheets
+    match: [security-headers]
+    subtopics:
+      - {id: bsc-csp, name: Content Security Policy, match: [content-security-policy]}
+      - {id: bsc-hsts, name: HSTS, match: [hsts]}
+      - {id: bsc-cookies, name: Cookie security attributes, match: [cookie-security-flags]}
+      - {id: bsc-cors, name: CORS configuration, match: [cors-configuration]}
+      - {id: r2-trusted-types, name: Trusted Types, match: [trusted-types]}
+      - {id: r2-clickjacking, name: Clickjacking defence, match: [clickjacking]}
+      - {id: r2-subresource-integrity, name: Subresource Integrity, match: [subresource-integrity]}
+      - {id: r2-permissions-policy, name: Permissions-Policy, match: [permissions-policy]}
+      - {id: r2-cross-origin-isolation, name: Cross-origin isolation (COOP, COEP, CORP), match: [cross-origin-isolation]}
+      - {id: r2-referrer-policy, name: Referrer-Policy, match: [referrer-policy]}
+      - {id: r2-csrf, name: CSRF defences, match: [csrf]}
+      - {id: r2-x-content-type-options, name: X-Content-Type-Options and MIME sniffing, match: [x-content-type-options]}
+  - id: supply-chain
+    name: Software supply chain security
+    source: SLSA; OpenSSF Scorecard; CIS 16.4
+    match: [supply-chain-security]
+    subtopics:
+      - {id: sc-sbom, name: SBOM generation, match: [sbom]}
+      - {id: sc-signing, name: Artefact signing, match: [artifact-signing]}
+      - {id: sc-pinning, name: Dependency pinning, match: [dependency-pinning]}
+      - {id: sc-scorecard, name: OpenSSF Scorecard, match: [openssf-scorecard]}
+      - {id: r2-slsa-provenance, name: SLSA provenance, match: [slsa-provenance]}
+      - {id: r2-cicd-hardening, name: CI/CD pipeline hardening, match: [cicd-hardening]}
+      - {id: r2-github-actions-security, name: GitHub Actions security, match: [github-actions-security]}
+      - {id: r2-malicious-package, name: Malicious package detection, match: [malicious-package]}
+      - {id: r2-dependency-confusion, name: Dependency confusion prevention, match: [dependency-confusion]}
+      - {id: r2-reproducible-builds, name: Reproducible builds, match: [reproducible-builds]}
+      - {id: r2-in-toto, name: in-toto attestations, match: [in-toto]}
+      - {id: r2-license-compliance, name: Licence compliance, match: [license-compliance]}
+  - id: appsec-testing
+    name: Application security testing tools
+    source: OWASP DevSecOps guideline; Semgrep/CodeQL/ZAP docs
+    match: [sast, dast]
+    subtopics:
+      - {id: ast-semgrep, name: Custom Semgrep rules, match: [semgrep-rules]}
+      - {id: ast-codeql, name: CodeQL queries, match: [codeql-queries]}
+      - {id: ast-zap, name: ZAP baseline scan, match: [zap-baseline-scan]}
+      - {id: ast-gate, name: Security gates in CI, match: [security-gate]}
+      - {id: r2-iast, name: IAST, match: [iast]}
+      - {id: r2-fuzzing, name: Fuzzing, match: [fuzzing]}
+      - {id: r2-zap-authenticated-scan, name: ZAP authenticated scans, match: [zap-authenticated-scan]}
+      - {id: r2-burp-suite, name: Burp Suite for AppSec verification, match: [burp-suite]}
+      - {id: r2-sast-triage, name: SAST finding triage, match: [sast-triage]}
+      - {id: r2-mobsf, name: Mobile app testing with MobSF, match: [mobsf]}
+      - {id: r2-nuclei, name: Nuclei templates for regression checks, match: [nuclei]}
+      - {id: r2-sonarqube, name: SonarQube security hotspots, match: [sonarqube]}
+  - id: input-output-handling
+    name: Input validation and output encoding
+    source: OWASP ASVS V5; OWASP cheat sheets
+    match: [input-validation]
+    subtopics:
+      - {id: io-params, name: Parameterised queries, match: [parameterized-queries]}
+      - {id: io-encoding, name: Context-aware output encoding, match: [output-encoding]}
+      - {id: io-upload, name: File upload security, match: [file-upload-security]}
+      - {id: r2-command-injection, name: OS command injection prevention, match: [command-injection]}
+      - {id: r2-html-sanitization, name: HTML sanitisation, match: [html-sanitization]}
+      - {id: r2-allowlist-validation, name: Allowlist validation, match: [allowlist-validation]}
+      - {id: r2-path-traversal, name: Path traversal prevention, match: [path-traversal]}
+      - {id: r2-template-injection, name: Server-side template injection, match: [template-injection]}
+      - {id: r2-ldap-injection, name: LDAP injection, match: [ldap-injection]}
+      - {id: r2-open-redirect, name: Open redirect prevention, match: [open-redirect]}
+      - {id: r2-redos, name: ReDoS prevention, match: [redos]}
+      - {id: r2-nosql-injection, name: NoSQL injection, match: [nosql-injection]}
+      - {id: r2-log-injection, name: Log injection, match: [log-injection]}
+  - id: app-authn-session
+    name: Application authentication and session management
+    source: OWASP ASVS V2/V3; OWASP cheat sheets
+    match: [session-management]
+    subtopics:
+      - {id: aas-jwt, name: JWT validation, match: [jwt-validation]}
+      - {id: aas-pkce, name: OAuth authorisation code with PKCE, match: [oauth-pkce]}
+      - {id: aas-session, name: Session lifecycle (fixation, timeout, logout), match: [session-fixation]}
+      - {id: r2-webauthn, name: WebAuthn in applications, match: [webauthn]}
+      - {id: r2-password-reset-security, name: Password reset flow security, match: [password-reset-security]}
+      - {id: r2-credential-stuffing, name: Credential stuffing defences, match: [credential-stuffing]}
+      - {id: r2-account-enumeration, name: Account enumeration prevention, match: [account-enumeration]}
+      - {id: r2-remember-me-tokens, name: Remember-me tokens, match: [remember-me-tokens]}
+      - {id: r2-refresh-token-rotation, name: Refresh token rotation, match: [refresh-token-rotation]}
+      - {id: r2-authorization-policy-engine, name: Authorization policy engines, match: [authorization-policy-engine]}
+      - {id: r2-server-side-sessions, name: Server-side session storage, match: [server-side-sessions]}
+
+  # ===== System hardening (product: system-hardening)
+  - id: benchmarks
+    name: Benchmarks and baselines
+    source: CIS Benchmarks; DISA STIGs; CIS 4
+    match: [cis-benchmarks]
+    subtopics:
+      - {id: bm-ciscat, name: CIS-CAT assessment, match: [cis-cat]}
+      - {id: bm-stig, name: DISA STIG implementation, match: [disa-stig]}
+      - {id: bm-openscap, name: OpenSCAP scanning and remediation, match: [openscap]}
+      - {id: bm-golden, name: Golden images, match: [golden-image]}
+      - {id: r2-inspec, name: Chef InSpec, match: [inspec]}
+      - {id: r2-ansible-lockdown, name: Ansible Lockdown, match: [ansible-lockdown]}
+      - {id: r2-security-compliance-toolkit, name: Microsoft Security Compliance Toolkit, match: [security-compliance-toolkit]}
+      - {id: r2-configuration-drift, name: Configuration drift detection, match: [configuration-drift]}
+      - {id: r2-benchmark-exceptions, name: Benchmark deviation documentation, match: [benchmark-exceptions]}
+      - {id: r2-scap-tailoring, name: SCAP Security Guide tailoring, match: [scap-tailoring]}
+      - {id: r2-stig-checklist, name: STIG Viewer checklists, match: [stig-checklist]}
+      - {id: r2-powerstig, name: PowerSTIG, match: [powerstig]}
+      - {id: r2-kube-bench, name: kube-bench, match: [kube-bench]}
+  - id: linux-hardening
+    name: Linux hardening
+    source: CIS Linux benchmarks; D3FEND Platform Hardening
+    match: [linux-hardening]
+    subtopics:
+      - {id: lh-ssh, name: sshd hardening, match: [sshd-hardening]}
+      - {id: lh-selinux, name: SELinux, match: [selinux]}
+      - {id: lh-apparmor, name: AppArmor, match: [apparmor]}
+      - {id: lh-sysctl, name: Kernel sysctl hardening, match: [sysctl-hardening]}
+      - {id: lh-sudo, name: sudoers hardening, match: [sudoers-hardening]}
+      - {id: lh-suid, name: SUID/SGID and permission audit, match: [suid-audit]}
+      - {id: r2-pam-hardening, name: PAM hardening (faillock, pwquality), match: [pam-hardening]}
+      - {id: r2-mount-hardening, name: Mount option hardening, match: [mount-hardening]}
+      - {id: r2-kernel-module-blacklist, name: Kernel module blacklisting, match: [kernel-module-blacklist]}
+      - {id: r2-grub-password, name: GRUB bootloader password, match: [grub-password]}
+      - {id: r2-fail2ban, name: fail2ban, match: [fail2ban]}
+      - {id: r2-systemd-sandboxing, name: systemd unit sandboxing, match: [systemd-sandboxing]}
+      - {id: r2-lynis, name: Lynis audits, match: [lynis]}
+  - id: windows-hardening
+    name: Windows hardening
+    source: Microsoft security baselines; CIS Windows benchmarks
+    match: [windows-hardening]
+    subtopics:
+      - {id: wh-smb, name: SMB signing and SMBv1 removal, match: [smb-signing]}
+      - {id: wh-ntlm, name: NTLM restriction, match: [ntlm-restriction]}
+      - {id: wh-llmnr, name: Disabling LLMNR and NBT-NS, match: [llmnr-netbios-disable]}
+      - {id: wh-gpo, name: Group Policy security settings, match: [group-policy]}
+      - {id: r2-rdp-hardening, name: RDP hardening, match: [rdp-hardening]}
+      - {id: r2-winrm-hardening, name: WinRM hardening, match: [winrm-hardening]}
+      - {id: r2-wdigest, name: WDigest and cached credentials, match: [wdigest]}
+      - {id: r2-schannel-hardening, name: SCHANNEL TLS hardening, match: [schannel-hardening]}
+      - {id: r2-server-core, name: Server Core minimisation, match: [server-core]}
+      - {id: r2-local-account-restrictions, name: Local account network logon restrictions, match: [local-account-restrictions]}
+      - {id: r2-office-macro-policy, name: Office macro policy, match: [office-macro-policy]}
+      - {id: r2-microsoft-security-baselines, name: Microsoft security baselines, match: [microsoft-security-baselines]}
+  - id: service-minimisation
+    name: Least functionality and service minimisation
+    source: Sec+ 2.5 hardening; CIS 4.8
+    match: [least-functionality]
+    subtopics:
+      - {id: sm-services, name: Disabling unnecessary services, match: [service-minimisation]}
+      - {id: sm-ports, name: Listening ports audit, match: [listening-ports-audit]}
+      - {id: sm-defaults, name: Default credentials removal, match: [default-credentials]}
+      - {id: r2-package-minimisation, name: Package minimisation, match: [package-minimisation]}
+      - {id: r2-legacy-protocol-removal, name: Legacy protocol removal, match: [legacy-protocol-removal]}
+      - {id: r2-windows-optional-features, name: Windows optional features and roles removal, match: [windows-optional-features]}
+      - {id: r2-kiosk-mode, name: Kiosk and single-purpose lockdown, match: [kiosk-mode]}
+      - {id: r2-attack-surface-reduction, name: Attack surface reduction by role, match: [attack-surface-reduction]}
+      - {id: r2-scheduled-job-review, name: Scheduled job review, match: [scheduled-job-review]}
+  - id: file-integrity-monitoring
+    name: File integrity monitoring
+    source: Sec+ 4.5 FIM; PCI DSS 11.5
+    match: [file-integrity-monitoring]
+    subtopics:
+      - {id: fim-aide, name: AIDE, match: [aide]}
+      - {id: fim-wazuh, name: Wazuh syscheck, match: [wazuh-fim]}
+      - {id: fim-change, name: Correlating FIM alerts with change records, match: [fim-change-correlation]}
+      - {id: r2-osquery-fim, name: osquery file events, match: [osquery-fim]}
+      - {id: r2-tripwire, name: Tripwire, match: [tripwire]}
+      - {id: r2-windows-registry-monitoring, name: Windows registry monitoring, match: [windows-registry-monitoring]}
+      - {id: r2-fim-baseline-update, name: FIM baseline updates after patching, match: [fim-baseline-update]}
+      - {id: r2-pci-fim, name: PCI DSS FIM scope, match: [pci-fim]}
+      - {id: r2-read-only-root-filesystem, name: Read-only root filesystems, match: [read-only-root-filesystem]}
+  - id: network-device-hardening
+    name: Network device hardening
+    source: CIS 12; NSA Network Infrastructure Security Guide
+    match: [network-device-hardening]
+    subtopics:
+      - {id: ndh-ios, name: Cisco IOS hardening, match: [cisco-ios-hardening]}
+      - {id: ndh-snmp, name: SNMPv3, match: [snmpv3]}
+      - {id: ndh-mgmt, name: Management plane protection, match: [management-plane-protection]}
+      - {id: ndh-backup, name: Network configuration backup, match: [network-config-backup]}
+      - {id: r2-tacacs, name: TACACS+ AAA, match: [tacacs]}
+      - {id: r2-junos-hardening, name: Junos hardening, match: [junos-hardening]}
+      - {id: r2-fortigate-hardening, name: FortiGate hardening, match: [fortigate-hardening]}
+      - {id: r2-pan-os-hardening, name: PAN-OS management hardening, match: [pan-os-hardening]}
+      - {id: r2-copp, name: Control plane policing, match: [copp]}
+      - {id: r2-routing-protocol-authentication, name: Routing protocol authentication, match: [routing-protocol-authentication]}
+      - {id: r2-image-verification, name: Network OS image verification, match: [image-verification]}
+      - {id: r2-network-device-logging, name: Network device logging, match: [network-device-logging]}
+  - id: database-hardening
+    name: Database hardening
+    source: CIS PostgreSQL/SQL Server benchmarks
+    match: [database-hardening]
+    subtopics:
+      - {id: dbh-pg, name: PostgreSQL hardening, match: [postgresql-hardening]}
+      - {id: dbh-mssql, name: SQL Server hardening, match: [sql-server-hardening]}
+      - {id: dbh-audit, name: Database audit logging, match: [database-audit-logging]}
+      - {id: dbh-tde, name: Transparent data encryption, match: [transparent-data-encryption]}
+      - {id: r2-mysql-hardening, name: MySQL hardening, match: [mysql-hardening]}
+      - {id: r2-mongodb-hardening, name: MongoDB hardening, match: [mongodb-hardening]}
+      - {id: r2-oracle-database-hardening, name: Oracle Database hardening, match: [oracle-database-hardening]}
+      - {id: r2-redis-hardening, name: Redis hardening, match: [redis-hardening]}
+      - {id: r2-database-privilege-review, name: Database privilege review, match: [database-privilege-review]}
+      - {id: r2-elasticsearch-security, name: Elasticsearch security, match: [elasticsearch-security]}
+      - {id: r2-managed-database-security, name: Managed cloud database security, match: [managed-database-security]}
+      - {id: r2-backup-encryption, name: Backup encryption, match: [backup-encryption]}
+  - id: web-server-hardening
+    name: Web server hardening
+    source: CIS NGINX/Apache/IIS benchmarks
+    match: [web-server-hardening]
+    subtopics:
+      - {id: wsh-nginx, name: NGINX hardening, match: [nginx-hardening]}
+      - {id: wsh-apache, name: Apache httpd hardening, match: [apache-hardening]}
+      - {id: wsh-iis, name: IIS hardening, match: [iis-hardening]}
+      - {id: r2-tomcat-hardening, name: Tomcat hardening, match: [tomcat-hardening]}
+      - {id: r2-owasp-crs, name: ModSecurity with the OWASP Core Rule Set, match: [owasp-crs]}
+      - {id: r2-reverse-proxy-hardening, name: Reverse proxy hardening, match: [reverse-proxy-hardening]}
+      - {id: r2-php-hardening, name: PHP hardening, match: [php-hardening]}
+  - id: container-hardening
+    name: Container host and runtime hardening
+    source: CIS Docker Benchmark; NIST SP 800-190
+    match: [container-hardening]
+    subtopics:
+      - {id: ch-daemon, name: Docker daemon hardening, match: [docker-daemon-hardening]}
+      - {id: ch-bench, name: docker-bench-security, match: [docker-bench]}
+      - {id: ch-rootless, name: Rootless containers, match: [rootless-containers]}
+      - {id: ch-minimal, name: Minimal and distroless images, match: [distroless-images]}
+      - {id: r2-seccomp, name: Seccomp profiles, match: [seccomp]}
+      - {id: r2-linux-capabilities, name: Linux capabilities, match: [linux-capabilities]}
+      - {id: r2-hadolint, name: Dockerfile linting with hadolint, match: [hadolint]}
+      - {id: r2-buildkit-secrets, name: BuildKit build secrets, match: [buildkit-secrets]}
+      - {id: r2-registry-hardening, name: Private registry hardening, match: [registry-hardening]}
+      - {id: r2-containerd-hardening, name: containerd hardening, match: [containerd-hardening]}
+      - {id: r2-user-namespaces, name: User namespaces, match: [user-namespaces]}
+  - id: firmware-security
+    name: Boot and firmware security
+    source: NIST SP 800-193; D3FEND Platform Hardening
+    match: [firmware-security]
+    subtopics:
+      - {id: fs-secureboot, name: UEFI Secure Boot, match: [uefi-secure-boot]}
+      - {id: fs-measured, name: TPM measured boot and attestation, match: [measured-boot]}
+      - {id: fs-updates, name: Firmware update management, match: [firmware-update-management]}
+      - {id: r2-bmc-hardening, name: BMC hardening (iDRAC, iLO), match: [bmc-hardening]}
+      - {id: r2-bios-password, name: BIOS and UEFI setup password, match: [bios-password]}
+      - {id: r2-chipsec, name: CHIPSEC firmware assessment, match: [chipsec]}
+      - {id: r2-intel-amt, name: Intel AMT and ME management, match: [intel-amt]}
+      - {id: r2-firmware-integrity-verification, name: Firmware integrity verification, match: [firmware-integrity-verification]}
+      - {id: r2-blacklotus-mitigation, name: BlackLotus bootkit mitigation, match: [blacklotus-mitigation]}
+      - {id: r2-dbx-updates, name: DBX updates, match: [dbx-updates]}
+  - id: audit-log-management
+    name: Audit log management
+    source: CIS 8; NIST SP 800-92
+    match: [audit-log-management]
+    subtopics:
+      - {id: alm-win, name: Windows advanced audit policy, match: [advanced-audit-policy]}
+      - {id: alm-auditd, name: Linux auditd rules, match: [auditd-rules]}
+      - {id: alm-forward, name: Central log forwarding, match: [log-forwarding]}
+      - {id: alm-ntp, name: Time synchronisation, match: [ntp-time-sync]}
+      - {id: alm-retention, name: Log retention policy, match: [log-retention-policy]}
+      - {id: r2-log-pipeline, name: Log pipelines, match: [log-pipeline]}
+      - {id: r2-tls-syslog, name: TLS syslog, match: [tls-syslog]}
+      - {id: r2-log-integrity, name: Log integrity and tamper evidence, match: [log-integrity]}
+      - {id: r2-log-volume-estimation, name: Log volume estimation, match: [log-volume-estimation]}
+      - {id: r2-m-21-31, name: OMB M-21-31 logging maturity, match: [m-21-31]}
+      - {id: r2-macos-unified-logging, name: macOS unified logging, match: [macos-unified-logging]}
+      - {id: r2-application-security-logging, name: Application security logging, match: [application-security-logging]}
+      - {id: r2-log-review, name: Log review procedures, match: [log-review]}
+
+  # ===== Threat intelligence (product: threat-intelligence)
+  - id: attack-mapping
+    name: ATT&CK and D3FEND mapping
+    source: MITRE ATT&CK; MITRE D3FEND
+    match: [mitre-attack]
+    subtopics:
+      - {id: am-navigator, name: ATT&CK Navigator layers, match: [attack-navigator]}
+      - {id: am-reports, name: Mapping CTI reports to techniques, match: [cti-report-mapping]}
+      - {id: am-d3fend, name: Mapping defences with D3FEND, match: [d3fend]}
+      - {id: am-emulation, name: Adversary emulation plans for validation, match: [adversary-emulation]}
+      - {id: r2-attack-flow, name: Attack Flow, match: [attack-flow]}
+      - {id: r2-mitre-atlas, name: MITRE ATLAS, match: [mitre-atlas]}
+      - {id: r2-capec, name: CAPEC, match: [capec]}
+      - {id: r2-mitre-engage, name: MITRE Engage, match: [mitre-engage]}
+      - {id: r2-attack-workbench, name: ATT&CK Workbench, match: [attack-workbench]}
+      - {id: r2-mitre-car, name: MITRE CAR analytics, match: [mitre-car]}
+      - {id: r2-attack-for-ics, name: ATT&CK for ICS, match: [attack-for-ics]}
+      - {id: r2-tram, name: TRAM, match: [tram]}
+  - id: intelligence-lifecycle
+    name: Intelligence lifecycle
+    source: CySA+ 1.4; FIRST CTI SIG curriculum
+    match: [intelligence-lifecycle]
+    subtopics:
+      - {id: il-pir, name: Priority intelligence requirements, match: [priority-intelligence-requirements]}
+      - {id: il-collection, name: Collection management, match: [collection-plan]}
+      - {id: il-ach, name: Analysis of competing hypotheses, match: [analysis-of-competing-hypotheses]}
+      - {id: il-reporting, name: Intelligence reporting products, match: [intel-reporting]}
+      - {id: r2-intel-feedback, name: Intelligence feedback and evaluation, match: [intel-feedback]}
+      - {id: r2-admiralty-code, name: Admiralty code source evaluation, match: [admiralty-code]}
+      - {id: r2-osint-collection, name: OSINT collection, match: [osint-collection]}
+      - {id: r2-dark-web-monitoring, name: Dark web monitoring, match: [dark-web-monitoring]}
+      - {id: r2-threat-assessment, name: Strategic threat assessment, match: [threat-assessment]}
+      - {id: r2-cti-cmm, name: CTI programme maturity with CTI-CMM, match: [cti-cmm]}
+      - {id: r2-cognitive-bias, name: Cognitive bias in analysis, match: [cognitive-bias]}
+      - {id: r2-structured-analytic-techniques, name: Structured analytic techniques, match: [structured-analytic-techniques]}
+  - id: ioc-handling
+    name: IOC handling
+    source: CySA+ 1.4; MISP docs
+    match: [iocs]
+    subtopics:
+      - {id: ioc-enrich, name: IOC enrichment, match: [ioc-enrichment]}
+      - {id: ioc-deploy, name: Deploying IOCs to controls, match: [ioc-deployment]}
+      - {id: ioc-expiry, name: IOC ageing and expiry, match: [ioc-expiry]}
+      - {id: ioc-defang, name: Defanging and safe handling, match: [defanging]}
+      - {id: r2-pyramid-of-pain, name: Pyramid of pain, match: [pyramid-of-pain]}
+      - {id: r2-confidence-scoring, name: Confidence scoring, match: [confidence-scoring]}
+      - {id: r2-retro-hunting, name: Retro-hunting IOCs, match: [retro-hunting]}
+      - {id: r2-misp-warninglists, name: MISP warninglists, match: [misp-warninglists]}
+      - {id: r2-ioc-extraction, name: IOC extraction from reports, match: [ioc-extraction]}
+      - {id: r2-ioc-sightings, name: IOC sightings, match: [ioc-sightings]}
+      - {id: r2-firewall-edl, name: Firewall external dynamic lists from intel, match: [firewall-edl]}
+  - id: threat-intel-platforms
+    name: Threat intelligence platforms
+    source: MISP and OpenCTI docs; OASIS STIX 2.1/TAXII 2.1
+    match: [threat-intel-platform]
+    subtopics:
+      - {id: tip-misp, name: MISP, match: [misp]}
+      - {id: tip-opencti, name: OpenCTI, match: [opencti]}
+      - {id: tip-stix, name: STIX 2.1 objects, match: [stix]}
+      - {id: tip-taxii, name: TAXII feeds, match: [taxii]}
+      - {id: r2-pymisp, name: PyMISP automation, match: [pymisp]}
+      - {id: r2-misp-taxonomies, name: MISP taxonomies and galaxies, match: [misp-taxonomies]}
+      - {id: r2-opencti-connectors, name: OpenCTI connectors, match: [opencti-connectors]}
+      - {id: r2-misp-sharing, name: MISP sharing groups and sync, match: [misp-sharing]}
+      - {id: r2-stix-patterning, name: STIX patterning, match: [stix-patterning]}
+      - {id: r2-misp-feeds, name: MISP feeds, match: [misp-feeds]}
+      - {id: r2-stix-taxii, name: TIP to SIEM integration, match: [stix-taxii]}
+  - id: adversary-profiling
+    name: Adversary analysis models
+    source: CySA+ 3.1 attack methodology frameworks
+    match: [adversary-profiling]
+    subtopics:
+      - {id: ap-diamond, name: Diamond model, match: [diamond-model]}
+      - {id: ap-killchain, name: Cyber kill chain, match: [cyber-kill-chain]}
+      - {id: ap-tracking, name: Threat actor tracking and clustering, match: [threat-actor-tracking]}
+      - {id: ap-estimative, name: Estimative language and confidence, match: [estimative-language]}
+      - {id: r2-victimology, name: Victimology, match: [victimology]}
+      - {id: r2-campaign-analysis, name: Campaign analysis, match: [campaign-analysis]}
+      - {id: r2-infrastructure-pivoting, name: Infrastructure pivoting, match: [infrastructure-pivoting]}
+      - {id: r2-unified-kill-chain, name: Unified Kill Chain, match: [unified-kill-chain]}
+      - {id: r2-ransomware-group-profiling, name: Ransomware group profiling, match: [ransomware-group-profiling]}
+      - {id: r2-attribution-confidence, name: Attribution confidence, match: [attribution-confidence]}
+      - {id: r2-threat-landscape, name: Sector threat landscape assessment, match: [threat-landscape]}
+      - {id: r2-activity-threads, name: Activity threads, match: [activity-threads]}
+  - id: digital-risk-protection
+    name: Digital risk protection
+    source: CySA+ 1.4 (deep/dark web sources); CSF ID.RA
+    match: [digital-risk-protection]
+    subtopics:
+      - {id: drp-creds, name: Leaked credential monitoring, match: [credential-leak-monitoring]}
+      - {id: drp-lookalike, name: Lookalike domain monitoring, match: [lookalike-domain-monitoring]}
+      - {id: drp-takedown, name: Takedown requests, match: [takedown-requests]}
+      - {id: r2-executive-protection-monitoring, name: Executive exposure monitoring, match: [executive-protection-monitoring]}
+      - {id: r2-social-media-impersonation, name: Social media impersonation, match: [social-media-impersonation]}
+      - {id: r2-rogue-app-monitoring, name: Rogue mobile app monitoring, match: [rogue-app-monitoring]}
+      - {id: r2-leak-site-monitoring, name: Ransomware leak site monitoring, match: [leak-site-monitoring]}
+      - {id: r2-infostealer-logs, name: Infostealer log monitoring, match: [infostealer-logs]}
+      - {id: r2-brand-impersonation, name: Brand impersonation, match: [brand-impersonation]}
+      - {id: r2-third-party-breach-monitoring, name: Third-party breach monitoring, match: [third-party-breach-monitoring]}
+  - id: information-sharing
+    name: Threat information sharing
+    source: NIST SP 800-150; FIRST TLP 2.0
+    match: [information-sharing]
+    subtopics:
+      - {id: is-tlp, name: Traffic Light Protocol, match: [tlp]}
+      - {id: is-isac, name: ISAC participation, match: [isac]}
+      - {id: is-feeds, name: Feed curation, match: [ti-feeds]}
+      - {id: r2-sharing-communities, name: Sharing communities, match: [sharing-communities]}
+      - {id: r2-isao, name: ISAOs, match: [isao]}
+      - {id: r2-sharing-agreements, name: Sharing agreements and legal protections, match: [sharing-agreements]}
+      - {id: r2-automated-indicator-sharing, name: Automated Indicator Sharing, match: [automated-indicator-sharing]}
+      - {id: r2-pap, name: Permissible Actions Protocol, match: [pap]}
+      - {id: r2-sharing-sanitisation, name: Sanitising data before sharing, match: [sharing-sanitisation]}
+      - {id: r2-cert-coordination, name: National CERT coordination, match: [cert-coordination]}

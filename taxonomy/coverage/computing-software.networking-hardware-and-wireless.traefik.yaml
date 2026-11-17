@@ -1,0 +1,202 @@
+# Coverage spec: traefik. Topics from the external structures named in `sources`.
+subject: traefik
+scope:
+  category: computing-software
+  field: networking-hardware-and-wireless
+  products: [traefik]
+sources:
+  - "Traefik docs reference/routing-configuration (http middlewares, routing, services, tls)"
+  - "Traefik docs reference/install-configuration (entrypoints, providers, tls, observability)"
+topics:
+  - id: middleware-basicauth
+    name: middleware basicauth
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/basicauth.md"
+    match: [basicauth, authentication, htpasswd, usersfile, middleware]
+  - id: middleware-digestauth
+    name: middleware digestauth
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/digestauth.md"
+    match: [digestauth, authentication, realm, usersfile, middleware]
+  - id: middleware-forwardauth
+    name: middleware forwardauth
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/forwardauth.md"
+    match: [forwardauth, authentication, delegated-auth, authresponseheaders, middleware]
+  - id: middleware-ratelimit
+    name: middleware ratelimit
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/ratelimit.md"
+    match: [ratelimit, rate-limiting, token-bucket, sourcecriterion, redis, middleware]
+  - id: middleware-ipallowlist
+    name: middleware ipallowlist
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/ipallowlist.md"
+    match: [ipallowlist, ip-filtering, sourcerange, ipstrategy, middleware]
+  - id: middleware-headers-and-cors
+    name: middleware headers and cors
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/headers.md"
+    match: [headers, cors, security-headers, custom-headers, accesscontrolalloworiginlist, middleware]
+  - id: middleware-compress
+    name: middleware compress
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/compress.md"
+    match: [compress, gzip, brotli, zstd, content-encoding, middleware]
+  - id: middleware-circuitbreaker
+    name: middleware circuitbreaker
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/circuitbreaker.md"
+    match: [circuitbreaker, resilience, expression, fallbackduration, middleware]
+  - id: middleware-retry
+    name: middleware retry
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/retry.md"
+    match: [retry, resilience, attempts, initialinterval, idempotent, middleware]
+  - id: middleware-redirectscheme
+    name: middleware redirectscheme
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/redirectscheme.md"
+    match: [redirectscheme, https-redirect, permanent, port, middleware]
+  - id: middleware-redirectregex
+    name: middleware redirectregex
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/redirectregex.md"
+    match: [redirectregex, regex, redirect, replacement, middleware]
+  - id: middleware-strip-and-add-prefix
+    name: middleware strip and add prefix
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/stripprefix.md"
+    match: [stripprefix, stripprefixregex, addprefix, x-forwarded-prefix, middleware]
+  - id: middleware-replacepath
+    name: middleware replacepath
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/replacepath.md"
+    match: [replacepath, replacepathregex, rewrite, original-path, middleware]
+  - id: middleware-chain
+    name: middleware chain
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/chain.md"
+    match: [chain, middleware-order, composition, reuse, middleware]
+  - id: middleware-buffering
+    name: middleware buffering
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/buffering.md"
+    match: [buffering, request-body, response-body, streaming, middleware]
+  - id: middleware-errors
+    name: middleware errors
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/errorpages.md"
+    match: [errors, error-pages, statusrewrites, custom-error-page, middleware]
+  - id: middleware-inflightreq
+    name: middleware inflightreq
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/inflightreq.md"
+    match: [inflightreq, concurrency-limit, 429, sourcecriterion, middleware]
+  - id: middleware-passtlsclientcert
+    name: middleware passtlsclientcert
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/passtlsclientcert.md"
+    match: [passtlsclientcert, mtls, client-certificate, x-forwarded-tls-client-cert, middleware]
+  - id: middleware-grpcweb-and-encodedcharacters
+    name: middleware grpcweb and encodedcharacters
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/middlewares/grpcweb.md"
+    match: [grpcweb, encodedcharacters, allowencodedslash, path-security, middleware]
+  - id: install-vs-routing-configuration
+    name: install vs routing configuration
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/getting-started/configuration-overview.md"
+    match: [static-configuration, dynamic-configuration, traefik-yml, cli-flags, environment-variables]
+  - id: entrypoints-core-settings
+    name: entrypoints core settings
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/entrypoints.md"
+    match: [entrypoints, address, asdefault, listeners, install-configuration]
+  - id: entrypoint-forwarded-headers-and-proxy-protocol
+    name: entrypoint forwarded headers and proxy protocol
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/entrypoints.md"
+    match: [forwardedheaders, trustedips, proxyprotocol, x-forwarded-for, entrypoints]
+  - id: entrypoint-timeouts-and-graceful-shutdown
+    name: entrypoint timeouts and graceful shutdown
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/entrypoints.md"
+    match: [respondingtimeouts, graceTimeOut, keepalive, transport, entrypoints]
+  - id: entrypoint-redirections-and-http3
+    name: entrypoint redirections and http3
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/entrypoints.md"
+    match: [redirections, http3, advertisedport, https-redirect, entrypoints]
+  - id: router-rules-and-priority
+    name: router rules and priority
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/routing/rules-and-priority.md"
+    match: [rule, router, priority, host, pathprefix, matchers]
+  - id: router-options-and-multilayer-routing
+    name: router options and multilayer routing
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/routing/router.md"
+    match: [router, parentrefs, multi-layer-routing, tls, respondingtimeouts]
+  - id: service-load-balancing-and-sticky
+    name: service load balancing and sticky
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/load-balancing/service.md"
+    match: [service, loadbalancer, wrr, p2c, hrw, leasttime, sticky]
+  - id: service-health-checks
+    name: service health checks
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/load-balancing/service.md"
+    match: [healthcheck, passivehealthcheck, unhealthyinterval, grpc, service]
+  - id: service-weighted-mirroring-failover
+    name: service weighted mirroring failover
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/load-balancing/service.md"
+    match: [weighted-service, mirroring, failover, canary, service]
+  - id: serverstransport-backend-tls
+    name: serverstransport backend tls
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/load-balancing/serverstransport.md"
+    match: [serverstransport, insecureskipverify, rootcas, forwardingtimeouts, backend-tls]
+  - id: tls-options-and-mtls
+    name: tls options and mtls
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/http/tls/tls-options.md"
+    match: [tls-options, minversion, ciphersuites, clientauth, sni-strict, mtls]
+  - id: acme-certificate-resolvers
+    name: acme certificate resolvers
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/tls/certificate-resolvers/acme.md"
+    match: [acme, letsencrypt, certresolver, httpchallenge, tlschallenge, dnschallenge]
+  - id: tls-ocsp-stapling-and-spiffe
+    name: tls ocsp stapling and spiffe
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/tls/ocsp.md"
+    match: [ocsp, stapling, spiffe, svid, workload-api]
+  - id: provider-file
+    name: provider file
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/providers/others/file.md"
+    match: [file-provider, providers, directory, watch, dynamic-configuration]
+  - id: provider-docker-labels
+    name: provider docker labels
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/providers/docker.md"
+    match: [docker-provider, labels, exposedbydefault, defaultrule, socket]
+  - id: providers-namespaces-and-precedence
+    name: providers namespaces and precedence
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/providers/overview.md"
+    match: [provider-namespace, cross-provider, precedence, at-suffix, providers]
+  - id: provider-kubernetes-crd
+    name: provider kubernetes crd
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/providers/kubernetes/kubernetes-crd.md"
+    match: [kubernetes, ingressroute, crd, middleware-crd, rbac]
+  - id: provider-kubernetes-ingress-and-gateway
+    name: provider kubernetes ingress and gateway
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/providers/kubernetes/kubernetes-ingress.md"
+    match: [kubernetes-ingress, gateway-api, httproute, ingress, provider]
+  - id: api-and-dashboard-security
+    name: api and dashboard security
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/api-dashboard.md"
+    match: [api, dashboard, insecure, basepath, debug]
+  - id: ping-and-healthcheck-cli
+    name: ping and healthcheck cli
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/observability/healthcheck.md"
+    match: [ping, healthcheck, liveness, readiness, traefik-entrypoint]
+  - id: logs-and-access-logs
+    name: logs and access logs
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/observability/logs-and-accesslogs.md"
+    match: [accesslog, log, json, filters, redact, bufferingsize]
+  - id: metrics-prometheus-and-otlp
+    name: metrics prometheus and otlp
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/observability/metrics.md"
+    match: [metrics, prometheus, otlp, datadog, statsd, influxdb]
+  - id: tracing-opentelemetry
+    name: tracing opentelemetry
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/observability/tracing.md"
+    match: [tracing, opentelemetry, otlp, samplerate, safequeryparams]
+  - id: plugins-and-fastproxy
+    name: plugins and fastproxy
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/install-configuration/experimental/plugins.md"
+    match: [plugins, experimental, moduleName, yaegi, fastproxy]
+  - id: tcp-routing-and-sni
+    name: tcp routing and sni
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/tcp/routing/router.md"
+    match: [tcp-router, hostsni, alpn, tls-passthrough, tcp]
+  - id: tcp-services-and-middlewares
+    name: tcp services and middlewares
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/tcp/service.md"
+    match: [tcp-service, inflightconn, ipallowlist, tcp-healthcheck, tcp-middleware]
+  - id: udp-routing-and-services
+    name: udp routing and services
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/reference/routing-configuration/udp/routing/router.md"
+    match: [udp, udp-router, loadbalancer, weighted, datagram]
+  - id: migrate-v2-to-v3
+    name: migrate v2 to v3
+    source: "https://github.com/traefik/traefik/blob/master/docs/content/migrate/v2-to-v3.md"
+    match: [migration, v2-to-v3, defaultrulesyntax, v3-upgrade, rollout]

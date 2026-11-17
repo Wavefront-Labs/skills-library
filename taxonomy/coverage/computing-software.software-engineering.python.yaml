@@ -1,0 +1,182 @@
+# Canonical coverage spec: Python language, standard library and packaging.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: python-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [python]
+sources:
+  - "Python Language Reference and Library Reference (docs.python.org/3)"
+  - "Python HOWTOs (docs.python.org/3/howto)"
+  - "Python Packaging User Guide (packaging.python.org)"
+  - "Typing specification (typing.python.org) and typing module docs"
+  - "PEPs 484, 517, 561, 621, 634, 654, 695, 703, 735, 779"
+topics:
+  - {id: py-data-model, name: "Data model and special methods", source: "Language Reference: Data model", match: [py-data-model], subtopics: [
+      {id: py-dm-repr, name: "repr, str and format protocols", match: [dunder-repr-str-format]},
+      {id: py-dm-getattr, name: "getattr versus getattribute", match: [getattr-getattribute]},
+      {id: py-dm-container, name: "Container and sequence protocols", match: [container-protocol]}]}
+  - {id: py-classes, name: "Classes and inheritance", source: "Tutorial: Classes; abc module", match: [py-classes], subtopics: [
+      {id: py-cls-dataclass, name: "Dataclasses", match: [python-dataclass]},
+      {id: py-cls-enum, name: "Enumerations", match: [strenum]},
+      {id: py-cls-abc, name: "Abstract base classes", match: [abstract-base-classes]}]}
+  - {id: py-functions, name: "Functions and arguments", source: "Language Reference: Function definitions; HOWTO Functional", match: [py-functions], subtopics: [
+      {id: py-fn-args, name: "Argument binding and star-args", match: [argument-binding-star-args]},
+      {id: py-fn-kwonly, name: "Positional-only and keyword-only parameters", match: [positional-only-keyword-only]},
+      {id: py-fn-closures, name: "Closures and nonlocal", match: [closures-nonlocal]}]}
+  - {id: py-iteration, name: "Iterators and generators", source: "Library Reference: itertools; HOWTO Functional", match: [py-iteration], subtopics: [
+      {id: py-it-yieldfrom, name: "Generator delegation", match: [yield-from]},
+      {id: py-it-itertools, name: "itertools recipes", match: [itertools-recipes]},
+      {id: py-it-protocol, name: "Custom iterator protocol", match: [iterator-protocol-custom]}]}
+  - {id: py-text, name: "Text and bytes", source: "Library Reference: Text Processing; HOWTO Unicode", match: [py-text], subtopics: [
+      {id: py-text-format, name: "str methods and format spec mini-language", match: [format-spec-mini-language]},
+      {id: py-text-unicode, name: "Unicode normalisation", match: [unicode-normalization]},
+      {id: py-text-bytes, name: "bytes, bytearray and memoryview", match: [bytes-bytearray-memoryview]}]}
+  - {id: py-numbers, name: "Numbers and statistics", source: "Library Reference: Numeric and Mathematical Modules", match: [py-numbers], subtopics: [
+      {id: py-num-decimal, name: "Decimal quantisation", match: [quantize]},
+      {id: py-num-fractions, name: "Fractions and rationals", match: [fractions-rational-numbers]},
+      {id: py-num-statistics, name: "statistics module", match: [statistics-module]}]}
+  - {id: py-collections, name: "Collections and data structures", source: "Library Reference: collections, heapq, bisect", match: [py-collections], subtopics: [
+      {id: py-col-deque, name: "deque and Counter", match: [deque-counter]},
+      {id: py-col-defaultdict, name: "defaultdict and ChainMap", match: [defaultdict-chainmap]},
+      {id: py-col-heapq, name: "heapq and bisect", match: [heapq-bisect]}]}
+  - {id: py-exceptions, name: "Exceptions and warnings", source: "Language Reference: Exceptions; warnings module", match: [py-exceptions], subtopics: [
+      {id: py-exc-group, name: "Exception groups and except star", match: [except-star]},
+      {id: py-exc-chain, name: "Exception chaining", match: [raise-from]},
+      {id: py-exc-warnings, name: "warnings module", match: [warnings-module]}]}
+  - {id: py-typing-core, name: "Typing fundamentals", source: "Typing spec: generics, protocols, typed dicts", match: [py-typing-core], subtopics: [
+      {id: py-tc-generics, name: "Generics and TypeVar", match: [typevar]},
+      {id: py-tc-protocol, name: "Protocols", match: [typing-protocol]},
+      {id: py-tc-typeddict, name: "TypedDict", match: [typeddict]}]}
+  - {id: py-typing-advanced, name: "Advanced typing", source: "Typing spec: special forms", match: [py-typing-advanced], subtopics: [
+      {id: py-ta-narrowing, name: "Type narrowing with TypeIs", match: [typeis]},
+      {id: py-ta-literalstring, name: "LiteralString and Never", match: [literalstring-never]},
+      {id: py-ta-annotated, name: "Annotated metadata", match: [typing-annotated]}]}
+  - {id: py-annotations, name: "Annotations at runtime", source: "annotationlib docs; PEP 649 and 749; typing.get_type_hints", match: [py-annotations], subtopics: [
+      {id: py-an-deferred, name: "Deferred annotations", match: [annotationlib-deferred]},
+      {id: py-an-hints, name: "Resolving hints at runtime", match: [get-type-hints-runtime]},
+      {id: py-an-transform, name: "dataclass_transform", match: [dataclass-transform]}]}
+  - {id: py-asyncio-core, name: "asyncio core", source: "Library Reference: asyncio", match: [py-asyncio-core], subtopics: [
+      {id: py-ac-taskgroup, name: "TaskGroup", match: [taskgroup]},
+      {id: py-ac-timeout, name: "Timeouts", match: [asyncio-timeout]},
+      {id: py-ac-queue, name: "Queues", match: [asyncio-queue]}]}
+  - {id: py-asyncio-adv, name: "asyncio advanced", source: "Library Reference: asyncio streams; contextvars", match: [py-asyncio-adv], subtopics: [
+      {id: py-aa-asyncgen, name: "Async generators and comprehensions", match: [async-generators-comprehensions]},
+      {id: py-aa-contextvars, name: "contextvars", match: [contextvars]},
+      {id: py-aa-streams, name: "Streams and servers", match: [asyncio-streams-servers]}]}
+  - {id: py-threading, name: "Threads", source: "Library Reference: threading, concurrent.futures", match: [py-threading], subtopics: [
+      {id: py-th-lock, name: "Locks and events", match: [threading-lock]},
+      {id: py-th-pool, name: "ThreadPoolExecutor and futures", match: [threadpoolexecutor-futures]},
+      {id: py-th-local, name: "Thread-local data", match: [thread-local-data]}]}
+  - {id: py-multiproc, name: "Processes and interpreters", source: "Library Reference: multiprocessing, concurrent.interpreters", match: [py-multiproc], subtopics: [
+      {id: py-mp-pool, name: "Process pools", match: [multiprocessing]},
+      {id: py-mp-shm, name: "Shared memory and managers", match: [shared-memory-manager]},
+      {id: py-mp-interp, name: "Subinterpreters", match: [concurrent-interpreters]}]}
+  - {id: py-io, name: "Files and I/O", source: "Library Reference: io, pathlib, mmap", match: [py-io], subtopics: [
+      {id: py-io-pathlib, name: "pathlib", match: [pathlib]},
+      {id: py-io-textio, name: "Buffering and TextIOWrapper", match: [io-buffering-textiowrapper]},
+      {id: py-io-mmap, name: "Memory-mapped files", match: [mmap-files]}]}
+  - {id: py-os, name: "Operating system interfaces", source: "Library Reference: os, shutil, tempfile", match: [py-os], subtopics: [
+      {id: py-os-tempfile, name: "Temporary files", match: [tempfile]},
+      {id: py-os-environ, name: "Environment and process info", match: [os-environ-process]},
+      {id: py-os-archives, name: "shutil archives", match: [shutil-archives]}]}
+  - {id: py-process-control, name: "Subprocesses and signals", source: "Library Reference: subprocess, signal, atexit", match: [py-process-control], subtopics: [
+      {id: py-pc-subprocess, name: "subprocess.run", match: [subprocess-run]},
+      {id: py-pc-signal, name: "Signal handling", match: [signal-handling]},
+      {id: py-pc-atexit, name: "atexit and shutdown hooks", match: [atexit-shutdown-hooks]}]}
+  - {id: py-networking, name: "Networking", source: "Library Reference: socket, ssl, selectors", match: [py-networking], subtopics: [
+      {id: py-net-socket, name: "Sockets", match: [socket-programming]},
+      {id: py-net-ssl, name: "TLS contexts", match: [ssl-contexts]},
+      {id: py-net-selectors, name: "selectors", match: [selectors-io-multiplexing]}]}
+  - {id: py-internet, name: "Internet protocols", source: "Library Reference: Internet Protocols", match: [py-internet], subtopics: [
+      {id: py-int-urllib, name: "urllib clients", match: [urllib]},
+      {id: py-int-httpserver, name: "http.server", match: [http-server-stdlib]},
+      {id: py-int-smtp, name: "email and smtplib", match: [email-smtplib]}]}
+  - {id: py-data-formats, name: "Data formats", source: "Library Reference: json, csv, xml", match: [py-data-formats], subtopics: [
+      {id: py-df-json, name: "json", match: [python-json]},
+      {id: py-df-csv, name: "csv", match: [python-csv]},
+      {id: py-df-xml, name: "Safe XML parsing", match: [xml-etree-safe-parsing]}]}
+  - {id: py-serialization, name: "Serialisation", source: "Library Reference: pickle, struct, shelve", match: [py-serialization], subtopics: [
+      {id: py-ser-pickle, name: "pickle security", match: [pickle-security]},
+      {id: py-ser-struct, name: "struct binary formats", match: [struct-binary-formats]},
+      {id: py-ser-shelve, name: "shelve and dbm", match: [shelve-dbm]}]}
+  - {id: py-archives-crypto, name: "Archives and hashing", source: "Library Reference: zipfile, tarfile, hashlib, hmac", match: [py-archives-crypto], subtopics: [
+      {id: py-ac-zip, name: "Safe zipfile and tarfile extraction", match: [zipfile-tarfile-safety]},
+      {id: py-ac-hash, name: "hashlib and hmac", match: [hashlib-hmac]},
+      {id: py-ac-base64, name: "base64 and binascii", match: [base64-binascii]}]}
+  - {id: py-time, name: "Dates and time", source: "Library Reference: datetime, zoneinfo, time", match: [py-time], subtopics: [
+      {id: py-time-zoneinfo, name: "zoneinfo", match: [zoneinfo]},
+      {id: py-time-clocks, name: "Monotonic clocks", match: [time-monotonic-perf-counter]},
+      {id: py-time-calendar, name: "calendar and date arithmetic", match: [calendar-date-arithmetic]}]}
+  - {id: py-text-processing, name: "Text processing", source: "Library Reference: re, textwrap, difflib, shlex", match: [py-text-processing], subtopics: [
+      {id: py-tp-re, name: "Regular expressions", match: [re-module]},
+      {id: py-tp-difflib, name: "textwrap and difflib", match: [textwrap-difflib]},
+      {id: py-tp-shlex, name: "string.Template and shlex", match: [string-template-shlex]}]}
+  - {id: py-logging, name: "Logging", source: "Logging HOWTO and Cookbook", match: [py-logging], subtopics: [
+      {id: py-log-dictconfig, name: "dictConfig", match: [dictconfig]},
+      {id: py-log-handlers, name: "Handlers", match: [logging-handlers]},
+      {id: py-log-structured, name: "Structured logging", match: [structured-logging]}]}
+  - {id: py-unit-testing, name: "Unit testing", source: "unittest and unittest.mock docs; pytest docs", match: [py-unit-testing], subtopics: [
+      {id: py-ut-pytest, name: "pytest fixtures", match: [fixtures]},
+      {id: py-ut-mock, name: "unittest.mock", match: [unittest-mock]},
+      {id: py-ut-subtest, name: "subTest and parametrisation", match: [subtest-parametrize]}]}
+  - {id: py-test-quality, name: "Test quality tools", source: "coverage.py, Hypothesis, doctest docs", match: [py-test-quality], subtopics: [
+      {id: py-tq-coverage, name: "Coverage measurement", match: [coverage-py]},
+      {id: py-tq-hypothesis, name: "Property-based testing", match: [python-hypothesis]},
+      {id: py-tq-doctest, name: "doctest", match: [doctest]}]}
+  - {id: py-debugging, name: "Debugging", source: "Library Reference: pdb, faulthandler, tracemalloc", match: [py-debugging], subtopics: [
+      {id: py-dbg-pdb, name: "pdb and breakpoint()", match: [pdb-breakpoint]},
+      {id: py-dbg-faulthandler, name: "faulthandler", match: [faulthandler-traceback]},
+      {id: py-dbg-tracemalloc, name: "tracemalloc", match: [tracemalloc]}]}
+  - {id: py-profiling, name: "Profiling and benchmarking", source: "Library Reference: profile, timeit, sys.monitoring", match: [py-profiling], subtopics: [
+      {id: py-prof-cprofile, name: "cProfile", match: [cprofile]},
+      {id: py-prof-timeit, name: "timeit", match: [timeit]},
+      {id: py-prof-monitoring, name: "sys.monitoring", match: [sys-monitoring]}]}
+  - {id: py-packaging-build, name: "Building distributions", source: "Packaging User Guide: Packaging projects", match: [py-packaging-build], subtopics: [
+      {id: py-pb-pyproject, name: "pyproject.toml", match: [pep-621]},
+      {id: py-pb-wheels, name: "Binary wheels", match: [cibuildwheel]},
+      {id: py-pb-backends, name: "Build backends", match: [pep-517]}]}
+  - {id: py-packaging-publish, name: "Publishing packages", source: "Packaging User Guide: Publishing", match: [py-packaging-publish], subtopics: [
+      {id: py-pp-twine, name: "twine and PyPI upload", match: [twine-pypi-upload]},
+      {id: py-pp-trusted, name: "Trusted publishing", match: [trusted-publishing]},
+      {id: py-pp-contents, name: "sdist and wheel contents", match: [sdist-wheel-contents]}]}
+  - {id: py-environments, name: "Environments and dependencies", source: "Packaging User Guide: Tutorials; venv docs", match: [py-environments], subtopics: [
+      {id: py-env-venv, name: "Virtual environments", match: [virtual-environments-venv]},
+      {id: py-env-hashes, name: "pip constraints and hashes", match: [pip-constraints-hashes]},
+      {id: py-env-lock, name: "Lock files", match: [uv-lock]}]}
+  - {id: py-import-system, name: "Import system", source: "Language Reference: The import system", match: [py-import-system], subtopics: [
+      {id: py-imp-circular, name: "Circular imports", match: [circular-imports]},
+      {id: py-imp-finders, name: "Custom finders and loaders", match: [importlib-finders-loaders]},
+      {id: py-imp-namespace, name: "Namespace packages", match: [namespace-packages]}]}
+  - {id: py-runtime-entry, name: "Running programs", source: "Library Reference: runpy, site, zipapp", match: [py-runtime-entry], subtopics: [
+      {id: py-re-site, name: "site and sitecustomize", match: [site-sitecustomize]},
+      {id: py-re-runpy, name: "runpy and -m", match: [runpy-main-module]},
+      {id: py-re-zipapp, name: "zipapp", match: [zipapp]}]}
+  - {id: py-security, name: "Secure coding", source: "Library Reference: secrets, ast.literal_eval; Python security docs", match: [py-security], subtopics: [
+      {id: py-sec-secrets, name: "secrets module", match: [secrets-module]},
+      {id: py-sec-injection, name: "Command injection", match: [shell-injection]},
+      {id: py-sec-eval, name: "Safe evaluation of literals", match: [ast-literal-eval]}]}
+  - {id: py-introspection, name: "AST and introspection", source: "Library Reference: ast, inspect, dis", match: [py-introspection], subtopics: [
+      {id: py-isp-ast, name: "ast transforms", match: [ast-node-transformer]},
+      {id: py-isp-inspect, name: "inspect module", match: [inspect-signature]},
+      {id: py-isp-dis, name: "dis bytecode", match: [dis-bytecode]}]}
+  - {id: py-ffi, name: "Foreign function interfaces", source: "Library Reference: ctypes; Extending and Embedding", match: [py-ffi], subtopics: [
+      {id: py-ffi-ctypes, name: "ctypes", match: [ctypes-foreign-functions]},
+      {id: py-ffi-cffi, name: "cffi", match: [cffi-extension-api]},
+      {id: py-ffi-capi, name: "C API extension modules", match: [c-api-extension-modules]}]}
+  - {id: py-databases, name: "Databases", source: "Library Reference: sqlite3; PEP 249", match: [py-databases], subtopics: [
+      {id: py-db-sqlite, name: "sqlite3", match: [sqlite3]},
+      {id: py-db-dbapi, name: "DB-API transactions", match: [dbapi-transactions]},
+      {id: py-db-sqlalchemy, name: "SQLAlchemy sessions", match: [sqlalchemy-sessions]}]}
+  - {id: py-cli-config, name: "Command lines and config", source: "Library Reference: argparse, tomllib, configparser", match: [py-cli-config], subtopics: [
+      {id: py-cc-argparse, name: "argparse", match: [argparse]},
+      {id: py-cc-toml, name: "tomllib", match: [tomllib]},
+      {id: py-cc-click, name: "click and typer CLIs", match: [click-typer-cli]}]}
+  - {id: py-memory, name: "Memory management", source: "Library Reference: gc, weakref; data model slots", match: [py-memory], subtopics: [
+      {id: py-mem-gc, name: "Garbage collector tuning", match: [garbage-collector-tuning]},
+      {id: py-mem-weakref, name: "weakref callbacks", match: [weakref-callbacks]},
+      {id: py-mem-slots, name: "slots", match: [python-slots]}]}
+  - {id: py-versions, name: "Version migration", source: "Python Whats New documents for 3.12 to 3.14", match: [py-versions], subtopics: [
+      {id: py-ver-removals, name: "Removed and deprecated modules", match: [deprecations-removals-313]},
+      {id: py-ver-314, name: "Python 3.14 features", match: [python-314-features]},
+      {id: py-ver-compat, name: "Version compat shims", match: [version-compat-shims]}]}

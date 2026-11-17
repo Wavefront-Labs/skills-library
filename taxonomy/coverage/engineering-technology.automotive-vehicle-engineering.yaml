@@ -1,0 +1,602 @@
+# Canonical coverage spec: automotive vehicle engineering (civil road vehicles; whole field).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+# Topics and subtopics come from external structures named in sources, not from existing skills.
+# Scope is civil automotive engineering only. Safety-critical areas are professional practice guidance.
+subject: automotive-vehicle-engineering
+scope:
+  category: engineering-technology
+  field: automotive-vehicle-engineering
+  products: [matlab-simulink, vehicle-dynamics, powertrain-design, ev-battery-systems, chassis-suspension-design, crash-safety, nvh, vehicle-electrical-architecture]
+sources:
+  - "Gillespie, Fundamentals of Vehicle Dynamics (SAE); Milliken and Milliken, Race Car Vehicle Dynamics; Pacejka, Tire and Vehicle Dynamics; Jazar, Vehicle Dynamics (chapter lists)"
+  - "Ehsani et al., Modern Electric Hybrid Electric and Fuel Cell Vehicles; Heywood, Internal Combustion Engine Fundamentals; Guzzella and Sciarretta, Vehicle Propulsion Systems (chapter lists)"
+  - "Reimpell, Stoll and Betzler, The Automotive Chassis; Limpert, Brake Design and Safety; Happian-Smith, Introduction to Modern Vehicle Design (chapter lists)"
+  - "Linden and Reddy, Handbook of Batteries; Plett, Battery Management Systems Vols 1 and 2; Warner, Lithium-Ion Battery Chemistries and Pack Design (chapter lists); UN Manual of Tests and Criteria section 38.3; UN Regulation 100; UN GTR 20; ISO 6469 series"
+  - "Kramer, Passive Safety of Vehicles; Huang, Vehicle Crash Mechanics; Euro NCAP, IIHS and NHTSA NCAP protocol overviews; FMVSS 208 214 216 301 and UN Regulations 94 95 and 137 overviews; LS-DYNA user manual contents"
+  - "Harrison, Vehicle Refinement; Zwicker and Fastl, Psychoacoustics; Genuit, Sound-Engineering im Automobilbereich; ISO 362 pass-by overview; UN R138 AVAS overview"
+  - "Navet and Simonot-Lion, Automotive Embedded Systems Handbook; ISO 11898 CAN; ISO 26262 parts 1-12; ISO/SAE 21434; UN R155 and R156; AUTOSAR specifications overview; ISO 14229 UDS"
+  - "MathWorks documentation tables of contents for Simulink, Stateflow, Powertrain Blockset, Vehicle Dynamics Blockset, Model Predictive Control Toolbox, Embedded Coder, AUTOSAR Blockset, Simulink Test and Simulink Real-Time"
+topics:
+  - id: vehicle-longitudinal-model
+    name: Vehicle longitudinal plant model
+    source: see sources
+    match: [vehicle-longitudinal-model]
+    subtopics:
+      - {id: coastdown-fitting, name: Fit road-load coefficients from coastdown data, match: [coastdown-fitting]}
+      - {id: longitudinal-tyre-model, name: Longitudinal tyre slip block, match: [longitudinal-tyre-model]}
+      - {id: driveline-compliance-model, name: Driveline lash and compliance model, match: [driveline-compliance-model]}
+      - {id: road-grade-input, name: Road grade and wind inputs, match: [road-grade-input]}
+  - id: drive-cycle-simulation
+    name: Drive-cycle simulation
+    source: see sources
+    match: [drive-cycle-simulation]
+    subtopics:
+      - {id: wltc-cycle, name: Set up the WLTC cycle and tolerances, match: [wltc-cycle]}
+      - {id: driver-speed-follower, name: Driver speed-follower controller, match: [driver-speed-follower]}
+      - {id: cycle-energy-integration, name: Integrate energy and fuel over a cycle, match: [cycle-energy-integration]}
+      - {id: regen-blending-model, name: Regenerative braking blending model, match: [regen-blending-model]}
+  - id: powertrain-blockset
+    name: Powertrain Blockset reference applications
+    source: see sources
+    match: [powertrain-blockset]
+    subtopics:
+      - {id: mapped-engine-model, name: Mapped engine model from test data, match: [mapped-engine-model]}
+      - {id: mapped-motor-model, name: Mapped motor and inverter model, match: [mapped-motor-model]}
+      - {id: battery-ecm-simulink, name: Battery equivalent-circuit model in Simulink, match: [battery-ecm-simulink]}
+      - {id: reference-application, name: Tailor a reference application, match: [reference-application]}
+  - id: controller-design
+    name: Control design in Simulink
+    source: see sources
+    match: [controller-design]
+    subtopics:
+      - {id: pid-tuner, name: Tune a vehicle loop with PID Tuner, match: [pid-tuner]}
+      - {id: gain-scheduling, name: Gain-scheduled controllers, match: [gain-scheduling]}
+      - {id: model-predictive-control, name: Model predictive control for vehicle problems, match: [model-predictive-control]}
+      - {id: model-linearization, name: Linearise a model and read Bode plots, match: [model-linearization]}
+  - id: stateflow-supervisory-logic
+    name: Stateflow supervisory logic
+    source: see sources
+    match: [stateflow]
+    subtopics:
+      - {id: mode-manager, name: Mode manager chart structure, match: [mode-manager]}
+      - {id: temporal-logic, name: Temporal logic and debounce timers, match: [temporal-logic]}
+      - {id: hybrid-supervisor, name: Hybrid supervisor mode logic, match: [hybrid-supervisor]}
+      - {id: stateflow-coverage, name: Stateflow chart coverage testing, match: [stateflow-coverage]}
+  - id: model-based-design-process
+    name: Model-based design process
+    source: see sources
+    match: [model-based-design]
+    subtopics:
+      - {id: requirements-traceability, name: Link requirements to model elements, match: [requirements-traceability]}
+      - {id: model-advisor, name: Model Advisor and modelling guidelines, match: [model-advisor]}
+      - {id: back-to-back-testing, name: MIL SIL PIL back-to-back equivalence, match: [back-to-back-testing]}
+      - {id: model-coverage, name: Model coverage metrics, match: [model-coverage]}
+  - id: production-code-generation
+    name: Production code generation
+    source: see sources
+    match: [code-generation]
+    subtopics:
+      - {id: embedded-coder, name: Embedded Coder configuration for ECU targets, match: [embedded-coder]}
+      - {id: fixed-point, name: Fixed-point scaling and conversion, match: [fixed-point]}
+      - {id: autosar-blockset, name: Export AUTOSAR software components, match: [autosar-blockset]}
+      - {id: a2l-export, name: Calibration data and A2L export, match: [a2l-export]}
+  - id: hil-preparation
+    name: Hardware-in-the-loop preparation
+    source: see sources
+    match: [hil-preparation]
+    subtopics:
+      - {id: fixed-step-solver, name: Fixed-step solver selection for real time, match: [fixed-step-solver]}
+      - {id: realtime-plant-model, name: Simplify a plant for real-time execution, match: [realtime-plant-model]}
+      - {id: fault-injection, name: IO scaling and fault insertion, match: [fault-injection]}
+      - {id: simulink-real-time, name: Simulink Real-Time target setup, match: [simulink-real-time]}
+  - id: tyre-force-behaviour
+    name: Tyre force behaviour
+    source: see sources
+    match: [tyre-behaviour]
+    subtopics:
+      - {id: cornering-stiffness, name: Slip angle and cornering stiffness, match: [cornering-stiffness]}
+      - {id: magic-formula, name: Magic Formula fitting, match: [magic-formula]}
+      - {id: load-sensitivity, name: Tyre load sensitivity, match: [load-sensitivity]}
+      - {id: combined-slip, name: Combined slip and friction ellipse, match: [combined-slip]}
+      - {id: tyre-thermal, name: Tyre temperature and pressure effects, match: [tyre-thermal]}
+  - id: steady-state-handling
+    name: Steady-state handling
+    source: see sources
+    match: [steady-state-handling]
+    subtopics:
+      - {id: bicycle-model, name: Bicycle model understeer analysis, match: [bicycle-model]}
+      - {id: constant-radius-test, name: Constant-radius cornering test, match: [constant-radius-test]}
+      - {id: lateral-load-transfer, name: Lateral load transfer calculation, match: [lateral-load-transfer]}
+      - {id: handling-diagram, name: Handling diagram construction, match: [handling-diagram]}
+  - id: transient-response
+    name: Transient handling response
+    source: see sources
+    match: [transient-response]
+    subtopics:
+      - {id: step-steer-test, name: Step-steer transient test, match: [step-steer-test]}
+      - {id: yaw-rate-gain, name: Yaw-rate gain and response time, match: [yaw-rate-gain]}
+      - {id: sine-with-dwell, name: Sine-with-dwell stability manoeuvre, match: [sine-with-dwell]}
+      - {id: steering-frequency-response, name: Steering frequency response sweep, match: [steering-frequency-response]}
+  - id: ride-comfort
+    name: Ride and primary comfort
+    source: see sources
+    match: [ride-comfort]
+    subtopics:
+      - {id: quarter-car, name: Quarter-car ride model, match: [quarter-car]}
+      - {id: damper-tuning, name: Damper force-velocity tuning, match: [damper-tuning]}
+      - {id: road-roughness-psd, name: Road roughness input spectra, match: [road-roughness-psd]}
+      - {id: whole-body-vibration, name: Whole-body vibration evaluation, match: [whole-body-vibration]}
+  - id: roll-stiffness-distribution
+    name: Roll stiffness and balance tuning
+    source: see sources
+    match: [roll-stiffness-distribution]
+    subtopics:
+      - {id: anti-roll-bar, name: Anti-roll bar sizing, match: [anti-roll-bar]}
+      - {id: lltd, name: Lateral load transfer distribution tuning, match: [lltd]}
+      - {id: roll-gradient, name: Roll gradient targets, match: [roll-gradient]}
+      - {id: flat-ride, name: Pitch and heave flat-ride tuning, match: [flat-ride]}
+  - id: stability-rollover
+    name: Stability and rollover
+    source: see sources
+    match: [stability-rollover]
+    subtopics:
+      - {id: static-stability-factor, name: Static stability factor, match: [static-stability-factor]}
+      - {id: esc-tuning, name: ESC intervention envelope, match: [esc-tuning]}
+      - {id: fishhook-test, name: Fishhook rollover test, match: [fishhook-test]}
+      - {id: split-mu-braking, name: Split-friction braking stability, match: [split-mu-braking]}
+  - id: steering-feel
+    name: Steering feel engineering
+    source: see sources
+    match: [steering-feel]
+    subtopics:
+      - {id: steering-torque-gradient, name: Steering torque gradient, match: [steering-torque-gradient]}
+      - {id: eps-assist, name: EPS assist curves, match: [eps-assist]}
+      - {id: on-centre-feel, name: On-centre feel and hysteresis, match: [on-centre-feel]}
+      - {id: steering-ratio, name: Variable steering ratio, match: [steering-ratio]}
+  - id: vehicle-dynamics-simulation
+    name: Vehicle dynamics simulation and testing
+    source: see sources
+    match: [vehicle-dynamics-simulation]
+    subtopics:
+      - {id: carsim, name: CarSim model setup, match: [carsim]}
+      - {id: adams-car, name: Adams Car handling events, match: [adams-car]}
+      - {id: vehicle-test-instrumentation, name: GPS and IMU test instrumentation, match: [vehicle-test-instrumentation]}
+      - {id: subjective-objective-correlation, name: Subjective to objective correlation, match: [subjective-objective-correlation]}
+  - id: road-load-and-performance
+    name: Road load and performance
+    source: see sources
+    match: [road-load]
+    subtopics:
+      - {id: gradeability, name: Acceleration and gradeability, match: [gradeability]}
+      - {id: top-speed-gearing, name: Top speed and gearing limits, match: [top-speed-gearing]}
+      - {id: road-load-derivation, name: Derive road load from vehicle parameters, match: [road-load-derivation]}
+      - {id: launch-traction, name: Traction-limited launch, match: [launch-traction]}
+  - id: transmission-ratio-selection
+    name: Transmission ratio selection
+    source: see sources
+    match: [transmission-ratios]
+    subtopics:
+      - {id: ratio-spread, name: Ratio spread and step selection, match: [ratio-spread]}
+      - {id: final-drive, name: Final drive selection, match: [final-drive]}
+      - {id: shift-schedule, name: Shift schedule design, match: [shift-schedule]}
+      - {id: transmission-types, name: Compare AT DCT CVT and AMT, match: [transmission-types]}
+  - id: engine-fundamentals
+    name: Engine fundamentals for powertrain engineers
+    source: see sources
+    match: [engine-fundamentals]
+    subtopics:
+      - {id: bmep, name: BMEP torque and power relations, match: [bmep]}
+      - {id: bsfc-map, name: Reading a BSFC map, match: [bsfc-map]}
+      - {id: turbo-matching, name: Turbocharger matching basics, match: [turbo-matching]}
+      - {id: engine-friction, name: Engine friction and downsizing, match: [engine-friction]}
+  - id: hybrid-architecture
+    name: Hybrid architecture
+    source: see sources
+    match: [hybrid-architecture]
+    subtopics:
+      - {id: parallel-hybrid, name: P0 to P4 parallel hybrid topologies, match: [parallel-hybrid]}
+      - {id: power-split, name: Power-split eCVT hybrids, match: [power-split]}
+      - {id: series-hybrid, name: Series hybrid and range extender, match: [series-hybrid]}
+      - {id: energy-management-strategy, name: Supervisory energy management, match: [energy-management-strategy]}
+  - id: electric-drive-design
+    name: Electric drive design
+    source: see sources
+    match: [electric-drive]
+    subtopics:
+      - {id: motor-selection, name: Traction motor type selection, match: [motor-selection]}
+      - {id: torque-speed-envelope, name: Torque-speed envelope and base speed, match: [torque-speed-envelope]}
+      - {id: inverter-sizing, name: Inverter sizing and losses, match: [inverter-sizing]}
+      - {id: ev-reduction-gear, name: Single-speed reduction gear selection, match: [ev-reduction-gear]}
+  - id: efficiency-mapping-and-cycles
+    name: Efficiency mapping and cycles
+    source: see sources
+    match: [efficiency-mapping]
+    subtopics:
+      - {id: motor-efficiency-map, name: Motor efficiency map use, match: [motor-efficiency-map]}
+      - {id: energy-consumption-estimate, name: Cycle energy consumption estimate, match: [energy-consumption-estimate]}
+      - {id: auxiliary-load, name: Auxiliary and thermal loads, match: [auxiliary-load]}
+      - {id: range-estimation, name: Range estimation method, match: [range-estimation]}
+  - id: driveability-calibration
+    name: Driveability and calibration targets
+    source: see sources
+    match: [driveability]
+    subtopics:
+      - {id: pedal-map, name: Accelerator pedal map design, match: [pedal-map]}
+      - {id: shuffle-damping, name: Tip-in tip-out shuffle damping, match: [shuffle-damping]}
+      - {id: creep-torque, name: Creep and launch torque, match: [creep-torque]}
+      - {id: ecu-calibration, name: ECU calibration process and tools, match: [ecu-calibration]}
+  - id: driveline-components
+    name: Driveline components
+    source: see sources
+    match: [driveline-components]
+    subtopics:
+      - {id: cv-joint, name: Driveshaft and CV joint sizing, match: [cv-joint]}
+      - {id: differential-types, name: Differential types and selection, match: [differential-types]}
+      - {id: clutch-sizing, name: Clutch and flywheel sizing, match: [clutch-sizing]}
+      - {id: gear-durability, name: Gear durability basics, match: [gear-durability]}
+  - id: cell-selection
+    name: Cell selection
+    source: see sources
+    match: [cell-selection]
+    subtopics:
+      - {id: cell-formats, name: Cylindrical prismatic and pouch formats, match: [cell-formats]}
+      - {id: lfp-vs-nmc, name: LFP versus NMC chemistry choice, match: [lfp-vs-nmc]}
+      - {id: cell-datasheet, name: Reading a cell datasheet, match: [cell-datasheet]}
+      - {id: cell-characterisation, name: Cell characterisation tests, match: [cell-characterisation]}
+  - id: pack-architecture
+    name: Pack architecture
+    source: see sources
+    match: [pack-architecture]
+    subtopics:
+      - {id: series-parallel, name: Series-parallel configuration, match: [series-parallel]}
+      - {id: cell-to-pack, name: Module versus cell-to-pack, match: [cell-to-pack]}
+      - {id: busbar-design, name: Busbar and interconnect design, match: [busbar-design]}
+      - {id: 800v-architecture, name: High-voltage architecture choice, match: [800v-architecture]}
+  - id: battery-thermal-management
+    name: Battery thermal management
+    source: see sources
+    match: [battery-thermal]
+    subtopics:
+      - {id: battery-heat-generation, name: Heat generation estimate, match: [battery-heat-generation]}
+      - {id: cold-plate, name: Liquid cooling plate design, match: [cold-plate]}
+      - {id: battery-preconditioning, name: Preconditioning and fast-charge thermal, match: [battery-preconditioning]}
+      - {id: thermal-propagation, name: Thermal runaway propagation design, match: [thermal-propagation]}
+  - id: bms-requirements
+    name: BMS requirements
+    source: see sources
+    match: [bms-requirements]
+    subtopics:
+      - {id: soc-estimation, name: State of charge estimation, match: [soc-estimation]}
+      - {id: soh-estimation, name: State of health estimation, match: [soh-estimation]}
+      - {id: cell-balancing, name: Cell balancing, match: [cell-balancing]}
+      - {id: power-derating, name: Current limit and derating, match: [power-derating]}
+      - {id: precharge, name: Contactor control and precharge, match: [precharge]}
+  - id: battery-safety
+    name: Battery safety design
+    source: see sources
+    match: [battery-safety]
+    subtopics:
+      - {id: hv-fusing, name: HV fusing and contactor protection, match: [hv-fusing]}
+      - {id: isolation-monitoring, name: Isolation monitoring, match: [isolation-monitoring]}
+      - {id: pack-venting, name: Pack enclosure and venting, match: [pack-venting]}
+      - {id: battery-regulations, name: Battery regulations and test standards, match: [battery-regulations]}
+  - id: ev-charging
+    name: Charging systems
+    source: see sources
+    match: [ev-charging]
+    subtopics:
+      - {id: onboard-charger, name: AC onboard charger, match: [onboard-charger]}
+      - {id: dc-fast-charging, name: DC fast-charging protocols, match: [dc-fast-charging]}
+      - {id: charge-curve, name: Charge curve design, match: [charge-curve]}
+      - {id: bidirectional-charging, name: Bidirectional charging V2X, match: [bidirectional-charging]}
+  - id: pack-mechanical
+    name: Pack mechanical design
+    source: see sources
+    match: [pack-mechanical]
+    subtopics:
+      - {id: structural-battery-pack, name: Structural pack integration, match: [structural-battery-pack]}
+      - {id: pack-crash-protection, name: Pack crash protection, match: [pack-crash-protection]}
+      - {id: pack-sealing, name: IP rating and sealing, match: [pack-sealing]}
+      - {id: pack-vibration-test, name: Vibration and shock durability, match: [pack-vibration-test]}
+  - id: battery-ageing
+    name: Ageing and lifetime
+    source: see sources
+    match: [battery-ageing]
+    subtopics:
+      - {id: calendar-ageing, name: Calendar versus cycle ageing, match: [calendar-ageing]}
+      - {id: lithium-plating, name: Lithium plating prevention, match: [lithium-plating]}
+      - {id: battery-warranty, name: Warranty capacity modelling, match: [battery-warranty]}
+      - {id: second-life, name: Second life and recycling, match: [second-life]}
+  - id: suspension-kinematics-topic
+    name: Suspension kinematics
+    source: see sources
+    match: [suspension-kinematics]
+    subtopics:
+      - {id: roll-centre, name: Roll centre geometry, match: [roll-centre]}
+      - {id: bump-steer, name: Bump steer setup, match: [bump-steer]}
+      - {id: anti-dive, name: Anti-dive and anti-squat, match: [anti-dive]}
+      - {id: motion-ratio, name: Motion ratio and wheel rate, match: [motion-ratio]}
+  - id: suspension-types
+    name: Suspension layouts
+    source: see sources
+    match: [suspension-types]
+    subtopics:
+      - {id: macpherson-strut, name: MacPherson strut layout, match: [macpherson-strut]}
+      - {id: multilink, name: Double wishbone and multilink layout, match: [multilink]}
+      - {id: twist-beam, name: Twist beam and solid axle, match: [twist-beam]}
+      - {id: air-suspension, name: Air suspension, match: [air-suspension]}
+  - id: springs-dampers-bushes
+    name: Springs dampers and bushes
+    source: see sources
+    match: [springs-dampers]
+    subtopics:
+      - {id: coil-spring, name: Coil spring design, match: [coil-spring]}
+      - {id: damper-valving, name: Damper valving, match: [damper-valving]}
+      - {id: bushing-rates, name: Bushing rate selection, match: [bushing-rates]}
+      - {id: bump-stop, name: Bump stops and jounce, match: [bump-stop]}
+  - id: steering-system-design
+    name: Steering system design
+    source: see sources
+    match: [steering-design]
+    subtopics:
+      - {id: steering-rack, name: Rack and pinion packaging, match: [steering-rack]}
+      - {id: ackermann, name: Ackermann geometry, match: [ackermann]}
+      - {id: steering-column, name: Steering column and intermediate shaft, match: [steering-column]}
+      - {id: steer-by-wire, name: Steer-by-wire considerations, match: [steer-by-wire]}
+  - id: brake-sizing
+    name: Braking system sizing
+    source: see sources
+    match: [brake-sizing]
+    subtopics:
+      - {id: brake-balance, name: Brake force distribution, match: [brake-balance]}
+      - {id: brake-disc-thermal, name: Disc thermal capacity, match: [brake-disc-thermal]}
+      - {id: pedal-ratio, name: Master cylinder booster and pedal ratio, match: [pedal-ratio]}
+      - {id: regen-brake-blending, name: Regen and friction blending, match: [regen-brake-blending]}
+      - {id: brake-fade, name: Brake fade and noise, match: [brake-fade]}
+  - id: body-structure-stiffness
+    name: Body structure stiffness
+    source: see sources
+    match: [body-stiffness]
+    subtopics:
+      - {id: torsional-stiffness, name: Torsional stiffness target, match: [torsional-stiffness]}
+      - {id: bending-stiffness, name: Bending stiffness and load paths, match: [bending-stiffness]}
+      - {id: body-joints, name: Joint stiffness, match: [body-joints]}
+      - {id: body-modal-fea, name: Modal and stiffness FEA checks, match: [body-modal-fea]}
+  - id: wheels-tyres-package
+    name: Wheels and tyre package
+    source: see sources
+    match: [wheel-package]
+    subtopics:
+      - {id: tyre-size, name: Tyre size selection, match: [tyre-size]}
+      - {id: wheel-offset, name: Wheel offset and clearance, match: [wheel-offset]}
+      - {id: wheel-bearing, name: Wheel bearing and hub loads, match: [wheel-bearing]}
+      - {id: tpms, name: Tyre pressure monitoring, match: [tpms]}
+  - id: kc-and-durability-testing
+    name: Kinematics compliance and durability testing
+    source: see sources
+    match: [kc-testing]
+    subtopics:
+      - {id: kc-rig, name: K and C rig tests, match: [kc-rig]}
+      - {id: compliance-steer, name: Compliance steer and camber, match: [compliance-steer]}
+      - {id: chassis-durability, name: Durability load cases, match: [chassis-durability]}
+      - {id: subframe-mount, name: Subframe mount design, match: [subframe-mount]}
+  - id: crash-test-protocols
+    name: Regulatory and consumer crash tests
+    source: see sources
+    match: [crash-test-protocols]
+    subtopics:
+      - {id: frontal-regulation, name: Frontal impact regulations, match: [frontal-regulation]}
+      - {id: euro-ncap, name: Euro NCAP overview, match: [euro-ncap]}
+      - {id: iihs-small-overlap, name: IIHS small overlap test, match: [iihs-small-overlap]}
+      - {id: side-impact, name: Side impact protocols, match: [side-impact]}
+      - {id: pedestrian-protection, name: Pedestrian protection, match: [pedestrian-protection]}
+  - id: frontal-structure-design
+    name: Frontal structure design
+    source: see sources
+    match: [frontal-structure]
+    subtopics:
+      - {id: load-paths, name: Load path design, match: [load-paths]}
+      - {id: crash-rail, name: Crash can and rail design, match: [crash-rail]}
+      - {id: powertrain-intrusion, name: Powertrain intrusion control, match: [powertrain-intrusion]}
+      - {id: crash-pulse, name: Crash pulse targets, match: [crash-pulse]}
+  - id: side-and-rear-structure
+    name: Side and rear structure
+    source: see sources
+    match: [side-structure]
+    subtopics:
+      - {id: side-impact-structure, name: Door beam and sill design, match: [side-impact-structure]}
+      - {id: b-pillar, name: B-pillar and roof rail, match: [b-pillar]}
+      - {id: rear-impact, name: Rear impact and fuel system, match: [rear-impact]}
+      - {id: pole-impact, name: EV side pole battery protection, match: [pole-impact]}
+  - id: restraint-systems
+    name: Restraint systems
+    source: see sources
+    match: [restraint-systems]
+    subtopics:
+      - {id: belt-load-limiter, name: Pretensioner and load limiter, match: [belt-load-limiter]}
+      - {id: airbag-design, name: Airbag sizing and venting, match: [airbag-design]}
+      - {id: deployment-logic, name: Deployment logic, match: [deployment-logic]}
+      - {id: child-restraint, name: Child restraint and ISOFIX, match: [child-restraint]}
+  - id: occupant-injury-criteria
+    name: Occupant injury criteria
+    source: see sources
+    match: [injury-criteria]
+    subtopics:
+      - {id: hic, name: Head injury criterion, match: [hic]}
+      - {id: chest-deflection, name: Chest deflection and viscous criterion, match: [chest-deflection]}
+      - {id: neck-injury, name: Neck and femur loads, match: [neck-injury]}
+      - {id: crash-dummies, name: Dummy families, match: [crash-dummies]}
+  - id: crash-cae
+    name: Crash CAE
+    source: see sources
+    match: [crash-cae]
+    subtopics:
+      - {id: crash-mesh, name: Mesh and element formulation, match: [crash-mesh]}
+      - {id: material-card, name: Material cards and strain rate, match: [material-card]}
+      - {id: joint-modelling, name: Spot weld and joint modelling, match: [joint-modelling]}
+      - {id: crash-correlation, name: Model correlation and validation, match: [crash-correlation]}
+      - {id: explicit-solver, name: Explicit solver setup, match: [explicit-solver]}
+  - id: crash-materials
+    name: Materials and joining for crash
+    source: see sources
+    match: [crash-materials]
+    subtopics:
+      - {id: ahss, name: Advanced high-strength steel selection, match: [ahss]}
+      - {id: aluminium-crash, name: Aluminium extrusions and castings, match: [aluminium-crash]}
+      - {id: composite-crash, name: Composite crash absorbers, match: [composite-crash]}
+      - {id: hot-stamping, name: Hot stamping boron steel, match: [hot-stamping]}
+  - id: post-crash
+    name: Post-crash and EV
+    source: see sources
+    match: [post-crash]
+    subtopics:
+      - {id: fuel-integrity, name: Fuel system integrity, match: [fuel-integrity]}
+      - {id: hv-post-crash, name: HV battery post-crash safety, match: [hv-post-crash]}
+      - {id: rescue-sheet, name: Rescue sheet and emergency response, match: [rescue-sheet]}
+      - {id: egress, name: Door opening and egress, match: [egress]}
+  - id: nvh-measurement
+    name: NVH measurement fundamentals
+    source: see sources
+    match: [nvh-measurement]
+    subtopics:
+      - {id: nvh-sensors, name: Accelerometer and microphone setup, match: [nvh-sensors]}
+      - {id: fft-analysis, name: FFT windowing and averaging, match: [fft-analysis]}
+      - {id: order-tracking, name: Order tracking, match: [order-tracking]}
+      - {id: psychoacoustics, name: Loudness and psychoacoustic metrics, match: [psychoacoustics]}
+  - id: transfer-path-analysis
+    name: Transfer path analysis
+    source: see sources
+    match: [transfer-path-analysis]
+    subtopics:
+      - {id: classical-tpa, name: Classical TPA, match: [classical-tpa]}
+      - {id: blocked-force, name: Component TPA and blocked forces, match: [blocked-force]}
+      - {id: operational-tpa, name: Operational TPA, match: [operational-tpa]}
+      - {id: path-contribution, name: Path contribution ranking, match: [path-contribution]}
+  - id: powertrain-noise
+    name: Engine and powertrain noise
+    source: see sources
+    match: [powertrain-noise]
+    subtopics:
+      - {id: engine-orders, name: Firing-order excitation, match: [engine-orders]}
+      - {id: engine-mounts, name: Engine mount system design, match: [engine-mounts]}
+      - {id: gear-whine, name: Gear whine, match: [gear-whine]}
+      - {id: intake-exhaust-noise, name: Intake and exhaust noise, match: [intake-exhaust-noise]}
+  - id: road-noise
+    name: Road and tyre noise
+    source: see sources
+    match: [road-noise]
+    subtopics:
+      - {id: structure-borne-noise, name: Structure-borne road noise, match: [structure-borne-noise]}
+      - {id: cavity-resonance, name: Tyre cavity resonance, match: [cavity-resonance]}
+      - {id: tyre-noise, name: Tyre airborne noise, match: [tyre-noise]}
+      - {id: bush-nvh-tuning, name: Suspension bush NVH tuning, match: [bush-nvh-tuning]}
+  - id: wind-noise
+    name: Wind noise
+    source: see sources
+    match: [wind-noise]
+    subtopics:
+      - {id: seal-leak, name: Door seal leak detection, match: [seal-leak]}
+      - {id: aeroacoustics, name: Mirror and A-pillar flow noise, match: [aeroacoustics]}
+      - {id: buffeting, name: Sunroof buffeting, match: [buffeting]}
+  - id: body-acoustics
+    name: Body acoustics
+    source: see sources
+    match: [body-acoustics]
+    subtopics:
+      - {id: acoustic-package, name: Absorption versus insulation, match: [acoustic-package]}
+      - {id: body-damping, name: Damping treatment, match: [body-damping]}
+      - {id: sea-modelling, name: SEA acoustic modelling, match: [sea-modelling]}
+      - {id: panel-contribution, name: Panel acoustic contribution, match: [panel-contribution]}
+  - id: ev-nvh
+    name: EV NVH
+    source: see sources
+    match: [ev-nvh]
+    subtopics:
+      - {id: motor-whine, name: Motor whine and electromagnetic orders, match: [motor-whine]}
+      - {id: inverter-noise, name: Inverter switching noise, match: [inverter-noise]}
+      - {id: avas, name: Acoustic vehicle alerting system, match: [avas]}
+      - {id: masking, name: Loss of engine masking, match: [masking]}
+  - id: nvh-cae-and-targets
+    name: NVH CAE and targets
+    source: see sources
+    match: [nvh-cae]
+    subtopics:
+      - {id: modal-analysis, name: Modal analysis FEA, match: [modal-analysis]}
+      - {id: acoustic-fea, name: FE acoustic coupling, match: [acoustic-fea]}
+      - {id: nvh-targets, name: NVH target cascade, match: [nvh-targets]}
+      - {id: sound-quality, name: Sound quality jury testing, match: [sound-quality]}
+  - id: vehicle-networks
+    name: Vehicle networks
+    source: see sources
+    match: [vehicle-networks]
+    subtopics:
+      - {id: can-fd, name: CAN and CAN FD bus design, match: [can-fd]}
+      - {id: lin-bus, name: LIN subnetworks, match: [lin-bus]}
+      - {id: automotive-ethernet, name: Automotive Ethernet, match: [automotive-ethernet]}
+      - {id: bus-load, name: Bus load analysis, match: [bus-load]}
+      - {id: dbc-files, name: DBC and ARXML databases, match: [dbc-files]}
+  - id: zonal-architecture
+    name: Domain and zonal architecture
+    source: see sources
+    match: [zonal-architecture]
+    subtopics:
+      - {id: domain-controller, name: Domain versus zonal, match: [domain-controller]}
+      - {id: vehicle-gateway, name: Central compute and gateway, match: [vehicle-gateway]}
+      - {id: ecu-consolidation, name: ECU consolidation tradeoffs, match: [ecu-consolidation]}
+      - {id: soa-someip, name: Service-oriented architecture, match: [soa-someip]}
+  - id: wiring-harness-design
+    name: Wiring harness design
+    source: see sources
+    match: [harness-design]
+    subtopics:
+      - {id: wire-sizing, name: Wire gauge and current derating, match: [wire-sizing]}
+      - {id: connector-selection, name: Connector selection and sealing, match: [connector-selection]}
+      - {id: harness-routing, name: Routing and protection, match: [harness-routing]}
+      - {id: harness-weight, name: Harness weight and cost reduction, match: [harness-weight]}
+  - id: power-distribution
+    name: Power distribution
+    source: see sources
+    match: [power-distribution]
+    subtopics:
+      - {id: fuse-box, name: Fuse relay and PDU design, match: [fuse-box]}
+      - {id: dcdc-converter, name: 12V DC-DC and low-voltage supply, match: [dcdc-converter]}
+      - {id: power-modes, name: Power moding and sleep, match: [power-modes]}
+      - {id: quiescent-current, name: Quiescent current budget, match: [quiescent-current]}
+      - {id: 48v-system, name: 48V systems, match: [48v-system]}
+  - id: autosar
+    name: AUTOSAR
+    source: see sources
+    match: [autosar]
+    subtopics:
+      - {id: autosar-classic, name: Classic Platform layers, match: [autosar-classic]}
+      - {id: autosar-adaptive, name: Adaptive Platform, match: [autosar-adaptive]}
+      - {id: autosar-swc, name: RTE and software component design, match: [autosar-swc]}
+      - {id: uds-diagnostics, name: Diagnostic stack and UDS, match: [uds-diagnostics]}
+  - id: functional-safety
+    name: Functional safety
+    source: see sources
+    match: [functional-safety]
+    subtopics:
+      - {id: hara, name: Hazard analysis and ASIL, match: [hara]}
+      - {id: safety-concept, name: Safety goals and concept, match: [safety-concept]}
+      - {id: hardware-metrics, name: Hardware metrics SPFM LFM, match: [hardware-metrics]}
+      - {id: software-safety, name: Software safety requirements, match: [software-safety]}
+      - {id: safety-case, name: Safety case, match: [safety-case]}
+  - id: cybersecurity-and-ota
+    name: Cybersecurity and OTA
+    source: see sources
+    match: [automotive-cybersecurity]
+    subtopics:
+      - {id: tara, name: Threat analysis and risk assessment, match: [tara]}
+      - {id: secure-boot, name: Secure boot and HSM, match: [secure-boot]}
+      - {id: unece-r155, name: UN R155 and R156 compliance, match: [unece-r155]}
+      - {id: ota-update, name: OTA update architecture, match: [ota-update]}
+  - id: emc-and-validation
+    name: EMC and E/E validation
+    source: see sources
+    match: [emc-validation]
+    subtopics:
+      - {id: emc-testing, name: EMC test methods, match: [emc-testing]}
+      - {id: transient-immunity, name: ESD and transient immunity, match: [transient-immunity]}
+      - {id: network-testing, name: Network conformance testing, match: [network-testing]}
+      - {id: ee-integration, name: E/E integration testing, match: [ee-integration]}

@@ -1,0 +1,313 @@
+# Coverage spec for Apache Tomcat 10.1 administration (computing-software / systems-network-administration).
+subject: Apache Tomcat
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [apache-tomcat]
+sources:
+  - "Apache Tomcat 10.1 Configuration Reference (https://tomcat.apache.org/tomcat-10.1-doc/config/)"
+  - "Apache Tomcat 10.1 User Guide (https://tomcat.apache.org/tomcat-10.1-doc/)"
+topics:
+  - id: http-connector-threads
+    name: "HTTP connector threads and connections"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["http-connector", "maxthreads", "acceptcount", "maxconnections"]
+    subtopics:
+      - {id: connection-timeouts, name: "Connection and keep-alive timeouts", match: [connectiontimeout, keepalive]}
+      - {id: connector-thread-pool, name: "Connector thread pool sizing", match: [thread-pool]}
+  - id: http-connector-limits
+    name: "HTTP connector request limits"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["request-limits", "maxpostsize", "maxparametercount", "maxhttpheadersize"]
+    subtopics:
+      - {id: multipart-limits, name: "Multipart limits", match: [multipart-limits]}
+      - {id: swallow-limit, name: "Aborted upload swallow size", match: [maxswallowsize]}
+  - id: uri-encoding-handling
+    name: "URI encoding and path character handling"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["uri-encoding", "encodedsolidushandling", "relaxedpathchars", "rejectsuspicioususris"]
+  - id: proxy-scheme-attributes
+    name: "Proxy, scheme and redirect attributes"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["proxyname", "redirectport", "useipvhosts", "server-header"]
+  - id: response-compression
+    name: "HTTP response compression"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["compression", "compressionminsize", "compressiblemimetype", "nocompressionuseragents"]
+  - id: ajp-connector
+    name: "AJP connector"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/ajp.html
+    match: ["ajp", "ajp-connector", "secretrequired", "mod-jk"]
+  - id: executor-thread-pool
+    name: "Executor shared thread pool"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/executor.html
+    match: ["executor", "standardthreadexecutor", "maxqueuesize", "threadrenewaldelay"]
+  - id: virtual-threads
+    name: "Virtual thread executor"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/executor.html
+    match: ["virtual-threads", "standardvirtualthreadexecutor", "usevirtualthreads"]
+  - id: server-element
+    name: "Server element and shutdown port"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/server.html
+    match: ["server-element", "shutdown-port", "portoffset", "utilitythreads"]
+  - id: service-engine
+    name: "Service and Engine elements"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/engine.html
+    match: ["service", "engine", "defaulthost", "jvmroute"]
+  - id: host-element
+    name: "Host element"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/host.html
+    match: ["host", "virtual-host", "appbase", "unpackwars"]
+    subtopics:
+      - {id: host-aliases, name: "Host aliases", match: [host-alias]}
+      - {id: host-xmlbase, name: "Host xmlBase and copyXML", match: [xmlbase, copyxml]}
+  - id: automatic-deployment
+    name: "Automatic application deployment"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/host.html
+    match: ["automatic-deployment", "autodeploy", "deployignore", "hot-deploy"]
+  - id: context-naming-versions
+    name: "Context naming and parallel deployment"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/context.html
+    match: ["context-naming", "parallel-deployment", "webapp-version", "root-context"]
+  - id: context-xml-locations
+    name: "Context XML locations and precedence"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/context.html
+    match: ["context-xml", "meta-inf", "default-context", "context-xml-default"]
+  - id: context-attributes
+    name: "Context attributes"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/context.html
+    match: ["reloadable", "crosscontext", "swallowoutput", "antiresourcelocking"]
+    subtopics:
+      - {id: session-cookie-settings, name: "Session cookie settings", match: [session-cookie, usehttponly]}
+  - id: context-parameters-environment
+    name: "Context Parameter and Environment entries"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/context.html
+    match: ["parameter", "environment", "env-entry", "context-param"]
+  - id: access-log-valve
+    name: "AccessLogValve"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["accesslogvalve", "access-log", "log-pattern", "request-time"]
+    subtopics:
+      - {id: access-log-rotation, name: "Access log rotation and retention", match: [rotation, maxdays]}
+  - id: remote-ip-valve
+    name: "RemoteIpValve"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["remoteipvalve", "x-forwarded-for", "internalproxies", "reverse-proxy"]
+  - id: remote-cidr-valve
+    name: "RemoteCIDRValve and IP filtering"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["remotecidrvalve", "remoteaddrvalve", "ip-allow-list", "cidr"]
+  - id: error-report-valve
+    name: "ErrorReportValve and custom error pages"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["errorreportvalve", "error-pages", "showreport", "showserverinfo"]
+  - id: stuck-thread-detection
+    name: "StuckThreadDetectionValve"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["stuckthreaddetectionvalve", "stuck-threads", "hung-requests"]
+  - id: semaphore-valve
+    name: "SemaphoreValve concurrency limit"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["semaphorevalve", "concurrency-limit", "throttling"]
+  - id: crawler-session-manager-valve
+    name: "CrawlerSessionManagerValve"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["crawlersessionmanagervalve", "crawler", "bot-sessions"]
+  - id: ssl-valve
+    name: "SSLValve for proxied client certificates"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/valve.html
+    match: ["sslvalve", "proxy-headers", "ssl-client-cert"]
+  - id: single-sign-on
+    name: "SingleSignOn valve"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/host.html
+    match: ["singlesignon", "sso", "jsessionidsso"]
+  - id: keystore-creation
+    name: "Keystore creation with keytool and openssl"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/ssl-howto.html
+    match: ["keystore", "keytool", "pkcs12", "self-signed-certificate"]
+  - id: ca-signed-certificate
+    name: "CSR and CA-signed certificate import"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/ssl-howto.html
+    match: ["csr", "certificate-signing-request", "certificate-chain", "ca-certificate"]
+  - id: tls-jsse-connector
+    name: "HTTPS connector with JSSE"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/ssl-howto.html
+    match: ["jsse", "sslhostconfig", "sslenabled", "certificatekeystorefile"]
+  - id: tls-openssl-connector
+    name: "OpenSSL / tomcat-native PEM connector"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/ssl-howto.html
+    match: ["openssl", "pem", "tomcat-native", "aprlifecyclelistener"]
+  - id: tls-protocols-ciphers
+    name: "TLS protocols and ciphers"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["protocols", "ciphers", "ciphersuites", "honorcipherorder"]
+  - id: client-certificate-auth
+    name: "Client certificate authentication"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["client-certificate", "mutual-tls", "certificateverification", "truststorefile"]
+  - id: sni
+    name: "SNI and multiple certificates"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["sni", "strictsni", "defaultsslhostconfigname", "multiple-certificates"]
+  - id: tls-troubleshooting
+    name: "TLS handshake troubleshooting"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/ssl-howto.html
+    match: ["handshake", "keystore-error", "logging-properties"]
+  - id: http2
+    name: "HTTP/2 upgrade protocol"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http2.html
+    match: ["http2", "upgradeprotocol", "maxconcurrentstreams", "h2c"]
+  - id: nio-nio2-protocol
+    name: "NIO and NIO2 protocol handlers"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/http.html
+    match: ["nio", "nio2", "usesendfile", "socket-buffers"]
+  - id: realm-userdatabase
+    name: "UserDatabaseRealm and MemoryRealm"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/realm.html
+    match: ["userdatabaserealm", "memoryrealm", "tomcat-users", "allrolesmode"]
+  - id: realm-datasource
+    name: "DataSourceRealm"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/realm.html
+    match: ["datasourcerealm", "jdbc-realm", "database-authentication"]
+  - id: realm-jndi-ldap
+    name: "JNDIRealm for LDAP"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/realm.html
+    match: ["jndirealm", "ldap", "usersearch", "userpattern"]
+  - id: realm-combined-lockout
+    name: "CombinedRealm and LockOutRealm"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/realm.html
+    match: ["combinedrealm", "lockoutrealm", "account-lockout", "brute-force"]
+  - id: realm-jaas
+    name: "JAASRealm"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/realm.html
+    match: ["jaasrealm", "jaas", "loginmodule"]
+  - id: credential-handler
+    name: "CredentialHandler password hashing"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/credentialhandler.html
+    match: ["credentialhandler", "messagedigestcredentialhandler", "secretkeycredentialhandler", "password-hashing"]
+  - id: jdbc-datasource
+    name: "JDBC DataSource resource (DBCP 2)"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/jndi-datasource-examples-howto.html
+    match: ["datasource", "jdbc", "dbcp2", "maxtotal"]
+  - id: jdbc-pool
+    name: "Tomcat JDBC pool"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/jdbc-pool.html
+    match: ["jdbc-pool", "tomcat-jdbc", "datasourcefactory", "jdbcinterceptors"]
+  - id: jndi-global-resources
+    name: "JNDI global resources and ResourceLink"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/jndi-resources-howto.html
+    match: ["globalnamingresources", "resourcelink", "resource-ref", "java-comp-env"]
+  - id: jndi-mail-beans
+    name: "Mail session and JavaBean resources"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/jndi-resources-howto.html
+    match: ["jakarta-mail", "mail-session", "beanfactory", "javabean-resource"]
+  - id: userdatabase-resource
+    name: "UserDatabase resource factories"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/jndi-resources-howto.html
+    match: ["userdatabase", "memoryuserdatabasefactory", "datasourceuserdatabasefactory", "tomcat-users-xml"]
+  - id: manager-access
+    name: "Manager app roles and access"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/manager-howto.html
+    match: ["manager", "manager-gui", "manager-script", "access-restriction"]
+  - id: manager-deploy
+    name: "Manager text interface deployment"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/manager-howto.html
+    match: ["text-interface", "deploy", "war-deployment", "remote-deploy"]
+  - id: manager-diagnostics
+    name: "Manager diagnostic commands"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/manager-howto.html
+    match: ["threaddump", "vminfo", "findleaks", "sslreload"]
+  - id: ant-manager-tasks
+    name: "Ant tasks for the Manager"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/manager-howto.html
+    match: ["ant", "catalina-tasks", "deploy-task"]
+  - id: host-manager
+    name: "Host Manager"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/host-manager-howto.html
+    match: ["host-manager", "admin-script", "storeconfiglifecyclelistener", "persist"]
+  - id: juli-logging
+    name: "JULI logging configuration"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/logging.html
+    match: ["juli", "asyncfilehandler", "log-levels", "catalina-out"]
+  - id: webapp-logging
+    name: "Per-webapp logging and swallowOutput"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/logging.html
+    match: ["per-webapp-logging", "swallowoutput", "classloader-webappname", "log4j"]
+  - id: jmx-remote
+    name: "Remote JMX monitoring"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/monitoring.html
+    match: ["jmx", "remote-jmx", "jmxremote", "jmxproxyservlet"]
+  - id: jmx-ant-tasks
+    name: "JMX Ant tasks"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/monitoring.html
+    match: ["jmx-ant", "mbean", "catalina-ant", "jmx-query"]
+  - id: class-loaders
+    name: "Class loader hierarchy"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/class-loader-howto.html
+    match: ["class-loader", "catalina-properties", "common-loader", "shared-loader"]
+  - id: classloader-delegation
+    name: "Webapp class loader delegation"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/class-loader-howto.html
+    match: ["delegate", "loader-element", "class-conflict"]
+  - id: windows-service
+    name: "Windows service installation"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/windows-service-howto.html
+    match: ["windows-service", "service-bat", "procrun", "commons-daemon"]
+  - id: windows-service-parameters
+    name: "Windows service parameters"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/windows-service-howto.html
+    match: ["jvmoptions", "jvmmx", "stdoutput", "serviceuser"]
+  - id: running-environment
+    name: "Running Tomcat: environment variables and setenv"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/RUNNING.txt
+    match: ["running", "setenv", "catalina-opts", "catalina-pid"]
+  - id: multiple-instances
+    name: "Multiple instances with CATALINA_BASE"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/RUNNING.txt
+    match: ["catalina-base", "multiple-instances", "instance-layout"]
+  - id: default-servlet
+    name: "DefaultServlet listings and write methods"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/default-servlet.html
+    match: ["default-servlet", "directory-listings", "tomcat-web-xml", "webdav"]
+    subtopics:
+      - {id: default-servlet-precompressed, name: "Precompressed static files and sendfile", match: [precompressed, sendfilesize]}
+  - id: rewrite-valve
+    name: "RewriteValve URL rewriting"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/rewrite.html
+    match: ["rewritevalve", "rewrite-config", "rewritecond", "rewriterule"]
+  - id: session-manager
+    name: "Session manager and persistence"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/manager.html
+    match: ["session-manager", "standardmanager", "persistentmanager", "session-persistence"]
+  - id: clustering
+    name: "Clustering and session replication"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/cluster-howto.html
+    match: ["cluster", "session-replication", "deltamanager", "backupmanager"]
+  - id: reverse-proxy-howto
+    name: "Proxy support and load balancing"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/proxy-howto.html
+    match: ["proxy-support", "mod-proxy", "load-balancer", "sticky-sessions"]
+  - id: jar-scanner
+    name: "JarScanner and TLD scanning"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/jar-scanner.html
+    match: ["jarscanner", "tld-scanning", "jarscanfilter"]
+  - id: lifecycle-listeners
+    name: "Lifecycle listeners"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/listeners.html
+    match: ["lifecycle-listener", "jrememoryleakpreventionlistener", "threadlocalleakpreventionlistener"]
+  - id: websocket-config
+    name: "WebSocket configuration"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/web-socket-howto.html
+    match: ["websocket", "websocket-config"]
+  - id: cgi-ssi
+    name: "CGI and SSI servlets"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/cgi-howto.html
+    match: ["cgi", "cgiservlet", "ssi", "ssiservlet"]
+  - id: jasper-jsp
+    name: "Jasper JSP engine configuration"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/jasper-howto.html
+    match: ["jasper", "jsp-compilation", "development-mode"]
+  - id: system-properties
+    name: "System properties"
+    source: https://tomcat.apache.org/tomcat-10.1-doc/config/systemprops.html
+    match: ["system-properties", "strict-servlet-compliance"]

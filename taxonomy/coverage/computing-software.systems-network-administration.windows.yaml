@@ -1,0 +1,1102 @@
+# Canonical coverage spec: Windows administration (Windows Server, Active Directory, PowerShell).
+# Checked by tools/coverage_check.py - a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears as a whole word in the skill's id/name.
+# Topics come from external, authoritative structures (the AZ-800 and AZ-801 Windows Server Hybrid
+# Administrator skills-measured outlines, the Microsoft Learn Windows Server and AD DS docs tables of
+# contents, and the PowerShell docs about_ topics and module reference), not from what we wrote.
+# Depth: each topic lists `subtopics` taken from the source's own sub-structure (exam objective
+# bullets, Learn docs page headings, cmdlet groups in the module reference, about_ topic sections).
+# Depth round 2 adds the next level: Microsoft Learn Windows Server and AD DS how-to and troubleshoot
+# pages, AZ-800/AZ-801 skill sub-bullets, PowerShell about_ topics and module cmdlet reference pages.
+subject: windows-admin
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [windows-server, active-directory, powershell]
+sources:
+  - "AZ-800 Administering Windows Server Hybrid Core Infrastructure, skills measured - Deploy and manage AD DS in on-premises and cloud environments (DCs, RODCs, FSMO, trusts, sites, replication, users/groups, gMSA, hybrid identity with Entra Connect/Cloud Sync, Group Policy, password policies); Manage Windows Servers and workloads in a hybrid environment (Windows Admin Center, PowerShell remoting, second-hop, JEA, Azure Arc); Manage virtual machines and containers (Hyper-V, Windows containers); Implement and manage an on-premises and hybrid networking infrastructure (DNS, DHCP, IPAM, VPN/RRAS, SET); Manage storage and file services (file servers, FSRM, Storage Spaces, S2D, Data Deduplication, iSCSI, SMB over QUIC, Azure File Sync)"
+  - "AZ-801 Configuring Windows Server Hybrid Advanced Services, skills measured - Secure Windows Server on-premises and hybrid infrastructures (OS hardening, WDAC, Credential Guard, Defender, updates, AD security, LAPS, firewall and IPsec, BitLocker); Implement and manage Windows Server high availability (failover clustering, quorum, CAU, rolling upgrades, SOFS, S2D); Implement disaster recovery (Hyper-V Replica, Windows Server Backup, Azure Site Recovery); Migrate servers and workloads (Storage Migration Service, ADMT, AD DS upgrades, IIS migration); Monitor and troubleshoot Windows Server environments (Performance Monitor, event logs, boot, AD recovery)"
+  - "Microsoft Learn Windows Server docs ToC (learn.microsoft.com/windows-server) - Get started/install (Server Core, Desktop Experience, activation), Manage (Windows Admin Center, Server Manager, Remote Server Administration Tools), Identity and access (AD DS, AD CS, AD FS, NPS), Networking (DNS, DHCP, IPAM, Remote Access, SDN), Storage (Storage Spaces, S2D, Storage Replica, File Server, FSRM, Dedup, SMB), Virtualization (Hyper-V, containers), Failover Clustering, Remote Desktop Services, Security (Credential Guard, BitLocker, Windows Defender Firewall), Troubleshooting, Windows Commands reference"
+  - "Microsoft Learn AD DS docs ToC (learn.microsoft.com/windows-server/identity/ad-ds) - Deploy (install DC, add DC, RODC, upgrade, virtualized DCs, cloning), Plan (sites, FSMO, trusts), Manage (AD Administrative Center, Recycle Bin, fine-grained password policy, gMSA, Protected Users, authentication policies and silos, time service, AD DS backup and restore, DSRM, ntdsutil), Troubleshoot (replication, DC locator, Kerberos)"
+  - "PowerShell docs (learn.microsoft.com/powershell) - about_ conceptual topics (Pipelines, Functions_Advanced, Parameters, Splatting, Try_Catch_Finally, Preference_Variables, Remote, Jobs, Thread_Jobs, Scheduled_Jobs, Classes, Modules, Execution_Policies, Profiles, Scopes, Providers, Regular_Expressions, Operators, Hash_Tables, Debuggers, Language_Modes, Logging, Signing, Calculated_Properties, Format.ps1xml), module reference (CimCmdlets, Microsoft.PowerShell.Utility/Management/Security, PSReadLine, ThreadJob, PSResourceGet, SecretManagement, ActiveDirectory, ScheduledTasks), Installing PowerShell 7, JEA docs, Pester and PSScriptAnalyzer docs"
+topics:
+  # --- AD DS deployment (AZ-800 Deploy and manage AD DS domain controllers; AD DS docs Deploy)
+  - id: dc-deployment
+    name: Deploying domain controllers and new forests
+    source: AZ-800/Deploy and manage AD DS domain controllers; AD DS docs/Deploy
+    match: [domain-controller-deployment, dcpromo, install-addsforest]
+    subtopics:
+      - {id: dc-new-forest, name: Install a new forest root with Install-ADDSForest (functional levels, DNS, DSRM password), match: [install-addsforest, new-forest]}
+      - {id: dc-additional-dc, name: Add a domain controller to an existing domain with Install-ADDSDomainController, match: [install-addsdomaincontroller, additional-domain-controller]}
+      - {id: dc-ifm, name: Install from media (ntdsutil ifm) for large or remote DCs, match: [install-from-media, ntdsutil-ifm]}
+      - {id: dc-demote, name: Demote a DC cleanly and force-remove a dead DC with metadata cleanup, match: [uninstall-addsdomaincontroller, dc-demotion]}
+      - {id: dc-child-domain, name: Add a child or tree domain to a forest, match: [install-addsdomain, child-domain]}
+      - {id: dc-prereq-checks, name: Pre-promotion checks with Test-ADDSForestInstallation and Test-ADDSDomainControllerInstallation, match: [test-addsforestinstallation, dc-prerequisite-checks]}
+      - {id: dc-dns-delegation, name: DNS delegation and zone creation for a new domain or forest, match: [dns-delegation-new-domain]}
+      - {id: dc-post-promo, name: Post-promotion verification (SYSVOL and NETLOGON shares, DNS registration, first replication), match: [dc-post-promotion-checks]}
+      - {id: dc-core-install, name: Promote a Server Core DC remotely and install the AD-Domain-Services feature, match: [server-core-domain-controller]}
+  - id: rodc
+    name: Read-only domain controllers
+    source: AZ-800/Deploy RODCs; AD DS docs/RODC
+    match: [read-only-domain-controller, rodc-deployment]
+    subtopics:
+      - {id: rodc-staged, name: Staged RODC install with pre-created account and delegated admin, match: [rodc-staging, add-addsreadonlydomaincontrolleraccount]}
+      - {id: rodc-prp, name: Password Replication Policy allowed/denied lists and prepopulation, match: [password-replication-policy, rodc-prp]}
+      - {id: rodc-compromise, name: Responding to a stolen or compromised RODC (reset cached passwords), match: [rodc-compromise, rodc-reset-passwords]}
+      - {id: rodc-filtered-attributes, name: RODC filtered attribute set and credential caching checks, match: [filtered-attribute-set, rodc-cached-credentials]}
+      - {id: rodc-admin-separation, name: Administrator role separation on an RODC with dsmgmt local roles, match: [rodc-admin-role-separation, dsmgmt]}
+      - {id: rodc-dns, name: RODC read-only DNS zones and update referrals, match: [rodc-dns]}
+      - {id: rodc-krbtgt, name: Per-RODC krbtgt accounts and Kerberos key isolation, match: [rodc-krbtgt]}
+      - {id: rodc-branch-apps, name: Branch office RODC application compatibility and writable DC referrals, match: [rodc-branch-office, rodc-app-compatibility]}
+  - id: fsmo-roles
+    name: FSMO operations master roles
+    source: AZ-800/Troubleshoot flexible single master operations roles; AD DS docs/FSMO
+    match: [fsmo-roles, operations-masters]
+    subtopics:
+      - {id: fsmo-placement, name: Placement of the five FSMO roles and the infrastructure master rule, match: [fsmo-placement, infrastructure-master]}
+      - {id: fsmo-transfer, name: Transfer roles with Move-ADDirectoryServerOperationMasterRole, match: [fsmo-transfer, move-addirectoryserveroperationmasterrole]}
+      - {id: fsmo-seize, name: Seize roles after a DC loss and never bring the old holder back, match: [fsmo-seize, ntdsutil-seize]}
+      - {id: fsmo-pdc-time, name: PDC emulator as forest time source and password-change authority, match: [pdc-emulator, pdc-time-source]}
+      - {id: fsmo-rid-pool, name: RID pool exhaustion and RID master health, match: [rid-master, rid-pool]}
+      - {id: fsmo-query, name: Identify role holders with netdom query fsmo and Get-ADForest/Get-ADDomain, match: [fsmo-role-holders-query]}
+      - {id: fsmo-schema-master, name: Schema master and controlled schema extensions (Schema Admins, ldifde, schmmgmt), match: [schema-extension]}
+      - {id: fsmo-domain-naming, name: Domain naming master and adding or removing domains and application partitions, match: [application-partitions]}
+      - {id: fsmo-outage-impact, name: What breaks when each role holder is offline and how long you can wait before seizing, match: [fsmo-outage-impact]}
+  - id: virtualized-dcs
+    name: Virtualized and Azure-hosted domain controllers
+    source: AZ-800/Deploy and manage DCs in Azure; AD DS docs/Virtualized domain controllers
+    match: [virtualized-domain-controller, azure-domain-controller]
+    subtopics:
+      - {id: vdc-genid, name: VM-GenerationID safeguards and snapshot restore behaviour, match: [vm-generation-id, dc-snapshot-safety]}
+      - {id: vdc-cloning, name: Cloning a virtual DC with DCCloneConfig.xml, match: [dc-cloning, dccloneconfig]}
+      - {id: vdc-azure, name: Deploying DCs on Azure VMs (data disk for NTDS, static IP, site design), match: [azure-vm-domain-controller, ntds-data-disk]}
+      - {id: vdc-time, name: Disabling host time sync for virtual DCs, match: [hyper-v-time-sync, virtual-dc-time]}
+      - {id: vdc-backup, name: Backing up virtual DCs with VSS-aware system state backups instead of snapshots, match: [virtual-dc-backup]}
+      - {id: vdc-placement, name: Spreading virtual DCs across hosts and clusters (anti-affinity, cluster bootstrap dependency), match: [virtual-dc-placement]}
+      - {id: vdc-azure-zones, name: Azure DC availability (availability zones and sets, backup, no Sysprep of DCs), match: [azure-dc-availability-zones]}
+      - {id: vdc-azure-vnet-dns, name: VNet custom DNS settings pointing at Azure-hosted DCs, match: [azure-vnet-dns-dcs]}
+  - id: functional-levels-upgrade
+    name: Domain and forest functional levels and DC upgrades
+    source: AZ-801/Upgrade AD DS; AD DS docs/Upgrade domain controllers
+    match: [functional-level, dc-upgrade]
+    subtopics:
+      - {id: fl-raise, name: Raise domain and forest functional level and what each unlocks, match: [set-adforestmode, set-addomainmode]}
+      - {id: fl-adprep, name: adprep forestprep/domainprep and schema version checks, match: [adprep, schema-version]}
+      - {id: fl-swing, name: Replace DCs with new OS versions (add new, move roles, demote old), match: [dc-replacement, dc-swing-upgrade]}
+      - {id: fl-2025, name: Windows Server 2025 functional level and 32k database pages, match: [functional-level-2025, 32k-pages]}
+      - {id: fl-dfsrmig, name: Migrate SYSVOL replication from FRS to DFSR with dfsrmig, match: [dfsrmig, sysvol-frs-migration]}
+      - {id: fl-inventory, name: Inventory DC OS versions, functional levels and schema before an upgrade, match: [dc-inventory]}
+      - {id: fl-rollback, name: Functional level rollback rules and Recycle Bin and PAM dependencies, match: [functional-level-rollback]}
+  # --- Multi-site, multi-domain, multi-forest (AZ-800)
+  - id: trusts
+    name: Forest and domain trusts
+    source: AZ-800/Configure and manage forest and domain trusts; AD DS docs/Trusts
+    match: [ad-trusts, forest-trust]
+    subtopics:
+      - {id: trust-forest-create, name: Create a two-way forest trust with conditional forwarders, match: [new-forest-trust, trust-dns-forwarders]}
+      - {id: trust-external, name: External and shortcut trusts and when to use each, match: [external-trust, shortcut-trust]}
+      - {id: trust-selective-auth, name: Selective authentication and Allowed to Authenticate, match: [selective-authentication, allowed-to-authenticate]}
+      - {id: trust-sid-filtering, name: SID filtering, quarantine and SID history across trusts, match: [sid-filtering, quarantine-trust]}
+      - {id: trust-troubleshoot, name: Verify and troubleshoot trusts (netdom trust, nltest, name suffix routing), match: [netdom-trust, name-suffix-routing]}
+      - {id: trust-realm, name: Kerberos realm trusts with MIT Kerberos realms and ksetup, match: [realm-trust, ksetup]}
+      - {id: trust-tgt-delegation, name: TGT delegation across forest trusts and unconstrained delegation blocking, match: [enable-tgt-delegation]}
+      - {id: trust-password-reset, name: Reset trust passwords with netdom trust /resetOneSide, match: [netdom-resetoneside]}
+      - {id: trust-remove, name: Remove obsolete trusts safely and clean up DNS forwarders, match: [remove-trust]}
+  - id: ad-sites
+    name: AD DS sites and subnets
+    source: AZ-800/Configure and manage AD DS sites
+    match: [ad-sites, sites-and-services]
+    subtopics:
+      - {id: sites-subnets, name: Create sites and map subnets so clients find local DCs, match: [new-adreplicationsite, new-adreplicationsubnet]}
+      - {id: sites-dc-locator, name: DC locator and site coverage (autositecoverage, SRV records), match: [dc-locator, site-coverage]}
+      - {id: sites-missing-subnet, name: Find clients in no site (netlogon.log NO_CLIENT_SITE), match: [no-client-site, missing-subnets]}
+      - {id: sites-gc-placement, name: Global catalog and universal group membership caching per site, match: [global-catalog-placement, universal-group-membership-caching]}
+      - {id: sites-istg, name: Inter-site topology generator and preferred bridgehead servers, match: [bridgehead-server]}
+      - {id: sites-kcc, name: KCC-generated and manual connection objects, match: [kcc, connection-objects]}
+      - {id: sites-next-closest, name: Try Next Closest Site and DC locator Group Policy settings, match: [try-next-closest-site]}
+      - {id: sites-azure, name: Representing Azure VNets and cloud regions as AD sites, match: [azure-ad-site]}
+  - id: ad-replication
+    name: AD DS replication management
+    source: AZ-800/Configure and manage AD DS replication; AD DS docs/Troubleshoot replication
+    match: [ad-replication, repadmin]
+    subtopics:
+      - {id: repl-site-links, name: Site links, costs, schedules and bridges, match: [site-links, site-link-bridge]}
+      - {id: repl-monitor, name: Monitor replication with repadmin /replsummary and /showrepl, match: [repadmin-replsummary, replication-health]}
+      - {id: repl-lingering, name: Remove lingering objects and handle tombstone lifetime, match: [lingering-objects, tombstone-lifetime]}
+      - {id: repl-usn-rollback, name: Detect and recover from USN rollback, match: [usn-rollback]}
+      - {id: repl-errors, name: Common replication errors (8606, 8614, 1722, 8453) and fixes, match: [replication-error-8614, replication-error-1722]}
+      - {id: repl-force, name: Force replication with repadmin /syncall and /replicate, match: [force-replication]}
+      - {id: repl-change-notification, name: Change notification on site links and urgent replication, match: [site-link-change-notification]}
+      - {id: repl-sysvol, name: SYSVOL DFSR replication health and authoritative SYSVOL restore, match: [sysvol-replication, dfsr-authoritative-sysvol]}
+      - {id: repl-metadata, name: Replication metadata and attribute origin with repadmin /showobjmeta, match: [replication-metadata]}
+  # --- Security principals (AZ-800)
+  - id: users-groups
+    name: Users, groups and computer accounts
+    source: AZ-800/Create and manage AD DS users and groups; ActiveDirectory module reference
+    match: [ad-users-and-groups, activedirectory-module]
+    subtopics:
+      - {id: ug-bulk-create, name: Bulk-create and update users from CSV with New-ADUser/Set-ADUser, match: [new-aduser, bulk-user-import]}
+      - {id: ug-group-scopes, name: Group scopes and types (domain local, global, universal) and conversion, match: [group-scope, universal-groups]}
+      - {id: ug-stale-accounts, name: Find and disable stale users and computers (lastLogonTimestamp, Search-ADAccount), match: [stale-accounts, search-adaccount]}
+      - {id: ug-ldap-filters, name: LDAP filters and Get-ADObject queries (bitwise flags, ranged attributes), match: [ldap-filter, get-adobject]}
+      - {id: ug-offboarding, name: Leaver offboarding (disable, strip groups, move OU, mailbox handover), match: [user-offboarding, account-deprovisioning]}
+      - {id: ug-computer-accounts, name: Computer account pre-staging, reset and secure channel repair, match: [computer-account, test-computersecurechannel]}
+      - {id: ug-token-size, name: Nested group membership, token bloat and MaxTokenSize, match: [token-bloat, nested-group-membership]}
+      - {id: ug-account-properties, name: Account expiry, logon hours, logon workstations and UPN suffixes, match: [account-expiration]}
+      - {id: ug-move-rename, name: Move and rename objects with Move-ADObject and Rename-ADObject, match: [move-adobject, rename-adobject]}
+  - id: ou-delegation
+    name: OU design and delegation of control
+    source: AD DS docs/Delegating administration; AZ-801/Configure and manage delegated privileges
+    match: [delegation-of-control, ou-delegation]
+    subtopics:
+      - {id: deleg-wizard, name: Delegate password reset and object creation with dsacls or the wizard, match: [dsacls, delegate-password-reset]}
+      - {id: deleg-audit, name: Audit existing OU ACLs and find over-delegation, match: [ad-acl-audit, ou-permissions-audit]}
+      - {id: deleg-adac, name: Active Directory Administrative Center and PowerShell History Viewer, match: [active-directory-administrative-center, adac]}
+      - {id: deleg-protect-deletion, name: Protect OUs from accidental deletion, match: [protect-from-accidental-deletion]}
+      - {id: deleg-ou-design, name: OU structure designed around delegation and GPO targeting, match: [ou-structure-design]}
+      - {id: deleg-extended-rights, name: Granular delegation with property sets, extended rights and validated writes, match: [property-sets]}
+      - {id: deleg-redirect-containers, name: Redirect default computer and user containers with redircmp and redirusr, match: [redirusr]}
+      - {id: deleg-inheritance, name: ACL inheritance, removing delegations and resetting to schema defaults, match: [ad-acl-inheritance]}
+  - id: gmsa
+    name: Group managed service accounts
+    source: AZ-800/Implement and manage gMSAs; AD DS docs/gMSA
+    match: [gmsa, group-managed-service-account]
+    subtopics:
+      - {id: gmsa-kds, name: Create the KDS root key and wait for replication, match: [kds-root-key, add-kdsrootkey]}
+      - {id: gmsa-create, name: Create a gMSA and grant hosts PrincipalsAllowedToRetrieveManagedPassword, match: [new-adserviceaccount, principalsallowedtoretrievemanagedpassword]}
+      - {id: gmsa-use, name: Run services, scheduled tasks and IIS app pools as a gMSA, match: [gmsa-scheduled-task, gmsa-app-pool]}
+      - {id: gmsa-dmsa, name: Delegated managed service accounts (dMSA) migration in Server 2025, match: [dmsa, delegated-managed-service-account]}
+      - {id: gmsa-sql, name: Run SQL Server services under a gMSA, match: [gmsa-sql-server]}
+      - {id: gmsa-troubleshoot, name: Troubleshoot Test-ADServiceAccount failures and password retrieval, match: [test-adserviceaccount]}
+      - {id: gmsa-spn, name: SPNs and Kerberos delegation for gMSAs, match: [gmsa-spn]}
+      - {id: gmsa-smsa, name: Standalone MSAs vs gMSAs and replacing user-account services, match: [standalone-managed-service-account]}
+  - id: domain-join
+    name: Joining servers to AD DS, Entra Domain Services and Entra ID
+    source: AZ-800/Join Windows Server to AD DS, Entra Domain Services and Entra ID
+    match: [domain-join, add-computer]
+    subtopics:
+      - {id: join-offline, name: Offline domain join with djoin provisioning blobs, match: [djoin, offline-domain-join]}
+      - {id: join-precreate-ou, name: Join into a target OU with least-privilege join accounts, match: [domain-join-ou, join-account-delegation]}
+      - {id: join-entra-ds, name: Join servers to Microsoft Entra Domain Services, match: [entra-domain-services, aadds]}
+      - {id: join-entra-id, name: Entra ID join and sign-in for Windows Server Azure VMs, match: [entra-id-join, aadloginforwindows]}
+      - {id: join-rename, name: Rename a domain-joined server or DC with netdom computername, match: [netdom-computername]}
+      - {id: join-remove, name: Remove a computer from the domain and rejoin with Remove-Computer, match: [remove-computer]}
+      - {id: join-troubleshoot, name: Troubleshoot join failures with netsetup.log (DNS, 1355, 2224, 8557), match: [netsetup-log, domain-join-errors]}
+      - {id: join-machine-quota, name: ms-DS-MachineAccountQuota and who can join computers, match: [machineaccountquota]}
+  # --- Hybrid identity (AZ-800 Implement and manage hybrid identities)
+  - id: entra-connect
+    name: Microsoft Entra Connect Sync
+    source: AZ-800/Implement and manage Entra Connect Sync
+    match: [entra-connect, entra-connect-sync]
+    subtopics:
+      - {id: ec-install, name: Install Entra Connect with custom settings, OU filtering and staging mode, match: [entra-connect-install, staging-mode]}
+      - {id: ec-auth-method, name: Choose and configure PHS, PTA or federation and seamless SSO, match: [password-hash-sync, pass-through-authentication]}
+      - {id: ec-sync-rules, name: Sync rules editor, scheduler cycles and Start-ADSyncSyncCycle, match: [start-adsyncsynccycle, sync-rules-editor]}
+      - {id: ec-errors, name: Fix sync errors (duplicate attributes, soft/hard match, UPN suffixes), match: [sync-errors, hard-match]}
+      - {id: ec-health, name: Entra Connect Health agents and alerts, match: [entra-connect-health]}
+      - {id: ec-upgrade, name: Upgrade and swing-migrate Entra Connect servers, match: [entra-connect-upgrade, entra-connect-swing-migration]}
+      - {id: ec-directory-extensions, name: Attribute filtering and directory extension attributes, match: [directory-extensions]}
+      - {id: ec-sourceanchor, name: sourceAnchor with ms-DS-ConsistencyGuid and immutableId, match: [consistencyguid, sourceanchor]}
+      - {id: ec-connector-account, name: AD DS connector account permissions with Set-ADSyncPermissions, match: [adsync-connector-account, set-adsyncpermissions]}
+  - id: entra-cloud-sync
+    name: Microsoft Entra Cloud Sync and hybrid integration
+    source: AZ-800/Implement Entra Cloud Sync; integrate Entra ID, AD DS and Entra DS
+    match: [entra-cloud-sync, cloud-sync]
+    subtopics:
+      - {id: cs-agent, name: Install provisioning agents and configure scoping, match: [provisioning-agent, cloud-sync-scoping]}
+      - {id: cs-vs-connect, name: Choosing Cloud Sync vs Connect Sync and running both, match: [cloud-sync-vs-connect-sync]}
+      - {id: cs-password-writeback, name: Password writeback and self-service password reset to on-premises, match: [password-writeback, sspr-writeback]}
+      - {id: cs-entra-kerberos, name: Entra Kerberos for hybrid access to on-premises resources, match: [entra-kerberos, cloud-kerberos-trust]}
+      - {id: cs-attribute-mapping, name: Cloud Sync attribute mapping and expressions, match: [cloud-sync-attribute-mapping]}
+      - {id: cs-group-provisioning, name: Group provisioning from Entra ID to AD DS, match: [cloud-sync-group-provisioning]}
+      - {id: cs-troubleshoot, name: Provisioning logs, quarantine and agent troubleshooting, match: [cloud-sync-quarantine, provisioning-logs]}
+      - {id: cs-accidental-deletes, name: Accidental deletion prevention threshold, match: [accidental-deletes-prevention]}
+  # --- Passwords and authentication policy (AZ-800/AZ-801)
+  - id: password-policies
+    name: Domain and fine-grained password policies
+    source: AZ-800/Configure AD DS password policies; AD DS docs/Fine-grained password policies
+    match: [password-policy, fine-grained-password-policy]
+    subtopics:
+      - {id: pw-default-domain, name: Default domain password and lockout policy, match: [default-domain-password-policy, account-lockout-policy]}
+      - {id: pw-pso, name: Password settings objects with New-ADFineGrainedPasswordPolicy, match: [pso, new-adfinegrainedpasswordpolicy]}
+      - {id: pw-entra-protection, name: Entra Password Protection for on-premises AD (banned passwords), match: [entra-password-protection, banned-passwords]}
+      - {id: pw-lockout-trace, name: Trace account lockout sources (4740, PDC, LockoutStatus), match: [account-lockout, event-4740]}
+      - {id: pw-account-audit, name: Report password-never-expires, pwdLastSet and reversible encryption accounts, match: [password-never-expires]}
+      - {id: pw-kerberos-policy, name: Domain Kerberos policy (ticket lifetimes and renewal), match: [kerberos-policy]}
+      - {id: pw-smartcard, name: Smart card required for interactive logon and NT hash rolling, match: [smartcard-required]}
+      - {id: pw-resultant, name: Resultant password policy with Get-ADUserResultantPasswordPolicy, match: [resultant-password-policy]}
+  - id: auth-policies-silos
+    name: Authentication policies, silos and Protected Users
+    source: AZ-801/Configure and manage account security; AD DS docs/Authentication policies and silos
+    match: [authentication-policy-silo, authentication-policies]
+    subtopics:
+      - {id: aps-silo, name: Create authentication policy silos to pin Tier 0 sign-in to Tier 0 hosts, match: [new-adauthenticationpolicysilo, tier-0-silo]}
+      - {id: aps-protected-users, name: Protected Users group effects and staged adoption, match: [protected-users-group]}
+      - {id: aps-sensitive, name: Account is sensitive and cannot be delegated, match: [account-not-delegated, sensitive-account]}
+      - {id: aps-kerberos-armoring, name: Kerberos armoring (FAST) and claims support, match: [kerberos-armoring, fast-armoring]}
+      - {id: aps-ntlm, name: Audit and restrict NTLM (NTLM operational log, 8004, outgoing restrictions), match: [restrict-ntlm]}
+      - {id: aps-enctypes, name: Kerberos encryption types, AES-only accounts and RC4 deprecation, match: [kerberos-encryption-types, rc4-deprecation]}
+      - {id: aps-rbcd, name: Resource-based constrained delegation for services, match: [rbcd-services, msds-allowedtoactonbehalfofotheridentity]}
+      - {id: aps-audit-mode, name: Authentication policy audit mode and TGT lifetime restrictions, match: [authentication-policy-audit-mode]}
+  - id: windows-laps
+    name: Windows LAPS
+    source: AZ-801/Configure and manage Windows LAPS; Windows LAPS docs
+    match: [windows-laps, laps]
+    subtopics:
+      - {id: laps-schema, name: Update-LapsADSchema and Set-LapsADComputerSelfPermission, match: [update-lapsadschema, set-lapsadcomputerselfpermission]}
+      - {id: laps-policy, name: LAPS policy (backup directory, complexity, age, post-auth actions), match: [laps-policy, post-authentication-actions]}
+      - {id: laps-dsrm, name: Back up DSRM passwords on DCs with Windows LAPS, match: [laps-dsrm]}
+      - {id: laps-legacy-migration, name: Migrate from legacy Microsoft LAPS and read passwords, match: [legacy-laps-migration, get-lapsadpassword]}
+      - {id: laps-entra, name: Back up LAPS passwords to Microsoft Entra ID and Intune policy, match: [laps-entra-id]}
+      - {id: laps-encryption, name: Password encryption and authorized decryptors, match: [laps-encryption, authorized-password-decryptors]}
+      - {id: laps-rotate, name: Password history and on-demand rotation with Reset-LapsPassword, match: [reset-lapspassword]}
+      - {id: laps-troubleshoot, name: LAPS event log and Invoke-LapsPolicyProcessing, match: [laps-event-log]}
+      - {id: laps-auto-account, name: Automatic account management and passphrases in Server 2025, match: [laps-automatic-account-management]}
+  - id: privileged-access
+    name: Privileged access, tiering and AD attack-path reduction
+    source: AZ-801/Secure a hybrid Active Directory infrastructure; Securing privileged access docs
+    match: [privileged-access, ad-tiering]
+    subtopics:
+      - {id: pa-paw, name: Privileged access workstations and admin jump hosts, match: [paw, privileged-access-workstation]}
+      - {id: pa-adminsdholder, name: AdminSDHolder, SDProp and adminCount cleanup, match: [adminsdholder, sdprop]}
+      - {id: pa-krbtgt, name: krbtgt password reset procedure, match: [krbtgt-reset]}
+      - {id: pa-defender-identity, name: Microsoft Defender for Identity sensors on DCs, match: [defender-for-identity, mdi-sensor]}
+      - {id: pa-jit, name: Time-bound group membership (PAM feature) for just-in-time admin, match: [privileged-access-management-feature, ttl-group-membership]}
+      - {id: pa-eam, name: Enterprise access model control, management and user planes, match: [enterprise-access-model]}
+      - {id: pa-attack-paths, name: AD attack-path and posture assessment with PingCastle and BloodHound, match: [attack-path-analysis]}
+      - {id: pa-unconstrained, name: Find and remove unconstrained delegation, match: [unconstrained-delegation-removal]}
+      - {id: pa-builtin-groups, name: Empty and monitor built-in privileged groups (Schema Admins, operators), match: [privileged-groups-cleanup]}
+  # --- Group Policy (AZ-800 Manage Windows Server by using domain-based Group Policies)
+  - id: group-policy
+    name: Group Policy implementation
+    source: AZ-800/Implement Group Policy Objects; Group Policy docs
+    match: [group-policy, gpo]
+    subtopics:
+      - {id: gp-central-store, name: ADMX central store and adding new templates, match: [central-store, admx]}
+      - {id: gp-backup-restore, name: Back up, restore and migrate GPOs with migration tables, match: [backup-gpo, migration-table]}
+      - {id: gp-preferences, name: Group Policy Preferences and item-level targeting, match: [group-policy-preferences, item-level-targeting]}
+      - {id: gp-loopback, name: Loopback processing for RDS and kiosk OUs, match: [loopback-processing]}
+      - {id: gp-wmi-filters, name: WMI filters and security filtering, match: [wmi-filter, security-filtering]}
+      - {id: gp-troubleshoot, name: Troubleshoot application with gpresult and RSOP, match: [gpresult, rsop]}
+      - {id: gp-security-baselines, name: Apply Microsoft security baselines with the Security Compliance Toolkit, match: [security-baseline, security-compliance-toolkit]}
+      - {id: gp-precedence, name: LSDOU precedence, enforced links and block inheritance, match: [gpo-enforced]}
+      - {id: gp-delegation, name: Delegate GPO creation, editing and linking, match: [gpo-delegation]}
+      - {id: gp-reporting, name: GPO reports and settings search with Get-GPOReport, match: [gpo-settings-report]}
+      - {id: gp-version-mismatch, name: GPO version mismatch between AD and SYSVOL, match: [gpo-version-mismatch]}
+      - {id: gp-client-processing, name: Client processing (gpupdate, slow link detection, background refresh), match: [slow-link-detection]}
+  - id: gp-advanced-settings
+    name: Group Policy security settings areas
+    source: Group Policy docs/Security policy settings; Advanced audit policy docs
+    match: [security-policy-settings, gpo-security-settings]
+    subtopics:
+      - {id: gpas-audit, name: Advanced audit policy configuration and subcategory override, match: [advanced-audit-policy, auditpol]}
+      - {id: gpas-user-rights, name: User rights assignment (logon locally, RDP, service logon, deny rights), match: [user-rights-assignment]}
+      - {id: gpas-restricted-groups, name: Restricted Groups vs Local Users and Groups preference for local admins, match: [restricted-groups, local-administrators-gpo]}
+      - {id: gpas-software-restriction, name: AppLocker rules via Group Policy, match: [applocker]}
+      - {id: gpas-security-options, name: Security options (LDAP signing, SMB signing, anonymous restrictions), match: [security-options]}
+      - {id: gpas-tattooing, name: Administrative template policies vs preference tattooing, match: [registry-tattooing]}
+      - {id: gpas-scripts, name: Startup, shutdown, logon and logoff scripts, match: [logon-scripts]}
+      - {id: gpas-software-install, name: Software installation (assign and publish MSI), match: [gpo-software-installation]}
+      - {id: gpas-folder-redirection, name: Folder redirection, match: [folder-redirection]}
+  # --- Hybrid management (AZ-800 Manage Windows Servers in a hybrid environment)
+  - id: windows-admin-center
+    name: Windows Admin Center
+    source: AZ-800/Deploy a WAC gateway server, configure a target machine for WAC
+    match: [windows-admin-center, wac]
+    subtopics:
+      - {id: wac-gateway, name: Deploy a WAC gateway with a trusted certificate, match: [wac-gateway, wac-certificate]}
+      - {id: wac-rbac, name: WAC gateway access control and role-based access on targets, match: [wac-rbac, wac-access-control]}
+      - {id: wac-extensions, name: WAC extensions and connection management, match: [wac-extensions]}
+      - {id: wac-azure, name: WAC in the Azure portal for Azure VMs and Arc servers, match: [wac-azure-portal]}
+      - {id: wac-kerberos-delegation, name: Single sign-on from the gateway with resource-based constrained delegation, match: [wac-kerberos-delegation]}
+      - {id: wac-ha, name: Highly available WAC gateway on a failover cluster, match: [wac-high-availability]}
+      - {id: wac-upgrade, name: Upgrading WAC and the v2 modernized gateway, match: [wac-upgrade]}
+      - {id: wac-troubleshoot, name: Troubleshoot WAC connections (WinRM, certificates, CredSSP prompts), match: [wac-troubleshooting]}
+  - id: ps-remoting-config
+    name: PowerShell remoting configuration
+    source: AZ-800/Configure PowerShell remoting; about_Remote, about_Remote_Requirements
+    match: [ps-remoting, winrm]
+    subtopics:
+      - {id: psr-enable, name: Enable-PSRemoting, WinRM listeners and firewall rules, match: [enable-psremoting, winrm-listener]}
+      - {id: psr-https, name: WinRM over HTTPS and TrustedHosts for workgroup machines, match: [winrm-https, trustedhosts]}
+      - {id: psr-second-hop, name: Second-hop with CredSSP or Kerberos resource-based constrained delegation, match: [second-hop, credssp]}
+      - {id: psr-ssh, name: PowerShell over SSH (OpenSSH server, subsystem config), match: [ssh-remoting, openssh-server]}
+      - {id: psr-sessions, name: Persistent PSSessions, disconnected sessions and session configurations, match: [pssession, register-pssessionconfiguration]}
+      - {id: psr-troubleshoot, name: about_Remote_Troubleshooting errors (access denied, Kerberos, 0x80090322), match: [remoting-troubleshooting]}
+      - {id: psr-quotas, name: WSMan quotas, MaxEnvelopeSize and idle timeouts, match: [wsman-quotas, maxenvelopesize]}
+      - {id: psr-implicit, name: Implicit remoting with Import-PSSession and Export-PSSession, match: [import-pssession]}
+      - {id: psr-copy-session, name: Copy files over sessions with Copy-Item -ToSession and -FromSession, match: [copy-item-tosession]}
+  - id: jea
+    name: Just Enough Administration
+    source: AZ-800/Configure JEA for PowerShell remoting; JEA docs
+    match: [jea, just-enough-administration]
+    subtopics:
+      - {id: jea-role-capability, name: Role capability files (VisibleCmdlets, functions, parameters), match: [role-capability, psrc]}
+      - {id: jea-session-config, name: Session configuration files, virtual accounts and gMSA run-as, match: [pssc, jea-virtual-account]}
+      - {id: jea-audit, name: JEA transcripts and auditing, match: [jea-transcripts, jea-auditing]}
+      - {id: jea-dsc, name: Deploying JEA endpoints to many servers, match: [jea-deployment]}
+      - {id: jea-test, name: Test JEA endpoints with Get-PSSessionCapability, match: [get-pssessioncapability]}
+      - {id: jea-security, name: JEA security pitfalls (dangerous cmdlets, parameter escapes), match: [jea-security]}
+      - {id: jea-role-definitions, name: RoleDefinitions group mapping and RequiredGroups, match: [jea-role-definitions, requiredgroups]}
+      - {id: jea-module, name: Custom functions and modules packaged for role capabilities, match: [jea-module]}
+  - id: azure-arc
+    name: Azure Arc-enabled servers and Azure management services
+    source: AZ-800/Manage Windows Servers and workloads by using Azure services
+    match: [azure-arc, arc-enabled-servers]
+    subtopics:
+      - {id: arc-onboard, name: Onboard servers with azcmagent at scale (service principal, proxy), match: [azcmagent, arc-onboarding]}
+      - {id: arc-machine-config, name: Azure Policy machine configuration on Arc servers, match: [azure-machine-configuration, guest-configuration]}
+      - {id: arc-update-manager, name: Azure Update Manager for on-premises servers, match: [azure-update-manager]}
+      - {id: arc-monitor, name: Azure Monitor Agent and data collection rules for Windows events, match: [azure-monitor-agent, data-collection-rule]}
+      - {id: arc-extensions, name: VM extensions on Arc-enabled servers, match: [arc-extensions]}
+      - {id: arc-ssh, name: SSH and RDP access to Arc-enabled servers, match: [arc-ssh]}
+      - {id: arc-esu, name: Extended Security Updates enabled by Azure Arc, match: [extended-security-updates, arc-esu]}
+      - {id: arc-troubleshoot, name: Troubleshoot the Connected Machine agent with azcmagent check and logs, match: [azcmagent-check]}
+  # --- Windows Server install and management (Learn docs Get started/Manage)
+  - id: server-install
+    name: Windows Server installation and editions
+    source: Windows Server docs/Get started/Install; Server Core
+    match: [windows-server-installation, server-core]
+    subtopics:
+      - {id: inst-core-config, name: Post-install Server Core configuration with sconfig and PowerShell, match: [sconfig, server-core-configuration]}
+      - {id: inst-unattend, name: Unattended installs with autounattend.xml, match: [autounattend, unattended-install]}
+      - {id: inst-in-place, name: In-place OS upgrade and edition conversion (DISM /Set-Edition), match: [in-place-upgrade, set-edition]}
+      - {id: inst-hotpatch, name: Hotpatching for Windows Server, match: [hotpatch]}
+      - {id: inst-features, name: Install roles and features with Install-WindowsFeature and Features on Demand, match: [install-windowsfeature, features-on-demand]}
+      - {id: inst-offline-servicing, name: Offline image servicing with DISM (drivers, updates, features), match: [dism-offline-servicing, add-windowsdriver]}
+      - {id: inst-wds, name: Network deployment with Windows Deployment Services, match: [pxe-boot]}
+      - {id: inst-sysprep, name: Sysprep and golden images, match: [sysprep-generalize]}
+  - id: activation-licensing
+    name: Activation and licensing
+    source: Windows Server docs/Activation (KMS, ADBA, AVMA)
+    match: [windows-activation, kms]
+    subtopics:
+      - {id: act-kms, name: KMS host setup, DNS SRV publishing and slmgr checks, match: [kms-host, slmgr]}
+      - {id: act-adba, name: Active Directory-based activation, match: [active-directory-based-activation, adba]}
+      - {id: act-avma, name: Automatic VM activation on Datacenter hosts, match: [avma, automatic-virtual-machine-activation]}
+      - {id: act-troubleshoot, name: Troubleshoot activation errors (0xC004F074 etc), match: [activation-errors, 0xc004f074]}
+      - {id: act-mak, name: MAK activation and VAMT, match: [mak]}
+      - {id: act-licensing-model, name: Core-based licensing and CAL requirements, match: [core-licensing, windows-server-cals]}
+      - {id: act-azure-kms, name: Activation of Azure Windows VMs against Azure KMS, match: [azure-kms]}
+  - id: servicing-updates
+    name: Servicing and update management
+    source: AZ-801/Manage Windows Server updates; Windows Server servicing docs
+    match: [windows-updates, servicing]
+    subtopics:
+      - {id: svc-wsus, name: WSUS deployment, approvals and cleanup, match: [wsus]}
+      - {id: svc-cau-policy, name: Windows Update policy (deferrals, active hours, restarts) for servers, match: [windows-update-policy, wufb]}
+      - {id: svc-offline, name: Install MSU/CAB updates offline and with DISM, match: [dism-add-package, msu-install]}
+      - {id: svc-component-store, name: Component store repair with DISM RestoreHealth and SFC, match: [dism-restorehealth, sfc-scannow]}
+      - {id: svc-update-troubleshoot, name: Troubleshoot failed updates (CBS.log, WindowsUpdate.log, rollback loops), match: [cbs-log, update-failures]}
+      - {id: svc-wsus-maintenance, name: WSUS database maintenance, decline superseded and reindex SUSDB, match: [wsus-cleanup, susdb]}
+      - {id: svc-pending-reboot, name: Detect pending reboots and coordinate restarts, match: [pending-reboot]}
+      - {id: svc-channels, name: LTSC vs Annual Channel servicing, match: [ltsc, annual-channel]}
+      - {id: svc-update-history, name: Update history, Get-HotFix and checkpoint cumulative updates, match: [get-hotfix, checkpoint-cumulative-updates]}
+  - id: task-scheduler
+    name: Scheduled tasks
+    source: ScheduledTasks module reference; Task Scheduler docs
+    match: [scheduled-tasks, task-scheduler]
+    subtopics:
+      - {id: ts-create, name: Create tasks with Register-ScheduledTask (triggers, principal, settings), match: [register-scheduledtask, new-scheduledtasktrigger]}
+      - {id: ts-gmsa, name: Run tasks as SYSTEM, a gMSA or with stored credentials safely, match: [scheduled-task-principal]}
+      - {id: ts-troubleshoot, name: Troubleshoot tasks (last result codes, history log, 0x1 and 0x41301), match: [task-last-run-result, task-scheduler-history]}
+      - {id: ts-deploy, name: Deploy scheduled tasks by Group Policy Preferences or export/import XML, match: [scheduled-task-xml, gpp-scheduled-task]}
+      - {id: ts-schtasks, name: schtasks.exe for legacy and remote management, match: [schtasks]}
+      - {id: ts-settings, name: Task settings and conditions (multiple instances, stop after, network), match: [task-settings, multipleinstances]}
+      - {id: ts-remote, name: Manage tasks on many servers with CIM sessions, match: [scheduledtask-cimsession]}
+      - {id: ts-persistence, name: Audit scheduled tasks for persistence (4698, 4702), match: [event-4698, task-persistence]}
+  - id: time-service
+    name: Windows Time service
+    source: AD DS docs/Windows Time service; w32tm reference
+    match: [w32time, windows-time-service]
+    subtopics:
+      - {id: time-pdc-ntp, name: Configure the forest-root PDC to an external NTP source, match: [w32tm-config, ntp-source]}
+      - {id: time-hierarchy, name: Domain time hierarchy (NT5DS) and checking with w32tm /monitor, match: [nt5ds, w32tm-monitor]}
+      - {id: time-gpo, name: Time settings by GPO with WMI filter for the PDC, match: [time-gpo, pdc-wmi-filter]}
+      - {id: time-skew, name: Diagnosing clock skew and high-accuracy time, match: [clock-skew, w32tm-stripchart]}
+      - {id: time-registry, name: W32Time registry tuning (MaxPosPhaseCorrection, SpecialPollInterval), match: [maxposphasecorrection]}
+      - {id: time-standalone, name: NTP client config for non-domain servers, match: [ntp-client-windows]}
+      - {id: time-debug-log, name: W32Time debug logging and time events, match: [w32time-debug-log]}
+      - {id: time-secure-seeding, name: Secure Time Seeding and why to disable it on servers, match: [secure-time-seeding]}
+  # --- Hyper-V and containers (AZ-800 Manage virtual machines and containers)
+  - id: hyper-v
+    name: Hyper-V host and VM configuration
+    source: AZ-800/Manage Hyper-V and guest virtual machines; Hyper-V docs
+    match: [hyper-v-host, hyper-v-vm]
+    subtopics:
+      - {id: hv-memory, name: VM memory (dynamic memory, startup/minimum/buffer, NUMA), match: [dynamic-memory, vm-numa]}
+      - {id: hv-ps-direct, name: Manage VMs with PowerShell Direct and enhanced session mode, match: [powershell-direct, enhanced-session-mode]}
+      - {id: hv-nested, name: Nested virtualization, match: [nested-virtualization]}
+      - {id: hv-storage, name: VM storage (VHDX types, shared VHDX/VHD Set, storage QoS), match: [vhdx, vhd-set]}
+      - {id: hv-networking, name: Hyper-V virtual switches, VLANs and Switch Embedded Teaming, match: [hyper-v-virtual-switch, switch-embedded-teaming]}
+      - {id: hv-checkpoints, name: Production vs standard checkpoints and merges, match: [production-checkpoints, avhdx]}
+      - {id: hv-live-migration, name: Live migration and shared-nothing migration settings, match: [hyper-v-live-migration, shared-nothing-migration]}
+  - id: windows-containers
+    name: Windows containers
+    source: AZ-800/Create and manage containers; Windows containers docs
+    match: [windows-containers, windows-container-images]
+    subtopics:
+      - {id: wc-runtime, name: Install a container runtime (containerd or Docker/Mirantis) on Windows Server, match: [containerd-windows, docker-windows-server]}
+      - {id: wc-base-images, name: Base images (Nano Server, Server Core, Server) and host version compatibility, match: [nanoserver-image, servercore-image]}
+      - {id: wc-isolation, name: Process vs Hyper-V isolation, match: [hyper-v-isolation, process-isolation]}
+      - {id: wc-networking, name: Container networking modes (NAT, transparent, l2bridge), match: [container-nat-network, l2bridge]}
+      - {id: wc-gmsa, name: gMSA credential specs for Windows containers, match: [credential-spec, container-gmsa]}
+      - {id: wc-volumes, name: Volumes and bind mounts for Windows containers, match: [windows-container-volumes]}
+      - {id: wc-dockerfile, name: Building Windows images (Dockerfile, SHELL, layers), match: [windows-dockerfile]}
+      - {id: wc-troubleshoot, name: Troubleshoot container networking with HNS and hnsdiag, match: [hnsdiag, host-networking-service]}
+      - {id: wc-resource-limits, name: CPU and memory limits for Windows containers, match: [windows-container-resource-limits]}
+  # --- Networking (AZ-800 Implement and manage an on-premises and hybrid networking infrastructure)
+  - id: windows-dns
+    name: Windows DNS Server
+    source: AZ-800/Implement on-premises and hybrid name resolution; DNS Server docs
+    match: [windows-dns-server, dnsserver-module]
+    subtopics:
+      - {id: wdns-ad-zones, name: AD-integrated zones, replication scope and secure dynamic updates, match: [ad-integrated-zone, secure-dynamic-updates]}
+      - {id: wdns-forwarders, name: Forwarders, conditional forwarders and root hints, match: [conditional-forwarder, dns-forwarders]}
+      - {id: wdns-scavenging, name: Aging and scavenging of stale records, match: [dns-scavenging, aging-and-scavenging]}
+      - {id: wdns-policies, name: DNS policies (split-brain, geo, query filters), match: [dns-policies, split-brain-dns]}
+      - {id: wdns-dnssec, name: DNSSEC zone signing and trust anchors, match: [dnssec]}
+      - {id: wdns-azure-hybrid, name: Hybrid resolution with Azure Private DNS and Private Resolver, match: [azure-private-dns, dns-private-resolver]}
+      - {id: wdns-debug, name: DNS debug and analytic logging, match: [dns-debug-logging, dns-analytic-log]}
+  - id: windows-dhcp
+    name: Windows DHCP Server
+    source: AZ-800/Implement and manage DHCP; DHCP Server docs
+    match: [windows-dhcp-server, dhcpserver-module]
+    subtopics:
+      - {id: wdhcp-scopes, name: Scopes, exclusions, reservations and options with PowerShell, match: [add-dhcpserverv4scope, dhcp-options]}
+      - {id: wdhcp-failover, name: DHCP failover (load balance and hot standby), match: [dhcp-failover]}
+      - {id: wdhcp-authorize, name: Authorize DHCP servers in AD and rogue detection, match: [dhcp-authorization]}
+      - {id: wdhcp-policies, name: DHCP policies, superscopes and vendor classes, match: [dhcp-policies, superscope]}
+      - {id: wdhcp-migrate, name: Back up and migrate DHCP with Export-DhcpServer, match: [export-dhcpserver, dhcp-migration]}
+  - id: ipam
+    name: IP Address Management (IPAM)
+    source: AZ-800/Implement IPAM; IPAM docs
+    match: [ipam, ip-address-management]
+    subtopics:
+      - {id: ipam-provision, name: Provision IPAM with GPO-based provisioning, match: [invoke-ipamgpoprovisioning, ipam-provisioning]}
+      - {id: ipam-discovery, name: Server discovery and managed server status, match: [ipam-discovery]}
+      - {id: ipam-address-tracking, name: Address space, blocks and utilization tracking, match: [ipam-address-space]}
+      - {id: ipam-audit, name: IP address tracking and audit by user or MAC, match: [ipam-audit]}
+      - {id: ipam-rbac, name: IPAM role-based access control, match: [ipam-rbac]}
+      - {id: ipam-dhcp-dns-manage, name: Manage DHCP scopes and DNS zones from IPAM, match: [ipam-dhcp-management]}
+      - {id: ipam-database, name: IPAM database on SQL Server and data purge, match: [ipam-sql-database]}
+      - {id: ipam-access-status, name: Fix blocked IPAM server access status, match: [ipam-access-status]}
+  - id: remote-access
+    name: Remote Access, VPN and routing
+    source: AZ-800/Implement and manage network connectivity; Remote Access docs
+    match: [remote-access, rras]
+    subtopics:
+      - {id: ra-always-on-vpn, name: Always On VPN infrastructure (RRAS, NPS, certificates, ProfileXML), match: [always-on-vpn]}
+      - {id: ra-s2s, name: Site-to-site VPN from RRAS to Azure VPN gateway, match: [site-to-site-vpn, azure-network-adapter]}
+      - {id: ra-nat-routing, name: LAN routing and NAT with RRAS, match: [rras-nat, lan-routing]}
+      - {id: ra-wap, name: Web Application Proxy publishing, match: [web-application-proxy]}
+      - {id: ra-vpn-protocols, name: RRAS VPN protocols IKEv2 and SSTP with certificates, match: [ikev2, sstp]}
+      - {id: ra-directaccess, name: DirectAccess legacy and migration to Always On VPN, match: [directaccess-migration]}
+      - {id: ra-bgp, name: RRAS BGP and static routes, match: [rras-bgp]}
+      - {id: ra-troubleshoot, name: VPN error codes (809, 812, 13801) and RRAS tracing, match: [vpn-error-809, rras-tracing]}
+  - id: nps
+    name: Network Policy Server (RADIUS)
+    source: Windows Server docs/Network Policy Server
+    match: [nps, network-policy-server]
+    subtopics:
+      - {id: nps-radius-clients, name: RADIUS clients and shared secrets, match: [radius-clients]}
+      - {id: nps-policies, name: Connection request and network policies (EAP, PEAP, conditions), match: [network-policies, peap]}
+      - {id: nps-8021x, name: 802.1X wired and wireless authentication with certificates, match: [8021x, eap-tls]}
+      - {id: nps-logging, name: NPS accounting logs and event 6273 reason codes, match: [nps-logging, event-6273]}
+      - {id: nps-config-export, name: Export and import NPS configuration, match: [export-npsconfiguration]}
+      - {id: nps-proxy, name: RADIUS proxy and remote RADIUS server groups, match: [radius-proxy, remote-radius-server-groups]}
+      - {id: nps-mfa, name: NPS extension for Microsoft Entra multifactor authentication, match: [nps-extension-mfa]}
+      - {id: nps-certificate, name: NPS server certificate selection for PEAP and EAP-TLS, match: [nps-server-certificate]}
+  - id: network-adapters
+    name: Server network adapter configuration
+    source: AZ-800/Configure network adapters; NetAdapter/NetTCPIP module reference
+    match: [netadapter, server-networking]
+    subtopics:
+      - {id: nic-ip-config, name: Static IP, DNS client and interface metrics with NetTCPIP cmdlets, match: [new-netipaddress, set-dnsclientserveraddress]}
+      - {id: nic-teaming, name: NIC teaming (LBFO) vs SET, match: [nic-teaming, lbfo]}
+      - {id: nic-rdma, name: RDMA, RSS and VMQ offloads, match: [rdma, rss-vmq]}
+      - {id: nic-connectivity-test, name: Test-NetConnection, pathping and port testing, match: [test-netconnection]}
+      - {id: nic-advanced, name: Advanced adapter properties (jumbo frames, speed and duplex), match: [jumbo-frames, netadapteradvancedproperty]}
+      - {id: nic-ipv6, name: IPv6 configuration and DisabledComponents done right, match: [ipv6-windows, disabledcomponents]}
+      - {id: nic-routes, name: Static routes and multihomed servers, match: [multihomed-server]}
+      - {id: nic-dns-suffix, name: DNS client registration and suffix search list, match: [dns-suffix-search-list]}
+      - {id: nic-capture, name: Packet capture with pktmon and netsh trace, match: [pktmon, netsh-trace]}
+  # --- Storage and file services (AZ-800 Manage storage and file services)
+  - id: file-server
+    name: File server and SMB
+    source: AZ-800/Configure and manage Windows Server file shares; File Server and SMB docs
+    match: [file-server, smb-shares]
+    subtopics:
+      - {id: fs-ntfs, name: NTFS and share permissions with AGDLP and icacls, match: [ntfs-permissions, icacls]}
+      - {id: fs-abe, name: Access-based enumeration and hidden shares, match: [access-based-enumeration]}
+      - {id: fs-smb-security, name: SMB signing, encryption and disabling SMB1, match: [smb-signing, smb-encryption]}
+      - {id: fs-smb-quic, name: SMB over QUIC, match: [smb-over-quic]}
+      - {id: fs-shadow-copies, name: Volume Shadow Copies for previous versions, match: [shadow-copies, previous-versions]}
+      - {id: fs-open-files, name: Manage open files and sessions (Get-SmbOpenFile, Close-SmbOpenFile), match: [get-smbopenfile, smb-sessions]}
+      - {id: fs-multichannel, name: SMB Multichannel and SMB Direct, match: [smb-multichannel]}
+      - {id: fs-dac, name: Dynamic Access Control and central access policies, match: [central-access-policy]}
+      - {id: fs-effective-access, name: Effective access and permission troubleshooting, match: [effective-permissions-troubleshooting]}
+      - {id: fs-smb-auth-hardening, name: SMB client and server authentication hardening in Server 2025 (NTLM blocking, rate limiter), match: [smb-authentication-rate-limiter]}
+  - id: dfs
+    name: DFS Namespaces and Replication
+    source: Windows Server docs/DFS Namespaces, DFS Replication
+    match: [dfs-namespaces, dfs-replication]
+    subtopics:
+      - {id: dfs-n-create, name: Create domain-based namespaces and folder targets, match: [new-dfsnroot, dfs-folder-targets]}
+      - {id: dfs-r-group, name: DFSR replication groups, staging quota and initial sync, match: [dfsr-staging, new-dfsreplicationgroup]}
+      - {id: dfs-r-health, name: DFSR health, backlog and conflict handling, match: [dfsr-backlog, conflictanddeleted]}
+      - {id: dfs-n-referrals, name: Referral ordering, site costing and target priority, match: [dfs-referrals]}
+      - {id: dfs-n-modes, name: Namespace modes, ABE and scalability, match: [dfsn-windows-server-2008-mode]}
+      - {id: dfs-r-preseed, name: Preseeding DFSR with robocopy and database cloning, match: [dfsr-preseeding, dfsr-database-cloning]}
+      - {id: dfs-r-authoritative, name: Authoritative and non-authoritative DFSR sync, match: [dfsr-authoritative-sync]}
+      - {id: dfs-r-schedule, name: DFSR schedules, bandwidth and file filters, match: [dfsr-schedule, dfsr-file-filters]}
+      - {id: dfs-n-dfsutil, name: Back up and restore namespaces with dfsutil, match: [dfsutil]}
+  - id: fsrm
+    name: File Server Resource Manager
+    source: AZ-800/Configure FSRM; FSRM docs
+    match: [fsrm, file-server-resource-manager]
+    subtopics:
+      - {id: fsrm-quotas, name: Quotas and quota templates, match: [fsrm-quotas]}
+      - {id: fsrm-screens, name: File screening (ransomware extension blocking), match: [file-screening]}
+      - {id: fsrm-classification, name: File classification infrastructure and file management tasks, match: [file-classification, file-management-tasks]}
+      - {id: fsrm-reports, name: Storage reports, match: [storage-reports]}
+      - {id: fsrm-notifications, name: FSRM email notifications and command actions, match: [fsrm-notifications]}
+      - {id: fsrm-auto-apply, name: Auto-apply quotas for user folders, match: [fsrm-auto-apply-quota]}
+      - {id: fsrm-file-groups, name: File groups, passive screens and exceptions, match: [file-groups]}
+      - {id: fsrm-access-denied, name: Access-denied assistance, match: [access-denied-assistance]}
+  - id: storage-spaces
+    name: Storage Spaces and disk management
+    source: AZ-800/Configure Storage Spaces; Storage docs
+    match: [storage-spaces, storage-pool]
+    subtopics:
+      - {id: ss-pool, name: Create pools and virtual disks (simple, mirror, parity, column count), match: [new-storagepool, new-virtualdisk]}
+      - {id: ss-tiers, name: Storage tiers and SSD cache, match: [storage-tiers]}
+      - {id: ss-repair, name: Replace failed disks and repair virtual disks, match: [repair-virtualdisk, retire-physicaldisk]}
+      - {id: ss-disk-volumes, name: Disks, partitions and ReFS vs NTFS volumes with Storage cmdlets, match: [initialize-disk, refs]}
+      - {id: ss-thin, name: Thin vs fixed provisioning and space reclamation, match: [thin-provisioning]}
+      - {id: ss-expand, name: Extend virtual disks and volumes, match: [resize-virtualdisk]}
+      - {id: ss-health, name: Physical disk health and reliability counters, match: [storagereliabilitycounter]}
+      - {id: ss-optimize, name: Rebalance pools with Optimize-StoragePool, match: [pool-rebalance]}
+  - id: s2d
+    name: Storage Spaces Direct
+    source: AZ-801/Implement Storage Spaces Direct; S2D docs
+    match: [storage-spaces-direct, s2d]
+    subtopics:
+      - {id: s2d-enable, name: Enable-ClusterS2D, validation and cache configuration, match: [enable-clusters2d]}
+      - {id: s2d-volumes, name: Create S2D volumes (mirror, MAP, resiliency), match: [s2d-volumes, mirror-accelerated-parity]}
+      - {id: s2d-maintenance, name: Node maintenance, storage jobs and repairs, match: [storage-maintenance-mode, get-storagejob]}
+      - {id: s2d-health, name: Health Service faults and performance history, match: [health-service, get-healthfault]}
+      - {id: s2d-networking, name: S2D networking with RDMA, DCB and PFC, match: [dcb, pfc]}
+      - {id: s2d-add-node, name: Add servers and drives to S2D, match: [add-s2d-node]}
+      - {id: s2d-reserve, name: Capacity planning and reserve capacity, match: [s2d-reserve-capacity]}
+      - {id: s2d-benchmark, name: Benchmark with DiskSpd and VMFleet, match: [diskspd, vmfleet]}
+  - id: dedup
+    name: Data Deduplication
+    source: AZ-800/Configure Data Deduplication; Dedup docs
+    match: [data-deduplication, dedup]
+    subtopics:
+      - {id: dedup-enable, name: Enable dedup with usage types (default, Hyper-V, backup), match: [enable-dedupvolume]}
+      - {id: dedup-jobs, name: Optimization, garbage collection and scrubbing jobs, match: [dedup-jobs, start-dedupjob]}
+      - {id: dedup-savings, name: Evaluate savings with DDPEval and Get-DedupStatus, match: [ddpeval, get-dedupstatus]}
+      - {id: dedup-backup, name: Backup and restore considerations for deduplicated volumes, match: [dedup-backup]}
+      - {id: dedup-exclusions, name: Dedup exclusions and file age policy, match: [dedup-exclusions]}
+      - {id: dedup-unoptimize, name: Disable dedup and unoptimize a volume, match: [unoptimization]}
+      - {id: dedup-chunk-store, name: Chunk store corruption and dedup events, match: [dedup-chunk-store]}
+  - id: iscsi
+    name: iSCSI target and initiator
+    source: AZ-800/Configure iSCSI; iSCSI Target Server docs
+    match: [iscsi, iscsi-target]
+    subtopics:
+      - {id: iscsi-target-setup, name: iSCSI Target Server virtual disks and targets, match: [new-iscsivirtualdisk, new-iscsiservertarget]}
+      - {id: iscsi-initiator, name: Initiator connections with persistent sessions, match: [connect-iscsitarget, iscsi-initiator]}
+      - {id: iscsi-mpio, name: MPIO for iSCSI, match: [mpio]}
+      - {id: iscsi-chap, name: CHAP authentication, match: [iscsi-chap]}
+      - {id: iscsi-cluster, name: Highly available iSCSI target in a cluster, match: [clustered-iscsi-target]}
+      - {id: iscsi-network, name: Dedicated iSCSI networks and binding, match: [iscsi-network-design]}
+      - {id: iscsi-troubleshoot, name: iSCSI troubleshooting (session drops, event IDs), match: [iscsi-troubleshooting]}
+  - id: storage-replica
+    name: Storage Replica
+    source: AZ-801/Configure Storage Replica; Storage Replica docs
+    match: [storage-replica]
+    subtopics:
+      - {id: sr-server-to-server, name: Server-to-server replication with New-SRPartnership, match: [new-srpartnership, test-srtopology]}
+      - {id: sr-stretch, name: Stretch cluster replication, match: [stretch-cluster]}
+      - {id: sr-failover, name: Reverse replication and failover, match: [set-srpartnership, sr-failover]}
+      - {id: sr-sizing, name: Log volume sizing and sync vs async, match: [sr-log-volume, synchronous-replication]}
+      - {id: sr-cluster-to-cluster, name: Cluster-to-cluster replication, match: [cluster-to-cluster-replication]}
+      - {id: sr-monitor, name: Monitor Storage Replica status and counters, match: [sr-monitoring]}
+      - {id: sr-test-failover, name: Test failover with Mount-SRDestination, match: [mount-srdestination]}
+      - {id: sr-remove, name: Remove partnerships cleanly, match: [remove-srpartnership]}
+  - id: azure-file-sync
+    name: Azure File Sync
+    source: AZ-800/Implement Azure File Sync
+    match: [azure-file-sync]
+    subtopics:
+      - {id: afs-deploy, name: Storage sync service, sync groups and server endpoints, match: [sync-group, server-endpoint]}
+      - {id: afs-tiering, name: Cloud tiering policies, match: [cloud-tiering]}
+      - {id: afs-migrate, name: Migrate file servers to Azure Files via Azure File Sync, match: [azure-files-migration]}
+      - {id: afs-troubleshoot, name: Troubleshoot sync errors and recall, match: [afs-sync-errors]}
+      - {id: afs-agent, name: Agent install, updates and auto-upgrade, match: [afs-agent]}
+      - {id: afs-network, name: Networking (private endpoints, proxy, firewall), match: [afs-private-endpoint]}
+      - {id: afs-dr, name: Disaster recovery for a server endpoint, match: [afs-disaster-recovery]}
+      - {id: afs-recall, name: Recall tiered files with Invoke-StorageSyncFileRecall, match: [afs-file-recall]}
+  # --- Security (AZ-801 Secure Windows Server)
+  - id: os-hardening
+    name: Windows Server OS hardening
+    source: AZ-801/Secure Windows Server operating system
+    match: [windows-server-hardening, os-hardening]
+    subtopics:
+      - {id: osh-credential-guard, name: Credential Guard and VBS, match: [credential-guard, virtualization-based-security]}
+      - {id: osh-wdac, name: App Control for Business (WDAC) policies, match: [wdac, app-control-for-business]}
+      - {id: osh-exploit-protection, name: Exploit Protection and attack surface reduction rules, match: [exploit-protection, asr-rules]}
+      - {id: osh-defender, name: Microsoft Defender Antivirus on servers (exclusions, passive mode), match: [defender-antivirus, mpcmdrun]}
+      - {id: osh-lsa, name: LSA protection (RunAsPPL) and NTLM restrictions, match: [lsa-protection, runasppl]}
+      - {id: osh-osconfig, name: OSConfig security baseline in Windows Server 2025, match: [osconfig]}
+      - {id: osh-services, name: Disable unneeded services and features, match: [disable-unneeded-services]}
+      - {id: osh-hvci, name: Memory integrity (HVCI), match: [hypervisor-protected-code-integrity]}
+      - {id: osh-schannel, name: Schannel TLS protocol and cipher hardening, match: [schannel-protocol-hardening]}
+      - {id: osh-secured-core, name: Secured-core server and Secure Boot, match: [secured-core-server, secure-boot]}
+  - id: windows-firewall
+    name: Windows Defender Firewall and IPsec
+    source: AZ-801/Secure Windows Server networking
+    match: [windows-firewall, netsecurity-module]
+    subtopics:
+      - {id: fw-rules, name: Firewall rules with New-NetFirewallRule and profiles, match: [new-netfirewallrule, firewall-profiles]}
+      - {id: fw-gpo, name: Firewall policy by GPO and rule merge settings, match: [firewall-gpo, local-rule-merge]}
+      - {id: fw-ipsec, name: Connection security rules and domain isolation, match: [connection-security-rules, domain-isolation]}
+      - {id: fw-logging, name: Firewall logging and troubleshooting drops, match: [firewall-logging, pfirewall-log]}
+      - {id: fw-netsh, name: netsh advfirewall export, import and reset, match: [advfirewall-export-import]}
+      - {id: fw-wfp-audit, name: WFP audit events 5152 and 5157, match: [filtering-platform-auditing]}
+      - {id: fw-scope, name: Restrict management ports by remote address scope, match: [firewall-remote-address-scope]}
+      - {id: fw-dynamic-keywords, name: Dynamic keywords and FQDN-based rules, match: [firewall-dynamic-keywords]}
+  - id: bitlocker
+    name: BitLocker on servers
+    source: AZ-801/Secure Windows Server storage
+    match: [bitlocker]
+    subtopics:
+      - {id: bl-enable, name: Enable BitLocker on OS and data volumes with TPM and recovery passwords, match: [enable-bitlocker, manage-bde]}
+      - {id: bl-ad-backup, name: Back up recovery keys to AD DS, match: [bitlocker-recovery-key-ad, backup-bitlockerkeyprotector]}
+      - {id: bl-network-unlock, name: BitLocker Network Unlock, match: [network-unlock]}
+      - {id: bl-cluster, name: BitLocker on cluster shared volumes, match: [bitlocker-csv]}
+      - {id: bl-recovery, name: Recovery key retrieval and recovery mode triggers, match: [bitlocker-recovery]}
+      - {id: bl-suspend, name: Suspend BitLocker for firmware and boot changes, match: [suspend-bitlocker]}
+      - {id: bl-gpo, name: BitLocker Group Policy settings and encryption methods, match: [bitlocker-gpo]}
+      - {id: bl-auto-unlock, name: Auto-unlock data volumes, match: [bitlocker-auto-unlock]}
+  - id: security-auditing
+    name: Security auditing and event monitoring
+    source: AZ-801/Identify and remediate Windows Server security issues; Security auditing docs
+    match: [security-auditing, security-event-log]
+    subtopics:
+      - {id: sa-key-events, name: Key security event IDs (4624, 4625, 4672, 4720, 4728, 4732), match: [event-4624, event-4625]}
+      - {id: sa-wef, name: Windows Event Forwarding with source-initiated subscriptions, match: [windows-event-forwarding, wef]}
+      - {id: sa-sentinel, name: Ship Windows security events to Microsoft Sentinel, match: [microsoft-sentinel]}
+      - {id: sa-defender-cloud, name: Defender for Servers and Defender for Cloud recommendations, match: [defender-for-servers]}
+      - {id: sa-ad-changes, name: Auditing AD object changes (DS Access, SACLs, 5136), match: [event-5136, ds-access-auditing]}
+      - {id: sa-file-access, name: File access auditing (SACLs, 4663), match: [event-4663, file-access-auditing]}
+      - {id: sa-process-creation, name: Process creation auditing with command line (4688), match: [event-4688, process-command-line-auditing]}
+      - {id: sa-sysmon, name: Sysmon deployment and configuration, match: [sysmon]}
+      - {id: sa-log-clear, name: Detect log clearing and audit tampering (1102, 4719), match: [event-1102]}
+  - id: ad-cs
+    name: Active Directory Certificate Services
+    source: Windows Server docs/AD CS; AZ-801 hybrid security
+    match: [ad-cs, certificate-services]
+    subtopics:
+      - {id: adcs-hierarchy, name: Two-tier PKI with offline root and enterprise issuing CA, match: [offline-root-ca, enterprise-ca]}
+      - {id: adcs-templates, name: Certificate templates and autoenrollment, match: [certificate-templates, autoenrollment]}
+      - {id: adcs-crl, name: CRL and AIA publication and pkiview checks, match: [crl, pkiview]}
+      - {id: adcs-esc, name: Audit templates for ESC1-ESC8 misconfigurations, match: [esc1, certify-audit]}
+      - {id: adcs-renew, name: Renew a CA certificate and back up the CA, match: [ca-renewal, backup-ca]}
+      - {id: adcs-ndes, name: NDES and SCEP, match: [ndes, scep]}
+      - {id: adcs-ces-cep, name: Certificate Enrollment Web Services (CEP and CES), match: [certificate-enrollment-web-services]}
+      - {id: adcs-ocsp, name: Online Responder (OCSP), match: [ocsp, online-responder]}
+      - {id: adcs-revoke, name: Revoke certificates and certutil admin tasks, match: [certificate-revocation, certutil]}
+      - {id: adcs-key-archival, name: Key archival and key recovery agents, match: [key-recovery-agent]}
+  - id: ad-fs
+    name: Active Directory Federation Services
+    source: Windows Server docs/AD FS
+    match: [ad-fs, adfs]
+    subtopics:
+      - {id: adfs-farm, name: AD FS farm deployment with WAP, match: [adfs-farm]}
+      - {id: adfs-rpt, name: Relying party trusts and claim rules, match: [relying-party-trust, claim-rules]}
+      - {id: adfs-certs, name: Token-signing certificate rollover, match: [token-signing-certificate]}
+      - {id: adfs-migrate, name: Migrate AD FS apps to Entra ID, match: [adfs-to-entra-migration]}
+      - {id: adfs-lockout, name: Extranet smart lockout, match: [extranet-smart-lockout]}
+      - {id: adfs-access-policies, name: Access control policies and MFA, match: [adfs-access-control-policy]}
+      - {id: adfs-troubleshoot, name: AD FS event logs, debug tracing and sign-on page tests, match: [adfs-troubleshooting]}
+      - {id: adfs-fbl, name: Farm behavior level upgrade, match: [adfs-farm-behavior-level]}
+      - {id: adfs-ssl, name: Service communication certificate renewal, match: [adfs-ssl-certificate]}
+  # --- High availability (AZ-801 Implement and manage Windows Server high availability)
+  - id: failover-clustering
+    name: Failover clustering
+    source: AZ-801/Implement a Windows Server failover cluster; Failover Clustering docs
+    match: [failover-clustering, failover-cluster]
+    subtopics:
+      - {id: fc-create, name: Validate and create a cluster (Test-Cluster, New-Cluster), match: [test-cluster, new-cluster]}
+      - {id: fc-quorum, name: Quorum and witness configuration (cloud, file share, disk), match: [cluster-quorum, cloud-witness]}
+      - {id: fc-networks, name: Cluster networks and roles, match: [cluster-networks]}
+      - {id: fc-csv, name: Cluster Shared Volumes, match: [cluster-shared-volumes, csvfs]}
+      - {id: fc-cau, name: Cluster-Aware Updating, match: [cluster-aware-updating, cau]}
+      - {id: fc-rolling-upgrade, name: Cluster OS rolling upgrade, match: [cluster-rolling-upgrade, update-clusterfunctionallevel]}
+      - {id: fc-troubleshoot, name: Troubleshoot with Get-ClusterLog and cluster events, match: [get-clusterlog, cluster-troubleshooting]}
+      - {id: fc-workgroup, name: Workgroup and multi-domain clusters, match: [workgroup-cluster]}
+      - {id: fc-owners, name: Preferred owners, failback and anti-affinity, match: [anti-affinity]}
+      - {id: fc-maintenance, name: Drain and pause nodes with Suspend-ClusterNode, match: [cluster-node-drain]}
+      - {id: fc-cno, name: Cluster name object and VCO permissions, match: [cluster-name-object, vco]}
+      - {id: fc-site-aware, name: Site-aware clusters and fault domains, match: [site-aware-cluster, fault-domains]}
+  - id: sofs
+    name: Scale-Out File Server and highly available file services
+    source: AZ-801/Configure Scale-Out File Server
+    match: [scale-out-file-server, sofs]
+    subtopics:
+      - {id: sofs-create, name: Create an SOFS role on CSV, match: [add-clusterscaleoutfileserverrole]}
+      - {id: sofs-ca-shares, name: Continuously available shares for Hyper-V and SQL, match: [continuous-availability]}
+      - {id: sofs-general-fs, name: General-use clustered file server role, match: [clustered-file-server]}
+      - {id: sofs-witness, name: SMB witness and client failover, match: [smb-witness]}
+      - {id: sofs-hyperv-smb, name: Hyper-V over SMB share and delegation setup, match: [hyper-v-smb-delegation]}
+      - {id: sofs-bandwidth, name: SMB bandwidth limits, match: [smb-bandwidth-limit]}
+      - {id: sofs-csv-balance, name: CSV ownership balancing and SMB client redirection, match: [csv-ownership-balancing]}
+  # --- Disaster recovery (AZ-801)
+  - id: hyper-v-replica
+    name: Hyper-V Replica
+    source: AZ-801/Implement Hyper-V Replica
+    match: [hyper-v-replica]
+    subtopics:
+      - {id: hvr-enable, name: Enable replication with Kerberos or certificate auth, match: [enable-vmreplication]}
+      - {id: hvr-failover, name: Test, planned and unplanned failover, match: [test-failover, planned-failover]}
+      - {id: hvr-broker, name: Hyper-V Replica Broker for clusters, match: [replica-broker]}
+      - {id: hvr-extended, name: Extended replication and recovery points, match: [extended-replication]}
+      - {id: hvr-monitor, name: Replication health and resynchronization, match: [measure-vmreplication, resynchronization]}
+      - {id: hvr-initial-media, name: Initial replication via external media, match: [initial-replication-external-media]}
+      - {id: hvr-reverse, name: Reverse replication after failover, match: [hyper-v-replica-reverse]}
+  - id: server-backup
+    name: Windows Server Backup and system state
+    source: AZ-801/Back up and restore Windows Server; Windows Server Backup docs
+    match: [windows-server-backup, wbadmin]
+    subtopics:
+      - {id: wsb-system-state, name: System state and bare-metal backups with wbadmin, match: [system-state-backup, bare-metal-recovery]}
+      - {id: wsb-restore-files, name: Restore files and volumes, match: [wbadmin-restore]}
+      - {id: wsb-mars, name: Azure Backup MARS agent for files and system state, match: [mars-agent, azure-backup]}
+      - {id: wsb-vss, name: VSS writers and vssadmin troubleshooting, match: [vss-writers, vssadmin]}
+      - {id: wsb-schedule, name: Scheduled backups and targets, match: [wbadmin-schedule]}
+      - {id: wsb-hyperv, name: Hyper-V VM backup with Windows Server Backup, match: [hyper-v-vm-backup]}
+      - {id: wsb-bmr-restore, name: Bare-metal restore from WinRE, match: [bare-metal-restore]}
+  - id: ad-recovery
+    name: AD DS backup, restore and recovery
+    source: AZ-801/Troubleshoot AD DS; AD DS docs/Backup and recovery
+    match: [ad-recovery, ad-backup]
+    subtopics:
+      - {id: adr-recycle-bin, name: AD Recycle Bin and Restore-ADObject, match: [ad-recycle-bin, restore-adobject]}
+      - {id: adr-authoritative, name: Authoritative restore with ntdsutil and DSRM, match: [authoritative-restore, dsrm]}
+      - {id: adr-snapshots, name: AD snapshots with ntdsutil and dsamain, match: [ad-snapshot, dsamain]}
+      - {id: adr-forest-recovery, name: Forest recovery plan, match: [forest-recovery]}
+      - {id: adr-ntds-maintenance, name: Offline NTDS.dit integrity checks and defrag, match: [ntds-dit, offline-defrag]}
+      - {id: adr-nonauth, name: Non-authoritative restore of a DC, match: [non-authoritative-restore]}
+      - {id: adr-dsrm-password, name: Reset and synchronize the DSRM password, match: [ntdsutil-set-dsrm-password]}
+      - {id: adr-backup-strategy, name: DC backup frequency vs tombstone lifetime, match: [dc-backup-strategy]}
+  - id: azure-site-recovery
+    name: Azure Site Recovery for Windows Server
+    source: AZ-801/Implement Azure Site Recovery
+    match: [azure-site-recovery, asr]
+    subtopics:
+      - {id: asr-hyperv, name: Protect Hyper-V VMs to Azure, match: [asr-hyper-v]}
+      - {id: asr-plans, name: Recovery plans and test failovers, match: [recovery-plans]}
+      - {id: asr-physical, name: Replicate physical and VMware servers, match: [asr-physical-servers]}
+      - {id: asr-network-mapping, name: Network mapping and IP retention, match: [asr-network-mapping]}
+      - {id: asr-failback, name: Failback and reprotect, match: [asr-failback, reprotect]}
+      - {id: asr-a2a, name: Azure-to-Azure disaster recovery, match: [azure-to-azure-dr]}
+      - {id: asr-health, name: Replication health and RPO alerts, match: [asr-replication-health]}
+  # --- Migration (AZ-801 Migrate servers and workloads)
+  - id: storage-migration-service
+    name: Storage Migration Service
+    source: AZ-801/Migrate on-premises storage to on-premises servers or Azure
+    match: [storage-migration-service, sms]
+    subtopics:
+      - {id: sms-inventory, name: Inventory source servers, match: [sms-inventory]}
+      - {id: sms-transfer, name: Transfer data and re-run transfers, match: [sms-transfer]}
+      - {id: sms-cutover, name: Cut over identities to the new server, match: [sms-cutover]}
+      - {id: sms-troubleshoot, name: Troubleshoot SMS errors and logs, match: [sms-troubleshooting]}
+      - {id: sms-azure, name: Migrate to Azure VMs with SMS, match: [sms-azure-vm]}
+      - {id: sms-samba, name: Migrate from Linux Samba and NAS sources, match: [sms-samba-source]}
+      - {id: sms-orchestrator, name: Orchestrator setup, proxy service and ports, match: [sms-orchestrator]}
+  - id: ad-migration
+    name: AD DS migration and consolidation
+    source: AZ-801/Migrate AD DS objects; ADMT docs
+    match: [ad-migration, admt]
+    subtopics:
+      - {id: admt-users, name: Migrate users and groups with SID history, match: [admt-user-migration, admt-sid-history]}
+      - {id: admt-pes, name: Password Export Server, match: [password-export-server]}
+      - {id: admt-computers, name: Migrate computers and translate security, match: [security-translation]}
+      - {id: admt-domain-rename, name: Domain rename and restructuring alternatives, match: [domain-rename, rendom]}
+      - {id: admt-install, name: Install ADMT with its SQL database and prerequisites, match: [admt-installation]}
+      - {id: admt-service-accounts, name: Migrate service accounts and translate profiles, match: [admt-service-account-migration]}
+      - {id: admt-sidhistory-cleanup, name: Remove SID history after migration, match: [sidhistory-cleanup]}
+  - id: workload-migration
+    name: Server role and workload migration
+    source: AZ-801/Migrate Windows Server workloads (IIS, file, print); Windows Server migration docs
+    match: [workload-migration, server-migration]
+    subtopics:
+      - {id: wm-iis, name: Migrate IIS sites with Web Deploy, match: [web-deploy, msdeploy]}
+      - {id: wm-print, name: Migrate print servers with PrintBrm, match: [printbrm]}
+      - {id: wm-robocopy, name: Copy file data with robocopy preserving ACLs, match: [robocopy]}
+      - {id: wm-azure, name: Migrate servers to Azure with Azure Migrate, match: [azure-migrate]}
+      - {id: wm-shares, name: Export share definitions and permissions, match: [share-registry-export]}
+      - {id: wm-adcs, name: Migrate AD CS to a new server, match: [adcs-migration]}
+      - {id: wm-smig, name: Windows Server Migration Tools, match: [windows-server-migration-tools, smig]}
+  # --- Monitoring and troubleshooting (AZ-801)
+  - id: performance-monitoring
+    name: Performance monitoring
+    source: AZ-801/Monitor Windows Server by using Windows Server tools
+    match: [performance-monitoring, perfmon]
+    subtopics:
+      - {id: pm-counters, name: Key counters for CPU, memory, disk and network, match: [performance-counters, get-counter]}
+      - {id: pm-dcs, name: Data collector sets and logman, match: [data-collector-sets, logman]}
+      - {id: pm-resmon, name: Resource Monitor and Task Manager triage, match: [resource-monitor]}
+      - {id: pm-wpr, name: Windows Performance Recorder and Analyzer traces, match: [wpr, wpa]}
+      - {id: pm-system-insights, name: System Insights predictive capacity, match: [system-insights]}
+      - {id: pm-baseline, name: Performance baselines and PAL analysis, match: [pal-tool]}
+      - {id: pm-memory-leak, name: Diagnose memory leaks with poolmon and handle counts, match: [poolmon, memory-leak]}
+      - {id: pm-disk-latency, name: Diagnose storage latency, match: [disk-latency]}
+      - {id: pm-sysinternals, name: Process Explorer and Process Monitor, match: [process-monitor, sysinternals]}
+  - id: event-logs
+    name: Event logs
+    source: AZ-801/Monitor Windows Server by using event logs
+    match: [event-logs, event-viewer]
+    subtopics:
+      - {id: el-get-winevent, name: Query events with Get-WinEvent and FilterHashtable/XPath, match: [get-winevent, filterhashtable]}
+      - {id: el-custom-views, name: Custom views and event subscriptions, match: [custom-views, event-subscriptions]}
+      - {id: el-sizing, name: Log sizing, retention and archiving with wevtutil, match: [wevtutil, event-log-size]}
+      - {id: el-task-trigger, name: Attach tasks to events, match: [event-triggered-task]}
+      - {id: el-custom-source, name: Custom event sources with New-EventLog and Write-EventLog, match: [new-eventlog, write-eventlog]}
+      - {id: el-remote, name: Query remote event logs at scale, match: [remote-event-log]}
+      - {id: el-analytic, name: Enable analytic and debug channels, match: [analytic-debug-logs]}
+      - {id: el-shutdown-events, name: Shutdown and crash events (41, 1074, 6008), match: [event-1074, unexpected-shutdown]}
+  - id: boot-troubleshooting
+    name: Boot and startup troubleshooting
+    source: AZ-801/Troubleshoot boot failures; Windows commands reference
+    match: [boot-troubleshooting, winre]
+    subtopics:
+      - {id: boot-bcd, name: Repair BCD with bcdedit and bcdboot, match: [bcdedit, bcdboot]}
+      - {id: boot-safe-mode, name: Safe mode and boot configuration options, match: [safe-mode]}
+      - {id: boot-bsod, name: Stop errors and memory dump analysis, match: [bugcheck, memory-dump]}
+      - {id: boot-azure-serial, name: Azure VM boot diagnostics and serial console, match: [serial-console, boot-diagnostics]}
+      - {id: boot-slow-logon, name: Slow boot and logon analysis, match: [slow-logon]}
+      - {id: boot-offline-registry, name: Startup repair and offline registry edits from WinRE, match: [offline-registry, startup-repair]}
+      - {id: boot-remove-update, name: Remove a bad update or driver from WinRE with DISM /Image, match: [winre-uninstall-update]}
+      - {id: boot-logging, name: Boot logging and ntbtlog.txt, match: [ntbtlog]}
+      - {id: boot-mbr2gpt, name: Convert MBR to GPT for UEFI and Secure Boot, match: [mbr2gpt]}
+  - id: dc-health
+    name: Domain controller health checks
+    source: AZ-801/Troubleshoot AD DS; dcdiag reference
+    match: [dc-health, dcdiag]
+    subtopics:
+      - {id: dch-dcdiag-tests, name: Interpret dcdiag test results, match: [dcdiag-tests]}
+      - {id: dch-dns-srv, name: Verify DC SRV records and netlogon registration, match: [dc-srv-records, nltest-dsgetdc]}
+      - {id: dch-ntds-perf, name: AD performance and LDAP query diagnostics, match: [ldap-performance, expensive-ldap-queries]}
+      - {id: dch-secure-channel, name: Netlogon and secure channel issues, match: [netlogon-secure-channel]}
+      - {id: dch-sysvol, name: Missing SYSVOL and NETLOGON shares (SysvolReady), match: [sysvol-netlogon-shares]}
+      - {id: dch-ds-events, name: Directory Service event IDs (1311, 1988, 2042, 13508), match: [directory-service-events]}
+      - {id: dch-report, name: Automated daily AD health report, match: [ad-health-report]}
+  # --- Remote Desktop Services, IIS, Print (Windows Server docs ToC)
+  - id: rds
+    name: Remote Desktop Services
+    source: Windows Server docs/Remote Desktop Services
+    match: [remote-desktop-services, rds]
+    subtopics:
+      - {id: rds-deploy, name: Session-based deployment roles (broker, session host, gateway, web), match: [rd-session-host, rd-connection-broker]}
+      - {id: rds-licensing, name: RD licensing and CALs, match: [rds-licensing, rds-cals]}
+      - {id: rds-gateway, name: RD Gateway with certificates and CAP/RAP, match: [rd-gateway]}
+      - {id: rds-fslogix, name: User profiles with FSLogix, match: [fslogix]}
+      - {id: rds-collections, name: Session collections and RemoteApp publishing, match: [remoteapp, session-collections]}
+      - {id: rds-broker-ha, name: Connection Broker high availability, match: [rd-connection-broker-ha]}
+      - {id: rds-web-client, name: RD Web client, match: [rd-web-client]}
+      - {id: rds-shadowing, name: Session shadowing and session management, match: [rds-shadowing, qwinsta]}
+      - {id: rds-certificates, name: RDS deployment certificates, match: [rds-certificates]}
+  - id: iis
+    name: Internet Information Services
+    source: Windows Server docs/IIS; IISAdministration module
+    match: [iis, iis-administration]
+    subtopics:
+      - {id: iis-sites, name: Sites, bindings and app pools with IISAdministration, match: [iis-bindings, application-pools]}
+      - {id: iis-tls, name: TLS certificates, SNI and cipher hardening, match: [iis-tls, sni]}
+      - {id: iis-logs, name: IIS logs and failed request tracing, match: [failed-request-tracing, iis-logs]}
+      - {id: iis-arr, name: URL Rewrite and ARR reverse proxy, match: [url-rewrite, arr]}
+      - {id: iis-auth, name: IIS authentication and Kerberos SPNs, match: [iis-windows-authentication]}
+      - {id: iis-config, name: Shared configuration and appcmd config backup, match: [appcmd, iis-shared-configuration]}
+      - {id: iis-app-pool-health, name: App pool recycling, identities and w3wp crashes, match: [app-pool-recycling, w3wp]}
+      - {id: iis-request-filtering, name: Request filtering and security headers, match: [request-filtering]}
+  - id: print-services
+    name: Print services
+    source: Windows Server docs/Print and Document Services
+    match: [print-server, print-services]
+    subtopics:
+      - {id: ps-drivers, name: Printer drivers and Point and Print restrictions, match: [point-and-print, printer-drivers]}
+      - {id: ps-deploy, name: Deploy printers by GPO, match: [deployed-printers]}
+      - {id: ps-spooler, name: Spooler troubleshooting and hardening, match: [print-spooler]}
+      - {id: ps-universal-print, name: Universal Print as a replacement, match: [universal-print]}
+      - {id: ps-branch-direct, name: Branch Office Direct Printing, match: [branch-office-direct-printing]}
+      - {id: ps-printmanagement, name: Manage printers and queues with PrintManagement cmdlets, match: [add-printer, printmanagement-module]}
+      - {id: ps-driver-isolation, name: Printer driver isolation, match: [printer-driver-isolation]}
+  # --- PowerShell language and scripting (PowerShell docs about_ topics)
+  - id: ps-pipeline
+    name: Pipeline and objects
+    source: about_Pipelines, about_Calculated_Properties
+    match: [powershell-pipeline, pipeline]
+    subtopics:
+      - {id: psp-binding, name: Pipeline parameter binding ByValue and ByPropertyName, match: [valuefrompipeline, valuefrompipelinebypropertyname]}
+      - {id: psp-calculated, name: Calculated properties with Select-Object, match: [calculated-properties]}
+      - {id: psp-grouping, name: Group-Object, Sort-Object and Measure-Object reporting, match: [group-object, measure-object]}
+      - {id: psp-export, name: Export to CSV, JSON and HTML reports, match: [export-csv, convertto-json]}
+      - {id: psp-filter-left, name: Filter left with -Filter vs Where-Object, match: [filter-left, where-object]}
+      - {id: psp-foreach, name: ForEach-Object vs foreach statement, match: [foreach-object]}
+      - {id: psp-output, name: Tee-Object, Out-File and encoding, match: [tee-object, out-file-encoding]}
+      - {id: psp-format, name: Format cmdlets and format.ps1xml, match: [format-ps1xml]}
+      - {id: psp-compare, name: Compare-Object, match: [compare-object]}
+  - id: ps-functions
+    name: Advanced functions and parameters
+    source: about_Functions_Advanced, about_Functions_Advanced_Parameters, about_Parameter_Sets
+    match: [advanced-functions, cmdletbinding]
+    subtopics:
+      - {id: psf-validation, name: Parameter validation attributes, match: [validateset, parameter-validation]}
+      - {id: psf-parameter-sets, name: Parameter sets, match: [parameter-sets]}
+      - {id: psf-shouldprocess, name: SupportsShouldProcess, WhatIf and Confirm, match: [supportsshouldprocess, whatif]}
+      - {id: psf-begin-process-end, name: begin/process/end blocks, match: [begin-process-end]}
+      - {id: psf-splatting, name: Splatting, match: [splatting]}
+      - {id: psf-dynamic-params, name: Argument completers and dynamic parameters, match: [argument-completer, dynamic-parameters]}
+      - {id: psf-output, name: OutputType and output stream pitfalls, match: [outputtype, output-streams]}
+      - {id: psf-help, name: Comment-based help, match: [comment-help-keywords]}
+      - {id: psf-scopes, name: Variable scopes and dot-sourcing, match: [about-scopes]}
+      - {id: psf-common-params, name: Common parameters and PipelineVariable, match: [common-parameters, pipelinevariable]}
+  - id: ps-error-handling
+    name: Error handling and debugging
+    source: about_Try_Catch_Finally, about_Preference_Variables, about_Debuggers
+    match: [powershell-error-handling, try-catch]
+    subtopics:
+      - {id: pse-terminating, name: Terminating vs non-terminating errors and ErrorAction, match: [erroraction, terminating-errors]}
+      - {id: pse-error-record, name: Inspect ErrorRecord and $Error, match: [errorrecord]}
+      - {id: pse-strict-mode, name: Set-StrictMode and preference variables, match: [set-strictmode, preference-variables]}
+      - {id: pse-debugger, name: Debugging with breakpoints and Set-PSBreakpoint, match: [set-psbreakpoint, powershell-debugging]}
+      - {id: pse-logging, name: Script logging and Start-Transcript, match: [start-transcript]}
+      - {id: pse-throw, name: throw, Write-Error and ThrowTerminatingError, match: [throwterminatingerror]}
+      - {id: pse-trap, name: trap statement, match: [trap-statement]}
+      - {id: pse-retry, name: Retry patterns and typed catch blocks, match: [retry-logic]}
+      - {id: pse-native, name: Native command errors and $LASTEXITCODE, match: [lastexitcode, native-command-errors]}
+  - id: ps-data
+    name: Working with data types
+    source: about_Hash_Tables, about_Arrays, about_Regular_Expressions, about_Operators
+    match: [powershell-data, hashtables]
+    subtopics:
+      - {id: psd-hashtables, name: Hashtables, ordered dictionaries and PSCustomObject, match: [pscustomobject, ordered-dictionary]}
+      - {id: psd-regex, name: Regular expressions with -match, -replace and Select-String, match: [powershell-regex, select-string]}
+      - {id: psd-strings, name: String formatting and here-strings, match: [format-operator, here-strings]}
+      - {id: psd-xml-json, name: XML and JSON parsing, match: [powershell-xml, convertfrom-json]}
+      - {id: psd-dates, name: Dates, times and culture, match: [get-date, datetime]}
+      - {id: psd-arrays, name: Arrays, generic lists and collection performance, match: [powershell-arrays]}
+      - {id: psd-types, name: Type casting and type accelerators, match: [type-casting]}
+      - {id: psd-csv, name: Import-Csv and ConvertFrom-Csv, match: [csv-import-parsing]}
+      - {id: psd-comparison, name: Comparison operators and case sensitivity, match: [comparison-operators]}
+  - id: ps-remoting-jobs
+    name: Jobs, parallelism and remoting at scale
+    source: about_Jobs, about_Thread_Jobs, about_Remote, ForEach-Object -Parallel
+    match: [powershell-jobs, background-jobs]
+    subtopics:
+      - {id: psj-thread-jobs, name: Start-ThreadJob, match: [start-threadjob, thread-jobs]}
+      - {id: psj-parallel, name: ForEach-Object -Parallel and throttling, match: [foreach-parallel, throttlelimit]}
+      - {id: psj-fan-out, name: Fan-out Invoke-Command to many servers, match: [invoke-command-fanout]}
+      - {id: psj-using-scope, name: $using scope and passing variables, match: [using-scope]}
+      - {id: psj-background, name: Start-Job and Receive-Job lifecycle, match: [start-job, receive-job]}
+      - {id: psj-scheduled, name: Scheduled jobs with PSScheduledJob, match: [register-scheduledjob]}
+      - {id: psj-asjob, name: Invoke-Command -AsJob, match: [asjob]}
+      - {id: psj-runspaces, name: Runspace pools, match: [runspace-pool]}
+  - id: ps-cim
+    name: CIM and WMI
+    source: CimCmdlets module reference
+    match: [cim, cimcmdlets, wmi-cmdlets]
+    subtopics:
+      - {id: cim-query, name: Get-CimInstance queries and filters, match: [get-ciminstance]}
+      - {id: cim-sessions, name: CIM sessions over WSMan and DCOM, match: [new-cimsession]}
+      - {id: cim-methods, name: Invoke-CimMethod, match: [invoke-cimmethod]}
+      - {id: cim-wmi-repair, name: WMI repository troubleshooting, match: [wmi-repository]}
+      - {id: cim-events, name: CIM indications with Register-CimIndicationEvent, match: [register-cimindicationevent]}
+      - {id: cim-classes, name: Discover classes with Get-CimClass, match: [get-cimclass]}
+      - {id: cim-wmi-migration, name: Migrate from Get-WmiObject to CIM cmdlets, match: [wmi-to-cim-migration]}
+      - {id: cim-set-remove, name: Set-CimInstance and Remove-CimInstance, match: [remove-ciminstance]}
+      - {id: cim-namespace-security, name: WMI namespace security for non-admins, match: [wmi-namespace-security]}
+  - id: ps-modules
+    name: Modules and package management
+    source: about_Modules, PSResourceGet docs
+    match: [powershell-modules, psresourceget]
+    subtopics:
+      - {id: psm-authoring, name: Module manifests and exports, match: [module-manifest]}
+      - {id: psm-private-repo, name: Private repositories and offline installs, match: [private-repository]}
+      - {id: psm-versioning, name: Module versions and side-by-side loading, match: [module-versioning]}
+      - {id: psm-pester, name: Pester tests, match: [pester]}
+      - {id: psm-scriptanalyzer, name: PSScriptAnalyzer rules, match: [psscriptanalyzer]}
+      - {id: psm-publish, name: Publish modules with Publish-PSResource, match: [module-publishing]}
+      - {id: psm-modulepath, name: PSModulePath and autoloading, match: [psmodulepath]}
+      - {id: psm-ci, name: Module build and CI pipelines, match: [module-ci]}
+  - id: ps-security
+    name: PowerShell security
+    source: about_Execution_Policies, about_Signing, about_Language_Modes, about_Logging
+    match: [powershell-security, executionpolicy]
+    subtopics:
+      - {id: pss-execution-policy, name: Execution policy scopes, match: [execution-policy-scopes]}
+      - {id: pss-signing, name: Code signing, match: [code-signing]}
+      - {id: pss-clm, name: Constrained language mode, match: [constrained-language-mode]}
+      - {id: pss-logging, name: Script block and module logging, match: [script-block-logging, module-logging]}
+      - {id: pss-secrets, name: SecretManagement and SecretStore, match: [secretmanagement]}
+      - {id: pss-amsi, name: AMSI scanning of scripts, match: [amsi]}
+      - {id: pss-wdac, name: PowerShell under App Control script enforcement, match: [powershell-wdac]}
+      - {id: pss-credentials, name: PSCredential handling and Export-Clixml DPAPI, match: [pscredential, export-clixml-credentials]}
+      - {id: pss-transcription, name: System-wide transcription, match: [powershell-transcription]}
+      - {id: pss-v2-removal, name: Remove PowerShell 2.0, match: [powershell-v2-removal]}
+  - id: ps-environment
+    name: PowerShell environment and versions
+    source: Installing PowerShell; about_Profiles; about_PSReadLine
+    match: [powershell-environment, pwsh]
+    subtopics:
+      - {id: pse-install, name: Install and update PowerShell 7 side by side, match: [install-powershell-7]}
+      - {id: pse-profiles, name: Profiles, match: [powershell-profiles]}
+      - {id: pse-psreadline, name: PSReadLine configuration, match: [psreadline]}
+      - {id: pse-compat, name: Windows PowerShell compatibility, match: [windows-powershell-compatibility]}
+      - {id: pse-vscode, name: VS Code PowerShell extension, match: [vscode-powershell]}
+      - {id: pse-env-vars, name: Environment variables, match: [environment-variables]}
+      - {id: pse-providers, name: Providers and PSDrives, match: [psprovider, psdrive]}
+      - {id: pse-experimental, name: Experimental features, match: [experimental-features]}
+  - id: ps-dsc
+    name: Desired State Configuration
+    source: PSDesiredStateConfiguration docs, DSC v3 docs
+    match: [dsc, desired-state-configuration]
+    subtopics:
+      - {id: dsc-lcm, name: LCM configuration, match: [lcm]}
+      - {id: dsc-resources, name: Writing class-based resources, match: [class-based-dsc-resource]}
+      - {id: dsc-v3, name: DSC v3, match: [dsc-v3]}
+      - {id: dsc-credentials, name: Credentials in configurations, match: [dsc-credentials]}
+      - {id: dsc-pull, name: Pull server and Azure Automation State Configuration, match: [dsc-pull-server]}
+      - {id: dsc-config-data, name: Configuration data and composite resources, match: [composite-resources]}
+      - {id: dsc-debug, name: Troubleshoot DSC with Get-DscConfigurationStatus, match: [dsc-troubleshooting]}
+      - {id: dsc-invoke-resource, name: Invoke-DscResource, match: [invoke-dscresource]}
+  - id: ps-classes
+    name: Classes and enums
+    source: about_Classes, about_Enum
+    match: [powershell-classes]
+    subtopics:
+      - {id: psc-define, name: Defining classes, match: [powershell-class-definition]}
+      - {id: psc-enums, name: Enums and flags, match: [powershell-enum]}
+      - {id: psc-dotnet, name: Calling .NET types, match: [dotnet-types]}
+      - {id: psc-add-type, name: Add-Type and P/Invoke, match: [add-type]}
+      - {id: psc-inheritance, name: Inheritance and interfaces, match: [class-inheritance]}
+      - {id: psc-constructors, name: Constructors, static and hidden members, match: [class-constructors]}
+      - {id: psc-using-module, name: using module and class reload gotchas, match: [class-reload-gotchas]}
+  - id: ps-rest
+    name: REST APIs and web requests
+    source: Microsoft.PowerShell.Utility/Invoke-RestMethod
+    match: [invoke-restmethod]
+    subtopics:
+      - {id: psr-auth, name: Authentication headers and OAuth tokens, match: [rest-authentication]}
+      - {id: psr-pagination, name: Pagination and rate limits, match: [rest-pagination]}
+      - {id: psr-graph, name: Microsoft Graph PowerShell SDK, match: [microsoft-graph-powershell]}
+      - {id: psr-certificates, name: TLS and certificate handling, match: [skipcertificatecheck]}
+      - {id: psr-webrequest, name: Invoke-WebRequest and file downloads, match: [file-download-webrequest]}
+      - {id: psr-http-errors, name: HTTP error handling and SkipHttpErrorCheck, match: [skiphttperrorcheck]}
+      - {id: psr-multipart, name: Multipart form uploads with -Form, match: [multipart-form-upload]}
+      - {id: psr-retry, name: Built-in retries with MaximumRetryCount, match: [maximumretrycount]}

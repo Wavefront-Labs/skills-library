@@ -1,0 +1,201 @@
+# Coverage spec for TiDB (database-administration).
+# A topic is covered when a skill in scope has a tag equal to one of its match keywords.
+subject: tidb
+scope:
+  category: computing-software
+  field: database-administration
+  products: [tidb]
+sources:
+  - https://docs.pingcap.com/tidb/stable/tidb-architecture
+  - https://docs.pingcap.com/tidb/stable/tidb-storage
+  - https://docs.pingcap.com/tidb/stable/tidb-computing
+  - https://docs.pingcap.com/tidb/stable/tidb-scheduling
+  - https://docs.pingcap.com/tidb/stable/tiflash-overview
+  - https://docs.pingcap.com/tidb/stable/garbage-collection-overview
+  - https://docs.pingcap.com/tidb/stable/pessimistic-transaction
+  - https://docs.pingcap.com/tidb/stable/optimistic-transaction
+  - https://docs.pingcap.com/tidb/stable/clustered-indexes
+  - https://docs.pingcap.com/tidb/stable/auto-random
+  - https://docs.pingcap.com/tidb/stable/backup-and-restore-overview
+  - https://docs.pingcap.com/tidb/stable/br-pitr-guide
+  - https://docs.pingcap.com/tidb/stable/ticdc-overview
+  - https://docs.pingcap.com/tidb/stable/tidb-lightning-overview
+  - https://docs.pingcap.com/tidb/stable/dm-overview
+  - https://docs.pingcap.com/tidb/stable/tiup-overview
+topics:
+  - id: architecture-and-components
+    name: Architecture and components
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [architecture, components, distributed-sql, tidb-server]
+  - id: tikv-storage-engine
+    name: TiKV storage engine
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [tikv, rocksdb]
+  - id: pd-placement-driver
+    name: PD placement driver
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [pd]
+  - id: regions-and-raft
+    name: Regions and Raft
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [region, raft, raft-learner]
+  - id: mvcc
+    name: MVCC
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [mvcc, start-ts, commit]
+  - id: key-value-mapping-of-rows
+    name: Key-value mapping of rows
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [key-value-mapping, key-value, tableid, rowid]
+  - id: index-mapping
+    name: Index mapping
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [indexid, valid-index]
+  - id: schema-versions-and-online-ddl
+    name: Schema versions and online DDL
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [schema-version, online-ddl]
+  - id: coprocessor-pushdown
+    name: Coprocessor pushdown
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [coprocessor, pushdown]
+  - id: pd-scheduling
+    name: PD scheduling
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [scheduling, operators]
+  - id: store-states
+    name: Store states
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [store-state, tombstone, max-store-down-time]
+  - id: location-labels
+    name: Location labels
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [location-labels]
+  - id: hot-region-scheduling
+    name: Hot region scheduling
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [hot-region, write-hotspot]
+  - id: tiflash-and-htap
+    name: TiFlash and HTAP
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [tiflash, htap, columnar, analytics, mpp]
+  - id: garbage-collection
+    name: Garbage collection
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [garbage-collection, gc, gc-life-time, safe-point]
+  - id: resolve-locks-and-delete-ranges
+    name: Resolve locks and delete ranges
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [resolve-locks, delete-ranges]
+  - id: pessimistic-transactions
+    name: Pessimistic transactions
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [pessimistic-transaction, select-for-update, deadlock]
+  - id: lock-wait-and-nowait
+    name: Lock wait and NOWAIT
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [lock-wait-timeout, nowait]
+  - id: optimistic-transactions
+    name: Optimistic transactions
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [optimistic-transaction, write-conflict]
+  - id: percolator-and-two-phase-commit
+    name: Percolator and two-phase commit
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [percolator, two-phase-commit, prewrite]
+  - id: transaction-mode-variable
+    name: Transaction mode variable
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [tidb-txn-mode]
+  - id: snapshot-and-current-read
+    name: Snapshot and current read
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [snapshot-read, current-read]
+  - id: clustered-indexes
+    name: Clustered indexes
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [clustered-index, index-organized-table, nonclustered, tidb-enable-clustered-index]
+  - id: auto-random
+    name: AUTO_RANDOM
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [auto-random, shard-bits]
+  - id: auto-increment-and-row-ids
+    name: Auto-increment and row IDs
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [auto-increment, tidb-rowid, last-insert-id]
+  - id: pre-splitting-regions
+    name: Pre-splitting regions
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [pre-split-regions]
+  - id: primary-key-choice
+    name: Primary key choice
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [primary-key]
+  - id: br-backup-and-restore
+    name: BR backup and restore
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [br, backup, restore]
+  - id: full-snapshot-backup
+    name: Full snapshot backup
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [snapshot-backup, backup-full, restore-full]
+  - id: pitr-log-backup
+    name: PITR log backup
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [pitr, log-backup, log-start, log-status, log-truncate, restore-point]
+  - id: backup-rpo-and-requirements
+    name: Backup RPO and requirements
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [rpo, check-requirements]
+  - id: ticdc-replication
+    name: TiCDC replication
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [ticdc, cdc, changefeed, replication]
+  - id: resolved-timestamp
+    name: Resolved timestamp
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [resolved-ts]
+  - id: kafka-and-sink-formats
+    name: Kafka and sink formats
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [kafka, avro, canal-json, debezium, csv]
+  - id: tidb-lightning
+    name: TiDB Lightning
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [tidb-lightning, bulk-load]
+  - id: physical-and-logical-import
+    name: Physical and logical import
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [physical-import, logical-import, import-into]
+  - id: data-migration-dm
+    name: Data Migration (DM)
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [dm, data-migration, dmctl]
+  - id: mysql-migration
+    name: MySQL migration
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [mysql-migration, mysql-compatibility]
+  - id: shard-merge
+    name: Shard merge
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [shard-merge]
+  - id: dumpling-export
+    name: Dumpling export
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [dumpling]
+  - id: tiup-cluster-management
+    name: TiUP cluster management
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [tiup, tiup-cluster, tiup-playground, package-manager, install]
+  - id: tiup-br-and-mirror
+    name: TiUP BR and mirror
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [tiup-br, mirror]
+  - id: binlog-legacy-and-gh-ost
+    name: Binlog legacy and gh-ost
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [binlog, gh-ost, redo-log]
+  - id: parquet-files
+    name: Parquet files
+    source: https://docs.pingcap.com/tidb/stable/tidb-architecture
+    match: [parquet]

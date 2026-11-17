@@ -1,0 +1,345 @@
+# Canonical coverage spec: Assembly language (x86-64 and ARM64) and toolchain.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: assembly-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [assembly]
+sources:
+  - "Intel 64 and IA-32 Architectures Software Developer Manual (intel.com/sdm)"
+  - "AMD64 Architecture Programmer's Manual (amd.com documentation hub)"
+  - "Arm Architecture Reference Manual for A-profile (developer.arm.com)"
+  - "System V AMD64 psABI, Microsoft x64 conventions, AAPCS64 (ARM-software/abi-aa)"
+  - "NASM, GNU as (GAS), MASM docs"
+  - "Linux syscall(2) man page and syscall tables"
+  - "GNU binutils, GDB, LLDB, LLVM docs; GCC Extended Asm"
+topics:
+  - id: asm-concepts
+    name: "Core concepts: encoding, endianness, ISA families"
+    source: "Intel SDM Vol 1 ch.1-3; Arm ARM A1"
+    match: [asm-concepts]
+    subtopics:
+      - {id: asm-concepts-endianness, name: "Endianness and twos complement", match: [endianness-twos-complement]}
+      - {id: asm-concepts-encoding, name: "Instruction encoding basics (CISC vs RISC)", match: [instruction-encoding-basics]}
+  - id: asm-x86-registers
+    name: "x86-64 registers and flags"
+    source: "Intel SDM Vol 1 ch.3 Basic Execution Environment"
+    match: [asm-x86-registers]
+    subtopics:
+      - {id: asm-x86-registers-gpr, name: "General-purpose registers and sub-registers", match: [gpr-subregisters]}
+      - {id: asm-x86-registers-flags, name: "RFLAGS status flags", match: [rflags-flags]}
+      - {id: asm-x86-registers-segment, name: "FS/GS segment bases and TLS", match: [segment-fs-gs]}
+  - id: asm-x86-addressing
+    name: "x86-64 addressing modes"
+    source: "Intel SDM Vol 1 ch.3.7 Operand Addressing"
+    match: [asm-x86-addressing]
+    subtopics:
+      - {id: asm-x86-addressing-modes, name: "Base+index*scale+disp addressing", match: [x86-addressing-modes]}
+      - {id: asm-x86-addressing-lea, name: "LEA as arithmetic", match: [lea-tricks]}
+      - {id: asm-x86-addressing-rip, name: "RIP-relative addressing", match: [rip-relative]}
+  - id: asm-x86-integer
+    name: "x86-64 integer instructions"
+    source: "Intel SDM Vol 2 instruction reference"
+    match: [asm-x86-integer]
+    subtopics:
+      - {id: asm-x86-integer-mov, name: "MOV, MOVZX, MOVSX and partial-register writes", match: [mov-movzx-movsx]}
+      - {id: asm-x86-integer-muldiv, name: "MUL, IMUL, DIV, IDIV", match: [mul-div-idiv]}
+      - {id: asm-x86-integer-bitops, name: "Shifts, rotates, AND/OR/XOR/NOT", match: [shifts-rotates-bitops]}
+  - id: asm-x86-control
+    name: "x86-64 control flow"
+    source: "Intel SDM Vol 2: Jcc, CMOVcc, CALL, RET"
+    match: [asm-x86-control]
+    subtopics:
+      - {id: asm-x86-control-jcc, name: "CMP, TEST and conditional jumps", match: [cmp-test-jcc]}
+      - {id: asm-x86-control-callret, name: "CALL, RET and the stack", match: [call-ret-stack]}
+      - {id: asm-x86-control-jumptable, name: "Indirect jumps and jump tables", match: [jump-tables]}
+  - id: asm-x86-string-atomic
+    name: "String ops, atomics and ordering"
+    source: "Intel SDM Vol 2 REP/MOVS/CMPXCHG; Vol 3 ch.9 memory ordering"
+    match: [asm-x86-string-atomic]
+    subtopics:
+      - {id: asm-x86-string-atomic-rep, name: "REP MOVS/STOS/SCAS and the direction flag", match: [rep-string-ops]}
+      - {id: asm-x86-string-atomic-lock, name: "LOCK prefix, XCHG, CMPXCHG, XADD", match: [lock-atomics]}
+      - {id: asm-x86-string-atomic-fences, name: "x86 memory model and fences", match: [x86-memory-ordering]}
+  - id: asm-x86-simd
+    name: "x86 SIMD: SSE, AVX, AVX-512"
+    source: "Intel SDM Vol 1 ch.10-15; Intrinsics Guide"
+    match: [asm-x86-simd]
+    subtopics:
+      - {id: asm-x86-simd-sse-scalar, name: "SSE/SSE2 scalar floating point", match: [sse-scalar-float]}
+      - {id: asm-x86-simd-avx, name: "AVX/AVX2 VEX encoding and YMM", match: [avx-vex-ymm]}
+      - {id: asm-x86-simd-avx512, name: "AVX-512 masking and ZMM", match: [avx512-masking]}
+      - {id: asm-x86-simd-cpuid, name: "CPUID feature detection and dispatch", match: [cpuid-feature-detect]}
+  - id: asm-x86-system
+    name: "x86 timing, hints and CET"
+    source: "Intel SDM Vol 2 and Vol 3"
+    match: [asm-x86-system]
+    subtopics:
+      - {id: asm-x86-system-rdtsc, name: "RDTSC and cycle timing", match: [rdtsc-timing]}
+      - {id: asm-x86-system-endbr, name: "ENDBR64 and indirect-branch tracking", match: [endbr-cet-ibt]}
+  - id: asm-x86-bitmanip
+    name: "Bit manipulation and multiword math"
+    source: "Intel SDM Vol 2: POPCNT, LZCNT, BMI1/2, ADX"
+    match: [asm-x86-bitmanip]
+    subtopics:
+      - {id: asm-x86-bitmanip-bmi, name: "POPCNT, LZCNT, TZCNT, BMI1/BMI2", match: [popcnt-lzcnt-bmi]}
+      - {id: asm-x86-bitmanip-divconst, name: "Division by constants via multiply", match: [division-by-constant]}
+  - id: asm-x87
+    name: "x87 FPU and IEEE 754"
+    source: "Intel SDM Vol 1 ch.8 x87 FPU, ch.11 SSE"
+    match: [asm-x87]
+    subtopics:
+      - {id: asm-x87-x87, name: "x87 stack registers and FLD/FSTP", match: [x87-fpu-stack]}
+      - {id: asm-x87-ieee, name: "IEEE 754 handling in SSE: NaN, rounding, MXCSR", match: [ieee754-mxcsr]}
+  - id: asm-arm64-registers
+    name: "AArch64 registers and flags"
+    source: "Arm ARM A-profile: Application Level Programmers Model"
+    match: [asm-arm64-registers]
+    subtopics:
+      - {id: asm-arm64-registers-regs, name: "X/W registers, SP, XZR/WZR", match: [aarch64-registers]}
+      - {id: asm-arm64-registers-nzcv, name: "NZCV condition flags", match: [nzcv-flags]}
+  - id: asm-arm64-loadstore
+    name: "AArch64 load/store and addressing"
+    source: "Arm ARM A64 instruction set: loads and stores"
+    match: [asm-arm64-loadstore]
+    subtopics:
+      - {id: asm-arm64-loadstore-ldrstr, name: "LDR/STR addressing modes", match: [ldr-str-addressing]}
+      - {id: asm-arm64-loadstore-pairs, name: "LDP/STP pairs and pre/post-index", match: [ldp-stp-pairs]}
+      - {id: asm-arm64-loadstore-adrp, name: "ADRP+ADD/LDR PC-relative addressing", match: [adrp-add-pc-relative]}
+  - id: asm-arm64-integer
+    name: "AArch64 integer instructions"
+    source: "Arm ARM A64 data processing"
+    match: [asm-arm64-integer]
+    subtopics:
+      - {id: asm-arm64-integer-arith, name: "ADD/SUB/logical with shifted operands", match: [arm64-arith-logic]}
+      - {id: asm-arm64-integer-bitfield, name: "Bitfield ops: UBFM, SBFM, BFI, UBFX", match: [arm64-bitfield]}
+      - {id: asm-arm64-integer-movk, name: "MOVZ/MOVK/MOVN constant building", match: [movz-movk-immediates]}
+  - id: asm-arm64-control
+    name: "AArch64 control flow"
+    source: "Arm ARM A64 branches and conditional select"
+    match: [asm-arm64-control]
+    subtopics:
+      - {id: asm-arm64-control-branch, name: "B, BL, BR, BLR, RET", match: [arm64-branches]}
+      - {id: asm-arm64-control-csel, name: "CMP, CSEL, CSET, CCMP", match: [arm64-conditional-select]}
+      - {id: asm-arm64-control-cbz, name: "CBZ, CBNZ, TBZ, TBNZ", match: [cbz-tbz]}
+  - id: asm-arm64-atomics
+    name: "AArch64 atomics and barriers"
+    source: "Arm ARM: exclusives, LSE, barriers"
+    match: [asm-arm64-atomics]
+    subtopics:
+      - {id: asm-arm64-atomics-exclusive, name: "LDXR/STXR exclusive loops", match: [ldxr-stxr-exclusives]}
+      - {id: asm-arm64-atomics-lse, name: "LSE atomics: LDADD, CAS, SWP", match: [arm64-lse-atomics]}
+      - {id: asm-arm64-atomics-barriers, name: "DMB, DSB, ISB and acquire/release", match: [arm64-barriers]}
+  - id: asm-arm64-simd
+    name: "AArch64 NEON and SVE"
+    source: "Arm ARM: Advanced SIMD and SVE"
+    match: [asm-arm64-simd]
+    subtopics:
+      - {id: asm-arm64-simd-neon, name: "NEON V registers and arrangements", match: [neon-vector-registers]}
+      - {id: asm-arm64-simd-sve, name: "SVE predicates and vector-length agnostic code", match: [sve-predicates]}
+  - id: asm-arm64-system
+    name: "AArch64 system features"
+    source: "Arm ARM: system instructions, PAC, BTI"
+    match: [asm-arm64-system]
+    subtopics:
+      - {id: asm-arm64-system-svc, name: "SVC and exception levels", match: [svc-exception-levels]}
+      - {id: asm-arm64-system-pac, name: "Pointer authentication and BTI", match: [pointer-auth-bti]}
+  - id: asm-abi-sysv
+    name: "System V AMD64 calling convention"
+    source: "System V AMD64 psABI ch.3"
+    match: [asm-abi-sysv]
+    subtopics:
+      - {id: asm-abi-sysv-args, name: "Integer and SSE argument registers", match: [sysv-arg-registers]}
+      - {id: asm-abi-sysv-saved, name: "Callee-saved registers and return values", match: [sysv-callee-saved]}
+      - {id: asm-abi-sysv-redzone, name: "Red zone and 16-byte stack alignment", match: [sysv-red-zone-alignment]}
+      - {id: asm-abi-sysv-structs, name: "Struct classification and passing", match: [sysv-struct-passing]}
+  - id: asm-abi-win64
+    name: "Microsoft x64 calling convention"
+    source: "Microsoft x64 software conventions"
+    match: [asm-abi-win64]
+    subtopics:
+      - {id: asm-abi-win64-args, name: "RCX/RDX/R8/R9 and XMM0-3", match: [win64-arg-registers]}
+      - {id: asm-abi-win64-shadow, name: "Shadow space and stack alignment", match: [win64-shadow-space]}
+      - {id: asm-abi-win64-seh, name: "Unwind info, prologs and SEH", match: [win64-unwind-seh]}
+  - id: asm-abi-aapcs64
+    name: "AAPCS64 calling convention"
+    source: "Arm AAPCS64 (ARM-software/abi-aa)"
+    match: [asm-abi-aapcs64]
+    subtopics:
+      - {id: asm-abi-aapcs64-args, name: "X0-X7 and V0-V7 argument passing", match: [aapcs64-arg-registers]}
+      - {id: asm-abi-aapcs64-saved, name: "Callee-saved, X18, X29, X30", match: [aapcs64-callee-saved]}
+      - {id: asm-abi-aapcs64-apple, name: "Apple and Windows ARM64 deviations", match: [aapcs64-platform-variants]}
+  - id: asm-stack-frames
+    name: "Stack frames and function structure"
+    source: "psABI ch.3.2.2; AAPCS64 stack"
+    match: [asm-stack-frames]
+    subtopics:
+      - {id: asm-stack-frames-prologue, name: "Prologue and epilogue patterns", match: [prologue-epilogue]}
+      - {id: asm-stack-frames-fp, name: "Frame-pointer chains and backtraces", match: [frame-pointer-chains]}
+      - {id: asm-stack-frames-canary, name: "Stack canaries", match: [stack-canaries]}
+  - id: asm-nasm
+    name: "NASM assembler"
+    source: "NASM manual"
+    match: [asm-nasm]
+    subtopics:
+      - {id: asm-nasm-syntax, name: "NASM syntax, sections and labels", match: [nasm-syntax-sections]}
+      - {id: asm-nasm-data, name: "Data directives, EQU and %define", match: [nasm-data-directives]}
+      - {id: asm-nasm-macros, name: "NASM macros and conditionals", match: [nasm-macros]}
+  - id: asm-gas
+    name: "GNU assembler (GAS)"
+    source: "GNU as manual"
+    match: [asm-gas]
+    subtopics:
+      - {id: asm-gas-att, name: "AT&T syntax rules", match: [gas-att-syntax]}
+      - {id: asm-gas-intel, name: "Intel syntax via .intel_syntax noprefix", match: [gas-intel-syntax]}
+      - {id: asm-gas-directives, name: "Sections and directives", match: [gas-directives-sections]}
+      - {id: asm-gas-cfi, name: "CFI directives", match: [gas-cfi-directives]}
+  - id: asm-masm
+    name: "MASM (ml64)"
+    source: "MASM reference"
+    match: [asm-masm]
+    subtopics:
+      - {id: asm-masm-syntax, name: "ml64 syntax and data", match: [masm-ml64-syntax]}
+      - {id: asm-masm-proc, name: "PROC FRAME and unwind directives", match: [masm-proc-frame]}
+  - id: asm-llvm
+    name: "LLVM integrated assembler"
+    source: "LLVM docs: llvm-mc, clang"
+    match: [asm-llvm]
+    subtopics:
+      - {id: asm-llvm-clang, name: "clang as the assembler driver", match: [clang-integrated-as]}
+      - {id: asm-llvm-mc, name: "llvm-mc assemble and disassemble", match: [llvm-mc-tool]}
+  - id: asm-linking
+    name: "Linking"
+    source: "GNU ld manual"
+    match: [asm-linking]
+    subtopics:
+      - {id: asm-linking-ld, name: "Linking asm objects with ld", match: [ld-basics]}
+      - {id: asm-linking-script, name: "Linker scripts", match: [linker-scripts]}
+      - {id: asm-linking-reloc, name: "Relocation types", match: [relocations]}
+      - {id: asm-linking-got, name: "GOT, PLT and PIC", match: [got-plt-pic]}
+  - id: asm-object-formats
+    name: "Object file formats"
+    source: "ELF gABI, PE/COFF spec, Mach-O"
+    match: [asm-object-formats]
+    subtopics:
+      - {id: asm-object-formats-elf, name: "ELF sections and segments", match: [elf-sections-segments]}
+      - {id: asm-object-formats-pe, name: "PE/COFF", match: [pe-coff-format]}
+      - {id: asm-object-formats-macho, name: "Mach-O", match: [macho-format]}
+  - id: asm-syscalls
+    name: "System calls"
+    source: "Linux syscall(2); Windows and macOS docs"
+    match: [asm-syscalls]
+    subtopics:
+      - {id: asm-syscalls-linux-x64, name: "Linux x86-64 syscall ABI", match: [linux-x86-64-syscalls]}
+      - {id: asm-syscalls-linux-a64, name: "Linux arm64 syscall ABI", match: [linux-arm64-syscalls]}
+      - {id: asm-syscalls-errno, name: "Return values and -errno", match: [syscall-errno-convention]}
+      - {id: asm-syscalls-other, name: "Windows ntdll and macOS syscalls", match: [windows-macos-syscalls]}
+  - id: asm-inline
+    name: "Inline assembly"
+    source: "GCC Extended Asm; Rust asm!; MSVC"
+    match: [asm-inline]
+    subtopics:
+      - {id: asm-inline-gcc, name: "GCC/Clang extended asm", match: [gcc-extended-asm]}
+      - {id: asm-inline-constraints, name: "Operand constraints", match: [asm-constraints]}
+      - {id: asm-inline-clobbers, name: "Clobbers and volatile", match: [asm-clobbers-volatile]}
+      - {id: asm-inline-rust, name: "Rust asm! and global_asm!", match: [rust-asm-macro]}
+  - id: asm-reading-output
+    name: "Reading compiler output"
+    source: "GCC/Clang docs; Compiler Explorer"
+    match: [asm-reading-output]
+    subtopics:
+      - {id: asm-reading-output-flags, name: "Generating asm with -S and -masm", match: [compiler-emit-asm]}
+      - {id: asm-reading-output-godbolt, name: "Compiler Explorer workflow", match: [compiler-explorer]}
+      - {id: asm-reading-output-opt, name: "What -O0 vs -O2 does to code", match: [optimisation-levels]}
+  - id: asm-interop
+    name: "C interop"
+    source: "psABI, AAPCS64, NASM extern/global"
+    match: [asm-interop]
+    subtopics:
+      - {id: asm-interop-call-asm, name: "Calling assembly from C", match: [c-calls-asm]}
+      - {id: asm-interop-call-c, name: "Calling C from assembly", match: [asm-calls-c]}
+      - {id: asm-interop-mangle, name: "Symbol naming and underscore prefix", match: [symbol-naming-mangling]}
+  - id: asm-binutils
+    name: "Binary inspection tools"
+    source: "GNU binutils docs"
+    match: [asm-binutils]
+    subtopics:
+      - {id: asm-binutils-objdump, name: "objdump disassembly", match: [objdump-disassemble]}
+      - {id: asm-binutils-readelf, name: "readelf, nm, size, strings", match: [readelf-nm]}
+  - id: asm-gdb
+    name: "GDB for assembly"
+    source: "GDB manual"
+    match: [asm-gdb]
+    subtopics:
+      - {id: asm-gdb-stepi, name: "Disassembly, stepi, nexti", match: [gdb-stepi-disassemble]}
+      - {id: asm-gdb-regs, name: "Registers and memory examine", match: [gdb-registers-memory]}
+  - id: asm-lldb
+    name: "LLDB for assembly"
+    source: "LLDB tutorial"
+    match: [asm-lldb]
+    subtopics:
+      - {id: asm-lldb-dis, name: "disassemble and thread step-inst", match: [lldb-disassemble-step]}
+      - {id: asm-lldb-regs, name: "register read and memory read", match: [lldb-registers-memory]}
+  - id: asm-debug-info
+    name: "Debug info and unwinding"
+    source: "DWARF standard; GAS CFI"
+    match: [asm-debug-info]
+    subtopics:
+      - {id: asm-debug-info-dwarf, name: "DWARF line info for asm sources", match: [dwarf-line-info]}
+      - {id: asm-debug-info-unwind, name: ".eh_frame unwinding", match: [eh-frame-unwind]}
+  - id: asm-performance
+    name: "Performance and microarchitecture"
+    source: "Intel Optimization Manual; Arm Software Optimization Guides"
+    match: [asm-performance]
+    subtopics:
+      - {id: asm-performance-latency, name: "Latency, throughput, dependencies", match: [latency-throughput]}
+      - {id: asm-performance-align, name: "Alignment and code layout", match: [alignment-padding]}
+      - {id: asm-performance-branch, name: "Branch prediction and mispredicts", match: [branch-prediction]}
+      - {id: asm-performance-mca, name: "llvm-mca throughput analysis", match: [llvm-mca]}
+  - id: asm-profiling
+    name: "Profiling and measurement"
+    source: "perf docs; LLVM tools"
+    match: [asm-profiling]
+    subtopics:
+      - {id: asm-profiling-perf, name: "perf annotate and counters", match: [perf-annotate]}
+      - {id: asm-profiling-bench, name: "Microbenchmarking asm", match: [microbenchmark-asm]}
+  - id: asm-security
+    name: "Security hardening and mitigations"
+    source: "Intel CET; Arm PAC/BTI; GCC/Clang hardening docs"
+    match: [asm-security]
+    subtopics:
+      - {id: asm-security-aslr, name: "ASLR, PIE, NX", match: [aslr-pie-nx]}
+      - {id: asm-security-shadow, name: "Shadow stacks and CFI", match: [shadow-stack-cfi]}
+      - {id: asm-security-spectre, name: "Speculation mitigations: lfence, retpoline", match: [spectre-mitigations]}
+  - id: asm-data-patterns
+    name: "Data and algorithm patterns"
+    source: "Common assembly idioms"
+    match: [asm-data-patterns]
+    subtopics:
+      - {id: asm-data-patterns-strings, name: "String and memory routines", match: [asm-string-routines]}
+      - {id: asm-data-patterns-arrays, name: "Array loops and struct offsets", match: [asm-arrays-structs]}
+      - {id: asm-data-patterns-switch, name: "Lowering switch and if chains", match: [asm-switch-lowering]}
+  - id: asm-project
+    name: "Project structure and tests"
+    source: "NASM/GAS include and macro docs; CI practice"
+    match: [asm-project]
+    subtopics:
+      - {id: asm-project-modular, name: "Modular source with include and macros", match: [asm-modular-source]}
+      - {id: asm-project-tests, name: "Testing asm routines from C", match: [asm-unit-tests]}
+      - {id: asm-project-build, name: "Makefile and CMake for asm", match: [asm-build-systems]}
+  - id: asm-containers-ci
+    name: "Containers, cross builds and CI"
+    source: "QEMU user-mode docs; Docker docs"
+    match: [asm-containers-ci]
+    subtopics:
+      - {id: asm-containers-ci-qemu, name: "qemu-user and cross-toolchains", match: [qemu-cross-run]}
+      - {id: asm-containers-ci-docker, name: "Docker multi-arch builds", match: [docker-multiarch]}
+      - {id: asm-containers-ci-ci, name: "CI matrix for x86-64 and arm64", match: [asm-ci-matrix]}
+  - id: asm-baremetal
+    name: "Freestanding and bare metal"
+    source: "Intel SDM Vol 3; Arm ARM D1"
+    match: [asm-baremetal]
+    subtopics:
+      - {id: asm-baremetal-start, name: "Freestanding _start and custom entry", match: [freestanding-start]}
+      - {id: asm-baremetal-x86-boot, name: "x86 real mode and long mode transition", match: [x86-boot-modes]}
+      - {id: asm-baremetal-arm-boot, name: "AArch64 boot: exception levels and vector table", match: [arm64-baremetal-boot]}

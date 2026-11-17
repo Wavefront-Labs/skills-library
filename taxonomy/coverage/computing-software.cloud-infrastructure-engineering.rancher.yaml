@@ -1,0 +1,217 @@
+# Coverage spec: rancher. Topics from the Rancher Manager docs (ranchermanager.docs.rancher.com).
+subject: rancher
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [rancher]
+sources:
+  - "Rancher Manager docs (ranchermanager.docs.rancher.com)"
+topics:
+  # --- Install on Kubernetes ---
+  - id: rancher-ha-architecture
+    name: "HA architecture, etcd quorum and layer 4 load balancing for the Rancher cluster"
+    source: "https://ranchermanager.docs.rancher.com/reference-guides/rancher-manager-architecture/architecture-recommendations"
+    match: [high-availability,etcd,layer-4,load-balancer,architecture]
+  - id: rancher-ha-rke2
+    name: "Preparing an RKE2 cluster for Rancher: tls-san, kubeconfig, load balancer"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher"
+    match: [rke2,high-availability,tls-san,kubeconfig,load-balancer,local-cluster]
+  - id: rancher-ha-k3s
+    name: "Preparing a K3s cluster with an external datastore"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/k3s-for-rancher"
+    match: [k3s,high-availability,datastore-endpoint,mysql,token]
+  - id: rancher-helm-install
+    name: "Installing Rancher with Helm: repos, cert-manager, hostname, cattle-system"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster"
+    match: [helm,install,cert-manager,cattle-system,rancher-stable,hostname]
+  - id: rancher-helm-options
+    name: "Helm chart options: replicas, antiAffinity, addLocal, extraEnv, registries"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/installation-references/helm-chart-options"
+    match: [helm,values,replicas,antiaffinity,addlocal,extraenv,systemdefaultregistry]
+  - id: rancher-bootstrap-password
+    name: "Setting and retrieving the bootstrap password"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/resources/bootstrap-password"
+    match: [bootstrap-password,first-login,admin,password-length]
+  - id: rancher-docker-single-node
+    name: "Single-node Docker install and its limits"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/rancher-on-a-single-node-with-docker"
+    match: [docker,single-node,privileged,development,migration]
+  # --- TLS and certificates ---
+  - id: rancher-tls-sources
+    name: "TLS sources: Rancher-generated, Lets Encrypt and own certificates"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster"
+    match: [tls,cert-manager,letsencrypt,ingress-tls-source,privateca,certificates]
+  - id: rancher-tls-secrets
+    name: "TLS secrets for the ingress and private CA"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/resources/add-tls-secrets"
+    match: [tls-rancher-ingress,tls-ca,tls-additional,private-ca,secrets]
+  - id: rancher-external-tls
+    name: "External TLS termination with tls=external"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/installation-references/helm-chart-options"
+    match: [tls-external,layer-7,load-balancer,websocket,healthz,x-forwarded-proto]
+  - id: rancher-cert-troubleshooting
+    name: "Certificate format troubleshooting: PEM chain and PKCS8 keys"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/rancher-on-a-single-node-with-docker/certificate-troubleshooting"
+    match: [pem,pkcs8,pkcs1,certificate-chain,openssl,intermediate-certificates]
+  - id: rancher-agent-tls-mode
+    name: "Agent TLS mode: strict versus system-store"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/installation-references/tls-settings"
+    match: [agent-tls-mode,strict,system-store,cacerts,agenttlsstrictcheck]
+  - id: rancher-cert-rotation
+    name: "Rotating Kubernetes certificates on downstream clusters"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/manage-clusters/rotate-certificates"
+    match: [certificate-rotation,kubelet,etcd,maintenance-window,webhook-certificate]
+  # --- Proxy and air gap ---
+  - id: rancher-proxy-install
+    name: "Installing Rancher and cert-manager behind an HTTP proxy"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/rancher-behind-an-http-proxy/install-rancher"
+    match: [proxy,noproxy,cert-manager,catalogs]
+  - id: rancher-airgap-images
+    name: "Mirroring images to a private registry"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/air-gapped-helm-cli-install/publish-images"
+    match: [air-gap,private-registry,rancher-images-txt,rancher-save-images,rancher-load-images]
+  - id: rancher-airgap-helm
+    name: "Air gap Helm install with systemDefaultRegistry"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/air-gapped-helm-cli-install/install-rancher-ha"
+    match: [air-gap,helm,systemdefaultregistry,usebundledsystemchart,certmanager-version]
+  # --- Upgrade and rollback ---
+  - id: rancher-upgrade
+    name: "Upgrade procedure with Helm, upgrade path and backups"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/upgrades"
+    match: [upgrade,helm-upgrade,upgrade-path,backup,feature-charts]
+  - id: rancher-rollback
+    name: "Rolling back with the backup operator and rancher-cleanup"
+    source: "https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rollbacks"
+    match: [rollback,restore,rancher-cleanup,cleanup-sh,capi]
+  # --- Backup and restore ---
+  - id: rancher-backup-install
+    name: "Installing the backup operator and creating a Backup"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/backup-restore-and-disaster-recovery/back-up-rancher"
+    match: [rancher-backup,backup-restore-operator,backup,cattle-resources-system]
+  - id: rancher-backup-resourcesets
+    name: "ResourceSets, schedules, retention and encryption"
+    source: "https://ranchermanager.docs.rancher.com/reference-guides/backup-restore-configuration/backup-configuration"
+    match: [resourceset,encryption,encryptionconfiguration,schedule,retention]
+  - id: rancher-backup-storage
+    name: "Backup storage: S3-compatible or StorageClass volume"
+    source: "https://ranchermanager.docs.rancher.com/reference-guides/backup-restore-configuration/storage-configuration"
+    match: [s3,storageclass,persistent-volume,reclaim-policy,minio]
+  - id: rancher-restore
+    name: "Restoring on the same cluster: prune and backup file names"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/backup-restore-and-disaster-recovery/restore-rancher"
+    match: [restore,prune,encryptionconfigsecretname,backupfilename,fleet]
+  - id: rancher-migration
+    name: "Migrating Rancher to a new cluster"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/backup-restore-and-disaster-recovery/migrate-rancher-to-new-cluster"
+    match: [migration,prune-false,hostname,local-cluster,k3s-to-rke2]
+  # --- Authentication ---
+  - id: rancher-auth-ad
+    name: "Active Directory over LDAP"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-active-directory"
+    match: [active-directory,ldap,ldaps,search-base,upn,samaccountname]
+  - id: rancher-auth-openldap
+    name: "OpenLDAP bind account and test login"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/configure-openldap"
+    match: [openldap,ldap,bind-account,principal,test-authentication]
+  - id: rancher-auth-oidc
+    name: "Generic OIDC client, mappers and claims"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-generic-oidc"
+    match: [oidc,generic-oidc,groups-claim,sub-claim,custom-claims]
+  - id: rancher-auth-okta
+    name: "Okta SAML"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-okta-saml"
+    match: [okta,saml,acs,sp-initiated,assertion-encryption]
+  - id: rancher-auth-github
+    name: "GitHub OAuth and site access"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-github"
+    match: [github,oauth,authorized-users,site-access]
+  - id: rancher-auth-refresh
+    name: "User info refresh settings and SAML caveats"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/manage-users-and-groups"
+    match: [auth-user-info-max-age-seconds,auth-user-info-resync-cron,saml,user-refresh]
+  - id: rancher-api-keys
+    name: "API keys: scope, expiry and bearer tokens"
+    source: "https://ranchermanager.docs.rancher.com/reference-guides/user-settings/api-keys"
+    match: [api-keys,bearer-token,access-key,secret-key,auth-token-max-ttl-minutes]
+  # --- RBAC and policy ---
+  - id: rancher-rbac-global
+    name: "Global permissions and new user defaults"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/manage-role-based-access-control-rbac/global-permissions"
+    match: [global-permissions,administrator,standard-user,user-base,new-user-default,manage-users]
+  - id: rancher-rbac-cluster
+    name: "Cluster roles: Owner, Member and Manage Nodes"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/manage-role-based-access-control-rbac/cluster-and-project-roles"
+    match: [cluster-owner,cluster-member,manage-nodes,create-projects,membership]
+  - id: rancher-rbac-project
+    name: "Project roles and cluster-wide namespace creation"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/manage-role-based-access-control-rbac/cluster-and-project-roles"
+    match: [project-owner,project-member,read-only,namespace-creation,clusterrole]
+  - id: rancher-rbac-custom
+    name: "Custom roles, inheritance and escalation risk"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/manage-role-based-access-control-rbac/custom-roles"
+    match: [custom-roles,inherit-from,grant-resources,manage-roles,privilege-escalation]
+  - id: rancher-rbac-locked
+    name: "Locked roles to enforce policy"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/manage-role-based-access-control-rbac/locked-roles"
+    match: [locked-roles,policy-enforcement,role-templates]
+  - id: rancher-psa
+    name: "Pod Security Admission templates and exemptions"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/psa-config-templates"
+    match: [psa,pod-security-admission,rancher-restricted,rancher-privileged,exemptions]
+  - id: rancher-quotas
+    name: "Project resource quotas and namespace defaults"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/advanced-user-guides/manage-projects/manage-project-resource-quotas/about-project-resource-quotas"
+    match: [resource-quotas,projects,project-limits,namespace-default-limits,annotations]
+  - id: rancher-audit-log
+    name: "API audit log levels and AuditPolicy"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/advanced-user-guides/enable-api-audit-log"
+    match: [audit-log,audit-level,auditpolicy,redaction]
+  # --- Downstream clusters ---
+  - id: rancher-provisioning
+    name: "RKE2 and K3s provisioning on CAPI"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/launch-kubernetes-with-rancher"
+    match: [provisioning,capi,custom-clusters,windows]
+  - id: rancher-k3s-config
+    name: "K3s cluster configuration form and YAML"
+    source: "https://ranchermanager.docs.rancher.com/reference-guides/cluster-configuration/rancher-server-configuration/k3s-cluster-configuration"
+    match: [cluster-configuration,service-cidr,secrets-encryption,etcd-snapshots,traefik]
+  - id: rancher-agents
+    name: "cattle-cluster-agent and rancher-system-agent"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/launch-kubernetes-with-rancher/about-rancher-agents"
+    match: [cattle-cluster-agent,rancher-system-agent,agents,tolerations,resource-requests]
+  - id: rancher-node-drivers
+    name: "Node drivers: activate, deactivate and custom"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/about-provisioning-drivers/manage-node-drivers"
+    match: [node-drivers,drivers,deactivate,manage-node-drivers]
+  - id: rancher-cloud-credentials
+    name: "Cloud credentials lifecycle and ownership"
+    source: "https://ranchermanager.docs.rancher.com/reference-guides/user-settings/manage-cloud-credentials"
+    match: [cloud-credentials,authentication,infrastructure-provider,ownership]
+  - id: rancher-nodes
+    name: "Node and machine pool operations"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/manage-clusters/nodes-and-machine-pools"
+    match: [nodes,machine-pools,cordon,drain,scale,auto-replace,ssh-key]
+  - id: rancher-registration
+    name: "Registering existing clusters"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/register-existing-clusters"
+    match: [import,registered-clusters,cluster-admin,agent-environment-variables]
+  - id: rancher-eks
+    name: "Creating EKS clusters"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/set-up-clusters-from-hosted-kubernetes-providers/eks"
+    match: [eks,iam,vpc,aws]
+  - id: rancher-aks
+    name: "Creating AKS clusters with a service principal"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/set-up-clusters-from-hosted-kubernetes-providers/aks"
+    match: [aks,azure,service-principal,contributor,subscription-id]
+  - id: rancher-gke
+    name: "Creating GKE clusters with a service account"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/set-up-clusters-from-hosted-kubernetes-providers/gke"
+    match: [gke,google-cloud,service-account,autopilot,project-id]
+  - id: rancher-ace
+    name: "Authorized cluster endpoint and kubeconfig contexts"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/manage-clusters/access-clusters/authorized-cluster-endpoint"
+    match: [authorized-cluster-endpoint,ace,kubeconfig,kube-api-auth,fqdn]
+  - id: rancher-etcd-tuning
+    name: "etcd keyspace and disk tuning"
+    source: "https://ranchermanager.docs.rancher.com/how-to-guides/advanced-user-guides/tune-etcd-for-large-installs"
+    match: [etcd,quota-backend-bytes,mvcc-database-space-exceeded,wal-dir,performance]

@@ -1,0 +1,378 @@
+# Canonical coverage spec: Blockchain & Web3 (whole field).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: blockchain-and-web3
+scope:
+  category: computing-software
+  field: blockchain-and-web3
+  products: [ethereum-evm, solidity, smart-contract-security, foundry-hardhat-tooling, bitcoin, wallets-and-keys, consensus-and-protocols]
+sources:
+  - "Ethereum.org developer docs (ethereum.org/en/developers/docs) - accounts, transactions, gas, EVM, nodes, APIs, scaling, consensus mechanisms, smart contracts, standards"
+  - "Solidity documentation (docs.soliditylang.org) - language description, types, contracts, ABI spec, security considerations, Yul, style guide"
+  - "Ethereum Yellow Paper and EIP repository (eips.ethereum.org) for EIP-20, 55, 712, 721, 1155, 1559, 1967, 4626"
+  - "OpenZeppelin Contracts documentation (docs.openzeppelin.com) - access control, tokens, proxy upgrade patterns"
+  - "ConsenSys Smart Contract Best Practices and SWC Registry - known attacks, development recommendations"
+  - "Foundry Book (book.getfoundry.sh) and Hardhat docs (hardhat.org/docs) - forge, cast, anvil, testing, scripting, deployment, verification"
+  - "Bitcoin Developer Documentation (developer.bitcoin.org) and BIPs 32, 39, 44, 125, 141, 340, 341 - transactions, Script, wallets, RPC"
+  - "Bitcoin whitepaper (bitcoin.org/bitcoin.pdf) and Ethereum consensus docs - proof of work, proof of stake, Gasper, slashing, finality"
+topics:
+  - id: bc-eth-accounts
+    name: "Accounts and state"
+    source: "ethereum.org docs/Accounts, Ethereum stack"
+    match: [bc-eth-accounts]
+    subtopics:
+      - {id: bc-eth-accounts-eoa-vs-contract-accounts, name: "EOA versus contract accounts", match: [eoa-vs-contract]}
+      - {id: bc-eth-accounts-account-nonce-management, name: "Nonce handling and stuck transactions", match: [account-nonce]}
+      - {id: bc-eth-accounts-state-trie-and-merkle-proofs, name: "State trie and Merkle proofs", match: [state-trie]}
+  - id: bc-eth-transactions
+    name: "Transactions and fees"
+    source: "ethereum.org docs/Transactions, Gas and fees"
+    match: [bc-eth-transactions]
+    subtopics:
+      - {id: bc-eth-transactions-eip1559-fee-fields, name: "EIP-1559 fee fields", match: [eip1559-fees]}
+      - {id: bc-eth-transactions-transaction-types-and-receipts, name: "Transaction types, status and receipts", match: [transaction-types]}
+      - {id: bc-eth-transactions-access-lists-and-blob-txs, name: "Access lists and blob transactions", match: [access-list-tx]}
+  - id: bc-eth-gas
+    name: "Gas accounting"
+    source: "ethereum.org docs/Gas, Yellow Paper"
+    match: [bc-eth-gas]
+    subtopics:
+      - {id: bc-eth-gas-intrinsic-gas-and-estimation, name: "Intrinsic gas and gas estimation", match: [intrinsic-gas]}
+      - {id: bc-eth-gas-storage-gas-and-refunds, name: "Storage gas costs and refunds", match: [sstore-cost]}
+  - id: bc-evm-execution
+    name: "EVM execution model"
+    source: "ethereum.org docs/EVM, evm.codes"
+    match: [bc-evm-execution]
+    subtopics:
+      - {id: bc-evm-execution-evm-stack-memory-storage, name: "Stack, memory, storage and calldata", match: [evm-data-areas]}
+      - {id: bc-evm-execution-opcode-reading-and-disassembly, name: "Reading opcodes and bytecode", match: [opcode-reading]}
+      - {id: bc-evm-execution-create-create2-deployment, name: "CREATE and CREATE2 addresses", match: [create2-address]}
+  - id: bc-eth-abi
+    name: "ABI encoding, selectors and logs"
+    source: "Solidity docs/Contract ABI Specification"
+    match: [bc-eth-abi]
+    subtopics:
+      - {id: bc-eth-abi-function-selectors-and-calldata, name: "Function selectors and calldata layout", match: [function-selector]}
+      - {id: bc-eth-abi-events-logs-and-topics, name: "Events, logs and topics", match: [event-logs]}
+      - {id: bc-eth-abi-custom-error-and-revert-decoding, name: "Decoding revert data", match: [revert-data-decoding]}
+  - id: bc-eth-jsonrpc
+    name: "JSON-RPC API usage"
+    source: "ethereum.org docs/JSON-RPC API, Nodes and clients"
+    match: [bc-eth-jsonrpc]
+    subtopics:
+      - {id: bc-eth-jsonrpc-json-rpc-core-calls, name: "Core JSON-RPC calls and block tags", match: [json-rpc-methods]}
+      - {id: bc-eth-jsonrpc-log-queries-and-rate-limits, name: "Querying logs reliably", match: [eth-getlogs-pagination]}
+      - {id: bc-eth-jsonrpc-websocket-subscriptions, name: "WebSocket subscriptions", match: [eth-subscribe]}
+  - id: bc-eth-l2
+    name: "Layer 2 and scaling"
+    source: "ethereum.org docs/Scaling, Layer 2"
+    match: [bc-eth-l2]
+    subtopics:
+      - {id: bc-eth-l2-rollup-types-and-trust, name: "Optimistic versus ZK rollups", match: [rollup-types]}
+      - {id: bc-eth-l2-l2-development-differences, name: "Developing for L2 chains", match: [l2-differences]}
+  - id: bc-sol-types
+    name: "Types and data locations"
+    source: "Solidity docs/Types, Data location"
+    match: [bc-sol-types]
+    subtopics:
+      - {id: bc-sol-types-value-types-and-casting, name: "Value types and safe casting", match: [sol-value-types]}
+      - {id: bc-sol-types-data-location-memory-storage-calldata, name: "Data locations: memory, storage, calldata", match: [sol-data-location]}
+      - {id: bc-sol-types-mappings-arrays-and-structs, name: "Mappings, arrays and structs", match: [sol-mappings]}
+  - id: bc-sol-functions
+    name: "Functions, visibility and modifiers"
+    source: "Solidity docs/Contracts - functions, modifiers"
+    match: [bc-sol-functions]
+    subtopics:
+      - {id: bc-sol-functions-visibility-and-mutability, name: "Visibility and state mutability", match: [sol-visibility]}
+      - {id: bc-sol-functions-modifiers-and-checks-effects-interactions, name: "Modifiers and function ordering", match: [sol-modifiers]}
+      - {id: bc-sol-functions-receive-fallback-and-payable, name: "receive, fallback and sending ETH", match: [receive-fallback]}
+  - id: bc-sol-inheritance
+    name: "Contracts, interfaces and libraries"
+    source: "Solidity docs/Contracts - inheritance, interfaces, libraries"
+    match: [bc-sol-inheritance]
+    subtopics:
+      - {id: bc-sol-inheritance-inheritance-and-linearization, name: "Inheritance and C3 linearization", match: [sol-inheritance]}
+      - {id: bc-sol-inheritance-interfaces-and-abstract-contracts, name: "Interfaces and abstract contracts", match: [sol-interfaces]}
+      - {id: bc-sol-inheritance-libraries-and-using-for, name: "Libraries and using-for", match: [sol-libraries]}
+  - id: bc-sol-errors
+    name: "Error handling"
+    source: "Solidity docs/Control structures - error handling"
+    match: [bc-sol-errors]
+    subtopics:
+      - {id: bc-sol-errors-require-revert-assert-custom-errors, name: "require, revert, assert and custom errors", match: [custom-errors]}
+      - {id: bc-sol-errors-try-catch-external-calls, name: "try/catch for external calls", match: [try-catch-solidity]}
+  - id: bc-sol-events
+    name: "Events and logging design"
+    source: "Solidity docs/Contracts - events"
+    match: [bc-sol-events]
+    subtopics:
+      - {id: bc-sol-events-event-design-and-indexing, name: "Designing events for indexers", match: [event-design]}
+      - {id: bc-sol-events-event-testing-and-indexing-pipeline, name: "Event testing and reorg-safe indexing", match: [expect-emit]}
+  - id: bc-sol-storage
+    name: "Storage layout and packing"
+    source: "Solidity docs/Layout of state variables in storage"
+    match: [bc-sol-storage]
+    subtopics:
+      - {id: bc-sol-storage-storage-slot-layout-and-packing, name: "Storage slot layout and packing", match: [storage-layout]}
+      - {id: bc-sol-storage-mapping-and-array-slot-computation, name: "Computing mapping and array slots", match: [mapping-slot]}
+      - {id: bc-sol-storage-constant-immutable-and-transient, name: "constant, immutable and transient storage", match: [constant-immutable]}
+  - id: bc-sol-upgrade
+    name: "Proxies and upgradeability"
+    source: "OpenZeppelin docs/Upgrades, EIP-1967"
+    match: [bc-sol-upgrade]
+    subtopics:
+      - {id: bc-sol-upgrade-proxy-patterns-transparent-uups-beacon, name: "Transparent, UUPS and beacon proxies", match: [proxy-patterns]}
+      - {id: bc-sol-upgrade-initializers-and-storage-gaps, name: "Initializers and storage gaps", match: [initializer-modifier]}
+      - {id: bc-sol-upgrade-upgrade-governance-and-timelocks, name: "Upgrade governance and timelocks", match: [upgrade-governance]}
+  - id: bc-sol-erc
+    name: "Token and interface standards"
+    source: "EIP repository/ERC-20, 721, 1155, 4626, 165, 2612"
+    match: [bc-sol-erc]
+    subtopics:
+      - {id: bc-sol-erc-erc20-implementation, name: "ERC-20 fungible tokens", match: [erc20-token]}
+      - {id: bc-sol-erc-erc721-nft-implementation, name: "ERC-721 non-fungible tokens", match: [erc721-token]}
+      - {id: bc-sol-erc-erc1155-multi-token, name: "ERC-1155 multi-token standard", match: [erc1155-token]}
+      - {id: bc-sol-erc-erc4626-vault-and-permit, name: "ERC-4626 vaults and ERC-2612 permit", match: [erc4626-vault]}
+  - id: bc-sol-openzeppelin
+    name: "OpenZeppelin building blocks"
+    source: "OpenZeppelin Contracts docs"
+    match: [bc-sol-openzeppelin]
+    subtopics:
+      - {id: bc-sol-openzeppelin-access-control-roles, name: "Ownable and AccessControl roles", match: [access-control-roles]}
+      - {id: bc-sol-openzeppelin-reentrancy-guard-and-pausable, name: "ReentrancyGuard and Pausable", match: [reentrancy-guard]}
+      - {id: bc-sol-openzeppelin-safeerc20-and-address-helpers, name: "SafeERC20 and utility libraries", match: [safeerc20-usage]}
+  - id: bc-sol-gas
+    name: "Gas optimisation"
+    source: "Solidity docs/Optimizer; Foundry gas reports"
+    match: [bc-sol-gas]
+    subtopics:
+      - {id: bc-sol-gas-optimizer-and-via-ir, name: "Compiler optimizer settings", match: [solc-optimizer]}
+      - {id: bc-sol-gas-storage-and-calldata-gas-patterns, name: "Storage, loops and calldata patterns", match: [gas-optimization-patterns]}
+      - {id: bc-sol-gas-gas-snapshot-ci, name: "Gas snapshots in CI", match: [forge-snapshot]}
+  - id: bc-sol-assembly
+    name: "Inline assembly and Yul"
+    source: "Solidity docs/Yul, Inline Assembly"
+    match: [bc-sol-assembly]
+    subtopics:
+      - {id: bc-sol-assembly-inline-assembly-safety, name: "Inline assembly basics and memory safety", match: [inline-assembly]}
+      - {id: bc-sol-assembly-namespaced-storage-erc7201, name: "Namespaced storage (ERC-7201)", match: [erc7201-namespaced]}
+  - id: bc-sec-reentrancy
+    name: "Reentrancy defences"
+    source: "ConsenSys best practices/Known attacks - reentrancy; SWC-107"
+    match: [bc-sec-reentrancy]
+    subtopics:
+      - {id: bc-sec-reentrancy-reentrancy-pattern-and-fix, name: "Recognising and fixing reentrancy", match: [reentrancy-fix]}
+      - {id: bc-sec-reentrancy-cross-function-and-readonly-reentrancy, name: "Cross-function and read-only reentrancy", match: [cross-function-reentrancy]}
+  - id: bc-sec-access
+    name: "Access control review"
+    source: "SWC-105/106/115/Best practices"
+    match: [bc-sec-access]
+    subtopics:
+      - {id: bc-sec-access-access-control-audit-checklist, name: "Access control audit checklist", match: [access-control-audit]}
+      - {id: bc-sec-access-initialization-and-front-run-setup, name: "Initialisation safety", match: [unprotected-initializer]}
+  - id: bc-sec-arith
+    name: "Arithmetic and precision"
+    source: "Solidity docs/Checked arithmetic; best practices"
+    match: [bc-sec-arith]
+    subtopics:
+      - {id: bc-sec-arith-checked-unchecked-and-casting, name: "Checked arithmetic, unchecked blocks and casts", match: [checked-arithmetic]}
+      - {id: bc-sec-arith-rounding-and-precision-loss, name: "Rounding direction and precision", match: [rounding-direction]}
+  - id: bc-sec-oracle
+    name: "Oracle and price safety"
+    source: "Chainlink docs/Data Feeds; best practices"
+    match: [bc-sec-oracle]
+    subtopics:
+      - {id: bc-sec-oracle-price-oracle-manipulation-defence, name: "Avoiding spot-price manipulation", match: [oracle-manipulation]}
+      - {id: bc-sec-oracle-chainlink-feed-consumption-checks, name: "Consuming Chainlink feeds safely", match: [chainlink-staleness]}
+  - id: bc-sec-signatures
+    name: "Signature security"
+    source: "EIP-712, EIP-191; SWC-117/121"
+    match: [bc-sec-signatures]
+    subtopics:
+      - {id: bc-sec-signatures-signature-replay-protection, name: "Preventing signature replay", match: [signature-replay]}
+      - {id: bc-sec-signatures-ecdsa-malleability-and-ecrecover, name: "ecrecover pitfalls", match: [ecrecover-pitfalls]}
+      - {id: bc-sec-signatures-eip712-typed-data-implementation, name: "Implementing EIP-712 verification", match: [eip712-domain]}
+  - id: bc-sec-calls
+    name: "External call and delegatecall safety"
+    source: "SWC-104/112/113; best practices"
+    match: [bc-sec-calls]
+    subtopics:
+      - {id: bc-sec-calls-unchecked-call-return-values, name: "Checking external call results", match: [unchecked-call-return]}
+      - {id: bc-sec-calls-delegatecall-and-selfdestruct-risks, name: "delegatecall and selfdestruct risks", match: [delegatecall-risks]}
+  - id: bc-sec-mev
+    name: "Front-running and MEV exposure"
+    source: "SWC-114; Ethereum docs MEV"
+    match: [bc-sec-mev]
+    subtopics:
+      - {id: bc-sec-mev-frontrunning-mitigations, name: "Front-running mitigations in contract design", match: [front-running-mitigation]}
+      - {id: bc-sec-mev-mev-aware-protocol-review, name: "MEV review of a protocol", match: [mev-review]}
+  - id: bc-sec-dos
+    name: "Denial-of-service patterns"
+    source: "SWC-113/128; best practices"
+    match: [bc-sec-dos]
+    subtopics:
+      - {id: bc-sec-dos-unbounded-loop-and-gas-dos, name: "Unbounded loops and gas griefing", match: [unbounded-loop]}
+      - {id: bc-sec-dos-griefing-and-forced-ether, name: "Forced ETH and balance assumptions", match: [forced-ether]}
+  - id: bc-sec-randomness
+    name: "Randomness and time"
+    source: "SWC-116/120"
+    match: [bc-sec-randomness]
+    subtopics:
+      - {id: bc-sec-randomness-on-chain-randomness-risks, name: "On-chain randomness", match: [weak-randomness]}
+      - {id: bc-sec-randomness-timestamp-dependence, name: "Block timestamp dependence", match: [timestamp-dependence]}
+  - id: bc-sec-audit
+    name: "Audit process and assurance"
+    source: "ConsenSys Diligence audit guides; Trail of Bits Building Secure Contracts"
+    match: [bc-sec-audit]
+    subtopics:
+      - {id: bc-sec-audit-audit-scoping-and-threat-model, name: "Scoping and threat modelling a contract system", match: [audit-scoping]}
+      - {id: bc-sec-audit-invariant-and-fuzz-testing-for-security, name: "Invariants and fuzzing for assurance", match: [invariant-testing]}
+      - {id: bc-sec-audit-incident-response-for-contracts, name: "Incident response for deployed contracts", match: [contract-incident-response]}
+  - id: bc-tool-forge-test
+    name: "Foundry testing"
+    source: "Foundry Book/Tests, Cheatcodes"
+    match: [bc-tool-forge-test]
+    subtopics:
+      - {id: bc-tool-forge-test-forge-test-structure-and-assertions, name: "Writing forge tests", match: [forge-test]}
+      - {id: bc-tool-forge-test-foundry-cheatcodes-essentials, name: "Essential cheatcodes", match: [foundry-cheatcodes]}
+      - {id: bc-tool-forge-test-fuzz-testing-with-forge, name: "Fuzz tests and bounds", match: [forge-fuzz]}
+      - {id: bc-tool-forge-test-fork-testing-mainnet-state, name: "Fork testing against live state", match: [forge-fork-test]}
+  - id: bc-tool-forge-ops
+    name: "Foundry build, scripts and cast"
+    source: "Foundry Book/Forge, Cast, Anvil"
+    match: [bc-tool-forge-ops]
+    subtopics:
+      - {id: bc-tool-forge-ops-forge-script-deployment, name: "Deployment with forge script", match: [forge-script]}
+      - {id: bc-tool-forge-ops-cast-cli-everyday-commands, name: "cast for chain interaction", match: [cast-cli]}
+      - {id: bc-tool-forge-ops-anvil-local-node-and-impersonation, name: "anvil local node", match: [anvil-node]}
+  - id: bc-tool-hardhat
+    name: "Hardhat workflows"
+    source: "Hardhat docs/Getting started, Testing, Deploying"
+    match: [bc-tool-hardhat]
+    subtopics:
+      - {id: bc-tool-hardhat-hardhat-project-config, name: "Hardhat project and config", match: [hardhat-config]}
+      - {id: bc-tool-hardhat-hardhat-testing-and-fixtures, name: "Hardhat tests with fixtures", match: [hardhat-test]}
+      - {id: bc-tool-hardhat-hardhat-deploy-and-verify, name: "Deploying and verifying with Hardhat", match: [hardhat-ignition]}
+  - id: bc-tool-static
+    name: "Static analysis and coverage"
+    source: "Slither, solhint, forge coverage docs"
+    match: [bc-tool-static]
+    subtopics:
+      - {id: bc-tool-static-slither-static-analysis, name: "Slither static analysis", match: [slither-analysis]}
+      - {id: bc-tool-static-coverage-and-lint-in-ci, name: "Coverage, formatting and CI", match: [forge-coverage]}
+  - id: bc-tool-deploy
+    name: "Release, verification and key handling"
+    source: "Foundry and Hardhat deployment docs; Etherscan docs"
+    match: [bc-tool-deploy]
+    subtopics:
+      - {id: bc-tool-deploy-testnet-deployment-and-verification, name: "Testnet rehearsal and explorer verification", match: [testnet-deploy]}
+      - {id: bc-tool-deploy-deployer-key-and-multisig-handover, name: "Deployer key hygiene and ownership handover", match: [deployer-key-hygiene]}
+  - id: bc-btc-utxo
+    name: "UTXO model"
+    source: "Bitcoin developer guide/Transactions, Block chain"
+    match: [bc-btc-utxo]
+    subtopics:
+      - {id: bc-btc-utxo-utxo-model-and-coin-selection, name: "UTXO model and coin selection", match: [utxo-model]}
+      - {id: bc-btc-utxo-confirmations-and-reorg-risk, name: "Confirmations and double-spend risk", match: [confirmations-depth]}
+  - id: bc-btc-script
+    name: "Script and address types"
+    source: "Bitcoin developer guide, BIP 141, 341"
+    match: [bc-btc-script]
+    subtopics:
+      - {id: bc-btc-script-script-types-p2pkh-p2sh-p2wpkh, name: "Output script types", match: [script-types]}
+      - {id: bc-btc-script-multisig-and-timelocks-script, name: "Multisig and timelocks in Script", match: [bitcoin-multisig]}
+      - {id: bc-btc-script-taproot-and-schnorr-overview, name: "Taproot and Schnorr signatures", match: [taproot-overview]}
+  - id: bc-btc-fees
+    name: "Fees, weight and replacement"
+    source: "Bitcoin Core docs; BIP 125, 141"
+    match: [bc-btc-fees]
+    subtopics:
+      - {id: bc-btc-fees-vbytes-weight-and-fee-estimation, name: "vbytes, weight and fee estimation", match: [virtual-size]}
+      - {id: bc-btc-fees-rbf-and-cpfp-fee-bumping, name: "RBF and CPFP fee bumping", match: [replace-by-fee]}
+  - id: bc-btc-rpc
+    name: "Bitcoin Core RPC"
+    source: "Bitcoin Core RPC reference"
+    match: [bc-btc-rpc]
+    subtopics:
+      - {id: bc-btc-rpc-bitcoin-cli-core-rpc, name: "bitcoin-cli essentials", match: [bitcoin-cli]}
+      - {id: bc-btc-rpc-psbt-workflow, name: "PSBT workflow", match: [psbt-workflow]}
+  - id: bc-btc-node
+    name: "Running a node"
+    source: "Bitcoin Core documentation"
+    match: [bc-btc-node]
+    subtopics:
+      - {id: bc-btc-node-bitcoin-core-node-config, name: "Running Bitcoin Core", match: [bitcoin-conf]}
+      - {id: bc-btc-node-regtest-development-environment, name: "Regtest development", match: [bitcoin-regtest]}
+  - id: bc-wal-hd
+    name: "HD wallets and mnemonics"
+    source: "BIP 32, 39, 44"
+    match: [bc-wal-hd]
+    subtopics:
+      - {id: bc-wal-hd-bip39-mnemonic-seed-handling, name: "BIP-39 mnemonic and seed handling", match: [bip39-mnemonic]}
+      - {id: bc-wal-hd-bip32-derivation-paths, name: "BIP-32/44 derivation paths and xpubs", match: [bip32-derivation]}
+      - {id: bc-wal-hd-hd-wallet-address-gap-and-recovery, name: "Address gap limit and wallet recovery", match: [gap-limit]}
+  - id: bc-wal-custody
+    name: "Custody, hardware wallets and multisig"
+    source: "Hardware wallet docs; Safe docs"
+    match: [bc-wal-custody]
+    subtopics:
+      - {id: bc-wal-custody-hardware-wallet-setup-and-verification, name: "Hardware wallet setup", match: [hardware-wallet-setup]}
+      - {id: bc-wal-custody-multisig-wallet-design, name: "Multisig custody design", match: [multisig-custody]}
+      - {id: bc-wal-custody-operational-security-for-key-holders, name: "Operational security for key holders", match: [crypto-opsec]}
+  - id: bc-wal-addresses
+    name: "Addresses and checksums"
+    source: "EIP-55, BIP 173/350"
+    match: [bc-wal-addresses]
+    subtopics:
+      - {id: bc-wal-addresses-eip55-address-checksum-and-derivation, name: "Ethereum address derivation and EIP-55", match: [eip55-checksum]}
+      - {id: bc-wal-addresses-bitcoin-bech32-address-validation, name: "Bech32 and bech32m address validation", match: [bech32-validation]}
+  - id: bc-wal-signing
+    name: "Signing messages and transactions"
+    source: "EIP-191, EIP-712, ERC-1271, EIP-4361"
+    match: [bc-wal-signing]
+    subtopics:
+      - {id: bc-wal-signing-personal-sign-and-message-verification, name: "personal_sign and message verification", match: [personal-sign]}
+      - {id: bc-wal-signing-offline-transaction-signing, name: "Offline transaction signing", match: [offline-signing]}
+  - id: bc-con-pow
+    name: "Proof of work"
+    source: "Bitcoin whitepaper; developer guide mining"
+    match: [bc-con-pow]
+    subtopics:
+      - {id: bc-con-pow-proof-of-work-and-difficulty, name: "Proof of work and difficulty adjustment", match: [proof-of-work]}
+      - {id: bc-con-pow-selfish-mining-and-51-percent-economics, name: "Attack models and economics", match: [selfish-mining]}
+  - id: bc-con-pos
+    name: "Proof of stake on Ethereum"
+    source: "ethereum.org docs/Proof-of-stake, Gasper, slashing"
+    match: [bc-con-pos]
+    subtopics:
+      - {id: bc-con-pos-ethereum-pos-validators-and-attestations, name: "Validators, slots and attestations", match: [ethereum-pos]}
+      - {id: bc-con-pos-finality-and-slashing, name: "Finality, checkpoints and slashing", match: [casper-ffg-finality]}
+      - {id: bc-con-pos-running-a-node-and-staking-hygiene, name: "Running an Ethereum node", match: [ethereum-node-setup]}
+  - id: bc-con-bft
+    name: "BFT consensus"
+    source: "Tendermint/CometBFT docs; PBFT paper concepts"
+    match: [bc-con-bft]
+    subtopics:
+      - {id: bc-con-bft-bft-consensus-fundamentals, name: "Byzantine fault tolerance basics", match: [bft-consensus]}
+      - {id: bc-con-bft-finality-types-and-tradeoffs, name: "Probabilistic versus economic finality", match: [probabilistic-finality]}
+  - id: bc-con-p2p
+    name: "Peer-to-peer networking and mempool"
+    source: "ethereum.org docs/Networking layer; Bitcoin developer guide P2P"
+    match: [bc-con-p2p]
+    subtopics:
+      - {id: bc-con-p2p-gossip-discovery-and-mempool, name: "Peer discovery, gossip and mempool", match: [p2p-gossip]}
+      - {id: bc-con-p2p-eclipse-and-sybil-defences, name: "Eclipse and Sybil resistance", match: [eclipse-attack-defence]}
+  - id: bc-con-forks
+    name: "Forks, reorgs and upgrades"
+    source: "Bitcoin soft/hard fork docs; Ethereum upgrades"
+    match: [bc-con-forks]
+    subtopics:
+      - {id: bc-con-forks-soft-vs-hard-forks, name: "Soft forks versus hard forks", match: [soft-fork]}
+      - {id: bc-con-forks-reorg-handling-in-applications, name: "Handling reorgs in applications", match: [reorg-handling]}
+  - id: bc-dapp-client
+    name: "Client libraries and dapp integration"
+    source: "ethers v6 docs; viem docs"
+    match: [bc-dapp-client]
+    subtopics:
+      - {id: bc-dapp-client-ethers-viem-contract-interaction, name: "Reading and writing with ethers or viem", match: [ethers-v6]}
+      - {id: bc-dapp-client-wallet-connection-eip1193, name: "Wallet connection with EIP-1193 and chain switching", match: [eip1193-provider]}
+      - {id: bc-dapp-client-indexing-and-subgraph-basics, name: "Indexing contract data", match: [subgraph-indexing]}

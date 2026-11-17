@@ -1,0 +1,356 @@
+# Canonical coverage spec: Zig language and ecosystem.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: zig-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [zig]
+sources:
+  - "Zig Language Reference (ziglang.org/documentation/master and latest release)"
+  - "Zig standard library docs (ziglang.org/documentation)"
+  - "Zig build system docs and std.Build (ziglang.org/learn/build-system)"
+  - "zig.guide, Zig style guide, ziglang.org/learn"
+  - "zig fmt, zig test, Zig package manager (build.zig.zon)"
+topics:
+  - id: zig-lexical
+    name: "Lexical structure and comments"
+    source: "Zig Language Reference: Comments, Identifiers, Literals"
+    match: [zig-lexical]
+    subtopics:
+      - {id: zig-lexical-doc, name: "Doc comments and container doc comments", match: [doc-comments]}
+      - {id: zig-lexical-identifiers-quoted, name: "Identifiers and @'quoted' names", match: [quoted-identifiers]}
+      - {id: zig-lexical-number-literals, name: "Integer, float and string literals", match: [number-literals]}
+  - id: zig-primitives
+    name: "Primitive types and values"
+    source: "Zig Language Reference: Primitive Types, Values"
+    match: [zig-primitives]
+    subtopics:
+      - {id: zig-primitives-int-widths, name: "Arbitrary-width integers and usize", match: [integer-widths]}
+      - {id: zig-primitives-float-bool-void, name: "Floats, bool, void, noreturn and type", match: [float-bool-void]}
+  - id: zig-variables
+    name: "Variables and declarations"
+    source: "Zig Language Reference: Variables, Container Level Variables"
+    match: [zig-variables]
+    subtopics:
+      - {id: zig-variables-const-var-undefined, name: "const, var and undefined", match: [const-var-undefined]}
+      - {id: zig-variables-container-level-threadlocal, name: "Container-level and threadlocal variables", match: [container-level-vars]}
+  - id: zig-control-flow
+    name: "Control flow"
+    source: "Zig Language Reference: if, while, for, switch, blocks"
+    match: [zig-control-flow]
+    subtopics:
+      - {id: zig-control-flow-if-while-optional-capture, name: "if/while with capture and else", match: [if-while-capture]}
+      - {id: zig-control-flow-for-ranges, name: "for loops, ranges and multi-object iteration", match: [for-loops-ranges]}
+      - {id: zig-control-flow-switch, name: "switch: ranges, captures and exhaustiveness", match: [switch-exhaustive]}
+      - {id: zig-control-flow-labeled-blocks, name: "Labeled blocks and break with value", match: [labeled-blocks]}
+  - id: zig-functions
+    name: "Functions"
+    source: "Zig Language Reference: Functions"
+    match: [zig-functions]
+    subtopics:
+      - {id: zig-functions-params-passing, name: "Parameters, immutability and pass-by-value", match: [function-params]}
+      - {id: zig-functions-inline-export-callconv, name: "inline, noinline, export and calling conventions", match: [callconv-inline-export]}
+  - id: zig-pointers
+    name: "Pointers"
+    source: "Zig Language Reference: Pointers, Sentinel-Terminated Pointers, Alignment"
+    match: [zig-pointers]
+    subtopics:
+      - {id: zig-pointers-pointer-kinds, name: "Single-item, many-item and C pointers", match: [pointer-kinds]}
+      - {id: zig-pointers-sentinel-alignment, name: "Sentinel-terminated pointers and alignment", match: [sentinel-alignment]}
+  - id: zig-arrays-slices
+    name: "Arrays and slices"
+    source: "Zig Language Reference: Arrays, Slices, Vectors"
+    match: [zig-arrays-slices]
+    subtopics:
+      - {id: zig-arrays-slices-array-ops, name: "Arrays, ++ and ** and multidimensional arrays", match: [array-operations]}
+      - {id: zig-arrays-slices-slice-ops, name: "Slices, slicing and bounds", match: [slice-operations]}
+  - id: zig-optionals
+    name: "Optionals"
+    source: "Zig Language Reference: Optionals"
+    match: [zig-optionals]
+    subtopics:
+      - {id: zig-optionals-orelse-unwrap, name: "orelse, .? and optional unwrapping", match: [optional-orelse]}
+      - {id: zig-optionals-optional-error-combined, name: "Optionals combined with error unions and pointers", match: [optional-error-combined]}
+  - id: zig-errors
+    name: "Error handling"
+    source: "Zig Language Reference: Errors"
+    match: [zig-errors]
+    subtopics:
+      - {id: zig-errors-error-sets-try, name: "Error sets, error unions, try and catch", match: [error-sets-try-catch]}
+      - {id: zig-errors-errdefer-traces, name: "errdefer and error return traces", match: [errdefer-traces]}
+      - {id: zig-errors-error-diagnostics, name: "Error payloads and diagnostics patterns", match: [error-diagnostics]}
+  - id: zig-structs
+    name: "Structs"
+    source: "Zig Language Reference: struct"
+    match: [zig-structs]
+    subtopics:
+      - {id: zig-structs-struct-methods, name: "Struct declarations, methods and default fields", match: [struct-methods]}
+      - {id: zig-structs-packed-extern-tuples, name: "packed, extern structs and tuples", match: [packed-extern-struct]}
+      - {id: zig-structs-struct-literals-results, name: "Anonymous struct literals and result locations", match: [struct-literals]}
+  - id: zig-enums-unions
+    name: "Enums, unions and opaque"
+    source: "Zig Language Reference: enum, union, opaque"
+    match: [zig-enums-unions]
+    subtopics:
+      - {id: zig-enums-unions-enums, name: "Enums, tag types and non-exhaustive enums", match: [enum-types]}
+      - {id: zig-enums-unions-tagged-unions, name: "Tagged unions and payload captures", match: [tagged-unions]}
+      - {id: zig-enums-unions-opaque-anyopaque, name: "opaque types and anyopaque", match: [opaque-anyopaque]}
+  - id: zig-comptime
+    name: "Compile-time execution"
+    source: "Zig Language Reference: comptime"
+    match: [zig-comptime]
+    subtopics:
+      - {id: zig-comptime-comptime-basics, name: "comptime parameters, variables and blocks", match: [comptime-execution]}
+      - {id: zig-comptime-reflection, name: "Type reflection with @typeInfo and std.meta", match: [type-reflection]}
+      - {id: zig-comptime-comptime-tables, name: "Comptime-generated tables and string maps", match: [comptime-tables]}
+  - id: zig-generics
+    name: "Generics and duck typing"
+    source: "Zig Language Reference: Generic Data Structures, anytype"
+    match: [zig-generics]
+    subtopics:
+      - {id: zig-generics-generic-types, name: "Generic data structures as functions returning types", match: [generic-types]}
+      - {id: zig-generics-anytype-duck, name: "anytype and duck typing", match: [anytype-duck-typing]}
+  - id: zig-memory
+    name: "Memory and allocators"
+    source: "Zig Language Reference: Memory; std.mem.Allocator, std.heap"
+    match: [zig-memory]
+    subtopics:
+      - {id: zig-memory-allocator-interface, name: "The Allocator interface and ownership", match: [allocator-interface]}
+      - {id: zig-memory-allocator-choices, name: "Choosing an allocator: arena, GPA, fixed buffer, page, C", match: [allocator-choices]}
+      - {id: zig-memory-allocator-strategies, name: "Allocator-passing design and failure testing", match: [allocator-testing]}
+  - id: zig-defer
+    name: "defer and resource cleanup"
+    source: "Zig Language Reference: defer, errdefer"
+    match: [zig-defer]
+    subtopics:
+      - {id: zig-defer-defer-ordering, name: "defer ordering and RAII-style cleanup", match: [defer-ordering]}
+      - {id: zig-defer-ownership-transfer, name: "Ownership transfer with defer and errdefer", match: [ownership-transfer]}
+  - id: zig-casting
+    name: "Type coercion and casts"
+    source: "Zig Language Reference: Type Coercion, Casting"
+    match: [zig-casting]
+    subtopics:
+      - {id: zig-casting-coercion-peer, name: "Implicit coercion and peer type resolution", match: [type-coercion]}
+      - {id: zig-casting-ptr-bit-casts, name: "@bitCast, @ptrCast and @alignCast", match: [bitcast-ptrcast]}
+  - id: zig-int-semantics
+    name: "Integer overflow and arithmetic"
+    source: "Zig Language Reference: Integer Overflow, Wrapping, Saturation"
+    match: [zig-int-semantics]
+    subtopics:
+      - {id: zig-int-semantics-wrapping-saturating, name: "Wrapping and saturating operators", match: [wrapping-saturating-ops]}
+      - {id: zig-int-semantics-undefined-behavior, name: "Illegal behavior and safety checks", match: [illegal-behavior-safety]}
+  - id: zig-vectors
+    name: "Vectors and SIMD"
+    source: "Zig Language Reference: Vectors"
+    match: [zig-vectors]
+    subtopics:
+      - {id: zig-vectors-vector-basics, name: "@Vector arithmetic, splat, reduce and shuffle", match: [vector-simd]}
+  - id: zig-strings
+    name: "Strings and text"
+    source: "Zig Language Reference: String Literals; std.unicode; zig.guide strings"
+    match: [zig-strings]
+    subtopics:
+      - {id: zig-strings-utf8-bytes, name: "Strings as byte slices and UTF-8 iteration", match: [utf8-strings]}
+      - {id: zig-strings-string-building, name: "Splitting, trimming and building strings", match: [string-building]}
+  - id: zig-std-containers
+    name: "Standard library containers"
+    source: "std.ArrayList, std.HashMap, std.MultiArrayList docs"
+    match: [zig-std-containers]
+    subtopics:
+      - {id: zig-std-containers-arraylist, name: "ArrayList and unmanaged lists", match: [arraylist]}
+      - {id: zig-std-containers-hashmap, name: "HashMap, AutoHashMap and StringHashMap", match: [hashmap]}
+      - {id: zig-std-containers-other-containers, name: "MultiArrayList, PriorityQueue, linked lists, BufSet", match: [multiarraylist-queue]}
+  - id: zig-std-mem
+    name: "std.mem and sorting"
+    source: "std.mem, std.sort docs"
+    match: [zig-std-mem]
+    subtopics:
+      - {id: zig-std-mem-mem-compare-search, name: "std.mem comparison, search and copy", match: [std-mem-functions]}
+      - {id: zig-std-mem-sorting, name: "Sorting and binary search", match: [sorting-binary-search]}
+  - id: zig-std-fmt
+    name: "Formatting and printing"
+    source: "std.fmt docs, std.debug.print"
+    match: [zig-std-fmt]
+    subtopics:
+      - {id: zig-std-fmt-fmt-specifiers, name: "Format strings and specifiers", match: [fmt-specifiers]}
+      - {id: zig-std-fmt-fmt-parse-custom, name: "Parsing numbers and custom format methods", match: [fmt-parse-custom]}
+  - id: zig-std-io
+    name: "Readers, writers and standard streams"
+    source: "std.io, std.fs.File, std.Io.Writer docs"
+    match: [zig-std-io]
+    subtopics:
+      - {id: zig-std-io-stdout-writer, name: "Writing to stdout and stderr with buffering", match: [stdout-writer]}
+      - {id: zig-std-io-reader-line-input, name: "Reading stdin and lines", match: [stdin-reader]}
+      - {id: zig-std-io-memory-streams, name: "In-memory streams and writers over buffers", match: [memory-streams]}
+  - id: zig-std-fs
+    name: "Files, directories and paths"
+    source: "std.fs, std.fs.path docs"
+    match: [zig-std-fs]
+    subtopics:
+      - {id: zig-std-fs-file-io, name: "Opening, reading and writing files", match: [file-io]}
+      - {id: zig-std-fs-dirs-walk-paths, name: "Directory iteration, walking and path handling", match: [dir-iterate-walk]}
+  - id: zig-std-process
+    name: "Process, arguments and environment"
+    source: "std.process docs"
+    match: [zig-std-process]
+    subtopics:
+      - {id: zig-std-process-args-env, name: "Command-line arguments and environment variables", match: [process-args-env]}
+      - {id: zig-std-process-child-processes, name: "Running child processes and capturing output", match: [child-processes]}
+  - id: zig-std-time-random
+    name: "Time, randomness and hashing"
+    source: "std.time, std.Random, std.hash, std.crypto"
+    match: [zig-std-time-random]
+    subtopics:
+      - {id: zig-std-time-random-time-random, name: "Clocks, timers and random numbers", match: [time-random]}
+  - id: zig-std-json
+    name: "JSON"
+    source: "std.json docs"
+    match: [zig-std-json]
+    subtopics:
+      - {id: zig-std-json-json-parse-stringify, name: "Parsing and writing JSON", match: [json-parse-stringify]}
+  - id: zig-std-net-http
+    name: "Networking and HTTP"
+    source: "std.net, std.http, std.posix docs"
+    match: [zig-std-net-http]
+    subtopics:
+      - {id: zig-std-net-http-tcp-sockets, name: "TCP servers and clients with std.net", match: [tcp-sockets]}
+      - {id: zig-std-net-http-http-client-server, name: "HTTP client and server in std.http", match: [http-client-server]}
+  - id: zig-std-math-meta
+    name: "Math, meta and utilities"
+    source: "std.math, std.meta, std.debug docs"
+    match: [zig-std-math-meta]
+    subtopics:
+      - {id: zig-std-math-meta-math-functions, name: "std.math: constants, rounding, safe arithmetic", match: [std-math]}
+      - {id: zig-std-math-meta-debug-assert-log, name: "std.debug, assertions and std.log", match: [debug-assert-log]}
+  - id: zig-concurrency
+    name: "Threads and synchronisation"
+    source: "std.Thread, std.atomic docs"
+    match: [zig-concurrency]
+    subtopics:
+      - {id: zig-concurrency-threads-mutex, name: "Spawning threads, Mutex and Condition", match: [threads-mutex]}
+      - {id: zig-concurrency-atomics, name: "Atomics and memory ordering", match: [atomics-ordering]}
+  - id: zig-async-io
+    name: "Async and I/O models"
+    source: "Zig Language Reference async notes; Zig release notes"
+    match: [zig-async-io]
+    subtopics:
+      - {id: zig-async-io-async-status, name: "Async status: removed async/await and event loops", match: [async-status]}
+  - id: zig-modules
+    name: "Files, imports and visibility"
+    source: "Zig Language Reference: @import, Containers, pub"
+    match: [zig-modules]
+    subtopics:
+      - {id: zig-modules-import-pub, name: "@import, pub and files as structs", match: [import-pub-visibility]}
+      - {id: zig-modules-usingnamespace-root, name: "root module, usingnamespace and std_options", match: [root-module-usingnamespace]}
+  - id: zig-build-system
+    name: "The build system"
+    source: "Zig Build System docs (ziglang.org/learn/build-system), std.Build"
+    match: [zig-build-system]
+    subtopics:
+      - {id: zig-build-system-build-zig-basics, name: "build.zig anatomy: executables, run and install steps", match: [build-zig-basics]}
+      - {id: zig-build-system-build-steps-modules, name: "Custom steps, modules, libraries and dependencies", match: [build-steps-modules]}
+      - {id: zig-build-system-build-cache-watch, name: "Build cache, parallelism, summary and watch mode", match: [build-cache-watch]}
+  - id: zig-build-options
+    name: "Build options and configuration"
+    source: "b.option, standardTargetOptions, addOptions"
+    match: [zig-build-options]
+    subtopics:
+      - {id: zig-build-options-user-options, name: "-D options with b.option and standard options", match: [build-user-options]}
+      - {id: zig-build-options-add-options-config, name: "Compile-time configuration with addOptions", match: [build-add-options]}
+  - id: zig-build-c
+    name: "Building and linking C"
+    source: "Zig Build System: C/C++, translate-c, zig cc"
+    match: [zig-build-c]
+    subtopics:
+      - {id: zig-build-c-compile-c-sources, name: "Compiling C sources and linking system libraries", match: [compile-c-sources]}
+      - {id: zig-build-c-translate-c-cimport, name: "@cImport, translate-c and bindings", match: [translate-c-cimport]}
+  - id: zig-package-manager
+    name: "Package manager and dependencies"
+    source: "build.zig.zon docs, zig fetch"
+    match: [zig-package-manager]
+    subtopics:
+      - {id: zig-package-manager-zon-manifest, name: "build.zig.zon manifest fields", match: [build-zig-zon]}
+      - {id: zig-package-manager-fetch-dependency, name: "zig fetch and b.dependency", match: [fetch-dependency]}
+      - {id: zig-package-manager-publish-package, name: "Publishing and versioning a Zig package", match: [publish-package]}
+  - id: zig-cli-tooling
+    name: "The zig command and toolchain"
+    source: "zig --help, zig build-exe, zig run, zig env"
+    match: [zig-cli-tooling]
+    subtopics:
+      - {id: zig-cli-tooling-zig-subcommands, name: "zig run, build-exe, build-lib, test and init", match: [zig-subcommands]}
+      - {id: zig-cli-tooling-version-management, name: "Installing and pinning Zig versions", match: [zig-version-management]}
+      - {id: zig-cli-tooling-zig-cc-compiler, name: "zig cc and zig c++ as drop-in C/C++ compilers", match: [zig-cc-compiler]}
+  - id: zig-cross-compile
+    name: "Cross-compilation and targets"
+    source: "Zig target triples, zig targets"
+    match: [zig-cross-compile]
+    subtopics:
+      - {id: zig-cross-compile-target-triples, name: "Target triples, CPU features and ABIs", match: [target-triples]}
+      - {id: zig-cross-compile-release-matrix-static, name: "Release builds, static linking and strip", match: [static-release-builds]}
+  - id: zig-testing
+    name: "Testing"
+    source: "std.testing, zig test, Zig Language Reference: Zig Test"
+    match: [zig-testing]
+    subtopics:
+      - {id: zig-testing-test-blocks, name: "test blocks, std.testing and zig test", match: [test-blocks]}
+      - {id: zig-testing-build-test-step, name: "Test steps, filters and test organisation", match: [build-test-step]}
+      - {id: zig-testing-fuzz-property-tests, name: "Fuzzing and property-style tests", match: [fuzz-property-tests]}
+  - id: zig-fmt-style
+    name: "Formatting and style"
+    source: "zig fmt, Zig Style Guide"
+    match: [zig-fmt-style]
+    subtopics:
+      - {id: zig-fmt-style-zig-fmt, name: "zig fmt usage and CI checks", match: [zig-fmt]}
+      - {id: zig-fmt-style-naming-conventions, name: "Style guide: naming, comments and structure", match: [style-naming]}
+  - id: zig-debugging
+    name: "Debugging and diagnostics"
+    source: "std.debug, lldb, gdb, valgrind"
+    match: [zig-debugging]
+    subtopics:
+      - {id: zig-debugging-debugger-usage, name: "Debugging Zig programs with gdb, lldb and the VS Code debugger", match: [debugger-gdb-lldb]}
+      - {id: zig-debugging-memory-bug-tools, name: "Finding memory bugs: GPA leak reports, valgrind, sanitizers", match: [memory-bug-tools]}
+      - {id: zig-debugging-panics-stack-traces, name: "Panics, stack traces and crash handling", match: [panics-stack-traces]}
+  - id: zig-performance
+    name: "Performance and optimisation"
+    source: "Build modes, std.mem.doNotOptimizeAway, perf"
+    match: [zig-performance]
+    subtopics:
+      - {id: zig-performance-optimize-modes, name: "Debug, ReleaseSafe, ReleaseFast and ReleaseSmall", match: [optimize-modes]}
+      - {id: zig-performance-profiling-benchmark, name: "Benchmarking and profiling Zig programs", match: [profiling-benchmark]}
+      - {id: zig-performance-data-oriented-design, name: "Data-oriented design and cache-friendly layouts", match: [data-oriented-design]}
+  - id: zig-interop
+    name: "C ABI and interoperability"
+    source: "Zig Language Reference: Exporting C, C ABI, extern"
+    match: [zig-interop]
+    subtopics:
+      - {id: zig-interop-export-c-library, name: "Exporting a C ABI library from Zig", match: [export-c-library]}
+      - {id: zig-interop-c-callbacks-userdata, name: "C callbacks, user data and string marshalling", match: [c-callbacks-userdata]}
+  - id: zig-embedded-wasm
+    name: "WebAssembly and freestanding targets"
+    source: "Zig targets: wasm32, freestanding"
+    match: [zig-embedded-wasm]
+    subtopics:
+      - {id: zig-embedded-wasm-wasm-freestanding, name: "Compiling to WebAssembly (wasm32-freestanding)", match: [wasm-freestanding]}
+      - {id: zig-embedded-wasm-freestanding-embedded, name: "Bare-metal and embedded Zig", match: [embedded-freestanding]}
+  - id: zig-security
+    name: "Security and safety"
+    source: "Zig safety, std.crypto"
+    match: [zig-security]
+    subtopics:
+      - {id: zig-security-crypto-std, name: "std.crypto: hashing, AEAD, signatures and randomness", match: [std-crypto]}
+      - {id: zig-security-memory-safety-model, name: "Zig's safety model and secure coding practice", match: [memory-safety-model]}
+  - id: zig-deployment
+    name: "Deployment"
+    source: "Zig static binaries, containers, CI"
+    match: [zig-deployment]
+    subtopics:
+      - {id: zig-deployment-container-ci, name: "Containers, CI pipelines and distribution", match: [container-ci]}
+      - {id: zig-deployment-production-logging, name: "Logging, versioning and runtime configuration in production", match: [production-logging]}
+  - id: zig-ecosystem
+    name: "Ecosystem, libraries and tooling"
+    source: "Community indexes (awesome-zig, zigistry), ZLS"
+    match: [zig-ecosystem]
+    subtopics:
+      - {id: zig-ecosystem-zls-editors, name: "ZLS and editor setup", match: [zls-editor-setup]}
+      - {id: zig-ecosystem-libraries-frameworks, name: "Notable libraries, frameworks and real-world projects", match: [libraries-frameworks]}
+      - {id: zig-ecosystem-learning-resources, name: "Official docs and learning resources", match: [learning-resources]}

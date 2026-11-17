@@ -1,0 +1,811 @@
+# Canonical coverage spec for crystal-language, drawn from external sources listed below.
+subject: crystal-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products:
+  - crystal
+sources:
+- 'Crystal reference book table of contents (https://crystal-lang.org/reference/): syntax and semantics, type system, methods, macros, C bindings, concurrency, compiler, guides'
+- 'Crystal standard library API docs index (https://crystal-lang.org/api/): Array, Hash, String, Int, File, IO, HTTP, JSON, YAML, Log, Time, Regex, Process, Channel, Socket, Spec, Benchmark'
+- 'Shards documentation (https://github.com/crystal-lang/shards): shard.yml spec and commands'
+- Crystal for Rubyists and the Crystal installation and deployment guides (https://crystal-lang.org/reference/)
+topics:
+- id: getting-started
+  name: Getting started
+  source: 'Reference book: Introduction, Installation, Using the Compiler'
+  match:
+  - getting-started
+  subtopics:
+  - id: install-crystal-toolchain
+    name: Install the Crystal toolchain
+    match:
+    - install-crystal-toolchain
+  - id: hello-world-compile-run
+    name: 'Hello world: run versus build'
+    match:
+    - hello-world-compile-run
+  - id: crystal-init-project
+    name: Scaffold a project with crystal init
+    match:
+    - crystal-init-project
+- id: syntax-basics
+  name: 'Syntax basics: literals, variables and control flow'
+  source: 'Reference book: Syntax and Semantics: literals, local variables, constants, if, unless, while, until'
+  match:
+  - syntax-basics
+  subtopics:
+  - id: literals-and-operators
+    name: Literals and operators
+    match:
+    - literals-and-operators
+  - id: variables-and-constants
+    name: Local variables, constants and assignment
+    match:
+    - variables-and-constants
+  - id: conditionals-and-loops
+    name: Conditionals and loops
+    match:
+    - conditionals-and-loops
+- id: types-and-methods
+  name: Types and methods
+  source: 'Reference book: Syntax and Semantics: methods and instance variables, type restrictions, return types, new, initialize'
+  match:
+  - types-and-methods
+  subtopics:
+  - id: method-definitions
+    name: Defining methods, classes and initialize
+    match:
+    - method-definitions
+  - id: method-return-types
+    name: Return types and method type annotations
+    match:
+    - method-return-types
+  - id: type-restrictions
+    name: Type restrictions on arguments
+    match:
+    - type-restrictions
+- id: type-inference
+  name: Type inference
+  source: 'Reference book: Type inference, Type grammar, Global type inference'
+  match:
+  - type-inference
+  subtopics:
+  - id: local-type-inference
+    name: How local type inference works
+    match:
+    - local-type-inference
+  - id: instance-var-inference
+    name: Instance and class variable type inference
+    match:
+    - instance-var-inference
+  - id: type-grammar
+    name: Type grammar and typeof
+    match:
+    - type-grammar
+- id: union-types
+  name: Union types
+  source: 'Reference book: Union types'
+  match:
+  - union-types
+  subtopics:
+  - id: union-type-basics
+    name: Union type basics
+    match:
+    - union-type-basics
+  - id: union-flow-typing
+    name: Narrowing unions
+    match:
+    - union-flow-typing
+  - id: union-method-dispatch
+    name: Virtual types and dispatch on unions
+    match:
+    - union-method-dispatch
+- id: nil-and-nilable
+  name: Nil and nilable types
+  source: 'Reference book: Nil, Nilable, Type grammar, if var'
+  match:
+  - nil-and-nilable
+  subtopics:
+  - id: nilable-types
+    name: Nilable types and the Nil type
+    match:
+    - nilable-types
+  - id: nil-safe-operators
+    name: 'Nil-safe helpers: try, &., not_nil!, ||'
+    match:
+    - nil-safe-operators
+  - id: nil-guards-and-unless
+    name: Nil guards and early returns
+    match:
+    - nil-guards-and-unless
+- id: flow-typing-is-a
+  name: Flow typing with if var.is_a?
+  source: 'Reference book: if var.is_a?, if var.responds_to?, if var, if !var'
+  match:
+  - flow-typing-is-a
+  subtopics:
+  - id: if-var-is-a
+    name: if var.is_a?(Type) narrowing
+    match:
+    - if-var-is-a
+  - id: if-var-responds-to
+    name: responds_to? and if var truthiness
+    match:
+    - if-var-responds-to
+  - id: flow-typing-limits
+    name: 'Flow typing limits: closures, ivars and method calls'
+    match:
+    - flow-typing-limits
+- id: case-when
+  name: case and when
+  source: 'Reference book: case, case in (pattern matching), select'
+  match:
+  - case-when
+  subtopics:
+  - id: case-when-values
+    name: case/when with values, ranges and types
+    match:
+    - case-when-values
+  - id: case-in-pattern-matching
+    name: case/in exhaustive matching
+    match:
+    - case-in-pattern-matching
+  - id: case-type-dispatch
+    name: Type dispatch with case
+    match:
+    - case-type-dispatch
+- id: blocks-and-procs
+  name: Blocks, yield and procs
+  source: 'Reference book: Blocks and procs, yield, capturing blocks, block forwarding'
+  match:
+  - blocks-and-procs
+  subtopics:
+  - id: blocks-yield
+    name: Blocks and yield
+    match:
+    - blocks-yield
+  - id: procs-and-captured-blocks
+    name: Procs and capturing a block
+    match:
+    - procs-and-captured-blocks
+  - id: block-forwarding
+    name: Block forwarding and return types
+    match:
+    - block-forwarding
+- id: closures
+  name: Closures
+  source: 'Reference book: Closures, capturing, Proc'
+  match:
+  - closures
+  subtopics:
+  - id: closure-capture
+    name: Closure capture semantics
+    match:
+    - closure-capture
+  - id: proc-literals-callbacks
+    name: Proc callbacks and event handlers
+    match:
+    - proc-literals-callbacks
+  - id: with-yield-self
+    name: with ... yield and DSL blocks
+    match:
+    - with-yield-self
+- id: generics
+  name: Generics
+  source: 'Reference book: Generics, free variables, Type grammar, forall'
+  match:
+  - generics
+  subtopics:
+  - id: generic-classes
+    name: Generic classes and structs
+    match:
+    - generic-classes
+  - id: generic-methods-restrictions
+    name: Generic methods, forall and restrictions
+    match:
+    - generic-methods-restrictions
+  - id: generic-type-vars-splat
+    name: 'Type variable helpers: typeof, T.new and splat generics'
+    match:
+    - generic-type-vars-splat
+- id: modules
+  name: Modules and mixins
+  source: 'Reference book: Modules, include, extend, namespacing'
+  match:
+  - modules
+  subtopics:
+  - id: modules-mixins
+    name: 'Modules as mixins: include and extend'
+    match:
+    - modules-mixins
+  - id: module-namespaces
+    name: Namespaces and nested modules
+    match:
+    - module-namespaces
+  - id: module-abstract-and-hooks
+    name: Module hooks and abstract methods
+    match:
+    - module-abstract-and-hooks
+- id: structs-vs-classes
+  name: Structs versus classes
+  source: 'Reference book: Structs, Classes and methods, Inheritance'
+  match:
+  - structs-vs-classes
+  subtopics:
+  - id: struct-value-semantics
+    name: 'Structs: value semantics'
+    match:
+    - struct-value-semantics
+  - id: class-reference-semantics
+    name: 'Classes: reference semantics and identity'
+    match:
+    - class-reference-semantics
+  - id: inheritance-abstract
+    name: Inheritance, super and abstract classes
+    match:
+    - inheritance-abstract
+- id: enums
+  name: Enums
+  source: 'Reference book: Enums, @[Flags]'
+  match:
+  - enums
+  subtopics:
+  - id: enum-basics
+    name: Defining and using enums
+    match:
+    - enum-basics
+  - id: enum-flags
+    name: Flags enums with @[Flags]
+    match:
+    - enum-flags
+  - id: enum-conversion-serialization
+    name: Enum conversion and serialisation
+    match:
+    - enum-conversion-serialization
+- id: annotations
+  name: Annotations
+  source: 'Reference book: Annotations, built-in annotations'
+  match:
+  - annotations
+  subtopics:
+  - id: annotation-definition
+    name: Defining and reading annotations
+    match:
+    - annotation-definition
+  - id: builtin-annotations
+    name: Built-in annotations
+    match:
+    - builtin-annotations
+  - id: annotations-in-macros
+    name: Annotation-driven code generation
+    match:
+    - annotations-in-macros
+- id: macros
+  name: Macros
+  source: 'Reference book: Macros, macro hooks, fresh variables, AST nodes'
+  match:
+  - macros
+  subtopics:
+  - id: macro-basics
+    name: 'Macro basics: macro, {{ }} and {% %}'
+    match:
+    - macro-basics
+  - id: macro-hooks-finished
+    name: 'Macro hooks: inherited, included, method_added, finished'
+    match:
+    - macro-hooks-finished
+  - id: macro-ast-and-fresh-vars
+    name: AST nodes, fresh variables and run
+    match:
+    - macro-ast-and-fresh-vars
+- id: alias-types
+  name: Alias and type introspection
+  source: 'Reference book: Alias, typeof, sizeof, instance_sizeof, offsetof, pointerof'
+  match:
+  - alias-types
+  subtopics:
+  - id: alias-declaration
+    name: alias declarations
+    match:
+    - alias-declaration
+  - id: typeof-sizeof-introspection
+    name: typeof, sizeof, instance_sizeof, offsetof, pointerof
+    match:
+    - typeof-sizeof-introspection
+- id: visibility
+  name: 'Visibility: private and protected'
+  source: 'Reference book: Visibility'
+  match:
+  - visibility
+  subtopics:
+  - id: method-visibility
+    name: private and protected methods
+    match:
+    - method-visibility
+  - id: private-types-and-constants
+    name: Private types, constants and file-private scope
+    match:
+    - private-types-and-constants
+- id: overloading
+  name: Method overloading
+  source: 'Reference book: Overloading'
+  match:
+  - overloading
+  subtopics:
+  - id: method-overloading
+    name: Overloading by arity, type and block
+    match:
+    - method-overloading
+  - id: overload-ordering
+    name: Overload resolution order and specificity
+    match:
+    - overload-ordering
+  - id: default-and-external-names
+    name: Default values and external parameter names
+    match:
+    - default-and-external-names
+- id: splats-named-args
+  name: Splats and named arguments
+  source: 'Reference book: Default values, splats and tuples, named arguments, double splat'
+  match:
+  - splats-named-args
+  subtopics:
+  - id: splat-args
+    name: Splat parameters and tuple expansion
+    match:
+    - splat-args
+  - id: double-splat-named-tuple
+    name: Double splat and NamedTuple arguments
+    match:
+    - double-splat-named-tuple
+  - id: named-arguments
+    name: Named arguments at call sites
+    match:
+    - named-arguments
+- id: c-bindings
+  name: C bindings
+  source: 'Reference book: C bindings, lib, fun, @[Link], struct, union, callbacks'
+  match:
+  - c-bindings
+  subtopics:
+  - id: lib-fun-declarations
+    name: lib and fun declarations
+    match:
+    - lib-fun-declarations
+  - id: link-annotation
+    name: '@[Link] and linking C libraries'
+    match:
+    - link-annotation
+  - id: c-structs-unions-callbacks
+    name: C structs, unions, enums and callbacks
+    match:
+    - c-structs-unions-callbacks
+- id: concurrency-fibers
+  name: 'Concurrency: fibers, channels and select'
+  source: 'Reference book: Concurrency, spawn, Channel, select; API: Fiber, Channel'
+  match:
+  - concurrency-fibers
+  subtopics:
+  - id: spawn-fibers
+    name: spawn and fibers
+    match:
+    - spawn-fibers
+  - id: channels
+    name: Channels
+    match:
+    - channels
+  - id: select-statement
+    name: select with timeouts and multiple channels
+    match:
+    - select-statement
+- id: multithreading
+  name: Multithreading and synchronization
+  source: 'Reference book: Concurrency; -Dpreview_mt; API: Mutex, Atomic, WaitGroup'
+  match:
+  - multithreading
+  subtopics:
+  - id: preview-mt-flag
+    name: Parallel execution with -Dpreview_mt
+    match:
+    - preview-mt-flag
+  - id: mutex-and-sync
+    name: Mutex and Sync primitives
+    match:
+    - mutex-and-sync
+  - id: atomic-and-wait-group
+    name: Atomic and WaitGroup
+    match:
+    - atomic-and-wait-group
+- id: exceptions
+  name: Exceptions
+  source: 'Reference book: Exception handling, raise, rescue, ensure, retry'
+  match:
+  - exceptions
+  subtopics:
+  - id: raise-rescue-ensure
+    name: raise, rescue, else and ensure
+    match:
+    - raise-rescue-ensure
+  - id: custom-exceptions
+    name: Custom exception classes
+    match:
+    - custom-exceptions
+  - id: retry-and-error-patterns
+    name: retry, timeouts and error handling patterns
+    match:
+    - retry-and-error-patterns
+- id: compile-time-flags
+  name: Compile-time flags
+  source: 'Reference book: Compile-time flags, -D, flag?, predefined flags'
+  match:
+  - compile-time-flags
+  subtopics:
+  - id: define-flags
+    name: Defining flags with -D
+    match:
+    - define-flags
+  - id: flag-macro-platform
+    name: 'Platform flags: flag?(:linux), :darwin, :win32, :x86_64'
+    match:
+    - flag-macro-platform
+- id: cli-build-run
+  name: 'Compiler CLI: build, run, eval'
+  source: 'Reference book: Using the compiler: crystal build, run, eval, --release, --static, --cross-compile'
+  match:
+  - cli-build-run
+  subtopics:
+  - id: crystal-build-options
+    name: crystal build options
+    match:
+    - crystal-build-options
+  - id: release-static-cross
+    name: --release, --static and --cross-compile
+    match:
+    - release-static-cross
+  - id: crystal-run-eval
+    name: crystal run and crystal eval
+    match:
+    - crystal-run-eval
+- id: cli-spec-docs-format
+  name: 'Compiler CLI: spec, docs, tool format'
+  source: 'Reference book: crystal spec, crystal docs, crystal tool format'
+  match:
+  - cli-spec-docs-format
+  subtopics:
+  - id: crystal-spec-cli
+    name: crystal spec command
+    match:
+    - crystal-spec-cli
+  - id: crystal-docs-command
+    name: crystal docs and API documentation
+    match:
+    - crystal-docs-command
+  - id: crystal-tool-format
+    name: crystal tool format
+    match:
+    - crystal-tool-format
+- id: cli-tools
+  name: 'Compiler CLI: crystal tool subcommands'
+  source: 'Reference book: crystal tool hierarchy, context, implementations, unreachable, dependencies, expand, types'
+  match:
+  - cli-tools
+  subtopics:
+  - id: tool-hierarchy
+    name: crystal tool hierarchy
+    match:
+    - tool-hierarchy
+  - id: tool-context
+    name: crystal tool context
+    match:
+    - tool-context
+  - id: tool-implementations-unreachable
+    name: tool implementations, unreachable, dependencies, expand, flags
+    match:
+    - tool-implementations-unreachable
+- id: shards
+  name: Shards dependency manager
+  source: 'Shards docs: shard.yml spec, shards commands, shard.lock, postinstall'
+  match:
+  - shards
+  subtopics:
+  - id: shard-yml
+    name: shard.yml structure
+    match:
+    - shard-yml
+  - id: shard-lock-install-update
+    name: shards install, update, check and shard.lock
+    match:
+    - shard-lock-install-update
+  - id: shards-postinstall-build
+    name: postinstall, scripts and building targets
+    match:
+    - shards-postinstall-build
+- id: stdlib-collections
+  name: 'Stdlib collections: Array, Hash, Set, Tuple, Range'
+  source: 'API docs index: Array, Hash, Set, Tuple, NamedTuple, Range, Enumerable, Indexable'
+  match:
+  - stdlib-collections
+  subtopics:
+  - id: array-api
+    name: Array API
+    match:
+    - array-api
+  - id: hash-api
+    name: Hash API
+    match:
+    - hash-api
+  - id: set-tuple-range
+    name: Set, Tuple, NamedTuple and Range
+    match:
+    - set-tuple-range
+- id: stdlib-strings-numbers
+  name: 'Stdlib: String, Char, Int, Float, BigInt'
+  source: 'API docs index: String, Char, Int, Float, Number, BigInt, Math'
+  match:
+  - stdlib-strings-numbers
+  subtopics:
+  - id: string-api
+    name: String API
+    match:
+    - string-api
+  - id: integer-float-api
+    name: Int, Float and number conversion
+    match:
+    - integer-float-api
+  - id: symbol-char-bool
+    name: Symbol, Char, Bool, Nil and Object basics
+    match:
+    - symbol-char-bool
+- id: stdlib-io-files
+  name: 'Stdlib: File, IO, Dir and Path'
+  source: 'API docs index: File, IO, IO::Memory, Dir, Path, FileUtils, STDIN'
+  match:
+  - stdlib-io-files
+  subtopics:
+  - id: file-api
+    name: File reading, writing and metadata
+    match:
+    - file-api
+  - id: io-streams
+    name: IO, IO::Memory, STDIN and pipes
+    match:
+    - io-streams
+  - id: dir-path-fileutils
+    name: Dir, Path and FileUtils
+    match:
+    - dir-path-fileutils
+- id: http-server-client
+  name: HTTP::Server and HTTP::Client
+  source: 'API docs index: HTTP::Server, HTTP::Client, HTTP::Handler, HTTP::WebSocket, HTTP::Params, HTTP::Cookie'
+  match:
+  - http-server-client
+  subtopics:
+  - id: http-server-basics
+    name: HTTP::Server and handlers
+    match:
+    - http-server-basics
+  - id: http-client
+    name: HTTP::Client requests
+    match:
+    - http-client
+  - id: http-websocket-params
+    name: WebSockets, query params, cookies and URI
+    match:
+    - http-websocket-params
+- id: json-yaml
+  name: JSON and YAML
+  source: 'API docs index: JSON, JSON::Serializable, JSON::Any, YAML, YAML::Serializable'
+  match:
+  - json-yaml
+  subtopics:
+  - id: json-parse-any
+    name: JSON parsing and generation
+    match:
+    - json-parse-any
+  - id: json-serializable
+    name: JSON::Serializable and JSON::Field
+    match:
+    - json-serializable
+  - id: yaml-serializable
+    name: YAML parsing and YAML::Serializable
+    match:
+    - yaml-serializable
+- id: log
+  name: Logging with Log
+  source: 'API docs index: Log, Log::Backend, Log::Severity, Log.setup'
+  match:
+  - log
+  subtopics:
+  - id: log-basics
+    name: Log basics and severities
+    match:
+    - log-basics
+  - id: log-backends-config
+    name: Log.setup, backends and LOG_LEVEL
+    match:
+    - log-backends-config
+- id: time
+  name: Time, Time::Span and time zones
+  source: 'API docs index: Time, Time::Span, Time::Location, Time::Format'
+  match:
+  - time
+  subtopics:
+  - id: time-basics
+    name: Time construction and arithmetic
+    match:
+    - time-basics
+  - id: time-zones-format
+    name: Time zones, formatting and parsing
+    match:
+    - time-zones-format
+- id: regex
+  name: Regex
+  source: 'API docs index: Regex, Regex::MatchData, String#scan, String#gsub'
+  match:
+  - regex
+  subtopics:
+  - id: regex-basics
+    name: Regex literals and matching
+    match:
+    - regex-basics
+  - id: regex-named-captures
+    name: MatchData and named captures
+    match:
+    - regex-named-captures
+- id: process-system
+  name: Process, ENV, ARGV and signals
+  source: 'API docs index: Process, ENV, ARGV, OptionParser, Signal, at_exit, System'
+  match:
+  - process-system
+  subtopics:
+  - id: process-run
+    name: Running external commands with Process
+    match:
+    - process-run
+  - id: env-argv-optionparser
+    name: ENV, ARGV and OptionParser
+    match:
+    - env-argv-optionparser
+  - id: signals-at-exit
+    name: Signals, at_exit and graceful shutdown
+    match:
+    - signals-at-exit
+- id: sockets
+  name: Sockets and networking
+  source: 'API docs index: Socket, TCPServer, TCPSocket, UDPSocket, UNIXSocket, OpenSSL::SSL, DNS'
+  match:
+  - sockets
+  subtopics:
+  - id: tcp-server-client
+    name: TCPServer and TCPSocket
+    match:
+    - tcp-server-client
+  - id: udp-unix-sockets
+    name: UDPSocket, UNIXSocket and TLS
+    match:
+    - udp-unix-sockets
+- id: spec-framework
+  name: Spec framework
+  source: 'API docs index: Spec, Spec::Expectations; Reference: Testing Crystal Code'
+  match:
+  - spec-framework
+  subtopics:
+  - id: spec-describe-it
+    name: describe, it and expectations
+    match:
+    - spec-describe-it
+  - id: spec-hooks-focus
+    name: Hooks, focus, tags and spec helpers
+    match:
+    - spec-hooks-focus
+  - id: spec-compile-time-and-ci
+    name: Spec in CI, JUnit output and compile-error tests
+    match:
+    - spec-compile-time-and-ci
+- id: benchmark
+  name: Benchmarking
+  source: 'API docs index: Benchmark, Benchmark.ips, Benchmark.bm, Time.measure'
+  match:
+  - benchmark
+  subtopics:
+  - id: benchmark-ips
+    name: Benchmark.ips
+    match:
+    - benchmark-ips
+  - id: benchmark-bm-measure
+    name: Benchmark.bm, Time.measure and profiling
+    match:
+    - benchmark-bm-measure
+- id: doc-comments
+  name: Documentation comments
+  source: 'Reference book: Documenting code, doc comments, crystal docs'
+  match:
+  - doc-comments
+  subtopics:
+  - id: doc-comment-markdown
+    name: Writing doc comments
+    match:
+    - doc-comment-markdown
+  - id: shards-doc-publishing
+    name: Publishing docs and releasing a shard
+    match:
+    - shards-doc-publishing
+- id: gc-runtime
+  name: Garbage collector and runtime
+  source: 'Reference book: Garbage collection (Boehm GC), GC module API, runtime'
+  match:
+  - gc-runtime
+  subtopics:
+  - id: boehm-gc
+    name: Boehm GC behaviour
+    match:
+    - boehm-gc
+  - id: gc-stats-memory
+    name: GC stats, manual collection and memory diagnosis
+    match:
+    - gc-stats-memory
+- id: llvm-backend
+  name: LLVM backend and code generation
+  source: 'Reference book: compiler internals, LLVM, build flags --emit, --release, debugging'
+  match:
+  - llvm-backend
+  subtopics:
+  - id: llvm-emit-ir
+    name: Emitting LLVM IR, assembly and objects
+    match:
+    - llvm-emit-ir
+  - id: optimization-and-debug-info
+    name: Optimisation levels and debug info
+    match:
+    - optimization-and-debug-info
+- id: docker-static
+  name: Docker and static Alpine builds
+  source: 'Reference book: Deployment, static linking, Docker images (crystallang/crystal)'
+  match:
+  - docker-static
+  subtopics:
+  - id: alpine-static-build
+    name: Static binaries on Alpine with musl
+    match:
+    - alpine-static-build
+  - id: multi-stage-docker
+    name: Multi-stage Dockerfile for Crystal apps
+    match:
+    - multi-stage-docker
+- id: frameworks
+  name: Web frameworks and ecosystem
+  source: 'Crystal ecosystem: Kemal, Lucky, Amber, Athena, Spider-Gazelle, shardbox.org'
+  match:
+  - frameworks
+  subtopics:
+  - id: kemal-framework
+    name: Kemal micro framework
+    match:
+    - kemal-framework
+  - id: lucky-amber-athena
+    name: Lucky, Amber and Athena compared
+    match:
+    - lucky-amber-athena
+  - id: database-access-crystal-db
+    name: Database access with crystal-db
+    match:
+    - database-access-crystal-db
+- id: crystal-for-rubyists
+  name: Crystal for Rubyists
+  source: 'Reference book: Crystal for Rubyists; Syntax differences guide'
+  match:
+  - crystal-for-rubyists
+  subtopics:
+  - id: ruby-differences
+    name: Ruby to Crystal differences
+    match:
+    - ruby-differences
+  - id: porting-ruby-gems-idioms
+    name: Porting Ruby code and idioms
+    match:
+    - porting-ruby-gems-idioms
+  - id: ecr-templates
+    name: ECR templates and string building
+    match:
+    - ecr-templates

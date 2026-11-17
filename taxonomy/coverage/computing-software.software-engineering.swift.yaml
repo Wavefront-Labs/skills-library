@@ -1,0 +1,122 @@
+# Canonical coverage spec: Swift language (Swift 5/6, concurrency, SwiftPM).
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: swift-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [swift]
+sources:
+  - "The Swift Programming Language book (docs.swift.org/swift-book) - Language Guide chapters and Language Reference"
+  - "Swift API Design Guidelines (swift.org/documentation/api-design-guidelines)"
+  - "Swift Package Manager documentation (docs.swift.org/swiftpm)"
+  - "Swift Evolution proposals index (github.com/swiftlang/swift-evolution) for concurrency and ownership features"
+  - "Swift Testing and XCTest documentation (developer.apple.com/documentation)"
+topics:
+  - id: swift-optionals
+    name: "Optionals"
+    source: "Swift book - The Basics (Optionals), Optional Chaining"
+    match: [swift-optionals]
+    subtopics:
+      - {id: swift-optionals-optional-binding, name: "Optional binding and guard let", match: [optional-binding]}
+      - {id: swift-optionals-optional-chaining, name: "Optional chaining and nil coalescing", match: [optional-chaining]}
+  - id: swift-types
+    name: "Value types, classes and enums"
+    source: "Swift book - Structures and Classes, Enumerations, Properties"
+    match: [swift-types]
+    subtopics:
+      - {id: swift-types-subscripts, name: "Subscripts", match: [subscripts]}
+      - {id: swift-types-extensions, name: "Extensions", match: [extensions]}
+      - {id: swift-types-inheritance, name: "Inheritance and overriding", match: [class-inheritance]}
+      - {id: swift-types-key-paths, name: "Key paths", match: [key-paths]}
+      - {id: swift-types-struct-vs-class, name: "Structs vs classes and copy semantics", match: [struct-vs-class]}
+      - {id: swift-types-enum-associated-values, name: "Enums with associated values and pattern matching", match: [enum-associated-values]}
+      - {id: swift-types-property-wrappers-observers, name: "Properties observers and lazy properties", match: [property-wrappers-observers]}
+      - {id: swift-types-initialisers, name: "Initialisers and two-phase initialisation", match: [initialisers]}
+  - id: swift-protocols
+    name: "Protocols and generics"
+    source: "Swift book - Protocols, Generics, Opaque and Boxed Types"
+    match: [swift-protocols]
+    subtopics:
+      - {id: swift-protocols-parameter-packs, name: "Parameter packs and variadic generics", match: [parameter-packs]}
+      - {id: swift-protocols-protocol-extensions, name: "Protocols extensions and default implementations", match: [protocol-extensions]}
+      - {id: swift-protocols-generics-associated-types, name: "Generics constraints and associated types", match: [generics-associated-types]}
+      - {id: swift-protocols-some-any-types, name: "Opaque some and existential any types", match: [some-any-types]}
+      - {id: swift-protocols-synthesised-conformances, name: "Equatable Hashable Comparable Codable conformances", match: [synthesised-conformances]}
+  - id: swift-closures
+    name: "Functions and closures"
+    source: "Swift book - Functions, Closures"
+    match: [swift-closures]
+    subtopics:
+      - {id: swift-closures-closure-capture, name: "Closures capture lists and escaping", match: [closure-capture]}
+      - {id: swift-closures-result-builders, name: "Result builders and function builders", match: [result-builders]}
+  - id: swift-errors
+    name: "Error handling"
+    source: "Swift book - Error Handling; Swift Evolution typed throws"
+    match: [swift-errors]
+    subtopics:
+      - {id: swift-errors-throwing-functions, name: "throws try and catch", match: [throwing-functions]}
+      - {id: swift-errors-result-typed-throws, name: "Result type and typed throws", match: [result-typed-throws]}
+      - {id: swift-errors-preconditions-assertions, name: "Preconditions assertions and fatalError", match: [preconditions-assertions]}
+  - id: swift-memory
+    name: "Memory management"
+    source: "Swift book - Automatic Reference Counting, Memory Safety, Ownership"
+    match: [swift-memory]
+    subtopics:
+      - {id: swift-memory-unsafe-pointers, name: "Unsafe pointers", match: [unsafe-pointers]}
+      - {id: swift-memory-arc-retain-cycles, name: "ARC retain cycles weak and unowned", match: [arc-retain-cycles]}
+      - {id: swift-memory-exclusivity-enforcement, name: "Exclusive access and value semantics safety", match: [exclusivity-enforcement]}
+      - {id: swift-memory-noncopyable-ownership, name: "Noncopyable types and ownership modifiers", match: [noncopyable-ownership]}
+  - id: swift-concurrency
+    name: "Swift concurrency"
+    source: "Swift book - Concurrency; Swift Evolution SE-0296, SE-0306, SE-0302, SE-0338"
+    match: [swift-concurrency]
+    subtopics:
+      - {id: swift-concurrency-mainactor, name: "MainActor and global actors", match: [mainactor]}
+      - {id: swift-concurrency-task-groups, name: "Task groups and async let", match: [task-groups]}
+      - {id: swift-concurrency-swift6-migration, name: "Swift 6 language mode migration", match: [swift6-migration]}
+      - {id: swift-concurrency-async-await-task, name: "async await and Task", match: [async-await-task]}
+      - {id: swift-concurrency-actors-isolation, name: "Actors and isolation", match: [actors-isolation]}
+      - {id: swift-concurrency-sendable-strict-concurrency, name: "Sendable and strict concurrency checking", match: [sendable-strict-concurrency]}
+      - {id: swift-concurrency-async-sequence, name: "AsyncSequence and AsyncStream", match: [async-sequence]}
+      - {id: swift-concurrency-task-cancellation, name: "Task cancellation and structured concurrency", match: [task-cancellation]}
+  - id: swift-collections-strings
+    name: "Collections and strings"
+    source: "Swift book - Collection Types, Strings and Characters"
+    match: [swift-collections-strings]
+    subtopics:
+      - {id: swift-collections-strings-collections-hof, name: "Array Dictionary Set and higher-order functions", match: [collections-hof]}
+      - {id: swift-collections-strings-string-unicode, name: "String indices Characters and Unicode", match: [string-unicode]}
+      - {id: swift-collections-strings-swift-regex, name: "Regex literals and string processing", match: [swift-regex]}
+  - id: swift-api-design
+    name: "API design and naming"
+    source: "Swift API Design Guidelines"
+    match: [swift-api-design]
+    subtopics:
+      - {id: swift-api-design-macros, name: "Macros", match: [swift-macros]}
+      - {id: swift-api-design-custom-operators, name: "Custom operators and precedence", match: [custom-operators]}
+      - {id: swift-api-design-api-naming, name: "Naming and argument labels", match: [api-naming]}
+      - {id: swift-api-design-access-control, name: "Access control and module boundaries", match: [access-control]}
+  - id: swift-spm
+    name: "Swift Package Manager and build"
+    source: "SwiftPM documentation (docs.swift.org/swiftpm), Swift Evolution"
+    match: [swift-spm]
+    subtopics:
+      - {id: swift-spm-package-plugins, name: "Package plugins", match: [package-plugins]}
+      - {id: swift-spm-package-manifest, name: "Package.swift manifest and dependencies", match: [package-manifest]}
+      - {id: swift-spm-swift-build-test, name: "Build configurations and swift test", match: [swift-build-test]}
+      - {id: swift-spm-swiftlint-swift-format, name: "Linting and formatting with SwiftLint and swift-format", match: [swiftlint-swift-format]}
+  - id: swift-testing
+    name: "Testing"
+    source: "Swift Testing and XCTest documentation"
+    match: [swift-testing]
+    subtopics:
+      - {id: swift-testing-xctest, name: "XCTest unit tests and async tests", match: [xctest]}
+      - {id: swift-testing-swift-testing-framework, name: "Swift Testing framework", match: [swift-testing-framework]}
+      - {id: swift-testing-swift-test-doubles, name: "Dependency injection and test doubles in Swift", match: [swift-test-doubles]}
+  - id: swift-interop
+    name: "Interoperability"
+    source: "Swift book - Objective-C interop (Using Swift with Cocoa and Objective-C), Swift C++ interoperability docs"
+    match: [swift-interop]
+    subtopics:
+      - {id: swift-interop-objc-interop, name: "Objective-C and C interop", match: [objc-interop]}
+      - {id: swift-interop-foundation-json-dates, name: "Foundation essentials Codable JSON dates", match: [foundation-json-dates]}

@@ -1,0 +1,1057 @@
+# Canonical coverage spec: Docker and containers.
+# Checked by tools/coverage_check.py — a topic is covered when a skill in scope has a tag equal
+# to one of its `match` keywords, or a keyword appears in the skill's id/name.
+# Topics come from external, authoritative structures (the Docker Certified Associate domains,
+# the Docker docs table of contents and the OCI specs), not from what we happened to write.
+# Subtopics (depth) come from the sub-structure of those same sources: docs.docker.com manual page
+# headings, the Dockerfile reference instruction list, the `docker` CLI sub-command reference and the
+# Compose file reference sections.
+subject: docker
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [docker]
+sources:
+  - "Docker Certified Associate (DCA) domains: Orchestration 25%, Image Creation/Management/Registry 20%, Installation and Configuration 15%, Networking 15%, Security 15%, Storage and Volumes 10%"
+  - "docs.docker.com manuals table of contents: Get started, Dockerfile reference, Build (BuildKit, Bake, multi-platform, cache, attestations), Compose, Engine (storage drivers, logging, networking, security, daemon), Docker Hub/Scout, Desktop"
+  - "OCI specifications: image-spec, runtime-spec, distribution-spec"
+  - "Docker security docs: rootless mode, seccomp, AppArmor, user namespaces, content trust, Docker Bench"
+  - "Subtopics: docs.docker.com manual page sub-headings, Dockerfile reference instruction list, docker CLI sub-command reference (docker run/build/network/volume/system/swarm/service), Compose file reference sections (services, networks, volumes, secrets, configs, include, profiles, develop)"
+topics:
+  # --- Images and Dockerfiles (DCA 20%; docs/Build)
+  - id: dockerfile-instructions
+    name: Dockerfile instructions and their semantics (RUN/CMD/ENTRYPOINT/COPY/ADD)
+    source: docs/Dockerfile reference
+    match: [dockerfile, entrypoint, cmd, copy, add, dockerfile-instructions]
+    subtopics:
+      - {id: run-forms, name: RUN shell vs exec form and RUN flags (--mount, --network, --security), match: [run-instruction, run-exec-form, shell-form]}
+      - {id: cmd-entrypoint-interaction, name: CMD and ENTRYPOINT interaction table and overriding at run time, match: [cmd-vs-entrypoint, entrypoint-cmd-interaction, entrypoint-override]}
+      - {id: copy-vs-add, name: COPY vs ADD, --chown/--chmod/--link, remote URLs and tar auto-extraction, match: [copy-vs-add, copy-chown, add-tar-extraction, copy-link]}
+      - {id: workdir-shell-stopsignal-expose, name: WORKDIR, SHELL, STOPSIGNAL, EXPOSE and VOLUME instructions, match: [workdir, shell-instruction, stopsignal, volume-instruction]}
+      - {id: onbuild-and-parser-directives, name: ONBUILD triggers and parser directives (syntax, escape), match: [onbuild, parser-directives, escape-directive]}
+      - {id: from-platform-flag, name: FROM --platform flag and FROM AS stage naming rules, match: [from-platform-flag]}
+      - {id: add-checksum-git, name: ADD --checksum, ADD git URLs and --keep-git-dir, match: [add-checksum, add-git-url, keep-git-dir]}
+      - {id: copy-parents-exclude, name: COPY --parents and --exclude, match: [copy-parents, copy-exclude]}
+      - {id: run-network-security-flags, name: RUN --network=none/host and --security=insecure entitlements, match: [run-network-none, run-security-insecure]}
+  - id: multi-stage-builds
+    name: Multi-stage builds
+    source: docs/Build/Building/Multi-stage
+    match: [multi-stage, multi-stage-build, multi-stage-builds, multistage]
+    subtopics:
+      - {id: named-stages-target, name: Naming stages and stopping at a stage with --target, match: [named-stages, build-target, target-stage]}
+      - {id: copy-from-external-image, name: Using an external image as a stage with COPY --from=image, match: [copy-from-image, external-stage]}
+      - {id: stage-inheritance-test-stage, name: Deriving stages from previous stages (test/lint stages), match: [stage-inheritance, test-stage]}
+      - {id: stage-skipping-legacy-builder, name: BuildKit stage skipping vs legacy builder behaviour, match: [stage-skipping, legacy-builder]}
+      - {id: parallel-stage-builds, name: Parallel independent stages in the BuildKit graph, match: [parallel-stages, build-graph]}
+      - {id: build-output-artifacts, name: Exporting build artifacts from a stage with --output type=local, match: [output-type-local, export-artifacts]}
+      - {id: conditional-stage-selection, name: Selecting stages by ARG in FROM (base-VARIANT pattern), match: [conditional-stage, stage-selection-arg]}
+      - {id: dev-prod-stages, name: Separate dev and prod stages from one Dockerfile, match: [dev-prod-stages]}
+  - id: layer-caching
+    name: Layer ordering and build cache optimisation
+    source: docs/Build/Cache
+    match: [layer-caching, build-cache, cache-mount, layer-ordering, cache-invalidation]
+    subtopics:
+      - {id: dependency-manifest-ordering, name: Copy dependency manifests before source to maximise cache hits, match: [dependency-manifest-first, package-manifest-ordering]}
+      - {id: run-cache-mount-sharing, name: RUN --mount=type=cache sharing modes, ids and uid/gid, match: [cache-mount-sharing, cache-mount-id]}
+      - {id: no-cache-filter, name: --no-cache and --no-cache-filter for selective rebuilds, match: [no-cache, no-cache-filter]}
+      - {id: build-cache-inspection-gc, name: Inspecting and pruning the builder cache (buildx du/prune, gc policy), match: [buildx-du, buildx-prune, cache-gc]}
+      - {id: keep-layers-small, name: Keeping layers small (combined RUN, package cache cleanup), match: [apt-cache-cleanup, layer-size-reduction]}
+      - {id: cache-key-rules, name: How COPY checksums, RUN text and ARG/ENV changes invalidate cache, match: [cache-key-rules, arg-cache-invalidation]}
+      - {id: cache-busting, name: Deliberate cache busting (CACHEBUST arg, ADD remote URL, --no-cache-filter), match: [cache-bust]}
+      - {id: cache-miss-debugging, name: Diagnosing cache misses with --progress=plain and build history, match: [cache-miss-debugging, progress-plain]}
+  - id: image-slimming
+    name: Image slimming, distroless and scratch bases
+    source: docs/Build
+    match: [image-slimming, distroless, scratch, small-images, image-size, alpine]
+    subtopics:
+      - {id: distroless-variants, name: Choosing distroless static/base/cc/debug variants, match: [distroless-variants, static-vs-base]}
+      - {id: scratch-essentials, name: FROM scratch with CA certs, tzdata and passwd, match: [scratch-ca-certificates, scratch-passwd]}
+      - {id: alpine-musl-pitfalls, name: Alpine musl pitfalls and glibc compatibility, match: [musl, alpine-pitfalls, glibc-compat]}
+      - {id: wolfi-chainguard, name: Wolfi and Chainguard images, match: [wolfi, chainguard-images]}
+      - {id: slim-variants, name: Debian slim variants and when to use them, match: [slim-variant, debian-slim]}
+      - {id: strip-binaries-upx, name: Stripping binaries and UPX compression, match: [strip-binaries, upx]}
+      - {id: slimtoolkit, name: slimtoolkit (docker-slim) dynamic minification, match: [slimtoolkit, docker-slim]}
+      - {id: squash-layers, name: Squashing layers and its tradeoffs, match: [layer-squash, squash]}
+  - id: base-image-selection
+    name: Base image selection and pinning by digest
+    source: docs/Build
+    match: [base-image, base-images, digest-pinning, image-pinning]
+    subtopics:
+      - {id: official-and-verified-images, name: Docker Official Images and Verified Publishers, match: [official-images, verified-publisher, docker-official-images]}
+      - {id: tag-plus-digest, name: Pinning tag@sha256 digests and keeping them readable, match: [sha256-digest, tag-plus-digest]}
+      - {id: base-image-update-automation, name: Automating base image bumps (Renovate, Dependabot), match: [renovate-docker, dependabot-docker, base-image-updates]}
+      - {id: base-image-lifecycle, name: Base image EOL and distro lifecycle planning, match: [base-image-eol, distro-lifecycle]}
+      - {id: scout-base-recommendations, name: Docker Scout base image recommendations, match: [scout-recommendations, base-image-recommendation]}
+      - {id: ubi-images, name: Red Hat UBI standard/minimal/micro base images, match: [ubi, ubi-minimal]}
+      - {id: base-image-comparison, name: Comparing candidate bases by size, CVEs and packages, match: [base-image-comparison]}
+      - {id: docker-hardened-images, name: Docker Hardened Images (DHI), match: [docker-hardened-images, dhi]}
+  - id: dockerignore-context
+    name: .dockerignore and build context
+    source: docs/Build/Building/Context
+    match: [dockerignore, build-context]
+    subtopics:
+      - {id: dockerignore-patterns, name: .dockerignore pattern syntax, negation and ** globs, match: [dockerignore-patterns, dockerignore-negation]}
+      - {id: per-dockerfile-ignore, name: Per-Dockerfile ignore files (Dockerfile.dockerignore), match: [dockerfile-dockerignore, per-dockerfile-ignore]}
+      - {id: remote-build-context, name: Git URL, tarball and stdin build contexts, match: [git-build-context, remote-context, stdin-context]}
+      - {id: named-build-contexts, name: Named additional contexts with --build-context, match: [named-build-context, build-context-flag]}
+      - {id: context-size-transfer, name: Diagnosing slow context transfer and oversized contexts, match: [context-size, context-transfer]}
+      - {id: dockerignore-allowlist, name: Allowlist-style .dockerignore (* then ! exceptions), match: [dockerignore-allowlist]}
+      - {id: context-secrets-leak, name: Keeping .git, .env and credentials out of the build context, match: [context-secrets-leak, dockerignore-secrets]}
+      - {id: dockerfile-flag-stdin, name: -f Dockerfile outside the context and Dockerfile from stdin, match: [dockerfile-flag, dockerfile-stdin]}
+  - id: buildkit-features
+    name: BuildKit - secrets, SSH, mounts, heredocs
+    source: docs/Build/BuildKit
+    match: [buildkit, build-secrets, secret-mount, ssh-mount, bind-mount-build]
+    subtopics:
+      - {id: secret-env-and-file, name: Secret mounts as files vs env (--secret id=,env=), match: [secret-env, secret-file-mount]}
+      - {id: ssh-agent-forwarding, name: SSH agent forwarding with --ssh and known_hosts, match: [ssh-default, ssh-forwarding]}
+      - {id: heredocs, name: Heredoc syntax in RUN and COPY, match: [heredoc, heredoc-dockerfile]}
+      - {id: run-bind-tmpfs-mounts, name: RUN --mount type=bind and type=tmpfs, match: [run-bind-mount, run-tmpfs-mount]}
+      - {id: buildkitd-config, name: buildkitd.toml (gc, mirrors, insecure registries), match: [buildkitd-toml, buildkitd-config]}
+      - {id: build-checks, name: docker build --check and Dockerfile lint rules, match: [build-checks, dockerfile-lint-checks]}
+      - {id: buildx-debug, name: Interactive debugging of failed builds with buildx debug, match: [buildx-debug, build-debugging]}
+      - {id: buildx-history, name: buildx history ls/inspect/logs/export, match: [buildx-history, build-history]}
+  - id: multi-platform-builds
+    name: Multi-platform/arm64 builds with buildx and QEMU
+    source: docs/Build/Multi-platform
+    match: [multi-platform, multi-arch, buildx, arm64, qemu, cross-platform]
+    subtopics:
+      - {id: binfmt-qemu-setup, name: Installing binfmt/QEMU emulation and its limits, match: [binfmt, qemu-emulation]}
+      - {id: cross-compile-buildplatform, name: Cross-compiling with --platform=$BUILDPLATFORM stages, match: [cross-compilation, buildplatform]}
+      - {id: multi-node-native-builders, name: Multi-node native builders with buildx create --append, match: [multi-node-builder, native-builders, buildx-append]}
+      - {id: imagetools-manifest-lists, name: Creating and inspecting manifest lists with imagetools, match: [imagetools, manifest-list]}
+      - {id: buildx-drivers, name: Choosing buildx drivers (docker, docker-container, kubernetes, remote), match: [buildx-drivers, docker-container-driver]}
+      - {id: push-by-digest-merge, name: One platform per runner, push by digest, merge with imagetools create, match: [push-by-digest, merge-manifests]}
+      - {id: load-multi-platform, name: Loading multi-platform images locally with the containerd store, match: [load-multi-platform]}
+      - {id: targetarch-args, name: TARGETOS/TARGETARCH/TARGETVARIANT in RUN and download URLs, match: [targetarch, targetos]}
+  - id: bake
+    name: Docker Bake for multi-target builds
+    source: docs/Build/Bake
+    match: [bake, docker-bake, buildx-bake]
+    subtopics:
+      - {id: bake-targets-groups, name: Bake targets, groups and the default group, match: [bake-targets, bake-groups]}
+      - {id: bake-variables-functions, name: Bake HCL variables, functions and target inheritance, match: [bake-variables, bake-functions, bake-inherits]}
+      - {id: bake-matrix, name: Bake matrix targets, match: [bake-matrix]}
+      - {id: bake-compose-input, name: Using a Compose file as Bake input, match: [bake-compose, bake-compose-file]}
+      - {id: bake-set-print, name: Overriding with --set and debugging with --print, match: [bake-set, bake-print]}
+      - {id: bake-contexts, name: Linking targets with contexts (target references), match: [bake-contexts, bake-target-context]}
+      - {id: bake-action-ci, name: docker/bake-action in GitHub Actions with metadata files, match: [bake-action]}
+      - {id: bake-output-cache, name: Per-target output, cache-to/from and attest in Bake, match: [bake-output, bake-cache]}
+  - id: build-args-env
+    name: Build args vs environment variables
+    source: docs/Dockerfile reference
+    match: [build-args, build-arg, arg, env, environment-variables]
+    subtopics:
+      - {id: predefined-args, name: Predefined ARGs (HTTP_PROXY, TARGETPLATFORM, BUILDPLATFORM), match: [predefined-args]}
+      - {id: arg-before-from-scope, name: ARG before FROM and global ARG scope rules, match: [arg-before-from, arg-scope]}
+      - {id: env-persistence-override, name: ENV persistence in the image and runtime -e overrides, match: [env-override, env-persistence]}
+      - {id: secrets-in-args-leak, name: Why build args leak via docker history, match: [secrets-in-args]}
+      - {id: variable-substitution, name: Dockerfile variable substitution forms (default, alt, substring), match: [dockerfile-variable-substitution, arg-default-value]}
+      - {id: build-arg-from-env, name: --build-arg NAME passthrough from the environment and Compose args, match: [build-arg-from-env]}
+      - {id: env-path, name: ENV PATH manipulation and multi-key ENV, match: [env-path, env-instruction]}
+      - {id: tz-locale-env, name: Timezone and locale ENV (TZ, LANG) in images, match: [tz-env, locale-env]}
+  - id: healthcheck-instruction
+    name: HEALTHCHECK and container health
+    source: docs/Dockerfile reference/HEALTHCHECK
+    match: [healthcheck, health-check, container-health]
+    subtopics:
+      - {id: healthcheck-options, name: --interval/--timeout/--start-period/--start-interval/--retries tuning, match: [healthcheck-options, start-period, start-interval]}
+      - {id: healthcheck-commands, name: Health commands without curl (wget, nc, app-native checks), match: [healthcheck-command, healthcheck-without-curl]}
+      - {id: healthcheck-none-override, name: HEALTHCHECK NONE, --no-healthcheck and --health-cmd overrides, match: [healthcheck-none, health-cmd]}
+      - {id: health-status-inspection, name: Reading State.Health, FailingStreak and health_status events, match: [health-status, failing-streak, health-status-event]}
+      - {id: autoheal, name: Restarting unhealthy containers (autoheal), match: [autoheal, restart-unhealthy]}
+      - {id: compose-healthcheck, name: healthcheck in Compose (test forms, disable, start_interval), match: [compose-healthcheck]}
+      - {id: swarm-healthcheck, name: Healthchecks in Swarm task replacement and rolling updates, match: [swarm-healthcheck]}
+      - {id: health-endpoint-design, name: Liveness vs readiness design for container health endpoints, match: [health-endpoint-design, readiness-check]}
+  - id: pid1-signals-init
+    name: PID 1, signal handling and init (tini)
+    source: docs/Engine/Run
+    match: [pid-1, pid1, signal-handling, tini, init, graceful-shutdown, zombie-processes]
+    subtopics:
+      - {id: zombie-reaping, name: Zombie reaping and subreapers without an init, match: [zombie-reaping, subreaper]}
+      - {id: signal-forwarding-gosu, name: Dropping privileges and forwarding signals with gosu/su-exec, match: [gosu, su-exec, signal-forwarding]}
+      - {id: stop-timeout, name: docker stop timeout and stop grace tuning, match: [stop-timeout, stop-grace]}
+      - {id: init-flag, name: The --init flag and compose init true, match: [init-flag, docker-init-flag]}
+      - {id: runtime-signal-quirks, name: npm start and JVM signal quirks, match: [npm-start-signals, jvm-sigterm]}
+      - {id: shell-form-signals, name: Shell-form CMD swallowing SIGTERM and exec in wrapper scripts, match: [shell-form-signals, exec-in-entrypoint]}
+      - {id: entrypoint-script-patterns, name: Entrypoint script patterns (set -e, exec "$@", first-arg checks), match: [entrypoint-script, exec-dollar-at]}
+      - {id: dumb-init-s6, name: dumb-init and s6-overlay for multi-process containers, match: [dumb-init, s6-overlay]}
+  - id: non-root-user
+    name: Running as non-root USER and file ownership
+    source: docs/Security
+    match: [non-root, user-instruction, uid-gid, file-ownership, rootless-user]
+    subtopics:
+      - {id: user-numeric-uid, name: USER with numeric UID for runAsNonRoot compatibility, match: [numeric-uid, user-numeric]}
+      - {id: creating-users-in-dockerfile, name: Creating users per distro (adduser/useradd), match: [adduser, useradd-dockerfile]}
+      - {id: run-user-group-add, name: docker run --user and --group-add overrides, match: [user-flag, group-add]}
+      - {id: unprivileged-ports, name: Binding ports below 1024 as non-root, match: [unprivileged-ports, ip-unprivileged-port-start]}
+      - {id: nonroot-writable-dirs, name: Writable directories and COPY --chown for non-root images, match: [nonroot-writable-dirs]}
+      - {id: nonroot-tags-65532, name: nonroot image tags and UID 65532 in distroless/Chainguard, match: [uid-65532, nonroot-tag]}
+      - {id: openshift-arbitrary-uid, name: OpenShift arbitrary UIDs and group-0 permissions, match: [arbitrary-uid, openshift-uid]}
+      - {id: k8s-run-as-user-match, name: Matching image USER with runAsUser and fsGroup, match: [fsgroup, run-as-user]}
+  - id: image-labels-metadata
+    name: OCI image labels and metadata
+    source: OCI/image-spec
+    match: [labels, oci-labels, image-metadata, annotations]
+    subtopics:
+      - {id: oci-annotation-keys, name: org.opencontainers.image.* annotation keys, match: [org-opencontainers-image]}
+      - {id: build-time-labels, name: Dynamic labels via --label and ARG, match: [build-label-flag, dynamic-labels]}
+      - {id: label-filtering, name: Filtering containers/images by label, match: [label-filter]}
+      - {id: buildx-annotations, name: buildx --annotation at manifest and index level, match: [buildx-annotations]}
+      - {id: inspect-labels, name: Reading labels with inspect and crane config, match: [inspect-labels, crane-config]}
+      - {id: label-schema-migration, name: Migrating label-schema.org labels to OCI keys, match: [label-schema]}
+      - {id: metadata-action-labels, name: Labels and annotations generated by docker/metadata-action, match: [metadata-action-labels]}
+      - {id: ghcr-source-label, name: org.opencontainers.image.source for GHCR repo linking, match: [ghcr-source-label]}
+  - id: language-specific-images
+    name: Language-specific image patterns (Node, Python, Go, Java, .NET)
+    source: docs/Language-specific guides
+    match: [node-image, python-image, go-image, java-image, dotnet-image, language-images]
+    subtopics:
+      - {id: node-patterns, name: Node images (npm ci, NODE_ENV, pruning dev deps), match: [node-image-patterns, npm-ci]}
+      - {id: python-patterns, name: Python images (venv, uv, bytecode flags), match: [python-venv, uv]}
+      - {id: go-patterns, name: Go static binaries with CGO_ENABLED=0, match: [go-static-binary, cgo-enabled]}
+      - {id: java-patterns, name: Java images (jlink, layered jars), match: [jlink, spring-boot-layers]}
+      - {id: dotnet-patterns, name: .NET sdk/runtime split and publish, match: [dotnet-publish, aspnet-runtime]}
+      - {id: rust-patterns, name: Rust images (cargo-chef, musl targets), match: [cargo-chef, rust-musl]}
+      - {id: ruby-php-patterns, name: Ruby and PHP-FPM images, match: [ruby-image, php-fpm-image]}
+      - {id: elixir-release, name: Elixir/Erlang mix release images, match: [elixir-release, mix-release]}
+      - {id: nginx-spa, name: Static SPA builds served by unprivileged nginx, match: [nginx-spa, nginx-unprivileged]}
+  - id: image-history-inspect
+    name: Inspecting image layers and history (dive, inspect)
+    source: DCA/Image Management
+    match: [image-inspect, image-history, dive, layer-inspection]
+    subtopics:
+      - {id: docker-history-output, name: Reading docker history output, match: [docker-history]}
+      - {id: dive-ci, name: dive efficiency scoring and CI mode, match: [dive-ci, dive-efficiency]}
+      - {id: rootfs-diff-ids, name: RootFS layers and diff_ids vs manifest digests, match: [rootfs-layers, diff-ids]}
+      - {id: remote-inspect, name: Inspecting remote images without pulling (skopeo, crane), match: [skopeo-inspect, crane-manifest]}
+      - {id: layer-extraction, name: Extracting a single layer from an image, match: [layer-extraction, extract-layer]}
+      - {id: image-config-inspect, name: Reading image Config (Entrypoint, Env, User, ExposedPorts), match: [image-config-inspect]}
+      - {id: image-ls-filters, name: image ls filters, --format, --digests and --tree, match: [image-ls-filter, image-tree]}
+      - {id: layer-secrets-audit, name: Auditing layers for leaked secrets and whiteout files, match: [layer-secrets-audit, whiteout]}
+  # --- Registries and distribution (DCA 20%; OCI distribution)
+  - id: registry-push-pull-tags
+    name: Tagging, pushing, pulling and digests
+    source: DCA/Registry
+    match: [tagging, image-tags, tag-strategy, push, pull, digest, digests]
+    subtopics:
+      - {id: semver-tag-strategy, name: Semver, sha and latest tagging strategy, match: [semver-tags, latest-tag]}
+      - {id: immutable-tags, name: Immutable tags, match: [immutable-tags]}
+      - {id: pull-by-digest, name: Pulling and running by digest, match: [pull-by-digest, digest-reference]}
+      - {id: retag-copy, name: Retagging and copying between registries (crane, skopeo), match: [crane-copy, skopeo-copy, retag]}
+      - {id: pull-policy-platform, name: --pull policy and --platform pulls, match: [pull-policy, pull-platform]}
+      - {id: login-credential-helpers, name: docker login and credential helpers, match: [docker-login, credential-helper]}
+      - {id: image-reference-grammar, name: Image reference grammar and docker.io/library defaults, match: [image-reference, docker-io-library]}
+      - {id: push-errors, name: Push errors (denied, blob unknown, manifest invalid, 413), match: [push-errors, denied-requested-access]}
+  - id: private-registry
+    name: Running and securing a private registry
+    source: DCA/Registry
+    match: [private-registry, registry, harbor, registry-auth]
+    subtopics:
+      - {id: distribution-tls-htpasswd, name: Deploying distribution registry with TLS and htpasswd, match: [registry-htpasswd, distribution-deploy]}
+      - {id: registry-storage-backends, name: Registry storage backends (filesystem, S3, GCS), match: [registry-s3-storage, registry-storage-backend]}
+      - {id: insecure-registries, name: insecure-registries and custom CA trust, match: [insecure-registries, registry-ca]}
+      - {id: harbor-projects-robots, name: Harbor projects, robot accounts and replication, match: [harbor-robot-account, harbor-projects]}
+      - {id: registry-token-auth, name: Bearer token auth with an external auth server, match: [registry-token-auth, bearer-token]}
+      - {id: registry-notifications, name: Registry webhooks and notifications, match: [registry-notifications, registry-webhooks]}
+      - {id: registry-config-yml, name: distribution config.yml (http, storage, middleware, redirect), match: [registry-config-yml]}
+      - {id: registry-ha, name: Registry HA behind a load balancer with shared storage and redis cache, match: [registry-ha, registry-redis-cache]}
+  - id: registry-mirrors-pull-through
+    name: Registry mirrors, pull-through caches and rate limits
+    source: docs/Registry
+    match: [registry-mirror, pull-through-cache, rate-limit, rate-limits, mirror]
+    subtopics:
+      - {id: daemon-mirror-config, name: registry-mirrors in daemon.json, match: [registry-mirrors-config, mirror-daemon-json]}
+      - {id: pull-through-deploy, name: Deploying a pull-through cache (proxy.remoteurl), match: [proxy-remoteurl, pull-through-registry]}
+      - {id: hub-rate-limit-check, name: Checking Docker Hub rate limit headers, match: [rate-limit-headers, hub-rate-limit]}
+      - {id: cloud-pull-through, name: ECR and Artifact Registry pull-through/remote repos, match: [ecr-pull-through, artifact-registry-remote]}
+      - {id: containerd-mirror, name: containerd hosts.toml mirrors for Kubernetes nodes, match: [containerd-mirror, hosts-toml]}
+      - {id: harbor-proxy-cache, name: Harbor proxy cache projects, match: [harbor-proxy-cache]}
+      - {id: authenticated-pulls, name: Authenticated Hub pulls in CI and on hosts, match: [authenticated-pulls]}
+      - {id: mirror-fallback, name: Mirror fallback behaviour and debugging which endpoint served a pull, match: [mirror-fallback]}
+  - id: image-lifecycle-gc
+    name: Image retention, pruning and registry garbage collection
+    source: DCA/Registry
+    match: [image-prune, prune, garbage-collection, retention, image-lifecycle]
+    subtopics:
+      - {id: image-prune-filters, name: image prune filters (dangling, until, label), match: [dangling-images, prune-until, prune-filter]}
+      - {id: registry-garbage-collect, name: registry garbage-collect and delete-untagged, match: [registry-garbage-collect, delete-untagged]}
+      - {id: cloud-lifecycle-policies, name: ECR/GCR/Hub lifecycle and retention policies, match: [lifecycle-policy]}
+      - {id: builder-prune, name: builder prune and keep-storage, match: [builder-prune, keep-storage]}
+      - {id: scheduled-cleanup, name: Scheduled prune jobs on hosts, match: [cleanup-cron, scheduled-prune]}
+      - {id: harbor-retention, name: Harbor tag retention rules and GC schedules, match: [harbor-retention]}
+      - {id: ghcr-cleanup, name: GHCR package version cleanup, match: [ghcr-cleanup, delete-package-versions]}
+      - {id: registry-api-delete, name: Deleting manifests via the registry API (crane delete, regctl), match: [crane-delete, regctl]}
+  - id: oci-artifacts-oras
+    name: OCI artifacts beyond images (ORAS, Helm charts, SBOMs)
+    source: OCI/distribution-spec
+    match: [oci-artifacts, oras, oci-artifact]
+    subtopics:
+      - {id: oras-push-pull, name: oras push/pull with artifact types and media types, match: [oras-push, artifact-type, media-types]}
+      - {id: helm-oci, name: Helm charts in OCI registries, match: [helm-oci, helm-push]}
+      - {id: referrers-api, name: OCI 1.1 referrers API and subject field, match: [referrers-api, oci-referrers, subject-field]}
+      - {id: attach-artifacts, name: Attaching SBOMs/signatures (oras attach, cosign attach), match: [oras-attach, cosign-attach]}
+      - {id: artifact-registry-support, name: Registry support for artifacts (zot, Harbor, cloud), match: [artifact-support, zot]}
+      - {id: oras-manifest, name: oras manifest fetch/push and index create, match: [oras-manifest]}
+      - {id: oci-image-layout-dir, name: OCI image layout on disk (oci-layout, index.json, blobs), match: [oci-image-layout]}
+      - {id: wasm-oci, name: Wasm modules as OCI artifacts, match: [wasm-oci]}
+  - id: image-export-save-load
+    name: save/load/export and air-gapped transfer
+    source: DCA/Image Management
+    match: [docker-save, docker-load, image-export, air-gapped, offline-images]
+    subtopics:
+      - {id: save-multiple-images, name: Saving multiple images into one tar, match: [save-multiple-images, multi-image-tar]}
+      - {id: export-vs-save, name: docker export/import vs save/load, match: [docker-export, docker-import]}
+      - {id: oci-layout-output, name: OCI layout output from buildx, match: [oci-layout]}
+      - {id: skopeo-transports, name: skopeo docker-archive and dir transports, match: [docker-archive, dir-transport]}
+      - {id: offline-registry-seeding, name: Seeding an offline registry, match: [offline-registry]}
+      - {id: compressed-save, name: Compressing save streams (gzip, zstd), match: [zstd, save-gzip]}
+      - {id: save-platform, name: docker save/load --platform and multi-platform archives, match: [save-platform]}
+      - {id: load-troubleshooting, name: docker load failures and archive format mismatches, match: [load-troubleshooting]}
+  # --- Supply chain security (DCA Security; docs/Scout)
+  - id: vulnerability-scanning
+    name: Image vulnerability scanning (Trivy, Scout, Grype)
+    source: docs/Scout
+    match: [vulnerability-scanning, image-scanning, trivy, docker-scout, grype, cve]
+    subtopics:
+      - {id: trivy-image-flags, name: trivy image severity/ignore-unfixed/exit-code flags, match: [trivy-image, ignore-unfixed, severity-threshold]}
+      - {id: trivyignore-vex, name: .trivyignore and VEX suppression, match: [trivyignore, vex]}
+      - {id: scout-cves-policy, name: docker scout cves and policy evaluation, match: [scout-cves, scout-policy]}
+      - {id: grype-syft-pipeline, name: syft to grype pipeline and DB updates, match: [grype-db, syft-grype]}
+      - {id: registry-scanning, name: In-registry scanning (Harbor Trivy, ECR scanning), match: [harbor-scanning, ecr-scanning, registry-scanning]}
+      - {id: offline-scanner-db, name: Offline vulnerability DB mirrors, match: [trivy-db-offline, air-gapped-scanning]}
+      - {id: trivy-config-secret, name: trivy config and secret scanning of Dockerfiles and images, match: [trivy-config, trivy-secret]}
+      - {id: scan-gating-sarif, name: Gating CI on scan results and SARIF upload, match: [sarif, scan-gating]}
+  - id: sbom-attestations
+    name: SBOMs and build provenance attestations
+    source: docs/Build/Attestations
+    match: [sbom, provenance, attestations, attestation, slsa]
+    subtopics:
+      - {id: buildx-sbom, name: buildx --sbom and --attest type=sbom, match: [buildx-sbom, attest-sbom]}
+      - {id: provenance-modes, name: Provenance mode=min vs max, match: [provenance-mode, attest-provenance]}
+      - {id: inspect-attestations, name: Inspecting attestations with imagetools and in-toto, match: [imagetools-inspect-attestations, in-toto]}
+      - {id: syft-formats, name: syft SBOM formats (SPDX, CycloneDX), match: [syft, cyclonedx, spdx]}
+      - {id: sbom-generator-image, name: Custom SBOM generator/scanner images, match: [sbom-generator, scanner-image]}
+      - {id: scout-sbom, name: docker scout sbom, match: [scout-sbom]}
+      - {id: cosign-attest, name: cosign attest and verify-attestation, match: [cosign-attest, verify-attestation]}
+      - {id: gh-attestations, name: GitHub artifact attestations (attest-build-provenance), match: [attest-build-provenance, gh-attestation]}
+  - id: image-signing
+    name: Image signing and verification (cosign, Notation, content trust)
+    source: docs/Security/Content trust
+    match: [image-signing, cosign, notation, sigstore, content-trust, dct]
+    subtopics:
+      - {id: cosign-keyless, name: cosign keyless signing (Fulcio, Rekor), match: [cosign-keyless, fulcio, rekor]}
+      - {id: cosign-keys, name: cosign key pairs and KMS signing/verification, match: [cosign-key, cosign-verify]}
+      - {id: notation-trust-policy, name: Notation signing and trust policy, match: [notation-sign, trust-policy]}
+      - {id: docker-content-trust-env, name: DOCKER_CONTENT_TRUST and Notary v1, match: [docker-content-trust-env, notary-v1]}
+      - {id: admission-signature-verification, name: Verifying signatures at admission (policy-controller, Kyverno), match: [policy-controller, kyverno-verify-images]}
+      - {id: sign-in-ci, name: Signing images in GitHub Actions, match: [sign-in-ci, cosign-installer]}
+      - {id: sign-by-digest, name: Signing digests not tags and multi-arch indexes, match: [sign-by-digest, recursive-signing]}
+      - {id: signature-storage, name: Where signatures live (.sig tags, referrers) and copying them, match: [signature-storage, sig-tags]}
+  - id: reproducible-builds
+    name: Reproducible builds
+    source: docs/Build
+    match: [reproducible-builds, reproducible, source-date-epoch]
+    subtopics:
+      - {id: source-date-epoch-buildx, name: SOURCE_DATE_EPOCH in buildx, match: [source-date-epoch]}
+      - {id: rewrite-timestamp, name: --output rewrite-timestamp=true, match: [rewrite-timestamp]}
+      - {id: pinned-packages, name: Pinning apt/pip packages and hashes, match: [pinned-packages, apt-pinning, pip-hashes]}
+      - {id: image-diff, name: Diffing two images (diffoci), match: [diffoci, image-diff]}
+      - {id: deterministic-layers, name: Deterministic layer content (ordering, umask, locale), match: [deterministic-layers, file-ordering]}
+      - {id: pinned-frontend, name: Pinning BuildKit and the Dockerfile frontend version, match: [pinned-frontend]}
+      - {id: snapshot-debian, name: snapshot.debian.org for reproducible apt installs, match: [snapshot-debian]}
+      - {id: rebuild-compare, name: Rebuild-and-compare verification in CI, match: [rebuild-compare]}
+  # --- Engine installation and configuration (DCA 15%; docs/Engine)
+  - id: engine-install-daemon-config
+    name: Engine installation and daemon.json configuration
+    source: DCA/Installation and Configuration
+    match: [daemon-json, daemon-config, docker-daemon, engine-install, dockerd]
+    subtopics:
+      - {id: apt-repo-install, name: Installing from the apt/yum repo and pinning a version, match: [apt-repo-install, docker-ce-version-pin]}
+      - {id: convenience-script, name: get.docker.com convenience script, match: [get-docker-sh, convenience-script]}
+      - {id: daemon-json-options, name: Key daemon.json options (data-root, log-opts, address pools), match: [data-root, daemon-json-options]}
+      - {id: dockerd-systemd-override, name: systemd ExecStart overrides and the hosts conflict, match: [dockerd-systemd-override, execstart-conflict]}
+      - {id: docker-group-post-install, name: docker group and post-install steps, match: [docker-group, post-install]}
+      - {id: dockerd-debug-logs, name: dockerd debug mode and journal logs, match: [dockerd-debug, daemon-logs]}
+      - {id: dockerd-validate-reload, name: dockerd --validate and live reload with SIGHUP, match: [dockerd-validate, daemon-reload-sighup]}
+      - {id: rhel-fedora-install, name: Installing on RHEL/Fedora with dnf and podman conflicts, match: [dnf-install, rhel-docker]}
+      - {id: docker-uninstall, name: Uninstalling Docker Engine and purging data, match: [docker-uninstall]}
+  - id: storage-drivers
+    name: Storage drivers (overlay2) and disk usage
+    source: DCA/Installation and Configuration
+    match: [storage-driver, overlay2, disk-usage, docker-system-df]
+    subtopics:
+      - {id: overlay2-internals, name: overlay2 lowerdir/upperdir/merged internals, match: [overlay2-internals, upperdir, lowerdir]}
+      - {id: system-df-verbose, name: docker system df -v and reclaimable space, match: [system-df-verbose, reclaimable]}
+      - {id: data-root-move, name: Relocating /var/lib/docker, match: [data-root-move, relocate-docker-root]}
+      - {id: storage-opt-size, name: Per-container size limits with --storage-opt and xfs pquota, match: [storage-opt-size, pquota, xfs-pquota]}
+      - {id: writable-layer-growth, name: Finding fat writable layers with docker ps -s, match: [docker-ps-size, writable-layer]}
+      - {id: alternative-storage-drivers, name: btrfs, zfs and fuse-overlayfs drivers, match: [btrfs-driver, zfs-driver, fuse-overlayfs]}
+      - {id: overlay2-backing-fs, name: overlay2 backing filesystem requirements (xfs ftype=1, d_type), match: [ftype, d-type]}
+      - {id: lazy-pulling-snapshotters, name: Lazy-pulling snapshotters (stargz, SOCI), match: [stargz, lazy-pulling, soci]}
+  - id: logging-drivers
+    name: Logging drivers and log rotation
+    source: docs/Engine/Logging
+    match: [logging-driver, log-driver, json-file, log-rotation, fluentd, logs]
+    subtopics:
+      - {id: json-file-rotation, name: json-file max-size/max-file rotation, match: [max-size, max-file]}
+      - {id: journald-driver, name: journald driver and querying, match: [journald]}
+      - {id: dual-logging, name: Dual logging cache for remote drivers, match: [dual-logging]}
+      - {id: remote-drivers, name: gelf/syslog/awslogs remote drivers, match: [gelf, syslog, awslogs]}
+      - {id: non-blocking-mode, name: mode=non-blocking and max-buffer-size, match: [non-blocking-logging, max-buffer-size]}
+      - {id: log-tags-labels, name: tag templates and labels/env log options, match: [log-tag-template, log-labels]}
+      - {id: local-log-driver, name: local logging driver, match: [local-log-driver]}
+      - {id: fluentd-splunk-drivers, name: fluentd and splunk driver options, match: [fluentd-driver-options, splunk-logging]}
+  - id: rootless-mode
+    name: Rootless Docker
+    source: docs/Security/Rootless
+    match: [rootless, rootless-docker, rootless-mode]
+    subtopics:
+      - {id: rootless-setuptool, name: dockerd-rootless-setuptool.sh install and uninstall, match: [dockerd-rootless-setuptool, rootless-install]}
+      - {id: rootless-networking, name: slirp4netns vs pasta vs vpnkit networking, match: [pasta, slirp4netns]}
+      - {id: rootless-port-binding, name: Privileged ports and port forwarding in rootless, match: [rootless-port-binding, rootless-privileged-ports]}
+      - {id: rootless-cgroup-delegation, name: cgroup v2 delegation for resource limits, match: [cgroup-v2-delegation]}
+      - {id: rootless-limitations, name: Rootless limitations and fuse-overlayfs, match: [rootless-limitations, rootless-storage-driver]}
+      - {id: rootless-linger, name: loginctl enable-linger and user services, match: [enable-linger, loginctl]}
+      - {id: rootless-docker-host, name: DOCKER_HOST and context for the rootless socket, match: [rootless-docker-host]}
+      - {id: rootless-troubleshooting, name: Rootless troubleshooting (newuidmap, XDG_RUNTIME_DIR, overlay), match: [newuidmap, xdg-runtime-dir]}
+  - id: daemon-tls-remote
+    name: Remote daemon access over TLS/SSH and contexts
+    source: DCA/Installation and Configuration
+    match: [docker-context, remote-daemon, daemon-tls, docker-host, contexts]
+    subtopics:
+      - {id: context-create-use, name: docker context create/use/export, match: [docker-context-create, context-switching]}
+      - {id: ssh-context, name: SSH contexts, agent and ControlMaster, match: [ssh-context, ssh-controlmaster]}
+      - {id: tls-cert-generation, name: Generating CA/server/client certs for dockerd TLS, match: [tls-cert-generation, tlscacert, tlsverify]}
+      - {id: dockerd-hosts-tcp, name: dockerd -H tcp hosts and the 2375 danger, match: [dockerd-hosts-flag, tcp-2375]}
+      - {id: socket-proxy, name: Socket proxies for limited remote access, match: [socket-proxy]}
+      - {id: remote-compose-buildx, name: Compose and buildx over remote contexts, match: [compose-context, remote-context-builds]}
+      - {id: docker-host-env, name: DOCKER_HOST/DOCKER_CONTEXT precedence, match: [docker-host-env, docker-context-env]}
+      - {id: socket-activation, name: systemd socket activation and fd:// hosts, match: [fd-socket, socket-activation]}
+  - id: proxies-and-dns-config
+    name: Proxy and DNS configuration for daemon and builds
+    source: docs/Engine
+    match: [proxy, http-proxy, dns-config, corporate-proxy]
+    subtopics:
+      - {id: daemon-proxies, name: daemon.json proxies block, match: [daemon-proxies-key, dockerd-proxy]}
+      - {id: client-proxies, name: config.json proxies for containers, match: [config-json-proxies, client-proxy]}
+      - {id: build-proxy, name: Proxy during builds, match: [build-proxy]}
+      - {id: dns-flags, name: --dns/--dns-search/--dns-opt flags, match: [dns-flag, dns-opt]}
+      - {id: mitm-ca, name: Trusting a MITM proxy CA in daemon, build and containers, match: [mitm-ca]}
+      - {id: systemd-resolved, name: systemd-resolved 127.0.0.53 and resolv.conf handling, match: [systemd-resolved, resolv-conf-127-0-0-53]}
+      - {id: no-proxy, name: NO_PROXY patterns for registries and internal hosts, match: [no-proxy]}
+      - {id: daemon-dns, name: daemon.json dns, dns-search and dns-opts defaults, match: [daemon-dns]}
+  - id: engine-upgrade-backup
+    name: Engine upgrades, live-restore and backing up Docker state
+    source: DCA/Installation and Configuration
+    match: [live-restore, engine-upgrade, docker-upgrade, docker-backup]
+    subtopics:
+      - {id: live-restore-config, name: live-restore configuration and limits, match: [live-restore-daemon-json, live-restore-limits]}
+      - {id: version-hold, name: Holding and upgrading docker-ce package versions, match: [apt-mark-hold, version-hold]}
+      - {id: docker-state-backup, name: Backing up /var/lib/docker and config, match: [var-lib-docker-backup, docker-state-backup]}
+      - {id: containerd-image-store, name: Migrating to the containerd image store, match: [containerd-image-store, containerd-snapshotter]}
+      - {id: engine-rollback, name: Downgrading and rolling back an engine upgrade, match: [engine-rollback, engine-downgrade]}
+      - {id: host-migration, name: Moving workloads to a new host, match: [host-migration]}
+      - {id: deprecated-features, name: Reading release notes and the deprecated features list before upgrades, match: [deprecated-features, release-notes]}
+      - {id: containerd-io-upgrade, name: Upgrading containerd.io alongside docker-ce, match: [containerd-io-upgrade]}
+  - id: docker-desktop
+    name: Docker Desktop configuration and resource limits
+    source: docs/Desktop
+    match: [docker-desktop, desktop, wsl2, file-sharing]
+    subtopics:
+      - {id: wslconfig, name: WSL2 integration and .wslconfig, match: [wslconfig]}
+      - {id: virtiofs, name: File sharing with VirtioFS/gRPC FUSE, match: [virtiofs]}
+      - {id: desktop-resources, name: CPU/memory/disk settings and Resource Saver, match: [vmmem, resource-saver]}
+      - {id: admin-settings, name: Settings Management and admin-settings.json, match: [admin-settings-json, settings-management]}
+      - {id: desktop-kubernetes-extensions, name: Desktop Kubernetes and Extensions, match: [desktop-kubernetes, docker-extensions]}
+      - {id: desktop-alternatives, name: Colima, Rancher Desktop and OrbStack alternatives, match: [colima, rancher-desktop, orbstack]}
+      - {id: desktop-diagnostics, name: Desktop diagnostics and troubleshooting, match: [desktop-diagnostics, com-docker-diagnose]}
+      - {id: desktop-networking, name: Desktop networking (host.docker.internal, host networking, VPN conflicts), match: [desktop-networking]}
+  - id: alternative-runtimes
+    name: containerd/nerdctl, Podman and runc/crun/gVisor runtimes
+    source: OCI/runtime-spec
+    match: [containerd, nerdctl, podman, runc, crun, gvisor, kata, runtime]
+    subtopics:
+      - {id: nerdctl-usage, name: nerdctl and ctr day-to-day use, match: [nerdctl-compose, ctr-vs-nerdctl]}
+      - {id: podman-compat, name: Podman docker compatibility, socket and Quadlet, match: [podman-compat, quadlet, podman-socket]}
+      - {id: runsc-registration, name: Registering gVisor runsc in daemon.json, match: [runsc, runtime-registration]}
+      - {id: kata-setup, name: Kata Containers runtime setup, match: [kata-runtime, kata-setup]}
+      - {id: crun-vs-runc, name: crun vs runc selection, match: [crun-vs-runc]}
+      - {id: buildah-usage, name: buildah builds without a daemon, match: [buildah-bud, buildah-usage]}
+      - {id: wasm-containers, name: Wasm workloads via containerd shims (runwasi), match: [runwasi, wasm-containers]}
+      - {id: containerd-config-toml, name: containerd config.toml essentials, match: [containerd-config-toml]}
+  # --- Running containers (docs/Engine/Run)
+  - id: run-options-lifecycle
+    name: docker run options, restart policies and container lifecycle
+    source: DCA/Orchestration
+    match: [docker-run, restart-policy, restart-policies, container-lifecycle, detach]
+    subtopics:
+      - {id: create-start-kill, name: docker create/start/kill and signal selection, match: [docker-create, docker-kill, docker-start]}
+      - {id: restart-policy-details, name: on-failure/unless-stopped semantics, match: [restart-on-failure, restart-unless-stopped]}
+      - {id: auto-remove, name: --rm, rm -f and rm -v, match: [auto-remove, rm-flag]}
+      - {id: naming-hostname, name: --name, --hostname and --label, match: [container-naming, hostname-flag]}
+      - {id: attach-tty-detach-keys, name: -it, attach and detach keys, match: [detach-keys, interactive-tty, docker-attach]}
+      - {id: pause-wait-update, name: pause/unpause, wait and update, match: [docker-pause, docker-wait, docker-update]}
+      - {id: cp-commit, name: docker cp and docker commit, match: [docker-cp, docker-commit]}
+      - {id: ps-filters-format, name: docker ps filters and --format, match: [ps-filter, ps-format]}
+  - id: resource-limits
+    name: CPU/memory limits, cgroups and OOM behaviour
+    source: DCA/Installation and Configuration
+    match: [resource-limits, memory-limit, cpu-limit, cgroups, oom]
+    subtopics:
+      - {id: memory-swap-reservation, name: --memory-swap and --memory-reservation, match: [memory-swap, memory-reservation]}
+      - {id: cpu-controls, name: --cpus, --cpuset-cpus and cpu-shares, match: [cpu-quota, cpuset]}
+      - {id: pids-limit, name: --pids-limit, match: [pids-limit]}
+      - {id: oom-controls, name: --oom-score-adj and --oom-kill-disable, match: [oom-score-adj, oom-kill-disable]}
+      - {id: ulimits, name: --ulimit and default-ulimits, match: [ulimit, default-ulimits]}
+      - {id: blkio-limits, name: Block IO limits (--device-read-bps, blkio weight), match: [blkio, device-read-bps, io-limits]}
+      - {id: gpu-access, name: --gpus and the NVIDIA Container Toolkit, match: [gpus-flag, nvidia-container-toolkit]}
+      - {id: cgroup-parent-driver, name: --cgroup-parent and cgroup driver (systemd vs cgroupfs), match: [cgroup-parent, cgroup-driver]}
+      - {id: oomkilled-diagnosis, name: Diagnosing OOMKilled containers, match: [oomkilled]}
+  - id: exec-debugging
+    name: exec/logs/inspect/stats debugging
+    source: DCA/Orchestration
+    match: [docker-exec, debugging, container-debugging, docker-logs, docker-inspect, docker-stats]
+    subtopics:
+      - {id: exec-options, name: exec --user/--workdir/--env, match: [exec-user, exec-workdir, exec-env]}
+      - {id: logs-options, name: logs --since/--tail/--timestamps/--follow, match: [logs-since, logs-tail, logs-timestamps]}
+      - {id: inspect-format, name: inspect --format Go templates, match: [inspect-format, go-template]}
+      - {id: stats-top, name: stats --format and docker top, match: [stats-format, docker-top]}
+      - {id: docker-diff, name: docker diff filesystem changes, match: [docker-diff]}
+      - {id: exit-codes, name: Exit codes 137/139/126/127 diagnosis, match: [exit-code-137, exit-code-126]}
+      - {id: strace-gdb, name: strace/gdb in containers with SYS_PTRACE, match: [sys-ptrace, strace-container]}
+      - {id: core-dumps, name: Capturing core dumps from containers, match: [core-dump, ulimit-core]}
+  - id: debugging-distroless
+    name: Debugging distroless containers (debug sidecars, docker debug)
+    source: docs/Engine
+    match: [docker-debug, debug-container, ephemeral-debug]
+    subtopics:
+      - {id: docker-debug-cli, name: docker debug command, match: [docker-debug-cli, debug-shell]}
+      - {id: pid-namespace-sidecar, name: Sidecars with --pid=container, match: [pid-container, shared-pid-namespace]}
+      - {id: network-namespace-join, name: --network container joins for network tools, match: [network-container-join]}
+      - {id: nsenter-target, name: nsenter into a container's namespaces, match: [nsenter-target]}
+      - {id: cdebug, name: cdebug and kubectl debug equivalents, match: [cdebug]}
+      - {id: static-busybox, name: Copying a static busybox into a running container, match: [static-busybox, busybox-static]}
+      - {id: debug-image-tags, name: Using :debug image variants with a busybox shell, match: [debug-image-tag]}
+      - {id: extract-files-from-images, name: Extracting files from images and stopped containers, match: [extract-files-image, docker-create-cp]}
+  - id: environment-and-secrets
+    name: Passing config and secrets to containers safely
+    source: DCA/Security
+    match: [secrets, env-file, environment-config, secret-injection]
+    subtopics:
+      - {id: env-file-format, name: env-file format and quoting rules, match: [env-file-format, env-file-quoting]}
+      - {id: file-suffix-convention, name: Secrets as files and the _FILE convention, match: [file-suffix-convention, secret-file]}
+      - {id: compose-secrets, name: Compose top-level secrets without Swarm, match: [compose-secrets, secrets-file]}
+      - {id: external-secret-injection, name: Vault agent and external secret injection, match: [vault-agent, external-secrets]}
+      - {id: env-leak, name: Where env secrets leak (inspect, history, logs), match: [env-leak, inspect-env-leak]}
+      - {id: compose-configs, name: Compose configs and read-only config mounts, match: [config-mount, compose-configs]}
+      - {id: env-passthrough, name: docker run -e passthrough and --env-file precedence, match: [env-passthrough]}
+      - {id: sops-secrets, name: SOPS-encrypted env files decrypted at deploy, match: [sops]}
+  - id: events-and-cleanup
+    name: docker events, system prune and housekeeping
+    source: DCA/Installation and Configuration
+    match: [docker-events, system-prune, housekeeping, cleanup]
+    subtopics:
+      - {id: events-filters, name: docker events filters and format, match: [events-filter, events-since]}
+      - {id: system-prune-flags, name: system prune -a/--volumes/--filter, match: [system-prune-all, prune-volumes]}
+      - {id: container-prune, name: container prune and stopped containers, match: [container-prune, stopped-containers]}
+      - {id: volume-prune, name: volume prune and anonymous volumes, match: [volume-prune, anonymous-volumes]}
+      - {id: network-prune, name: network prune, match: [network-prune]}
+      - {id: disk-full-recovery, name: Recovering a host with /var/lib/docker full, match: [disk-full, no-space-left]}
+      - {id: events-automation, name: Reacting to die/oom/health_status events in scripts, match: [events-automation]}
+      - {id: volume-in-use, name: Finding which containers use a volume before pruning, match: [volume-in-use]}
+  # --- Networking (DCA 15%; docs/Engine/Networking)
+  - id: network-drivers
+    name: bridge/host/none/overlay/macvlan/ipvlan drivers
+    source: DCA/Networking
+    match: [network-drivers, bridge-network, host-network, macvlan, ipvlan, overlay-network]
+    subtopics:
+      - {id: bridge-options, name: Bridge driver options (com.docker.network.bridge.*), match: [bridge-options, bridge-name]}
+      - {id: host-network-tradeoffs, name: Host network mode tradeoffs, match: [host-network-mode, host-networking-tradeoffs]}
+      - {id: macvlan-setup, name: macvlan parent interface and host access, match: [macvlan-parent, macvlan-host-access]}
+      - {id: ipvlan-modes, name: ipvlan L2 vs L3 modes, match: [ipvlan-l3, ipvlan-l2]}
+      - {id: overlay-standalone, name: Attachable and encrypted overlay networks, match: [overlay-encrypted, attachable-overlay]}
+      - {id: none-network, name: none network for isolated containers, match: [none-network]}
+      - {id: address-pools, name: default-address-pools sizing, match: [default-address-pools, address-pool-sizing]}
+      - {id: docker0-bip, name: Configuring the default docker0 bridge (bip, mtu, icc), match: [bip, docker0]}
+  - id: port-publishing
+    name: Port publishing and host binding
+    source: DCA/Networking
+    match: [port-publishing, port-mapping, publish, expose, ports]
+    subtopics:
+      - {id: publish-syntax, name: -p ip:host:container/proto syntax, match: [publish-udp, bind-address]}
+      - {id: publish-all, name: -P, docker port and ephemeral ranges, match: [publish-all, docker-port, ephemeral-ports]}
+      - {id: expose-vs-publish, name: EXPOSE vs publish, match: [expose-vs-publish]}
+      - {id: userland-proxy, name: userland-proxy and hairpin NAT, match: [userland-proxy, hairpin-nat]}
+      - {id: localhost-binding, name: Binding to 127.0.0.1 only and the ip daemon option, match: [localhost-binding, ip-flag]}
+      - {id: port-conflicts, name: Diagnosing address already in use, match: [port-conflict, address-in-use]}
+      - {id: port-ranges, name: Publishing port ranges, match: [port-range]}
+      - {id: wsl-port-forwarding, name: Published ports on Docker Desktop and WSL localhost forwarding, match: [wsl-port-forwarding]}
+  - id: container-dns-discovery
+    name: Embedded DNS and container name resolution
+    source: DCA/Networking
+    match: [embedded-dns, service-discovery, container-dns, dns]
+    subtopics:
+      - {id: embedded-dns-server, name: The 127.0.0.11 resolver, match: [127-0-0-11]}
+      - {id: network-aliases, name: --network-alias and Compose aliases, match: [network-alias]}
+      - {id: host-gateway, name: host.docker.internal and host-gateway add-host, match: [host-docker-internal, host-gateway, add-host]}
+      - {id: legacy-links, name: Default bridge, --link and why it is legacy, match: [legacy-links, link-flag]}
+      - {id: dns-round-robin, name: DNS round robin with shared aliases, match: [dns-round-robin]}
+      - {id: dns-forwarding-failures, name: External resolution failures and resolv.conf forwarding, match: [dns-forwarding, dns-resolution-failure]}
+      - {id: extra-hosts-compose-dns, name: extra_hosts, dns and dns_search in Compose, match: [extra-hosts, compose-dns]}
+      - {id: etc-hosts, name: /etc/hosts, /etc/hostname and resolv.conf files managed by Docker, match: [etc-hosts]}
+  - id: user-defined-networks
+    name: User-defined networks and isolation
+    source: DCA/Networking
+    match: [user-defined-network, network-isolation, custom-network]
+    subtopics:
+      - {id: network-create-options, name: network create --subnet/--gateway/--ip-range, match: [subnet-flag, ip-range, gateway-flag]}
+      - {id: internal-network, name: --internal networks, match: [internal-network]}
+      - {id: static-ip, name: Static IPs with --ip, match: [static-ip]}
+      - {id: connect-disconnect, name: network connect/disconnect on running containers, match: [network-connect, network-disconnect]}
+      - {id: multi-network-routing, name: Multi-network containers and gateway priority, match: [multi-network, network-priority, gw-priority]}
+      - {id: network-inspect, name: network inspect and labels, match: [network-inspect]}
+      - {id: ipam-aux-addresses, name: IPAM drivers, multiple subnets and aux-addresses, match: [ipam, aux-addresses]}
+      - {id: network-segmentation, name: Frontend/backend network segmentation pattern, match: [network-segmentation]}
+  - id: iptables-firewall-interaction
+    name: Docker and iptables/nftables/firewalld interaction
+    source: docs/Engine/Networking/Packet filtering
+    match: [iptables, firewall, docker-user-chain, nftables, firewalld]
+    subtopics:
+      - {id: docker-user-rules, name: Restricting external access in DOCKER-USER, match: [docker-user-rules, restrict-external-access]}
+      - {id: ufw-docker, name: ufw bypass and the ufw-docker fix, match: [ufw-bypass, ufw-docker]}
+      - {id: iptables-false, name: iptables false and manual forwarding, match: [iptables-false, ip-forward]}
+      - {id: firewalld-zone, name: firewalld docker zone, match: [firewalld-zone, docker-zone]}
+      - {id: nftables-backend, name: The nftables firewall backend, match: [nftables-backend, firewall-backend]}
+      - {id: masquerade, name: IP masquerade and forwarding behaviour, match: [ip-masq, masquerade]}
+      - {id: gateway-modes, name: Gateway modes (nat, nat-unprotected, routed), match: [nat-unprotected, gateway-mode]}
+      - {id: iptables-legacy-nft, name: iptables-legacy vs iptables-nft alternatives, match: [iptables-legacy, iptables-nft]}
+  - id: ipv6-networking
+    name: IPv6 in Docker networks
+    source: docs/Engine/Networking/IPv6
+    match: [ipv6]
+    subtopics:
+      - {id: enable-ipv6, name: Enabling IPv6 on daemon and networks, match: [ipv6-daemon-json, enable-ipv6]}
+      - {id: ula-subnets, name: ULA subnets and fixed-cidr-v6, match: [fixed-cidr-v6, ula-subnet]}
+      - {id: ip6tables, name: ip6tables and IPv6 NAT, match: [ip6tables, ipv6-nat]}
+      - {id: dual-stack-publish, name: Dual-stack port publishing, match: [dual-stack, ipv6-publish]}
+      - {id: ndp-proxy-routed, name: NDP proxy and routed IPv6, match: [ndp-proxy, ipv6-routed]}
+      - {id: compose-ipv6, name: IPv6 in Compose networks, match: [compose-ipv6]}
+      - {id: ipv6-only, name: IPv6-only networks (--ipv4=false), match: [ipv6-only]}
+      - {id: ipv6-troubleshooting, name: IPv6 connectivity troubleshooting, match: [ipv6-troubleshooting]}
+  - id: network-troubleshooting
+    name: Container network troubleshooting (nsenter, netshoot)
+    source: DCA/Networking
+    match: [netshoot, nsenter, network-troubleshooting, network-debugging]
+    subtopics:
+      - {id: netshoot-usage, name: netshoot as sidecar and host-net tool, match: [netshoot-usage, netshoot-sidecar]}
+      - {id: nsenter-net, name: nsenter -n into a container's netns, match: [nsenter-net]}
+      - {id: tcpdump, name: tcpdump captures of container traffic, match: [tcpdump, packet-capture]}
+      - {id: mtu-issues, name: MTU mismatches and path MTU, match: [mtu-mismatch, path-mtu]}
+      - {id: conntrack, name: conntrack and NAT table debugging, match: [conntrack, nat-table]}
+      - {id: subnet-conflict, name: Subnet conflicts with VPNs, match: [subnet-conflict, vpn]}
+      - {id: iptables-trace, name: iptables TRACE and nft trace, match: [iptables-trace, nft-trace]}
+      - {id: no-internet-in-container, name: Container cannot reach the internet checklist, match: [no-internet-in-container]}
+      - {id: inter-container-connectivity, name: Containers cannot reach each other (networks, 127.0.0.1 binds), match: [inter-container-connectivity, bind-0-0-0-0]}
+  # --- Storage and volumes (DCA 10%)
+  - id: volumes-bind-tmpfs
+    name: Volumes vs bind mounts vs tmpfs
+    source: DCA/Storage and Volumes
+    match: [volumes, volume, bind-mount, bind-mounts, tmpfs]
+    subtopics:
+      - {id: mount-vs-v, name: --mount vs -v syntax, match: [mount-flag, v-flag, mount-syntax]}
+      - {id: bind-propagation, name: Bind propagation (rshared, rslave), match: [bind-propagation, rshared]}
+      - {id: readonly-mounts, name: Read-only mounts, match: [readonly-mount, ro-mount]}
+      - {id: tmpfs-options, name: tmpfs size and mode, match: [tmpfs-size, tmpfs-mode]}
+      - {id: anonymous-volumes, name: Anonymous volumes and the VOLUME instruction, match: [anonymous-volume, volume-instruction]}
+      - {id: volume-prepopulate, name: Pre-populating volumes from image content and nocopy, match: [volume-prepopulate, volume-nocopy]}
+      - {id: selinux-labels, name: SELinux z/Z labels, match: [selinux-z, z-label]}
+      - {id: volume-subpath, name: volume-subpath mounts, match: [volume-subpath]}
+      - {id: image-mount, name: --mount type=image read-only image mounts, match: [image-mount]}
+  - id: volume-drivers-plugins
+    name: Volume drivers and plugins (NFS, cloud)
+    source: DCA/Storage and Volumes
+    match: [volume-driver, volume-drivers, volume-plugin, nfs-volume]
+    subtopics:
+      - {id: local-nfs, name: local driver NFS options, match: [local-driver-nfs, nfs-opts]}
+      - {id: local-cifs, name: local driver CIFS/SMB options, match: [cifs-volume, smb-volume]}
+      - {id: local-o-options, name: local driver -o tmpfs and bind options, match: [local-driver-o, volume-bind-o]}
+      - {id: plugin-lifecycle, name: plugin install/enable/disable/upgrade, match: [plugin-enable, plugin-upgrade]}
+      - {id: cloud-volume-plugins, name: Cloud block/file plugins (EBS, EFS, rexray), match: [rexray, ebs-plugin, efs-volume]}
+      - {id: volume-plugin-api, name: Writing a volume plugin, match: [volume-plugin-api]}
+      - {id: volume-create-inspect, name: volume create/inspect/ls filters and labels, match: [volume-create, volume-inspect]}
+      - {id: cluster-volumes-csi, name: Swarm cluster volumes with CSI plugins, match: [cluster-volumes, csi-plugin]}
+  - id: volume-backup-migration
+    name: Volume backup, restore and migration
+    source: DCA/Storage and Volumes
+    match: [volume-backup, volume-restore, volume-migration]
+    subtopics:
+      - {id: tar-helper-container, name: tar via helper container, match: [tar-backup-container]}
+      - {id: consistent-db-backup, name: Dump vs volume snapshot for databases, match: [consistent-backup, pg-dump-vs-volume]}
+      - {id: scheduled-backup-tools, name: restic and offen scheduled backups, match: [restic, offen-docker-volume-backup]}
+      - {id: volume-clone, name: Cloning and renaming volumes, match: [volume-clone, volume-rename]}
+      - {id: cross-host-migration, name: Cross-host migration over ssh/rsync, match: [rsync-migration, ssh-pipe]}
+      - {id: restore-verification, name: Restore testing and verification, match: [restore-test, restore-verification]}
+      - {id: compose-volume-backup, name: Backing up all volumes of a Compose project, match: [compose-volume-backup]}
+      - {id: filesystem-snapshots, name: LVM/ZFS/btrfs snapshots for volume backups, match: [lvm-snapshot, zfs-snapshot]}
+  - id: file-permissions-mounts
+    name: UID/GID and permission problems on mounts
+    source: DCA/Storage and Volumes
+    match: [mount-permissions, uid-mapping, permissions, file-permissions]
+    subtopics:
+      - {id: match-host-uid, name: Matching host UID via build args, match: [uid-build-arg, match-host-uid]}
+      - {id: entrypoint-chown, name: Fixing ownership at startup in an entrypoint, match: [entrypoint-chown, fix-perms]}
+      - {id: desktop-permissions, name: Desktop WSL/macOS mount ownership mapping, match: [wsl-mount-permissions, mac-file-ownership]}
+      - {id: rootless-permissions, name: Rootless subuid mapping on mounts, match: [rootless-permissions, subuid-mapping]}
+      - {id: userns-permissions, name: userns-remap ownership on volumes, match: [userns-permissions, remapped-ownership]}
+      - {id: setgid-acl, name: setgid and ACLs for shared directories, match: [setgid, acl]}
+      - {id: permission-denied-diagnosis, name: Diagnosing permission denied on mounts (ls -n, SELinux, noexec), match: [permission-denied, noexec]}
+      - {id: umask, name: umask and group-writable files in containers, match: [umask]}
+  - id: database-in-containers
+    name: Running stateful services (databases) in containers
+    source: docs/Guides
+    match: [stateful, database-container, postgres-container, data-persistence]
+    subtopics:
+      - {id: postgres-init-upgrade, name: Postgres init scripts and major upgrades, match: [docker-entrypoint-initdb, pg-upgrade]}
+      - {id: mysql-container, name: MySQL/MariaDB containers, match: [mysql-container]}
+      - {id: redis-container, name: Redis persistence in containers, match: [redis-container, redis-persistence]}
+      - {id: mongodb-container, name: MongoDB containers, match: [mongodb-container]}
+      - {id: shm-stop-grace, name: shm-size and stop grace for databases, match: [shm-size, stop-grace-period]}
+      - {id: db-backup-cron, name: Scheduled dumps from a sidecar, match: [db-backup-cron, pg-dump-container]}
+      - {id: db-bind-vs-volume, name: Bind mount vs volume for database data, match: [db-bind-mount]}
+      - {id: elasticsearch-container, name: Elasticsearch/OpenSearch containers (vm.max_map_count, heap), match: [vm-max-map-count, elasticsearch-container]}
+      - {id: kafka-container, name: Kafka in KRaft mode in containers (listeners, advertised listeners), match: [kafka-container, advertised-listeners]}
+  # --- Compose (docs/Compose)
+  - id: compose-file-services
+    name: Compose file - services, depends_on, healthcheck gating
+    source: docs/Compose/Compose file reference/services
+    match: [compose, docker-compose, compose-file, depends-on, healthcheck-gating]
+    subtopics:
+      - {id: depends-on-conditions, name: depends_on conditions (healthy, completed_successfully), match: [service-healthy, service-completed-successfully]}
+      - {id: command-entrypoint, name: command and entrypoint overrides, match: [compose-command, compose-entrypoint]}
+      - {id: compose-build, name: build section (context, target, args, cache_from), match: [compose-build, build-context-compose]}
+      - {id: compose-ports, name: ports long syntax and host_ip, match: [compose-ports, ports-long-syntax]}
+      - {id: compose-scale, name: --scale and deploy.replicas, match: [compose-scale, replicas]}
+      - {id: up-down-flags, name: up/down flags (--build, --force-recreate, --remove-orphans), match: [remove-orphans, force-recreate]}
+      - {id: compose-config-validate, name: compose config to validate and resolve, match: [compose-config-validate, compose-config-resolve]}
+      - {id: lifecycle-hooks, name: post_start and pre_stop lifecycle hooks, match: [post-start, pre-stop]}
+      - {id: compose-ps-pull-top, name: compose ps/pull/top/images inspection commands, match: [compose-ps, compose-pull]}
+  - id: compose-networks-volumes
+    name: Compose networks and volumes
+    source: docs/Compose/Compose file reference/networks and volumes
+    match: [compose-networks, compose-volumes]
+    subtopics:
+      - {id: external-networks, name: external networks, match: [external-network, compose-external]}
+      - {id: aliases-ipv4-address, name: aliases and ipv4_address, match: [compose-aliases, ipv4-address]}
+      - {id: volume-long-syntax, name: volumes long syntax and bind create_host_path, match: [bind-create-host-path, volume-long-syntax]}
+      - {id: compose-tmpfs-readonly, name: tmpfs and read_only in services, match: [compose-tmpfs, compose-read-only]}
+      - {id: external-volumes, name: external named volumes, match: [external-volume]}
+      - {id: down-volumes, name: down -v behaviour, match: [compose-down-v]}
+      - {id: network-driver-opts, name: network driver and driver_opts, match: [compose-network-driver, driver-opts]}
+      - {id: default-network, name: The default project network and resource naming, match: [default-network, network-name]}
+  - id: compose-profiles-overrides
+    name: Compose profiles, override files and multiple environments
+    source: docs/Compose/Profiles and Merge
+    match: [compose-profiles, profiles, override-files, compose-override, compose-env]
+    subtopics:
+      - {id: profile-activation, name: --profile and COMPOSE_PROFILES, match: [compose-profiles-flag, compose-profiles-env]}
+      - {id: merge-rules, name: Merge rules and !reset/!override tags, match: [compose-merge-rules, reset-tag]}
+      - {id: multiple-files, name: Multiple -f files and COMPOSE_FILE, match: [compose-file-env, multiple-compose-files]}
+      - {id: prod-override, name: Production override files, match: [compose-prod-override, override-prod]}
+      - {id: project-name, name: Project name and COMPOSE_PROJECT_NAME, match: [compose-project-name, project-name]}
+      - {id: compose-ls, name: compose ls and managing several projects, match: [compose-ls]}
+      - {id: compose-override-yaml, name: Automatic compose.override.yaml loading, match: [compose-override-yaml]}
+      - {id: profile-dependencies, name: Profiles with depends_on and explicitly targeted services, match: [profile-dependencies]}
+  - id: compose-env-interpolation
+    name: .env interpolation and variable precedence
+    source: docs/Compose/Environment variables
+    match: [env-interpolation, dotenv, env-precedence, compose-variables]
+    subtopics:
+      - {id: interpolation-syntax, name: Default and required variable syntax, match: [default-values, required-variables]}
+      - {id: env-file-attribute, name: env_file attribute vs --env-file, match: [env-file-flag, env-file-attribute]}
+      - {id: precedence-order, name: Precedence order (shell, env_file, environment), match: [precedence-order, shell-vs-env-file]}
+      - {id: dollar-escaping, name: Escaping dollar signs, match: [dollar-escaping, double-dollar]}
+      - {id: multiple-env-files, name: Multiple env files and .env syntax rules, match: [multiple-env-files, env-file-syntax]}
+      - {id: interpolation-scope, name: Where interpolation applies and where it does not, match: [interpolation-scope]}
+      - {id: compose-config-environment, name: compose config --environment and debugging resolved values, match: [compose-config-environment]}
+      - {id: environment-map, name: environment list vs map syntax and value-less pass-through, match: [environment-map]}
+  - id: compose-dev-workflow
+    name: Compose watch, dev containers and hot reload
+    source: docs/Compose/Develop
+    match: [compose-watch, dev-workflow, hot-reload, dev-containers, devcontainer]
+    subtopics:
+      - {id: watch-actions, name: watch sync/rebuild/sync+restart actions, match: [watch-sync, watch-rebuild, sync-restart]}
+      - {id: devcontainer-compose, name: devcontainer.json with Compose, match: [devcontainer-json, devcontainer-compose]}
+      - {id: node-modules-volume, name: Excluding node_modules with anonymous volumes, match: [node-modules-volume, anonymous-volume-exclude]}
+      - {id: remote-debugging, name: Debugger ports (delve, debugpy, inspector), match: [remote-debugging, delve, debugpy]}
+      - {id: compose-run, name: compose run one-off containers, match: [compose-run, one-off-container]}
+      - {id: compose-exec-logs, name: compose exec and logs in dev, match: [compose-exec, compose-logs]}
+      - {id: watch-ignore, name: watch ignore/include paths and initial_sync, match: [watch-ignore, initial-sync]}
+      - {id: bind-mount-performance, name: Bind mount performance on macOS/Windows (synchronized file shares), match: [synchronized-file-shares, bind-mount-performance]}
+  - id: compose-production
+    name: Compose in production - restart, logging, resource limits
+    source: docs/Compose/Use Compose in production
+    match: [compose-production, production-compose]
+    subtopics:
+      - {id: deploy-resources, name: deploy.resources limits, match: [deploy-resources]}
+      - {id: logging-options, name: logging driver options in Compose, match: [logging-options]}
+      - {id: pinned-images, name: Pinned images and pull policy, match: [pinned-images]}
+      - {id: systemd-compose, name: systemd unit for Compose, match: [systemd-compose]}
+      - {id: zero-downtime, name: Zero-downtime updates with Compose, match: [zero-downtime]}
+      - {id: reverse-proxy-labels, name: Traefik/Caddy reverse proxy via labels, match: [compose-reverse-proxy, traefik-compose]}
+      - {id: compose-pull-update, name: Image update workflow (pull, up -d --no-deps, Watchtower), match: [watchtower, compose-pull-update]}
+      - {id: compose-gpu, name: GPU device reservations in Compose, match: [compose-gpu, device-reservations]}
+  - id: compose-include-extend
+    name: Compose include/extends and reusable fragments
+    source: docs/Compose/Compose file reference/include and extends
+    match: [compose-include, extends, yaml-anchors, compose-fragments]
+    subtopics:
+      - {id: include-top-level, name: include top-level element, match: [include-top-level, include-path]}
+      - {id: extends-service, name: extends from file and service, match: [extends-file, extends-service]}
+      - {id: extension-fields, name: x- extension fields and anchors, match: [x-fields, extension-fields]}
+      - {id: include-conflicts, name: include conflicts and project_directory, match: [include-conflicts, project-directory]}
+      - {id: shared-compose-library, name: Shared Compose fragments across repos, match: [compose-library, shared-compose]}
+      - {id: include-env-file, name: include with env_file and per-include project_directory, match: [include-env-file]}
+      - {id: remote-include-oci, name: Remote Compose files from git and OCI artifacts, match: [compose-oci, remote-include]}
+      - {id: compose-publish, name: docker compose publish, match: [compose-publish]}
+  # --- Orchestration (DCA 25%)
+  - id: swarm-cluster
+    name: Swarm init, nodes, managers and quorum
+    source: DCA/Orchestration
+    match: [swarm, docker-swarm, swarm-manager, swarm-quorum]
+    subtopics:
+      - {id: advertise-listen-addr, name: --advertise-addr and --listen-addr, match: [advertise-addr, listen-addr]}
+      - {id: join-tokens, name: Join tokens and rotation, match: [join-token, token-rotate]}
+      - {id: promote-demote, name: Promoting/demoting managers and quorum, match: [node-promote, node-demote]}
+      - {id: node-drain-labels, name: Node availability, drain and labels, match: [node-drain, node-labels, node-availability]}
+      - {id: swarm-backup, name: Raft backup and --force-new-cluster, match: [swarm-backup, raft-backup, force-new-cluster]}
+      - {id: autolock, name: Autolock and unlock keys, match: [autolock, unlock-key]}
+      - {id: ca-rotation, name: Swarm CA rotation, match: [ca-rotate, swarm-ca]}
+      - {id: node-ls-rm, name: node ls/inspect/rm and node status reasons, match: [node-ls, node-rm]}
+      - {id: swarm-leave, name: Leaving and re-initialising a swarm, match: [swarm-leave]}
+  - id: swarm-services-stacks
+    name: Swarm services, stacks, replicas and rolling updates
+    source: DCA/Orchestration
+    match: [swarm-service, swarm-services, stack-deploy, swarm-stack, rolling-update]
+    subtopics:
+      - {id: update-config, name: update-parallelism/delay/failure-action, match: [update-parallelism, update-delay, failure-action]}
+      - {id: service-rollback, name: service rollback and rollback-config, match: [service-rollback, rollback-config]}
+      - {id: global-vs-replicated, name: Global vs replicated mode, match: [global-mode, replicated-mode]}
+      - {id: placement, name: Placement constraints and preferences, match: [service-constraint, placement-preference]}
+      - {id: stack-deploy-key, name: The deploy key in stack files, match: [deploy-key, stack-compose]}
+      - {id: service-ps-logs, name: service ps/logs and task states, match: [service-ps, service-logs, task-state]}
+      - {id: swarm-reservations, name: Resource reservations and limits, match: [swarm-reservations, swarm-limits]}
+      - {id: service-scale-registry-auth, name: service scale, update --image and --with-registry-auth, match: [with-registry-auth, service-scale]}
+      - {id: stack-ps-rm, name: stack ls/ps/services/rm, match: [stack-rm, stack-ps]}
+  - id: swarm-secrets-configs
+    name: Swarm secrets and configs
+    source: DCA/Orchestration
+    match: [swarm-secrets, swarm-configs, docker-secret]
+    subtopics:
+      - {id: secret-rotation, name: secret create and rotation, match: [secret-create, secret-rotation]}
+      - {id: config-create, name: config create and mount targets, match: [config-create, config-mount-target]}
+      - {id: stack-external-secrets, name: External secrets in stack files, match: [external-secret, stack-secrets]}
+      - {id: secret-target-mode, name: Secret target, uid/gid and mode, match: [secret-target, secret-mode]}
+      - {id: config-templating, name: Templated configs, match: [config-template, templating]}
+      - {id: compose-vs-swarm-secrets, name: Secret behaviour differences between Compose and Swarm, match: [compose-vs-swarm-secrets]}
+      - {id: versioned-secrets, name: Versioned secret names in stacks for rotation, match: [versioned-secrets]}
+      - {id: secret-driver, name: Secret driver plugins (Vault), match: [secret-driver]}
+  - id: swarm-networking-ingress
+    name: Swarm overlay networking and routing mesh
+    source: DCA/Orchestration
+    match: [routing-mesh, swarm-overlay, swarm-ingress]
+    subtopics:
+      - {id: ingress-customisation, name: Customising the ingress network, match: [ingress-network, ingress-subnet]}
+      - {id: publish-mode-host, name: publish mode host vs ingress, match: [publish-mode-host, mode-host]}
+      - {id: swarm-ports-encryption, name: Swarm ports and overlay encryption, match: [swarm-ports, vxlan-4789, overlay-encryption]}
+      - {id: endpoint-mode, name: endpoint-mode vip vs dnsrr, match: [dnsrr, endpoint-mode, vip]}
+      - {id: attachable, name: Attachable overlays for standalone containers, match: [attachable]}
+      - {id: swarm-load-balancer, name: External load balancer in front of Swarm, match: [swarm-load-balancer, traefik-swarm]}
+      - {id: overlay-troubleshooting, name: Debugging overlay networks (7946/4789, VIP issues), match: [overlay-troubleshooting, port-7946]}
+      - {id: tasks-dns, name: tasks.<service> DNS for per-task discovery, match: [tasks-dns]}
+  - id: kubernetes-handoff
+    name: From Compose to Kubernetes (kompose, manifests)
+    source: docs/Guides
+    match: [kompose, compose-to-kubernetes, kubernetes-migration]
+    subtopics:
+      - {id: kompose-convert, name: kompose convert flags and labels, match: [kompose-convert]}
+      - {id: compose-to-helm, name: Generating a Helm chart from Compose, match: [compose-to-helm, kompose-chart]}
+      - {id: healthcheck-to-probes, name: Mapping healthchecks to probes, match: [healthcheck-to-probes, probes-mapping]}
+      - {id: volumes-to-pvc, name: Mapping volumes to PVCs, match: [volumes-to-pvc]}
+      - {id: env-to-configmap, name: Mapping env to ConfigMaps and Secrets, match: [configmap, env-to-configmap]}
+      - {id: networks-to-services, name: Compose networks to Services and Ingress, match: [service-vs-ingress, compose-networks-to-services]}
+      - {id: compose-bridge, name: Compose Bridge to Kubernetes manifests, match: [compose-bridge]}
+      - {id: kind-k3d, name: Loading local images into kind and k3d, match: [kind-load, k3d]}
+  # --- Security (DCA 15%; docs/Security)
+  - id: capabilities-privileged
+    name: Linux capabilities and avoiding --privileged
+    source: DCA/Security
+    match: [capabilities, cap-drop, cap-add, privileged, least-privilege]
+    subtopics:
+      - {id: default-capabilities, name: The default capability set, match: [default-capabilities, bounding-set]}
+      - {id: cap-drop-all, name: cap-drop ALL then add back, match: [cap-drop-all]}
+      - {id: privileged-grants, name: What --privileged actually grants, match: [privileged-container]}
+      - {id: device-access, name: --device and device cgroup rules, match: [device-flag, device-cgroup-rule]}
+      - {id: file-capabilities, name: setcap file capabilities in images, match: [setcap, file-capabilities]}
+      - {id: sysctl-flag, name: --sysctl namespaced sysctls, match: [sysctl-flag, net-sysctl]}
+      - {id: net-admin-raw, name: NET_ADMIN, NET_RAW and NET_BIND_SERVICE use cases, match: [net-admin, net-raw]}
+      - {id: capability-audit, name: Auditing effective capabilities (capsh, pscap, /proc status), match: [capsh, cap-audit]}
+  - id: seccomp-apparmor
+    name: seccomp and AppArmor profiles
+    source: docs/Security
+    match: [seccomp, apparmor, seccomp-profile]
+    subtopics:
+      - {id: default-seccomp, name: Default seccomp profile contents, match: [default-seccomp-profile]}
+      - {id: custom-seccomp, name: Authoring a custom seccomp JSON, match: [custom-seccomp, seccomp-json]}
+      - {id: seccomp-debugging, name: seccomp unconfined and diagnosing denied syscalls, match: [seccomp-unconfined, seccomp-denied-syscall]}
+      - {id: custom-apparmor, name: Loading a custom AppArmor profile, match: [apparmor-parser, custom-apparmor]}
+      - {id: docker-default-apparmor, name: docker-default AppArmor profile, match: [docker-default-profile]}
+      - {id: profile-generation, name: Generating profiles from traces, match: [seccomp-profile-generation, oci-seccomp-bpf-hook]}
+      - {id: selinux, name: SELinux container policy, match: [selinux, container-t]}
+      - {id: security-opt, name: --security-opt syntax overview, match: [security-opt]}
+  - id: user-namespaces
+    name: User namespace remapping
+    source: docs/Security
+    match: [user-namespaces, userns-remap, userns]
+    subtopics:
+      - {id: userns-remap-config, name: userns-remap daemon config and dockremap, match: [userns-remap-config, dockremap]}
+      - {id: subordinate-ids, name: subuid/subgid ranges, match: [subuid-ranges, subordinate-ids]}
+      - {id: userns-host, name: --userns=host per container, match: [userns-host]}
+      - {id: remapped-volume-ownership, name: Volume ownership under remapping, match: [remapped-volume-ownership]}
+      - {id: userns-limitations, name: Remapping limitations, match: [userns-limitations]}
+      - {id: userns-mode-compose, name: userns_mode in Compose, match: [userns-mode]}
+      - {id: userns-vs-rootless, name: Choosing userns-remap vs rootless, match: [userns-vs-rootless]}
+      - {id: userns-troubleshooting, name: Troubleshooting remapped containers, match: [userns-troubleshooting]}
+  - id: read-only-rootfs
+    name: Read-only root filesystem and no-new-privileges
+    source: DCA/Security
+    match: [read-only, read-only-rootfs, no-new-privileges]
+    subtopics:
+      - {id: read-only-tmpfs, name: read-only with tmpfs writable paths, match: [read-only-tmpfs, writable-paths]}
+      - {id: no-new-privileges-flag, name: no-new-privileges flag, match: [no-new-privileges]}
+      - {id: writable-path-discovery, name: Discovering needed writable paths with docker diff, match: [docker-diff-writable, writable-path-discovery]}
+      - {id: read-only-compose, name: read_only in Compose services, match: [read-only-compose-service]}
+      - {id: immutable-container, name: Immutable container pattern, match: [immutable-container]}
+      - {id: read-only-recipes, name: Read-only recipes for nginx, postgres and node, match: [read-only-nginx]}
+      - {id: tmpfs-noexec, name: tmpfs noexec/nosuid hardening, match: [tmpfs-noexec]}
+      - {id: readonlyrootfilesystem, name: Parity with Kubernetes readOnlyRootFilesystem, match: [readonlyrootfilesystem]}
+  - id: docker-socket-exposure
+    name: Docker socket exposure and docker-in-docker risks
+    source: docs/Security
+    match: [docker-socket, docker-sock, docker-in-docker, dind, socket-exposure]
+    subtopics:
+      - {id: socket-mount-risks, name: Socket mount risks and alternatives, match: [socket-mount, socket-alternatives]}
+      - {id: socket-proxy-filter, name: Filtering socket proxies, match: [tecnativa-socket-proxy, socket-proxy-filter]}
+      - {id: dind-vs-dood, name: DinD vs DooD, match: [dood, dind-vs-dood]}
+      - {id: dind-ci, name: DinD in CI with TLS and privileged, match: [dind-tls, dind-privileged]}
+      - {id: sysbox, name: Sysbox and rootless DinD, match: [sysbox, rootless-dind]}
+      - {id: daemonless-builds, name: Daemonless builds (kaniko, rootless BuildKit), match: [kaniko, buildkit-rootless]}
+      - {id: socket-root-equivalence, name: docker.sock root equivalence, group permissions and the :ro myth, match: [docker-sock-ro, docker-sock-permissions]}
+      - {id: socket-mount-audit, name: Auditing which containers mount the socket, match: [socket-mount-audit]}
+  - id: docker-bench-hardening
+    name: Docker Bench and CIS Docker Benchmark hardening
+    source: docs/Security
+    match: [docker-bench, cis-docker, hardening, cis-benchmark]
+    subtopics:
+      - {id: bench-run, name: Running docker-bench-security and reading output, match: [bench-run, docker-bench-output]}
+      - {id: cis-host, name: CIS host configuration section, match: [cis-host-configuration, auditd-docker-rules]}
+      - {id: cis-daemon, name: CIS daemon configuration section, match: [cis-daemon-configuration]}
+      - {id: cis-runtime, name: CIS container runtime section, match: [cis-container-runtime]}
+      - {id: cis-images, name: CIS images and build files section, match: [cis-images]}
+      - {id: bench-exceptions, name: Exceptions and remediation tracking, match: [bench-exceptions]}
+      - {id: authz-plugins, name: Authorization plugins (OPA docker authz), match: [authz-plugin, opa-docker-authz]}
+      - {id: daemon-hardening, name: Daemon hardening flags (icc, no-new-privileges, userland-proxy), match: [daemon-hardening]}
+  - id: runtime-security-monitoring
+    name: Runtime security monitoring (Falco, audit)
+    source: DCA/Security
+    match: [falco, runtime-security, container-monitoring, audit]
+    subtopics:
+      - {id: falco-rules, name: Custom Falco rules and macros, match: [falco-custom-rules, falco-macros]}
+      - {id: falco-install, name: Installing Falco on Docker hosts, match: [falco-install, falco-docker]}
+      - {id: falcosidekick, name: Falcosidekick alert routing, match: [falcosidekick]}
+      - {id: auditd, name: auditd rules for Docker, match: [auditd]}
+      - {id: drift-detection, name: Container drift detection, match: [drift-detection]}
+      - {id: ebpf-alternatives, name: Tracee and Tetragon alternatives, match: [tracee, tetragon]}
+      - {id: falco-tuning, name: Tuning Falco false positives with exceptions, match: [falco-tuning, falco-exceptions]}
+      - {id: container-forensics, name: Container incident forensics (pause, export, diff, checkpoint), match: [container-forensics]}
+  # --- CI/CD and operations
+  - id: ci-image-builds
+    name: Building and pushing images in CI (GitHub Actions, GitLab)
+    source: docs/Build/CI
+    match: [ci, ci-cd, github-actions, gitlab-ci, build-push-action, ci-builds]
+    subtopics:
+      - {id: gha-build-push, name: build-push-action and metadata-action, match: [metadata-action]}
+      - {id: gitlab-dind-kaniko, name: GitLab CI with DinD or kaniko, match: [gitlab-dind, gitlab-kaniko]}
+      - {id: oidc-login, name: OIDC registry login, match: [oidc, oidc-login, cloud-registry-login]}
+      - {id: ci-tagging, name: CI tagging (sha, branch, semver), match: [ci-tagging, sha-tags]}
+      - {id: jenkins-docker, name: Jenkins pipeline Docker builds, match: [jenkins-docker, jenkins-pipeline]}
+      - {id: ci-multi-arch, name: Multi-arch build matrices in CI, match: [ci-multi-arch, build-matrix]}
+      - {id: pr-build-test, name: PR builds with load and test without push, match: [pr-build, load-and-test]}
+      - {id: azure-pipelines-docker, name: Azure Pipelines Docker@2 builds, match: [azure-pipelines-docker]}
+      - {id: circleci-docker, name: CircleCI setup_remote_docker and machine executors, match: [setup-remote-docker, circleci-docker]}
+  - id: remote-build-cache
+    name: Remote build cache (registry, GHA cache) and cache strategies
+    source: docs/Build/Cache/Backends
+    match: [remote-cache, registry-cache, gha-cache, cache-to, cache-from]
+    subtopics:
+      - {id: registry-backend, name: type=registry backend and mode=max, match: [type=registry, mode=max]}
+      - {id: gha-backend, name: type=gha backend, match: [type=gha]}
+      - {id: s3-azblob-backend, name: type=s3 and azblob backends, match: [type=s3, type=azblob]}
+      - {id: local-inline-backend, name: type=local and inline cache, match: [type=local, type=inline]}
+      - {id: cache-scoping, name: Cache scoping and eviction, match: [cache-scoping, cache-eviction]}
+      - {id: cache-image-manifest, name: cache-to compression, oci-mediatypes and image-manifest, match: [image-manifest-cache, oci-mediatypes]}
+      - {id: cache-from-fallback, name: Multiple cache-from sources (branch then main fallback), match: [cache-from-fallback]}
+      - {id: docker-build-cloud, name: Docker Build Cloud builders, match: [docker-build-cloud, build-cloud]}
+  - id: testcontainers-integration-tests
+    name: Containers in integration tests (Testcontainers)
+    source: docs/Guides
+    match: [testcontainers, integration-tests, test-containers]
+    subtopics:
+      - {id: testcontainers-java, name: Testcontainers for Java, match: [testcontainers-java]}
+      - {id: testcontainers-go, name: Testcontainers for Go, match: [testcontainers-go]}
+      - {id: testcontainers-python-node, name: Testcontainers for Python and Node, match: [testcontainers-python, testcontainers-node]}
+      - {id: ryuk-reuse, name: Ryuk and container reuse, match: [ryuk, container-reuse]}
+      - {id: testcontainers-ci, name: Testcontainers in CI (socket, DinD), match: [testcontainers-ci, testcontainers-docker-host]}
+      - {id: wait-strategies, name: Wait strategies and modules, match: [wait-strategy, testcontainers-modules]}
+      - {id: testcontainers-dotnet, name: Testcontainers for .NET, match: [testcontainers-dotnet]}
+      - {id: testcontainers-compose, name: Compose modules in Testcontainers, match: [testcontainers-compose]}
+  - id: container-observability
+    name: Container metrics and log shipping (cAdvisor, Loki, Fluent Bit)
+    source: docs/Engine/Logging
+    match: [cadvisor, fluent-bit, loki, container-metrics, log-shipping, observability]
+    subtopics:
+      - {id: cadvisor-prometheus, name: cAdvisor with Prometheus, match: [cadvisor-prometheus]}
+      - {id: daemon-metrics, name: dockerd metrics-addr endpoint, match: [metrics-addr, daemon-metrics]}
+      - {id: loki-driver, name: Loki Docker logging driver, match: [loki-driver, loki-docker-driver]}
+      - {id: fluent-bit-input, name: Fluent Bit docker/forward inputs, match: [fluent-bit-input]}
+      - {id: otel-docker-stats, name: OpenTelemetry docker_stats receiver, match: [otel-docker-stats, docker-stats-receiver]}
+      - {id: prometheus-docker-sd, name: Prometheus docker_sd_configs, match: [docker-sd]}
+      - {id: grafana-docker-dashboard, name: Grafana dashboards for cAdvisor/node-exporter container metrics, match: [grafana-docker-dashboard]}
+      - {id: filelog-receiver, name: OpenTelemetry Collector filelog receiver for json-file logs, match: [filelog-receiver]}
+  - id: docker-api-sdk
+    name: Docker Engine API and SDKs
+    source: docs/Engine/API
+    match: [docker-api, engine-api, docker-sdk, api]
+    subtopics:
+      - {id: curl-unix-socket, name: curl over the unix socket, match: [curl-unix-socket]}
+      - {id: api-version, name: API versioning and negotiation, match: [api-version]}
+      - {id: docker-py, name: docker-py usage, match: [docker-py]}
+      - {id: go-sdk, name: Go SDK usage, match: [go-sdk]}
+      - {id: dockerode, name: dockerode usage, match: [dockerode]}
+      - {id: streaming-endpoints, name: Streaming endpoints (events, logs, attach hijack), match: [api-streaming, hijacked-connection]}
+      - {id: api-build, name: Building via the API with a tar context, match: [api-build, build-endpoint]}
+      - {id: x-registry-auth, name: X-Registry-Auth header for pulls and pushes via the API, match: [x-registry-auth]}
+      - {id: api-exec, name: Exec via the API (create, start, inspect exit code), match: [api-exec]}
+  - id: docker-init-templates
+    name: docker init and project templating
+    source: docs/Reference/CLI/docker init
+    match: [docker-init, project-template, scaffolding]
+    subtopics:
+      - {id: init-language-templates, name: Per-language init templates, match: [init-go, init-python, init-node]}
+      - {id: template-review, name: Reviewing generated files, match: [template-review]}
+      - {id: project-generators, name: Cookiecutter and custom generators, match: [cookiecutter, project-generator]}
+      - {id: init-existing-project, name: Running init in an existing project, match: [init-existing-project]}
+      - {id: init-java-rust-aspnet, name: docker init templates for Java, Rust, ASP.NET and PHP, match: [init-java, init-rust, init-aspnet]}
+      - {id: init-compose-yaml, name: Customising the generated compose.yaml, match: [init-compose-yaml]}
+      - {id: readme-docker, name: Generated .dockerignore and README.Docker.md, match: [readme-docker]}
+      - {id: devcontainer-features, name: Dev Container templates and features as scaffolding, match: [devcontainer-features]}

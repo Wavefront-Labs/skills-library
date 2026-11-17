@@ -1,0 +1,298 @@
+# Coverage spec: Apache Cassandra. Topics and subtopics from the external structures in `sources`.
+subject: cassandra
+scope:
+  category: computing-software
+  field: database-administration
+  products: [cassandra]
+sources:
+  - "Apache Cassandra documentation ToC (cassandra.apache.org/doc/latest) - Architecture (dynamo, storage engine, guarantees), Data modeling, CQL reference, Operating (compaction, repair, hints, snitch, topology, backups, bulk loading and CDC, metrics, security), Tools (nodetool, cqlsh, sstable tools, stress), Configuration (cassandra.yaml, JVM)"
+  - "DataStax Cassandra developer and administrator learning paths and CQL reference (docs.datastax.com)"
+  - "Apache Cassandra Certified Developer and Administrator exam topic lists (DataStax Academy)"
+topics:
+  - id: arch-dynamo
+    name: Dynamo-style architecture
+    source: "Cassandra docs/Architecture/Dynamo"
+    match: [gossip, token-ring, dynamo-architecture]
+    subtopics:
+      - {id: gossip-protocol, name: "Gossip and failure detection", match: [gossip-protocol, phi-accrual, failure-detector]}
+      - {id: token-ring-and-vnodes, name: "Token ring, partitioner and vnodes", match: [token-ring-vnodes, vnodes, murmur3]}
+  - id: arch-storage
+    name: Storage engine
+    source: "Cassandra docs/Architecture/Storage Engine"
+    match: [storage-engine, lsm-tree, memtable]
+    subtopics:
+      - {id: write-path-commitlog-memtable, name: "Write path: commit log, memtable, flush", match: [commitlog, write-path, memtable-flush]}
+      - {id: read-path-bloom-index, name: "Read path, bloom filters, key cache", match: [read-path, bloom-filter, key-cache]}
+  - id: arch-guarantees
+    name: Consistency guarantees
+    source: "Cassandra docs/Architecture/Guarantees"
+    match: [consistency-level, quorum, tunable-consistency]
+    subtopics:
+      - {id: tunable-consistency-levels, name: "Choosing consistency levels", match: [local-quorum, each-quorum, read-write-quorum]}
+      - {id: lightweight-transactions-paxos, name: "Lightweight transactions (Paxos)", match: [lwt, paxos, serial-consistency]}
+  - id: model-core
+    name: Data modeling methodology
+    source: "Cassandra docs/Data Modeling"
+    match: [data-modeling, query-first-design, partition-key]
+    subtopics:
+      - {id: query-first-modeling, name: "Query-driven table design", match: [query-first-design, access-patterns, denormalization]}
+      - {id: partition-key-sizing, name: "Partition key choice and sizing", match: [partition-size, wide-partition, bucketing]}
+  - id: model-clustering
+    name: Clustering and primary keys
+    source: "Cassandra docs/Data Modeling/Table design"
+    match: [clustering-columns, primary-key, compound-key]
+    subtopics:
+      - {id: clustering-order, name: "Clustering columns and sort order", match: [clustering-order, order-by, time-series-table]}
+      - {id: static-columns-and-collections, name: "Static columns, collections, frozen types", match: [static-column, collections, frozen-types]}
+  - id: model-antipatterns
+    name: Anti-patterns
+    source: "Data modeling anti-patterns"
+    match: [queue-antipattern, tombstone-antipattern, allow-filtering]
+    subtopics:
+      - {id: tombstone-heavy-queues, name: "Queue and delete-heavy anti-pattern", match: [tombstones, tombstone-warn-threshold, queue-pattern]}
+      - {id: secondary-index-allow-filtering, name: "Secondary indexes and ALLOW FILTERING", match: [secondary-index, sai-vs-2i, index-selection]}
+  - id: cql-ddl
+    name: CQL data definition
+    source: "CQL reference/Data definition"
+    match: [cql-ddl, keyspace, create-table]
+    subtopics:
+      - {id: keyspace-replication-strategy, name: "Creating keyspaces and replication", match: [create-keyspace, networktopologystrategy, replication-factor]}
+      - {id: table-options-and-alter, name: "Table options and ALTER TABLE", match: [table-options, alter-table, default-ttl]}
+  - id: cql-dml
+    name: CQL data manipulation
+    source: "CQL reference/Data manipulation"
+    match: [cql-dml, insert, select]
+    subtopics:
+      - {id: upsert-semantics-and-ttl, name: "Upserts, TTL and write timestamps", match: [upsert, using-ttl, writetime]}
+      - {id: batches-logged-unlogged, name: "Batches: logged, unlogged, counter", match: [batch, logged-batch, unlogged-batch]}
+  - id: cql-types
+    name: CQL data types
+    source: "CQL reference/Data types"
+    match: [cql-types, timeuuid, counter]
+    subtopics:
+      - {id: timeuuid-uuid-timestamps, name: "uuid, timeuuid and time types", match: [timeuuid, date-time-types, mintimeuuid]}
+      - {id: counters, name: "Counter columns", match: [counter-column, counter-table, counter-update]}
+  - id: cql-functions
+    name: Functions, UDFs, aggregates
+    source: "CQL reference/Functions"
+    match: [user-defined-functions, aggregates, cql-functions]
+    subtopics:
+      - {id: udf-and-uda, name: "User-defined functions and aggregates", match: [udf, uda, enable-user-defined-functions]}
+      - {id: json-and-token-queries, name: "JSON support and token() queries", match: [select-json, insert-json, token-function]}
+  - id: cql-mv
+    name: Materialized views and SAI
+    source: "CQL reference/Materialized views"
+    match: [materialized-views, mv, sai-index]
+    subtopics:
+      - {id: materialized-view-limits, name: "Materialized views and their limits", match: [materialized-view, mv-repair, base-table-sync]}
+      - {id: sai-index-creation, name: "Storage-Attached Index setup", match: [sai-queries, sai-index-options, vector-search]}
+  - id: ops-compaction
+    name: Compaction
+    source: "Cassandra docs/Operating/Compaction"
+    match: [compaction, stcs, lcs]
+    subtopics:
+      - {id: stcs-vs-lcs, name: "SizeTiered vs Leveled compaction", match: [size-tiered-compaction, leveled-compaction, write-amplification]}
+      - {id: twcs-time-series, name: "TimeWindowCompactionStrategy", match: [time-window-compaction, twcs-window, ttl-expiry]}
+  - id: ops-repair
+    name: Repair
+    source: "Cassandra docs/Operating/Repair"
+    match: [repair, anti-entropy, merkle-tree]
+    subtopics:
+      - {id: nodetool-repair-modes, name: "Running nodetool repair", match: [nodetool-repair, incremental-repair, primary-range]}
+      - {id: automated-repair-reaper, name: "Automated repair scheduling", match: [cassandra-reaper, repair-scheduling, subrange-repair]}
+  - id: ops-hints
+    name: Hints and read repair
+    source: "Cassandra docs/Operating/Hints and Read repair"
+    match: [hinted-handoff, read-repair, batchlog]
+    subtopics:
+      - {id: hinted-handoff-tuning, name: "Hinted handoff", match: [hints, max-hint-window, hints-directory]}
+      - {id: read-repair-and-speculative-retry, name: "Read repair and speculative retry", match: [blocking-read-repair, speculative-retry, read-repair-chance]}
+  - id: ops-topology
+    name: Adding, removing and replacing nodes
+    source: "Cassandra docs/Operating/Topology changes"
+    match: [bootstrap, decommission, replace-node]
+    subtopics:
+      - {id: bootstrap-new-node, name: "Bootstrapping a node", match: [bootstrap-node, auto-bootstrap, join-ring]}
+      - {id: decommission-and-replace, name: "Decommission, removenode and replace", match: [removenode, replace-address, assassinate]}
+  - id: ops-snitch
+    name: Snitches and multi-DC
+    source: "Cassandra docs/Operating/Snitch"
+    match: [snitch, gossipingpropertyfilesnitch, rack-awareness]
+    subtopics:
+      - {id: configuring-snitch, name: "Choosing a snitch", match: [endpoint-snitch, cassandra-rackdc-properties, ec2-snitch]}
+      - {id: adding-a-datacenter, name: "Adding or removing a datacenter", match: [add-datacenter, rebuild, nodetool-rebuild]}
+  - id: ops-backup
+    name: Backup and restore
+    source: "Cassandra docs/Operating/Backups"
+    match: [snapshot, incremental-backup, restore]
+    subtopics:
+      - {id: snapshots-and-incremental, name: "Snapshots and incremental backups", match: [nodetool-snapshot, incremental-backups, clearsnapshot]}
+      - {id: restore-and-sstableloader, name: "Restoring and sstableloader", match: [sstableloader, nodetool-refresh, point-in-time-restore]}
+  - id: ops-bulk
+    name: Bulk loading and CDC
+    source: "Cassandra docs/Operating/Bulk loading and CDC"
+    match: [bulk-loading, cqlsh-copy, cdc]
+    subtopics:
+      - {id: cqlsh-copy-and-dsbulk, name: "cqlsh COPY and DSBulk", match: [copy-from, copy-to, dsbulk]}
+      - {id: change-data-capture, name: "Change data capture", match: [cdc-raw, cdc-enabled, commitlog-cdc]}
+  - id: ops-metrics
+    name: Monitoring and metrics
+    source: "Cassandra docs/Operating/Metrics"
+    match: [jmx-metrics, cassandra-metrics, dropped-messages]
+    subtopics:
+      - {id: key-metrics-to-watch, name: "Key metrics and thresholds", match: [pending-compactions, thread-pool-stats, read-latency]}
+      - {id: query-tracing-and-slow-logs, name: "Tracing and slow query logging", match: [query-tracing, tracing-probability, slow-query-log]}
+  - id: ops-security
+    name: Security
+    source: "Cassandra docs/Operating/Security"
+    match: [cassandra-security, roles, tls-encryption]
+    subtopics:
+      - {id: authentication-authorization, name: "Authentication and authorization", match: [password-authenticator, cassandra-authorizer, create-role]}
+      - {id: tls-and-audit, name: "TLS encryption and audit logging", match: [client-encryption, internode-encryption, audit-logging]}
+  - id: cfg-yaml
+    name: Configuration (cassandra.yaml)
+    source: "Cassandra docs/Configuration"
+    match: [cassandra-yaml, concurrent-writes, memtable-allocation]
+    subtopics:
+      - {id: cassandra-yaml-essentials, name: "Essential cassandra.yaml settings", match: [listen-address, rpc-address, seed-provider]}
+      - {id: concurrency-and-throughput, name: "Concurrency and throughput settings", match: [concurrent-reads, concurrent-writes, compaction-throughput]}
+  - id: cfg-jvm
+    name: JVM and GC
+    source: "Cassandra docs/Configuration/JVM options"
+    match: [jvm-options, cassandra-gc, g1gc]
+    subtopics:
+      - {id: heap-and-gc-tuning, name: "Heap sizing and garbage collector", match: [heap-size, max-heap, zgc]}
+      - {id: off-heap-and-page-cache, name: "Off-heap structures and page cache", match: [offheap-memtables, chunk-cache, page-cache]}
+  - id: tool-nodetool
+    name: nodetool
+    source: "Cassandra docs/Tools/nodetool"
+    match: [nodetool, tablestats, tpstats]
+    subtopics:
+      - {id: nodetool-diagnostics, name: "nodetool diagnostic commands", match: [nodetool-status, nodetool-info, netstats]}
+      - {id: nodetool-maintenance, name: "nodetool maintenance commands", match: [nodetool-flush, nodetool-drain, nodetool-cleanup, nodetool-scrub]}
+  - id: tool-cqlsh
+    name: cqlsh and SSTable tools
+    source: "Cassandra docs/Tools/cqlsh and SSTable tools"
+    match: [cqlsh, describe, sstabledump]
+    subtopics:
+      - {id: cqlsh-usage, name: "cqlsh sessions and options", match: [cqlsh-ssl, cqlsh-paging, cqlshrc]}
+      - {id: sstable-tools, name: "SSTable utilities", match: [sstablemetadata, sstablescrub, sstableverify]}
+  - id: tool-stress
+    name: Benchmarking
+    source: "Cassandra docs/Tools/cassandra-stress"
+    match: [cassandra-stress, nosqlbench, load-testing]
+    subtopics:
+      - {id: cassandra-stress-profile, name: "cassandra-stress profiles", match: [stress-yaml, write-benchmark, cassandra-stress-user]}
+      - {id: nosqlbench-workloads, name: "NoSQLBench workloads", match: [nosqlbench-workload, activity-driver, scenario]}
+  - id: drv-client
+    name: Drivers and client behaviour
+    source: "Drivers documentation"
+    match: [cassandra-driver, load-balancing-policy, prepared-statement]
+    subtopics:
+      - {id: prepared-statements-and-paging, name: "Prepared statements and paging", match: [prepared-statements, paging-state, fetch-size]}
+      - {id: driver-policies, name: "Load balancing, retry and reconnection policies", match: [token-aware-routing, retry-policy, execution-profile]}
+  - id: upg-upgrade
+    name: Upgrades
+    source: "Cassandra docs/Operating/Upgrading and NEWS.txt"
+    match: [rolling-upgrade, upgradesstables, version-compatibility]
+    subtopics:
+      - {id: rolling-upgrade-procedure, name: "Rolling upgrade procedure", match: [rolling-upgrade-procedure, news-txt, pre-upgrade-checks]}
+      - {id: storage-compatibility-mode, name: "Compatibility and feature flags", match: [storage-compatibility-mode, sstable-format, client-protocol-version]}
+  - id: perf-tuning
+    name: Performance troubleshooting
+    source: "Cassandra docs/Troubleshooting"
+    match: [latency-troubleshooting, hot-partition, read-latency-tuning]
+    subtopics:
+      - {id: hot-partition-diagnosis, name: "Diagnosing hot partitions and nodes", match: [hot-spot, nodetool-toppartitions, key-skew]}
+      - {id: gc-and-dropped-mutation-triage, name: "GC pauses and dropped messages", match: [dropped-mutations, long-gc-pause, overloaded-node]}
+  - id: tuning-os
+    name: Operating system and hardware
+    source: "Cassandra docs/Operating/Hardware"
+    match: [os-tuning, swap-off, ulimits]
+    subtopics:
+      - {id: linux-kernel-settings, name: "Linux kernel and filesystem settings", match: [vm-max-map-count, readahead, xfs-filesystem]}
+      - {id: hardware-sizing, name: "Hardware sizing and disk layout", match: [node-sizing, jbod, disk-capacity]}
+  - id: arch-messaging
+    name: Messaging and streaming
+    source: "Cassandra docs/Architecture/Messaging and Streaming"
+    match: [internode-messaging, streaming, zero-copy-streaming]
+    subtopics:
+      - {id: internode-messaging-tuning, name: "Internode messaging and timeouts", match: [internode-timeouts, messaging-service, native-protocol]}
+      - {id: streaming-and-zero-copy, name: "Streaming and zero-copy streaming", match: [stream-throughput, zero-copy-streaming, netstats-streams]}
+  - id: arch-replication
+    name: Replication and virtual tables
+    source: "Cassandra docs/Architecture and Operating/Virtual tables"
+    match: [replication-strategy, virtual-tables, system-views]
+    subtopics:
+      - {id: virtual-tables-system-views, name: "Virtual tables for diagnostics", match: [system-views, virtual-keyspace, settings-table]}
+      - {id: transient-replication, name: "Transient replication", match: [transient-replication, full-replica, cheap-quorums]}
+  - id: cql-security
+    name: CQL security statements
+    source: "CQL reference/Security"
+    match: [grant-revoke, list-permissions, role-hierarchy]
+    subtopics:
+      - {id: roles-and-permission-grants, name: "Roles, grants and resource scopes", match: [role-hierarchy, grant-permission, resource-hierarchy]}
+      - {id: network-auth-and-mtls, name: "Network and mTLS authorizers", match: [cidr-authorizer, network-authorizer, mutual-tls-auth]}
+  - id: cql-triggers
+    name: Triggers and CQL extras
+    source: "CQL reference/Triggers"
+    match: [triggers, use-keyspace, cql-comments]
+    subtopics:
+      - {id: triggers-and-their-risks, name: "Triggers", match: [create-trigger, trigger-class, trigger-risks]}
+      - {id: cql-prepared-and-bind-markers, name: "CQL syntax details", match: [bind-markers, identifiers-quoting, cql-comments]}
+  - id: ops-compression
+    name: Compression and bloom filters
+    source: "Cassandra docs/Operating/Compression and Bloom filters"
+    match: [sstable-compression, lz4-compressor, zstd-compression]
+    subtopics:
+      - {id: compression-settings, name: "SSTable compression", match: [chunk-length-kb, compression-ratio, zstd]}
+      - {id: bloom-filter-tuning, name: "Bloom filter tuning", match: [bloom-filter-memory, bloom-filter-false-positive, disable-bloom]}
+  - id: ops-caching
+    name: Caches
+    source: "Cassandra docs/Configuration/Caching"
+    match: [row-cache, key-cache, counter-cache]
+    subtopics:
+      - {id: key-and-row-cache, name: "Key cache and row cache", match: [row-cache-size, key-cache-size, caching-options]}
+      - {id: chunk-cache-and-page-cache, name: "Chunk cache and OS cache interplay", match: [chunk-cache-size, buffer-pool, cache-hit-rate]}
+  - id: ops-k8s
+    name: Cassandra on Kubernetes
+    source: "K8ssandra and cass-operator documentation"
+    match: [k8ssandra, cass-operator, statefulset]
+    subtopics:
+      - {id: cass-operator-deployment, name: "Deploying with cass-operator", match: [cass-operator, cassandradatacenter, k8ssandra-operator]}
+      - {id: k8s-upgrades-and-scaling, name: "Scaling and upgrades on Kubernetes", match: [rolling-restart-k8s, scale-datacenter, operator-upgrade]}
+  - id: ops-startup-troubleshoot
+    name: Startup and connectivity troubleshooting
+    source: "Cassandra docs/Troubleshooting"
+    match: [node-wont-start, connection-refused, schema-disagreement]
+    subtopics:
+      - {id: schema-disagreement-fix, name: "Resolving schema disagreement", match: [schema-versions, reset-local-schema, describecluster-mismatch]}
+      - {id: node-fails-to-start, name: "Diagnosing a node that will not start", match: [commitlog-replay-failure, port-in-use, system-log-triage]}
+  - id: model-timeseries
+    name: Time-series and IoT modelling
+    source: "Data modeling patterns"
+    match: [time-series-modeling, iot-data-model, rollup-tables]
+    subtopics:
+      - {id: time-bucketed-tables, name: "Time-bucketed time-series tables", match: [time-bucket, bucket-size, ttl-timeseries]}
+      - {id: rollups-and-downsampling, name: "Rollups and downsampling", match: [rollup-aggregation, downsample, counter-rollups]}
+  - id: ops-analytics
+    name: Analytics with Spark
+    source: "Spark Cassandra Connector documentation"
+    match: [spark-cassandra-connector, analytics-workloads, dc-isolation]
+    subtopics:
+      - {id: spark-connector-usage, name: "Spark Cassandra Connector", match: [spark-connector, dataframe-cassandra, join-with-cassandra-table]}
+      - {id: analytics-datacenter-isolation, name: "Isolating analytics workloads", match: [workload-isolation, analytics-dc, local-one-reads]}
+  - id: ops-transactions-accord
+    name: Newer features
+    source: "Cassandra 5.0 release notes"
+    match: [accord-transactions, guardrails, unified-compaction]
+    subtopics:
+      - {id: guardrails-framework, name: "Guardrails", match: [guardrails, guardrail-thresholds, table-count-limit]}
+      - {id: unified-compaction-strategy, name: "Unified Compaction Strategy", match: [unified-compaction-strategy, ucs, scaling-parameters]}
+  - id: ops-disk
+    name: Disk and data management
+    source: "Cassandra docs/Operating/Hardware"
+    match: [disk-failure-policy, data-directories, tablesnap]
+    subtopics:
+      - {id: disk-failure-handling, name: "Disk failure policy", match: [disk-failure-policy, commit-failure-policy, jbod-failure]}
+      - {id: cleanup-and-disk-space, name: "Reclaiming disk space", match: [disk-space-emergency, garbagecollect-tombstones, snapshot-cleanup]}

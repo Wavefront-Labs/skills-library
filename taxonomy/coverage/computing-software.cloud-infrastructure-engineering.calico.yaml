@@ -1,0 +1,229 @@
+# Coverage spec: calico. Topics from the Calico open source docs (docs.tigera.io/calico/latest).
+subject: calico
+scope:
+  category: computing-software
+  field: cloud-infrastructure-engineering
+  products: [calico]
+sources:
+  - "Calico open source docs (docs.tigera.io/calico/latest)"
+topics:
+  # --- Architecture ---
+  - id: calico-components
+    name: "Components and roles: Felix, BIRD, confd, Typha, CNI plugins, kube-controllers"
+    source: "https://docs.tigera.io/calico/latest/reference/architecture/overview"
+    match: [architecture,felix,bird,confd,typha,kube-controllers,cni-plugin,dikastes]
+  - id: calico-data-path
+    name: "Data path: routes, ARP and no-overlay forwarding"
+    source: "https://docs.tigera.io/calico/latest/reference/architecture/data-path"
+    match: [architecture,data-path,routing,arp,iptables]
+  - id: calico-typha-scaling
+    name: "Typha scaling and configuration"
+    source: "https://docs.tigera.io/calico/latest/reference/typha/overview"
+    match: [typha,scale,datastore,configuration,tls,health]
+  - id: calico-kube-controllers
+    name: "kube-controllers: node, policy and other controllers"
+    source: "https://docs.tigera.io/calico/latest/reference/kube-controllers/configuration"
+    match: [kube-controllers,node-controller,policy-controller,enabled-controllers,environment-variables]
+  # --- Install and platforms ---
+  - id: calico-install-operator
+    name: "Installing with the Tigera Operator and checking tigerastatus"
+    source: "https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart"
+    match: [install,tigera-operator,manifests,tigerastatus,crds,custom-resources]
+  - id: calico-install-helm
+    name: "Installing with the Helm chart and values"
+    source: "https://docs.tigera.io/calico/latest/getting-started/kubernetes/helm"
+    match: [install,helm,tigera-operator,values,kubernetesprovider]
+  - id: calico-managed-eks
+    name: "Installing on EKS"
+    source: "https://docs.tigera.io/calico/latest/getting-started/kubernetes/managed-public-cloud/eks"
+    match: [eks,aws,aws-node,vpc-cni,installation,eksctl]
+  - id: calico-managed-aks
+    name: "Installing on AKS"
+    source: "https://docs.tigera.io/calico/latest/getting-started/kubernetes/managed-public-cloud/aks"
+    match: [aks,azure,azure-cni,azure-managed,self-managed]
+  - id: calico-calicoctl
+    name: "Installing calicoctl and connecting to the datastore"
+    source: "https://docs.tigera.io/calico/latest/operations/calicoctl/install"
+    match: [calicoctl,install,kubeconfig,datastore,calicoapiconfig]
+  - id: calico-api-server
+    name: "Calico API server and managing resources with kubectl"
+    source: "https://docs.tigera.io/calico/latest/operations/install-apiserver"
+    match: [apiserver,kubectl,aggregation-api,v3-api]
+  - id: calico-native-v3-crds
+    name: "Native v3 CRDs versus the aggregation API server"
+    source: "https://docs.tigera.io/calico/latest/operations/native-v3-crds"
+    match: [native-crds,v3,crd,gitops,admission-policy]
+  # --- Data planes ---
+  - id: calico-ebpf-enable
+    name: "Enabling the eBPF data plane and its requirements"
+    source: "https://docs.tigera.io/calico/latest/operations/ebpf/enabling-ebpf"
+    match: [ebpf,dataplane,bpf,kernel,vxlan,kube-proxy]
+  - id: calico-ebpf-api-server-kube-proxy
+    name: "eBPF: API server ConfigMap and kube-proxy hand-off"
+    source: "https://docs.tigera.io/calico/latest/operations/ebpf/enabling-ebpf"
+    match: [ebpf,kube-proxy,configmap,kubernetes-services-endpoint,api-server]
+  - id: calico-ebpf-dsr-netkit
+    name: "eBPF: direct server return, netkit and attach types"
+    source: "https://docs.tigera.io/calico/latest/operations/ebpf/enabling-ebpf"
+    match: [ebpf,dsr,netkit,bpfattachtype,tcx]
+  - id: calico-ebpf-troubleshoot
+    name: "Troubleshooting the eBPF data plane"
+    source: "https://docs.tigera.io/calico/latest/operations/ebpf/troubleshoot-ebpf"
+    match: [ebpf,troubleshooting,bpf-counters,policy-dump,tracelog]
+  - id: calico-nftables
+    name: "nftables data plane"
+    source: "https://docs.tigera.io/calico/latest/getting-started/kubernetes/nftables"
+    match: [nftables,dataplane,kube-proxy,linuxdataplane]
+  - id: calico-vpp
+    name: "VPP data plane"
+    source: "https://docs.tigera.io/calico/latest/getting-started/kubernetes/vpp/getting-started"
+    match: [vpp,dataplane,dpdk,hugepages,calico-vpp-config]
+  - id: calico-ipvs
+    name: "IPVS kube-proxy mode"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/use-ipvs"
+    match: [ipvs,kube-proxy,nodeport,iptablesmarkmask,kubenodeportrange]
+  # --- IPAM ---
+  - id: calico-ippools
+    name: "Multiple IP pools and who owns them"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/ippools"
+    match: [ipam,ip-pools,installation,nodeselector,no-default-pools]
+  - id: calico-ipam-block-size
+    name: "Changing the pool block size"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/change-block-size"
+    match: [ipam,blocksize,temporary-pool,migration]
+  - id: calico-ipam-migrate-pools
+    name: "Migrating between IP pools"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/migrate-pools"
+    match: [ipam,ip-pools,migration,cluster-cidr,disable-pool]
+  - id: calico-ipam-topology
+    name: "Topology-based IP pools"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/assign-ip-addresses-topology"
+    match: [ipam,topology,nodeselector,rack,zone]
+  - id: calico-ipam-static
+    name: "Static pod IPs and IP reservations"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/use-specific-ip"
+    match: [ipam,static-ip,annotation,ipreservation,allowed-uses]
+  - id: calico-ip-autodetection
+    name: "Node IP autodetection methods"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/ip-autodetection"
+    match: [ipam,autodetection,node-address,can-reach,cidrs]
+  - id: calico-ipv6-dual-stack
+    name: "IPv6 only and dual stack"
+    source: "https://docs.tigera.io/calico/latest/networking/ipam/ipv6"
+    match: [ipv6,dual-stack,ippool,calico-ipam,router-id]
+  # --- Encapsulation, encryption and BGP ---
+  - id: calico-overlay-modes
+    name: "IP-in-IP and VXLAN pool modes"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/vxlan-ipip"
+    match: [encapsulation,ipip,vxlan,crosssubnet,overlay]
+  - id: calico-mtu
+    name: "MTU sizing for overlays and WireGuard"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/mtu"
+    match: [mtu,veth,tunnel,fragmentation]
+  - id: calico-wireguard
+    name: "WireGuard encryption of pod traffic"
+    source: "https://docs.tigera.io/calico/latest/network-policy/encrypt-cluster-pod-traffic"
+    match: [wireguard,encryption,wireguardenabled,pod-traffic]
+  - id: calico-bgp-peers
+    name: "BGP peers, AS numbers and per-node peering"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/bgp"
+    match: [bgp,bgppeer,peering,asnumber,top-of-rack]
+  - id: calico-bgp-route-reflectors
+    name: "BGP route reflectors and disabling the node mesh"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/bgp"
+    match: [bgp,route-reflector,node-to-node-mesh,cluster-id]
+  - id: calico-bgp-filters
+    name: "BGP import and export filters"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/bgp"
+    match: [bgp,bgpfilter,import,export,route-filtering]
+  - id: calico-bgp-configuration
+    name: "BGPConfiguration resource fields"
+    source: "https://docs.tigera.io/calico/latest/reference/resources/bgpconfig"
+    match: [bgpconfiguration,communities,prefixadvertisements,listenport,meshpassword]
+  - id: calico-bgp-service-advertisement
+    name: "Advertising service cluster and external IPs"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/advertise-service-ips"
+    match: [bgp,services,cluster-ip,external-ip,ecmp]
+  - id: calico-qos
+    name: "QoS: bandwidth, packet rate, connections and DSCP"
+    source: "https://docs.tigera.io/calico/latest/networking/configuring/qos-controls"
+    match: [qos,bandwidth,packet-rate,max-connections,dscp]
+  # --- Network policy ---
+  - id: calico-policy-spec
+    name: "NetworkPolicy resource: order, types and selectors"
+    source: "https://docs.tigera.io/calico/latest/reference/resources/networkpolicy"
+    match: [network-policy,networkpolicy,order,types,selector,performancehints]
+  - id: calico-default-deny
+    name: "Default deny patterns"
+    source: "https://docs.tigera.io/calico/latest/network-policy/get-started/kubernetes-default-deny"
+    match: [network-policy,default-deny,globalnetworkpolicy,kube-dns]
+  - id: calico-policy-rules
+    name: "Policy rules for services, namespaces and external networks"
+    source: "https://docs.tigera.io/calico/latest/network-policy/policy-rules/service-policy"
+    match: [network-policy,services,namespaceselector,networkset,globalnetworkset]
+  - id: calico-policy-tiers
+    name: "Policy tiers: order, pass and default actions"
+    source: "https://docs.tigera.io/calico/latest/network-policy/policy-tiers/tiered-policy"
+    match: [tiers,order,pass,defaultaction,kube-admin,kube-baseline]
+  - id: calico-tier-rbac
+    name: "RBAC for tiered policy"
+    source: "https://docs.tigera.io/calico/latest/network-policy/policy-tiers/rbac-tiered-policies"
+    match: [rbac,tiers,clusterrole,tier-networkpolicies,authorization]
+  - id: calico-staged-policy
+    name: "Staged network policy"
+    source: "https://docs.tigera.io/calico/latest/network-policy/staged-network-policies"
+    match: [staged,stagednetworkpolicy,stagedglobalnetworkpolicy,preview,policies-pending]
+  # --- Host protection ---
+  - id: calico-host-endpoints
+    name: "Host endpoints and protecting hosts and VMs"
+    source: "https://docs.tigera.io/calico/latest/network-policy/hosts/protect-hosts"
+    match: [host-endpoint,host-protection,defaultendpointtohostaction,vm]
+  - id: calico-host-endpoint-automation
+    name: "Automatic and templated host endpoints for nodes"
+    source: "https://docs.tigera.io/calico/latest/network-policy/hosts/kubernetes-nodes"
+    match: [host-endpoint,kubecontrollersconfiguration,auto-hep,templates]
+  - id: calico-failsafe-rules
+    name: "Failsafe rules"
+    source: "https://docs.tigera.io/calico/latest/reference/host-endpoints/failsafe"
+    match: [failsafe,failsafeinboundhostports,failsafeoutboundhostports]
+  - id: calico-pre-dnat
+    name: "Pre-DNAT policy for NodePorts"
+    source: "https://docs.tigera.io/calico/latest/reference/host-endpoints/pre-dnat"
+    match: [pre-dnat,nodeport,ingress-only]
+  - id: calico-dos-conntrack
+    name: "DoS deny lists and doNotTrack for high-connection workloads"
+    source: "https://docs.tigera.io/calico/latest/network-policy/extreme-traffic/defend-dos-attack"
+    match: [dos,xdp,donottrack,applyonforward,conntrack]
+  # --- Observability, operations and upgrades ---
+  - id: calico-metrics
+    name: "Prometheus metrics for Felix, Typha and kube-controllers"
+    source: "https://docs.tigera.io/calico/latest/operations/monitor/monitor-component-metrics"
+    match: [prometheus,metrics,felix,typha,kube-controllers,monitoring]
+  - id: calico-metric-reference
+    name: "Felix and kube-controllers metric families"
+    source: "https://docs.tigera.io/calico/latest/reference/felix/prometheus"
+    match: [metrics,calculation-graph,cluster-metrics,ipam-allocations,garbage-collection]
+  - id: calico-metrics-security
+    name: "Restricting access to Prometheus endpoints"
+    source: "https://docs.tigera.io/calico/latest/network-policy/comms/secure-metrics"
+    match: [prometheus,metrics,host-endpoint,deny-list,port-9091]
+  - id: calico-flow-logs
+    name: "Whisker, Goldmane and flow logs"
+    source: "https://docs.tigera.io/calico/latest/observability/enable-whisker"
+    match: [whisker,goldmane,flow-logs,observability,grpc,reporter]
+  - id: calico-troubleshooting
+    name: "Troubleshooting commands and component logs"
+    source: "https://docs.tigera.io/calico/latest/operations/troubleshoot/commands"
+    match: [troubleshooting,kubectl,tigerastatus,diags,logs,log-level]
+  - id: calico-upgrade
+    name: "Upgrading Calico on Kubernetes"
+    source: "https://docs.tigera.io/calico/latest/operations/upgrading/kubernetes-upgrade"
+    match: [upgrade,operator,helm,manifest,crds,ownerreferences]
+  - id: calico-decommission-node
+    name: "Decommissioning a node"
+    source: "https://docs.tigera.io/calico/latest/operations/decommissioning-a-node"
+    match: [node,decommission,cleanup,node-controller]
+  - id: calico-certificate-management
+    name: "Certificate management via Kubernetes CSRs"
+    source: "https://docs.tigera.io/calico/latest/operations/certificate-management"
+    match: [certificates,certificatemanagement,csr,signername,tls]

@@ -1,0 +1,366 @@
+# Canonical coverage spec: shell scripting language (POSIX sh and GNU bash).
+# Topics come from external structures: POSIX.1 Shell Command Language (XCU chapter 2) and Shell and Utilities,
+# the GNU Bash Reference Manual table of contents (shell syntax, commands, functions, parameters, expansions,
+# redirections, executing commands, scripts, builtins, shell variables, job control, interactive features),
+# and the ShellCheck rule catalogue categories.
+# A topic is covered by a skill tag equal to a match keyword.
+subject: shell-scripting-language
+scope:
+  category: computing-software
+  field: systems-network-administration
+  products: [bash]
+sources:
+  - "POSIX.1-2024 Shell Command Language (pubs.opengroup.org/onlinepubs/9799919799)"
+  - "GNU Bash Reference Manual (gnu.org/software/bash/manual)"
+  - "ShellCheck wiki rule catalogue (shellcheck.net)"
+topics:
+  - id: sh-quoting
+    name: "Quoting and word splitting"
+    source: "Bash manual 3.1.2 quoting; POSIX 2.2"
+    match: [sh-quoting]
+    subtopics:
+      - {id: sh-quoting-ansi-c-quoting, name: ANSI-C quoting with dollar-single-quote, match: [ansi-c-quoting]}
+      - {id: sh-quoting-line-continuation, name: Backslash line continuation, match: [line-continuation]}
+  - id: sh-lists
+    name: "Pipelines lists and exit status"
+    source: "Bash manual 3.2 shell commands; POSIX 2.9"
+    match: [sh-command-lists]
+    subtopics:
+      - {id: sh-lists-command-grouping, name: Brace groups versus subshell parentheses, match: [command-grouping]}
+      - {id: sh-lists-time-pipeline, name: Timing pipelines with the time keyword, match: [time-pipeline]}
+  - id: sh-loops
+    name: "Loops"
+    source: "Bash manual 3.2.5.1 looping constructs"
+    match: [for-loop]
+    subtopics:
+      - {id: sh-loops-break-levels, name: Breaking out of nested loops, match: [break-levels]}
+      - {id: sh-loops-while-read-null, name: Looping over null-delimited input, match: [while-read-null]}
+  - id: sh-conditionals
+    name: "Conditionals test and double brackets"
+    source: "Bash manual 3.2.5.2 and 6.4 conditional expressions"
+    match: [double-bracket]
+    subtopics:
+      - {id: sh-conditionals-dparen-arithmetic-test, name: Arithmetic tests with double parentheses, match: [dparen-arithmetic-test]}
+      - {id: sh-conditionals-test-n-z-operators, name: String emptiness tests with -n and -z, match: [test-n-z-operators]}
+  - id: sh-case
+    name: "Case statements and select"
+    source: "Bash manual 3.2.5.2 case and select"
+    match: [case-statement]
+    subtopics:
+      - {id: sh-case-case-semicolon-ampersand, name: Case terminators semicolon-ampersand and double-semicolon-ampersand, match: [case-semicolon-ampersand]}
+      - {id: sh-case-case-extglob-patterns, name: Extended glob patterns in case, match: [case-extglob-patterns]}
+  - id: sh-functions
+    name: "Shell functions and local scope"
+    source: "Bash manual 3.3 shell functions"
+    match: [bash-functions]
+    subtopics:
+      - {id: sh-functions-recursive-functions, name: Recursive shell functions, match: [recursive-functions]}
+      - {id: sh-functions-command-builtin-bypass, name: Wrapping builtins with command and builtin, match: [command-builtin-bypass]}
+  - id: sh-parameters
+    name: "Parameter expansion"
+    source: "Bash manual 3.5.3 shell parameter expansion"
+    match: [parameter-expansion]
+    subtopics:
+      - {id: sh-parameters-trim-prefix-suffix, name: Removing prefixes and suffixes, match: [trim-prefix-suffix]}
+      - {id: sh-parameters-parameter-length, name: String and array length expansion, match: [parameter-length]}
+  - id: sh-special-params
+    name: "Positional and special parameters"
+    source: "Bash manual 3.4 shell parameters"
+    match: [sh-special-parameters]
+    subtopics:
+      - {id: sh-special-params-last-argument-underscore, name: Last argument and dollar-underscore, match: [last-argument-underscore]}
+      - {id: sh-special-params-pid-and-bang-parameters, name: PID parameters dollar-dollar and dollar-bang, match: [pid-and-bang-parameters]}
+  - id: sh-command-subst
+    name: "Command and process substitution"
+    source: "Bash manual 3.5.4 and 3.5.6"
+    match: [sh-command-substitution]
+    subtopics:
+      - {id: sh-command-subst-trailing-newline-stripping, name: Trailing newline removal in substitution, match: [trailing-newline-stripping]}
+      - {id: sh-command-subst-nested-command-substitution, name: Nesting command substitution, match: [nested-command-substitution]}
+  - id: sh-arithmetic
+    name: "Arithmetic expansion"
+    source: "Bash manual 3.5.5 and 6.5 shell arithmetic"
+    match: [arithmetic-expansion]
+    subtopics:
+      - {id: sh-arithmetic-base-n-constants, name: Numeric bases and leading-zero octal traps, match: [base-n-constants]}
+      - {id: sh-arithmetic-integer-overflow-64bit, name: 64-bit integer wraparound, match: [integer-overflow-64bit]}
+  - id: sh-globbing
+    name: "Brace expansion and pathname globbing"
+    source: "Bash manual 3.5.1 and 3.5.8"
+    match: [globbing]
+    subtopics:
+      - {id: sh-globbing-glob-no-match-literal, name: Unmatched glob passed literally, match: [glob-no-match-literal]}
+      - {id: sh-globbing-brace-sequence-expansion, name: Brace sequences and zero padding, match: [brace-sequence-expansion]}
+  - id: sh-redirection
+    name: "Redirections and file descriptors"
+    source: "Bash manual 3.6 redirections; POSIX 2.7"
+    match: [redirection]
+    subtopics:
+      - {id: sh-redirection-redirect-both-streams, name: Redirecting stdout and stderr together, match: [redirect-both-streams]}
+      - {id: sh-redirection-fd-duplication-swap, name: Duplicating and swapping file descriptors, match: [fd-duplication-swap]}
+  - id: sh-heredoc
+    name: "Here documents and here strings"
+    source: "Bash manual 3.6.6 and 3.6.7"
+    match: [sh-heredoc]
+    subtopics:
+      - {id: sh-heredoc-heredoc-to-ssh, name: Here documents sent to ssh, match: [heredoc-to-ssh]}
+      - {id: sh-heredoc-heredoc-generate-config, name: Generating config files from here documents, match: [heredoc-generate-config]}
+  - id: sh-arrays
+    name: "Indexed and associative arrays"
+    source: "Bash manual 6.7 arrays"
+    match: [bash-arrays]
+    subtopics:
+      - {id: sh-arrays-array-slicing, name: Array slicing and appending, match: [array-slicing]}
+      - {id: sh-arrays-associative-array-keys, name: Associative array keys and iteration, match: [associative-array-keys]}
+  - id: sh-errexit
+    name: "Error handling with set -e and pipefail"
+    source: "Bash manual 4.3.1 the set builtin"
+    match: [errexit]
+    subtopics:
+      - {id: sh-errexit-errexit-exceptions, name: Contexts where set -e is ignored, match: [errexit-exceptions]}
+      - {id: sh-errexit-set-u-nounset, name: Unset variable errors with set -u, match: [set-u-nounset]}
+  - id: sh-traps
+    name: "Traps signals and cleanup"
+    source: "Bash manual 3.7.6 signals; trap builtin"
+    match: [sh-trap]
+    subtopics:
+      - {id: sh-traps-trap-debug-return, name: DEBUG and RETURN traps, match: [trap-debug-return]}
+      - {id: sh-traps-trap-reset-and-list, name: Listing and resetting traps, match: [trap-reset-and-list]}
+  - id: sh-read
+    name: "read and mapfile"
+    source: "Bash manual 4.2 bash builtins"
+    match: [sh-read-builtin]
+    subtopics:
+      - {id: sh-read-read-timeout-prompt, name: read with -t timeout and -p prompt, match: [read-timeout-prompt]}
+      - {id: sh-read-read-silent-password, name: Silent input with read -s, match: [read-silent-password]}
+  - id: sh-getopts
+    name: "Argument parsing with getopts"
+    source: "Bash manual 4.1 getopts; POSIX utility conventions"
+    match: [getopts]
+    subtopics:
+      - {id: sh-getopts-getopts-optstring-silent, name: getopts silent error mode and OPTIND, match: [getopts-optstring-silent]}
+      - {id: sh-getopts-getopt-gnu-long-options, name: GNU getopt for long options, match: [getopt-gnu-long-options]}
+  - id: sh-options
+    name: "set and shopt options"
+    source: "Bash manual 4.3 set and shopt builtins"
+    match: [shopt]
+    subtopics:
+      - {id: sh-options-set-minus-o-list, name: Listing set -o options, match: [set-minus-o-list]}
+      - {id: sh-options-shopt-lastpipe, name: shopt lastpipe and pipeline variable scope, match: [shopt-lastpipe]}
+  - id: sh-startup
+    name: "Startup files and login shells"
+    source: "Bash manual 6.2 bash startup files"
+    match: [bashrc]
+    subtopics:
+      - {id: sh-startup-invoke-as-sh-mode, name: Bash invoked as sh, match: [invoke-as-sh-mode]}
+      - {id: sh-startup-rcfile-option, name: The --rcfile and --norc options, match: [rcfile-option]}
+  - id: sh-subshell
+    name: "Subshells and environment"
+    source: "Bash manual 3.7.3 command execution environment"
+    match: [subshell]
+    subtopics:
+      - {id: sh-subshell-subshell-variable-loss, name: Variables lost in subshells, match: [subshell-variable-loss]}
+      - {id: sh-subshell-exec-builtin-replace-shell, name: exec replacing the shell process, match: [exec-builtin-replace-shell]}
+  - id: sh-jobs
+    name: "Job control"
+    source: "Bash manual chapter 7 job control"
+    match: [job-control]
+    subtopics:
+      - {id: sh-jobs-disown-builtin, name: disown and job table removal, match: [disown-builtin]}
+      - {id: sh-jobs-nohup-command, name: nohup and surviving hangup, match: [nohup-command]}
+  - id: sh-process-mgmt
+    name: "Background processes kill and wait"
+    source: "Bash manual wait and kill builtins"
+    match: [sh-kill]
+    subtopics:
+      - {id: sh-process-mgmt-wait-for-pid, name: Waiting for specific PIDs, match: [wait-for-pid]}
+      - {id: sh-process-mgmt-kill-process-group, name: Signalling a process group, match: [kill-process-group]}
+  - id: sh-printf
+    name: "printf and output formatting"
+    source: "Bash manual printf builtin; POSIX printf"
+    match: [printf]
+    subtopics:
+      - {id: sh-printf-printf-repeat-char, name: Repeating a character with printf, match: [printf-repeat-char]}
+      - {id: sh-printf-printf-hex-octal, name: Hex octal and char conversion with printf, match: [printf-hex-octal]}
+  - id: sh-posix
+    name: "POSIX sh portability"
+    source: "POSIX Shell Command Language; checkbashisms"
+    match: [posix-sh]
+    subtopics:
+      - {id: sh-posix-dash-local-keyword, name: local in dash and POSIX, match: [dash-local-keyword]}
+      - {id: sh-posix-posix-no-arrays, name: Replacing arrays in POSIX sh, match: [posix-no-arrays]}
+  - id: sh-shellcheck
+    name: "ShellCheck and shfmt"
+    source: "ShellCheck wiki; shfmt documentation"
+    match: [sh-shellcheck]
+    subtopics:
+      - {id: sh-shellcheck-shfmt-formatting, name: Formatting scripts with shfmt, match: [shfmt-formatting]}
+      - {id: sh-shellcheck-shellcheck-sc2086, name: Fixing unquoted variable warning SC2086, match: [shellcheck-sc2086]}
+  - id: sh-debugging
+    name: "Debugging with xtrace"
+    source: "Bash manual set -x and PS4"
+    match: [set-x]
+    subtopics:
+      - {id: sh-debugging-bash-xtracefd, name: Sending xtrace to a separate descriptor, match: [bash-xtracefd]}
+      - {id: sh-debugging-debug-trap-stepping, name: Single-stepping with the DEBUG trap, match: [debug-trap-stepping]}
+  - id: sh-testing
+    name: "Testing shell with bats"
+    source: "bats-core documentation"
+    match: [sh-bats]
+    subtopics:
+      - {id: sh-testing-bats-setup-teardown, name: bats setup and teardown hooks, match: [bats-setup-teardown]}
+      - {id: sh-testing-bats-run-assertions, name: bats run status and output, match: [bats-run-assertions]}
+  - id: sh-tempfiles
+    name: "Temp files and atomic writes"
+    source: "mktemp man page; POSIX mktemp rationale"
+    match: [sh-mktemp]
+    subtopics:
+      - {id: sh-tempfiles-mktemp-template, name: mktemp templates and suffixes, match: [mktemp-template]}
+      - {id: sh-tempfiles-mv-atomic-rename, name: Atomic replace with mv rename, match: [mv-atomic-rename]}
+  - id: sh-locking
+    name: "Locking and single-instance scripts"
+    source: "util-linux flock man page"
+    match: [sh-flock]
+    subtopics:
+      - {id: sh-locking-flock-fd-lock, name: flock on an open descriptor, match: [flock-fd-lock]}
+      - {id: sh-locking-pidfile-stale-detection, name: Pidfiles and stale lock detection, match: [pidfile-stale-detection]}
+  - id: sh-injection
+    name: "eval and command injection"
+    source: "Bash manual eval builtin; OWASP command injection"
+    match: [sh-eval]
+    subtopics:
+      - {id: sh-injection-eval-alternatives-arrays, name: Replacing eval with arrays, match: [eval-alternatives-arrays]}
+      - {id: sh-injection-untrusted-filename-dash-prefix, name: Filenames starting with a dash, match: [untrusted-filename-dash-prefix]}
+  - id: sh-logging
+    name: "Logging and verbosity"
+    source: "logger and journalctl man pages"
+    match: [sh-logging]
+    subtopics:
+      - {id: sh-logging-logger-syslog-facility, name: logger priorities and facilities, match: [logger-syslog-facility]}
+      - {id: sh-logging-tee-log-file-exec, name: Logging all output via exec and tee, match: [tee-log-file-exec]}
+  - id: sh-cron
+    name: "Cron and non-interactive environments"
+    source: "crontab man page; systemd.timer"
+    match: [sh-cron-environment]
+    subtopics:
+      - {id: sh-cron-crontab-env-setup, name: Setting PATH and SHELL in crontab, match: [crontab-env-setup]}
+      - {id: sh-cron-systemd-timer-unit, name: Replacing cron with a systemd timer, match: [systemd-timer-unit]}
+  - id: sh-shebang
+    name: "Shebang line and executable scripts"
+    source: "Bash manual 3.8 shell scripts"
+    match: [sh-shebang]
+    subtopics:
+      - {id: sh-shebang-env-s-shebang-args, name: env -S for shebang arguments, match: [env-s-shebang-args]}
+      - {id: sh-shebang-shebang-posix-sh-dash, name: Choosing bin-sh versus bash shebang, match: [shebang-posix-sh-dash]}
+  - id: sh-paths
+    name: "Script directory and path handling"
+    source: "Bash manual BASH_SOURCE; coreutils realpath"
+    match: [sh-script-dir]
+    subtopics:
+      - {id: sh-paths-bash-source-dirname, name: BASH_SOURCE for the script directory, match: [bash-source-dirname]}
+      - {id: sh-paths-readlink-f-portable, name: Portable readlink -f replacement, match: [readlink-f-portable]}
+  - id: sh-performance
+    name: "Performance and avoiding forks"
+    source: "Bash manual builtins versus external commands"
+    match: [sh-performance]
+    subtopics:
+      - {id: sh-performance-avoid-useless-cat, name: Avoiding useless cat and extra pipes, match: [avoid-useless-cat]}
+      - {id: sh-performance-builtin-string-ops-vs-sed, name: Builtin string operations instead of sed, match: [builtin-string-ops-vs-sed]}
+  - id: sh-idempotent
+    name: "Idempotent and safe automation"
+    source: "ShellCheck destructive-command rules; coreutils"
+    match: [sh-idempotent-scripts]
+    subtopics:
+      - {id: sh-idempotent-mkdir-p-ln-sf-idempotent, name: Re-runnable mkdir and ln, match: [mkdir-p-ln-sf-idempotent]}
+      - {id: sh-idempotent-grep-q-before-append, name: Append a line only if absent, match: [grep-q-before-append]}
+  - id: sh-jq
+    name: "JSON handling with jq"
+    source: "jq manual"
+    match: [sh-jq]
+    subtopics:
+      - {id: sh-jq-jq-select-map, name: jq select and map, match: [jq-select-map]}
+      - {id: sh-jq-jq-to-shell-vars, name: Loading jq output into shell variables, match: [jq-to-shell-vars]}
+  - id: sh-dates
+    name: "Dates and time arithmetic"
+    source: "coreutils date manual"
+    match: [sh-date-command]
+    subtopics:
+      - {id: sh-dates-date-format-strftime, name: date format strings, match: [date-format-strftime]}
+      - {id: sh-dates-date-relative-strings, name: Relative dates like yesterday and next friday, match: [date-relative-strings]}
+  - id: sh-secrets
+    name: "Permissions umask and secrets"
+    source: "POSIX umask; OWASP secrets management"
+    match: [sh-umask]
+    subtopics:
+      - {id: sh-secrets-read-secret-from-file, name: Reading secrets from files not arguments, match: [read-secret-from-file]}
+      - {id: sh-secrets-umask-077-subshell, name: Scoped umask 077 in a subshell, match: [umask-077-subshell]}
+  - id: sh-windows
+    name: "Shell on Windows with Git Bash MSYS2 and WSL"
+    source: "MSYS2 documentation; Git for Windows"
+    match: [sh-git-bash]
+    subtopics:
+      - {id: sh-windows-wsl-interop-paths, name: WSL wslpath and Windows interop, match: [wsl-interop-paths]}
+      - {id: sh-windows-msys-path-conversion-disable, name: Disabling MSYS path conversion, match: [msys-path-conversion-disable]}
+  - id: sh-libraries
+    name: "Functions libraries and sourcing"
+    source: "Bash manual source builtin"
+    match: [sh-source-libraries]
+    subtopics:
+      - {id: sh-libraries-source-relative-path, name: Sourcing a file relative to the script, match: [source-relative-path]}
+      - {id: sh-libraries-library-namespace-prefix, name: Namespacing library functions, match: [library-namespace-prefix]}
+  - id: sh-text
+    name: "Text processing with sed awk and grep"
+    source: "POSIX utilities sed awk grep"
+    match: [text-processing]
+    subtopics:
+      - {id: sh-text-sed-address-ranges, name: sed addresses and ranges, match: [sed-address-ranges]}
+      - {id: sh-text-cut-tr-fields, name: cut and tr for field extraction, match: [cut-tr-fields]}
+  - id: sh-find-xargs
+    name: "find and xargs pipelines"
+    source: "POSIX find and xargs"
+    match: [find-exec]
+    subtopics:
+      - {id: sh-find-xargs-find-regex-maxdepth, name: find -regex and -maxdepth, match: [find-regex-maxdepth]}
+      - {id: sh-find-xargs-find-printf, name: find -printf output formats, match: [find-printf]}
+  - id: sh-regex
+    name: "Regular expression matching in bash"
+    source: "Bash manual conditional constructs"
+    match: [bash-rematch]
+    subtopics:
+      - {id: sh-regex-rematch-greedy-pitfalls, name: Regex greedy matching and portability pitfalls, match: [rematch-greedy-pitfalls]}
+      - {id: sh-regex-regex-variable-quoting, name: Storing a regex in a variable, match: [regex-variable-quoting]}
+  - id: sh-history-readline
+    name: "History and Readline"
+    source: "Bash manual chapters 8 and 9"
+    match: [readline]
+    subtopics:
+      - {id: sh-history-readline-readline-kill-ring-shortcuts, name: Readline kill ring and editing shortcuts, match: [readline-kill-ring-shortcuts]}
+      - {id: sh-history-readline-history-expansion-modifiers, name: History expansion word designators and modifiers, match: [history-expansion-modifiers]}
+  - id: sh-prompt
+    name: "Prompt customisation"
+    source: "Bash manual 6.9 controlling the prompt"
+    match: [ps1]
+    subtopics:
+      - {id: sh-prompt-prompt-ansi-wrapping, name: Wrapping colour codes in prompt escapes, match: [prompt-ansi-wrapping]}
+      - {id: sh-prompt-prompt-trim-dirtrim, name: PROMPT_DIRTRIM for long paths, match: [prompt-trim-dirtrim]}
+  - id: sh-attributes
+    name: "declare readonly and variable attributes"
+    source: "Bash manual declare builtin"
+    match: [declare-builtin]
+    subtopics:
+      - {id: sh-attributes-declare-f-listing, name: Listing function definitions with declare -f, match: [declare-f-listing]}
+      - {id: sh-attributes-declare-case-attributes, name: declare -u and -l case attributes, match: [declare-case-attributes]}
+  - id: sh-case-mod
+    name: "Case modification and transformations"
+    source: "Bash manual 3.5.3 parameter transformation"
+    match: [parameter-transformation]
+    subtopics:
+      - {id: sh-case-mod-uppercase-first-letter, name: Capitalising the first letter, match: [uppercase-first-letter]}
+      - {id: sh-case-mod-parameter-at-a-operator, name: The at-a and at-A transformations, match: [parameter-at-a-operator]}
+  - id: sh-coproc
+    name: "Coprocesses and named pipes"
+    source: "Bash manual 3.2.6 coprocesses; mkfifo"
+    match: [coproc]
+    subtopics:
+      - {id: sh-coproc-named-coproc-fd, name: Named coprocesses and descriptors, match: [named-coproc-fd]}
+      - {id: sh-coproc-fifo-pipeline-bidirectional, name: Two-way communication with fifos, match: [fifo-pipeline-bidirectional]}

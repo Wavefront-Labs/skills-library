@@ -1,0 +1,269 @@
+# Canonical coverage spec: Go language and toolchain.
+# Topics and subtopics come from the external sources listed below, not from existing skills.
+subject: go-language
+scope:
+  category: computing-software
+  field: software-engineering
+  products: [go]
+sources:
+  - "The Go Programming Language Specification (go.dev/ref/spec)"
+  - "Effective Go and Go Code Review Comments (go.dev/doc/effective_go, go.dev/wiki/CodeReviewComments)"
+  - "Go Modules Reference and go command documentation (go.dev/ref/mod, pkg.go.dev/cmd/go)"
+  - "Go blog articles (go.dev/blog) on errors, context, generics, pipelines, fuzzing, slog, PGO, iterators"
+  - "Go standard library package docs (pkg.go.dev/std): net/http, encoding/json, database/sql, log/slog, testing, sync, runtime/pprof"
+  - "Go diagnostics, GC guide and memory model (go.dev/doc/diagnostics, go.dev/doc/gc-guide, go.dev/ref/mem)"
+topics:
+  - id: go-types-values
+    name: "Types, constants and zero values"
+    source: "Go spec: Constants, Types, Properties of types and values"
+    match: [go-types-values]
+    subtopics:
+      - {id: go-iota-constants, name: "Typed and untyped constants and iota", match: [go-iota-constants]}
+      - {id: go-numeric-conversion-overflow, name: "Numeric conversions and integer overflow", match: [go-numeric-overflow]}
+      - {id: go-comparable-types, name: "Comparable types and map keys", match: [go-comparable-types]}
+  - id: go-composite-types
+    name: "Arrays, slices, maps and structs"
+    source: "Go spec: Array, Slice, Struct and Map types; Go blog slices-intro"
+    match: [go-composite-types]
+    subtopics:
+      - {id: go-slice-aliasing-append, name: "Slice aliasing, capacity and append", match: [go-slice-aliasing]}
+      - {id: go-map-iteration-order, name: "Map iteration order, deletion and concurrent access", match: [go-map-semantics]}
+      - {id: go-slices-maps-packages, name: "The slices and maps standard packages", match: [go-slices-maps-pkg]}
+  - id: go-strings-text
+    name: "Strings, runes and text processing"
+    source: "Go blog strings; strings, bytes, unicode/utf8, regexp, strconv package docs"
+    match: [go-strings-text]
+    subtopics:
+      - {id: go-strings-builder, name: "strings.Builder and bytes.Buffer", match: [go-strings-builder]}
+      - {id: go-strconv-parsing, name: "strconv parsing and formatting with errors", match: [go-strconv-parsing]}
+  - id: go-functions-methods
+    name: "Functions, methods and closures"
+    source: "Go spec: Function declarations, Method declarations, Function literals"
+    match: [go-functions-methods]
+    subtopics:
+      - {id: go-variadic-functions, name: "Variadic functions and argument spreading", match: [go-variadic-functions]}
+      - {id: go-method-values-expressions, name: "Method values and method expressions", match: [go-method-values]}
+      - {id: go-functional-options, name: "Functional options pattern", match: [go-functional-options]}
+  - id: go-interfaces
+    name: "Interfaces and type assertions"
+    source: "Go spec: Interface types, Type assertions; Go FAQ nil error"
+    match: [go-interfaces]
+    subtopics:
+      - {id: go-nil-interface-trap, name: "Nil interface versus nil pointer inside an interface", match: [go-nil-interface-trap]}
+      - {id: go-interface-embedding-satisfaction, name: "Interface embedding and compile-time satisfaction checks", match: [go-interface-satisfaction]}
+      - {id: go-accept-interfaces-return-structs, name: "Accept interfaces, return structs and small interfaces", match: [go-accept-interfaces]}
+  - id: go-generics
+    name: "Generics"
+    source: "Go spec: Type parameters; Go blog generics; Type Parameters Proposal"
+    match: [go-generics]
+    subtopics:
+      - {id: go-type-constraints-cmp, name: "Constraints, comparable and the cmp package", match: [go-type-constraints]}
+      - {id: go-generic-data-structures, name: "Generic data structures and when not to use generics", match: [go-generic-structures]}
+      - {id: go-type-inference-limits, name: "Type inference rules and limitations", match: [go-type-inference]}
+  - id: go-errors
+    name: "Error handling"
+    source: "Go blog error-handling-and-go, go1.13-errors; errors package docs"
+    match: [go-errors]
+    subtopics:
+      - {id: go-errors-is-as-wrapping, name: "Wrapping with %w, errors.Is and errors.As", match: [go-errors-wrapping]}
+      - {id: go-sentinel-and-typed-errors, name: "Sentinel errors versus typed errors", match: [go-sentinel-errors]}
+      - {id: go-errors-join, name: "Joining multiple errors with errors.Join", match: [go-errors-join]}
+      - {id: go-panic-recover, name: "panic, recover and when each is appropriate", match: [go-panic-recover]}
+  - id: go-defer-control
+    name: "Control flow and defer"
+    source: "Go spec: Statements, Defer statements, Goto, Labeled statements"
+    match: [go-defer-control]
+    subtopics:
+      - {id: go-defer-evaluation-order, name: "defer argument evaluation and ordering", match: [go-defer-order]}
+      - {id: go-switch-fallthrough, name: "switch, fallthrough and type switch forms", match: [go-switch-forms]}
+  - id: go-concurrency-basics
+    name: "Goroutines and channels"
+    source: "Go spec: Go statements, Channel types, Select statements; Go blog concurrency-patterns"
+    match: [go-concurrency-basics]
+    subtopics:
+      - {id: go-channel-axioms, name: "Channel axioms: nil, closed and buffered behaviour", match: [go-channel-axioms]}
+      - {id: go-goroutine-leaks, name: "Goroutine leaks and how to detect them", match: [go-goroutine-leaks]}
+      - {id: go-worker-pools, name: "Worker pools and bounded concurrency", match: [go-worker-pools]}
+      - {id: go-errgroup, name: "errgroup for grouped goroutines with cancellation", match: [go-errgroup]}
+  - id: go-sync-memory
+    name: "Synchronisation and the memory model"
+    source: "Go memory model (go.dev/ref/mem); sync and sync/atomic package docs"
+    match: [go-sync-memory]
+    subtopics:
+      - {id: go-happens-before, name: "Happens-before and data races", match: [go-happens-before]}
+      - {id: go-atomic-types, name: "sync/atomic typed values", match: [go-atomic-types]}
+      - {id: go-sync-map-oncefunc, name: "sync.Map, OnceFunc and OnceValue", match: [go-sync-map-once]}
+      - {id: go-race-detector, name: "The race detector in tests and CI", match: [go-race-detector]}
+  - id: go-context
+    name: "context package"
+    source: "Go blog context; context package docs"
+    match: [go-context]
+    subtopics:
+      - {id: go-context-cancellation-propagation, name: "Cancellation propagation and deadlines", match: [go-context-cancellation]}
+      - {id: go-context-values, name: "context values and key types", match: [go-context-values]}
+      - {id: go-context-afterfunc-cause, name: "WithCancelCause, AfterFunc and WithoutCancel", match: [go-context-cause]}
+  - id: go-modules
+    name: "Modules and dependency management"
+    source: "Go Modules Reference (go.dev/ref/mod)"
+    match: [go-modules]
+    subtopics:
+      - {id: go-mvs-minimal-version-selection, name: "Minimal version selection and go.sum", match: [go-mvs]}
+      - {id: go-mod-tidy-graph, name: "go mod tidy, why, graph and verify", match: [go-mod-tidy]}
+      - {id: go-toolchain-directive, name: "go and toolchain directives in go.mod", match: [go-toolchain-directive]}
+      - {id: go-retract-deprecate, name: "retract and deprecate directives", match: [go-retract-deprecate]}
+  - id: go-build-toolchain
+    name: "Build, install and tooling"
+    source: "go command documentation (go build, go install, go env, go generate, go vet)"
+    match: [go-build-toolchain]
+    subtopics:
+      - {id: go-build-cache-flags, name: "Build cache, -trimpath and reproducible builds", match: [go-reproducible-builds]}
+      - {id: go-cgo, name: "cgo basics, costs and pitfalls", match: [go-cgo]}
+      - {id: go-go-install-tools, name: "go install and the tools directive", match: [go-install-tools]}
+  - id: go-testing
+    name: "Testing"
+    source: "testing package docs; go test flags; Go blog subtests, fuzz"
+    match: [go-testing]
+    subtopics:
+      - {id: go-subtests-parallel, name: "Subtests and t.Parallel", match: [go-subtests]}
+      - {id: go-fuzzing, name: "Native fuzzing with go test -fuzz", match: [go-fuzzing]}
+      - {id: go-golden-files, name: "Golden files and testdata", match: [go-golden-files]}
+      - {id: go-httptest, name: "net/http/httptest servers and recorders", match: [go-httptest]}
+  - id: go-benchmarks-profiling
+    name: "Benchmarks and profiling"
+    source: "testing.B docs; runtime/pprof; Go diagnostics"
+    match: [go-benchmarks-profiling]
+    subtopics:
+      - {id: go-benchmark-benchstat, name: "Benchmarks with b.Loop and benchstat", match: [go-benchstat]}
+      - {id: go-pprof-cpu-heap, name: "CPU and heap profiles with pprof", match: [go-pprof]}
+      - {id: go-flight-recorder-trace, name: "Execution tracer and flight recording", match: [go-flight-recorder]}
+  - id: go-runtime-gc
+    name: "Runtime, scheduler and garbage collector"
+    source: "A Guide to the Go Garbage Collector; runtime package docs"
+    match: [go-runtime-gc]
+    subtopics:
+      - {id: go-gmp-scheduler, name: "The G-M-P scheduler and GOMAXPROCS in containers", match: [go-gomaxprocs]}
+      - {id: go-memory-limit-oom, name: "GOMEMLIMIT and diagnosing OOM kills", match: [go-gomemlimit]}
+      - {id: go-runtime-metrics, name: "runtime/metrics and MemStats", match: [go-runtime-metrics]}
+      - {id: go-finalizers-cleanup, name: "Finalizers, runtime.AddCleanup and weak pointers", match: [go-addcleanup]}
+  - id: go-unsafe-reflect
+    name: "reflect and unsafe"
+    source: "reflect and unsafe package docs; Go blog laws-of-reflection"
+    match: [go-unsafe-reflect]
+    subtopics:
+      - {id: go-reflect-basics, name: "reflect Type, Value and settability", match: [go-reflect-basics]}
+      - {id: go-unsafe-pointer-rules, name: "unsafe.Pointer valid patterns", match: [go-unsafe-pointer]}
+      - {id: go-unsafe-string-slice, name: "unsafe.String and unsafe.Slice zero-copy conversions", match: [go-unsafe-string]}
+  - id: go-io-files
+    name: "I/O, files and the filesystem"
+    source: "io, io/fs, os, bufio, path/filepath package docs"
+    match: [go-io-files]
+    subtopics:
+      - {id: go-bufio-scanner, name: "bufio.Scanner limits and Reader usage", match: [go-bufio-scanner]}
+      - {id: go-io-fs-abstraction, name: "io/fs and fstest.MapFS", match: [go-io-fs]}
+      - {id: go-atomic-file-writes, name: "Atomic file writes with temp file and rename", match: [go-atomic-file-write]}
+  - id: go-encoding
+    name: "Encoding and serialisation"
+    source: "encoding/json, encoding/xml, encoding/gob, encoding/csv, encoding/binary package docs"
+    match: [go-encoding]
+    subtopics:
+      - {id: go-json-custom-marshalers, name: "Custom MarshalJSON and UnmarshalJSON", match: [go-json-marshalers]}
+      - {id: go-json-streaming-decoder, name: "Streaming json.Decoder and unknown fields", match: [go-json-decoder]}
+  - id: go-http-server
+    name: "net/http servers"
+    source: "net/http package docs; Go blog routing-enhancements"
+    match: [go-http-server]
+    subtopics:
+      - {id: go-http-middleware-chain, name: "Middleware chaining and ResponseWriter wrapping", match: [go-http-middleware]}
+      - {id: go-http-request-limits, name: "Request body limits and header timeouts", match: [go-http-limits]}
+  - id: go-http-client
+    name: "net/http clients and networking"
+    source: "net/http, net, net/url package docs"
+    match: [go-http-client]
+    subtopics:
+      - {id: go-http-retries-backoff, name: "Retries with backoff and idempotency", match: [go-http-retries]}
+      - {id: go-http-connection-reuse, name: "Connection reuse and draining response bodies", match: [go-http-body-drain]}
+      - {id: go-url-parsing, name: "net/url parsing and safe construction", match: [go-url-parsing]}
+  - id: go-database
+    name: "Databases with database/sql"
+    source: "database/sql package docs; go.dev/doc/database"
+    match: [go-database]
+    subtopics:
+      - {id: go-sql-null-handling, name: "NULL handling with sql.Null types", match: [go-sql-null]}
+      - {id: go-sql-prepared-statements, name: "Prepared statements and context-aware queries", match: [go-sql-prepared]}
+      - {id: go-pgx-driver, name: "pgx native driver and pooling", match: [go-pgx]}
+  - id: go-logging-observability
+    name: "Logging, metrics and tracing"
+    source: "log/slog package docs; OpenTelemetry Go docs; expvar"
+    match: [go-logging-observability]
+    subtopics:
+      - {id: go-slog-handlers-attrs, name: "slog handlers, groups and custom attributes", match: [go-slog-handlers]}
+      - {id: go-opentelemetry, name: "OpenTelemetry tracing instrumentation", match: [go-opentelemetry]}
+      - {id: go-prometheus-client, name: "Prometheus client_golang metrics", match: [go-prometheus]}
+  - id: go-templates-embed
+    name: "Templates, embed and code generation"
+    source: "text/template, html/template, embed, go generate docs"
+    match: [go-templates-embed]
+    subtopics:
+      - {id: go-embed-fs, name: "go:embed and embed.FS", match: [go-embed-fs]}
+      - {id: go-template-funcs, name: "Template FuncMap and escaping contexts", match: [go-template-funcs]}
+      - {id: go-stringer-generate, name: "go generate with stringer and mockgen", match: [go-generate-stringer]}
+  - id: go-cli-config
+    name: "Command-line tools and configuration"
+    source: "flag, os, os/signal package docs; cobra and viper docs"
+    match: [go-cli-config]
+    subtopics:
+      - {id: go-flag-package, name: "flag package patterns and subcommands", match: [go-flag-package]}
+      - {id: go-cobra-commands, name: "Cobra command trees and completions", match: [go-cobra]}
+      - {id: go-env-config, name: "Environment-driven configuration and validation", match: [go-env-config]}
+  - id: go-security
+    name: "Security-sensitive programming"
+    source: "crypto/*, math/rand/v2, govulncheck, Go security policy"
+    match: [go-security]
+    subtopics:
+      - {id: go-crypto-rand, name: "crypto/rand versus math/rand/v2", match: [go-crypto-rand]}
+      - {id: go-password-hashing, name: "Password hashing with argon2 and bcrypt", match: [go-password-hashing]}
+      - {id: go-constant-time-compare, name: "Constant-time comparison and HMAC", match: [go-constant-time]}
+      - {id: go-sql-injection-safe, name: "Injection-safe query and command construction", match: [go-injection-safe]}
+  - id: go-iterators
+    name: "Iterators and range-over-func"
+    source: "iter package docs; Go blog range-functions; slices and maps iterator functions"
+    match: [go-iterators]
+    subtopics:
+      - {id: go-iter-composition, name: "Composing iterators with slices.Collect and maps.Keys", match: [go-iter-composition]}
+  - id: go-design-style
+    name: "Design, style and project structure"
+    source: "Effective Go; Go Code Review Comments; Go Proverbs; go.dev/doc/modules/layout"
+    match: [go-design-style]
+    subtopics:
+      - {id: go-package-naming, name: "Package naming and avoiding util packages", match: [go-package-naming]}
+      - {id: go-internal-packages, name: "internal packages and API surface control", match: [go-internal-packages]}
+      - {id: go-dependency-injection, name: "Dependency injection without frameworks", match: [go-dependency-injection]}
+      - {id: go-doc-comments, name: "Doc comments and pkg.go.dev presentation", match: [go-doc-comments]}
+  - id: go-release-ops
+    name: "Release, deployment and supply chain"
+    source: "GoReleaser docs; Go vulnerability management; ko and Docker docs"
+    match: [go-release-ops]
+    subtopics:
+      - {id: go-docker-multistage, name: "Minimal container images for Go binaries", match: [go-docker-multistage]}
+      - {id: go-goreleaser, name: "Releases with GoReleaser", match: [go-goreleaser]}
+      - {id: go-gc-toolchain-upgrade, name: "Upgrading Go versions safely", match: [go-version-upgrade]}
+  - id: go-grpc-rpc
+    name: "RPC and gRPC"
+    source: "grpc.io Go quickstart and basics; connectrpc docs"
+    match: [go-grpc-rpc]
+    subtopics:
+      - {id: go-grpc-interceptors, name: "gRPC interceptors and deadlines", match: [go-grpc-interceptors]}
+      - {id: go-grpc-status-errors, name: "gRPC status codes and error details", match: [go-grpc-status]}
+  - id: go-time-rand
+    name: "Time, randomness and numbers"
+    source: "time, math/rand/v2, math/big, math/bits package docs"
+    match: [go-time-rand]
+    subtopics:
+      - {id: go-time-testing-clock, name: "Injecting clocks for testable time", match: [go-clock-injection]}
+  - id: go-process-system
+    name: "Processes, signals and the OS"
+    source: "os/exec, os/signal, syscall, runtime package docs"
+    match: [go-process-system]
+    subtopics:
+      - {id: go-exec-command-safety, name: "os/exec argument safety and output capture", match: [go-exec-safety]}
+      - {id: go-signal-graceful, name: "Signal handling and graceful shutdown", match: [go-signal-shutdown]}

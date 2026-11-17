@@ -1,0 +1,719 @@
+# Canonical coverage spec: robotics software (ROS 2 ecosystem). Topics from the external sources below.
+subject: robotics-software-ros2
+scope:
+  category: computing-software
+  field: robotics-software
+  products:
+  - ros2-core
+  - ros2-navigation-nav2
+  - moveit-manipulation
+  - robot-simulation-gazebo
+  - robot-perception-slam
+  - robot-control-and-kinematics
+sources:
+- ROS 2 documentation tutorials and concepts (docs.ros.org, Humble and Jazzy)
+- REP index (ros.org/reps)
+- Nav2 documentation (docs.nav2.org)
+- MoveIt 2 documentation (moveit.picknik.ai)
+- Gazebo documentation (gazebosim.org/docs)
+- ros2_control documentation (control.ros.org)
+- 'Siciliano et al., Robotics: Modelling, Planning and Control (kinematics, dynamics, control chapters)'
+topics:
+- id: ros2-distros-environment
+  name: ROS 2 distributions and environment
+  source: 'ROS 2 docs: Installation, Configuring environment'
+  match:
+  - ros2-distros-environment
+  subtopics:
+  - id: ros2-distro-selection
+    name: Choose a ROS 2 distribution (Humble, Jazzy, Rolling) by Ubuntu release
+    match:
+    - ros-distros
+  - id: ros2-environment-setup
+    name: Source the ROS 2 underlay and overlay, set ROS_DOMAIN_ID, and avoid en
+    match:
+    - ros-env-setup
+- id: ros2-nodes
+  name: Nodes and client libraries
+  source: 'ROS 2 tutorials: Writing a simple publisher/subscriber (C++ and Python), Client libraries'
+  match:
+  - ros2-nodes
+  subtopics:
+  - id: rclcpp-node
+    name: 'Write a ROS 2 node in C++ with rclcpp: Node subclass, timers, spin, an'
+    match:
+    - rclcpp-node
+  - id: rclpy-node
+    name: 'Write a ROS 2 node in Python with rclpy: Node subclass, timers, spin, '
+    match:
+    - rclpy-node
+- id: ros2-topics
+  name: Topics and publish/subscribe
+  source: 'ROS 2 tutorials: Understanding topics, Publisher/Subscriber'
+  match:
+  - ros2-topics
+  subtopics:
+  - id: topic-pubsub-code
+    name: Create publishers and subscribers in rclcpp and rclpy with typed messa
+    match:
+    - topic-pubsub
+  - id: topic-cli
+    name: 'Inspect and drive topics with ros2 topic list, info, echo, hz, bw and '
+    match:
+    - topic-cli
+- id: ros2-services
+  name: Services
+  source: 'ROS 2 tutorials: Understanding services, Writing a simple service and client'
+  match:
+  - ros2-services
+  subtopics:
+  - id: service-server-client
+    name: Implement a ROS 2 service server and asynchronous client without block
+    match:
+    - service-server
+  - id: service-cli
+    name: Discover and call services from the command line with ros2 service lis
+    match:
+    - service-cli
+- id: ros2-actions
+  name: Actions
+  source: 'ROS 2 tutorials: Understanding actions, Writing an action server and client'
+  match:
+  - ros2-actions
+  subtopics:
+  - id: action-server-client
+    name: Write an action server and client with goals, feedback, results and ca
+    match:
+    - action-server
+  - id: action-cli
+    name: Use ros2 action list, info, send_goal and type to inspect and test act
+    match:
+    - action-cli
+- id: ros2-parameters
+  name: Parameters
+  source: 'ROS 2 tutorials: Understanding parameters, Using parameters in a class'
+  match:
+  - ros2-parameters
+  subtopics:
+  - id: parameter-declare-get
+    name: 'Declare typed node parameters with defaults and descriptors, and read '
+    match:
+    - parameter-declare
+  - id: parameter-callbacks-yaml
+    name: Validate dynamic parameter changes with set-parameters callbacks and l
+    match:
+    - parameter-callback
+- id: ros2-interfaces
+  name: Custom interfaces (msg, srv, action)
+  source: 'ROS 2 tutorials: Creating custom msg and srv files, Expanding on ROS 2 interfaces'
+  match:
+  - ros2-interfaces
+  subtopics:
+  - id: custom-interfaces
+    name: 'Define custom '
+    match:
+    - custom-interface
+  - id: interface-cli-types
+    name: Explore standard interface packages and field types with ros2 interfac
+    match:
+    - interface-cli
+- id: ros2-launch
+  name: Launch system
+  source: 'ROS 2 tutorials: Creating a launch file, Using substitutions, event handlers'
+  match:
+  - ros2-launch
+  subtopics:
+  - id: launch-python
+    name: Write Python launch files with LaunchDescription, Node actions, parame
+    match:
+    - launch-python
+  - id: launch-xml-yaml
+    name: Write ROS 2 launch files in XML or YAML with args, includes, groups an
+    match:
+    - launch-xml-yaml
+  - id: launch-substitutions-events
+    name: Use launch arguments, substitutions, conditions, event handlers and Op
+    match:
+    - launch-substitutions
+- id: ros2-qos
+  name: Quality of Service
+  source: 'ROS 2 concepts: About Quality of Service settings'
+  match:
+  - ros2-qos
+  subtopics:
+  - id: qos-profiles
+    name: 'Pick QoS reliability, durability, history, deadline and lifespan; use '
+    match:
+    - qos-profiles
+  - id: qos-compatibility
+    name: Diagnose QoS incompatibility between publishers and subscribers with t
+    match:
+    - qos-compatibility
+- id: ros2-lifecycle
+  name: Managed (lifecycle) nodes
+  source: 'ROS 2 design: Managed nodes; demos: lifecycle'
+  match:
+  - ros2-lifecycle
+  subtopics:
+  - id: lifecycle-states
+    name: Implement a lifecycle node with configure, activate, deactivate and cl
+    match:
+    - lifecycle-states
+  - id: lifecycle-cli-launch
+    name: Drive lifecycle nodes with ros2 lifecycle and launch-time transitions
+    match:
+    - lifecycle-cli
+- id: ros2-tf2
+  name: Transforms (tf2)
+  source: 'ROS 2 tutorials: Introducing tf2, Writing a static/dynamic broadcaster and listener'
+  match:
+  - ros2-tf2
+  subtopics:
+  - id: tf2-broadcast
+    name: Publish dynamic and static transforms with tf2_ros TransformBroadcaste
+    match:
+    - tf2-broadcast
+  - id: tf2-lookup
+    name: Look up transforms with tf2_ros Buffer and TransformListener and handl
+    match:
+    - tf2-lookup
+- id: ros2-colcon-packages
+  name: Workspaces, colcon and packages
+  source: 'ROS 2 tutorials: Creating a workspace, Creating a package, colcon'
+  match:
+  - ros2-colcon-packages
+  subtopics:
+  - id: colcon-build
+    name: Build and test a ROS 2 workspace with colcon, selecting packages and u
+    match:
+    - colcon-build
+  - id: ament-package-types
+    name: 'Create ament_cmake and ament_python packages with ros2 pkg create and '
+    match:
+    - ament-package
+  - id: rosdep-dependencies
+    name: Resolve system and ROS dependencies with rosdep init, update and insta
+    match:
+    - rosdep
+- id: ros2-rosbag2
+  name: Recording and playback (rosbag2)
+  source: 'ROS 2 tutorials: Recording and playing back data; rosbag2 docs'
+  match:
+  - ros2-rosbag2
+  subtopics:
+  - id: bag-record-play
+    name: Record and replay topics with ros2 bag record, info and play, includin
+    match:
+    - bag-record
+  - id: bag-qos-programmatic
+    name: Handle QoS overrides, compression and rosbag2_py reading when bags wil
+    match:
+    - bag-qos-override
+- id: ros2-executors
+  name: Executors and callback groups
+  source: 'ROS 2 concepts: Executors; tutorials: Using callback groups'
+  match:
+  - ros2-executors
+  subtopics:
+  - id: executors-threading
+    name: Choose SingleThreaded or MultiThreaded executors and understand callba
+    match:
+    - executors
+  - id: callback-groups
+    name: Use MutuallyExclusive and Reentrant callback groups to avoid deadlocks
+    match:
+    - callback-groups
+- id: ros2-composition
+  name: Composition and intra-process
+  source: 'ROS 2 tutorials: Composing multiple nodes in a single process'
+  match:
+  - ros2-composition
+  subtopics:
+  - id: composable-nodes
+    name: Build rclcpp components and load them into a container to share a proc
+    match:
+    - composable-nodes
+  - id: intra-process-comms
+    name: Enable intra-process communication and zero-copy publishing with uniqu
+    match:
+    - intra-process
+- id: ros2-middleware
+  name: DDS and RMW middleware
+  source: 'ROS 2 concepts: About different ROS 2 DDS/RTPS vendors, Discovery'
+  match:
+  - ros2-middleware
+  subtopics:
+  - id: rmw-implementations
+    name: Select an RMW implementation (Fast DDS, Cyclone DDS, Zenoh) with RMW_I
+    match:
+    - rmw-implementation
+  - id: discovery-network
+    name: 'Configure discovery on real networks: domain IDs, localhost-only range'
+    match:
+    - discovery-config
+- id: ros2-tools-debugging
+  name: Debugging and visualization tools
+  source: 'ROS 2 tutorials: Using rqt_console, Using RViz, ros2 doctor'
+  match:
+  - ros2-tools-debugging
+  subtopics:
+  - id: rviz-rqt-tools
+    name: Visualize with RViz 2 and inspect the graph and logs with rqt_graph an
+    match:
+    - rviz-rqt
+  - id: ros2-doctor-tracing
+    name: Diagnose with ros2 doctor, log levels and ros2_tracing; read ROS logs
+    match:
+    - ros2-doctor
+- id: ros2-conventions-reps
+  name: REPs and conventions
+  source: 'REP index: REP 103, 105, 2000'
+  match:
+  - ros2-conventions-reps
+  subtopics:
+  - id: rep103-rep105-frames
+    name: Apply REP 103 units and axis conventions and REP 105 frames (map, odom
+    match:
+    - rep-103
+  - id: rep-process-release
+    name: Find the REP governing a convention (2000 releases, 2004 quality level
+    match:
+    - rep-index
+- id: nav2-bringup
+  name: Nav2 bring-up and architecture
+  source: 'Nav2 docs: Getting Started, Navigation Concepts, Configuration Guide'
+  match:
+  - nav2-bringup
+  subtopics:
+  - id: nav2-bringup-launch
+    name: Bring up the Nav2 stack with nav2_bringup, a params file, a map and th
+    match:
+    - nav2-bringup
+  - id: nav2-goals-commander
+    name: Send initial pose and navigation goals from code with NavigateToPose a
+    match:
+    - nav2-simple-commander
+- id: nav2-costmaps
+  name: Costmaps
+  source: 'Nav2 docs: Setting Up the Costmap Layers, Costmap 2D, Inflation'
+  match:
+  - nav2-costmaps
+  subtopics:
+  - id: costmap-layers
+    name: 'Configure global and local costmap layers: static, obstacle, voxel and'
+    match:
+    - costmap-layers
+  - id: costmap-footprint-inflation
+    name: Tune robot footprint, inflation radius and cost scaling, and use keepo
+    match:
+    - costmap-inflation
+- id: nav2-planning
+  name: Global planning
+  source: 'Nav2 docs: Planner Server, NavFn, Smac Planner, Theta*'
+  match:
+  - nav2-planning
+  subtopics:
+  - id: planner-server-plugins
+    name: Select and configure Nav2 global planner plugins (NavFn, Smac 2D/Hybri
+    match:
+    - planner-server
+  - id: path-smoothing-tolerances
+    name: Smooth planned paths with the smoother server and set planner and goal
+    match:
+    - path-smoother
+- id: nav2-control
+  name: Local control
+  source: 'Nav2 docs: Controller Server, DWB, Regulated Pure Pursuit, MPPI'
+  match:
+  - nav2-control
+  subtopics:
+  - id: controller-server-plugins
+    name: Configure the controller server with DWB, Regulated Pure Pursuit or MP
+    match:
+    - controller-server
+  - id: velocity-limits-collision-monitor
+    name: Limit and filter cmd_vel with velocity_smoother and the collision moni
+    match:
+    - collision-monitor
+- id: nav2-behavior-trees
+  name: Behavior trees and recoveries
+  source: 'Nav2 docs: Behavior Trees, Behavior Tree XML Nodes, Behavior Server'
+  match:
+  - nav2-behavior-trees
+  subtopics:
+  - id: bt-navigator-xml
+    name: 'Customize the BT Navigator: pick a behavior tree XML, add nodes and re'
+    match:
+    - bt-navigator
+  - id: recovery-behaviors-server
+    name: 'Configure behavior_server recoveries (spin, backup, drive_on_heading, '
+    match:
+    - behavior-server
+- id: nav2-localization
+  name: Localization and maps
+  source: 'Nav2 docs: Setting up AMCL, Map Server, SLAM'
+  match:
+  - nav2-localization
+  subtopics:
+  - id: amcl-localization
+    name: 'Configure AMCL: frames, motion model, scan topic, particle counts, and'
+    match:
+    - nav2-amcl
+  - id: map-server-saving
+    name: 'Serve and save maps with nav2_map_server: map YAML fields, map_saver_c'
+    match:
+    - map-server
+- id: nav2-advanced
+  name: Waypoints, docking and route features
+  source: 'Nav2 docs: Waypoint Following, Docking, Route Server, Nav2 Python API'
+  match:
+  - nav2-advanced
+  subtopics:
+  - id: waypoint-follower
+    name: 'Run waypoint missions with FollowWaypoints and task executors at each '
+    match:
+    - waypoint-follower
+  - id: docking-keepout-routes
+    name: Use Nav2 docking (Jazzy and later) with a dock database, and know when
+    match:
+    - nav2-docking
+- id: moveit-setup
+  name: MoveIt Setup Assistant and configuration
+  source: 'MoveIt 2 docs: MoveIt Setup Assistant, Configuration tutorials'
+  match:
+  - moveit-setup
+  subtopics:
+  - id: moveit-setup-assistant
+    name: 'Generate a MoveIt 2 config package with the Setup Assistant: planning '
+    match:
+    - setup-assistant
+  - id: moveit-config-files
+    name: Edit key MoveIt config files and load them with MoveItConfigsBuilder i
+    match:
+    - moveit-config-files
+- id: moveit-planning-pipelines
+  name: Planning pipelines
+  source: 'MoveIt 2 docs: Motion Planning Pipeline, OMPL, Pilz, CHOMP, STOMP'
+  match:
+  - moveit-planning-pipelines
+  subtopics:
+  - id: ompl-planning
+    name: 'Configure the OMPL planning pipeline: planner configs per group, RRTCo'
+    match:
+    - ompl-pipeline
+  - id: pilz-chomp-stomp
+    name: Use the Pilz industrial planner for PTP, LIN and CIRC motions, and kno
+    match:
+    - pilz-planner
+- id: moveit-move-group
+  name: MoveGroup interface and moveit_py
+  source: 'MoveIt 2 docs: Move Group C++ Interface, MoveIt Python, Your First Project'
+  match:
+  - moveit-move-group
+  subtopics:
+  - id: movegroup-interface-cpp
+    name: Plan and execute with moveit::planning_interface::MoveGroupInterface i
+    match:
+    - move-group-interface
+  - id: moveit-py-and-constraints
+    name: Use the moveit_py Python API and add path or goal constraints to plann
+    match:
+    - moveit-py
+- id: moveit-planning-scene
+  name: Planning scene and collision
+  source: 'MoveIt 2 docs: Planning Scene, Collision Objects, Allowed Collision Matrix'
+  match:
+  - moveit-planning-scene
+  subtopics:
+  - id: collision-objects-scene
+    name: Add, move, attach and remove collision objects with PlanningSceneInter
+    match:
+    - planning-scene
+  - id: allowed-collision-matrix
+    name: Manage the allowed collision matrix, touch links and collision padding
+    match:
+    - allowed-collision-matrix
+- id: moveit-kinematics
+  name: Kinematics solvers in MoveIt
+  source: 'MoveIt 2 docs: Kinematics Configuration, IKFast, pick_ik'
+  match:
+  - moveit-kinematics
+  subtopics:
+  - id: kinematics-plugins
+    name: Choose and configure MoveIt IK solvers (KDL, pick_ik, BioIK, IKFast, L
+    match:
+    - kinematics-plugin
+  - id: moveit-robotstate-jacobian
+    name: Use RobotModel and RobotState in C++ for forward kinematics, IK and th
+    match:
+    - robot-state
+- id: moveit-execution
+  name: Trajectory execution and time parameterization
+  source: 'MoveIt 2 docs: Trajectory Execution, Time Parameterization, Controllers'
+  match:
+  - moveit-execution
+  subtopics:
+  - id: trajectory-execution-controllers
+    name: Connect MoveIt to controllers via FollowJointTrajectory and tune traje
+    match:
+    - trajectory-execution
+  - id: time-parameterization
+    name: Time-parameterize paths with TOTG or Ruckig smoothing and apply veloci
+    match:
+    - time-parameterization
+- id: moveit-servo-mtc
+  name: MoveIt Servo and Task Constructor
+  source: 'MoveIt 2 docs: MoveIt Servo, MoveIt Task Constructor'
+  match:
+  - moveit-servo-mtc
+  subtopics:
+  - id: moveit-servo
+    name: Run MoveIt Servo for real-time Cartesian or joint jogging with singula
+    match:
+    - moveit-servo
+  - id: moveit-task-constructor
+    name: Compose pick-and-place pipelines with MoveIt Task Constructor stages a
+    match:
+    - task-constructor
+- id: gz-install-cli
+  name: Gazebo versions, installation and CLI
+  source: 'Gazebo docs: Install, Getting started, gz command line'
+  match:
+  - gz-install-cli
+  subtopics:
+  - id: gz-versions-install
+    name: Pick the Gazebo release that pairs with your ROS 2 distro (Fortress, H
+    match:
+    - gz-versions
+  - id: gz-cli-topics-services
+    name: 'Run worlds and inspect state with gz sim, gz topic, gz service and gz '
+    match:
+    - gz-cli
+- id: gz-worlds
+  name: SDF worlds
+  source: 'Gazebo docs / SDFormat spec: world, include, physics, light'
+  match:
+  - gz-worlds
+  subtopics:
+  - id: sdf-world-structure
+    name: 'Author an SDF world file: world element, systems plugins, lights, grou'
+    match:
+    - sdf-world
+  - id: sdf-fuel-includes
+    name: Reuse models with include, Fuel URIs and GZ_SIM_RESOURCE_PATH, with po
+    match:
+    - gz-fuel
+- id: gz-models
+  name: Models, links and joints
+  source: 'SDFormat spec: model, link, inertial, joint, geometry'
+  match:
+  - gz-models
+  subtopics:
+  - id: sdf-links-joints-inertia
+    name: Build SDF models with links, inertias, collisions, visuals and revolut
+    match:
+    - sdf-model
+  - id: urdf-to-sdf-ros
+    name: 'Move a ROS robot into Gazebo: URDF/xacro to SDF, gazebo extension tags'
+    match:
+    - urdf-sdf
+- id: gz-sensors
+  name: Sensors
+  source: 'Gazebo docs: Sensors, gz-sensors'
+  match:
+  - gz-sensors
+  subtopics:
+  - id: sensors-lidar-camera-imu
+    name: Add gpu_lidar, camera, depth and IMU sensors to SDF links with topics,
+    match:
+    - gz-sensors
+  - id: sensors-system-render
+    name: Enable the Sensors system with the right render engine and run headles
+    match:
+    - sensors-system
+- id: gz-systems
+  name: Systems, plugins and physics
+  source: 'Gazebo docs: Systems, Physics, Writing a plugin'
+  match:
+  - gz-systems
+  subtopics:
+  - id: gz-system-plugins
+    name: Add Gazebo system plugins (DiffDrive, JointController, JointStatePubli
+    match:
+    - gz-plugins
+  - id: gz-physics-tuning
+    name: 'Tune physics step size, real-time factor, engine and friction/contact '
+    match:
+    - gz-physics
+- id: gz-ros-integration
+  name: ros_gz integration
+  source: 'ros_gz docs: ros_gz_bridge, ros_gz_sim, ros_gz_image'
+  match:
+  - gz-ros-integration
+  subtopics:
+  - id: ros-gz-bridge
+    name: 'Bridge ROS 2 and Gazebo topics with ros_gz_bridge, using arguments or '
+    match:
+    - ros-gz-bridge
+  - id: ros-gz-launch-sim
+    name: Launch Gazebo from ROS 2 launch with ros_gz_sim, spawn the robot and w
+    match:
+    - ros-gz-sim
+- id: perception-camera
+  name: Camera calibration and image pipelines
+  source: 'ROS 2 docs: camera_calibration, image_pipeline, image_transport, cv_bridge'
+  match:
+  - perception-camera
+  subtopics:
+  - id: camera-calibration
+    name: Calibrate a monocular or stereo camera with camera_calibration and pub
+    match:
+    - camera-calibration
+  - id: image-pipeline-transport
+    name: 'Rectify and transport images with image_proc, image_transport plugins '
+    match:
+    - image-transport
+- id: perception-pointcloud
+  name: Point clouds and depth
+  source: 'ROS 2 docs: sensor_msgs/PointCloud2, pcl_ros, depth_image_proc'
+  match:
+  - perception-pointcloud
+  subtopics:
+  - id: pointcloud2-handling
+    name: Read and build PointCloud2 messages in Python and C++ and filter cloud
+    match:
+    - pointcloud2
+  - id: depth-to-scan-cloud
+    name: 'Create point clouds from depth images and flatten clouds to LaserScan '
+    match:
+    - depth-image-proc
+- id: slam-2d
+  name: 2D SLAM with slam_toolbox
+  source: slam_toolbox docs, Nav2 SLAM guide
+  match:
+  - slam-2d
+  subtopics:
+  - id: slam-toolbox-mapping
+    name: Build 2D maps with slam_toolbox online async or sync mode, tune parame
+    match:
+    - slam-toolbox
+  - id: slam-toolbox-localization
+    name: Localize on a serialized slam_toolbox map and use lifelong mapping; in
+    match:
+    - slam-localization
+- id: slam-3d-visual
+  name: 3D and visual SLAM
+  source: RTAB-Map docs, ROS 2 SLAM packages
+  match:
+  - slam-3d-visual
+  subtopics:
+  - id: rtabmap-ros
+    name: 'Run RTAB-Map with RGB-D or stereo cameras: topics, frames, database, m'
+    match:
+    - rtabmap
+  - id: lidar-odometry-3d
+    name: Choose 3D LiDAR odometry/SLAM (KISS-ICP, LIO-SAM style) and wire frame
+    match:
+    - lidar-odometry
+- id: sensor-fusion
+  name: Sensor fusion and odometry
+  source: robot_localization docs
+  match:
+  - sensor-fusion
+  subtopics:
+  - id: robot-localization-ekf
+    name: 'Fuse odometry, IMU and GPS with robot_localization EKF: sensor config '
+    match:
+    - robot-localization
+  - id: imu-odometry-covariance
+    name: 'Prepare IMU and wheel odometry for fusion: orientation filtering, cova'
+    match:
+    - imu-odom-quality
+- id: control-framework
+  name: ros2_control framework
+  source: 'ros2_control docs: Getting started, controller manager, CLI'
+  match:
+  - control-framework
+  subtopics:
+  - id: controller-manager-cli
+    name: Operate ros2_control with the controller manager, spawner and ros2 con
+    match:
+    - controller-manager
+  - id: ros2-control-urdf
+    name: Declare hardware, joints, and command/state interfaces in the URDF ros
+    match:
+    - ros2-control-urdf
+- id: control-controllers
+  name: Standard ros2_controllers
+  source: 'ros2_controllers docs: joint_trajectory_controller, diff_drive_controller'
+  match:
+  - control-controllers
+  subtopics:
+  - id: joint-trajectory-controller
+    name: Configure and command joint_trajectory_controller via topic or FollowJ
+    match:
+    - joint-trajectory
+  - id: diff-drive-controller
+    name: 'Configure diff_drive_controller for a two-wheel base: wheel geometry, '
+    match:
+    - diff-drive-controller
+- id: control-hardware
+  name: Hardware interface development
+  source: 'ros2_control docs: Writing a hardware component, Mock components, controller chaining'
+  match:
+  - control-hardware
+  subtopics:
+  - id: hardware-interface-plugin
+    name: Write a ros2_control SystemInterface hardware plugin with lifecycle ca
+    match:
+    - hardware-interface
+  - id: controller-chaining-mock
+    name: Test with mock hardware and chain controllers through reference interf
+    match:
+    - controller-chaining
+- id: kinematics-fk-ik
+  name: Forward and inverse kinematics
+  source: 'Siciliano et al., Robotics: Modelling, Planning and Control, ch. 2-3'
+  match:
+  - kinematics-fk-ik
+  subtopics:
+  - id: forward-kinematics-dh
+    name: Compute forward kinematics with homogeneous transforms and Denavit-Har
+    match:
+    - forward-kinematics
+  - id: inverse-kinematics-jacobian
+    name: 'Solve IK numerically with the Jacobian: pseudo-inverse, damped least s'
+    match:
+    - inverse-kinematics
+  - id: singularities-manipulability
+    name: Detect singularities and measure manipulability with Jacobian rank, co
+    match:
+    - singularities
+- id: trajectory-generation
+  name: Trajectory generation
+  source: Siciliano et al., ch. 4 Trajectory planning
+  match:
+  - trajectory-generation
+  subtopics:
+  - id: joint-space-trajectories
+    name: Generate joint trajectories with cubic or quintic polynomials and trap
+    match:
+    - trajectory-polynomial
+  - id: cartesian-orientation-paths
+    name: 'Interpolate Cartesian paths with position lines and quaternion slerp, '
+    match:
+    - cartesian-trajectory
+- id: dynamics-control
+  name: Robot dynamics and feedback control
+  source: Siciliano et al., ch. 7-8 Dynamics and Motion control
+  match:
+  - dynamics-control
+  subtopics:
+  - id: robot-dynamics-model
+    name: Use the manipulator dynamic model B(q)qdd + C qd + g = tau for gravity
+    match:
+    - robot-dynamics
+  - id: pid-tuning-controllers
+    name: 'Implement and tune PID loops: discrete form, anti-windup, derivative f'
+    match:
+    - pid-tuning
