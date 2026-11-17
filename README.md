@@ -10,7 +10,7 @@ an outcome, in what order, with measurable gates. Every file carries a review `s
 can see how far it has been checked.
 
 <!-- skills-status:start -->
-**Review status:** 2,686 verified · 31,149 docs-checked · 1,738 gated · 15,947 draft of 51,520 skills (17 Nov 2026). Drafts are written but not yet checked against sources; the status in each file says which you are reading.
+**Review status:** <!-- STATUS:START -->2,686 verified · 31,149 docs-checked · 1,738 gated · 15,947 draft of 51,520 skills<!-- STATUS:END -->. Drafts are written but not yet checked against sources; the status in each file says which you are reading.
 <!-- skills-status:end -->
 
 ## Using it from your agent (or any LLM)
@@ -102,7 +102,7 @@ _29/29 categories started, 51520 skills total._
 
 | category | fields with skills | skills |
 |---|---|---|
-| computing-software | 32 | 40201 |
+| computing-software | 32 | 40202 |
 | creative-arts | 19 | 5837 |
 | engineering-technology | 24 | 1585 |
 | health-medicine | 47 | 393 |
