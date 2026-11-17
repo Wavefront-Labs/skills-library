@@ -10,33 +10,38 @@ an outcome, in what order, with measurable gates. Every file carries a review `s
 can see how far it has been checked.
 
 <!-- skills-status:start -->
-**Review status:** 2,685 verified · 31,149 docs-checked · 1,738 gated · 15,947 draft of 51,519 skills (through review batch 1362, 2026-11-09).
-<!-- skills-status-json {"verified":2685,"docs_checked":31149,"gated":1738,"draft":15947,"total":51519,"reviewed":35404,"last_batch":1362,"generated":"2026-11-09T07:56:20Z"} -->
+**Review status:** 2,686 verified · 31,149 docs-checked · 1,738 gated · 15,947 draft of 51,520 skills (17 Nov 2026). Drafts are written but not yet checked against sources; the status in each file says which you are reading.
 <!-- skills-status:end -->
 
-## Using it from your agent
+## Using it from your agent (or any LLM)
 
-The library is meant to be *asked*, not read. The agent states the job, gets a short ranked list,
-fetches the one or two files that fit, follows them. That replaces the research it would otherwise do.
+The library is meant to be *asked*, not read. The agent states the job, gets a short ranked list, opens the one or
+two files that fit, and follows them. That replaces research it would otherwise do from scratch. The agent carries
+about 250 tokens of "how to ask", never the catalogue.
 
-1. Clone the repo and build the index once per pull:
-   ```bash
-   pip install -r requirements.txt && python tools/reindex.py
-   ```
-   `skills.index.jsonl` (one line per skill: id, description, tags, status) is generated and not committed.
-2. Search and fetch from the command line or from any agent that can run a command:
-   ```bash
-   python tools/serve.py search sealed secrets rename namespace
-   python tools/serve.py get computing-software.devops-ci-cd.sealed-secrets.sealed-secrets-scopes
-   ```
-3. **Claude Code and other agents that load skills:** install the connector in
-   [`connector/`](connector/README.md). It is a small skill that teaches the agent the protocol (search,
-   choose, fetch at most two, cite the id) and, optionally, a hook that consults the library on every real
-   prompt and before any web research, with a silence threshold so it says nothing when nothing fits.
-4. Or browse: [`SKILLS.md`](SKILLS.md) lists the categories; each `INDEX.md` lists one level down; the
-   skill files are plain Markdown with YAML frontmatter.
+**Setup (5 minutes, once):**
 
-How the interface is shaped, and where it is going, is in [`connector/CONTRACT.md`](connector/CONTRACT.md).
+```bash
+git clone https://github.com/Wavefront-Labs/skills-library.git && cd skills-library
+pip install -r requirements.txt && python tools/reindex.py     # builds skills.index.jsonl (about 6 min)
+```
+
+Then pick how your LLM reaches it:
+
+| Your setup | What to do |
+|---|---|
+| **Claude Code, or any MCP client** | Run the MCP server: `claude mcp add -e WAVEFRONT_SKILLS_LOCAL=<path to the clone> wavefront-skills -- python <path>/connector/wavefront-skills/scripts/mcp_server.py`. Other clients: add a stdio server that runs that script with the same env var. The agent gets six tools (`library_route`, `card`, `get`, `expand`, `browse`, `report`) and their descriptions teach the protocol. |
+| **Agents that load Agent Skills** | Copy `connector/wavefront-skills/` into your skills folder (`~/.claude/skills/`). It holds the protocol only. |
+| **Make it automatic (Claude Code)** | Add the hook from [`connector/README.md`](connector/README.md): the library is consulted on every real prompt and before any web search, and stays silent when nothing fits. |
+| **Any other LLM or script** | Point it at [`AGENTS.md`](AGENTS.md) (written for an LLM to read), or paste the five-step protocol from it into your system prompt. The agent calls `python tools/serve.py search <words>` and `python tools/serve.py get <id>`, or `python connector/wavefront-skills/scripts/skills.py find "<task>"`. |
+
+Search quality: keyword search needs the skill's own words; semantic search finds the right skill from natural
+phrasing (79% vs 29% in our blind test). It needs `pip install fastembed numpy` and an embedding folder: download
+`skills-emb.npz` from the latest release, run `python tools/retrieval_eval.py unpack skills-emb.npz --out <dir>`,
+and set `WAVEFRONT_SKILLS_EMB=<dir>`. Without it everything still works on keyword search.
+
+Or browse: [`SKILLS.md`](SKILLS.md) lists the categories; each `INDEX.md` lists one level down; the skill files are
+plain Markdown with YAML frontmatter. Interface details are in [`connector/CONTRACT.md`](connector/CONTRACT.md).
 
 ## Reading a skill
 
@@ -54,27 +59,38 @@ skills by id.
 ## Contributing
 
 Contributions are welcome: new skills, corrections, methods, and taxonomy fixes. The bar is that a reader can
-act on the skill correctly; the format is strict so that a library this size stays searchable.
+act on the skill correctly; the format is strict so that a library this size stays searchable. **Every pull
+request is checked automatically against the schema** (`tools/lint.py`, the id/version rules, the index build),
+and a maintainer reviews it, may edit it for consistency, and promotes its status.
 
-- Read [`CONTRIBUTING.md`](CONTRIBUTING.md) (how to choose the path, the file contract, the quality bar,
-  what must never go in a skill) and [`SCHEMA.md`](SCHEMA.md).
-- Scaffold with `python tools/new_skill.py <category> <field> <product> <name> "description"`, write the body,
-  run `python tools/lint.py`, open a pull request. One skill or one coherent change per PR is easiest to review.
-- Write from verified behaviour and list your `sources`. New contributions land as `status: draft`; a
-  maintainer reviews, may edit for consistency, and promotes the status.
-- Don't paste copyrighted text or anything you can't license under Apache-2.0; never include secrets,
-  personal data or machine-specific paths.
+**As a person:**
+
+1. Fork the repo, clone your fork, run the setup above.
+2. Search first (`python tools/serve.py search <words>`) so you extend rather than duplicate. Wrong or outdated
+   skill? Fix it in place (bump `version`, set `updated`) or open an issue with the skill id.
+3. Scaffold: `python tools/new_skill.py <category> <field> <product> <name> "<one-line description>"`, write the
+   body from verified behaviour, list your `sources`. Placement help is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+4. `python tools/lint.py`, commit with `git commit -s`, open a pull request from your fork to `main`.
+
+**With an LLM agent:** point it at [`AGENTS.md`](AGENTS.md). It has the same steps as a checklist, including the
+rules an agent must not break: new skills are `status: draft`, never self-promoted to `docs-checked` or `verified`,
+no invented commands, no secrets. Review what your agent wrote before you open the PR; you are the contributor.
+
+Rules for everyone: new contributions land as `status: draft`. Write from verified behaviour and say what is
+unconfirmed. Don't paste copyrighted text or anything you can't license under Apache-2.0; never include secrets,
+personal data or machine-specific paths. By submitting you agree your contribution is Apache-2.0 (sign off with `-s`).
+See also [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) and [`SECURITY.md`](SECURITY.md).
 
 ## Layout
 ```
 SKILLS.md              the categories and how to search
 SCHEMA.md              the skill file contract
 CONTRIBUTING.md        how to add or change skills
+AGENTS.md              the same, written for an LLM agent (use and contribute)
 skills/<category>/<field>/<product>/<name>.md    the skills and methods
 taxonomy/              where a skill should go: categories, fields, products, coverage specs
 tools/                 new_skill.py  lint.py  reindex.py  serve.py  retrieval_eval.py
 connector/             the connector skill, hook, interface contract and evaluation harness
-docs/                  maintainer notes
 ```
 
 `taxonomy/` is the map; `skills/` is the territory. A product can exist in the taxonomy with no skills
@@ -82,7 +98,7 @@ under it yet.
 
 ## Stats
 <!-- STATS:START (generated by tools/reindex.py — do not edit by hand) -->
-_29/29 categories started, 51519 skills total._
+_29/29 categories started, 51520 skills total._
 
 | category | fields with skills | skills |
 |---|---|---|
@@ -115,7 +131,7 @@ _29/29 categories started, 51519 skills total._
 | relationships-social | 15 | 96 |
 | humanities | 15 | 86 |
 | education-training | 10 | 68 |
-| **total** | **586** | **51519** |
+| **total** | **586** | **51520** |
 <!-- STATS:END -->
 
 ## Licence
