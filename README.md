@@ -136,6 +136,10 @@ _29/29 categories started, 51520 skills total._
 | **total** | **586** | **51520** |
 <!-- STATS:END -->
 
+## Support
+
+The library is free and Apache-2.0. If it saves you time, you can [support its upkeep](https://donate.stripe.com/dRm3cu8pedvLfHtaxP0sU00) (pay what you want). Contributing skills and reviews helps just as much.
+
 ## Licence
 
 Apache-2.0 for everything in this repository: skill text, methods, taxonomy and tools. See [`LICENSE`](LICENSE).
