@@ -31,9 +31,7 @@ jobs:
         run: python tools/reindex.py
       - name: Every served response starts with the licence notice
         run: python tools/serve.py --selftest
-      # Taxonomy bookkeeping drifted while the library grew. Reported, not blocking, until a maintainer repairs it.
-      - name: Taxonomy checks (advisory)
-        continue-on-error: true
+      - name: Taxonomy checks
         run: |
           python taxonomy/fields/check.py
           python taxonomy/products/check.py
