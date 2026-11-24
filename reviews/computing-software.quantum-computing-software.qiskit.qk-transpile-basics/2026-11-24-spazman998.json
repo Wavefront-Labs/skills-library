@@ -1,0 +1,78 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.quantum-computing-software.qiskit.qk-transpile-basics",
+    "version": "2",
+    "sha256": "071da0f32b1006de6e5dde48faad8ee9939a34a418d97bad084c670383d4d4b9"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://quantum.cloud.ibm.com/docs/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "303d1ddc94fb99c7c0cb1a322ccce4bea9d34aebfac9b383b24d983821c3f026"
+    },
+    {
+      "url": "https://github.com/Qiskit/qiskit",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "0427630b26fa55b566594c99dceb59d25361e10d173cb0ba2e3ab8589dff0319"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager\npm = generate_preset_pass_manager(optimization_level=2, backend=backend, seed_transpiler=7)\nisa = pm.run(qc)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'generate_preset_pass_manager' and 'preset passmanagers' appear zero times in both fetched pages; the GitHub README demonstrates the transpile() entry point ('from qiskit import transpile' ... 'qc_transpiled = transpile(qc, target=target)') and neither page mentions optimization_level, backend= or seed_transpiler, so no listed source covers the import path, the keyword arguments or the .run() call."
+    },
+    {
+      "claim": "Level 0 maps only; 1 light; 2 medium; 3 heavy and slowest.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'optimization level' and 'optimization_level' appear zero times in both fetched pages; the docs root redirects to the guides introduction page whose only transpiler text is the Optimization card blurb ('construct high-fidelity circuits with reduced depth...'), and the README says only that Qiskit contains 'a transpiler that supports optimizing quantum circuits'."
+    },
+    {
+      "claim": "Compare isa.depth() and isa.count_ops()[\"cx\"/\"ecr\"/\"cz\"] across levels and seeds.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'count_ops' and 'depth' appear zero times in both fetched pages; no source documents circuit-analysis methods or cx/ecr/cz gate keys ('ecr' occurs in the GitHub page only inside the word 'secret' in UI strings), so no listed source covers this comparison."
+    },
+    {
+      "claim": "Layout and routing are stochastic; set a seed for comparable benchmarks.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'stochastic' and 'seed' appear zero times in both fetched pages; the README mentions only 'transpiler passes for synthesis, optimization, mapping, and scheduling' and says nothing about layout or routing being stochastic or seeds making benchmarks comparable."
+    },
+    {
+      "claim": "Transpile a 5-qubit circuit at levels 0 and 3 and compare two-qubit gate counts.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check restating optimization levels 0 and 3; neither fetched page contains any optimization-level content or a 5-qubit transpilation example, so no listed source covers it."
+    },
+    {
+      "claim": "Transpile circuits to a backend target, choosing optimization level 0-3 and seeding for reproducibility.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The GitHub README supports only the general premise ('running a quantum circuit on hardware requires rewriting to the basis gates and connectivity of the quantum hardware. The tool that does this is the transpiler') plus its BackendV2 text, but says nothing about optimization level 0-3 or seeding for reproducibility; the docs root is the guides introduction/TOC page."
+    }
+  ],
+  "coverage": "I took the frontmatter description plus every concrete statement in the body - the full code block (import path qiskit.transpiler.preset_passmanagers, the generate_preset_pass_manager call with its optimization_level=2, backend and seed_transpiler=7 keyword arguments, and pm.run(qc)), the optimization-level semantics sentence (0 maps only, 1 light, 2 medium, 3 heavy and slowest), the isa.depth() and isa.count_ops() cx/ecr/cz comparison, the stochastic layout-and-routing gotcha, and the 5-qubit levels-0-and-3 self-check - covering every command, flag, number and behaviour in the file, and checked each against both listed sources, which I fetched and read today (docs root HTTP 200, GitHub repo page HTTP 200).",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all six claims are unverifiable against the listed sources as fetched today. https://quantum.cloud.ibm.com/docs/ redirects to the guides introduction page: apart from the Optimization card blurb ('construct high-fidelity circuits with reduced depth that are ready for execution with the Qiskit SDK transpiler') and a link to the real guide at /docs/en/qiskit/transpile, 'generate_preset_pass_manager', 'preset pass manager', 'optimization_level', 'optimization level', 'seed_transpiler', 'stochastic', 'count_ops' and 'depth' appear zero times in its text. The Qiskit GitHub page confirms only the general premise (a transpiler that supports optimizing circuits; running on hardware requires rewriting to basis gates and connectivity; the transpile(qc, target=target) example) with no preset-pass-manager, optimization-level, seeding or stochastic-routing content. A fix PR should bump version and list the pages that actually document these claims as sources - the transpiler guide (https://quantum.cloud.ibm.com/docs/en/qiskit/transpile), the generate_preset_pass_manager API reference and the optimization-levels documentation - then re-check each claim.",
+  "attestation_sha256": "8ac4179e30b859114af1341838249106f28541494b907af5b6e0b3f73dd826b0"
+}
