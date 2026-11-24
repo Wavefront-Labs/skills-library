@@ -1,0 +1,142 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.cybersecurity-defensive.palo-alto-pan-os.pan-os-packet-flow-and-capture-troubleshooting",
+    "version": "2",
+    "sha256": "a5605959ca5a4344eb92f1988829b6adf9184b6ba55418a23fbde4b334aefc3f"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-admin/monitoring/take-packet-captures/take-a-custom-packet-capture",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "42e5e8ba30a3e55a3ea0c212ada3d08ae1bad0bf487c4dc47cc274cdf67a55dd"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "find the stage (receive, firewall, transmit, drop) where a flow dies",
+      "verdict": "confirmed",
+      "source_url": "https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-admin/monitoring/take-packet-captures/take-a-custom-packet-capture",
+      "evidence_quote": "Continue to Add each Stage you want to capture ( receive, firewall , transmit , and drop ) and set a unique File name for each stage.",
+      "note": "The page lists the four packet capture stages as receive, firewall, transmit and drop, each with its own file name; the 'where a flow dies' goal framing is the skill's own."
+    },
+    {
+      "claim": "debug dataplane packet-diag set filter index 1 match source 10.1.1.5 destination 198.51.100.7 destination-port 443 protocol 6",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'packet-diag' occurs zero times in the fetched page: it is a GUI procedure (Monitor > Packet Capture) whose only commands are two telnet invocations from the source system."
+    },
+    {
+      "claim": "debug dataplane packet-diag set filter on",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No CLI on the page; the GUI equivalent is 'Set Filtering to on', but this packet-diag command appears nowhere."
+    },
+    {
+      "claim": "debug dataplane packet-diag set capture stage receive file rx.pcap",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The GUI procedure says 'select receive as the Stage and set the File name to telnet-test-received', but this CLI command for the receive stage is absent."
+    },
+    {
+      "claim": "debug dataplane packet-diag set capture stage firewall file fw.pcap",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "firewall is named as one of the four capture stages, but no CLI command for a per-stage firewall capture appears on the page."
+    },
+    {
+      "claim": "debug dataplane packet-diag set capture stage transmit file tx.pcap",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "transmit is named as one of the four capture stages, but no CLI command for a per-stage transmit capture appears on the page."
+    },
+    {
+      "claim": "debug dataplane packet-diag set capture stage drop file drop.pcap",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page notes the example produced no drop file because no packets were dropped, but the drop-stage CLI command appears nowhere."
+    },
+    {
+      "claim": "debug dataplane packet-diag set capture on",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The GUI has 'Set packet capture to on' plus a performance warning, but this packet-diag command is absent."
+    },
+    {
+      "claim": "debug dataplane packet-diag set capture off\ndebug dataplane packet-diag set filter off\nview-pcap filter-pcap drop.pcap\ndebug dataplane packet-diag clear all",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The GUI has 'Turn packet capture off', but none of these four CLI lines appear; the page says to view captures with a network packet analyzer, not view-pcap."
+    },
+    {
+      "claim": "show counter global filter packet-filter yes delta yes",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'show counter', 'packet-filter' and 'delta' occur zero times in the fetched page."
+    },
+    {
+      "claim": "Counters with the same filter:",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page never connects counters to the capture filter; it only describes GUI filters for selecting captured traffic."
+    },
+    {
+      "claim": "Drop counters tell you the reason (route lookup failure, policy deny, session setup failure, zone protection, etc.).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The only drop text is the no-dropped-packets example; 'route lookup', 'policy deny' and 'session setup' are absent, and 'zone protection' appears only in site navigation metadata."
+    },
+    {
+      "claim": "Leaving the filter or capture on after finishing impacts performance and can fill disk.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial support only: the page warns 'system performance can be degraded' and says to always turn packet capture off when done, but says filtered captures have little impact and never mentions disk."
+    },
+    {
+      "claim": "The firewall stage capture shows post-NAT packets; compare with receive to see translation.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'post-NAT' appears nowhere; the page's only NAT guidance is that NAT requires two filters (pre-NAT source IP and the NAT IP for the return direction), not what the firewall stage shows."
+    },
+    {
+      "claim": "Traffic offloaded to hardware may not appear in later captures; use `set session offload no` for troubleshooting only (confirm).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial support: the page says 'to ensure that you capture all traffic, you may need to Disable Hardware Offload' and links a page of that name, but 'set session offload no' appears nowhere."
+    },
+    {
+      "claim": "You find a specific counter incrementing, for example a policy deny or no route, matching the flow; fix and confirm the counter stops.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verification-workflow claim; the page contains no counter-based workflow at all."
+    }
+  ],
+  "coverage": "I claimed every command line in both code blocks (packet-diag clear all, the filter line with index 1, protocol 6 and the 10.1.1.5/198.51.100.7:443 example values, filter on/off, the four stage captures with per-stage .pcap filenames, capture on/off, view-pcap filter-pcap, show counter global filter packet-filter yes delta yes), the four-stage goal line, the same-filter counters line, the drop-counter reason list, all three gotchas (performance and disk, post-NAT firewall stage, session offload) and the Verify closing line, so every command, flag, number and behaviour is covered; only the short section labels (Capture on the dataplane:, Reproduce the traffic, then:, Gotchas, ## Verify) were not claimed separately, and each claim was checked against the single source fetched today with the attest user-agent (200, no redirect).",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but 15 of 16 claims are unverifiable: the only listed source is the GUI procedure Take a Custom Packet Capture and contains no CLI at all ('packet-diag', 'view-pcap', 'show counter', 'packet-filter', 'delta' and 'set session offload no' all occur zero times in the fetched HTML), so every command in the skill is uncovered; only the four capture stages (receive, firewall, transmit, drop) are confirmed. A fix PR should bump version and add CLI sources that document the debug dataplane packet-diag filter/capture syntax, view-pcap filter-pcap, show counter global filter delta and the offload command - the fetched page itself links a Disable Hardware Offload page as a starting point - or rewrite the skill as the GUI workflow the current source supports; the drop-counter reason list, the post-NAT firewall-stage behaviour and the disk-filling warning also need sources of their own. The listed URL itself is live (200, no redirect), so unlike the pan-os-licensing skill the problem is coverage, not a dead link.",
+  "attestation_sha256": "a2f73c9e0060e01ea4a73c0473fe3342370e05c05ac7020c37e7ab965a300497"
+}
