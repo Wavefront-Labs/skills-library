@@ -1,0 +1,168 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.web-development.node-express.serving-user-content-from-a-sandbox-domain",
+    "version": "2",
+    "sha256": "070c6e95aae993df8eaa928cce6712d08004d10e8b2e6acb9fa113931a978f8c"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "39683daf3956af4338bf7091445037898bfffffc2a9625bc07629a34b4a151a6"
+    },
+    {
+      "url": "https://github.blog/engineering/githubs-csp-journey/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "d601041f3ed5cdf80670a87d4272617ad45e8436de10b681d1c96d6318715d17"
+    },
+    {
+      "url": "https://publicsuffix.org/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "a24d1cff8c37abb239a7048bfbf7295a0bda9220202e03f2181fae7382e90984"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Any user upload that a browser can render as HTML or SVG runs script in the origin that serves it.",
+      "verdict": "confirmed",
+      "source_url": "https://github.blog/engineering/githubs-csp-journey/",
+      "evidence_quote": "serving user-controlled content on a GitHub.com domain would increase the chances of script execution on that domain"
+    },
+    {
+      "claim": "If that origin is your app, the uploader has stored XSS.",
+      "verdict": "confirmed",
+      "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+      "evidence_quote": "Client-side active content (XSS, CSRF, etc.) that could endanger other users if the files are publicly retrievable"
+    },
+    {
+      "claim": "Serve uploads from `example-usercontent.com` (a different eTLD+1), not `files.example.com`.",
+      "verdict": "confirmed",
+      "source_url": "https://github.blog/engineering/githubs-csp-journey/",
+      "evidence_quote": "we serve all responses to raw requests on their own domain"
+    },
+    {
+      "claim": "Subdomains share cookies scoped to `.example.com` and count as same-site (SameSite cookies and CSRF defences treat them as trusted).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Per-user/tenant subdomains (`alice.example-pages.com`) need the domain on the **Public Suffix List** so each subdomain is its own site.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Examples: GitHub (`githubusercontent.com`), Google (`googleusercontent.com`).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Content-Type: <type detected server-side, never the client's>",
+      "verdict": "confirmed",
+      "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+      "evidence_quote": "The Content-Type for uploaded files is provided by the user, and as such cannot be trusted, as it is trivial to spoof"
+    },
+    {
+      "claim": "Content-Type: <type detected server-side, never the client's>\nX-Content-Type-Options: nosniff",
+      "verdict": "confirmed",
+      "source_url": "https://github.blog/engineering/githubs-csp-journey/",
+      "evidence_quote": "We also mitigate this by using the X-Content-Type-Options: nosniff header, but CSP provides extremely strong assurances, even if there were a bug that let an attacker control content-type"
+    },
+    {
+      "claim": "Content-Disposition: attachment; filename=\"...\"          (inline only for allowlisted image/video types)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Content-Security-Policy: sandbox; default-src 'none'; img-src 'self'; style-src 'unsafe-inline'",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Cross-Origin-Resource-Policy: cross-origin               (or same-site if only your app embeds them)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`CSP: sandbox` gives the document an opaque origin with scripts disabled even if it is rendered.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "SVG can contain `<script>`, event handlers and `<foreignObject>`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "rasterise to PNG on upload (safest)",
+      "verdict": "confirmed",
+      "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+      "evidence_quote": "decode and re-encode to an allowed image format, explicitly removing unnecessary metadata"
+    },
+    {
+      "claim": "sanitise with DOMPurify's SVG profile",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "scripts do not run in `<img>`-loaded SVG, but direct navigation does",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "HTML uploads: never inline on any domain you care about; attachment only or render in a sandboxed iframe from the sandbox domain",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Private files via short-lived signed URLs (S3/GCS presigned GET, CloudFront signed URLs) tied to the requesting user",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "never long-lived public object URLs for private data",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Uploading `<svg onload=alert(document.domain)>` and opening its URL directly shows the sandbox domain (or no execution), never your app's domain.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "App cookies are absent from requests to the content domain.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I extracted every concrete claim in the skill in file order - the HTML/SVG script-execution and stored-XSS statements, the separate-domain recommendation with its cookie/same-site and Public Suffix List rationale and the GitHub/Google domain examples, all five response-header lines plus the CSP sandbox opaque-origin behaviour, the SVG script/foreignObject/DOMPurify/rasterise/img-navigation behaviours, the HTML-upload sandboxed-iframe rule, the signed-URL access-control rules and both Verify checks - and checked each against the three listed sources, all of which I fetched and read.",
+  "verdict": "fail",
+  "attestation_sha256": "22641e4e6a12ad0002744d506e523433d5aca28f07293f690beeea4966e6745f",
+  "suggested_edits": "Nothing is contradicted, but many material claims have no coverage in the listed sources: add sources for CSP sandbox opaque-origin semantics, Content-Disposition, Cross-Origin-Resource-Policy, cookie domain scope and same-site semantics, the effect of Public Suffix List listing on per-user subdomains (publicsuffix.org only defines public suffixes and mentions supercookies), SVG script/foreignObject content and img-loaded SVG behaviour, DOMPurify's SVG profile, and S3/GCS/CloudFront presigned or signed URLs. The Google googleusercontent.com example appears in no listed source (GitHub's githubusercontent.com is evidenced by the raw.githubusercontent.com redirect in the github.blog post), so cite a source for it or drop it. The listed sources do confirm the core separation, content-type, nosniff and image re-encoding claims."
+}
