@@ -1,0 +1,126 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.systems-network-administration.virtualisation.vds-traffic-filtering-and-dscp-marking",
+    "version": "3",
+    "sha256": "7f00492866258104eac56ef37fcc5fdcc26f379161e060ed5f9b9e1c9ce1afb2"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "8f489012fec9fe3c178edc85a0aa079400484a00e5d33ddfe86ad9f98a96e4d1"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "mark (or drop) traffic at the virtual port so the physical network can prioritise it, without relying on guests.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Distributed port group (or an uplink port group) -> Configure -> Traffic filtering and marking -> Enable, then add rules.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Rules are evaluated in order; first match wins.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Action**: Allow, Drop, or Tag.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "CoS value (802.1p, 0-7) and/or DSCP value (0-63).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "voice EF (46), video AF41 (34), vMotion CS1 (8, scavenger), storage AF31 (26).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Direction**: ingress (into the switch from the VM), egress, or both.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "system traffic type (vMotion, vSAN, NFS, management, iSCSI, VM), MAC (src/dst/VLAN/EtherType), IP (protocol, ports, addresses).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Rule \"voice-ef\": Tag, DSCP 46, CoS 5, ingress, qualifier IP protocol UDP dst ports 16384-32767.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "On the uplink port group: Tag DSCP 8, qualifier system traffic = vMotion, egress.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "DSCP set here overwrites the guest marking; to trust the guest, do not add a Tag rule for that traffic.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "CoS only travels on tagged frames (VLAN trunk); on access ports it is lost.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Drop rules are a coarse firewall without logging; use NSX or the guest firewall for real policy.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "vDS 5.5+ is required; standard switches have no marking.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "pktcap-uw --uplink vmnic0 --dir 1 -o - | tcpdump-uw -r - -vv",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "shows the expected `tos 0xb8` (DSCP 46) on egress frames; switch QoS counters increment in the right queue.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I extracted every concrete claim in the skill — the client navigation path, the full rule anatomy (actions, CoS and DSCP ranges with the example EF/AF41/CS1/AF31 values, directions, all three qualifier classes), both worked examples with their DSCP/CoS values and the 16384-32767 UDP port range, every gotcha including the vDS 5.5+ version statement, and the whole pktcap-uw/tcpdump-uw verify command with its expected tos 0xb8 — and checked each against the skill's only listed source.",
+  "verdict": "fail",
+  "suggested_edits": "The only listed source is the vSphere 8.0 documentation library landing page, which is a table of contents and states none of the skill's facts, so every claim is unverifiable as sourced. The content actually lives in the vSphere Networking book's policies chapter; list the deep pages instead, e.g. https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-networking/networking-policies/traffic-filtering-policy.html (what is traffic filtering and marking policy), .../traffic-filtering-policy/traffic-filtering-and-marking-for-a-group.html and its sub-pages (enable/mark/filter/network traffic rules, where the Allow/Drop/Tag actions, CoS/DSCP tagging and the Configure tab path are described), .../traffic-filtering-policy/qualifying-traffic-for-filtering-and-marking.html and its system/MAC/IP qualifier sub-pages, plus https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-networking/monitoring-network-packets.html for the pktcap-uw verification step. While re-verifying, also check the gotchas: the what-is page states the policy does not support vSphere distributed switches configured with network offloads compatibility (a missing gotcha), the DiffServ conventions EF 46/AF41 34/CS1 8/AF31 26 and the RTP port range 16384-32767 are generic networking facts that vSphere docs do not state and need their own sources (RFC/Cisco), and 'first match wins' should be reconciled with the documented ordered rule set with modifiable rule priorities.",
+  "attestation_sha256": "a3927fe16e7694c46f8be002b1415b593c63fffc8bf55e2c890bcfd6621d514c"
+}
