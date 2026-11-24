@@ -1,0 +1,133 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.fsharp.type-providers",
+    "version": "2",
+    "sha256": "4fd41c87fa45b5e22cdd1c527fdc351eefd1cc46c56b516562bb2639c86eb0a2"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/",
+      "fetched_at": "2026-11-24T05:20:00Z",
+      "http_status": 200,
+      "content_sha256": "0a5b3688806487d7a39d74e9da77fbe417c7af6264ce17fc567523a206642640"
+    },
+    {
+      "url": "https://fsprojects.github.io/FSharp.Data/",
+      "fetched_at": "2026-11-24T05:20:00Z",
+      "http_status": 200,
+      "content_sha256": "f97d0203f93411a37e7dbbdb8b3382689293f28833edec4623c0dc6108d4a3ce"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "#r \"nuget: FSharp.Data\"\nopen FSharp.Data",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither page shows package-reference code; the FSharp.Data homepage only states that the package is available on NuGet."
+    },
+    {
+      "claim": "type Weather = JsonProvider<\"\"\"{ \"temp\": 12.5, \"city\": \"Oslo\" }\"\"\">",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The homepage names the JsonProvider type and says the type providers infer types from the structure of a sample document, but shows no JsonProvider code, so the inline-sample syntax is not covered."
+    },
+    {
+      "claim": "let w = Weather.Parse \"\"\"{ \"temp\": 20.0, \"city\": \"Rome\" }\"\"\"",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The generated type's Parse method is not mentioned on either page; the homepage mentions only runtime helpers for parsing files."
+    },
+    {
+      "claim": "printfn \"%s %f\" w.City w.Temp",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither page documents generated typed members or their inferred property types; the homepage mentions type-safe access only in general."
+    },
+    {
+      "claim": "type Csv = CsvProvider<\"data/sample.csv\", HasHeaders=true>",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The homepage names the CsvProvider type and sample-based inference, but documents no HasHeaders parameter or sample-file syntax."
+    },
+    {
+      "claim": "let rows = Csv.Load(\"data/prod.csv\").Rows |> Seq.map (fun r -> r.Id)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Load method and the Rows property are not mentioned on either page."
+    },
+    {
+      "claim": "A type provider generates types at compile time from a sample/schema (JSON, CSV, XML, SQL, OpenAPI, ...); the IDE completes members from the sample.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The homepage states that the type providers infer types from the structure of a sample document, and the MS Learn page says type providers access databases and web services, but neither states compile-time type generation, IDE member completion, or SQL/OpenAPI providers."
+    },
+    {
+      "claim": "Static parameters (the angle-bracket arguments) must be compile-time constants; use `[<Literal>]` paths.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Static parameters, the compile-time-constant requirement and the Literal attribute for provider sample paths are not mentioned on either page."
+    },
+    {
+      "claim": "Providers load inside the compiler and IDE, so they can be fragile with `dotnet build` on new SDKs or in `net` target mismatches.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Provider hosting inside the compiler and IDE and SDK fragility are not mentioned on either page."
+    },
+    {
+      "claim": "Sample drives the shape: a field missing from the sample is not available; use a representative or multi-sample file.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The homepage states types are inferred from a sample document or a document containing multiple samples, but never states that a field missing from the sample is unavailable."
+    },
+    {
+      "claim": "Relative sample paths resolve against the project directory (`ResolutionFolder`).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "ResolutionFolder is not mentioned on either page."
+    },
+    {
+      "claim": "Slow providers slow compile and IDE responsiveness; prefer runtime parsing in hot builds.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Provider compile-time and IDE performance is not mentioned on either page."
+    },
+    {
+      "claim": "Change the sample field name and confirm the usage site fails to compile.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not stated by either page; consistent with the sample-driven inference the homepage describes, but not covered."
+    },
+    {
+      "claim": "get typed access to external schemas.",
+      "verdict": "confirmed",
+      "source_url": "https://fsprojects.github.io/FSharp.Data/",
+      "evidence_quote": "The structure is then used to provide easy to use type-safe access to documents that follow the same structure."
+    }
+  ],
+  "coverage": "Claims cover every command and line of code in the skill (#r and open directives, both type-provider definitions, Parse, printfn with typed members, Load and Rows), the HasHeaders setting, the numbers in the code samples (12.5, 20.0) inside those code claims, and every behaviour stated in the bullet list, gotchas and self-check.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing in the skill is contradicted by the current sources, but they cover almost none of its concrete claims: the FSharp.Data URL is a landing page with no code or API reference, and the Microsoft URL is a language-reference index that only links type-provider articles. Replace them with pages that actually document the claims - the FSharp.Data library documentation pages for the JSON and CSV type providers that the landing page links to, and the Microsoft F# type-providers tutorial/overview pages - then re-review so the #r directive, Parse/Load/Rows, HasHeaders and ResolutionFolder static parameters, the static-parameter compile-time rules and the tooling-limit behaviours can be verified.",
+  "attestation_sha256": "3e597ab0c56b036c06652d312cfb794bed4d5aca42c0416cabcc4f63979cefcf"
+}
