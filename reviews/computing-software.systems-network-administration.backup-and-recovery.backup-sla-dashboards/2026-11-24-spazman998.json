@@ -1,0 +1,156 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.systems-network-administration.backup-and-recovery.backup-sla-dashboards",
+    "version": "2",
+    "sha256": "1ecc7b979a95b9609aa07ba6c8f58efd73ab3961b292ea2b05dbf9d9f67bb1e2"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://helpcenter.veeam.com/docs/backup/vbr_rest/overview.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "239cbb3f661b7c25598e92c7e72c09474000b05782807d2dee53eabd887edff3"
+    },
+    {
+      "url": "https://grafana.com/docs/grafana/latest/dashboards/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "32286251e8ddb760ce65dc9ab210e95868492e76a35f93dc47ff0558c3ab944b"
+    },
+    {
+      "url": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "d93ad092a3213352644919c8fe58f6c8472da41168518c84d39da8ea4d2c415c"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "% of in-scope systems whose newest good restore point is younger than the tier RPO",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Gold 100% < 4 h, Silver > 99% < 24 h",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Job success rate | Successful + warning runs / all runs, last 30 days | > 98%",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Unprotected systems | Systems in CMDB/inventory with no backup | 0",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Restore test pass rate | Passed tests / scheduled tests, quarter | 100%",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Measured RTO | Time from restore start to app validated, per test | Under tier RTO",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Immutable copy coverage | % of tier with a copy in immutable/offline storage | 100% for Gold",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Repository headroom | Days until full at current growth | > 90 days",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "\"Success rate\" alone hides a VM that has failed every night for a week.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Veeam: REST API (`/api/v1/sessions`, `/api/v1/backupObjects`) or Veeam ONE reports",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "other tools have similar APIs or CLI JSON output",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Inventory: vCenter/Hyper-V/CMDB lists to compute unprotected systems",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Restore tests: a simple table (system, date, result, measured time) from the test runbook",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Collect into a database or Prometheus (see backup metrics exporters), visualise in Grafana or Power BI.",
+      "verdict": "confirmed",
+      "source_url": "https://grafana.com/docs/grafana/latest/dashboards/",
+      "evidence_quote": "Dashboards allow you to query, transform, visualize, and understand your data no matter where it’s stored."
+    },
+    {
+      "claim": "One row per tier; red/amber/green on RPO compliance; drill-down to failing systems with ticket links.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Trend lines (90 days) for success rate and capacity.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Exclude retired systems promptly or compliance looks worse than reality.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Warnings count as success only if the restore point is usable; treat \"warning: guest processing failed\" on databases as failure.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Pick three systems at random and check that the dashboard's last-good-backup time matches the backup console.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "The skill contains no commands or flags, so I extracted every number and target (4 h, 24 h, 99%, 98%, 30 days, quarter, 0, 90 days, three systems), both Veeam REST API endpoint paths, every named tool (Veeam, Veeam ONE, vCenter, Hyper-V, CMDB, Prometheus, Grafana, Power BI), every metric definition and every behavioural statement in the Data sources, Build, Gotchas and Verify sections, and checked each against all three listed sources.",
+  "verdict": "fail",
+  "suggested_edits": "The Veeam source URL redirects to a JavaScript-driven Swagger index (helpcenter.veeam.com/references/vbr/13/rest/index.html) whose only text is two 'About Veeam Backup & Replication REST API' headings: it names no endpoints and no Veeam ONE, so the skill's one actionable API claim is unsupported. Replace it with the reference pages that actually document /api/v1/sessions and /api/v1/backupObjects for the VBR version targeted (the current reference serves API 1.3-rev2 for VBR 13), plus a Veeam ONE reporting page. The NIST URL is the SP 800-34 Rev. 1 landing page, whose abstract is about contingency planning and never defines RPO or RTO; cite the guide's own recovery-objective sections (or the PDF) if the RPO/RTO framing is meant to be grounded there. The Grafana page only supports general dashboard visualisation - drill-down, red/amber/green thresholds and 90-day trend lines are design advice with no listed source. The metric definitions and example targets are the author's own and fine as examples, but the endpoint paths and tool behaviour claims need sources before promotion.",
+  "attestation_sha256": "16d3033bfb2949ae00927138b902a802c079ed24a892c5395d7da7b814b4506e"
+}
