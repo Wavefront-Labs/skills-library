@@ -1,0 +1,142 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.cybersecurity-defensive.palo-alto-pan-os.pan-os-licensing-and-dynamic-updates",
+    "version": "2",
+    "sha256": "50f86d1ed5d6521f9a9e384c435ef62135a9bda8f1ea803198a2df98442d876b"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-upgrade/software-and-content-updates/dynamic-content-updates",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "6182ccab5483a2098dafa63b1e35bd7f6bc6c381ed2fd84ff7cafe6c06fedace"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Fetch PAN-OS licences and schedule content updates (Applications and Threats, antivirus, WildFire) with CLI checks and the right ordering",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary: the skill's only listed source, the pan-os-admin dynamic-content-updates URL, returned HTTP 404 on every fetch attempt today (web fetch tool, urllib with the attest user-agent, curl with a browser user agent), so no listed page could be read and none covers the licence-fetch and update-scheduling scope."
+    },
+    {
+      "claim": "Goal: licensed subscriptions active and App-ID / threat content current without breaking policy",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Goal line: the only listed source 404s today, so no listed page covers it; the same-titled page the URL's content now lives at (pan-os-upgrade path, not a listed source) says only that 'dynamic content updates available to you might depend on your subscriptions'."
+    },
+    {
+      "claim": "request license fetch auth-code <AUTH-CODE>\nrequest license info",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The two licence CLI commands: the only listed source 404s today; the page that content now lives at (pan-os-upgrade path, not a listed source) contains no CLI commands at all, and 'request license' appears nowhere in it."
+    },
+    {
+      "claim": "request content upgrade check\nrequest content upgrade download latest\nrequest content upgrade install version latest",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The three content-upgrade CLI commands: the only listed source 404s today; the moved page (not a listed source) shows no CLI commands, only a sidebar link to a separate 'CLI Commands for Upgrade' section."
+    },
+    {
+      "claim": "request anti-virus upgrade check\nrequest anti-virus upgrade download latest\nrequest anti-virus upgrade install version latest",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The three anti-virus CLI commands: the only listed source 404s today; the moved page (not a listed source) has no CLI commands and covers antivirus release cadence, not upgrade commands."
+    },
+    {
+      "claim": "Scheduling (Device > Dynamic Updates > Schedule): set Applications and Threats to download-and-install with a threshold of 24 hours",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Schedule navigation, download-and-install action and 24-hour threshold: the only listed source 404s today; the moved page (not a listed source) says only that you can set a schedule 'to define the frequency at which the firewall checks for and downloads or installs new updates (DeviceDynamic Updates)' and never states a 24-hour install threshold or the action name download-and-install."
+    },
+    {
+      "claim": "on production so new App-IDs are not enforced the moment they publish",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Threshold rationale: no listed source could be read (the only one 404s today); the moved page (not a listed source) never says new App-IDs are held back from being enforced at publish time."
+    },
+    {
+      "claim": "Use a shorter interval for threat signatures",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Shorter interval for threat signatures: no listed source could be read (the only one 404s today); the moved page (not a listed source) gives release cadences ('Antivirus updates are released every 24 hours', WildFire checks as often as every minute) but no install-interval guidance."
+    },
+    {
+      "claim": "verify the schedule appears in `show config running | match update-schedule`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The show config running verification: the only listed source 404s today; the moved page (not a listed source) contains no CLI commands, so the update-schedule verification line is covered by no readable page."
+    },
+    {
+      "claim": "New App-ID content can re-classify traffic (a previously `ssl` flow becomes a named app) and silently change which rule matches",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "App-ID re-classification gotcha: no listed source could be read (the only one 404s today); the moved page (not a listed source) comes closest with 'resulting changes in security policy enforcement that can impact application availability' but never says a previously ssl flow becomes a named app."
+    },
+    {
+      "claim": "Review the release notes and the Policy Optimizer new-App-ID view after install (confirm menu name in your release)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Release notes and Policy Optimizer: no listed source could be read (the only one 404s today); the moved page (not a listed source) never mentions Policy Optimizer or a new-App-ID view, only tips to 'Manage New and Modified App-IDs'."
+    },
+    {
+      "claim": "A content package needs a minimum PAN-OS version; downloads for a package newer than the OS supports fail with a version error",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Minimum PAN-OS version: no listed source could be read (the only one 404s today); the moved page (not a listed source) states a minimum only for WF-Private content, that firewall and appliance 'must both be running PAN-OS 6.1 or a later release'."
+    },
+    {
+      "claim": "In HA, install content on both peers or use the same schedule with the sync-to-peer option (confirm per release)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "HA sync-to-peer: no listed source could be read (the only one 404s today); the moved page (not a listed source) has no sync-to-peer or content-install-on-both-peers guidance, only navigation links to HA upgrade pages."
+    },
+    {
+      "claim": "show system info | match \"app-version|av-version|threat-version\"",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The show system info version check: the only listed source 404s today; the moved page (not a listed source) contains no CLI commands, so app-version/av-version/threat-version checking is covered by no readable page."
+    },
+    {
+      "claim": "request license info\nshow jobs all",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The show jobs verification command: the only listed source 404s today; the moved page (not a listed source) contains no CLI commands and no job-status guidance."
+    },
+    {
+      "claim": "Licences should show an expiry date in the future and the job should report FIN / OK",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Expiry and FIN/OK expectations: no listed source could be read (the only one 404s today); the moved page (not a listed source) mentions neither licence expiry dates nor job status FIN or OK, only that some updates require a valid maintenance/support contract."
+    }
+  ],
+  "coverage": "I took the frontmatter description and goal line, all eight CLI command lines (request license fetch auth-code, request license info, the three request content upgrade commands, the three request anti-virus upgrade commands) plus the three verify-block commands, the Device > Dynamic Updates > Schedule navigation with the download-and-install action and the 24-hour threshold and its new-App-ID rationale, the shorter-interval guidance, all three gotchas (App-ID re-classification with the Policy Optimizer view, the minimum PAN-OS version, the HA sync-to-peer option) and the licence-expiry and FIN/OK expectations, so every command, flag, number and behaviour is covered, but the skill's only listed source, https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-admin/software-and-content-updates/dynamic-content-updates, returned HTTP 404 on every fetch attempt today (web fetch tool, urllib with the attest user-agent, and curl with a browser user agent), so no listed source could be read; the same-titled page now lives at https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-upgrade/software-and-content-updates/dynamic-content-updates, which I fetched and read (HTTP 200, 523,308 bytes) but which is not a source the skill lists, so it cannot serve as evidence and every claim is unverifiable.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all 16 claims are unverifiable because the skill's only listed source, https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-admin/software-and-content-updates/dynamic-content-updates, is a dead link - it returned HTTP 404 on every fetch attempt today (web fetch tool, urllib with the attest user-agent, and curl with a browser user agent). The same-titled page now lives at https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-upgrade/software-and-content-updates/dynamic-content-updates (fetched today, HTTP 200), and even that page would not confirm most of the skill: it contains no CLI commands at all (only a sidebar link to a separate CLI Commands for Upgrade section), so none of the eleven request/show command lines is covered; it never uses the words download-and-install and never states a 24-hour install threshold (its 24-hour mentions are antivirus release cadence and the WildFire signature wait without a subscription); it has no HA sync-to-peer guidance; it states a minimum PAN-OS version only for WF-Private content (PAN-OS 6.1 or later); and Policy Optimizer and re-classification are absent, the closest text being that new and modified App-IDs bring 'resulting changes in security policy enforcement that can impact application availability'. A fix PR should bump version, replace the dead URL with the pan-os-upgrade one, and add sources that actually cover the claims - the PAN-OS CLI reference or the CLI Commands for Upgrade page for the request/show commands, the Device > Dynamic Updates help page for schedule actions, thresholds and the HA sync-to-peer option, and a licence activation page for request license info and expiry - or trim the skill to what the current sources support.",
+  "attestation_sha256": "dc06e422019ec3d0fc204d631edac3e1ec21449aff5f929eca25f665e50f9291"
+}
