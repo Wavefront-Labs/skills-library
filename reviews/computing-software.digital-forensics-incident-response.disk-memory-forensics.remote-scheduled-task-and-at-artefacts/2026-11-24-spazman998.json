@@ -1,0 +1,132 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.digital-forensics-incident-response.disk-memory-forensics.remote-scheduled-task-and-at-artefacts",
+    "version": "2",
+    "sha256": "2d83dac8a65576c82b6b0c84dcbfcd2826d829500792c5a12790e0d5a3f0311e"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://jpcertcc.github.io/ToolAnalysisResultSheet/",
+      "fetched_at": "2026-11-24T23:41:46Z",
+      "http_status": 200,
+      "content_sha256": "8683db33dad71bf1520ad9b249fbbd78843b6a2540fdea0668c3b0c297283a77"
+    },
+    {
+      "url": "https://attack.mitre.org/techniques/T1053/005/",
+      "fetched_at": "2026-11-24T23:41:46Z",
+      "http_status": 200,
+      "content_sha256": "a0e932d8e662bfd91fe7f9ceea853ae74abc41e8962a795f3bf9e07ab8483be7"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "prove that a task was registered on a host from another host and ran a payload.",
+      "verdict": "confirmed",
+      "source_url": "https://attack.mitre.org/techniques/T1053/005/",
+      "evidence_quote": "the windows task scheduler can also be abused to conduct remote execution as part of lateral movement"
+    },
+    {
+      "claim": "Security **4698** (task created) with task name, XML content including `Command` and\n  `Arguments`, and `SubjectUserName`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "4699 (deleted), 4700/4701 (enabled/disabled), 4702\n  (updated).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Requires \"Audit Other Object Access Events\".",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`Microsoft-Windows-TaskScheduler/Operational` 106 (registered), 140 (updated), 141\n  (deleted), 200/201 (action started/completed), 129 (process created with PID).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Security 4624 type 3 from the source just before, plus 5145 access to `\\\\*\\IPC$` named\n  pipe `atsvc` (for `at`/Impacket atexec).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Task XML file in `Windows\\System32\\Tasks\\<name>` (author, registration date, command)\n  and registry `SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\<name>`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Impacket `atexec.py`: random 8-char task name",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "runs `cmd.exe /C <cmd> > %windir%\\Temp\\<rand>.tmp 2>&1`,",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "task deleted after (4699 shortly after 4698).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`schtasks.exe /create /s <target> /u ... /tr ...`",
+      "verdict": "confirmed",
+      "source_url": "https://attack.mitre.org/techniques/T1053/005/",
+      "evidence_quote": "used scheduled tasks to execute batch scripts for lateral movement with the following command: schtasks /create /s"
+    },
+    {
+      "claim": "in 4688/Sysmon 1, Prefetch SCHTASKS.EXE,\n4648 explicit credentials naming target; PowerShell `Register-ScheduledTask -CimSession`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "SecurityEvent | where EventID == 4698\n| extend Cmd = extract(@\"<Command>(.*?)</Command>\", 1, EventData)\n| where Cmd has_any (\"cmd.exe\",\"powershell\",\"\\\\Temp\\\\\",\"rundll32\")",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Deleted tasks leave 4699/141 and possibly TaskCache remnants; the XML file is removed.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Legitimate software creates many tasks; focus on created-then-deleted pairs and those\n  created by remote logons.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "4624 type 3 from source, 4698 within seconds, 200/129 showing execution, and 4699 if\ncleaned, all for the same task name.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I chose every concrete claim in the skill - all Security and TaskScheduler event IDs (4698, 4699, 4700/4701, 4702, 106, 140, 141, 200/201, 129), 4624 type 3, the 5145 atsvc IPC$ pipe, the task XML and TaskCache paths, the Audit Other Object Access Events requirement, the atexec.py random 8-char task name, redirect command and 4699-after-4698 deletion, the schtasks.exe /create /s command, 4688/Sysmon 1, Prefetch SCHTASKS.EXE, 4648, Register-ScheduledTask -CimSession, the KQL hunt query and the verify chain - then fetched both listed sources and searched each page for every claim.",
+  "verdict": "fail",
+  "attestation_sha256": "912fcbbe620b246fa69cd33bfdd946d29d0c76cdfae22ee947a1f59130f7676c",
+  "suggested_edits": "Nothing is contradicted, but the two listed sources cover almost none of the skill: the JPCERT URL is the Tool Analysis Result Sheet index (a tool list, no artefact detail) and MITRE T1053/005 is the technique page with no Windows event IDs, so every event-ID, path and atexec claim is unverifiable. A fix PR should bump version and cite sources that state these artefacts: the JPCERT schtasks detail page https://jpcertcc.github.io/ToolAnalysisResultSheet/details/schtasks.htm (fetched 200 today; documents the TaskScheduler 106/200/201 events, the Sysmon process-create command line with schtasks /create /s, Prefetch and TaskCache), Microsoft Learn security-auditing pages for events 4698/4699/4700/4701/4702 and the Audit Other Object Access Events subcategory, a TaskScheduler event reference for 129/140/141, an Impacket atexec.py source reference for the random 8-char task name, the cmd.exe /C redirect and task deletion, and 4624/5145/atsvc documentation; MITRE T1053/005 confirms only the schtasks /create /s lateral-movement command form and atexec.py usage by menuPass."
+}
