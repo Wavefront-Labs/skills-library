@@ -1,0 +1,197 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.game-programming.unity.ugui-selectable-explicit-navigation",
+    "version": "2",
+    "sha256": "f074fcbb3a65782a15deb187be03c8781119ca32db75b81fbdb830166ac19bd3"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-SelectableNavigation.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "baee73075b09fba9dfe87ea0bc041e27c7a4eb6fed9777e41ab023d4800996a9"
+    },
+    {
+      "url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventSystem.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "8573f3a68c9efdfe90409a1a4de75da4e344250e5dec4fba021b2aad91f3dbaa"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "picks nearest selectable in each direction by position",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Automatic-mode behaviour; the Navigation Options page's Automatic row says only 'Automatic Navigation.' and the EventSystem API page does not cover automatic navigation selection."
+    },
+    {
+      "claim": "Fine for simple grids;\n  breaks with irregular layouts or scroll views.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Assessment of Automatic mode's limits; neither listed source describes where automatic navigation breaks."
+    },
+    {
+      "claim": "**Horizontal / Vertical**: restrict to one axis",
+      "verdict": "confirmed",
+      "source_url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-SelectableNavigation.html",
+      "evidence_quote": "Horizontal Navigates Horizontally. Vertical Navigates Vertically. Automatic Automatic Navigation.",
+      "note": "The manual's mode table: the Horizontal row reads 'Navigates Horizontally.' and the Vertical row 'Navigates Vertically.', i.e. each navigates on a single axis."
+    },
+    {
+      "claim": "Horizontal would fight value change, so\n  put sliders in Vertical-only lists",
+      "verdict": "confirmed",
+      "source_url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-SelectableNavigation.html",
+      "evidence_quote": "Note that the vertical sliders can't be focused-away-from using up or down keys, because they control the value of the slider.",
+      "note": "The manual's visualization paragraph states a slider's value axis is consumed by value control, so navigation on that axis cannot move focus away; the same is stated for horizontal sliders and left/right keys."
+    },
+    {
+      "claim": "**Explicit**: set Up/Down/Left/Right targets manually",
+      "verdict": "confirmed",
+      "source_url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-SelectableNavigation.html",
+      "evidence_quote": "In this mode you can explicitly specify where the control navigates to for different arrow keys.",
+      "note": "The manual's Explicit row."
+    },
+    {
+      "claim": "**None**: not reachable by navigation.",
+      "verdict": "confirmed",
+      "source_url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-SelectableNavigation.html",
+      "evidence_quote": "No keyboard navigation. Also ensures that it does not receive focus from clicking/tapping on it.",
+      "note": "The manual's None row: no keyboard navigation."
+    },
+    {
+      "claim": "The **Visualize** button in the inspector draws arrows for every selectable in the scene.",
+      "verdict": "confirmed",
+      "source_url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-SelectableNavigation.html",
+      "evidence_quote": "Selecting Visualize gives you a visual representation of the navigation you have set up in the scene window.",
+      "note": "The manual's Visualize row; the following paragraph describes the arrows showing focus changes for the collection of controls as a group."
+    },
+    {
+      "claim": "EventSystem.current.SetSelectedGameObject(null);   // force OnSelect to fire\n    EventSystem.current.SetSelectedGameObject(firstButton.gameObject);",
+      "verdict": "confirmed",
+      "source_url": "https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventSystem.html",
+      "evidence_quote": "Set the object as selected. Will send an OnDeselect the the old selected object and OnSelect to the new selected object.",
+      "note": "EventSystem.SetSelectedGameObject(GameObject) is documented on the API page (EventSystem.current returns the current EventSystem), so the null-then-select pattern deselects the old object and fires OnSelect on the newly selected one; the page's typo 'the the' is copied verbatim."
+    },
+    {
+      "claim": "EventSystem \"First Selected\" only applies at startup.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The API page documents the firstSelectedGameObject property ('Only one object can be selected at a time. Think: controller-selected button.') but never states when it is applied."
+    },
+    {
+      "claim": "After a mouse click on empty space, selection becomes null",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions mouse clicks on empty space or the selection becoming null; the EventSystem page only defines currentSelectedGameObject."
+    },
+    {
+      "claim": "if `currentSelectedGameObject == null` and a navigation input arrives",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "currentSelectedGameObject is documented ('The GameObject currently considered active by the EventSystem.') but the reselect-on-navigation-input pattern appears in no listed source."
+    },
+    {
+      "claim": "store it in `OnSelect` via `ISelectHandler`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "OnSelect events are named in the SetSelectedGameObject description, but ISelectHandler appears in neither listed source."
+    },
+    {
+      "claim": "When closing a sub-menu, restore selection to the button that opened it.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Practice guidance; no listed source covers restoring selection when a sub-menu closes."
+    },
+    {
+      "claim": "var nav = new Navigation { mode = Navigation.Mode.Explicit };",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source names the UnityEngine.UI Navigation struct or Navigation.Mode.Explicit; the manual documents the Explicit mode at inspector level only."
+    },
+    {
+      "claim": "nav.selectOnUp = buttons[(i - 1 + buttons.Count) % buttons.Count];",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "selectOnUp is not mentioned by either listed source."
+    },
+    {
+      "claim": "nav.selectOnDown = buttons[(i + 1) % buttons.Count];\n    buttons[i].navigation = nav;",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither selectOnDown nor the Selectable.navigation property is named by either listed source."
+    },
+    {
+      "claim": "Selection does not scroll the view automatically",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions scrolling behaviour; the uGUI ScrollRect documentation is not listed."
+    },
+    {
+      "claim": "adjust\n`ScrollRect.normalizedPosition` (or `content.anchoredPosition`) to keep it visible.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "ScrollRect.normalizedPosition and content.anchoredPosition appear in neither listed source."
+    },
+    {
+      "claim": "use `InputSystemUIInputModule` (not StandaloneInputModule) and bind Navigate/\n  Submit/Cancel actions.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The EventSystem page mentions BaseInputModule and move/submit/cancel navigation events (sendNavigationEvents) but never InputSystemUIInputModule or StandaloneInputModule; the Input System UI module docs are not listed."
+    },
+    {
+      "claim": "Disabled (non-interactable) selectables are skipped automatically; hidden but active ones are not.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source states how non-interactable or hidden-but-active selectables are treated by navigation."
+    },
+    {
+      "claim": "Popups must block navigation to elements behind them",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Practice guidance; no listed source covers blocking navigation behind popups."
+    },
+    {
+      "claim": "Unplug mouse: every screen reachable and escapable with gamepad.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify-section criterion; a test step, not a documented Unity behaviour."
+    },
+    {
+      "claim": "Click empty space, then press d-pad: focus returns.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify-section criterion restating the selection-loss fix; no listed source covers it."
+    }
+  ],
+  "coverage": "I chose every concrete claim in the skill - all four navigation-mode bullets including Automatic's nearest-pick behaviour and its simple-grids/scroll-views caveat, the slider value-axis advice, the Visualize button, both EventSystem selection calls with their comments, the First-Selected timing, the mouse-click selection-loss and reselect pattern with OnSelect/ISelectHandler, the sub-menu restore advice, all four code lines of the explicit-navigation block (Navigation, Navigation.Mode.Explicit, selectOnUp, selectOnDown, Selectable.navigation), the no-auto-scroll behaviour with ScrollRect.normalizedPosition and content.anchoredPosition, the InputSystemUIInputModule/StandaloneInputModule guidance, the disabled-selectables and popup behaviours, and both Verify checklist items - covering every behaviour, API name and code line since the skill has no commands, flags or numbers; I fetched both listed Unity pages with the checker's own fetcher (both 200) and set a claim confirmed only where a page states it - the Navigation Options page confirms the Horizontal, Vertical, Explicit and None modes, the slider value-axis conflict and the Visualize button, and the EventSystem API page confirms SetSelectedGameObject's OnDeselect/OnSelect semantics - while the Automatic nearest-pick behaviour, First-Selected timing, selection loss after clicks, auto-scrolling, disabled-selectable skipping, the UnityEngine.UI Navigation/Selectable C# members and InputSystemUIInputModule appear in neither page and are unverifiable, so the core code and gotcha guidance of the skill is materially uncovered.",
+  "verdict": "fail",
+  "attestation_sha256": "9dc747cfebe58e346d6c8fdf96b717bf1f81e58dd3c8eedcd665f0b2108b982e",
+  "suggested_edits": "Nothing is contradicted, but most actionable claims are covered by neither listed source. A fix PR should bump version and add to sources: the uGUI API pages for UnityEngine.UI.Navigation (Navigation.Mode.Explicit, selectOnUp/selectOnDown) and UnityEngine.UI.Selectable (the navigation property and how navigation treats non-interactable or hidden selectables), UnityEngine.UI.ScrollRect (normalizedPosition, and whether selection auto-scrolls), and Input System UI documentation for InputSystemUIInputModule versus StandaloneInputModule; also cite a page stating when EventSystem.firstSelectedGameObject is applied and that clicking empty space clears the current selection. The Navigation Options manual page documents the modes at inspector level only - its Automatic row says just 'Automatic Navigation.' - so either cite a page describing automatic nearest-in-direction selection or soften that bullet to what the source states."
+}
