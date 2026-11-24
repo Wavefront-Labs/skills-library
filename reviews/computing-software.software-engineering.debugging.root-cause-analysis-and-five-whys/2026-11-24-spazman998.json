@@ -1,0 +1,194 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.debugging.root-cause-analysis-and-five-whys",
+    "version": "2",
+    "sha256": "3c178fe3b230bac573fd2d117595bca70387949d640fc5529691034e75834cd4"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://sre.google/sre-book/postmortem-culture/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "ef876f0a0f09a88f3acc3294ec24eb922751b0059cba8be271aa6fe8474656c5"
+    },
+    {
+      "url": "https://www.atlassian.com/incident-management/postmortem/5-whys",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "d71bd2ab5480473c1300be4c0d1d7ec96d0530f8e0ea1162efc6a7dde215a59b"
+    },
+    {
+      "url": "https://how.complexsystems.fail/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "49394f4ba596146647bfd5b2271be5cc96ff05f08531394b538ab311b4ed9cdf"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "five whys done well, contributing-factor trees, separating trigger from cause, and actions that prevent the class of bug.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary: Atlassian covers the five-whys method and branching into multiple factors, Cook covers contributing factors, and the SRE chapter covers blameless postmortems, but no fetched page covers contributing-factor trees, separating trigger from cause, or actions that prevent the class of bug."
+    },
+    {
+      "claim": "Start from the precise failure and ask \"why?\" repeatedly",
+      "verdict": "confirmed",
+      "source_url": "https://www.atlassian.com/incident-management/postmortem/5-whys",
+      "evidence_quote": "Identify the problem and ask why it happened. Then ask why that happened.",
+      "note": "The page continues: 'Then ask why that next thing happened. And so on until you get to the true root cause of your problem.'"
+    },
+    {
+      "claim": "each answer backed by evidence:",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The word 'evidence' appears zero times in the Atlassian 5-whys page and the SRE chapter; no readable source says each answer must be backed by evidence, and learningfromincidents.io was blocked from this environment today (SSL handshake failure on every attempt)."
+    },
+    {
+      "claim": "Why did customers get double-charged? The payment job ran twice for the same orders.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Worked example: hypothetical double-charge scenario; no listed source documents it."
+    },
+    {
+      "claim": "Why twice? Two workers picked the same batch.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Worked example narrative; no listed source covers it."
+    },
+    {
+      "claim": "Why? The batch lock expired while the first worker was still running.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Worked example narrative (batch lock expiry); no listed source covers it."
+    },
+    {
+      "claim": "Why? Lock TTL 60 s; the job took 4 min after the payment API slowed.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Worked example numbers (60 s lock TTL, 4 min job); no listed source states these values."
+    },
+    {
+      "claim": "Why was that possible? The job wasn't idempotent and lock TTL wasn't tied to job duration\n   (no lease renewal, no fencing).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Worked example conclusion (idempotency, lease renewal, fencing); no listed source covers it."
+    },
+    {
+      "claim": "Fixes then target several levels: idempotency key per charge (prevents the class), lease renewal\nwith fencing tokens, alert on job duration, and API timeout.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Fix list for the hypothetical scenario; no fetched page discusses idempotency keys, lease renewal with fencing tokens, or fixes at several levels."
+    },
+    {
+      "claim": "most failures have **several contributing factors**; a single chain hides the others.",
+      "verdict": "confirmed",
+      "source_url": "https://how.complexsystems.fail/",
+      "evidence_quote": "Because overt failure requires multiple faults, there is no isolated ‘cause’ of an accident. There are multiple contributors to accidents.",
+      "note": "Atlassian similarly: 'There’s no 5-whys police coming for you if your cause-and-effect chain turns into a tree of multiple factors.'"
+    },
+    {
+      "claim": "Draw a tree or fishbone (people/process/tooling/code/environment/dependencies).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "None of the three fetched pages mentions fishbone or Ishikawa diagrams or those cause categories; learningfromincidents.io was blocked today."
+    },
+    {
+      "claim": "Stop at causes you can act on;",
+      "verdict": "confirmed",
+      "source_url": "https://www.atlassian.com/incident-management/postmortem/5-whys",
+      "evidence_quote": "Five is shorthand for a process that pushes you to dig deeper until you hit the broken process or processes behind the incident."
+    },
+    {
+      "claim": "don't stop at \"human error\".",
+      "verdict": "confirmed",
+      "source_url": "https://www.atlassian.com/incident-management/postmortem/5-whys",
+      "evidence_quote": "Human error, team B’s screwup, and lack of employee X attention aren’t acceptable answers to the question."
+    },
+    {
+      "claim": "Ask why the system made the error\n  easy and its consequences severe (Cook, How Complex Systems Fail).",
+      "verdict": "confirmed",
+      "source_url": "https://how.complexsystems.fail/",
+      "evidence_quote": "Post-accident remedies for “human error” are usually predicated on obstructing activities that can “cause” accidents. These end-of-the-chain measures do little to reduce the likelihood of further accidents.",
+      "note": "The page names the essay and author (How Complex Systems Fail, Richard I. Cook, MD); the skill's phrasing distills Cook's argument that human-error attribution is hindsight-biased and end-of-chain remedies do little."
+    },
+    {
+      "claim": "Separate **trigger** (deploy, traffic spike, bad input) from underlying causes (missing\n  validation, no rate limit).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither Atlassian, the SRE chapter, nor Cook contrasts a trigger with underlying causes; learningfromincidents.io was blocked today so could not be checked."
+    },
+    {
+      "claim": "Each \"why\" needs evidence (logs, code, metrics), not a guess.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Evidence' appears zero times in the Atlassian 5-whys page and the SRE chapter; Cook's essay does not discuss evidence for whys either."
+    },
+    {
+      "claim": "Find the defect (the line), then ask why it was written, why review didn't catch it, why tests\n  didn't, why monitoring didn't detect it sooner.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The four-question chain for code bugs appears in none of the fetched pages; the sources cover incident postmortems, the 5-whys method and complex-system failure."
+    },
+    {
+      "claim": "Each answer is a possible action.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Method guidance; no fetched source states it."
+    },
+    {
+      "claim": "Search for the **same pattern elsewhere** (`rg`, Semgrep/CodeQL query) and fix all instances.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'rg', 'Semgrep' and 'CodeQL' appear nowhere in the three fetched pages; no listed source documents searching for the same pattern or fixing all instances."
+    },
+    {
+      "claim": "Add a regression test and, where possible, a static check that bans the pattern.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "None of the fetched pages mentions regression tests or static checks that ban a pattern."
+    },
+    {
+      "claim": "Summary, impact, timeline, root cause and contributing factors, what went well, action items with\nowners and dates (prevent, detect, mitigate).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the SRE chapter defines a postmortem as 'a written record of an incident, its impact, the actions taken to mitigate or resolve it, the root cause(s), and the follow-up actions to prevent the incident from recurring', and its blameless framing is confirmed, but 'timeline', 'what went well', 'owner' and 'date' appear nowhere in it."
+    },
+    {
+      "claim": "Track action items to completion; unfinished actions\nare the most common postmortem failure.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page says action items must be tracked to completion or that unfinished actions are the most common postmortem failure; the SRE chapter's closest text covers review sessions and a repository of past incidents."
+    }
+  ],
+  "coverage": "I took the frontmatter description, the five-whys intro line and all five worked-example steps plus the fixes line (including the 60 s TTL and 4 min numbers), the four Rules bullets split into their component sentences, the three code-bug bullets and both write-up sentences, so that every number, tool name (rg, Semgrep/CodeQL) and behaviour is covered, and checked each against the three sources fetched today (https://sre.google/sre-book/postmortem-culture/, https://www.atlassian.com/incident-management/postmortem/5-whys and https://how.complexsystems.fail/), while https://www.learningfromincidents.io/ rejected every fetch attempt today (web fetch tool, urllib with the attest user-agent and curl over https all failed with an SSL handshake failure, and http timed out), so only the fetched URLs appear in sources.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but 17 of 22 claims are unverifiable against the sources that could be read. The Atlassian page confirms only the five-whys mechanics (identify the problem and ask why, digging to a broken process, human error not an acceptable answer), Cook's essay confirms only the multiple-contributors and end-of-the-chain-remedy points, and the SRE chapter confirms no claim in full - it defines a postmortem as a record of impact, root cause(s) and preventive actions but never mentions a timeline, 'what went well', owners or dates, nor tracking action items to completion; the fishbone categories, the trigger-vs-underlying-cause split, evidence for each why, the code-bug question chain, rg/Semgrep/CodeQL, the regression test and static-check guidance and the worked example are covered by no fetched page. A fix PR should bump version and cite sources that cover the missing material - an Ishikawa/fishbone diagram reference, the SRE Workbook's Postmortem Analysis chapter for the template list and action-item tracking, a page contrasting triggers with underlying causes and requiring evidence per why, and rg/Semgrep/CodeQL docs - or trim those sections to what the current sources support. Note also that https://www.learningfromincidents.io/ rejected every fetch from this environment today (SSL handshake failure over https, timeout over http), so re-fetch checks of that source will fail here.",
+  "attestation_sha256": "abeb7934ac38b02638cf3635ec0ddcc1c97404933c4864e8fb0427a4a36c184a"
+}
