@@ -1,0 +1,198 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.devops-ci-cd.build-systems.monorepo-build-strategies",
+    "version": "2",
+    "sha256": "557e035591814d0382e7d2649979f26a360554d35de8ab221ecd0cb90ab79466"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://nx.dev/ci/features/affected",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "7ac2dd83e596c2ebbadd540913275398180cc6f5181eb416479d70f8ce7b87c2"
+    },
+    {
+      "url": "https://turbo.build/repo/docs/crafting-your-repository/running-tasks",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "fd76f5a334da9588940782609ec0bab7cf46610e6722dffc6c220ed7d83e68b5"
+    },
+    {
+      "url": "https://bazel.build/query/guide",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "25521f25c250bf11d0a8a4338aeaa1d9798d4249a1df515fce41ce0e58759158"
+    },
+    {
+      "url": "https://git-scm.com/docs/git-sparse-checkout",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "1e274b5f414daf12dfac1bc8071feacc409e2eb679284c4fcb9cee0a17e10156"
+    },
+    {
+      "url": "https://monorepo.tools/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "c80c1a23c2a69dc3b09a257a48f0182244c6dd4a982e1a466b0bc3957c44fdd4"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "\"Affected\" = projects whose files changed + everything that depends on them.",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "Nx 23 and earlier use project-based affected: a change to a project runs every task of that project and of every project that depends on it."
+    },
+    {
+      "claim": "nx affected -t test --base=origin/main --head=HEAD",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "nx affected -t build --base=origin/main --head=$PR_BRANCH_NAME # where PR_BRANCH_NAME is defined by your CI system"
+    },
+    {
+      "claim": "compare against the merge-base with the target branch, not `HEAD~1`:",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`turbo run test --filter='...[origin/main]'` (filter syntax changed across Turborepo",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`bazel query \"rdeps(//..., set($TARGETS))\"` (or tools like `bazel-diff`/`target-determinator`).",
+      "verdict": "confirmed",
+      "source_url": "https://bazel.build/query/guide",
+      "evidence_quote": "You can use rdeps(u, x) to find the reverse dependencies of the targets in x within the transitive closure of u"
+    },
+    {
+      "claim": "CI checkouts default to depth 1",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Use `fetch-depth: 0` or fetch the",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "fetch-depth: 0 is required. Without the full Git history, there is no base commit to compare against."
+    },
+    {
+      "claim": "git fetch --depth=100 origin main",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`nrwl/nx-set-shas` or equivalent to find the last green main commit.",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "The nrwl/nx-set-shas action uses the GitHub API to find the last successful workflow run on main and sets NX_BASE and NX_HEAD"
+    },
+    {
+      "claim": "On **main** itself, compare to the last *successful* main build, not the previous",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "The recommended approach is to set the base SHA to the latest successful commit on the main branch. This ensures that all changes since the last successful CI run are accounted for."
+    },
+    {
+      "claim": "Some files affect all projects: root lockfile, root `tsconfig`, shared ESLint config,",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "By default, a change to your package manager's lock file affects every task."
+    },
+    {
+      "claim": "Nx: `namedInputs` / `sharedGlobals` in `nx.json`.",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "production is a named input that leaves out spec files, and ^ reads an input from a project's dependencies"
+    },
+    {
+      "claim": "Turborepo: `globalDependencies` / `globalEnv` in `turbo.json`; task-level `env` for env vars.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "pnpm/Nx can hash per-project resolved deps from the lockfile",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "To limit it to the tasks of projects whose resolved dependencies changed, set projectsAffectedByDependencyUpdates to \"auto\" in nx.json"
+    },
+    {
+      "claim": "npx nx show projects --affected --json",
+      "verdict": "confirmed",
+      "source_url": "https://nx.dev/ci/features/affected",
+      "evidence_quote": "nx show projects --affected -t build --explain works the same way."
+    },
+    {
+      "claim": "`dependsOn: [\"^build\"]` in Nx/Turbo). Pick one convention per repo.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Workspaces (`pnpm`/`yarn`/`npm` workspaces with `workspace:*`, Gradle composite",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Enforce dependency rules: Nx `@nx/enforce-module-boundaries` with tags",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "(`scope:payments`, `type:ui` cannot import `type:data-access`), Bazel `visibility`,",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`dependency-cruiser` or `import-linter` (Python). Without them the graph collapses",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Nx Cloud / Turborepo remote cache / Bazel remote execution offer distribution without",
+      "verdict": "confirmed",
+      "source_url": "https://monorepo.tools/",
+      "evidence_quote": "Distribute work across multiple machines while preserving the developer experience of running everything locally."
+    },
+    {
+      "claim": "At very large sizes: partial clone (`git clone --filter=blob:none`), sparse checkout",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "git sparse-checkout set apps/payments libs/shared",
+      "verdict": "confirmed",
+      "source_url": "https://git-scm.com/docs/git-sparse-checkout",
+      "evidence_quote": "The command git sparse-checkout set A/B/C sets the directory A/B/C as a recursive pattern, the directories A and A/B are added as parent patterns."
+    },
+    {
+      "claim": "`scalar` for maintenance and\nfilesystem monitor",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I extracted every command, flag, config key, default and tool name in the skill — nx affected -t/--base/--head, turbo run --filter, bazel query rdeps, fetch-depth: 0, git fetch --depth=100, git clone --filter=blob:none, git sparse-checkout set, scalar, npx nx show projects --affected --json, namedInputs/sharedGlobals, globalDependencies/globalEnv, dependsOn, the depth-1 checkout default, and the lockfile/global-input/last-green/distribution behaviours — and checked each against all five fetched sources, omitting only advice with no source-checkable specifics (bucketing, CODEOWNERS, versioning, Git LFS, the Verify checklist and the GitHub Actions YAML wiring); a claim is confirmed only where a fetched page documents its named command or mechanism, so sharedGlobals, the --json flag, set($TARGETS), bazel-diff, target-determinator, pnpm, Bazel remote execution and the tsconfig/ESLint examples appear in no listed source.",
+  "verdict": "fail",
+  "suggested_edits": "No claim is contradicted, but twelve concrete ones are unverifiable because the listed pages do not cover them, so the skill mostly needs better sources (URLs below are candidates to check, not yet verified): the Turborepo running-tasks page documents --filter source-control ranges like [HEAD^1] and [main...my-feature] but never the '...[origin/main]' form, globalDependencies/globalEnv, task-level env or dependsOn [\"^build\"] — add the Turborepo --filter reference and the turbo.json task-configuration docs (e.g. https://turborepo.dev/docs/reference/run and https://turborepo.dev/docs/crafting-your-repository/configuring-tasks); the Nx affected page documents namedInputs, fetch-depth: 0, nx-set-shas and per-project lockfile hashing but never sharedGlobals or @nx/enforce-module-boundaries — add the Nx inputs and module-boundaries references (e.g. https://nx.dev/docs/reference/inputs and the Nx enforce-module-boundaries docs); git-scm.com/docs/git-sparse-checkout covers 'git sparse-checkout set <directories>' but not --filter=blob:none or scalar — add the git partial-clone and scalar man pages (e.g. https://git-scm.com/docs/git-partial-clone and https://git-scm.com/docs/scalar); 'CI checkouts default to depth 1' and 'git fetch --depth=100 origin main' need the actions/checkout documentation (https://github.com/actions/checkout); 'Bazel visibility' and 'Bazel remote execution' need bazel.build pages beyond the query guide; and the workspaces list (workspace:*, Gradle composite builds, Cargo/Go workspaces, go.work) plus dependency-cruiser/import-linter need their respective tool docs — or trim those specifics so every remaining concrete claim is covered by a listed source. Note the listed turbo.build URL now 301-redirects to turborepo.dev (quotes still verify after the redirect).",
+  "attestation_sha256": "9019982a331002b3324fb186b8388bc680885879878d9b9f5e5744af3046e257"
+}
