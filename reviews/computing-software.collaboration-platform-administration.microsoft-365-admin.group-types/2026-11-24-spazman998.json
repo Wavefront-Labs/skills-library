@@ -1,0 +1,85 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.collaboration-platform-administration.microsoft-365-admin.group-types",
+    "version": "2",
+    "sha256": "aa8ea855c12e3ecbc100a8011f6bc660a950b0e926206bb729af1844135a76bc"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "11bda03d5419d58da2e68cf03ca4b8420e3d123f9f1167bcfe18c1a7b39a65ab"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ms-102",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "3075bcf408615d678c68861973b92e518664e2635440b64f60cd812365eb45d8"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Microsoft 365 group: shared mailbox, calendar, SharePoint site, optional Team.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The study guide lists the exam objective 'Create and manage groups, including Microsoft 365 Groups and manage shared mailboxes' but never says a Microsoft 365 group includes a shared mailbox, calendar, SharePoint site or Team; the admin hub page does not mention Microsoft 365 groups at all ('microsoft 365 group' appears 0 times in its text)."
+    },
+    {
+      "claim": "Security group: access control to resources and licence assignment; not mail-enabled.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'security group' appears in neither fetched page; the study guide mentions 'Manage and monitor Microsoft 365 licenses, including group-based licensing' without tying licence assignment to security groups, and neither page says security groups are not mail-enabled."
+    },
+    {
+      "claim": "Distribution list: email only, managed in Exchange.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'distribution list' appears 0 times in both fetched pages ('exchange' appears 0 times in the hub and in the study guide only as 'Exchange Online' inside a DLP objective); the hub's closest text is the link blurb 'Manage email settings, distribution groups, and security settings, and set up shared mailboxes', which says nothing about email-only scope or Exchange management."
+    },
+    {
+      "claim": "Mail-enabled security group: both mail and permissions, created in Exchange.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'mail-enabled' appears 0 times in both fetched pages; no listed source mentions mail-enabled security groups or where they are created."
+    },
+    {
+      "claim": "Dynamic membership is available for Microsoft 365 and security groups through rules.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'dynamic membership' appears 0 times in both fetched pages; neither the admin hub nor the study guide mentions dynamic groups or membership rules (the study guide's Entra identity section covers synchronization, authentication and Conditional Access)."
+    },
+    {
+      "claim": "Converting types is limited; distribution lists can be upgraded to Microsoft 365 groups, but not the reverse.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'distribution list' appears 0 times in both fetched pages, so no listed source covers upgrading distribution lists to Microsoft 365 groups or the one-way restriction."
+    },
+    {
+      "claim": "Guests added to Microsoft 365 groups gain access to the group's resources.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The hub's only guest text is the users-and-groups link blurb 'Manage passwords, add and remove users, set up and manage groups, manage guest access, and assign user licenses', which does not mention Microsoft 365 groups or what guests can reach; the study guide never mentions guests."
+    }
+  ],
+  "coverage": "I took all seven factual bullets in the skill body - the four group-type definitions, the dynamic-membership line and both Gotchas (the one-way distribution-list-to-Microsoft-365-group upgrade and guest access) - since the skill contains no commands, flags or numbers, and checked each against both listed sources fetched today (the Microsoft 365 admin center help hub and the MS-102 study guide, both returning 200).",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all seven claims are unverifiable: both listed sources are navigation or study pages, not a group-type reference. The admin URL is a hub landing page whose only group-related text is link blurbs ('set up and manage groups, manage guest access', 'Manage email settings, distribution groups, and security settings, and set up shared mailboxes'), and the MS-102 study guide only lists exam objectives such as 'Create and manage groups, including Microsoft 365 Groups and manage shared mailboxes' and 'group-based licensing'. A fix PR should bump version and cite pages that actually define group types, e.g. https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups for the four types and dynamic membership, the distribution-list upgrade page for the one-way conversion, and a Microsoft 365 Groups guest-access page for the guest gotcha, or trim the skill to what those sources support.",
+  "attestation_sha256": "56c60b218d5481237589644bf63fc71772e32b648cbd54ec1e94c70e3489b3a9"
+}
