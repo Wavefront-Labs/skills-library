@@ -1,0 +1,198 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.digital-forensics-incident-response.log-analysis.log-normalisation-and-timestamp-alignment",
+    "version": "2",
+    "sha256": "6a87df73193e36915298b41a488d803b9695464521fe877dc727de067dbf94fe"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://www.elastic.co/guide/en/ecs/current/index.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "b628c310f72218e824f40feb55150c43c3cf5fe3ff099d1dcdbfbea6575922d2"
+    },
+    {
+      "url": "https://schema.ocsf.io/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "37726ad2d3980206a3839905828fcda5232845e9d3cb9a61727f8cf3390e8f30"
+    },
+    {
+      "url": "https://datatracker.ietf.org/doc/html/rfc3339",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "48bb02946f8a19d8c8d7fd3c04b55f2f7f7fe08ba5490c29d79575557dbd3082"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Windows EVTX: UTC (FILETIME); viewers display local time.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Linux syslog (RFC 3164): local time, **no year, no zone**; journald stores UTC\n     microseconds.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "IIS W3C logs: UTC by default; Apache/nginx: local time with offset (`[16/Oct/2026:09:12:01 +0100]`).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Cloud audit logs (CloudTrail, Entra ID, M365, GCP): UTC ISO 8601.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "FAT/exFAT, some appliances, many firewalls: local device time.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Epoch variants: Unix seconds/ms, Windows FILETIME (100 ns since 1601), Mac absolute (2001),",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Mac absolute (2001),\n     WebKit/Chrome (microseconds since 1601).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Convert to UTC ISO 8601 / RFC 3339** with explicit zone (`2026-10-16T09:12:01.123Z`)",
+      "verdict": "confirmed",
+      "source_url": "https://datatracker.ietf.org/doc/html/rfc3339",
+      "evidence_quote": "z a suffix which, when applied to a time, denotes a utc offset of 00:00"
+    },
+    {
+      "claim": "and keep\n   the original value in a separate field.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Fix missing years** (RFC 3164) using file mtime and rollover order; beware December/January\n   boundaries.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**DST:** convert with a time-zone database (IANA name like `Europe/London`), not a fixed\n   offset, so the DST transition hour is handled.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "compare an event seen by two systems (a Kerberos ticket request in\n  DC logs vs client logs, a firewall connection vs Sysmon Event 3",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "a proxy request vs browser\n  history)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Windows records time changes as Security 4616 and System Event 1 (Kernel-General);",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "W32Time events show sync failures.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Record skew per source (e.g. \"Host WS042 clock is 3 min 12 s ahead\")",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "or annotate the timeline. Never silently alter originals.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Map to a common schema: Elastic Common Schema",
+      "verdict": "confirmed",
+      "source_url": "https://www.elastic.co/guide/en/ecs/current/index.html",
+      "evidence_quote": "ecs defines a common set of fields to be used when storing event data in elasticsearch, such as logs and metrics"
+    },
+    {
+      "claim": "(`source.ip`, `user.name`, `process.command_line`,\n  `event.action`), OCSF, or Splunk CIM.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Normalise usernames (`DOMAIN\\user`, `user@domain`, SID), hostnames (FQDN vs short, case), IPs",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "(IPv4-mapped IPv6 `::ffff:10.0.0.5`), and process paths (case, `\\Device\\HarddiskVolume3\\`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Keep a `source`/`log_name` field so every event can be traced back to its original record.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Plaso (normalises to UTC internally), Timesketch for collaborative timelines",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Splunk props/transforms (`TZ` per sourcetype)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Python/pandas with\n`pd.to_datetime(..., utc=True)`, DuckDB for ad hoc merges.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Every source in the timeline has a documented native zone, conversion method and measured skew,\nand two independent events confirm alignment.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I extracted every concrete claim in the skill - the six native-format/zone bullets (Windows EVTX FILETIME, Linux syslog RFC 3164 and journald, IIS W3C and the Apache/nginx +0100 example, CloudTrail/Entra ID/M365/GCP, FAT/exFAT and firewalls), the four epoch figures (100 ns and microseconds since 1601, Mac absolute 2001), the RFC 3339 conversion example 2026-10-16T09:12:01.123Z with the keep-original-value rule, the missing-years and IANA Europe/London DST rules, the clock-skew comparisons (Kerberos, Sysmon Event 3, Security 4616, System Event 1 Kernel-General, W32Time), the skew-recording example and the never-alter-originals rule, the schema-mapping sentence with its four ECS field names plus OCSF and Splunk CIM, the username/hostname/IPv4-mapped-IPv6/process-path normalisation examples, the source/log_name traceability field, every tooling claim (Plaso UTC, Timesketch, Splunk TZ per sourcetype, pd.to_datetime utc=True, DuckDB) and the self-check - and checked each against the three listed sources, all of which fetched successfully with HTTP 200.",
+  "verdict": "fail",
+  "attestation_sha256": "e3da14a772f627b2fa73b4835c0efbe6b08b492af8fa189f89a9548e0e1306a0",
+  "suggested_edits": "Only two claims are supported by the listed sources: the ECS reference index states that ECS \"defines a common set of fields to be used when storing event data in Elasticsearch, such as logs and metrics\", which covers the general map-to-ECS advice, and RFC 3339 defines the Z suffix as a UTC offset of 00:00, which supports the example timestamp. The remaining claims are covered by no listed source. Fix by citing pages that actually state each claim: the ECS index page names field sets but never lists source.ip, user.name, process.command_line or event.action, so cite the per-field-set ECS reference pages (source, user, process, event field definitions) for the four field names; the OCSF landing page is a JavaScript schema browser whose only descriptive sentence says its categories organize event classes - it names no fields - so cite a specific OCSF class/object/dictionary page if OCSF field mapping is claimed; Splunk CIM has no listed source at all, so add Splunk CIM documentation for the CIM mention and the TZ-per-sourcetype props/transforms claim; cite Microsoft Learn for Windows EVTX FILETIME storage, Security event 4616 and System Event 1 (Kernel-General) time changes and W32Time, RFC 3164 and the systemd journald docs for syslog local time with no year and journald UTC microseconds, Microsoft IIS and Apache/nginx logging docs for W3C UTC and the +0100 offset format, AWS/Microsoft/Google audit-log documentation for CloudTrail/Entra ID/M365/GCP UTC ISO 8601, an epoch reference for FILETIME 100 ns since 1601, Mac absolute 2001 and WebKit/Chrome microseconds since 1601, an IANA time-zone database page for Europe/London and DST handling, Sysmon documentation for Event 3, and the Plaso, Timesketch, pandas (pd.to_datetime utc=True) and DuckDB documentation for the tooling behaviours; the file-mtime year-rollover heuristic and the source/log_name traceability field are the author's practice guidance and should either be sourced or marked as opinion."
+}
