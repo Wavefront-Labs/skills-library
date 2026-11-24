@@ -1,0 +1,120 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.ocaml.dumping-parsetree-typedtree-and-lambda",
+    "version": "2",
+    "sha256": "57b2cd30cbc6091ed9bca7b00ebab8b3dbdd5514d6f1a6d657139a7f5929e59e"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://ocaml.org/manual/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "1c9c39caa3515b597054a8d9bc0f82a999f5861480735e775414c7bdab525176"
+    },
+    {
+      "url": "https://ocaml.org/docs",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "42c279bdcbdd73a31910f4452b57d669786281d3ee4b51fd15f430e2ef9c86b8"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Inspect each compiler stage with -dsource/-dparsetree/-dtypedtree/-dlambda and read pattern-match compilation and desugaring.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Both listed pages are index pages: the manual root is the release-5.5 table of contents and ocaml.org/docs is a learn/docs hub; neither mentions -dsource, -dparsetree, -dtypedtree or -dlambda anywhere."
+    },
+    {
+      "claim": "ocamlfind ocamlopt -dsource -c x.ml        # pretty-printed source after ppx",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions -dsource, ocamlfind or a -c option; on the manual root 'ocamlopt' occurs only in the chapter title '16. Native-code compilation (ocamlopt)'."
+    },
+    {
+      "claim": "ocamlfind ocamlopt -dparsetree -c x.ml",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions -dparsetree, ocamlfind or a -c option; the manual root is a table of contents and ocaml.org/docs a documentation hub."
+    },
+    {
+      "claim": "ocamlfind ocamlopt -dtypedtree -c x.ml",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions -dtypedtree, ocamlfind or a -c option; the manual root is a table of contents and ocaml.org/docs a documentation hub."
+    },
+    {
+      "claim": "ocamlfind ocamlopt -dlambda -c x.ml        # lambda IR; shows match compilation",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions -dlambda, ocamlfind or match-compilation output; the manual root lists only chapter titles, including '16. Native-code compilation (ocamlopt)'."
+    },
+    {
+      "claim": "ocamlfind ocamlopt -dcmm -c x.ml           # C-- IR",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions -dcmm, ocamlfind or C--; the manual root is a table of contents and ocaml.org/docs a documentation hub."
+    },
+    {
+      "claim": "`-dsource` after ppx is the quick way to see what a deriver generated",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions ppx, derivers or -dsource output; ocaml.org/docs links guides and books but contains no compiler flags, and the manual root has no option lists."
+    },
+    {
+      "claim": "`dune describe pp x.ml` does it through dune",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions 'dune describe pp'; ocaml.org/docs mentions Dune only as 'a user-friendly and efficient build system for developing OCaml projects', with no commands."
+    },
+    {
+      "claim": "`-dlambda` shows if pattern matches became jumptables or comparisons, and whether closures/allocations are present",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source describes what -dlambda output shows; neither fetched page mentions jumptables, comparisons, closures or allocations."
+    },
+    {
+      "claim": "With flambda: `-dflambda` and `-dflambda-verbose`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions -dflambda or -dflambda-verbose; the manual root has only the chapter title '24. Optimisation with Flambda'."
+    },
+    {
+      "claim": "Use dune `(ocamlopt_flags (:standard -dlambda))` and read `_build/log`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions ocamlopt_flags, :standard, dune stanzas or _build/log; dune's documentation is not among the listed sources."
+    },
+    {
+      "claim": "Output formats vary by compiler version.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page says anything about dump output formats or compiler-version variation."
+    }
+  ],
+  "coverage": "I took the frontmatter description and every concrete statement in the body in file order - the five ocamlfind ocamlopt command lines with their trailing comments, and all five Notes bullets (the -dsource-after-ppx/deriver behaviour, dune describe pp, what -dlambda output shows, the flambda flags -dflambda and -dflambda-verbose, the dune (ocamlopt_flags (:standard -dlambda)) stanza with _build/log, and the compiler-version caveat) - so every command, flag and behaviour is covered; the self-check checkbox is structural, not a claim.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but 0 of 12 claims are confirmable because both listed sources are index pages: https://ocaml.org/manual/ is the release-5.5 table of contents (its only ocamlopt mention is the chapter title '16. Native-code compilation (ocamlopt)') and https://ocaml.org/docs is a learn/docs hub whose Dune text is tool-level only. A fix PR should bump version and cite pages that actually document the claims. Note the manual's own option chapters do not help in 5.5: manual/5.5/comp.html and manual/5.5/native.html list none of the -d* dump flags (the sole in-manual mention is the Warning 74 text 'inspect the -dlambda generated code' in comp.html), so a fixer should look to 'ocamlopt -help' output or the ocamlopt(1)/ocamlc(1) man pages for -dsource/-dparsetree/-dtypedtree/-dlambda/-dcmm/-dflambda/-dflambda-verbose; 'dune describe pp' is documented at https://dune.readthedocs.io/en/stable/reference/cli.html ('Build a given file and print the preprocessed output') and the (ocamlopt_flags (:standard ...)) syntax at https://dune.readthedocs.io/en/stable/concepts/ocaml-flags.html; ocamlfind needs a findlib source; or trim the skill to what the two index pages support.",
+  "attestation_sha256": "a3530e5b6cd4e54bb17314b678a3ff4eeafea3a7bee9fec4e2e341ef01c924f6"
+}
