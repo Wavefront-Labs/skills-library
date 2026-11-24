@@ -1,0 +1,198 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.it-support-helpdesk.device-provisioning.driver-packs-and-injection",
+    "version": "2",
+    "sha256": "35d9dc5ebbc9a09281f083dcc25abd67ea010e18eaece3c107147ebdc7f28d89"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "710d4d841587c0d965225a4b853a92e76480a6868b595a4623c11535b4f3facb"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "7a61d3729b72d15549843754b84e576b999c93dff4803c8dff94fd991db9be57"
+    },
+    {
+      "url": "https://www.dell.com/support/kbdoc/en-us/000124139/dell-command-deploy-driver-packs-for-enterprise-client-os-deployment",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "5e5e91a608af0c8ed141011fceade7e0e33fb29d651b918a96c63b6794bbefb5"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Handle drivers for OS builds: vendor driver packs by model, WinPE-only NIC/storage drivers, offline DISM and online pnputil injection, model detection and VMD storage gotchas.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary: the sources confirm the DISM and pnputil commands and the Dell pack naming, but no listed source states the WinPE-only NIC/storage rule, model detection or VMD gotchas."
+    },
+    {
+      "claim": "Use enterprise driver packs, not consumer installers:",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Recommendation; the Dell page documents packs for enterprise client OS deployment via SCCM/MDT but never contrasts them with consumer installers."
+    },
+    {
+      "claim": "Dell Driver Packs (Dell Command |\nDeploy)",
+      "verdict": "confirmed",
+      "source_url": "https://www.dell.com/support/kbdoc/en-us/000124139/dell-command-deploy-driver-packs-for-enterprise-client-os-deployment",
+      "evidence_quote": "Dell Command | Deploy Driver Pack, contains the drivers in the form of .exe files for Dell commercial client computers.",
+      "note": "The Dell article intermittently returned 403 to the non-browser fetcher before this 200 on 2026-11-24, so re-fetch checks of this source may be flaky."
+    },
+    {
+      "claim": "HP driver packs / HP Image Assistant, Lenovo SCCM packages / Update Retriever.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source mentions HP, HP Image Assistant, Lenovo, SCCM packages or Update Retriever; none of these names appears in the three fetched pages."
+    },
+    {
+      "claim": "They are INF-based and match the model's supported OS build.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Dell page says the pack 'contains the drivers in the form of .exe files' (format changing from .cab to DUP) and offers per-model, per-OS downloads, but never states packs are INF-based or match the model's supported OS build."
+    },
+    {
+      "claim": "(Get-CimInstance Win32_ComputerSystem).Model              # Dell, HP",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source documents Win32_ComputerSystem model detection; the only WMI string in the Microsoft pages is a WMIConfig XML namespace in an unattend example."
+    },
+    {
+      "claim": "(Get-CimInstance Win32_ComputerSystemProduct).Version     # Lenovo friendly name",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source documents Win32_ComputerSystemProduct or Lenovo friendly-name model detection."
+    },
+    {
+      "claim": "(Get-CimInstance Win32_ComputerSystem).Model              # Lenovo returns machine type, e.g. 21HD",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source documents Lenovo machine-type model numbers; '21HD' appears nowhere in the fetched sources."
+    },
+    {
+      "claim": "Use these values in task sequence WMI conditions or naming of driver packages.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers task sequences or WMI conditions."
+    },
+    {
+      "claim": "Add NIC and storage drivers to the boot image, nothing else.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Closest statements: the Microsoft page notes driver packages needed for Windows PE to see the local hard disk drive or a network, and the Dell page describes WinPE packs providing drivers required to boot, but neither states the only-NIC-and-storage rule."
+    },
+    {
+      "claim": "Missing storage driver = no\ndisks visible",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image",
+      "evidence_quote": "driver packages for Windows PE to see the local hard disk drive or a network"
+    },
+    {
+      "claim": "on Intel 11th gen and later, VMD/RST mode is the usual cause",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source mentions VMD, RST, AHCI or 11th-generation Intel platforms."
+    },
+    {
+      "claim": "(add the\nIntel RST VMD driver or switch to AHCI before imaging if policy allows).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source mentions the Intel RST VMD driver, AHCI switching or imaging policy."
+    },
+    {
+      "claim": "DISM /Image:<MOUNT_DIR> /Add-Driver /Driver:<DRIVERS>\\Model-21HD /Recurse",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image",
+      "evidence_quote": "Dism /Image:C:\\test\\offline /Add-Driver /Driver:c:\\drivers /Recurse"
+    },
+    {
+      "claim": "DISM /Image:<MOUNT_DIR> /Get-Drivers",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image",
+      "evidence_quote": "Dism /Image:C:\\test\\offline /Get-Drivers"
+    },
+    {
+      "claim": "pnputil /add-driver \"<DRIVERS>\\*.inf\" /subdirs /install",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax",
+      "evidence_quote": "PNPUTIL /add-driver &lt;filename.inf | *.inf&gt; [/subdirs] [/install] [/reboot]"
+    },
+    {
+      "claim": "pnputil /enum-drivers",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax",
+      "evidence_quote": "PNPUTIL /enum-drivers [/class &lt;name | GUID&gt;] [/files]"
+    },
+    {
+      "claim": "**Apply Driver Package** per model (condition on model) is predictable; avoid Auto Apply\n  Drivers with a huge catalogue (wrong matches, slow).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source documents MDT/SCCM task-sequence steps; 'Apply Driver Package' and 'Auto Apply Drivers' appear in none of the fetched pages (the Dell page mentions SCCM/MDT only as deployment tools that use the packs)."
+    },
+    {
+      "claim": "After deployment, keep drivers current with Windows Update for Business driver policies\n  or vendor tools rather than re-imaging.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers Windows Update for Business driver policies or vendor update tools."
+    },
+    {
+      "claim": "Driver packs for the wrong OS build install but cause yellow bangs or BSODs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source describes wrong-OS-build pack behaviour, yellow bangs or BSODs."
+    },
+    {
+      "claim": "Firmware (BIOS, Thunderbolt, dock) updates are separate from driver packs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source mentions firmware, BIOS, Thunderbolt or dock updates."
+    },
+    {
+      "claim": "Duplicate INFs from several packs make Windows pick by date/rank, not the one you meant.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The pnputil page notes PnPUtil will not force a non-highest-ranked driver onto a device, but no source describes duplicate-INF selection by date/rank across packs."
+    },
+    {
+      "claim": "Device Manager shows no unknown devices after build, `pnputil /enum-drivers` lists the\nintended versions, and the model boots and sleeps/wakes cleanly.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify checklist; the pnputil page documents /enum-drivers, but no source covers Device Manager unknown-device checks or boot/sleep-wake criteria."
+    }
+  ],
+  "coverage": "I took the frontmatter description and every sentence, command line and inline comment of the body - the three driver-pack source sentences, all three model-detection PowerShell lines with their comments, the WinPE and VMD sentences, both DISM offline commands, both pnputil online commands, both task-sequence bullets, all three gotchas and the Verify checklist - splitting wrapped lines and compound sentences so that every command, flag, number (21HD, 11th gen) and behaviour is covered, and checked each against the three listed sources fetched today.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but 17 of 23 claims are unverifiable against the three listed sources: the Microsoft DISM page confirms only the two offline-injection commands and the disk/network-driver dependency for Windows PE, the pnputil page confirms only the two online-injection commands, and the Dell page confirms only the Dell Command | Deploy pack naming - model detection (Win32_ComputerSystem / Win32_ComputerSystemProduct, Lenovo machine types), HP and Lenovo pack tools, the INF-based and model/OS-build matching statement, the WinPE-only-NIC/storage rule, VMD/RST/AHCI on Intel 11th gen and later, the task-sequence guidance (Apply Driver Package vs Auto Apply Drivers), Windows Update for Business driver policies, all three gotchas and the Verify criteria are covered by no listed source. A fix PR should bump version and cite Microsoft WMI class docs for Win32_ComputerSystem and Win32_ComputerSystemProduct, HP and Lenovo enterprise driver-pack pages, Intel VMD/RST documentation, MDT/ConfigMgr task-sequence docs, Windows Update for Business driver-policy docs and driver-ranking (date/rank) docs for the duplicate-INF gotcha - or trim those sections to what the current sources support. Note also that the Dell article intermittently returns 403 to non-browser fetchers (several 403s before a 200 on 2026-11-24), which can make automated re-fetch checks flaky.",
+  "attestation_sha256": "45a43b1b58593f7c6da4765f7546a440c72756de60d8472f1ec7274a413ee7ed"
+}
