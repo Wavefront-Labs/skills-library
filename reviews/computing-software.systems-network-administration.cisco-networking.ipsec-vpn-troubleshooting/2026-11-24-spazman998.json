@@ -1,0 +1,226 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.systems-network-administration.cisco-networking.ipsec-vpn-troubleshooting",
+    "version": "2",
+    "sha256": "845fdfa9ceed51a2365676d9769fae2d4b7dfff11c805a4ba5a2793ccca3ed11"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [],
+  "claims": [
+    {
+      "claim": "`ping <peer> source <wan-if>`; UDP 500",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers the underlay reachability check: doc 5409 contains no ping guidance and the ASA IKEv2 article is a negotiation walkthrough only; both are additionally blocked to the checker."
+    },
+    {
+      "claim": "UDP 500 and 4500 (NAT-T) and ESP (protocol 50) allowed by every",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source states the port/protocol requirements: '4500' and 'protocol 50' appear nowhere in doc 5409, and the ASA article shows IKE on UDP 500 with NAT-T detection lines but never lists ports or ESP's protocol number."
+    },
+    {
+      "claim": "If the peer is behind NAT, only UDP 500/4500 pass, ESP is\nencapsulated in 4500.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No NAT encapsulation content in either source: doc 5409 has no NAT-T material, and the ASA article's only NAT-T lines are 'No NAT found' / 'NAT-T is not detected' - UDP 4500 encapsulation of ESP is never described."
+    },
+    {
+      "claim": "show crypto ikev2 sa              ! READY = good; IN-NEG stuck = negotiation failing",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Covered by the ASA IKEv2 debugs article, but the URL listed in the skill 404s (the article lives under support/docs/security/asa-5500-x-series-next-generation-firewalls/) and cisco.com 403s the checker's fetch; read via the web fetch tool it shows show crypto ikev2 sa output with READY status, but IN-NEG is never mentioned."
+    },
+    {
+      "claim": "show crypto isakmp sa             ! IKEv1: QM_IDLE = good; MM_NO_STATE = no reply / mismatch",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Covered by doc 5409, which 403s the checker's fetch (10 of 10 attempts) so it cannot be cited; fetched once manually it states 'in theshow crypto isakmp sa output, the state must always be qm_idle' and that MM_NO_STATE 'means that main mode has failed'."
+    },
+    {
+      "claim": "no SA at all | no interesting traffic (policy-based), wrong peer IP, UDP 500 blocked",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 ties a wrong peer IP to the MM_KEY_EXCH state ('either the configured pre-shared key is not correct or the peer ip addresses are different'), not to 'no SA at all'; neither source mentions 'interesting traffic' or blocked UDP 500."
+    },
+    {
+      "claim": "MM_NO_STATE / IN-NEG | proposal mismatch (encryption, PRF/hash, DH group)",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker, read via a manual fetch) covers this: an SA in MM_NO_STATE means main mode failed and it directs 'verify that the phase 1 policy is on both peers, and ensure that all the attributes match' - encryption, hash, DH group."
+    },
+    {
+      "claim": "AUTH failure | pre-shared key mismatch, wrong identity (address vs FQDN), cert issues",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker) states the sanity-check/malformed debug error 'appears if the pre-shared keys on the peers do not match' and lists 'no cert and no keys with remote peer' among its sample errors; the address-vs-FQDN identity form is not covered."
+    },
+    {
+      "claim": "works then drops | DPD failing, lifetimes mismatched, NAT keepalives missing",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers drop causes: doc 5409 mentions no DPD, keepalives or lifetime-mismatch drops (0 occurrences of DPD), and the ASA article only shows DPD configuration ('DPD configured for 10 seconds, retry 2'), not failure behaviour."
+    },
+    {
+      "claim": "show crypto ipsec sa peer 203.0.113.20",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Both docs use show crypto ipsec sa (5409: 'this command shows ipsec sas built between peers'; it is the ASA article's IPSec verification command), but neither shows the 'peer <ip>' filter form; both 403 the checker's fetch."
+    },
+    {
+      "claim": "!   local  ident (addr/mask/prot/port): (10.10.0.0/255.255.0.0/0/0)",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker, read via a manual fetch) shows the identical output format: 'local ident (addr/mask/prot/port): ( 10.1.0.0/255.255.255.0/0/0 )'."
+    },
+    {
+      "claim": "!   remote ident (addr/mask/prot/port): (10.20.0.0/255.255.0.0/0/0)",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker, read via a manual fetch) shows 'remote ident (addr/mask/prot/port): ( 10.1.1.0/255.255.255.0/0/0 )' in its show crypto ipsec sa example."
+    },
+    {
+      "claim": "#pkts encaps: 1520, #pkts decaps: 0",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Both docs show these counters - 5409: '#pkts encaps: 7767918, #pkts encrypt: 7767918' and '#pkts decaps: 7760382'; ASA article: '#pkts encaps: 3' / '#pkts decaps: 3' - the specific 1520/0 values are the skill's own example."
+    },
+    {
+      "claim": "*encaps increase, decaps 0**: we send, peer is not sending back",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker) supports the directionality: 'because phase 2 security associations (sas) are unidirectional, each sa shows traffic in only one direction (encryptions are outbound, decryptions are inbound)'."
+    },
+    {
+      "claim": "NAT exemption missing (traffic NATted before encryption), or peer's firewall policy.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The peer-side causes (peer routing, NAT exemption before encryption, peer firewall policy) are stated in neither source."
+    },
+    {
+      "claim": "*decaps increase, encaps 0**: the reverse on our side",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The same 5409 unidirectional-SA statement ('encryptions are outbound, decryptions are inbound') covers the reverse asymmetry; both sources are blocked to the checker."
+    },
+    {
+      "claim": "route to the remote subnet does not\n  point into the tunnel, or our NAT translates it first",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers local routing into the tunnel or denying VPN traffic in the NAT ACL; the sources contain no NAT-exemption guidance."
+    },
+    {
+      "claim": "crypto ACLs must be exact mirrors",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker) states 'the access lists on each peer need to mirror each other (all entries need to be reversible)' in its 'proxy identities not supported' section."
+    },
+    {
+      "claim": "the error shows \"proxy identities not supported\" / TS_UNACCEPTABLE",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker) documents 'proxy identities not supported': 'this message appears in debugs if the access list for ipsec traffic does not match'; TS_UNACCEPTABLE appears in neither source."
+    },
+    {
+      "claim": "- PFS group mismatch: phase 1 up, phase 2 fails.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The ASA IKEv2 article (skill's URL 404s; real path under security/asa-5500-x-series-next-generation-firewalls; read via web fetch) says a CREATE_CHILD_SA can carry an optional KE payload for forward secrecy and 'if it guesses wrong, the CREATE_CHILD_SA exchange fails, and it has to retry with a different KEi'."
+    },
+    {
+      "claim": "debug crypto condition peer ipv4 203.0.113.20     ! limit debugs to one peer",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'debug crypto condition' appears nowhere in doc 5409 (0 occurrences) and the ASA article uses 'debug crypto ikev2 protocol 127' / 'debug crypto ikev2 platform 127' instead; conditional debugging is uncovered."
+    },
+    {
+      "claim": "debug crypto ikev2\ndebug crypto ikev2 error",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The ASA IKEv2 article documents the debug crypto ikev2 family as 'debug crypto ikev2 protocol 127' and 'debug crypto ikev2 platform 127'; the skill's plain IOS forms 'debug crypto ikev2' and 'debug crypto ikev2 error' are not shown as such."
+    },
+    {
+      "claim": "debug crypto ipsec\nundebug all",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Doc 5409 (403 to the checker) documents debug crypto ipsec: 'this command shows the source and destination of ipsec tunnel endpoints'; 'undebug all' is not mentioned in either source."
+    },
+    {
+      "claim": "logging buffered 1000000 debugging`, `no logging console",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers IOS logging configuration (buffer size, 'no logging console'); both are blocked to the checker in any case."
+    },
+    {
+      "claim": "clear crypto session remote 203.0.113.20",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'clear crypto' appears nowhere in doc 5409 (0 occurrences) and not in the ASA article; the command cannot be checked against any listed source."
+    },
+    {
+      "claim": "re-negotiates one peer; avoid `clear crypto sa`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source discusses clearing SAs, per-peer renegotiation or the hub caution."
+    },
+    {
+      "claim": "IKE SA READY/QM_IDLE, IPsec SA with both encaps and decaps rising.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "A restatement of state meanings already noted: READY appears in the ASA article's show crypto ikev2 sa output, QM_IDLE in 5409's show crypto isakmp sa output, and both show encaps/decaps counters; all sources are blocked to the checker."
+    },
+    {
+      "claim": "NAT exemption in place on both sides (`show ip nat translations` has no VPN flows).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers NAT-exemption verification or 'show ip nat translations'; the ASA article's NAT-T lines concern NAT detection for encapsulation, not exempting VPN traffic from NAT."
+    },
+    {
+      "claim": "Rekey and DPD behave over a lifetime period.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source describes rekey or DPD behaviour over a lifetime; the ASA article shows DPD configuration only ('DPD configured for 10 seconds, retry 2') and 5409 has no DPD content."
+    }
+  ],
+  "coverage": "I extracted every command and flag (the ping source-interface check, show crypto ikev2 sa, show crypto isakmp sa, show crypto ipsec sa peer, debug crypto condition peer ipv4, debug crypto ikev2, debug crypto ikev2 error, debug crypto ipsec, undebug all, clear crypto session remote, clear crypto sa and show ip nat translations), every number and setting (UDP 500 and 4500, ESP protocol 50, the 1520/0 encaps/decaps counters, the 10.10.0.0/255.255.0.0 and 10.20.0.0/255.255.0.0 idents, peer 203.0.113.20, logging buffered 1000000 debugging and no logging console) and every behaviour claim (the READY/IN-NEG and QM_IDLE/MM_NO_STATE state meanings, all four symptom-cause rows, the encaps-without-decaps and decaps-without-encaps diagnoses with their routing/NAT causes, mirrored crypto ACLs, the proxy identities/TS_UNACCEPTABLE errors, PFS group mismatch, logging-buffer practice, the clear-crypto cautions and the three verify bullets), then attempted both listed sources repeatedly with the checker's own request (User-Agent wavefront-attest/1, 30 s timeout): both 403'd in 10 of 10 attempts each (the 5409 IOS debug doc returned 200 once in about 15 tries, and I read that body; the 115935 ASA IKEv2 URL 403'd in 14 of 15 attempts and 404'd once - it is a dead path, the article actually lives under /c/en/us/support/docs/security/asa-5500-x-series-next-generation-firewalls/, and I read it there via the web fetch tool), so no source can be listed or cited: claims are gated where that source content covers them (QM_IDLE and MM_NO_STATE meanings, phase-1 proposal attributes, PSK mismatch and cert errors, mirror ACLs, 'proxy identities not supported', the show crypto ipsec sa ident and encaps/decaps output, SA directionality, debug crypto ipsec, show crypto ikev2 sa READY, and the PFS/KEi CREATE_CHILD_SA failure) and unverifiable where neither source's content does (UDP 4500, ESP protocol 50, IN-NEG, TS_UNACCEPTABLE, debug crypto condition, the IOS debug crypto ikev2 forms, logging configuration, clear crypto session, show ip nat translations, and the DPD/keepalive/lifetime drop causes).",
+  "verdict": "fail",
+  "attestation_sha256": "518d9b2ae293093a71940704d5c96c5b4a3fd6c0ad26f9b55c41253a3bf13ad2",
+  "suggested_edits": "Replace or mirror both cisco.com sources for any re-review: www.cisco.com 403s the checker's fetch on roughly 19 of 20 requests (the 5409 debug doc fetched 200 only once in about 15 tries), and the second URL is a dead path - the article 'Use ASA IKEv2 Debugs for Site-to-Site VPN with PSKs' actually lives at https://www.cisco.com/c/en/us/support/docs/security/asa-5500-x-series-next-generation-firewalls/115935-asa-ikev2-debugs.html; web.archive.org has no snapshot of the 115935 URL but does of 5409 (https://web.archive.org/web/20241217200949/https://www.cisco.com/c/en/us/support/docs/security-vpn/ipsec-negotiation-ike-protocols/5409-ipsec-debug-00.html, fetched 200 today), so swap the live links for such archives or another fetchable mirror; the 5409 content I did read supports the QM_IDLE/MM_NO_STATE meanings, phase-1 attribute matching, PSK-mismatch and cert errors, mirrored access lists, 'proxy identities not supported', the show crypto ipsec sa ident/counter output and debug crypto ipsec, and the ASA article supports show crypto ikev2 sa/READY and the PFS KEi CREATE_CHILD_SA failure, so a fetchable mirror would confirm those; claims needing new sources: UDP 4500 and ESP protocol 50 (RFC 3947/3948), the IN-NEG IKEv2 SA state and TS_UNACCEPTABLE notify (an IKEv2 failure-state reference), debug crypto condition (IOS conditional-debug documentation), logging buffered / no logging console, clear crypto session remote and the hub caution, show ip nat translations NAT-exemption verification, and DPD/NAT-keepalive/lifetime drop causes; also note the ASA article's debug syntax is 'debug crypto ikev2 protocol 127'/'debug crypto ikev2 platform 127' rather than the skill's IOS 'debug crypto ikev2'/'debug crypto ikev2 error' forms, and it never mentions IN-NEG; sources is left empty because both listed URLs are blocked to the checker's fetch (the schema's sources minItems 1 cannot be satisfied honestly in this situation)."
+}
