@@ -1,0 +1,176 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.digital-privacy-hygiene.password-managers.lastpass-breach-lessons-for-vault-users",
+    "version": "2",
+    "sha256": "dfaf38facc1e8dae3576b5d34ef86e0a067b8787e922c0a6e434616379f6cd77"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://www.privacyguides.org/en/passwords/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "37b2f2507aa4aac4f54a6f7044d503a938ccd870c1094b2611f1d0b6734fbc38"
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "9fdf8b41477e641594832cebd4dbb388d8d61ebe71c7d3a4bdec21d235fc8556"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "assess exposure (KDF, metadata), and rotate in priority order, using the LastPass 2022 case",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary of the description: the LastPass 2022 case is covered by the gated incident notice, but no fetched page covers the rotate-in-priority-order guidance."
+    },
+    {
+      "claim": "In the LastPass incidents disclosed in 2022, attackers obtained backups of customer\nvaults",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (blog.lastpass.com 403s attest.py's fetcher; see coverage), read via the web fetch tool today. The notice, published December 22, 2022 and referencing 'the incident we previously disclosed in August of 2022', states: 'The threat actor was also able to copy a backup of customer vault data from the encrypted storage container'."
+    },
+    {
+      "claim": "Passwords and notes were encrypted, but **site URLs and some metadata were\nnot**",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (see coverage), read via the web fetch tool today. The notice states the vault backup 'is stored in a proprietary binary format that contains both unencrypted data, such as website URLs, as well as fully-encrypted sensitive fields such as website usernames and passwords, secure notes, and form-filled data', secured with 256-bit AES."
+    },
+    {
+      "claim": "many older accounts still had very low **PBKDF2 iteration counts** (some\nas low as 1 or 5,000)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The December 2022 notice mentions only its 100,100-iteration default; the figures 1 and 5,000 appear in none of the three fetched pages, and the page only links out to a later March 2023 follow-up article, which is not a listed source."
+    },
+    {
+      "claim": "because the default had been raised over time without\nmigrating existing accounts",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page covers LastPass's iteration-default history or migration of existing accounts; OWASP's work-factor upgrade guidance is generic and says nothing about LastPass accounts."
+    },
+    {
+      "claim": "Researchers later linked thefts of cryptocurrency to\ncracked vaults whose owners stored seed phrases in secure notes",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "None of the three fetched pages mentions cryptocurrency thefts linked to cracked vaults or seed phrases stored in secure notes; the incident notice does not discuss follow-on thefts."
+    },
+    {
+      "claim": "Offline cracking cost per guess ~ KDF cost",
+      "verdict": "confirmed",
+      "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+      "evidence_quote": "It makes calculating the hash more computationally expensive, which in turn reduces the speed and/or increases the cost for which an attacker can attempt to crack the password hash.",
+      "note": "From OWASP's Using Work Factors section: 'The work factor is the number of iterations of the hashing algorithm that are performed for each password', and higher work factors 'make hashes more difficult for an attacker to crack'."
+    },
+    {
+      "claim": "a 6-word diceware phrase (~77 bits) is out of reach\n   even at low iteration counts",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'diceware' and '77 bits' appear in none of the three fetched pages; no listed source gives diceware entropy figures."
+    },
+    {
+      "claim": "an 8-character human password is not",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No source states the crackability of 8-character passwords; the notice only requires a twelve-character master-password minimum since 2018."
+    },
+    {
+      "claim": "changing them now doesn't protect the\n   stolen copy",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page discusses changing KDF iterations after a theft; OWASP covers work-factor upgrades at next login, not exposure of an already-stolen copy."
+    },
+    {
+      "claim": "seed phrases and recovery codes are instantly monetisable",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page discusses the monetisability of seed phrases or recovery codes."
+    },
+    {
+      "claim": "the URL list tells an attacker which vaults to crack\n   first (crypto exchanges, high-value employers)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The notice confirms website URLs were stored unencrypted, but no fetched source says attackers prioritise which vaults to crack from the URL list."
+    },
+    {
+      "claim": "the master password was under\n   ~12 random characters or reused, or iterations were below ~100,000",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (see coverage), read via web fetch today. The notice states 'Since 2018, we have required a twelve-character minimum for master passwords' and '100,100 iterations of the Password-Based Key Derivation Function (PBKDF2)', and that non-default master passwords need significantly fewer guesses; reuse enables credential stuffing."
+    },
+    {
+      "claim": "crypto wallets (move funds to a new seed, don't just change a\n   password)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page covers crypto-wallet rotation or moving funds to a new seed; the notice only suggests 'changing passwords of websites you have stored'."
+    },
+    {
+      "claim": "email accounts, financial accounts, password manager-stored recovery\n   codes and TOTP seeds, then everything else",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The notice suggests changing stored website passwords but gives no priority order; Privacy Guides and OWASP do not discuss breach response at all."
+    },
+    {
+      "claim": "Re-enroll TOTP for accounts whose seeds were in the vault (the seed itself is\n   compromised, not just the password)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page covers TOTP re-enrolment or compromised TOTP seeds."
+    },
+    {
+      "claim": "Move to a provider with stronger defaults, or stay and raise KDF settings; either way\n   use a new master password",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: Privacy Guides documents that Bitwarden uses PBKDF2 by default, offers the more-secure Argon2, and shows how to change the KDF algorithm in the web vault; but no source gives this breach-response advice or says to use a new master password."
+    },
+    {
+      "claim": "Revoke sessions and review email forwarding rules on the important accounts",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page covers revoking sessions or reviewing email forwarding rules; the notice warns of phishing and credential stuffing against accounts associated with the vault, but gives no such remediation steps."
+    },
+    {
+      "claim": "Never store crypto seed phrases in an online vault; use paper/metal offline",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'seed phrase' appears nowhere in Privacy Guides or the other fetched pages; no listed source covers offline seed-phrase storage."
+    },
+    {
+      "claim": "Check your KDF after every provider announcement; old accounts lag defaults",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the blocked notice says 'You can check the current number of PBKDF2 iterations for your LastPass account here', but no source covers checking KDF after announcements or that old accounts lag defaults."
+    }
+  ],
+  "coverage": "I took the frontmatter description and every sentence of the incident narrative, exposure equation, response playbook and prevention bullets - the 2022 dating, the vault-backup theft, unencrypted URLs, the 1 and 5,000 iteration counts, the unmigrated-defaults history, the researcher-linked crypto thefts, the diceware 6-word/77-bit and 8-character figures, the ~12-character and ~100,000-iteration thresholds, the rotation order, TOTP re-enrolment, the provider/KDF move, session revocation, the offline-cracking line and both prevention bullets - so that every number, threshold and behaviour is covered, and checked each against all three listed sources fetched today; blog.lastpass.com was readable via the web fetch tool and plain urllib but returns 403 to attest.py's wavefront-attest/1 user agent (retested twice, and 403 also for a browser-like UA), so it is omitted from sources and its claims are gated rather than confirmed; the Verify checklist items are to-dos, not factual claims, and were excluded.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but only 1 of 20 claims is confirmed from a re-fetchable source and 3 are gated: blog.lastpass.com blocks attest.py's wavefront-attest/1 fetcher with 403 (also 403 for a browser-like UA, though readable via the web fetch tool and plain urllib), so the incident-notice claims - vault backups copied in 2022, unencrypted URLs alongside encrypted passwords and notes, and the ~12-character and ~100,000-iteration thresholds traceable to the notice's twelve-character minimum and 100,100-iteration default - are gated rather than confirmed, and re-fetch checks of that source will fail in this environment. Uncovered by any listed source: the 1-or-5,000 iteration figures and unmigrated-defaults history, the researcher-linked crypto thefts, the diceware 77-bit and 8-character figures, the whole response playbook (rotation order, TOTP re-enrolment, provider/KDF move with a new master password, session revocation and email-forwarding review) and both prevention bullets. A fix PR should bump version and either add sources covering them - LastPass's later March 2023 update or third-party reporting for the iteration history and crypto-theft link, an EFF diceware reference for the entropy figure, a breach-response guide for the playbook - or trim those sections to what the current sources support.",
+  "attestation_sha256": "b9493b1f4074bee6a9a2bd23c22dacac731f4138c103981cdf3bdf8e0bd5a6fe"
+}
