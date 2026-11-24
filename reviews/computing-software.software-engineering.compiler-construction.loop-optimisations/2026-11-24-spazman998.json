@@ -1,0 +1,90 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.compiler-construction.loop-optimisations",
+    "version": "2",
+    "sha256": "1ecda3b647f5c99ec3fc9ce770ad35076785bc377aa38a787605c10cd7630246"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://craftinginterpreters.com/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "90acdc21820cf39ca8b9d210e565e352d77044ef0ab2c7e373b5dcb1ca37ec8a"
+    },
+    {
+      "url": "https://llvm.org/docs/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "f5f5f92e13e1ffec85b8818b4f9908576b6cb7f271e4ec5cb48b79ff2e53635e"
+    },
+    {
+      "url": "https://llvm.org/docs/tutorial/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "811e2fae596e1b3c40ad4c1c50efa52196ac6ca1b569f038f2e6fd7ae7c040ee"
+    },
+    {
+      "url": "https://mlir.llvm.org/docs/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "9bfed51baaa21803b26cb2e55e54ec2845b81fe31cf6b4ecce6ab73b9d22dd32"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Goal: speed up loops.\n- Find natural loops (back edges), hoist invariants (LICM) when safe, induction variable strength reduction, unrolling, fusion/fission.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary (goal plus the full technique bullet); no fetched source describes this: 'natural loop', 'back edge', 'invariant', 'licm', 'hoist', 'induction', 'strength reduction', 'unroll' and 'fission' appear zero times across all four pages fetched today."
+    },
+    {
+      "claim": "Find natural loops (back edges)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'natural loop', 'back edge' and 'backedge' appear zero times in all four fetched pages; the llvm.org pages offer only the unrelated navigation link 'LLVM Loop Terminology (and Canonical Forms)'."
+    },
+    {
+      "claim": "hoist invariants (LICM) when safe",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'loop-invariant', 'invariant', 'licm' and 'hoist' appear zero times in all four pages fetched today; none describes loop-invariant code motion or when it is safe."
+    },
+    {
+      "claim": "induction variable strength reduction, unrolling, fusion/fission",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'induction', 'strength reduction', 'unroll' and 'fission' appear zero times; the only 'fusion' on the llvm.org pages is the navigation link title 'Loop Fusion in LLVM', which says nothing about induction variables, strength reduction, unrolling or fission."
+    },
+    {
+      "claim": "Alias and exception safety limit hoisting",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The only 'alias' and 'exception' text on the llvm.org pages is the navigation link titles 'LLVM Alias Analysis Infrastructure' and 'Exception Handling in LLVM'; no page states that alias or exception safety limits hoisting, and 'hoist' appears zero times."
+    },
+    {
+      "claim": "Profile-guided choices.\nVerify: loop benchmark IR shows reduced work in the body.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The llvm.org pages' only profile-guided or benchmark text is the navigation link titles 'How To Build Clang and LLVM with Profile-Guided Optimizations', 'MemPGO: Profile-Guided Memory Optimization for LLVM', 'llvm-exegesis - LLVM machine instruction benchmark' and 'Benchmarking tips'; none ties profile-guided choices to loop optimisation or describes a loop-benchmark IR check, and 'benchmark' appears nowhere on the craftinginterpreters.com or mlir.llvm.org pages."
+    }
+  ],
+  "coverage": "I took the goal line with the full technique bullet as the scope claim, then every behaviour separately - natural loops found via back edges, hoisting invariants (LICM) when safe, induction variable strength reduction, unrolling and fusion/fission, and alias/exception safety limiting hoisting - plus the profile-guided line and the Verify criterion; the skill contains no commands, flags, settings, defaults, numbers or limits, and the closing draft provenance line is not a checkable claim. All four listed sources were fetched and read today (HTTP 200): the Crafting Interpreters book landing page, the LLVM docs index, the LLVM Kaleidoscope tutorial index and the MLIR docs index.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all six claims are unverifiable: the four listed sources are a book landing page and three documentation index pages, whose only loop-optimisation-adjacent text is site-wide navigation link titles ('Loop Fusion in LLVM', 'LLVM Loop Terminology (and Canonical Forms)', 'LLVM Alias Analysis Infrastructure', 'Exception Handling in LLVM', 'How To Build Clang and LLVM with Profile-Guided Optimizations', 'Benchmarking tips'). A fix PR should bump version and cite pages that actually document the behaviour: LLVM's Loop Terminology (and Canonical Forms) page and the analysis and transform passes list for natural loops and back edges, LICM and its alias/exception-safety preconditions, induction-variable strength reduction and LoopUnroll, plus LLVM's PGO and benchmarking user guides for profile-guided choices and IR/benchmark verification, or a tutorial text such as the Crafting Interpreters contents/optimization chapter for hoisting basics. Material and uncovered: everything, including the back-edge definition of natural loops, the safety conditions for LICM, the alias/exception limit on hoisting, profile-guided choice of optimisations and the loop-benchmark IR verification.",
+  "attestation_sha256": "4457effe2ddd16aea46cd0a54624776519c76174051d11a5ebb9ac8de5220556"
+}
