@@ -1,0 +1,72 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.networking-hardware-and-wireless.switching-routing-hardware.sw-8021x-mab-and-dynamic-vlan",
+    "version": "2",
+    "sha256": "35a92b29845f6ce1829b19c078bf93dd8cffc069394afb9b1c11f066de822522"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-25",
+  "sources": [],
+  "claims": [
+    {
+      "claim": "Configure wired 802.1X with MAB fallback, dynamic VLANs from RADIUS, and a monitor-first rollout.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Frontmatter description scope; no listed source covers it - both listed URLs return 403 to the checker's fetcher, and their browser-readable content is marketing and documentation-index landing pages with no 802.1X, MAB, RADIUS or VLAN text."
+    },
+    {
+      "claim": "Start in monitor/open mode (authentication runs but traffic is not blocked) to learn which devices fail, then enforce.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Monitor/open-mode behaviour (authentication runs but traffic is not blocked) is 802.1X access-security configuration content documented in vendor guides on the blocked cisco.com and juniper.net domains; the readable landing pages never mention monitor mode, authentication or enforcement."
+    },
+    {
+      "claim": "Order: 802.1X first, MAB fallback for printers and IoT, with a guest/auth-fail VLAN for failures.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Rollout-ordering design guidance; no listed source covers the 802.1X-first ordering, MAB fallback for printers and IoT, or the guest/auth-fail VLAN - the readable landing pages contain none of these words and the vendor guides are blocked (403)."
+    },
+    {
+      "claim": "RADIUS returns VLAN or ACL attributes (Tunnel-Private-Group-ID, downloadable ACLs) for dynamic assignment.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Tunnel-Private-Group-ID and downloadable-ACL dynamic assignment is RADIUS/identity-based-networking configuration content documented in vendor guides on the blocked cisco.com and juniper.net domains; the readable landing pages never mention RADIUS, Tunnel-Private-Group-ID, downloadable ACLs or VLAN assignment."
+    },
+    {
+      "claim": "IP phones with PCs behind them use multi-domain or multi-auth host modes.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Multi-domain and multi-auth host modes are 802.1X interface configuration content documented in vendor guides on the blocked cisco.com and juniper.net domains; the readable landing pages never mention host modes, IP phones or PCs."
+    },
+    {
+      "claim": "Test supplicant timeouts and switch behaviour when RADIUS is unreachable (critical VLAN/inaccessible authentication bypass).",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Critical VLAN and Inaccessible Authentication Bypass are RADIUS-unreachable fallback features documented in vendor guides on the blocked cisco.com and juniper.net domains; the readable landing pages never mention them."
+    },
+    {
+      "claim": "`show authentication sessions` (or equivalent) lists the method, VLAN and state for each tested device class.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "show authentication sessions is a switch CLI command documented in vendor guides on the blocked cisco.com and juniper.net domains; the readable landing pages never mention the command or its method, VLAN and state output fields."
+    }
+  ],
+  "coverage": "I chose every concrete claim in the skill - the frontmatter description's scope sentence, all five Wired 802.1X bullets (monitor/open-mode behaviour, the 802.1X-first ordering with MAB fallback and the guest/auth-fail VLAN, the RADIUS Tunnel-Private-Group-ID and downloadable-ACL attribute names, the multi-domain/multi-auth host-mode names, and the supplicant-timeout and critical-VLAN/inaccessible-authentication-bypass feature names), and the show authentication sessions verify command with its method, VLAN and state output fields - covering every command, attribute, mode and feature name in the file; I then probed both listed sources with the checker's own fetcher and both return 403 Forbidden (https://www.cisco.com/ and https://www.juniper.net/documentation/), and when fetched with browser or curl User-Agents both are content-free landing pages - the Cisco home page is product marketing with no 802.1X, MAB, RADIUS, supplicant or VLAN text, and the Juniper page is a documentation index with no 802.1X, MAB, host-mode or authentication text - so the five platform-behaviour and CLI claims are gated on the blocked vendor documentation and the two rollout-guidance claims are covered by no readable listed source.",
+  "verdict": "fail",
+  "attestation_sha256": "5df504a1e8ad62049e25372c29d265e364fb7bca366e139b94f3b537cbc1c9de",
+  "suggested_edits": "Both listed sources are unusable here: https://www.cisco.com/ and https://www.juniper.net/documentation/ are domain-root landing pages that return 403 Forbidden to the checker's anonymous fetcher, and even when read with browser or curl User-Agents they contain no 802.1X, MAB, RADIUS, VLAN, host-mode or authentication content at all. A fix PR should bump version and replace them with specific, fetchable pages that state each claim: a publicly readable wired 802.1X/MAB configuration guide covering monitor mode, the 802.1X-with-MAB-fallback ordering, guest/auth-fail VLANs, multi-domain and multi-auth host modes, critical VLAN / Inaccessible Authentication Bypass and the show authentication sessions output, plus an RADIUS attribute reference for Tunnel-Private-Group-ID (RADIUS attribute 81, defined in RFC 2868) and vendor documentation of downloadable ACLs for dynamic assignment. Separately, the protocol cannot represent the blocked sources: listing either 403 URL makes check --refetch fail, so both blocked sources are recorded here as gated claims with empty quotes and the sources array is empty."
+}
