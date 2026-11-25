@@ -1,0 +1,181 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.data-engineering.etl-pipeline-design.restatements-and-versioned-outputs",
+    "version": "2",
+    "sha256": "3c650cfe1d6edf1ac10b45ee45094273d4bbb978932d1bec8b971c8a671d9dd7"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-25",
+  "sources": [
+    {
+      "url": "https://martinfowler.com/articles/bitemporal-history.html",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "219788b635999875084999cdde36ea2bc483b2e71b53ebc7bbb86cd58eab9c99"
+    },
+    {
+      "url": "https://docs.snowflake.com/en/user-guide/data-time-travel",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "4f215799f93a1d9b79b3101422577db0580745d0f6b96451416fdd04edd50e94"
+    },
+    {
+      "url": "https://iceberg.apache.org/docs/latest/branching/",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "596af764e0d0147a53921255bf894267a515054bacaadb772dd1276acabf0cc7"
+    },
+    {
+      "url": "https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "c5a9b56fe867fcac5753ec48daa318b9ebc6ae7686c8f3e3b31b0e4e7cf90c4d"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "late data silently updates history",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Definitional row of the skill's own policy taxonomy; none of the four fetched sources describes an 'always current' restatement policy."
+    },
+    {
+      "claim": "after close (e.g. month-end + 5 business days), period is frozen; corrections post to the current period as adjustments",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers period-close policy or adjustment posting; the 5-business-days figure is the skill's own example, and the Kimball page is an index of technique names with no descriptions."
+    },
+    {
+      "claim": "history may change, but every published version is kept",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source describes a keep-every-published-version policy; the Iceberg page's tags retain selected historical snapshots for auditing, an opt-in mechanism, not every published version."
+    },
+    {
+      "claim": "Publish each reporting run as an immutable snapshot",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source prescribes per-run immutable snapshots; the Kimball index lists 'periodic snapshot fact tables' as a link title only, with no technique description on the fetched page."
+    },
+    {
+      "claim": "INSERT INTO marts.kpi_monthly_snapshots\nSELECT 'v2026_10_05' AS version, current_timestamp() AS published_at, k.*\nFROM marts.kpi_monthly k;",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Illustrative SQL with the skill's invented table and column names; appears verbatim in none of the four fetched sources."
+    },
+    {
+      "claim": "Reports cite the version; \"latest\" is a view over the newest version.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Design guidance; no listed source covers version-citing reports or a 'latest' view over versions."
+    },
+    {
+      "claim": "Restatement report: diff current version vs previously published one by key and measure.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source describes restatement diff reports by key and measure."
+    },
+    {
+      "claim": "Iceberg tags (`CREATE TAG v2026_10 ...`)",
+      "verdict": "confirmed",
+      "source_url": "https://iceberg.apache.org/docs/latest/branching/",
+      "evidence_quote": "for more sophisticated snapshot lifecycle management, iceberg supports branches and tags which are named references to snapshots with their own independent lifecycles.",
+      "note": "The page's Spark SQL examples create tags with 'ALTER TABLE prod.db.table CREATE TAG `eow-01` AS OF VERSION 7 RETAIN 7 DAYS;', so the skill's fragment elides the ALTER TABLE prefix; tags also 'retain important historical snapshots for auditing purposes'."
+    },
+    {
+      "claim": "Delta/Snowflake time travel (bounded by retention — not a long-term archive)",
+      "verdict": "confirmed",
+      "source_url": "https://docs.snowflake.com/en/user-guide/data-time-travel",
+      "evidence_quote": "a key component of snowflake time travel is the data retention period.",
+      "note": "The page bounds Time Travel by the retention period ('the standard retention period is 1 day (24 hours)', Enterprise '0 up to 90 days'); no Delta Lake source is listed, so the Delta half of the claim is uncovered."
+    },
+    {
+      "claim": "**valid time** — when the fact was true in the business",
+      "verdict": "confirmed",
+      "source_url": "https://martinfowler.com/articles/bitemporal-history.html",
+      "evidence_quote": "you may also hear people using the terms valid , or effective (for actual) and transaction (for record).",
+      "note": "The article maps 'valid' to its 'actual' axis, which 'records what history should be given perfect transmission of information' - i.e. when the fact was true; its footnote says the valid/transaction terminology is also used in the SQL:2011 standard."
+    },
+    {
+      "claim": "**transaction/recorded time** — when the warehouse learned it",
+      "verdict": "confirmed",
+      "source_url": "https://martinfowler.com/articles/bitemporal-history.html",
+      "evidence_quote": "this means each event needs an actual date (or time) for when the event occurred in the world, and a record date (or time) for when we learned about it.",
+      "note": "The article's intro likewise defines record history as capturing 'how our knowledge of history changes', matching 'when the warehouse learned it'."
+    },
+    {
+      "claim": "Corrections close the old row's recorded interval and insert a new row; nothing is updated in place.",
+      "verdict": "confirmed",
+      "source_url": "https://martinfowler.com/articles/bitemporal-history.html",
+      "evidence_quote": "however record history itself is append only. we don't change what we thought we knew about sally's salary on feb 25. we just append the later knowledge we gained.",
+      "note": "Fowler stores record history as start/end date ranges (record start / record end columns), so each correction opens a new record interval while the previous one closes - nothing is rewritten in place."
+    },
+    {
+      "claim": "SELECT SUM(amount) FROM fct_revenue_bt\nWHERE order_date BETWEEN '2026-09-01' AND '2026-09-30'\n  AND recorded_from <= '2026-10-01' AND (recorded_to > '2026-10-01' OR recorded_to IS NULL);",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The as-of semantics it implements is confirmed conceptually by Fowler (sally.salaryat('2021-02-25', '2021-03-25')), but this SQL with its table and column names appears in no listed source."
+    },
+    {
+      "claim": "After close, late records get `posting_period = current open period` and a flag `is_prior_period_adjustment`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers posting_period or is_prior_period_adjustment mechanics."
+    },
+    {
+      "claim": "Reports by posting period never change after close; reports by business date show the restated view.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers posting-period versus business-date reporting behaviour."
+    },
+    {
+      "claim": "Reprocess affected windows only (lookback on late data), but always regenerate the comparison against the last published version.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers lookback reprocessing windows; the Kimball index lists 'late arriving facts' as a link title only, with no description on the page."
+    },
+    {
+      "claim": "Restatement threshold: auto-publish changes under X% / $Y; above it, require owner sign-off and a release note",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Placeholder thresholds (X% / $Y) and the sign-off policy appear in no listed source; the '1.20M to 1.23M' release note is the skill's own illustrative example."
+    },
+    {
+      "claim": "Keep the inputs reproducible (pinned source snapshots, code version in the output row) so any version can be regenerated.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers pinned source snapshots or code versions stored in output rows."
+    },
+    {
+      "claim": "A past published report can be reproduced exactly (version or as-of query).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The verify line's exact-reproduction guarantee is the skill's own checklist; no listed source states it."
+    }
+  ],
+  "coverage": "Claims cover every concrete assertion in the file: all three policy-table behaviours including the month-end + 5 business days number, both SQL commands (the snapshot INSERT and the as-of SELECT with its exact recorded_from/recorded_to filter), the Iceberg-tag and Delta/Snowflake time-travel alternatives, both bitemporal axis definitions and the corrections behaviour, the posting_period/is_prior_period_adjustment mechanics, the reprocess, threshold (X% / $Y) and reproducibility bullets, and the reproduce-exactly verify line - every command, flag, number and behaviour - each checked against all four listed sources fetched today with attest.py's wavefront-attest/1 fetcher, with quotes sliced from the exact tag-stripped page text.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted and the bitemporal core is well sourced: Fowler's article covers both time axes and append-only record history, the Iceberg page documents tags as named snapshot references (created via ALTER TABLE ... CREATE TAG name AS OF VERSION n RETAIN ...), and the Snowflake page bounds Time Travel by its data retention period (1 day standard, up to 90 days on Enterprise). But 14 of 19 claims have no source coverage: the policy mechanics (month-end + 5 business days close), the whole versioned-snapshot workflow (immutable per-run snapshots, version-citing reports, diff reports), both SQL examples, posting_period/is_prior_period_adjustment, reprocessing windows, the X%/$Y threshold and the reproducibility guidance are the authors' technique stated as fact, and the Kimball URL is a bare index of technique names ('periodic snapshot fact tables', 'late arriving facts' appear as link titles with no descriptions on the fetched page). A fix PR should bump version and link the Kimball technique sub-pages that actually describe these patterns instead of the index, source or soften the mechanics bullets as author judgement, write the Iceberg tag syntax in full (the fragment 'CREATE TAG v2026_10 ...' reads like a standalone statement), and either add a Delta Lake time-travel source or drop 'Delta' from the time-travel claim, since no listed source covers Delta.",
+  "attestation_sha256": "a27f7505afc182280e5089184290ab9213c723cf6ec8934e525e000b84ee3f0b"
+}
