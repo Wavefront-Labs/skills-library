@@ -1,0 +1,150 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.digital-forensics-incident-response.log-analysis.detection-false-positive-tuning",
+    "version": "2",
+    "sha256": "8129cd56fd6d9e139072be13a240991e0cb33276f8a09d3b5449121619494ac1"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://github.com/SigmaHQ/sigma-specification",
+      "fetched_at": "2026-11-24T23:01:48Z",
+      "http_status": 200,
+      "content_sha256": "6c90b68277a6bff3722edcf3e2fcf02e6342f17c38f6fa5ec5598ba56f1d48e5"
+    },
+    {
+      "url": "https://github.com/palantir/alerting-detection-strategy-framework",
+      "fetched_at": "2026-11-24T23:01:48Z",
+      "http_status": 200,
+      "content_sha256": "e6ea08034c399fcc5eac1a034780fb7cb0e14dfbff25fb9eef289d09f894ddfd"
+    },
+    {
+      "url": "https://attack.mitre.org/",
+      "fetched_at": "2026-11-24T23:01:48Z",
+      "http_status": 200,
+      "content_sha256": "52a0352afa8f34bd2520590e498d36c2ffec43c2b783ff3fae4bc700076c2561"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "reduce alert noise so analysts trust the detection, while keeping it able to catch the\ntechnique.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Bad tuning (broad exclusions) is how real intrusions go unseen.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Per rule over 30 days: alert count, true positives, benign true positives (real activity, authorised),\n  false positives (logic wrong), time to triage.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Track in the detection repository or SOAR.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "(FP = rule matches things that are not the technique): tighten field conditions, use\n   parent/child, command-line structure, or signature status rather than names.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "add asset role, user group, signer, prevalence so triage is instant and severity can vary.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "exclude the *specific* combination\n   (host group + signed binary path + parent + account), never just a process name.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "filter_backup_agent:\n     Image|endswith: '\\VendorBackup\\agent.exe'\n     ParentImage|endswith: '\\services.exe'\n     User: 'NT AUTHORITY\\SYSTEM'\n   condition: selection and not filter_backup_agent",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "alert on rare combos (stacking) or counts over time.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Lower severity / route to hunting queue** rather than disable.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Disabling a rule is a decision for the detection owner with a recorded reason.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Every exclusion has an owner, reason, ticket and review/expiry date.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Avoid exclusions on user-writable paths, wildcards matching attacker-controllable names, or whole hosts (attackers live on those hosts too).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Re-run the rule against the positive test cases (Atomic Red Team, recorded incident data) after each change.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Re-check FP volume after a week.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Excluding \"admin tools\" excludes attackers using the same admin tools.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Tuning by ignoring an entire log source field that went null after a parser change - check data quality first.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Positive tests still fire, FP count dropped, and every exclusion is documented with an expiry.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I chose every concrete claim in the skill - the 30-day and one-week windows, the Sigma YAML filter/condition block, and every stated tuning, exclusion, hygiene, regression and verification behaviour (18 claims) - then fetched all three listed sources and searched each page for every claim.",
+  "verdict": "fail",
+  "attestation_sha256": "126fce47647d5d693c196b90dfe8b8aea295bb1de587e866d38ebaf33ba28b11",
+  "suggested_edits": "Nothing is contradicted, but none of the three listed sources covers the skill's claims: the SigmaHQ/sigma-specification landing page is a repository-layout README with no endswith modifier or condition syntax, the Palantir ADS landing page describes the template's sections (false positives, validation, priority) but no tuning, exclusion, measurement or regression guidance, and attack.mitre.org is a knowledge-base landing page. A fix PR should bump version and cite pages that actually state these behaviours - e.g. the Sigma modifiers appendix (specification/sigma-appendix-modifiers.md) for Image|endswith and condition 'selection and not' syntax, SigmaHQ blog posts on false-positive filters for the scoped-exclusion and wildcard guidance, the ADS framework's false-positives and validation sections for owner/review requirements, and Red Canary Atomic Red Team documentation for the positive-test-case claim - or narrow the claims to what those documents state."
+}

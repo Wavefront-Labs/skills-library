@@ -1,0 +1,145 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.devops-ci-cd.release-engineering.git-cliff-changelog-generation",
+    "version": "2",
+    "sha256": "fa15fe95d9036e611fe0bf196ad53721f0ad0ce7d7dd4654c2ad5fe59b541d49"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://git-cliff.org/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "53f678531498a0e62029f75ff577e10b5f64a3104424954195ada0e1ddd72789"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Generate changelogs and next-version suggestions from conventional commits with git-cliff: cliff.toml, commit parsers, templates and CI usage.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page's conventional-commits sentence covers changelog generation, but says nothing about next-version suggestions, cliff.toml, parsers, templates or CI."
+    },
+    {
+      "claim": "a reproducible CHANGELOG built from commit history.",
+      "verdict": "confirmed",
+      "source_url": "https://git-cliff.org/",
+      "evidence_quote": "git-cliff can generate changelog files for any Git repository that follows the conventional commits specification."
+    },
+    {
+      "claim": "git cliff --init                       # writes cliff.toml with defaults",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "git cliff -o CHANGELOG.md              # full history",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "git cliff --unreleased                 # since last tag",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "git cliff --latest                     # latest release only (for release notes)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "git cliff --bump --unreleased          # compute next semantic version from commit types",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "git cliff --tag v1.4.0 -o CHANGELOG.md # label unreleased commits as a new tag",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "[changelog]\nheader = \"# Changelog\\n\"",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "conventional_commits = true\nfilter_unconventional = true",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "commit_parsers = [\n  { message = \"^feat\", group = \"Features\" },\n  { message = \"^fix\", group = \"Bug Fixes\" },",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "{ message = \"^chore\\\\(release\\\\)\", skip = true },",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Templates use Tera syntax. `tag_pattern` restricts which tags count as releases.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Run in the release job after tagging; use `fetch-depth: 0` (full clone with tags) or the changelog will be empty.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Publish `git cliff --latest --strip header` as release notes.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Squash-merge titles must follow the convention.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Skip bot commits with a parser rule.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Details of options vary by version; check the docs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Dry run on a branch (`git cliff --unreleased`) lists the commits you expect, grouped.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I took every git cliff command line with its flags and inline comment from the Setup and CI sections (--init, -o CHANGELOG.md, --unreleased, --latest, --bump, --tag v1.4.0, --strip header, fetch-depth: 0), every cliff.toml key and parser rule shown (changelog header, conventional_commits, filter_unconventional, the ^feat, ^fix and ^chore(release) commit_parsers rules, tag_pattern), the Tera-template statement, and every behaviour sentence in the description, Goal, Gotchas and Verify sections, then checked each against the single listed source.",
+  "verdict": "fail",
+  "suggested_edits": "The only listed source is the git-cliff.org marketing landing page: it supports the general premise (git-cliff generates changelog files from conventional-commits repositories, with regex-powered parsers configured via a configuration file) but contains no CLI flag, no cliff.toml key, no mention of Tera and no CI guidance, so every command, setting and behaviour in the Setup, cliff.toml, CI and Verify sections is unverifiable against it. Add the real documentation as sources and re-check each claim: the git-cliff.org/docs usage and CLI pages for --init, -o, --unreleased, --latest, --bump, --tag and --strip; the configuration reference for the [changelog] and [git] sections (conventional_commits, filter_unconventional, commit_parsers, tag_pattern); the Tera template documentation; and the CI/GitHub Actions docs that justify fetch-depth: 0 and running after tagging. The github.com/orhun/git-cliff README also documents the default cliff.toml and the CLI flags and would cover most of the Setup section.",
+  "attestation_sha256": "2ad0f465f06716aa736054c02dc9c9f4de4008f61735ddc126e8f5f4d23e8b04"
+}

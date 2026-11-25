@@ -1,0 +1,167 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.systems-network-administration.virtualisation.vsphere-support-bundles-vm-support",
+    "version": "2",
+    "sha256": "4456e907c985e790f8c61d3e76f0ad812d15229d66e1249d8d7148f798b543e9"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://knowledge.broadcom.com/external/article?legacyId=653",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "51a7a9bcc09dcc864f3949eb3c0e9f3c4e48369f825c9e14f6c4f2c97730898b"
+    },
+    {
+      "url": "https://knowledge.broadcom.com/external/article?legacyId=1010705",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "8517198d3b50f394738982310719398a18fd59495a0c1b38ad5d418e896d43d0"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Collect vSphere diagnostic bundles: vm-support on ESXi, vc-support on VCSA, from the client or API",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Frontmatter description scope: KB 1010705 confirms only the vm-support-on-ESXi half (\"The command-line vm-support utility is present on all versions of VMware ESXi\"); neither listed source mentions vc-support, VCSA or an API collection path."
+    },
+    {
+      "claim": "vm-support -w /vmfs/volumes/<datastore>",
+      "verdict": "confirmed",
+      "source_url": "https://knowledge.broadcom.com/external/article?legacyId=1010705",
+      "evidence_quote": "To export the log bundle to a specific shared vmfs datastore, use this command: vm-support -w /vmfs/volumes/DATASTORE_NAME"
+    },
+    {
+      "claim": "writes esx-<host>-<date>.tgz there",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "KB 1010705 says vm-support \"produces a gzipped tarball ( .tgz file) locally on the host\" but neither source states the esx-<host>-<date> filename pattern."
+    },
+    {
+      "claim": "vm-support -p -d 300 -i 10 -w /vmfs/volumes/<ds> # include a 5-minute performance snapshot",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither KB documents vm-support's -p/-d/-i performance-snapshot flags or the 300 s / 10 s values; KB 653 covers only the vSphere Client's \"Gather performance data\" option with a duration and interval."
+    },
+    {
+      "claim": "Or from a browser: `https://<host>/cgi-bin/vm-support.cgi`.",
+      "verdict": "confirmed",
+      "source_url": "https://knowledge.broadcom.com/external/article?legacyId=1010705",
+      "evidence_quote": "Using any HTTP client, download the resource from: https://ESXHostnameOrIPAddress/cgi-bin/vm-support.cgi"
+    },
+    {
+      "claim": "Actions → Export System Logs → select hosts (and optionally vCenter), include\nperformance data if relevant",
+      "verdict": "confirmed",
+      "source_url": "https://knowledge.broadcom.com/external/article?legacyId=653",
+      "evidence_quote": "Right click the vCenter object and select Export System Logs . Select All or only the desired ESXi host to collect logs at the same time.",
+      "note": "The same KB section also has \"If required, select Include vCenter Server and vSphere UI logs .\" and \"If required, select the Gather performance data option, and specify a duration and interval.\""
+    },
+    {
+      "claim": "Write to a datastore, not `/tmp` (RAM disk, may fill and\nhurt the host)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither KB warns against /tmp or calls it a RAM disk; KB 1010705 only says that without -w vm-support picks a VMFS or VFFS partition with the highest free space, listing /var/tmp/, /var/log/ and the working directory as possible locations."
+    },
+    {
+      "claim": "vc-support -l           # on VCSA shell, writes to /storage/log by default",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions vc-support, the VCSA shell or /storage/log; both articles cover ESXi host diagnostics only."
+    },
+    {
+      "claim": "or `https://<vcsa>/appliance/support-bundle` (with credentials), or VAMI",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions the appliance support-bundle URL or VAMI; both articles cover ESXi host diagnostics only."
+    },
+    {
+      "claim": "Bundles can be\nGBs; check `/storage/log` free space first (`df -h`)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions bundle sizes, /storage/log or df -h."
+    },
+    {
+      "claim": "hostd/vmkernel logs rotate within days on busy hosts",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions log rotation, hostd or vmkernel logs."
+    },
+    {
+      "claim": "Note the UTC time of the incident; logs are in UTC",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source mentions UTC or log timestamps."
+    },
+    {
+      "claim": "For a PSOD, collect after the host returns: the core dump is extracted into the bundle",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source covers PSOD collection or core-dump extraction into the bundle; KB 653 only offers a \"Password for encrypted core dumps\" option in the export dialog."
+    },
+    {
+      "claim": "as long as a dump target was configured",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Dump-target prerequisite for the PSOD core dump; neither listed source mentions dump targets."
+    },
+    {
+      "claim": "Use the Broadcom support portal upload for the case, or the vendor's file transfer\nservice",
+      "verdict": "confirmed",
+      "source_url": "https://knowledge.broadcom.com/external/article?legacyId=653",
+      "evidence_quote": "Upload the logs to the Broadcom Support Portal.",
+      "note": "KB 1010705 covers the transfer-service half: \"After the log bundle is collected and downloaded to a client, upload the logs to the SFTP/FTP site .\""
+    },
+    {
+      "claim": "Strip nothing yourself, but be aware bundles contain hostnames, IPs, and\nusernames",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Both KBs say only \"Data collected in a host support bundle may be considered sensitive\"; neither enumerates hostnames, IPs and usernames."
+    },
+    {
+      "claim": "copy the relevant logs only:\n`scp root@<host>:/var/log/{vmkernel,hostd,vobd}.log .` and the VM's `vmware.log`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers copying individual vmkernel/hostd/vobd logs or vmware.log; KB 1010705 says only that the collected bundle \"can be copied off the host using FTP, SCP, or another method\"."
+    },
+    {
+      "claim": "Bundle opens (`tar tzf` lists `var/log/*` and `commands/*` outputs)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither listed source describes the bundle's internal layout or tar tzf verification."
+    },
+    {
+      "claim": "its time range covers\nthe incident, and the case has the upload reference",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify-section criterion; neither listed source mentions checking a bundle's time range or an upload reference."
+    }
+  ],
+  "coverage": "I chose every concrete claim in the skill - the frontmatter description's collection scope, both vm-support command lines (the -w datastore destination and the -p -d 300 -i 10 performance snapshot), the esx-<host>-<date>.tgz output name, the vm-support.cgi browser URL, the vSphere Client Export System Logs flow with host selection and optional vCenter logs, the /tmp RAM-disk warning, vc-support -l with its /storage/log default, the appliance/support-bundle URL and VAMI, the GBs / df -h free-space check, the log-rotation window and UTC timing, the PSOD core-dump claim, the portal/transfer-service upload, the bundle-contents warning, the scp partial-collection command and both Verify criteria (tar tzf layout, time range and upload reference) - covering every command, flag, URL, path, number and behaviour, and checked each against both listed Broadcom KB articles, which together confirm only the ESXi-side items (vm-support -w, the vm-support.cgi download, the Export System Logs flow and the portal upload) and cover none of the VCSA, performance-flag, timing or bundle-content claims.",
+  "verdict": "fail",
+  "attestation_sha256": "ae75e4322c1d91098d31026e2a19806b0f5c11e98310594a02bdf2bb7923aa94",
+  "suggested_edits": "Nothing is contradicted, but both listed KBs are ESXi-host articles, so the skill's vCenter half and several operational claims are unsourced. Add fetchable sources for vc-support on the VCSA shell (the -l flag and /storage/log default), the https://<vcsa>/appliance/support-bundle URL and VAMI (a vCenter support-bundle KB or the VAMI documentation), vm-support's -p/-d/-i performance-snapshot flags and values, the esx-<host>-<date>.tgz bundle naming, and bundle contents (KB 653 already links 'Data collected when gathering diagnostic information from vSphere products', which would cover the hostnames/IPs/usernames warning); either source or drop the /tmp RAM-disk warning, the log-rotation window, the UTC note and the PSOD/dump-target claim. The scp and tar tzf verification steps can stay as reviewer technique but remain unverifiable unless a source documents them."
+}

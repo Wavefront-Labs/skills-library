@@ -1,0 +1,168 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.qa-testing-engineering.test-automation.versioned-reference-datasets",
+    "version": "2",
+    "sha256": "06fcde99821ad2866ee32cb49716c84449b2751e670d860ecbc56e70dcda4a31"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://dvc.org/doc",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "3c1809c0186e57a3013ec28dd14a52424e12324bbb5d1997fa26f3f6a22599cb"
+    },
+    {
+      "url": "https://git-lfs.com/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "157ecba43122d46ac78d20234d94738dd9fd7a1de064089669df313fed513a97"
+    },
+    {
+      "url": "https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "29a8db1120231c07211acd2d739b1dc728248b501afc75acc0e4c9d97a3d7655"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Maintain versioned reference datasets for tests: what to include, storage with Git LFS or DVC, checksums, regeneration scripts and change review.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Only the tool half is corroborated: git-lfs.com calls LFS 'an open source Git extension for versioning large files' and doc.dvc.org brands DVC 'Data version control', but no listed source mentions reference datasets for tests, checksums, regeneration scripts or change review."
+    },
+    {
+      "claim": "Representative records covering partitions and edge cases (one customer per segment, unusual names, max-length fields).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partitions, one-customer-per-segment records, unusual names and max-length fields appear in none of the three fetched pages; git-lfs.com's only 'datasets' mention is among the large file types it replaces with text pointers."
+    },
+    {
+      "claim": "Known-answer records for calculations (with expected results alongside).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers known-answer records or expected results stored alongside inputs; none of the three pages mentions test calculations."
+    },
+    {
+      "claim": "Size tiers: `small` for unit/CI, `medium` for integration, `large` for performance (generated, not hand-made).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The small/medium/large tier scheme tied to unit, integration and performance tests appears in no listed source; no page mentions test-data size tiers or generated-not-hand-made data."
+    },
+    {
+      "claim": "A README: purpose, schema version, how generated, owner, and privacy statement (synthetic or masked).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "README contents for datasets (purpose, schema version, how generated, owner, privacy statement) are covered by none of the three fetched pages."
+    },
+    {
+      "claim": "< ~10 MB text | plain Git next to tests",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'10 MB' appears in none of the three pages; the GitHub page's only numbers are Git LFS per-file limits (2 GB Free/Pro, 4 GB Team, 5 GB Enterprise Cloud - 'If you exceed the per-file limit of 5 GB, the file will be rejected by Git LFS with an error message'), and git-lfs.com says only that LFS versions large files 'even those as large as a couple GB in size'."
+    },
+    {
+      "claim": "Large binaries | Git LFS (`git lfs track \"*.parquet\"`)",
+      "verdict": "confirmed",
+      "source_url": "https://git-lfs.com/",
+      "evidence_quote": "You can configure additional file extensions at anytime. git lfs track \"*.psd\"",
+      "note": "git-lfs.com's Getting Started step 2 shows the command form 'git lfs track \"*.psd\"' for selecting the file types Git LFS manages (\"*.parquet\" is the skill's instance of the same command); the page lead adds that LFS 'replaces large files such as audio samples, videos, datasets, and graphics with text pointers inside Git'."
+    },
+    {
+      "claim": "`dvc add data/ref_v3`, `dvc push` to S3/GCS",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The listed dvc.org/doc 301-redirects to the doc.dvc.org docs index, which names 'add', 'push', 'remote', 'Amazon S3' and 'Google Cloud Storage' only as sidebar labels under Command Reference and Data Management; the strings 'dvc add' and 'dvc push' appear nowhere in its text and no sentence describes storing datasets or pushing to S3/GCS."
+    },
+    {
+      "claim": "`.dvc` pointer files in Git",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "doc.dvc.org lists '.dvc Files' only as a Project Structure sidebar label; 'pointer' appears in that page only inside CSS rules, and neither git-lfs.com nor the GitHub page mentions DVC's .dvc files at all."
+    },
+    {
+      "claim": "Version datasets explicitly (`ref-customers/v3/`), tests pin a version.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers explicit dataset version directories or tests pinning a dataset version; doc.dvc.org's closest text is a 'Versioning Data and Models' sidebar label."
+    },
+    {
+      "claim": "Record a checksum manifest (`sha256sum * > MANIFEST.sha256`)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'sha256sum' and 'checksum' appear zero times in all three fetched pages; no source covers checksum manifests or verifying them at test start."
+    },
+    {
+      "claim": "Regeneration is a script in the repo (seeded Faker generators, export queries plus masking), never manual edits.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Faker' appears in none of the pages; no listed source covers seeded generators, masked export queries or scripted dataset regeneration."
+    },
+    {
+      "claim": "Schema changes: migrate the dataset with the same migration scripts as production, bump the version, keep the old one until tests move.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source says dataset schema changes should reuse production migration scripts, bump versions, or keep old datasets until tests move."
+    },
+    {
+      "claim": "Dataset diffs in PRs (row counts, schema, sample diff); for big files, CI posts a summary (rows added/removed per partition).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers dataset diffs in PRs, CI row-count summaries per partition, or owner approval of dataset changes."
+    },
+    {
+      "claim": "Production extracts used as reference data must be masked and approved; synthetic is safer.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Masking and approval of production extracts used as test reference data appear in none of the three fetched pages."
+    },
+    {
+      "claim": "Shared mutable copies drift; load fresh from the versioned source per run.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers shared mutable copies drifting or loading fresh copies from the versioned source per run."
+    },
+    {
+      "claim": "LFS bandwidth quotas on hosted Git; cache in CI",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'bandwidth' and 'quota' appear zero times in both git-lfs.com and the GitHub About page fetched today; the GitHub page covers per-file size limits only (2 GB Free/Pro, 4 GB Team, 5 GB Enterprise Cloud) and links to a separate 'Git Large File Storage billing' page, so the quota gotcha is covered by no listed source."
+    },
+    {
+      "claim": "Tests reference a dataset version, the checksum check passes in CI, and the dataset can be rebuilt from its script to the same checksum.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers tests referencing dataset versions, checksum checks passing in CI, or rebuilding a dataset from its script to the same checksum."
+    }
+  ],
+  "coverage": "Claims cover every concrete assertion in the file: the frontmatter description, all four what-belongs bullets, all three storage-table rows (the ~10 MB number, the git lfs track, dvc add and dvc push commands, the S3/GCS remotes and .dvc pointer files), all four versioning bullets including the sha256sum checksum manifest, the change-review line, all three gotchas including the LFS bandwidth quotas, and the verify line - every command, flag, number and behaviour - each checked against all three listed sources fetched today with the web fetch tool and again with attest.py's wavefront-attest/1 fetcher (dvc.org/doc 301-redirects to doc.dvc.org), with the quote taken from the exact tag-stripped page text.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but only 1 of 18 claims is confirmed: git-lfs.com documents the git lfs track command, while the listed dvc.org/doc 301-redirects to the doc.dvc.org docs index whose only coverage of the skill's DVC claims is sidebar labels ('add' and 'push' under Command Reference, 'Amazon S3' and 'Google Cloud Storage' under Remote Storage, '.dvc Files' under Project Structure) - the strings 'dvc add' and 'dvc push' and any pointer-file or remote-upload behaviour appear nowhere in its text. A fix PR should bump version and replace dvc.org/doc with pages that document the commands, e.g. doc.dvc.org/command-reference/add, doc.dvc.org/command-reference/push, doc.dvc.org/user-guide/data-management/remote-storage/amazon-s3 and doc.dvc.org/user-guide/project-structure/dvc-files; add the GitHub 'Git Large File Storage billing' page for the bandwidth-quota gotcha, since the listed About page never uses 'bandwidth' or 'quota' (it covers per-file limits of 2/4/5 GB by plan only); and either source or trim the test-data practice guidance (size tiers, the ~10 MB plain-Git threshold, sha256sum manifests, Faker regeneration, schema migrations, masked production extracts, PR diff reviews), which no listed source covers.",
+  "attestation_sha256": "452b837f2297b0e787cc32da8db2fe23567cdc390d7e8f3b417195abcd4daf7a"
+}

@@ -1,0 +1,178 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.qa-testing-engineering.test-automation.testing-honeycomb-microservices",
+    "version": "2",
+    "sha256": "1257d8b49d2e756e7901dab156afb68ac1384555251b51fcc33c9fe3bf4af2a3"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "cd168471105815e69d1712650296e3aa88ad52d7e052b2748874cd61319b0450"
+    },
+    {
+      "url": "https://martinfowler.com/articles/microservice-testing/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "2efa9ec3b03e3fcb3a6a81213d12fbbdd9b367ca11d7a5d02d42411fbb458450"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "favour service-level integration tests with real dependencies, few implementation-detail unit tests, minimal E2E",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "That means we should focus on Integration Tests, have a few Implementation Detail Tests and even fewer Integrated Tests (ideally none).",
+      "note": "The article's top layer is 'Integrated Tests (ideally none)'; the skill renders this as minimal E2E."
+    },
+    {
+      "claim": "small services whose complexity lies in how they talk to databases, queues and other services, not in internal logic (Spotify engineering, 2018)",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "The biggest complexity in a Microservice is not within the service itself, but in how it interacts with others, and that deserves special attention.",
+      "note": "Page published Jan 11, 2018 on Spotify Engineering by André Schaffer and Rickard Dybeck; its dependency examples are a SQL database, pubsub event sources and other services."
+    },
+    {
+      "claim": "unit tests only for genuinely complex isolated logic",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "We save Implementation Detail Tests for parts of the code that are naturally isolated and have an internal complexity of their own."
+    },
+    {
+      "claim": "Most tests are integrated tests of one service",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "What we should aim for instead is Integration Tests, which verify the correctness of our service in a more isolated fashion"
+    },
+    {
+      "claim": "start the service (in-process or container) with real infrastructure (DB, broker via Testcontainers) and stubbed external services (WireMock)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The article's pattern supports a real database and replaces external event sources with an in-memory pubsub topic, but neither source mentions containers, Testcontainers, stubs or WireMock."
+    },
+    {
+      "claim": "and test through its public API",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "We spin up a database, populate it, start the service, and query the actual API in the tests."
+    },
+    {
+      "claim": "Few \"integration\" tests** across several real services",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "That means we should focus on Integration Tests, have a few Implementation Detail Tests and even fewer Integrated Tests (ideally none).",
+      "note": "The article's term is 'Integrated Tests', defined as 'A test that will pass or fail based on the correctness of another system'."
+    },
+    {
+      "claim": "replaced largely by **contract tests** between services",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "They will also be the basis for when we take the leap to Consumer-driven Contract Based Testing (e.g. PACT), getting even more confident of not accidentally breaking contracts.",
+      "note": "The article presents consumer-driven contract testing (PACT) as the direction they are heading, building on shared fixtures."
+    },
+    {
+      "claim": "Unit tests with heavy mocking in a small service mostly verify the mocks and break on every refactor",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The article never uses 'mock' or 'mocks'; it says too many unit tests 'restrict how we can change the code without also having to change the tests', which supports only the break-on-refactor half."
+    },
+    {
+      "claim": "Service-level tests survive refactoring, catch wiring and query defects, and still run in seconds with containers",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The article supports surviving refactoring ('Now we are able to refactor the internals without touching any tests') and a few-seconds suite ('The suite goes from milliseconds to a few seconds'), but mentions no containers and never says tests 'catch wiring and query defects'."
+    },
+    {
+      "claim": "@SpringBootTest(webEnvironment = RANDOM_PORT)\n@Testcontainers\nclass OrderApiTest {",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched source mentions Spring Boot, Java or the @Testcontainers annotation; the Fowler page's slide content is JavaScript-loaded and absent from the fetched HTML."
+    },
+    {
+      "claim": "@Container static PostgreSQLContainer<?> db = new PostgreSQLContainer<>(\"postgres:16\");",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Testcontainers and the postgres:16 image appear in neither source; the article mentions PostgreSQL only as an example database ('replace the database from PostgreSQL to NoSQL')."
+    },
+    {
+      "claim": "@RegisterExtension static WireMockExtension billing = WireMockExtension.newInstance().build();",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "WireMock appears in neither fetched source."
+    },
+    {
+      "claim": "// POST /orders, assert response + row in DB + call made to billing stub",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Worked example; the POST /orders flow, DB row assertion and billing stub are not described in either source."
+    },
+    {
+      "claim": "One container set per test class or suite to keep speed; reset data between tests.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The article describes spinning up and populating a database for tests but says nothing about containers, test classes, suites or resetting data between tests."
+    },
+    {
+      "claim": "Contract tests (Pact) for every consumer/provider pair.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Spotify article mentions PACT only as a future step ('when we take the leap to Consumer-driven Contract Based Testing (e.g. PACT)'); neither source says contract tests are written for every consumer/provider pair."
+    },
+    {
+      "claim": "E2E only for a handful of business-critical journeys in a deployed environment.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The article never mentions end-to-end tests, business-critical journeys or deployed environments; its closest statement is 'even fewer Integrated Tests (ideally none)'."
+    },
+    {
+      "claim": "Services with rich domain logic (pricing engines) still need a wide unit-test base: choose shape per service.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source discusses services with rich domain logic or pricing engines; the closest is saving Implementation Detail Tests for code that is 'naturally isolated and have an internal complexity of their own'."
+    },
+    {
+      "claim": "Each service's suite runs locally in minutes",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No source states a minutes figure; the article says the suite goes 'from milliseconds to a few seconds', which is faster, but the claim's wording is in neither source."
+    },
+    {
+      "claim": "most tests exercise the public API with real infrastructure",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "We spin up a database, populate it, start the service, and query the actual API in the tests."
+    },
+    {
+      "claim": "cross-service correctness relies on contracts rather than a large E2E suite",
+      "verdict": "confirmed",
+      "source_url": "https://engineering.atspotify.com/2018/01/testing-of-microservices",
+      "evidence_quote": "As an added bonus, since we reuse the same fixtures for other services we increase confidence that we won’t accidentally break the contracts between them."
+    }
+  ],
+  "coverage": "I took every sentence of the description, Goal, Shape, Why, Implementing, When-not-to-use and Verify sections as claims, splitting sentences that mix covered and uncovered parts, including every line of the Java example (@SpringBootTest(webEnvironment = RANDOM_PORT), @Testcontainers, the PostgreSQLContainer postgres:16 line, the WireMockExtension line and the POST /orders comment), the Testcontainers, WireMock, container and Pact tool mentions, the seconds and minutes figures, and the (Spotify engineering, 2018) attribution, then checked each against the two listed sources.",
+  "verdict": "fail",
+  "suggested_edits": "The Spotify article supports the honeycomb shape itself (few Implementation Detail Tests for naturally isolated complex code, focus on single-service Integration Tests against a spun-up real database queried through the actual API, ideally no Integrated Tests, contract confidence through shared fixtures with PACT as the next step). The Martin Fowler page adds nothing beyond its agenda because the Infodeck slide text is loaded by JavaScript and is absent from the fetched HTML. Nothing in the sources covers the implementation stack: Testcontainers, WireMock, the Spring Boot annotations, the postgres:16 image, one container set per test class or suite, resetting data between tests, contract tests 'for every consumer/provider pair', or E2E 'business-critical journeys in a deployed environment' - all material. Add sources that document these (Testcontainers, WireMock and Spring Boot testing docs, Pact consumer/provider docs, and a rendered copy of the Fowler deck), and either source or drop 'mostly verify the mocks' (the article never mentions mocks) and reword 'runs locally in minutes' (the article says a few seconds).",
+  "attestation_sha256": "743c179857774ebd9d4b9049e35043301225f3365c33c7a7879919564c636e0f"
+}

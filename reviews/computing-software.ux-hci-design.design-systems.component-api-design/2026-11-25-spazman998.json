@@ -1,0 +1,72 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.ux-hci-design.design-systems.component-api-design",
+    "version": "2",
+    "sha256": "e6ca3f03e4055eb69123fe73866341cdfa4bb03ff67d463db7d0be6214257a87"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-25",
+  "sources": [
+    {
+      "url": "https://www.w3.org/WAI/ARIA/apg/",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "91a4556b78522c559e0818f00dce934e1e71e95b03597974803d1a1f62efd337"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Prefer composition (slots/children) over many boolean props.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The words composition, slots, children and boolean appear zero times in the fetched APG home page, which is an index of ARIA patterns and practices with no component-API guidance."
+    },
+    {
+      "claim": "Standardise prop names across components (`size`, `variant`, `disabled`, `onChange`).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No prop-name guidance on the page: 'variant', 'disabled' and 'onChange' appear zero times and the only 'size' matches are font-size rules in the page's own CSS; the APG home page documents accessibility semantics, not component props."
+    },
+    {
+      "claim": "Variants over one-off styles; enumerate states: default, hover, focus, active, disabled, loading, error.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage at best: the page's only relevant 'states' occurrence is 'ARIA roles, states and properties' (ARIA semantics, not component visual states); hover, focus and active appear only in the page's own CSS, and variants are never mentioned."
+    },
+    {
+      "claim": "Spread native attributes to the root element; forward refs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither native-attribute spreading nor forwarding refs appears anywhere on the page; React-style component-API mechanics are outside the APG home page's scope."
+    },
+    {
+      "claim": "Accessible by default (roles, focus management) and documented keyboard behaviour.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the page says 'Learn how to make accessible web components and widgets with ARIA roles, states and properties and by implementing keyboard support.', which covers ARIA roles and keyboard support, but never mentions focus management, accessibility 'by default' or documented keyboard behaviour."
+    },
+    {
+      "claim": "Two teams can build different layouts from the same components without forking them.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify-section criterion: a team-adoption test of API quality, not a documented behaviour; no listed source addresses building layouts from shared components without forking."
+    }
+  ],
+  "coverage": "I took all five behaviour bullets of the Component API section - composition over boolean props, the standard prop names, the variant/state list, attribute spreading with ref forwarding, and the accessibility defaults - plus the Verify checklist criterion, covering every claim in the file since the skill contains no commands, flags, settings or numbers, then fetched the single listed source (APG home page, HTTP 200, hashed below) with attest.py's wavefront-attest/1 user agent and searched its text for each claim.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but no concrete claim is stated by the skill's only source: the W3C ARIA APG home page is a landing/index page for ARIA patterns and practices, and its only component-relevant sentence ('Learn how to make accessible web components and widgets with ARIA roles, states and properties and by implementing keyboard support.') echoes the accessibility bullet without mentioning focus management, accessibility 'by default' or documented keyboard behaviour. A fix PR should bump version and add sources that actually state component-API design guidance - e.g. a design system's component-contribution or API guidelines page for composition over boolean props, standardised size/variant/disabled/onChange props and variant/state enumeration, React documentation for spreading native attributes to the root element and forwardRef, and a specific APG pattern or practice page (e.g. the keyboard-interface practice) rather than the APG index for the accessibility bullet - or trim the skill to what a cited page supports.",
+  "attestation_sha256": "23ea7b71042b325c94b4d44e58fea4f20ad230aa76447e59feba79e0441b262a"
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.quantum-computing-software.qiskit.qk-target",
+    "version": "2",
+    "sha256": "12e627e3ccec83718005b6b50f3abcc246099c915da51c211603fa1d98b0c01d"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://quantum.cloud.ibm.com/docs/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "303d1ddc94fb99c7c0cb1a322ccce4bea9d34aebfac9b383b24d983821c3f026"
+    },
+    {
+      "url": "https://github.com/Qiskit/qiskit",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "e4c8060898c232111c7a5278fc4798958ae9566155a20ce5ca94d3eb0b47322a"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "t = backend.target\nt.operation_names; backend.coupling_map\nt[\"cx\"] if \"cx\" in t else None",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'backend.target' and 'operation_names' appear zero times in both fetched pages; the README's only Target text is Target.from_configuration(basis_gates=[\"cz\", \"sx\", \"rz\"], coupling_map=CouplingMap.from_line(3)) fed to transpile(qc, target=target), and its BackendV2 paragraph names no backend attributes; the docs root is the guides introduction/TOC page."
+    },
+    {
+      "claim": "Hardware jobs must be ISA circuits: only native gates on connected qubits.",
+      "verdict": "confirmed",
+      "source_url": "https://github.com/Qiskit/qiskit",
+      "evidence_quote": "However, running a quantum circuit on hardware requires rewriting to the basis gates and connectivity of the quantum hardware.",
+      "note": "The README states the requirement in these words and never uses the term 'ISA' (the page's 10 lowercase 'isa' matches are GitHub UI feature-flag/JSON strings); 'basis gates and connectivity of the quantum hardware' is the claim's 'only native gates on connected qubits'. The docs root has no ISA text."
+    },
+    {
+      "claim": "Target holds per-qubit properties such as gate error and duration.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'gate error' and 'duration' appear zero times in both fetched pages; the README shows Target only via from_configuration(basis_gates=..., coupling_map=...) with no per-qubit properties, so no listed source documents error or duration values on a Target."
+    },
+    {
+      "claim": "Do not hard-code basis gates; they differ by device (ecr, cz, sx, rz, x are examples).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the README maps an example circuit to basis_gates = [\"cz\", \"sx\", \"rz\"], but no fetched page says basis gates differ by device or warns against hard-coding them, and 'ecr' and a standalone gate 'x' appear nowhere (the 7 'ecr' matches are inside 'secret_scanning' UI strings)."
+    },
+    {
+      "claim": "List two-qubit gate error for each edge and find the worst.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check restating the per-qubit error claim; 'gate error' appears zero times in both fetched pages and neither page mentions two-qubit gate errors or coupling-map edges, so no listed source covers it."
+    },
+    {
+      "claim": "Read a backend's Target for operations, coupling and error rates, and understand ISA circuits.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Frontmatter description: the README constructs a Target directly with Target.from_configuration rather than reading a backend's Target and never mentions error rates or ISA; the docs root is an introduction/TOC page, so the description's specifics are uncovered."
+    }
+  ],
+  "coverage": "I took the frontmatter description plus every concrete statement in the body - the full code block (backend.target, t.operation_names, backend.coupling_map and the t[\"cx\"] membership-and-indexing expression), the ISA-circuits requirement sentence, the per-qubit-properties sentence, the basis-gates gotcha with its ecr/cz/sx/rz/x examples, and the two-qubit-gate-error self-check - covering every command, attribute, number and behaviour in the file, and checked each against both listed sources, which I fetched and read today with the web fetch tool and re-fetched with attest.py's user agent (docs root HTTP 200, GitHub repo page HTTP 200).",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but 5 of 6 claims are unverifiable against the listed sources as fetched today. https://quantum.cloud.ibm.com/docs/ redirects to the guides introduction/TOC page whose only transpiler text is the Optimization card blurb ('construct high-fidelity circuits with reduced depth that are ready for execution with the Qiskit SDK transpiler', linking to /docs/qiskit/transpile), and the GitHub README covers only the general hardware requirement plus a standalone Target.from_configuration example - 'backend.target', 'operation_names', 'gate error', 'duration', 'ecr' and 'ISA' appear nowhere substantive in either page. A fix PR should bump version and list the pages that actually document these claims - the qiskit.transpiler.Target API reference (operation_names, Target indexing/membership, per-qubit gate error and duration), the BackendV2 reference or the BackendV1-to-BackendV2 migration guide linked from the docs TOC at /docs/guides/qiskit-backendv1-to-v2 (backend.target, backend.coupling_map), the transpiler guide at /docs/qiskit/transpile (ISA circuits), and a page listing per-device basis gates including ecr and x - then re-check each claim.",
+  "attestation_sha256": "6e1794fef44fa55805eda10108d5485088e962e4183be8678d0058bfaa9159d5"
+}

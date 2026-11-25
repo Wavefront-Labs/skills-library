@@ -1,0 +1,168 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.cryptography-implementation.openssl.checking-aes-ni-hardware-acceleration",
+    "version": "2",
+    "sha256": "9c09722f0c352e5fd4ebd3a0a086194ff76b4827544223744d1ebb01754931f3"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://docs.openssl.org/3.0/man3/OPENSSL_ia32cap/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "52975ed74339e1249f6ce300bafe36d3a9bf15daca759cc0e33ea4c6955ce918"
+    },
+    {
+      "url": "https://datatracker.ietf.org/doc/html/rfc8439",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "6a05949234a3f320848c434c5e785dddff858ba410efa5d2c4613f8efd5dd11b"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Hardware AES (x86 AES-NI + PCLMULQDQ for GHASH, VAES/AVX-512 on newer CPUs,",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "makes AES-GCM several times faster **and** constant\ntime.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Software AES with lookup tables is slow and leaks via cache timing.",
+      "verdict": "confirmed",
+      "source_url": "https://datatracker.ietf.org/doc/html/rfc8439",
+      "evidence_quote": "its performance on platforms that lack such hardware is considerably lower. yet another problem is that many aes implementations are vulnerable to cache- collision timing attacks"
+    },
+    {
+      "claim": "grep -o -w -E 'aes|pclmulqdq|vaes|vpclmulqdq|avx512f' /proc/cpuinfo | sort | uniq -c",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "grep -o -w -E 'aes|pmull|sha2' /proc/cpuinfo | sort -u",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "sysctl -a | grep -i 'hw.optional.arm.FEAT_AES'",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Hypervisors sometimes mask CPU flags (old CPU models in VM configs, some\nnested setups).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "If `aes` is missing inside a VM on modern hardware, fix the VM\nCPU model (`host-passthrough`) rather than accepting slow crypto.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "openssl speed -evp aes-128-gcm -seconds 2",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "OPENSSL_ia32cap=\"~0x200000200000000\" openssl speed -evp aes-128-gcm -seconds 2",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "The mask clears bit 57 (AES-NI)",
+      "verdict": "confirmed",
+      "source_url": "https://docs.openssl.org/3.0/man3/OPENSSL_ia32cap/",
+      "evidence_quote": "bit #54 denoting availability of movbe instruction; bit #57 denoting aes-ni instruction set extension"
+    },
+    {
+      "claim": "bit 33 (PCLMULQDQ) of the capability vector",
+      "verdict": "confirmed",
+      "source_url": "https://docs.openssl.org/3.0/man3/OPENSSL_ia32cap/",
+      "evidence_quote": "bit #33 denoting availability of pclmulqdq instruction; bit #41 denoting ssse3, supplemental sse3, support"
+    },
+    {
+      "claim": "A large drop (often 5-10x) confirms the accelerated path was in use.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "If both\nruns are equally slow, the build or CPU lacks acceleration.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "`openssl version -a` shows `CPUINFO: OPENSSL_ia32cap=...` in 3.x builds",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "non-default environment variable value here means someone has masked features.",
+      "verdict": "confirmed",
+      "source_url": "https://docs.openssl.org/3.0/man3/OPENSSL_ia32cap/",
+      "evidence_quote": "now the only way to affect the capability detection is to set openssl_ia32cap environment variable prior target application start"
+    },
+    {
+      "claim": "AES hardware present (servers, modern laptops, ARMv8 phones): AES-128-GCM\n  or AES-256-GCM.",
+      "verdict": "confirmed",
+      "source_url": "https://datatracker.ietf.org/doc/html/rfc8439",
+      "evidence_quote": "while aes is very fast on dedicated hardware, its performance on platforms that lack such hardware is considerably lower"
+    },
+    {
+      "claim": "No AES hardware (older/low-end ARM, many MCUs without AES peripheral):\n  ChaCha20-Poly1305 - fast in software",
+      "verdict": "confirmed",
+      "source_url": "https://datatracker.ietf.org/doc/html/rfc8439",
+      "evidence_quote": "it is considerably faster than aes in software-only implementations, making it around three times as fast on platforms that lack specialized aes hardware"
+    },
+    {
+      "claim": "and constant time without tables.",
+      "verdict": "confirmed",
+      "source_url": "https://datatracker.ietf.org/doc/html/rfc8439",
+      "evidence_quote": "the operations used in chacha20 are all additions, xors, and fixed rolls. all of these can and should be implemented in constant time"
+    },
+    {
+      "claim": "TLS stacks (BoringSSL, Go, OpenSSL with `SSL_OP_PRIORITIZE_CHACHA`) can\n  prefer ChaCha20 when the client lists it first, signalling no AES hardware.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "On MCUs, use the AES peripheral via the vendor HAL or mbedTLS alt\nimplementations;",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "check the peripheral handles key/IV loading without leaving\nkey material in readable registers after use.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I extracted every command and flag (the three /proc/cpuinfo/sysctl CPU-flag greps, both openssl speed -evp aes-128-gcm -seconds 2 invocations and the OPENSSL_ia32cap=~0x200000200000000 mask), every number and setting (bit 57, bit 33, the 5-10x figure, 3.x builds, AES-128-GCM/AES-256-GCM, ChaCha20-Poly1305, SSL_OP_PRIORITIZE_CHACHA, host-passthrough, mbedTLS) and every behaviour claim (software-AES cache leakage, the AES-NI/PCLMULQDQ/VAES/ARMv8 enumeration, hypervisor flag masking, the openssl version -a CPUINFO note, the env-var masking meaning, the three AEAD-choice bullets and the MCU register guidance), treating the Verify checklist as procedural restatements of already-checked behaviours; the OPENSSL_ia32cap man page confirmed the bit 57/bit 33 mappings and the env-var masking mechanism, RFC 8439 confirmed the cache-timing, AES-hardware-performance and ChaCha20 software/constant-time claims, the Intel article (HTTP 403 to the attestation fetch, so omitted from sources) gates the AES-NI speedup and constant-time claims, and no listed source covers the /proc/cpuinfo, sysctl, QEMU host-passthrough, TLS-stack and MCU specifics.",
+  "verdict": "fail",
+  "suggested_edits": "Replace the Intel article, which returns 403 Forbidden to automated fetchers, with a fetchable AES-NI performance source covering the 'several times faster', '5-10x' and constant-time claims; add sources for the unsupported specifics: Linux /proc/cpuinfo and macOS sysctl hw.optional.arm.FEAT_AES CPU flags, QEMU host-passthrough VM CPU model, the OpenSSL SSL_OP_PRIORITIZE_CHACHA option (ssl(7) man page), the openssl version -a CPUINFO line, and ARMv8/mbedTLS MCU documentation; the bit 57/bit 33 mask mapping and the OPENSSL_ia32cap env-var semantics are confirmed by the listed man page and the cache-timing/ChaCha20 claims by RFC 8439.",
+  "attestation_sha256": "b88e8f9073cdb3813c65a578990e1fff9b3e54f989a29a84051d06141d6b1fbf"
+}

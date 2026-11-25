@@ -1,0 +1,107 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.networking-hardware-and-wireless.wifi-80211.wifi-80211r-fast-transition",
+    "version": 2,
+    "sha256": "1ad3d7cd25e8a466f0f150e56fd012d1f82a6c9cd3bb3207baac642a3c13b5ac"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://www.ieee802.org/11/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "4e42225d8dcd8d9fed49d047a7a6019c4d2e874525088862a413959fbeefd425"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Enable 802.11r FT (over-the-air or over-DS) with correct mobility domain and key holders so voice clients roam fast.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Frontmatter description scope; the fetched page never mentions 802.11r operation, mobility domains, key holders or roaming speed - its only 802.11r references are the inactive task-group label 'TGr - Fast BSS Transition (FT)' and a trademark disclaimer."
+    },
+    {
+      "claim": "FT precomputes keys so a roam skips a full 802.1X exchange.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page is a working-group landing page (sessions, ballots, task-group and document links); it never mentions key precomputation, roaming or 802.1X."
+    },
+    {
+      "claim": "Requires a shared mobility domain ID and key hierarchy across APs on the same SSID (controller or cluster handles it).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No occurrence of 'mobility domain', 'key hierarchy', 'SSID' or controller/cluster key sharing anywhere on the page."
+    },
+    {
+      "claim": "Modes: over-the-air (client talks to target AP directly) and over-DS (via the current AP).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page never uses the terms 'over-the-air' or 'over-DS' and describes no FT mechanisms; 'Fast BSS Transition (FT)' appears only as the inactive task-group link label 'TGr'."
+    },
+    {
+      "claim": "Over-the-air is more broadly compatible.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page contains no compatibility comparison of FT modes; 'Over-the-air' appears nowhere in its text."
+    },
+    {
+      "claim": "Some older clients fail to associate to FT-enabled SSIDs",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No statement about client association failures on FT-enabled SSIDs; the page only lists task groups, ballots and meetings."
+    },
+    {
+      "claim": "\"FT adaptive\" or mixed modes exist on some platforms",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page never mentions 'FT adaptive', mixed FT modes, or any vendor platforms or products."
+    },
+    {
+      "claim": "Test device classes, especially IoT and printers.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No mention of IoT devices, printers or per-device-class client testing anywhere on the page."
+    },
+    {
+      "claim": "Alternatives when FT is unsuitable: OKC/PMK caching (vendor-specific, non-standard) or sticky roam avoidance.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page never mentions OKC, PMK caching, sticky clients or roam avoidance; 'PMF' on the page is Protected Management Frames, not PMK."
+    },
+    {
+      "claim": "Capture shows Reassociation Request with FT elements and no full EAP exchange.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify-section criterion; the page mentions no Reassociation Request, FT elements, EAP or packet capture."
+    },
+    {
+      "claim": "A voice call holds through a walk test with sub-50-ms gaps",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Verify-section criterion carrying the skill's only number; the page has no voice-call or walk-test guidance and no 50 ms figure - its numbers are meeting dates, ballot IDs and publication dates."
+    }
+  ],
+  "coverage": "I took the frontmatter description and every sentence of the body bullets and Verify checklist as claims, splitting the compound lines (client association failures vs FT-adaptive/mixed modes, and the two mode definitions) so that every behaviour, mode name, alternative (OKC/PMK caching, sticky roam avoidance) and the one number (sub-50-ms gaps) is covered; the skill contains no commands, flags or settings. The single listed source was fetched and read, and each claim was checked against it.",
+  "verdict": "fail",
+  "suggested_edits": "The sole listed source is the IEEE 802.11 working-group landing page (sessions, ballots, task-group and document links); its only references to 802.11r/FT are the inactive task-group label 'TGr - Fast BSS Transition (FT)' and the trademark disclaimer, so it cannot confirm any technical claim in this skill. A fix PR should bump version and cite sources that actually document FT operation and deployment - e.g. the IEEE 802.11r-2008 amendment itself via IEEE Xplore or the Get 802 program, or vendor configuration documentation for 802.11r fast transition (Aruba, Cisco, Meraki, hostapd) covering mobility domain ID, key hierarchy, over-the-air vs over-DS, client compatibility and PMK caching - or trim the skill to what such sources support. Material and uncovered: everything, including the key-precomputation/802.1X claim, the mobility-domain requirement, the two FT modes and their compatibility ranking, FT-adaptive/mixed modes, the OKC/PMK-caching and sticky-roam alternatives, and the sub-50-ms voice criterion.",
+  "attestation_sha256": "27afb2da73b7171f22c3ef7ae53d522a2e8b96fc02e64591fd3b64c01529b989"
+}

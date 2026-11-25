@@ -1,0 +1,105 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.it-governance-risk-compliance.nist-csf-800-53.nist80053-planning-risk-supply",
+    "version": "2",
+    "sha256": "f9924d32a83e16db8b0e9c757ccd2b8ec8b701d7636f578fa21eaac15ce9892a"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://www.nist.gov/cyberframework",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "e39c49bb7d6786d4a2a176854eef3047d65d96c41db11c5e8b7780e8ab9bec56"
+    },
+    {
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "854203a5db1c8e3d82767de412585919453efdf5cc77f456d47e7dc37f73bdbe"
+    },
+    {
+      "url": "https://csrc.nist.gov/pubs/sp/800/37/r2/final",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "9290e9b0b19f178bab68689cdf055543eb7accc21da1652d07322fc716044ca6"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Apply SP 800-53 Rev 5 programme-level families: planning, program management, risk assessment, acquisition, supply chain, contingency, incident response, PII.",
+      "verdict": "confirmed",
+      "source_url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+      "evidence_quote": "Planning ; Program Management ; Personnel Security ; PII Processing and Transparency ; Risk Assessment ; System and Services Acquisition",
+      "note": "Scope description: all eight family areas it names appear by full name in the Control Families list of the SP 800-53 Rev. 5 page - the quote shows five, and Contingency Planning, Incident Response and Supply Chain Risk Management appear in the same list - though the page states no 'programme-level' grouping."
+    },
+    {
+      "claim": "programme-level families, including those new in Rev 5.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page states that any family is new in Rev 5 or uses the term 'programme-level'; the 800-53 page's only 'new' statement is its 2025 planning note listing release-5.2.0 control changes (SA-15(13), SA-24, SI-02(07))."
+    },
+    {
+      "claim": "Rev 5 has 20 families: AC AT AU CA CM CP IA IR MA MP PE PL PM PS PT RA SA SC SI SR.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The 800-53 Rev. 5 page's Control Families section lists exactly 20 families by full name in the same order as these acronyms, and the list's HTML container carries data-total='20', but the page text never states the count and the two-letter identifiers appear on none of the three fetched pages."
+    },
+    {
+      "claim": "New in Rev 5: PT (PII processing and transparency) and SR (supply chain risk management).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Both families appear by full name in the 800-53 page's Control Families list, so the parenthetical expansions match, but no fetched page says either family was added in Rev 5; the r4-to-r5 changes are only in a linked xlsx that is neither a listed source nor page text."
+    },
+    {
+      "claim": "PM controls are organisation-wide, not baseline-assigned.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page says anything about the PM family's scope or baseline assignment; the abstract's 'controls are flexible and customizable and implemented as part of an organization-wide process to manage risk' is about controls generally, and 800-37's keyword 'control baseline' carries no PM statement."
+    },
+    {
+      "claim": "RA-3 risk assessment, RA-5 vulnerability monitoring.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'RA-3' and 'RA-5' appear on none of the three fetched pages; 'Risk Assessment' appears only as a family name on the 800-53 page, and 'vulnerability' only in the site footer's Vulnerability Disclosure link."
+    },
+    {
+      "claim": "SA-11 developer testing. SR-3 supply chain controls.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'SA-11', 'SR-3', 'developer' and 'testing' appear on none of the three fetched pages; 'System and Services Acquisition' and 'Supply Chain Risk Management' appear only as family names."
+    },
+    {
+      "claim": "CP-2 contingency plan, CP-9 backup. IR-4 incident handling.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'CP-2', 'CP-9', 'backup' and 'incident handling' appear nowhere; 'Contingency Planning' and 'Incident Response' appear only as family names, and 'IR-04' appears once, only in the 2025 planning note's list of controls updated in release 5.2.0."
+    },
+    {
+      "claim": "List the 20 family identifiers from memory, then verify against the catalog.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check line: no fetched page states a family count in its text; the 800-53 page lists 20 families by full name and its HTML carries data-total='20', but no sentence gives the number or the identifiers."
+    }
+  ],
+  "coverage": "I took the frontmatter description, the Goal line, both body bullets - the 20-family count with its 20 two-letter acronyms, the new-in-Rev-5 PT and SR families, the PM organisation-wide/not-baseline-assigned behaviour, and the RA-3, RA-5, SA-11, SR-3, CP-2, CP-9 and IR-4 control statements - and the self-check line, covering every number, identifier and behaviour in the file, and checked each against all three listed sources, fetched and read today (all HTTP 200 via the attest fetcher); the H1 acronym list was treated as the topic title subsumed by the description and 20-family claims.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but only the description's family scope is confirmed: the SP 800-53 Rev. 5 landing page lists all 20 control families by full name (its HTML list container even carries data-total='20'), yet its text never states the count, never uses two-letter identifiers, never says PT and SR are new in Rev 5, and has no control-level content - RA-3, RA-5, SA-11, SR-3, CP-2, CP-9 and IR-4 appear nowhere (IR-04 only in a 2025 planning-note change list) - and nothing on PM controls being organisation-wide rather than baseline-assigned; the cyberframework and SP 800-37 pages add nothing on any claim. A fix PR should bump version and cite sources that state these facts - the SP 800-53 Rev 5 document itself (nvlpubs PDF or the CPRT catalog) for the 20 families, their acronyms and control titles, the r4-to-r5 comparison workbook linked from the page for what is new in Rev 5, and SP 800-53B for which controls are baseline-assigned - or trim the skill to what the landing pages support.",
+  "attestation_sha256": "5512d25b883018d8ed50c73ce029acaade882f52e9ae54f60e0b721524a88ee5"
+}

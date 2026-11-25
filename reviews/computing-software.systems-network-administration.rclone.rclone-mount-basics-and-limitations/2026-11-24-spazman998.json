@@ -1,0 +1,167 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.systems-network-administration.rclone.rclone-mount-basics-and-limitations",
+    "version": "2",
+    "sha256": "df62f7de452deffe57de33745bc7b453775e7438f91b43e323cd0c6d7c70e710"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://rclone.org/commands/rclone_mount/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "36478f0cd9fd2f164394320ef316c50a64d7eab19279659bc94b6718708452f6"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "mounts a remote as a FUSE filesystem on Linux, FreeBSD, macOS and Windows",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Rclone mount allows Linux, FreeBSD, macOS and Windows to mount any of Rclone's cloud storage systems as a file system with FUSE."
+    },
+    {
+      "claim": "The mountpoint must be an existing empty directory on Unix",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "On Linux/macOS/FreeBSD start the mount like this, where /path/to/local/mount is an empty existing directory"
+    },
+    {
+      "claim": "It runs in the foreground by default",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Mount runs in foreground mode by default. Use the --daemon flag to force background mode."
+    },
+    {
+      "claim": "stops on Ctrl-C, SIGINT or SIGTERM",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "When the program ends while in foreground mode, either via Ctrl+C or receiving a SIGINT or SIGTERM signal, the mount should be automatically stopped."
+    },
+    {
+      "claim": "`--daemon` backgrounds it on Unix and then you unmount manually with `fusermount -u` (or `fusermount3 -u`)",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "When running in background mode the user will have to stop the mount manually: # Linux fusermount -u /path/to/local/mount # ... or on some systems fusermount3 -u /path/to/local/mount"
+    },
+    {
+      "claim": "With `--daemon`, the parent waits up to `--daemon-wait` for the mount to appear",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "the main rclone program will wait for the background mount to become ready or until the timeout specified by the --daemon-wait flag"
+    },
+    {
+      "claim": "On Windows the mount is foreground only",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "On Windows you can run mount in foreground only, the flag is ignored."
+    },
+    {
+      "claim": "the target can be `*` (auto drive), a drive letter such as `X:`, a path, or a network share",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "rclone mount remote:path/to/files * rclone mount remote:path/to/files X: rclone mount remote:path/to/files C:\\path\\parent\\mount rclone mount remote:path/to/files \\\\cloud\\remote"
+    },
+    {
+      "claim": "Without `--vfs-cache-mode`, files can only be written sequentially and reads can only seek",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Without the use of --vfs-cache-mode this can only write files sequentially, it can only seek when reading."
+    },
+    {
+      "claim": "so many applications fail; use `writes` or `full`",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "This means that many applications won't work with their files on an rclone mount without --vfs-cache-mode writes or --vfs-cache-mode full ."
+    },
+    {
+      "claim": "Bucket-based remotes (Azure Blob, Swift, S3, GCS, B2) cannot store empty directories",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Bucket-based remotes - Azure Blob, Swift, S3, Google Cloud Storage and B2 - can't store empty directories."
+    },
+    {
+      "claim": "only Azure Blob, GCS and S3 can keep them with `--xxx-directory_markers`",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Of these, only Azure Blob, Google Cloud Storage and S3 can preserve them when you add --xxx-directory_markers"
+    },
+    {
+      "claim": "Filesystems expect reliability that cloud storage lacks",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "File systems expect things to be 100% reliable, whereas cloud storage systems are a long way from 100% reliable."
+    },
+    {
+      "claim": "unlike sync and copy, mount cannot retry without local copies of uploads",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "The rclone sync/copy commands cope with this with lots of retries. However rclone mount can't use retries in the same way without making local copies of the uploads."
+    },
+    {
+      "claim": "local copies of uploads, which VFS caching provides",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Look at the VFS File Caching for solutions to make mount more reliable."
+    },
+    {
+      "claim": "The service can use `Type=notify`, entering started state after the mount is ready",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "it is possible to use Type=notify. In this case the service will enter the started state after the mountpoint has been successfully set up."
+    },
+    {
+      "claim": "systemd gives no `PATH` or `HOME`, so tilde expansion fails: pass `--config` and `--cache-dir` as absolute paths",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "This means that tilde ( ~ ) expansion will not work and you should provide --config and --cache-dir explicitly as absolute paths via rclone arguments."
+    },
+    {
+      "claim": "The fallback `PATH` is `/bin:/usr/bin`, which must contain `fusermount` or `fusermount3`",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Since mounting requires the fusermount or fusermount3 program, rclone will use the fallback PATH of /bin:/usr/bin in this scenario. Please ensure that fusermount / fusermount3 is present on this PATH."
+    },
+    {
+      "claim": "Symlink the binary to `/sbin/mount.rclone` (optionally `rclonefs`) and rclone translates mount options",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "you should symlink rclone binary to /sbin/mount.rclone and optionally /usr/bin/rclonefs , e.g. ln -s /usr/bin/rclone /sbin/mount.rclone . rclone will detect it and translate command-line arguments appropriately"
+    },
+    {
+      "claim": "you can use `mount sftp1:subdir /mnt/data -t rclone -o vfs_cache_mode=writes`",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "Now you can run classic mounts like this: mount sftp1:subdir /mnt/data -t rclone -o vfs_cache_mode=writes,sftp_key_file=/path/to/pem"
+    },
+    {
+      "claim": "a systemd `.mount` unit with `Type=rclone`, `What=sftp1:subdir` and `Options=rw,_netdev,allow_other,args2env,vfs-cache-mode=writes,config=/etc/rclone.conf,cache-dir=/var/rclone`",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "[Mount] Type = rclone What = sftp1:subdir Where = /mnt/data Options = rw,_netdev,allow_other,args2env,vfs-cache-mode=writes,config=/etc/rclone.conf,cache-dir=/var/rclone"
+    },
+    {
+      "claim": "On Linux, if AppArmor blocks `fusermount3` you may see \"Permission denied\"",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "fusermount3: mount failed: Permission denied CRITICAL: Fatal error: failed to mount FUSE fs: fusermount: exit status 1 This may be due to newer Apparmor restrictions"
+    },
+    {
+      "claim": "On macOS an NFS mount without a cache mode is read-only",
+      "verdict": "confirmed",
+      "source_url": "https://rclone.org/commands/rclone_mount/",
+      "evidence_quote": "When using NFS mount on macOS, if you don't specify |--vfs-cache-mode| the mount point will be read-only."
+    }
+  ],
+  "coverage": "I extracted every command, flag, option value, path, platform list and named behaviour in the skill — the rclone mount invocation, the empty-existing-directory mountpoint rule, the foreground default with Ctrl-C/SIGINT/SIGTERM, --daemon with fusermount -u / fusermount3 -u manual unmount and --daemon-wait, the Windows foreground-only rule and its four mount targets (*, X:, path, network share), the --vfs-cache-mode sequential-write/seek-read limitation with the writes/full recommendation, the bucket-based remote list with --xxx-directory_markers, the sync/copy retry contrast, Type=notify, the PATH/HOME and /bin:/usr/bin fallback facts, --config/--cache-dir absolute paths, the /sbin/mount.rclone and rclonefs symlinks, the mount sftp1:subdir example, the systemd .mount unit options, the AppArmor fusermount3 Permission denied error and the macOS NFS read-only note — and checked each against the single listed source, the rclone mount page, which covers all of them.",
+  "verdict": "pass",
+  "attestation_sha256": "d8fbf2acc60a449cf2405cbdab7dcefc70d355245c2f383f20121f03c72793d3"
+}

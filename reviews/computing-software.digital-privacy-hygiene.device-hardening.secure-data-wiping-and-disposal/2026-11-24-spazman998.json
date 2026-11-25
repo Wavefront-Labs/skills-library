@@ -1,0 +1,246 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.digital-privacy-hygiene.device-hardening.secure-data-wiping-and-disposal",
+    "version": "2",
+    "sha256": "438074e4eb75260b2ef0febdcd573705fa4ae596fdb91192de8ca65d48c49841"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://csrc.nist.gov/pubs/sp/800/88/r1/final",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "269ce6c30b374355d11d591cde9176a225f61465d89bd837a217372e6e02e6bb"
+    },
+    {
+      "url": "https://support.apple.com/guide/security/erasing-content-settings-sec6dbc12256/web",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "0a50be25ee6f2753dc6cde9f0fe881021249de566fcf591a1a5ebfd9858eb630"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Wipe a drive or device before resale, trade-in, return or disposal so data can't be recovered, and know why old overwrite-based methods fail on SSDs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched source covers the skill's scope: the NIST page is the publication landing page (abstract and keywords only) and the Apple URL redirects to the guide welcome table-of-contents page, so nothing read today states that overwrite-based methods fail on SSDs or covers wiping before resale or disposal."
+    },
+    {
+      "claim": "A quick format or moving files to the recycle bin/trash only removes the\nfilesystem's pointers to the data",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'format' occurs on the NIST landing page only inside the word 'information', and the Apple welcome page has no formatting or filesystem content, so no listed source read today describes what a quick format or trash deletion removes."
+    },
+    {
+      "claim": "the underlying bits stay on the media until\noverwritten, and commodity recovery tools read them back trivially",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'overwrite' appears zero times in both fetched pages and neither mentions recovery tools or residual data, so no listed source read today covers recoverable residual data after format or delete."
+    },
+    {
+      "claim": "Use a full-disk pass: `DBAN`\n  (free, boots from USB, single-pass is adequate per NIST 800-88 for modern",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'DBAN' appears zero times in the NIST landing page (title, abstract, authors, keywords, links only) and zero times in the Apple welcome page, so no listed source read today covers DBAN, USB booting or single-pass overwrite adequacy."
+    },
+    {
+      "claim": "the old \"7-pass\" folklore is unnecessary and mostly wastes time)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'7-pass' and 'pass' appear zero times in the NIST landing page text and in the Apple welcome page, so no listed source read today discusses multi-pass overwrite folklore."
+    },
+    {
+      "claim": "the ATA **Secure Erase** command built into most drive firmware (accessible via\n  `hdparm --security-erase` on Linux, or a vendor tool)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'ATA', 'hdparm' and 'firmware' appear zero times in both fetched pages; the NIST keywords include 'secure erase' but as a bare tag word with no ATA, firmware or command detail, so no listed source read today covers the ATA Secure Erase command or hdparm --security-erase."
+    },
+    {
+      "claim": "**Degaussing** (industrial magnetic erasure) and **physical destruction**\n  (shredding, drilling through the platters) are the NIST \"Purge\"/\"Destroy\" tiers",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Degaussing', 'Purge' and 'Destroy' appear zero times in the NIST landing page fetched today (abstract, authors, keywords and links only), so no listed source read today states that degaussing and physical destruction are the NIST Purge/Destroy tiers."
+    },
+    {
+      "claim": "a logical block address you \"overwrite\"\n  may get written to a *different* physical cell, leaving the old data intact",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'wear' and 'flash' appear zero times in both fetched pages, so no listed source read today covers wear leveling or the remapping of overwritten blocks to different physical cells."
+    },
+    {
+      "claim": "A full-disk overwrite pass that looks complete\n  from the OS's view can leave recoverable fragments in over-provisioned or\n  reserved flash blocks.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'over-provisioned', 'reserved' and 'flash' appear zero times in both fetched pages, so no listed source read today covers recoverable fragments left by overwrite passes in over-provisioned or reserved flash."
+    },
+    {
+      "claim": "**ATA Secure Erase / NVMe Format with\n  Secure Erase, or the vendor's own secure-erase utility**",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'NVMe' and 'ATA' appear zero times in both fetched pages, so no listed source read today covers ATA Secure Erase, NVMe Format with Secure Erase or vendor secure-erase utilities for SSDs."
+    },
+    {
+      "claim": "controller to purge mapping tables and reset all cells at the firmware level",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'controller', 'mapping' and 'firmware' appear zero times in the NIST landing page and the Apple welcome page, so no listed source read today describes what a firmware-level secure erase does to mapping tables and cells."
+    },
+    {
+      "claim": "this is the NIST 800-88 \"Purge\" method for SSDs, not an OS-level overwrite tool.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Purge' and 'SSD' appear zero times in the NIST landing page (its keywords mention 'secure erase' and 'crypto erase' only as tag words), so no listed source read today ties a Purge method to SSDs."
+    },
+    {
+      "claim": "**whole-disk encrypted from first use**\n  (BitLocker, FileVault, LUKS, or a self-encrypting drive)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Apple welcome page mentions FileVault only in table-of-contents entries ('filevault volume encryption with filevault', 'managing filevault'), and 'BitLocker', 'LUKS' and 'self-encrypting' appear zero times in both fetched pages, so no listed source read today states these are whole-disk encryption options."
+    },
+    {
+      "claim": "destroying the\n  encryption key makes all data permanently unreadable instantly",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The NIST landing page mentions 'crypto erase' only as a keyword; the Apple welcome page's only encryption sentence is the overview blurb that Apple devices 'have encryption features to safeguard user data and enable remote wipe', so no listed source read today states that destroying the encryption key makes data unreadable instantly."
+    },
+    {
+      "claim": "old plaintext may remain in unallocated/reserved space —\n  crypto-erase alone doesn't fix that; still run a firmware secure erase.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page mentions residual plaintext, late-added encryption or unallocated space, so no listed source read today covers this behaviour."
+    },
+    {
+      "claim": "Modern iPhones/iPads and Android devices (Android 10+) encrypt storage by\n  default once a screen lock is set.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Android' appears zero times in both fetched pages, and the Apple welcome page says only that 'apple devices have encryption features to safeguard user data and enable remote wipe in the case of device theft or loss' - nothing about default-once-screen-lock-set or Android 10+, so no listed source read today covers this."
+    },
+    {
+      "claim": "**Settings → Erase All Content and Settings**\n  (iOS) or **Factory data reset** (Android) destroys the on-device encryption key\n  as part of the process",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'erase' appears zero times in the fetched Apple page because the listed URL redirects to the guide welcome page, whose table of contents has no 'Erase All Content and Settings' article; 'factory reset' also appears zero times, so no listed source read today states that these options destroy the on-device encryption key."
+    },
+    {
+      "claim": "Sign out of iCloud/Google account **before**\n  wiping to release Activation Lock / Factory Reset Protection",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Apple welcome page mentions Activation Lock only as a table-of-contents entry ('activation lock security') with no guidance, and 'Android', 'FRP' and 'erase' appear zero times in its text, so no listed source read today covers signing out before wiping to release Activation Lock or Factory Reset Protection."
+    },
+    {
+      "claim": "ChromeOS: **Powerwash** similarly resets and is adequate for a device that was\n  encrypted (default).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'ChromeOS' and 'Powerwash' appear zero times in both fetched pages, so no listed source read today covers Powerwash."
+    },
+    {
+      "claim": "Three tiers by sensitivity and destination: **Clear** (single-pass overwrite or\nreset, fine for low-sensitivity reuse within your control)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Clear', 'Purge' and 'Destroy' appear zero times in the NIST landing page fetched today (title, abstract, authors, keywords and links only; the tier definitions are in the linked PDF, which is not a listed source), so no listed source read today defines the three sanitization tiers."
+    },
+    {
+      "claim": "**Purge** (ATA Secure\nErase, crypto-erase, or degaussing — for media leaving your control)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'ATA', 'degaussing' and 'Purge' appear zero times in the NIST landing page (abstract, authors, keywords and links only), so no listed source read today lists ATA Secure Erase, crypto-erase or degaussing as Purge methods."
+    },
+    {
+      "claim": "**Destroy**\n(physical destruction — for the most sensitive data or media that can't be\nverified wiped)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Destroy' and 'destruction' appear zero times in the NIST landing page (abstract, authors, keywords and links only), so no listed source read today ties physical destruction to the most sensitive data or unverifiable media."
+    },
+    {
+      "claim": "Running DBAN or a similar overwrite-only tool on an SSD and considering it done\n  is the most common mistake here",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'DBAN' and 'SSD' appear zero times in both fetched pages, so no listed source read today covers the overwrite-tool-on-SSD mistake."
+    },
+    {
+      "claim": "A \"factory reset\" on an *unencrypted* older Android phone is much weaker than\n  on a modern one",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'factory reset' and 'Android' appear zero times in both fetched pages, so no listed source read today compares factory-reset strength on unencrypted older Android phones."
+    },
+    {
+      "claim": "Cloud-synced data (photos, messages, backups) isn't touched by wiping the\n  device at all",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither fetched page discusses cloud-synced data or what device wiping leaves untouched, so no listed source read today covers this."
+    },
+    {
+      "claim": "HDD: DBAN single-pass or ATA Secure Erase run and completed without error.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check item restating the HDD wipe methods; 'DBAN' and 'ATA' appear zero times in both fetched pages, so no listed source read today covers it."
+    },
+    {
+      "claim": "SSD: vendor/firmware Secure Erase or confirmed crypto-erase used, not a plain\n      overwrite tool.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check item restating the SSD method; 'firmware' appears zero times in the NIST landing page and the Apple welcome page has no erase content, so no listed source read today covers it."
+    },
+    {
+      "claim": "Phone: account signed out and Activation Lock/FRP cleared before or during\n      the reset.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check item restating the phone reset steps; the Apple welcome page mentions Activation Lock only as a table-of-contents entry and 'erase'/'reset' guidance appears zero times, so no listed source read today covers it."
+    },
+    {
+      "claim": "For anything leaving organisational custody, the method matches the NIST\n      800-88 tier for its sensitivity.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check item restating the NIST tier matching; the NIST landing page fetched today contains no tier definitions (abstract, authors, keywords and links only), so no listed source read today covers it."
+    },
+    {
+      "claim": "Media type identified (HDD vs SSD vs phone flash) before choosing a method.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check item; neither fetched page gives media-type selection guidance - the NIST page has only its abstract and keywords and the Apple page is a table of contents, so no listed source read today covers it."
+    }
+  ],
+  "coverage": "I took the frontmatter description, every concrete behaviour in sections 1-5 (format or trash deletion only removing filesystem pointers with bits remaining, DBAN as a free USB-booting tool with single-pass adequate per NIST 800-88, the 7-pass folklore, the ATA Secure Erase command via hdparm --security-erase, degaussing and physical destruction as the NIST Purge/Destroy tiers, wear-leveling remapping and recoverable fragments in over-provisioned flash, ATA Secure Erase / NVMe Format purging mapping tables as the NIST 800-88 Purge method for SSDs, BitLocker/FileVault/LUKS whole-disk encryption, crypto-erase by key destruction, residual plaintext after late encryption, Android 10+ default encryption, Erase All Content and Settings / Factory data reset destroying the on-device key, Activation Lock / FRP sign-out, ChromeOS Powerwash, and the Clear/Purge/Destroy tier definitions), all three gotchas and all five Verify checklist items - every command, tool, flag, number and behaviour in the file - and checked each against both listed sources, which I fetched and read today: the NIST URL (HTTP 200) is the publication landing page with only the abstract and keywords, and the Apple URL (HTTP 200) redirects to the guide welcome page.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all 30 claims are unverifiable against the listed sources as fetched today. The NIST URL is the publication landing page only - title, abstract, authors, keywords ('media types; mobile devices with storage; crypto erase; secure erase; media sanitization; sanitization tools and methods; ensuring confidentiality') and links - with 'Clear', 'Purge', 'Destroy', 'ATA', 'NVMe', 'overwrite', 'degauss', 'SSD', 'flash', 'wear', 'DBAN' and 'hdparm' appearing zero times in its text; the guidance itself is in the linked PDF (https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-88r1.pdf), which is not a listed source, and the page also states it was 'Withdrawn on September 26, 2025' and superseded by SP 800-88 Rev. 2. The Apple URL redirects to the Apple Platform Security welcome page (table of contents for the August 2026 guide): 'erase' appears zero times in the fetched text and no 'Erase All Content and Settings' article is served there, so it confirms nothing about key destruction, default encryption or Activation Lock beyond TOC entries ('filevault volume encryption with filevault', 'activation lock security'). A fix PR should bump version and cite sources that actually contain the material: the SP 800-88 Rev. 1 PDF (or the current Rev. 2 page plus PDF) for the Clear/Purge/Destroy tiers, ATA/NVMe secure erase, degaussing and the SSD overwrite caveats; Apple's current Erase-all-content-and-settings or data-protection article for the iOS/iPadOS claims; and Android/ChromeOS documentation for Android 10+ default encryption and Powerwash.",
+  "attestation_sha256": "0b9d43608a767fa29c54ebffb3911437a192beca5f1ce75096fee5900dcf3125"
+}

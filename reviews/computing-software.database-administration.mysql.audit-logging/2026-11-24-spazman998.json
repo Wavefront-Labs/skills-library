@@ -1,0 +1,225 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.database-administration.mysql.audit-logging",
+    "version": "2",
+    "sha256": "3cf51c9f8c0e409dfd87ec97b8803a4652fb9d7dfd9d2f896190c21c6c82d2d2"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://docs.percona.com/percona-server/8.4/audit-log-filter-overview.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "4d966ab813830afbd154e3723e1bed9dfb1e564a5a68e5ba25869f04025dfbb1"
+    },
+    {
+      "url": "https://mariadb.com/kb/en/mariadb-audit-plugin/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "59ab93e9dfcf69b5cd9585520f82ae0c2dda3798ca8c791b82a40150e986233c"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Audit MySQL activity with MySQL Enterprise Audit filters or the Percona/MariaDB audit plugins: install, filter by user and event class, rotate and ship logs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary: the Percona overview page fetched today (HTTP 200) covers the Audit Log Filter component auditing activity with per-account scoping and event/class matching, and the MariaDB landing page describes the MariaDB Audit Plugin recording 'server activity, including connections, queries, and table access', but no fetched page covers shipping logs off-host and the MySQL Enterprise Audit material sits on the dev.mysql.com pages that 403 attest.py's fetcher (read via the web fetch tool today, see coverage)."
+    },
+    {
+      "claim": "Community MySQL has no audit plugin.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page states anything about Community MySQL's audit facilities: the readable Percona page discusses only Percona's own component replacing its legacy audit log plugin, and the blocked dev.mysql.com overview page states only 'MySQL Enterprise Audit is an extension included in MySQL Enterprise Edition, a commercial product' without mentioning Community MySQL."
+    },
+    {
+      "claim": "Options: MySQL Enterprise Audit (commercial),",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (see coverage), read via the web fetch tool today. The MySQL 8.4 audit-log page states: 'MySQL Enterprise Audit is an extension included in MySQL Enterprise Edition, a commercial product. To learn more about commercial products, see https://www.mysql.com/products/'."
+    },
+    {
+      "claim": "Percona Server's audit log filter component (free, uses the same JSON filter functions as Enterprise in Percona 8.4)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the Percona overview documents the component and its JSON filter functions - 'Updates via audit_log_filter_set_filter() and audit_log_filter_set_user() take effect on new sessions' and 'Filter definitions are JSON documents' - but no fetched page states the component is free or uses 'the same JSON filter functions as Enterprise'; 'Enterprise' appears nowhere on the Percona page and the dev.mysql.com pages do not mention Percona."
+    },
+    {
+      "claim": "MariaDB's `server_audit` plugin (also loadable in some MySQL versions)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The MariaDB source fetched today redirects to a docs landing page whose own description reads 'complete mariadb audit plugin reference: server_audit activity logging, connection/query event tracking, file/syslog output, and compliance configuration.' and whose guide links promise to 'enable logging, select specific event types to record, and exclude specific users from the audit trail', but no fetched page states the plugin is loadable in MySQL."
+    },
+    {
+      "claim": "Install (Enterprise: run the shipped script):",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source documents an Enterprise install script: the blocked dev.mysql.com pages defer installation to 'Section 8.4.5.2, Installing or Uninstalling MySQL Enterprise Audit' without naming a script, and the Percona overview links a separate install page under Additional reading."
+    },
+    {
+      "claim": "mysql -u root -p < <MYSQL_SHARE_DIR>/audit_log_filter_linux_install.sql",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The script name audit_log_filter_linux_install.sql and this mysql invocation appear in none of the four fetched pages - installation lives on unlisted sub-pages (dev.mysql.com Section 8.4.5.2 and Percona's 'Install the audit log filter') - and the <MYSQL_SHARE_DIR> placeholder appears nowhere."
+    },
+    {
+      "claim": "Define filters in JSON and assign them to accounts:",
+      "verdict": "confirmed",
+      "source_url": "https://docs.percona.com/percona-server/8.4/audit-log-filter-overview.html",
+      "evidence_quote": "Filter definitions and account assignments live in mysql system tables. Updates via audit_log_filter_set_filter() and audit_log_filter_set_user() take effect on new sessions (and reloads) without bouncing the server.",
+      "note": "From the Percona overview's 'Why the filter component' section; the same page adds 'Filter definitions are JSON documents' and 'A rule can match an event, a class, a subclass, or a specific field value', and the blocked MySQL filtering page states 'Filter definitions are JSON values'."
+    },
+    {
+      "claim": "-- log connections and DDL/DCL for everyone",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the blocked MySQL filtering page documents a filter that 'enables logging only of events in the connection class' assigned to the default account, but nothing covers the DDL/DCL half of this comment - the general/status/general_command.str filter it describes appears in no listed source."
+    },
+    {
+      "claim": "SELECT audit_log_filter_set_filter('conn_ddl', '{\"filter\": {\"class\": [\n  {\"name\": \"connection\"},",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (see coverage), read via the web fetch tool today. The MySQL filtering page shows the same call and class: 'define a filter (shown here named log_conn_events) that enables logging only of events in the connection class' with SET @f = '{ \"filter\": { \"class\": { \"name\": \"connection\" } } }'; SELECT audit_log_filter_set_filter('log_conn_events', @f);. The readable Percona page confirms the mechanism - JSON filter definitions matched by class, updated via audit_log_filter_set_filter() - but names no connection class, and the skill uses the array form of 'class' where the MySQL example uses the single-object form."
+    },
+    {
+      "claim": "{\"name\": \"general\", \"event\": {\"name\": \"status\", \"log\": {\"field\": {\"name\": \"general_command.str\", \"value\": \"Query\"}}}}",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'general_command' appears in none of the four fetched pages; the blocked MySQL filtering page documents only connection-class and log:true filters plus generic field filtering ('Audit event fields such as those that indicate operation status or SQL statement executed') - the general class, status event and general_command.str field are documented in Section 8.4.5.8 'Writing Audit Log Filter Definitions', which is not a listed source."
+    },
+    {
+      "claim": "SELECT audit_log_filter_set_user('%', 'conn_ddl');           -- default for all accounts",
+      "verdict": "confirmed",
+      "source_url": "https://docs.percona.com/percona-server/8.4/audit-log-filter-overview.html",
+      "evidence_quote": "On connect, the component loads one filter definition from the matching USER / HOST row in mysql.audit_log_user , or falls back to the default account ( % ).",
+      "note": "Confirms the '%' default: an account with no matching USER/HOST row falls back to the default account; the same page adds 'A concrete account (for example admin @ localhost) overrides a % assignment', and the blocked MySQL filtering page states 'The filter assigned to % is used for connections from any account that has no explicitly assigned filter (which initially is true for all accounts)'."
+    },
+    {
+      "claim": "-- log everything for DBAs\nSELECT audit_log_filter_set_filter('log_all', '{\"filter\": {\"log\": true}}');\nSELECT audit_log_filter_set_user('dba_alice@%', 'log_all');",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (see coverage), read via the web fetch tool today. The MySQL filtering page states: 'To log all auditable events for all users, use the following statements, which create a simple filter to enable logging and assign it to the default account: SELECT audit_log_filter_set_filter('log_all', '{ \"filter\": { \"log\": true } }'); SELECT audit_log_filter_set_user('%', 'log_all');' and, for per-account assignment, 'To assign a filter explicitly to a particular user account or accounts, define the filter, then assign it to the relevant accounts' - 'Now full logging is enabled for user1@localhost and user2@localhost.'"
+    },
+    {
+      "claim": "SELECT * FROM mysql.audit_log_filter; SELECT * FROM mysql.audit_log_user;",
+      "verdict": "confirmed",
+      "source_url": "https://docs.percona.com/percona-server/8.4/audit-log-filter-overview.html",
+      "evidence_quote": "The Audit Log Filter component uses mysql system tables on InnoDB . They hold account assignments and filter JSON.",
+      "note": "The same page lists both tables - 'The audit_log_filter table stores named filter definitions' (columns NAME and FILTER) and 'The audit_log_user table maps accounts to filters' (columns USER, HOST and FILTERNAME) - and the blocked MySQL filtering page adds that 'you can display audit filters by querying the mysql.audit_log_filter table'."
+    },
+    {
+      "claim": "Settings: `audit_log_format = JSON`, `audit_log_rotate_on_size = 1G`,",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "audit_log_format is named on the blocked MySQL overview page only as the selector of file format - 'By default, audit log file contents are written in new-style XML format, without compression or encryption. To select the file format, set the audit_log_format system variable at server startup.' - with JSON never given as an audit_log_format value on any listed page (the Percona page lists NEW, OLD, JSON and JSONL as values of the component's own audit_log_filter.format), and audit_log_rotate_on_size appears in no fetched page."
+    },
+    {
+      "claim": "`audit_log_max_size`/`audit_log_prune_seconds` for retention, `audit_log_encryption = AES` and `audit_log_compression = GZIP` available.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "audit_log_max_size, audit_log_prune_seconds, audit_log_encryption and audit_log_compression appear in none of the four fetched pages; the Percona overview links a 'Compression and encryption' sub-page but documents no such variables on this page, and the blocked MySQL overview page says only that by default contents are written 'without compression or encryption'."
+    },
+    {
+      "claim": "Read with `audit_log_read()` or directly from the files.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "audit_log_read() appears in none of the four fetched pages; the blocked MySQL overview page links a 'Reading Audit Log Files' section (Section 8.4.5.6, a separate unlisted page) and mentions only the audit.log file in the server data directory."
+    },
+    {
+      "claim": "plugin_load_add = server_audit\nserver_audit_logging = ON",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The MariaDB URL now redirects to a docs landing page (mariadb.com/docs/server/reference/plugins/mariadb-audit-plugin) whose text is generic; plugin_load_add and server_audit_logging appear zero times in the fetched page - the variables live on unlisted sub-pages such as the configuration and options-and-system-variables pages."
+    },
+    {
+      "claim": "server_audit_events = CONNECT,QUERY_DDL,QUERY_DCL\nserver_audit_excl_users = monitoring",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "server_audit_events, server_audit_excl_users, CONNECT, QUERY_DDL and QUERY_DCL appear zero times in the fetched MariaDB landing page; it only promises a configuration guide to 'enable logging, select specific event types to record, and exclude specific users from the audit trail'."
+    },
+    {
+      "claim": "server_audit_file_rotate_size = 1000000000\nserver_audit_file_rotations = 10",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "server_audit_file_rotate_size and server_audit_file_rotations appear zero times in the fetched MariaDB landing page, which only links a guide about setting 'size limits' and 'rotation strategies'; the 1000000000-byte size and 10 rotations are stated by no listed source."
+    },
+    {
+      "claim": "Always: connections (incl. failures), DDL, DCL (GRANT/CREATE USER), changes to audit settings.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the MariaDB landing page says the plugin 'records server activity, including connections, queries, and table access', and the blocked MySQL overview page says the log 'contents include when clients connect and disconnect, and what actions they perform while connected', but no fetched page covers auditing failed connections, DCL/GRANT/CREATE USER events or changes to audit settings."
+    },
+    {
+      "claim": "For sensitive tables: table-access events filtered to those tables, not every SELECT.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page covers filtering table-access events to specific tables: the MariaDB page only mentions that table access is recorded, and the Percona page says a rule 'can match an event, a class, a subclass, or a specific field value' without naming table-based filtering."
+    },
+    {
+      "claim": "Ship logs off-host promptly (Filebeat/Fluent Bit) to storage the DBAs cannot alter.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Filebeat and Fluent Bit appear in none of the four fetched pages, and nothing covers shipping audit logs off-host or to storage DBAs cannot alter."
+    },
+    {
+      "claim": "Log in with a wrong password and run a `CREATE TABLE`; confirm both appear in the audit file with user, host and timestamp.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check line: no fetched page states that a failed login and a CREATE TABLE both appear in the audit file with user, host and timestamp; the blocked MySQL overview page says only that the log 'contents include when clients connect and disconnect, and what actions they perform while connected'."
+    },
+    {
+      "claim": "Logging every query on a busy OLTP server costs real throughput and disk; measure.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: the Percona page says events a filter skips 'never reach the formatter or the writer, so the cost of \"audit everything, then throw most of it away\" is avoided at the source', which presumes a cost to auditing everything, but no source states the throughput and disk cost of logging every query on a busy OLTP server."
+    },
+    {
+      "claim": "`SUPER`/`AUDIT_ADMIN` holders can change filters; audit filter changes and restrict those privileges.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Source page blocked to the checker (see coverage), read via the web fetch tool today. The MySQL filtering page states 'The AUDIT_ADMIN or SUPER privilege is required to use any of these functions' (and that using any filtering function requires the AUDIT_ADMIN or SUPER privilege or an error occurs), confirming holders of either privilege can change filters; the readable Percona page covers only half - 'You need AUDIT_ADMIN to administer the Audit Log Filter component' - without mentioning SUPER."
+    },
+    {
+      "claim": "The general query log is not an audit log (no filtering, huge, easily disabled).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The general query log is not discussed in any of the four fetched pages, let alone contrasted with audit logs."
+    }
+  ],
+  "coverage": "I took the frontmatter description, both section intro lines, every command and SQL statement in the code blocks - the mysql install command with its audit_log_filter_linux_install.sql script and <MYSQL_SHARE_DIR> placeholder, the conn_ddl filter with its class/connection and general/status/general_command.str fragments, the '%' default assignment, the log_all filter with its per-DBA assignment and the two mysql.audit_log_* table queries - all six MariaDB ini settings with their values, every named setting in the settings line (audit_log_format = JSON, audit_log_rotate_on_size = 1G, audit_log_max_size, audit_log_prune_seconds, audit_log_encryption = AES, audit_log_compression = GZIP and audit_log_read()), the three policy bullets, the self-check line and all three gotchas, covering every command, flag, setting, number and behaviour in the file, and checked each against all four listed sources fetched and read today: the Percona and MariaDB pages were fetched with attest.py's user-agent (both HTTP 200, listed below), while both dev.mysql.com pages return 403 to attest.py's wavefront-attest/1 user agent (retested twice per URL, and 403 also for a browser-like UA, though 200 via the web fetch tool and Python's default urllib UA, with which they were read), so they are omitted from sources and the claims they cover are gated rather than confirmed; the MariaDB URL also redirects to a docs landing page that no longer documents the server_audit_* variables.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but only 3 of 27 claims are confirmed from re-fetchable sources and 4 are gated: dev.mysql.com blocks attest.py's wavefront-attest/1 fetcher with 403 (also 403 to a browser-like UA, though readable via the web fetch tool and plain urllib), so the Enterprise Audit claims it covers - Enterprise Audit being commercial, the connection-class conn_ddl filter, the log_all filter and the SUPER/AUDIT_ADMIN gotcha - are gated rather than confirmed, and re-fetch checks of dev.mysql.com sources will fail in this environment. Uncovered by any listed source: the audit_log_filter_linux_install.sql install script, the general/status/general_command.str filter fragment, every settings variable (audit_log_format = JSON, audit_log_rotate_on_size = 1G, audit_log_max_size, audit_log_prune_seconds, audit_log_encryption = AES, audit_log_compression = GZIP, audit_log_read()), all six MariaDB server_audit_* settings (the kb URL now redirects to a docs landing page with no variable documentation), community MySQL having no audit plugin, the free/Enterprise-equivalence claim for Percona, MySQL loadability of server_audit, the policy bullets, the self-check and two gotchas. A fix PR should bump version and cite pages that actually document these facts - dev.mysql.com's audit-log-installation, audit-log-reference and audit-log-file-reading pages for the install script, the format/rotation/retention/encryption/compression variables and audit_log_read(), MariaDB's configuration and options-and-system-variables sub-pages for the server_audit_* settings and event values, and a Percona page stating the free/Enterprise relationship - or trim the skill to what the four cited pages support; note that dev.mysql.com currently 403s automated re-fetches from this environment, which will flag any attestation citing it.",
+  "attestation_sha256": "ad167ed3932285e59534a4a4cd7b90ff2a06a80cda0a0f555990d3653eb085cc"
+}

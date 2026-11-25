@@ -1,0 +1,170 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.cloud-infrastructure-engineering.cloud-cost-optimisation.pre-migration-baseline",
+    "version": "2",
+    "sha256": "757b7606503c884c7f342c98bd182ab7b9f9c0365694950d0a749befd97628b9"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/migrate/concepts-business-case-calculation",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "3ca1ed869498632cfb27072356aecfe759350d37d39d48c2645c2a4dab8ab162"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Build a pre-migration cost baseline: on-prem cost per workload (hardware, licences, facilities, labour), utilisation data, and a target cloud estimate.",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/azure/migrate/concepts-business-case-calculation",
+      "evidence_quote": "Cost components for running on-premises servers. For TCO calculations, an annual cost is computed for the following heads.",
+      "note": "The page is exactly this scope: an annual on-premises cost table across compute hardware, software licensing, storage, network, security, facilities, labor and management heads, discovery utilization data, and the Azure TCO estimate for applications and workloads."
+    },
+    {
+      "claim": "server and storage depreciation (or lease), allocated by VM/host share",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/azure/migrate/concepts-business-case-calculation",
+      "evidence_quote": "Server depreciation (Total server hardware acquisition cost)/(Depreciable life) Depreciable life = 4 years Storage depreciation (Total storage hardware acquisition cost)/(Depreciable life) Depreciable life = 4 years",
+      "note": "The source lists server and storage depreciation as on-premises TCO components; the '(or lease)' alternative and the VM/host-share allocation basis are not stated by any fetched source."
+    },
+    {
+      "claim": "OS, hypervisor (VMware), database (SQL Server, Oracle), middleware;\n  support and maintenance contracts",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Microsoft page lists Windows Server, SQL Server and VMware virtualization licensing plus license support and maintenance rows, but no fetched source mentions Oracle or middleware licences, so the claim as written is not stated by any listed source."
+    },
+    {
+      "claim": "data center rack/power/cooling or colocation fees per kW.",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/azure/migrate/concepts-business-case-calculation",
+      "evidence_quote": "The facilities cost is based on a colocation model, which includes space, power, and lease costs per kWh.",
+      "note": "The colocation arm is stated, but the source prices colocation per kWh (kilowatt-hour) where the skill says per kW; rack and cooling appear only indirectly (network cabinets at $906 each, PUE 1.80)."
+    },
+    {
+      "claim": "infrastructure operations FTE share (hardware, patching, backups).",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/azure/migrate/concepts-business-case-calculation",
+      "evidence_quote": "DC admin cost = Number of VMs/Average number of VMs that a full-time administrator can manage * Average hourly rate for an IT administrator * Average yearly working hours.",
+      "note": "The source computes labor as DC admin cost based on the number of VMs a full-time administrator can manage; patch management and backup admin costs appear on the page as separate management cost heads ($145 per server each)."
+    },
+    {
+      "claim": "backup and DR infrastructure, WAN circuits, security tooling.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Microsoft page includes backup costs and server/SQL security costs as on-premises heads, but DR infrastructure and WAN circuits are not mentioned on any fetched page."
+    },
+    {
+      "claim": "Mark each item as avoidable (stops after migration and decommission) or sunk.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page mentions an avoidable-versus-sunk cost classification; the FinOps source (404 today; archived 2026-01-20 copy read via the Wayback Machine) only mentions retiring capital assets as a migration trigger."
+    },
+    {
+      "claim": "Collect 2-4 weeks minimum (30+ days preferred) of CPU, memory, disk IOPS and throughput, network",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched source states a collection duration or the metrics list; the Microsoft page mentions performance data via appliance discovery with no duration, and the listed AWS URL is 404 (its successor guide says two weeks of programmatic collection suffice for initial planning - a different claim)."
+    },
+    {
+      "claim": "with discovery tools (AWS Application Discovery Service / Migration Evaluator, Azure Migrate\nappliance, Google Migration Center)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Microsoft page confirms Azure Migrate appliance/collector discovery for the most accurate metadata and performance data; the listed AWS URL is 404 and its successor guide references Migration Evaluator for a directional business case; no listed source mentions Google Migration Center."
+    },
+    {
+      "claim": "Size to observed P95, not allocated specs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "P95, percentile and allocated-specs sizing appear nowhere in the fetched Microsoft page, nor in the AWS successor guide or the archived FinOps copy."
+    },
+    {
+      "claim": "Get finance data for the fixed asset register, contracts and facility costs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched source mentions a fixed asset register; the Microsoft page derives on-premises costs from discovery data and default assumptions (for example $2 per GB storage, $906 per cabinet)."
+    },
+    {
+      "claim": "Allocate shared costs to workloads with clear keys (vCPU share, storage TB, rack units).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Microsoft page computes costs from per-server and per-VM formulas; cabinets (16 physical servers per cabinet by default) feed network costs, but no allocation-key methodology for shared costs is stated."
+    },
+    {
+      "claim": "Produce the target cloud estimate (rightsized, with expected commitment discounts and licence\n   choices such as BYOL vs licence-included).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Microsoft page covers the target estimate (Azure cost from assessments, with Azure Hybrid Benefit licence choices) and lists savings options among assumptions, but never states commitment discounts or the BYOL vs licence-included framing."
+    },
+    {
+      "claim": "Document assumptions and freeze the baseline (version, date) before migration starts.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Microsoft page has an Azure cost assumptions section but no guidance on freezing or versioning a baseline before migration starts."
+    },
+    {
+      "claim": "Plan double-running cost during the migration window and decommission dates.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Gated on the dead FinOps source: its archived 2026-01-20 copy said running in parallel in both environments can create unanticipated financial impact, but that URL returns 404 to every fetcher today; the Microsoft page models per-year migration percentages with remaining on-premises CAPEX/OPEX but states no decommission dates."
+    },
+    {
+      "claim": "Comparing fully loaded cloud cost with on-prem hardware only flatters on-prem.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not stated on any fetched page; the archived FinOps copy only says to create value comparisons between source and destination environments, without this comparison-fairness warning."
+    },
+    {
+      "claim": "Savings that only happen when hardware is decommissioned or contracts end; track those dates.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page ties savings realization to hardware decommissioning or contract end dates; the archived FinOps copy mentions closing data centers and retiring capital assets only as migration triggers."
+    },
+    {
+      "claim": "Sizing from allocated VM specs overestimates cloud cost by 30-50% in typical estates.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The 30-50% figure appears in no fetched source (Microsoft page, AWS successor guide or archived FinOps copy); this material number is unsupported."
+    },
+    {
+      "claim": "Baseline per workload signed off by finance with avoidable vs sunk split.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched source covers finance sign-off of a per-workload baseline or the avoidable-versus-sunk split."
+    },
+    {
+      "claim": "Cloud estimate uses measured utilisation.",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/azure/migrate/concepts-business-case-calculation",
+      "evidence_quote": "Azure Migrate appliance discovery or Azure Migrate collector-based discovery : Use for the most accurate metadata and performance data.",
+      "note": "The page builds the business case from Azure Migrate appliance or collector discovery, the option for the most accurate metadata and performance data, and its discovery insights summarize utilization."
+    }
+  ],
+  "coverage": "I took the frontmatter description, all five baseline-component bullets plus the avoidable/sunk sentence, the whole utilisation paragraph (collection duration and metrics, the three discovery tools, P95 sizing), all five numbered steps, all three gotchas and both Verify criteria - covering every number (2-4 weeks, 30+ days, P95, 30-50%, per kW), every named tool and cost component and every behaviour - and checked each against the listed sources; only the Microsoft Learn page could be fetched today (HTTP 200, hashed with the attest user-agent), while the FinOps and AWS prescriptive-guidance URLs return 404 to the web fetch tool, urllib with the attest user-agent and a browser user-agent alike, so only the fetched URL appears in sources and their claims are unverifiable or gated.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but only 5 of 20 claims could be confirmed against the one fetchable listed source (the Microsoft Learn business-case page), one is gated and 14 are unverifiable because the other two listed sources are dead. Fix the URLs first: https://www.finops.org/framework/capabilities/onboarding-workloads/ 404s today - the capability moved to https://www.finops.org/framework/previous-capabilities/onboarding-workloads/ in the 2024 FinOps Framework restructure (and even that page has no on-prem cost, right-sizing or utilisation content); https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-portfolio-discovery/welcome.html 404s today - a 2026-07-03 archived capture shows it 301-redirecting to https://docs.aws.amazon.com/prescriptive-guidance/latest/application-portfolio-assessment-guide/introduction.html, so cite that guide (its portfolio-discovery-initial-planning section, or the strategy-application-portfolio-assessment-migration variant). Then add sources that actually cover the uncovered material: utilisation collection duration and metrics, P95/percentile-based rightsizing, and the 30-50% allocated-specs overestimate figure (Azure Migrate assessment-concepts and AWS right-sizing/Migration Evaluator pages, or delete the number), plus avoidable-vs-sunk cost methodology, shared-cost allocation keys, and Google Migration Center (no Google source is listed at all). Also change 'colocation fees per kW' to per kWh, since the Microsoft source prices colocation per kWh. Bump version when editing.",
+  "attestation_sha256": "416489a3c0b875ab48ed569ef1b92da815dcd4ec29aea8a745e16827bad33fc2"
+}

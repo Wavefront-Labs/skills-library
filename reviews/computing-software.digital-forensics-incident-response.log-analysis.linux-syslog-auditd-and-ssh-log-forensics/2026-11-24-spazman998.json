@@ -1,0 +1,289 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.digital-forensics-incident-response.log-analysis.linux-syslog-auditd-and-ssh-log-forensics",
+    "version": "3",
+    "sha256": "5726d594c45c53feb3879228a0769b7a051fe141a94b0739e2df183b024c4802"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://man7.org/linux/man-pages/man8/auditd.8.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "2204c3a38c45c41a28ebca7dc3ed5c10d4cd01c75e3f9cd1c2d443c92b5acecf"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Linux has no built-in Sysmon-equivalent process-creation\nlog unless auditd (or eBPF-based tooling) was configured *before* the incident.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "auditd(8) says nothing about what Linux logs by default; 'sysmon', 'process-creation' and 'ebpf' appear zero times on the fetched page."
+    },
+    {
+      "claim": "`/var/log/auth.log` (Debian/Ubuntu) or `/var/log/secure` (RHEL/CentOS)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'auth.log', 'secure' and 'sshd' appear zero times on the page, which documents only the audit daemon itself."
+    },
+    {
+      "claim": "authentication attempts (success/failure, source IP, key vs password), `sudo`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page documents no SSH, sudo or PAM log contents; 'sudo' appears zero times and 'pam' only in a referring-page link (pam_loginuid(8))."
+    },
+    {
+      "claim": "This is on by default and is the first place to check for",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "auditd(8) makes no statement about what is on by default on a Linux host."
+    },
+    {
+      "claim": "brute force (`Failed password` repetition), successful logins from unexpected\n  source IPs, and sudo privilege escalation",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'failed password' and 'brute' appear zero times on the fetched page."
+    },
+    {
+      "claim": "**Process execution is NOT logged by default.**",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "auditd(8) does not discuss process-execution logging or Linux defaults for it."
+    },
+    {
+      "claim": "there is no built-in record of what\n  commands ran, when, by whom",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered; the page says only that auditd writes audit records to the disk."
+    },
+    {
+      "claim": "the single biggest gap vs Windows Sysmon/4688\n  coverage",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'sysmon' and '4688' appear zero times; the page is not about Windows."
+    },
+    {
+      "claim": "If auditd wasn't configured before the incident, process-execution",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered by auditd(8)."
+    },
+    {
+      "claim": "`journald` (systemd-based distros) centralizes syslog plus service start/stop/crash",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'journald' and 'syslog' appear zero times on the page."
+    },
+    {
+      "claim": "`journalctl -u sshd`, `journalctl --since`/`--until` for a time-bounded",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'journalctl', '-u', '--since' and '--until' appear zero times on the page."
+    },
+    {
+      "claim": "Binary journal format persists across reboots if `Storage=persistent` was set",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'storage=persistent' and journal persistence are not mentioned; the page is about the audit daemon, not journald."
+    },
+    {
+      "claim": "check this wasn't left at the volatile default before assuming history survived",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered by auditd(8)."
+    },
+    {
+      "claim": "ausearch -k <rule_key> -ts today            # search by configured rule key",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "ausearch is named on the page only as a log-viewing utility ('Viewing the logs is done with the ausearch or aureport utilities'); its -k and -ts flags and rule-key search appear nowhere."
+    },
+    {
+      "claim": "ausearch -ui <uid> -ts recent               # search by actor",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "ausearch's -ui and -ts flags are not documented on this page; ausearch appears only as a named viewing utility."
+    },
+    {
+      "claim": "aureport --summary                           # quick overview across all audit records",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "aureport is named only as a viewing utility; '--summary' and its quick-overview behaviour appear zero times."
+    },
+    {
+      "claim": "`auditd` only logs what explicit rules (`auditctl -a always,exit -F arch=b64 -S execve",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page says 'Configuring the audit system or loading rules is done with the auditctl utility', but never that auditd logs only what rules tell it to; 'execve' and 'arch=b64' appear zero times."
+    },
+    {
+      "claim": "a default/minimal auditd config logs very little beyond what the",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The page does not discuss how much a default or minimal auditd configuration logs, nor CIS/STIG baselines."
+    },
+    {
+      "claim": "`auditctl -l` (or the rule files under `/etc/audit/rules.d/`) for what was actually",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "auditctl is named only as the rules-loading utility; the page documents no 'auditctl -l' flag (its only -l is auditd's own follow-symlinks option)."
+    },
+    {
+      "claim": "the rule files under `/etc/audit/rules.d/`",
+      "verdict": "confirmed",
+      "source_url": "https://man7.org/linux/man-pages/man8/auditd.8.html",
+      "evidence_quote": "there is also an augenrules program that reads rules located in /etc/audit/rules.d/ and compiles them into an audit.rules file",
+      "note": "The FILES section repeats it: '/etc/audit/rules.d/ - directory holding individual sets of rules to be compiled into one file by augenrules.'"
+    },
+    {
+      "claim": "`~/.bash_history` is the closest thing to a command-execution record absent auditd,",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Bash history is not mentioned anywhere on the auditd(8) page."
+    },
+    {
+      "claim": "It's **written on shell exit** (or periodically), so a live/still-open shell's",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Shell history write behaviour is not covered by auditd(8)."
+    },
+    {
+      "claim": "**Trivially evaded**: `unset HISTFILE`, `export HISTSIZE=0`, `history -c`, piping",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'histfile', 'histsize' and 'history' appear zero times on the page."
+    },
+    {
+      "claim": "a single `curl |\n  bash` one-liner from automation leaves no bash-history trace",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'curl' and 'bash' appear zero times on the page."
+    },
+    {
+      "claim": "Lacks timestamps unless `HISTTIMEFORMAT` was set before the session",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'histtimeformat' appears zero times on the page."
+    },
+    {
+      "claim": "correlate command order against auth.log login/logout timestamps for",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "auth.log correlation guidance is not covered by auditd(8)."
+    },
+    {
+      "claim": "`.bash_history` for root and every user account that was accessed matters",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered by auditd(8)."
+    },
+    {
+      "claim": "An attacker with any\n  competence disables or clears it",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered by auditd(8)."
+    },
+    {
+      "claim": "**Cron**: `/etc/crontab`, `/etc/cron.d/*`, per-user `crontab -l` for every user",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'cron' appears only in a referring-page link (auditd.cron(5)); 'crontab', '/etc/crontab' and '/etc/cron.d' appear zero times."
+    },
+    {
+      "claim": "(including service accounts), and `/etc/cron.{hourly,daily,weekly,monthly}/`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'/etc/cron.{hourly,daily,weekly,monthly}/' and the other cron directories appear zero times on the page."
+    },
+    {
+      "claim": "check file modification times against the incident window, not just content",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered by auditd(8)."
+    },
+    {
+      "claim": "a malicious unit file or timer dropped in `/etc/systemd/system/` or\n  `/lib/systemd/system/` and enabled; `systemctl list-unit-files --state=enabled` for",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'systemctl', '/etc/systemd/system/' and '/lib/systemd/system/' appear zero times; 'systemd' appears only in the -n option text and a referring-page link."
+    },
+    {
+      "claim": "`/etc/rc.local`, shell profile files (`/etc/profile.d/`, `~/.bashrc`, `~/.bash_profile`)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'rc.local', 'profile.d', 'bashrc' and 'bash_profile' appear zero times on the page."
+    },
+    {
+      "claim": "and SSH `authorized_keys` additions (check every user's, including ones not",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'authorized_keys' and 'ssh' appear zero times on the page."
+    },
+    {
+      "claim": "`utmp`/`wtmp`/`btmp` (`last`, `lastb`, `lastlog` commands) give login session history",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'last', 'lastb', 'lastlog', 'wtmp' and 'btmp' appear zero times; 'utmp' appears only in a referring-page link (systemd-update-utmp.service(8))."
+    },
+    {
+      "claim": "(wtmp), failed logins (btmp) and last-login-per-user (lastlog)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not covered by auditd(8)."
+    },
+    {
+      "claim": "can be tampered with by a root-level attacker",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'tamper' appears zero times on the page."
+    }
+  ],
+  "coverage": "Claims were chosen in file order to take every command, flag, setting, path, default and behaviour in the body - the auth.log/secure paths and their on-by-default statement, the process-execution default, the journald/journalctl commands and Storage=persistent setting, the ausearch -k/-ts, ausearch -ui/-ts, aureport --summary, auditctl execve-rule and auditctl -l commands, the auditd rules claims and /etc/audit/rules.d/, every bash-history behaviour and setting (HISTFILE, HISTSIZE, HISTTIMEFORMAT, curl-pipe evasion), every cron/systemd/rc.local/profile/authorized_keys persistence path with crontab -l and systemctl list-unit-files --state=enabled, and the utmp/wtmp/btmp last/lastb/lastlog claims - and each was checked against the only listed source, auditd(8) at man7.org (fetched today, HTTP 200), which documents only the audit daemon's options, signals and file locations.",
+  "verdict": "fail",
+  "attestation_sha256": "a3024a51fc361d8374db402543733440620d5f5d11c1b8d09d4f509f353ac624",
+  "suggested_edits": "The single listed source cannot support this skill: auditd(8) covers only the audit daemon itself, so every command, flag and non-auditd path in the skill is unverifiable. Add per-topic sources and re-check: ausearch(8) and aureport(8) man pages for the -k, -ui, -ts and --summary flags; auditctl(8) or audit.rules(7) for auditctl -l and the 'always,exit -F arch=b64 -S execve' rule syntax; journalctl(1) and journald.conf(5) for -u/--since/--until and Storage=persistent; bash(1) for HISTFILE, HISTSIZE=0, history -c, HISTTIMEFORMAT and write-on-shell-exit semantics; sshd(8) or distro logging docs for /var/log/auth.log vs /var/log/secure and 'Failed password'; cron(8)/crontab(5) for the cron paths and per-user crontab; systemd.unit(5) for /etc/systemd/system vs /lib/systemd/system; last(1)/lastb(1)/lastlog(8) for wtmp/btmp/lastlog. Keep auditd(8) as the source for the /etc/audit/rules.d/ rule-file claim, which it confirms. Also soften 'auditd only logs what explicit rules tell it to' - auditd(8) documents neither that exclusivity nor any rule syntax."
+}

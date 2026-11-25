@@ -1,0 +1,65 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.scala.sc-resource-safety-bracket",
+    "version": "2",
+    "sha256": "e239c26627ca7fdbd2cc4df114e71318bc1e7760bf00fb3bee10d23311fbbc31"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://docs.scala-lang.org/scala3/book/introduction.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "09e6e0b11f3f378df1103be55bff59cc8a536e364d2122384f8af590b9817c31"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "`scala.util.Using(new FileInputStream(f)) { in => ... }`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The stdlib API call: the only listed source is the Scala 3 Book introduction page, and 'scala.util.using' and 'fileinputstream' appear zero times in its tag-stripped text; the two occurrences of the word 'using' are navigation links titled 'Using the Scala Toolkit'."
+    },
+    {
+      "claim": "returns a `Try` and closes on exit.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Behaviour of scala.util.Using: the words 'try', 'closes' and 'close' appear zero times in the fetched page, which is a book introduction (welcome, background on Martin Odersky, table of contents) with no resource-management content."
+    },
+    {
+      "claim": "`Resource.make(acquire)(release).use(r => ...)`; releases on error and cancellation.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "cats-effect is never mentioned in the source ('cats', 'resource', 'acquire', 'release' and 'cancellation' all appear zero times in the tag-stripped page text), so neither the Resource.make/use call nor the release-on-error-and-cancellation behaviour is covered."
+    },
+    {
+      "claim": "`ZIO.acquireRelease` with `ZIO.scoped` (confirm ZIO 2 API).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'zio', 'acquirerelease' and 'scoped' appear zero times in the fetched page; the skill itself flags this line as unconfirmed with '(confirm ZIO 2 API)', and no listed source covers ZIO at all."
+    },
+    {
+      "claim": "Verify: throw inside `use` and confirm release ran.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check step for bracket-like release behaviour; no listed source describes testing resource release by throwing inside use."
+    }
+  ],
+  "coverage": "I took every concrete claim in the skill body - the stdlib scala.util.Using call and its returns-a-Try / closes-on-exit behaviour, the cats-effect Resource.make(acquire)(release).use call with its releases-on-error-and-cancellation behaviour, the ZIO.acquireRelease-with-ZIO.scoped line including its '(confirm ZIO 2 API)' caveat, and the throw-inside-use verification step, so every API call, library name and behaviour is covered - and checked each against the only listed source, https://docs.scala-lang.org/scala3/book/introduction.html, fetched today (HTTP 200, 68,870 bytes).",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but none of the five claims is covered by the only listed source: the Scala 3 Book introduction page is a welcome/TOC page containing no mention of scala.util.Using, FileInputStream, Try, resource closing, cats-effect, Resource.make, acquire/release, cancellation, ZIO, acquireRelease or scoped (verified by fetching it with the attest user-agent and searching the tag-stripped text). A fix PR should bump version and list sources that actually cover the claims: the scala.util.Using API documentation or the Scala Toolkit resource-management page for the Try result and close-on-exit behaviour, the cats-effect Resource documentation (typelevel.org/cats-effect/docs/std/resource) for Resource.make/.use and release on error and cancellation, and the ZIO 2 reference for ZIO.acquireRelease and ZIO.scoped (zio.dev) - the skill's own '(confirm ZIO 2 API)' note flags that the ZIO line is unverified - or trim the skill to what the current source supports.",
+  "attestation_sha256": "159553fade04d070f2feca4e762a02d6ee417172d09b87589bf1b6fb2c705247"
+}

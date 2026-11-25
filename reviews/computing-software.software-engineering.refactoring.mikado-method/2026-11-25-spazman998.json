@@ -1,0 +1,203 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.refactoring.mikado-method",
+    "version": "2",
+    "sha256": "028668ebd30ede2190906d50b0c175f888a664434325070e5bf5797950609649"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-25",
+  "sources": [
+    {
+      "url": "https://mikadomethod.info/",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "3899a52da290d12164a59c42c7a862a272390b6efc5254574d95e4b38a0ffff8"
+    },
+    {
+      "url": "https://www.manning.com/books/the-mikado-method",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "2146de73f143aded4164bd9312a614d5d744ac8f0792ebbe7f30fe91ad34e1f2"
+    },
+    {
+      "url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "fetched_at": "2026-11-25",
+      "http_status": 200,
+      "content_sha256": "8dde61cce6af9f5937bf341761659d798b27312f21e5d86c5b6626ca4f85b73f"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "From Ellnestam and Brolund, *The Mikado Method*.",
+      "verdict": "confirmed",
+      "source_url": "https://www.manning.com/books/the-mikado-method",
+      "evidence_quote": "ola ellnestam and daniel brolund are developers, coaches, and team leaders. they developed the mikado method in response to years of experience resolving technical debt in complex legacy systems.",
+      "note": "Manning's About-the-authors section names Ola Ellnestam and Daniel Brolund as the developers of the method; mikadomethod.info's footer likewise credits '© 2014 Daniel Brolund and Ola Ellnestam'."
+    },
+    {
+      "claim": "A way to do a big change (upgrade a framework, split a module, replace a dependency) in small, always-green steps",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "use this when you start an ambitious refactoring . doing baby steps and keeping the code in a shippable state gives you incredible productivity.",
+      "note": "The article's worked example is an ambitious change (ORM dependency upgrade) done as baby steps with the code kept in a shippable state; Manning's blurb sells the book for 'nontrivial technical improvements' on 'an existing software system'. The framework/module/dependency instances are the skill's own examples."
+    },
+    {
+      "claim": "steps without a long-lived branch",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source discusses the method's branch strategy: 'branch' appears zero times in all three fetched pages, and the article's checkpoints only say 'you can stop anytime, open a PR and ship the improvements', which implies short-lived work without stating it."
+    },
+    {
+      "claim": "**Write the goal** at the top of a graph (paper, whiteboard, or a Markdown/Mermaid file)",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "set a goal . write it down on paper. put it at the top or at the center, it doesn’t really matter.",
+      "note": "The article writes the goal on paper at the top (or centre) of the graph; mikadomethod.info confirms the medium ('use a pen and paper, or a whiteboard, and just go'). The Markdown/Mermaid file option is the skill's own suggestion and appears in no source."
+    },
+    {
+      "claim": "**Try it naively** - make the change the simplest way, directly.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "you upgrade the dependency and realize the project doesn’t compile anymore. damn, you should have read the changelog before!",
+      "note": "The article's example attempts the goal (upgrade the ORM dependency) directly first and only then discovers what blocks it."
+    },
+    {
+      "claim": "**Look at what breaks** (compile errors, failing tests).",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "you try to do so. you upgrade the dependency and realize the project doesn’t compile anymore.",
+      "note": "The article's breakage signal in the worked example is the compiler ('the project doesn't compile anymore'); failing tests are not shown in the example, only indirectly via mikadomethod.info listing test-driven development among practices to combine."
+    },
+    {
+      "claim": "Each distinct thing you need to fix first becomes a **prerequisite** node with an arrow from the goal.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "that’s your subgoal. write it down on your paper and attach it to the goal you tried to achieve.",
+      "note": "The article attaches each discovered subgoal to the goal it blocks ('attach it to the goal you tried to achieve'), i.e. a prerequisite node with an edge from the goal; Manning's blurb likewise describes 'mapping the key dependencies'."
+    },
+    {
+      "claim": "This is the step people skip; do not keep the broken attempt.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "if you failed: revert your changes . undo what you did during the timebox. this is important to start fresh.",
+      "note": "The article insists the failed attempt is undone in full ('Revert your changes. Again. I'm serious.') and calls reverting 'a critical step to avoid the sunk cost fallacy'."
+    },
+    {
+      "claim": "`git reset --hard` / `git restore .`",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The skill's only concrete commands: the article says to revert your changes after a failed timebox but names no git command, and neither mikadomethod.info nor the Manning page mentions git at all."
+    },
+    {
+      "claim": "Pick a **leaf** prerequisite (no prerequisites of its own) and try it naively.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "start over from 3) with the next unchecked subgoal available . start from the leaves of your mikado graph.",
+      "note": "The article restarts work 'from the leaves of your Mikado graph' and 'with one of the leaves' - the goals with no unchecked subgoals of their own."
+    },
+    {
+      "claim": "If it breaks things, add its prerequisites to the graph and revert again.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "revert your changes . again. i’m serious. then write down the new subgoals. start over with one of the leaves.",
+      "note": "The article's inner loop: revert, write down the new subgoals, start over with one of the leaves."
+    },
+    {
+      "claim": "When a leaf can be done with everything green, **commit it** (to main, small and safe), tick it off the graph.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "if you succeeded: commit . you’ll certainly finish before the end of the timebox, that’s fine, stop the timer.",
+      "note": "The article commits only when the timebox succeeds and then checks the goal off ('check the goal you achieved on paper'), framing the commit as 'a checkpoint' after which 'you can stop anytime, open a PR and ship the improvements'; it names no branch, so 'to main' is the skill's addition."
+    },
+    {
+      "claim": "Repeat until the goal itself is a leaf; do it, commit.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "in the end, you’ll make the main goal easy . then, just do it. upgrade your orm dependency.",
+      "note": "The article iterates 'until you've checked your main goal' and finishes by just doing the now-easy main goal, having committed each prerequisite as it succeeded."
+    },
+    {
+      "claim": "Each attempt is an experiment that discovers dependencies.",
+      "verdict": "confirmed",
+      "source_url": "https://mikadomethod.info/",
+      "evidence_quote": "the mikado method is a process for surfacing hard-to-see dependencies in a codebase.",
+      "note": "mikadomethod.info defines the method as surfacing hard-to-see dependencies; Manning's What's-inside list likewise has 'surface the dependencies in legacy systems'."
+    },
+    {
+      "claim": "Keeping half-broken changes leads to a \"big ball of red\" you cannot ship.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "whenever you fix 1 problem, 2 more arise . the project doesn’t compile anymore. it has been a few hours since you committed the code.",
+      "note": "The article's 'quicksand' is exactly the un-reverted half-broken state - the project no longer compiles and it has been hours since the last committable state; 'big ball of red' is the skill's phrasing for it."
+    },
+    {
+      "claim": "Reverting keeps the codebase releasable, and each committed step is small enough to review and merge daily.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "it means you can stop anytime, open a pr and ship the improvements.",
+      "note": "The article ties each checked goal to a commit that is 'a checkpoint', letting you stop anytime, open a PR and ship, 'keeping the code in a shippable state'; the daily-merge cadence is the skill's gloss, not the source's words."
+    },
+    {
+      "claim": "Time-box each attempt (10-15 minutes). If it is still red after that, revert and decompose.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "try to achieve the goal within a timebox . 5min, 10min, 15min, as you wish. keep it relatively short.",
+      "note": "The source offers 5min/10min/15min timeboxes 'as you wish' and its own advice is 'I find 10min to be a pragmatic compromise'; on failure you revert and decompose into subgoals, so the skill's 10-15 minutes sits inside the source's offered range."
+    },
+    {
+      "claim": "Keep the graph in the repo or the ticket so others can pick up leaves in parallel.",
+      "verdict": "confirmed",
+      "source_url": "https://mikadomethod.info/",
+      "evidence_quote": "use it in a team to share workload and track progress.",
+      "note": "mikadomethod.info says the method is used 'in a team to share workload and track progress' and 'in a pair, or when mobprogramming, to share a common view of what to do, and why'; keeping the graph in the repo or ticket is the skill's suggestion."
+    },
+    {
+      "claim": "Combine with branch by abstraction or feature flags for prerequisites that change behaviour.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "None of the three sources mentions branch by abstraction or feature flags; the closest is Manning's 'This book builds on agile processes such as refactoring, TDD, and rapid feedback', which names neither technique."
+    },
+    {
+      "claim": "Use the compiler and tests as the discovery tools",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "you upgrade the dependency and realize the project doesn’t compile anymore.",
+      "note": "The compiler half is directly demonstrated by the article's example; 'tests' as a discovery tool is only indirectly supported (mikadomethod.info lists test-driven development among practices to get more out of, Manning says the book 'builds on agile processes such as refactoring, TDD, and rapid feedback'), so that half is uncovered."
+    },
+    {
+      "claim": "automated refactorings (IDE) make leaf steps quick",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source mentions IDE tooling or automated refactorings; mikadomethod.info lists 'classic refactorings' and Manning 'refactoring' as complementary practices, without any IDE or automation claim."
+    },
+    {
+      "claim": "Every commit on main during the effort is green and deployable.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "doing baby steps and keeping the code in a shippable state gives you incredible productivity.",
+      "note": "The article's end state is a codebase always kept in a shippable state via baby steps - the verify criterion restated."
+    },
+    {
+      "claim": "The graph is fully ticked; the goal commit is small because all prerequisites were done.",
+      "verdict": "confirmed",
+      "source_url": "https://understandlegacycode.com/blog/a-process-to-do-safe-changes-in-a-complex-codebase/",
+      "evidence_quote": "when each of its subgoals is checked, tackling a goal should be easy.",
+      "note": "The article checks subgoals off as they are committed, iterates 'until you've checked your main goal', and each checked subgoal leaves the remaining goal easy to do."
+    }
+  ],
+  "coverage": "Claims cover every concrete assertion in the file: the author attribution and intro premise (always-green steps, no long-lived branch), all seven loop steps including the two git revert commands and the 10-15 minute time-box number, the why-revert paragraph, all four practical tips down to the IDE-refactoring clause, and both verify checklist items - the mermaid diagram and the 'Billing module' example only illustrate the loop and the frontmatter description restates it, so they add no separate claims; each claim was checked against all three listed sources fetched today with attest.py's wavefront-attest/1 user agent, with evidence quotes sliced from the exact tag-stripped page text.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted: the loop itself is well sourced - the understandlegacycode article walks the exact cycle (goal written at the top of a paper graph, naive attempt, subgoals attached to the goal they block, full revert on failure, work from the leaves, commit on success, 5/10/15-minute timeboxes with 10min the author's compromise, code kept in a shippable state), mikadomethod.info defines the method as 'a process for surfacing hard-to-see dependencies in a codebase' with pen-and-paper and team use, and Manning's page credits Ola Ellnestam and Daniel Brolund. But four claims have no source coverage: the skill's only concrete commands `git reset --hard` / `git restore .` (the article says revert but names no git command, and no page mentions git), the 'without a long-lived branch' premise ('branch' appears zero times in all three pages), the branch-by-abstraction / feature-flags tip, and IDE-automated refactorings. A fix PR should bump version and source or soften these - present the git commands as the author's own suggestion rather than the method's, state the time-box as the source's 5-15 minute range with 10min recommended, and either add references for branch by abstraction / feature flags and IDE refactorings (e.g. a branch-by-abstraction write-up) or drop those two tips - and note that 'tests' in the discovery-tools line is only indirectly supported while the compiler half is directly demonstrated.",
+  "attestation_sha256": "0c77874487d72425ca6d917064a5e566798859bda74a61e5b58553f57f0c74c1"
+}

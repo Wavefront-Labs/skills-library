@@ -1,0 +1,126 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.cloud-infrastructure-engineering.cloud-architecture.cloud-exit-strategy",
+    "version": "2",
+    "sha256": "34d3f72400921a977f42b15203fc333932eb7b0155f77c85dcc750763505e538"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://www.eba.europa.eu/regulation-and-policy/internal-governance/guidelines-on-outsourcing-arrangements",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "db75187182e5d88f6e910a32c024c0df3dedc496f64c0cf495fbd510e7ecd99f"
+    },
+    {
+      "url": "https://eur-lex.europa.eu/eli/reg/2022/2554/oj",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "13f0190fc21e36b892dbcd0ee3498332fc3b5f84c8490a080a24fe6750b4bafd"
+    },
+    {
+      "url": "https://learn.microsoft.com/azure/cloud-adoption-framework/strategy/business-outcomes/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "0090510e7424ab732a8122675336fbb16663ece8889d869e06b8ffd5015d26b9"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The goal is to know what leaving would cost per workload and to\nkeep that cost acceptable for critical services.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Goal statement: no listed source states it. The Microsoft CAF page fetched today (HTTP 200, redirects to the develop-a-cloud-adoption-strategy page) says only that a strategy 'directs how your business adopts cloud technology' and 'connects executive intent to measurable outcomes', with no per-workload exit-cost content; the EBA and DORA pages do not discuss costing lock-in per workload either."
+    },
+    {
+      "claim": "proprietary services used (managed DB engine, queues,\n   serverless runtime, IAM model, data warehouse), data volume, contractual terms\n   (commitments, notice periods), skills",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Lock-in register contents: no fetched page lists these register fields. DORA's register of information concerns financial entities' ICT contractual arrangements, not a per-workload lock-in register of proprietary services, and the EBA and Microsoft pages carry no register guidance."
+    },
+    {
+      "claim": "Rate switching effort (S/M/L/XL) and time.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The S/M/L/XL rating scheme appears in no fetched source."
+    },
+    {
+      "claim": "open data formats (Parquet, PostgreSQL-compatible engines),\n   containers and Kubernetes for compute, IaC with modules per provider, OpenTelemetry for\n   telemetry, standard identity (SAML/OIDC)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Portability levers: Parquet, PostgreSQL, Kubernetes, OpenTelemetry, SAML and OIDC appear zero times in all three fetched pages; the Microsoft CAF strategy page contains no portability or technology guidance (its only exit and lock matches are UI chrome such as 'exit editor mode' and the layout script's 'blocked' variable)."
+    },
+    {
+      "claim": "EBA outsourcing guidelines and DORA\n   require documented, tested exit strategies for critical ICT third-party services",
+      "verdict": "confirmed",
+      "source_url": "https://eur-lex.europa.eu/eli/reg/2022/2554/oj",
+      "evidence_quote": "Exit plans shall be comprehensive, documented and, in accordance with the criteria set out in Article 4(2), shall be sufficiently tested and reviewed periodically.",
+      "note": "DORA Article 28(8) states this for ICT services supporting critical or important functions: the preceding sentence reads 'for ict services supporting critical or important functions, financial entities shall put in place exit strategies', and the same paragraph requires transition plans to 'remove the contracted ict services and the relevant data from the ict third-party service provider and to securely and integrally transfer them to alternative providers or reincorporate them in-house'. The EBA half of the claim is not shown by the fetched EBA page, which redirects to a single-rulebook landing page that only summarises the outsourcing guidelines ('provide a clear definition of outsourcing and specify the criteria to assess whether or not an outsourced activity, service, process or function (or part of it) is critical or important') with no exit-strategy text."
+    },
+    {
+      "claim": "triggers (provider failure, price change, regulatory order), target (other cloud or\n   on-prem)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: DORA Article 28(8) says exit strategies 'shall take into account risks that may emerge at the level of ict third-party service providers, in particular a possible failure on their part, a deterioration of the quality of the ict services provided, any business disruption due to inappropriate or failed provision of ict services ... or the termination of contractual arrangements', which covers provider failure but not price change or regulatory order, and DORA's migration targets are alternative providers or in-house solutions, not 'other cloud or on-prem'. No listed source lists this trigger set or target."
+    },
+    {
+      "claim": "data extraction method and egress cost, timeline, roles, contract clauses\n   (data return, assistance period, deletion certificates)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Partial coverage only: DORA requires contractual provisions laying down 'the relevant guarantees for enabling the access, recovery and return of data in the case of insolvency, resolution or discontinuation of the business operations of the ict third-party service provider' and 'the establishment of a mandatory adequate transition period', but 'deletion', 'deletion certificates', egress cost, timeline and roles appear in no fetched page (deletion: zero occurrences in all three sources)."
+    },
+    {
+      "claim": "export full data sets periodically and restore them outside the provider;\n   time it.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "DORA requires exit plans to be 'sufficiently tested and reviewed periodically' and transition plans to remove data and transfer it to alternative providers or in-house, but no fetched page instructs exporting full data sets and restoring them outside the provider, or timing the exercise."
+    },
+    {
+      "claim": "A desk-top walkthrough at minimum annually.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Annually' appears zero times in all three fetched pages, and 'desk-top'/'walkthrough' appear nowhere either; DORA says exit plans shall be tested 'periodically' only, and its two '12 months' occurrences concern critical third-country ICT providers establishing EU subsidiaries, not exit testing."
+    },
+    {
+      "claim": "petabytes of egress take weeks and real money; know the number.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Egress' appears zero times in all three fetched pages; no source discusses egress volumes, timescales or costs."
+    },
+    {
+      "claim": "Multi-cloud everything to avoid lock-in usually costs more than the exit would.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Multi-cloud' and 'lock-in' appear in no fetched page (the Microsoft strategy page's only lock matches are the 'blocked' variable in its layout script); no source compares multi-cloud running costs with exit costs."
+    },
+    {
+      "claim": "Contracts without data-return assistance clauses make exit slow even when technically easy.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page makes this claim: DORA requires contracts to lay down guarantees for 'the access, recovery and return of data' and a mandatory adequate transition period, but does not state that contracts lacking data-return assistance clauses make exits slow."
+    }
+  ],
+  "coverage": "I took the goal statement, every step's concrete content - the lock-in register field list, the S/M/L/XL switching-effort rating, the full portability-lever technology list, the EBA/DORA regulatory requirement, the exit-plan trigger, target and contract-clause lists, and the export-and-restore test with its annual cadence - plus all three gotchas, covering every command, flag, setting, number and behaviour in the file (the skill contains no commands or flags; its only number is the annual walkthrough cadence), then fetched all three listed sources with attest.py's wavefront-attest/1 user agent (all HTTP 200, listed below, the EBA URL redirecting to its single-rulebook page and the Microsoft URL redirecting to the develop-a-cloud-adoption-strategy page) and searched each fetched page for every claim.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted and DORA (EUR-Lex, fetched today) confirms the documented-and-sufficiently-tested exit-plan requirement via Article 28(8), but the other 11 of 12 claims are unverifiable because no listed source covers them: the EBA URL redirects to a single-rulebook landing page that only summarises the outsourcing guidelines (definition of outsourcing, critical-or-important criteria) with no exit-strategy text, and per that page's 18 September 2026 press release the outsourcing guidelines will be repealed by the new Guidelines on the sound management of third-party risk related to non-ICT services once applicable, so the EBA reference is going stale; the Microsoft business-outcomes page is a cloud-adoption-strategy landing page with no exit, portability, lock-in or egress content. A fix PR should bump version and cite sources that actually support the substantive claims - the EBA/GL/2019/02 guidelines PDF (or the 2026 third-party risk guidelines) for the EBA exit-strategy requirement, DORA Article 28(8) as the anchor for documented tested exit plans, primary documentation for the Parquet/PostgreSQL/Kubernetes/OpenTelemetry/SAML-OIDC portability levers, and provider egress pricing pages for the data-gravity gotcha - or trim the skill to what the cited pages support; note that DORA requires periodically reviewed exit plans and contract provisions for data return plus a mandatory transition period, but says nothing about deletion certificates, price-change or regulatory-order triggers, an annual desk-top walkthrough, or per-workload exit-cost registers.",
+  "attestation_sha256": "305f7d4866893ebce6906e6aaf39cb1d0a52710199dc28cf235127267141d49e"
+}

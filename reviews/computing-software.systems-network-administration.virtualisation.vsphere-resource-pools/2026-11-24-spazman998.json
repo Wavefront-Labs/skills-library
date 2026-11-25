@@ -1,0 +1,120 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.systems-network-administration.virtualisation.vsphere-resource-pools",
+    "version": "2",
+    "sha256": "69a7f43a2f8e16c5ad515805ef345950ff4c1146272da50b3ab8524adbc5b4bc"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/managing-resource-pools.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "19db594fb797bd996fcd71fb1ace1761d77bed31579ffd5fd57daca2831c703c"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Shares divide resources **between sibling pools**, then among VMs inside each pool.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Example: Prod pool High shares (8000) with 80 VMs, Test pool Normal (4000) with 4 VMs.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Under contention Prod gets 2/3 of the cluster split 80 ways; each Test VM gets far more",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Enable **scalable shares** on the cluster/pool (7.0+): pool shares scale with VM\n  count and size.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Reservation** guarantees MHz/MB to the pool.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Expandable reservation** lets child VMs\n  borrow unreserved capacity from the parent for power-on admission.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "**Limits** on pools cap the whole group (e.g. test can never exceed 30% of the cluster);",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "limits cause ready time even when the host is idle.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Using resource pools to organise VMs visually (one pool per team, default shares)\ndistorts entitlement and is the classic misuse.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "organisation; create pools only for resource policy. Nested pools multiply the problem.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "Cluster → Monitor → Resource Allocation → CPU/Memory shows reservation, shares and\n  worst-case allocation per VM.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "PowerCLI: `Get-ResourcePool | Select Name, CpuSharesLevel, NumCpuShares, CpuReservationMHz, MemReservationGB`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "DRS must be enabled for resource pools to exist; disabling DRS **deletes** them",
+      "verdict": "contradicted",
+      "source_url": "https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/managing-resource-pools.html",
+      "evidence_quote": "Each standalone host and each DRS cluster has an (invisible) root resource pool that groups the resources of that host or cluster."
+    },
+    {
+      "claim": "(vSphere\n  7+ offers to save a snapshot of the tree you can restore).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    },
+    {
+      "claim": "vApps behave like resource pools for shares.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": ""
+    }
+  ],
+  "coverage": "I extracted every concrete claim in the skill — the one PowerCLI command, every number and version (8000/4000 share values, 80/4 VMs, 2/3 split, 7.0+/7+, 30% cluster cap) and every behavioural statement — and checked each against the skill's only listed source.",
+  "verdict": "fail",
+  "suggested_edits": "The only listed source is the chapter overview page, which states none of the skill's specifics: share values, scalable shares, expandable-reservation and limit behaviour, ready time, the DRS-disable behaviour, vApps, PowerCLI, and the Resource Allocation view are all absent. Add the chapter sub-pages that actually contain these facts (Why Use Resource Pools?, Create a Resource Pool, Resource Pool Admission Control, Expandable Reservations Example 1 and 2) plus the shares pages under Configure Your Resource Allocation Settings in vSphere, then re-verify. Also fix the DRS gotcha: the overview says each standalone host, which cannot run DRS, also has a root resource pool, so 'DRS must be enabled for resource pools to exist' is wrong as written — scope it to pools on clusters and verify the disable-DRS behaviour against a DRS page before promoting.",
+  "attestation_sha256": "06852e1ee71bc3c5eaa3a01e82d9596fe9dfe7b5340df1c28b30adf3be5e9381"
+}

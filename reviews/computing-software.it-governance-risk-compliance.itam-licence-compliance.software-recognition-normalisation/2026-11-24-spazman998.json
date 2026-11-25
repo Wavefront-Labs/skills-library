@@ -1,0 +1,122 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.it-governance-risk-compliance.itam-licence-compliance.software-recognition-normalisation",
+    "version": "2",
+    "sha256": "a2af8b256eee17e33c6734bdbd8f4e039966cba17d54a727d33b7f454f3ca07f"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://spdx.github.io/spdx-spec/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "2de84c473da71845fe0edfdc7acbe64422c74bca624b11e60c93a6fb7f35aef3"
+    },
+    {
+      "url": "https://cyclonedx.org/specification/overview/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "9c910a538236d3a0310ce66454b12fdf953e7fda041e9b930c725fd39727fe25"
+    },
+    {
+      "url": "https://www.ntia.gov/page/software-bill-materials",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "ab6340fa3fe7028c81050e28ed344adf8a52a408967459e8632ffb7d8c9b86b8"
+    },
+    {
+      "url": "https://openchainproject.org/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "486a63b738fecd72583b74014a6164270ab84cff18b2e3cd72c581e1c256882d"
+    },
+    {
+      "url": "https://reuse.software/spec/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "e92235cc285e0cbdb199c74655c69f94b6cce9eb0dd18b3fa0062fbfad979118"
+    },
+    {
+      "url": "https://opensource.org/licenses",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "c6eda2ca9ba0bd8c072d2ce090ec3d85a53f125ec10f9b93d9ad336e15581e34"
+    },
+    {
+      "url": "https://www.gnu.org/licenses/gpl-faq.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "ad46956039a5840d676f1161bf67f6a821183f7f9fa8925be003f8d36bd9a42b"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Goal: reliable product identity so licence counts are right.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "None of the readable sources mentions product identity for licence counting; the ISO 19770-1 page, the one plausibly relevant source, is unreachable (403 to every fetcher, see coverage)."
+    },
+    {
+      "claim": "Source signals: SWID, add/remove programs, package managers, file signatures, service names.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The only SWID mention (NTIA) calls SWID one of three SBOM formats, not a recognition source signal; no fetched page lists add/remove programs, package managers, file signatures or service names as discovery signals."
+    },
+    {
+      "claim": "Match to a catalogue (vendor-provided recognition library or in-house) producing publisher, product, edition, version.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page describes matching install strings to a recognition catalogue producing publisher, product, edition and version; the SPDX and CycloneDX pages fetched are format overviews with no such process."
+    },
+    {
+      "claim": "Maintain override rules for unmatched items; review the top unrecognised list weekly.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'override rules', 'unrecognised' and any review cadence appear in none of the fetched pages."
+    },
+    {
+      "claim": "Exclude free components (runtimes, drivers) via rule groups.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page covers excluding free runtimes or drivers via rule groups; the GPL FAQ's 'runtime library' and 'driver' mentions are about GPL licensing questions, not ITAM exclusion rules."
+    },
+    {
+      "claim": "Editions (Standard vs Enterprise) can look identical in installed names; use feature flags or licence keys.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page discusses Standard vs Enterprise edition identification, feature flags or licence keys; 'edition' appears only in unrelated newsletter/2019-edition link text."
+    },
+    {
+      "claim": "Vendors rename products after acquisitions.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No fetched page mentions vendors renaming products after acquisitions; NTIA's 'acquisition' hits are about consumers acquiring software."
+    },
+    {
+      "claim": "Verify: recognition rate exceeds 95% on licensable titles.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The 95% recognition-rate threshold and 'licensable titles' appear in no fetched source; no page states any recognition-rate target."
+    }
+  ],
+  "coverage": "I took every sentence of the skill body - the goal line, all four method bullets, both gotchas and the verify threshold - so every behaviour, signal type and number (the 95% rate) is covered, and checked each against all eight listed sources fetched today: seven fetched fine (spdx.github.io/spdx-spec/ serves a 374-byte JavaScript-redirect stub and reuse.software/spec/ a 270-byte meta-refresh stub to plain fetchers, so neither carries specification content), while iso.org/standard/68291.html returns 403 to every fetcher tried (the web fetch tool twice, urllib with attest.py's wavefront-attest/1 user agent, default Python UA, a browser UA and curl), so it could not be read, hashed or listed in sources; none of the readable pages - SBOM-format overviews (SPDX, CycloneDX, NTIA), open-source licence pages (OSI, GNU GPL FAQ, REUSE) and OpenChain's compliance-program page - mentions software recognition, normalisation, recognition catalogues, override rules, recognition rates or licence counting.",
+  "verdict": "fail",
+  "suggested_edits": "All 8 claims are unverifiable: the listed sources are SBOM-format, open-source-licence and compliance-program pages, none of which covers ITAM recognition or normalisation practice, and the one plausibly relevant source (ISO/IEC 19770-1 at iso.org/standard/68291.html) is 403 to every fetcher in this environment (it would also break re-fetch checks if cited). A fix PR should bump version and either cite sources that actually describe the practice - ISO/IEC 19770-2 for SWID tags as a source signal, vendor recognition-library documentation (e.g. Flexera, Snow, ServiceNow ITAM) or an ITAM Body of Knowledge for catalogue matching, override rules, excluding free components, edition differentiation and a recognition-rate benchmark for the 95% target - or trim the method/gotchas/verify sections to what such sources support.",
+  "attestation_sha256": "6fc1e884b8eb69913d2a22bce8db016441c8b1a12bcc4daebcb9094806fd141d"
+}

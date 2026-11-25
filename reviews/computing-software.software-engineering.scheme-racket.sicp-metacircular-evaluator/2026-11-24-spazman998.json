@@ -1,0 +1,86 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.scheme-racket.sicp-metacircular-evaluator",
+    "version": "2",
+    "sha256": "b9878119845800052cc79de020643749d0f8cfbe1b5b23172f47ebe53de1e38d"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://sarabander.github.io/sicp/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "8f33d8b79860de7d9b293f4eca1e4999408c200651d6b551717e7c7ae9b239e1"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Write eval and apply for a Scheme subset in Scheme: environments, special forms, primitive procedures, REPL driver (SICP 4.1).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The sole listed source is the site's cover page (1,932 bytes); after tag stripping its only words are the title 'Structure and Interpretation of Computer Programs, 2e', so the claimed SICP 4.1 scope (environments, special forms, primitive procedures, REPL driver) is covered by no listed source."
+    },
+    {
+      "claim": "(define (m-eval e env)\n  (cond [(number? e) e]\n        [(symbol? e) (lookup e env)]",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Behaviour claim: numbers self-evaluate and symbols are looked up in the environment. The listed URL serves no book text (cover page only: title, CSS and link URLs), so no listed source covers this dispatch."
+    },
+    {
+      "claim": "[(eq? (car e) 'quote) (cadr e)]",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Behaviour claim: a quote form evaluates to its quoted datum. The fetched cover page contains no evaluator text, so nothing covers it."
+    },
+    {
+      "claim": "[(eq? (car e) 'lambda) (list 'proc (cadr e) (cddr e) env)]",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Behaviour claim: lambda evaluates to a tagged list of parameters, body and defining environment. No listed source covers it; the fetched page has no book text."
+    },
+    {
+      "claim": "[else (m-apply (m-eval (car e) env) (map (lambda (x) (m-eval x env)) (cdr e)))]))",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Behaviour claim: an application evaluates its operator and operands, then applies the result. No listed source covers it."
+    },
+    {
+      "claim": "Needs `lookup`, `extend-environment`, `m-apply`; the SICP book lists them.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The listed cover page says nothing about any procedure. As unlisted context I fetched the section 4.1 page (html/4_002e1.xhtml): the book's own names are lookup-variable-value, extend-environment and apply - never bare lookup or m-apply - so even the right page would only confirm extend-environment exactly."
+    },
+    {
+      "claim": "Tail-call behaviour of the host determines tail calls in the guest.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers host tail-call behaviour; the fetched cover page carries no book text."
+    },
+    {
+      "claim": "Evaluate `((lambda (x) (+ x 1)) 2)` in your interpreter.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check expression for the reader; covered by no listed source."
+    }
+  ],
+  "coverage": "I took every concrete statement in the skill in file order - the frontmatter description with its SICP 4.1 scope, all five dispatch clauses of the m-eval code (numbers, symbols, quote, lambda, application), the three named helper procedures with the 'the SICP book lists them' claim, the host tail-call behaviour statement, and the self-check expression - and checked each against the single listed source, which I fetched and read today (HTTP 200).",
+  "verdict": "fail",
+  "suggested_edits": "The single listed source is the site's cover page, so no claim in this skill can ever be confirmed against it; list the pages that actually carry the section 4.1 text instead, e.g. https://sarabander.github.io/sicp/html/4_002e1.xhtml (fetched as context: it contains the eval and apply listings, the 4.1.3 environment operations and the 4.1.4 driver loop). Also reword 'the SICP book lists them': the book's own names are lookup-variable-value and apply, with only extend-environment matching the skill's spelling, so either align the skill's helper names with the book's or state the book's names explicitly.",
+  "attestation_sha256": "3b933e196800d4fee9b82ae23e9ddc9a34887c842c285dde1a0d621ae68822da"
+}

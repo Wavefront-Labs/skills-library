@@ -1,0 +1,93 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.ada.float-fixed-types",
+    "version": "2",
+    "sha256": "463e51892193dd49c054ea9f4622b01824488f39cd488f59a5a106554521e589"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.adacore.com/courses/intro-to-ada/chapters/more_about_types.html",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "2fe1c8c7199f9e5c4b4c2f84318d58ab46dd95521ac83c9993ecf4f2a3d49cb1"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Float, digits-based floating types, ordinary and decimal fixed point (delta/small) in Ada and their attributes.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary: the Adacore chapter fetched today (HTTP 200) contains no floating- or fixed-point content at all, and www.ada-auth.org/standards/ timed out on every fetch attempt, so no listed source read today covers the scope."
+    },
+    {
+      "claim": "type Real is digits 15;                     -- floating, >=15 decimal digits",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Adacore page fetched today covers aggregates, overloading/qualified expressions and character types; 'digits' and 'float' appear zero times in its text, and the ada-auth standards page timed out, so no listed source read today states what 'digits 15' guarantees."
+    },
+    {
+      "claim": "type Volt is delta 0.01 range 0.0 .. 100.0; -- ordinary fixed",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The only 'delta' on the Adacore page is the unrelated 'Delta Aggregates' sidebar link and no fixed-point declaration appears; the ada-auth standards page timed out, so no listed source read today covers this declaration."
+    },
+    {
+      "claim": "type Money is delta 0.01 digits 12;         -- decimal fixed",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'decimal' appears zero times in the fetched Adacore page, which has no decimal fixed-point section; the ada-auth standards page timed out, so no listed source read today covers this declaration."
+    },
+    {
+      "claim": "for Volt'Small use 0.01;                    -- exact decimal small",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Small' appears nowhere in the fetched Adacore page; the ada-auth standards page timed out, so no listed source read today documents a Small rep clause."
+    },
+    {
+      "claim": "Ordinary fixed `small` defaults to a power of two <= delta, not 0.01, unless you give the clause.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Adacore page has no fixed-point content ('power of two' appears zero times) and the ada-auth standards page timed out, so no listed source read today states the default-small rule."
+    },
+    {
+      "claim": "Mixed fixed multiply/divide needs conversion to a type.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Adacore page discusses conversions only for qualified expressions of general types, not fixed-point multiply/divide; the ada-auth standards page timed out, so no listed source read today covers this."
+    },
+    {
+      "claim": "Float equality: compare with a tolerance.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'tolerance' and 'float' appear zero times in the fetched Adacore page; the ada-auth standards page timed out, so no listed source read today covers the float-equality gotcha."
+    },
+    {
+      "claim": "Print `Volt'Small` before and after the clause; the value changes.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check: 'Small' appears nowhere in the fetched Adacore page and the ada-auth standards page timed out, so no listed source read today covers the Small behaviour."
+    }
+  ],
+  "coverage": "I took the frontmatter description, all four Ada code lines with their inline comments (the digits 15 floating declaration, the delta 0.01 range 0.0 .. 100.0 ordinary fixed declaration, the delta 0.01 digits 12 decimal fixed declaration and the for Volt'Small use 0.01 clause), the default-small bullet, the mixed fixed multiply/divide bullet, the float-equality gotcha and the Volt'Small self-check - covering every command, number (15, 0.01, 12, 100.0) and behaviour - and checked each against the listed sources: the Adacore chapter was fetched (HTTP 200) and read, while https://www.ada-auth.org/standards/ timed out on every attempt today (web fetch tool, urllib with the attest user-agent, and curl over https and http) and could not be read or hashed, so only the fetched URL appears in sources.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all 9 claims are unverifiable against the listed sources. The cited Adacore chapter (more_about_types.html) is about aggregates, overloading/qualified expressions and character types, with zero occurrences of float, digits, small, decimal, tolerance or power of two, so it covers none of the skill's material; and www.ada-auth.org/standards/ timed out on every fetch attempt from this environment (web fetch tool, urllib with the attest user-agent, curl over https and http), so nothing could be confirmed or contradicted. A fix PR should bump version and cite sources that actually cover the material: the same course's dedicated Fixed-Point Types chapter (https://learn.adacore.com/courses/intro-to-ada/chapters/fixed_point_types.html, linked from the fetched page's sidebar - I fetched it today and it does contain delta/digits/Small/decimal and power-of-two content), a page covering floating point type declarations and float equality comparison, and the Ada Reference Manual sections for floating point, ordinary fixed point and decimal fixed point types and the Small attribute. Note that the ada-auth host was unreachable from this environment today, which can make automated re-fetch checks of that source fail elsewhere too.",
+  "attestation_sha256": "62eb3e71c129efc64e84f428f47c7cf2feb75260521147d12bf1717fa08ceae3"
+}

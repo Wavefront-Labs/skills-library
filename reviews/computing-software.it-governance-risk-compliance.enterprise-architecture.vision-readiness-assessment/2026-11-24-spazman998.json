@@ -1,0 +1,79 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.it-governance-risk-compliance.enterprise-architecture.vision-readiness-assessment",
+    "version": "2",
+    "sha256": "8627eafb73d41b06d35a7a8990190b04e8d28887c842ac835b80e12abbca2b0b"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [],
+  "claims": [
+    {
+      "claim": "Goal: expose whether the organisation can absorb the change.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The business transformation readiness assessment and its purpose are TOGAF ADM Phase A content; the covering source (pubs.opengroup.org/togaf-standard/) returns 401 and an Open Group SSO login redirect to anonymous requests, so this cannot be checked."
+    },
+    {
+      "claim": "Identify readiness factors (vision, desire and willingness, ability, capacity, funding, sponsorship, governance, skills).",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The readiness factor list follows the TOGAF Phase A assessment; the covering source (pubs.opengroup.org/togaf-standard/) returns 401 and an Open Group SSO login redirect to anonymous requests, so the exact factor list cannot be checked."
+    },
+    {
+      "claim": "Score each factor, for example on a 1-5 scale, with evidence.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Rating readiness factors is TOGAF Phase A content; the covering source (pubs.opengroup.org/togaf-standard/) returns 401 and an Open Group SSO login redirect to anonymous requests, so neither the rating behaviour nor the specific 1-5 scale can be checked."
+    },
+    {
+      "claim": "Record actions to close the most important gaps and assign owners.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Readiness actions are TOGAF Phase A content; the covering source (pubs.opengroup.org/togaf-standard/) returns 401 and an Open Group SSO login redirect to anonymous requests, so this cannot be checked."
+    },
+    {
+      "claim": "Re-run at Phase E and F to confirm assumptions before committing the migration plan.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Phase E and Phase F are TOGAF ADM phases and the re-run behaviour would be checked against the TOGAF standard; the covering source (pubs.opengroup.org/togaf-standard/) returns 401 and an Open Group SSO login redirect to anonymous requests, so this cannot be checked."
+    },
+    {
+      "claim": "Verify: a readiness table with scores, evidence and actions is attached to the Architecture Vision.",
+      "verdict": "gated",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Architecture Vision is a TOGAF Phase A deliverable; the covering source (pubs.opengroup.org/togaf-standard/) returns 401 and an Open Group SSO login redirect to anonymous requests, so this cannot be checked."
+    },
+    {
+      "claim": "Scores without evidence are opinions; interview at least two levels.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers interview depth, and in any case all five listed sources are blocked to the checker (see coverage)."
+    },
+    {
+      "claim": "Do not hide low readiness; it should shape the roadmap sequencing.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers this guidance, and in any case all five listed sources are blocked to the checker (see coverage)."
+    }
+  ],
+  "coverage": "I chose every concrete claim in this prose skill - the goal line, all four method bullets (the readiness factor list, the 1-5 scoring scale, the actions-and-owners rule, and the Phase E and F re-run), both gotchas (the evidence-and-two-levels interview rule and the low-readiness/roadmap-sequencing rule) and the verify line - which covers every number, phase and behaviour, since the skill contains no commands or flags; I then attempted to fetch all five listed sources with both the checker's own fetcher (User-Agent wavefront-attest/1) and the web fetch tool, and none could be read: https://pubs.opengroup.org/togaf-standard/ and https://pubs.opengroup.org/architecture/archimate32-doc/ return 401 with an Open Group SSO login redirect to anonymous requests, https://www.zachman.com/about-the-zachman-framework serves a TLS certificate for zachman.lab529.com and 301s to a malformed zachman-feac.com URL, https://www.businessarchitectureguild.org/ returns 403 Forbidden, and https://www.dodcio.defense.gov/Library/DoD-Architecture-Framework/ has no DNS record for its www host (the apex host returns 403) - so the six TOGAF-content claims are gated on the blocked Open Group pages and the two practice-advice claims are covered by no listed source.",
+  "verdict": "fail",
+  "suggested_edits": "Every listed source is unreadable to an anonymous checker, so nothing can be confirmed or contradicted: pubs.opengroup.org/togaf-standard/ and /architecture/archimate32-doc/ now sit behind Open Group SSO (401 to non-browser requests; browser requests get an identity.opengroup.org login page), www.zachman.com/about-the-zachman-framework is a parked domain (TLS certificate for zachman.lab529.com, 301 to http://zachman-feac.comabout-the-zachman-framework), www.businessarchitectureguild.org returns 403 to automated fetchers, and www.dodcio.defense.gov/Library/DoD-Architecture-Framework/ no longer resolves (no DNS record for the www host; the apex 403s). Replace the sources with fetchable pages that actually state the claims: a publicly readable copy of the TOGAF business transformation readiness assessment (ADM Phase A) for the factor list, the rating approach, the Phase E/F re-run and the Architecture Vision attachment, and a change-management or readiness source for the interview-depth and roadmap-sequencing advice. When re-sourcing, note that the published TOGAF readiness factor list is commonly given as vision; desire, determination and willingness; ability to change; capacity to change; actions to be taken; available funding; defined governance; and skills - which differs from the skill's list (sponsorship appears instead, and there is no actions factor) - and TOGAF does not prescribe a 1-5 numeric scale, so those two claims will need rewording or a different cited source. Separately, the attestation schema requires sources minItems 1, which cannot be satisfied honestly when every listed source is blocked; consider allowing zero sources or recording blocked attempts with their status.",
+  "attestation_sha256": "deeba67299beec5b86bbd33a65e3b99102b9b7cdb26f8a7d309d375d405c0202"
+}

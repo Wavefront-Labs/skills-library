@@ -1,0 +1,79 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.ada.command-line-env-vars",
+    "version": "2",
+    "sha256": "7d5f0745f4322c618f03d960142864627c5c5133e8c89104bc121ffbcfb31e6f"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.adacore.com/courses/intro-to-ada/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "8c11e4a9c527e007cbf1afd62054c5b0e29b61b6b33783c685b25cca750f3ce7"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "description: \"Ada.Command_Line Argument_Count/Argument/Set_Exit_Status and Ada.Environment_Variables.\"",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Scope summary: the Adacore course index fetched today (HTTP 200) has no command-line or environment-variables chapter, and 'Command_Line', 'Argument_Count', 'Set_Exit_Status' and 'Environment_Variables' appear zero times in its text, and www.ada-auth.org/standards/ timed out on every fetch attempt, so no listed source read today covers the scope."
+    },
+    {
+      "claim": "with Ada.Command_Line; with Ada.Environment_Variables;\nfor I in 1 .. Ada.Command_Line.Argument_Count loop\n   Put_Line (Ada.Command_Line.Argument (I));\nend loop;",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The Adacore page fetched today is the Introduction to Ada course index (24 chapters on language basics and standard-library containers, dates, strings, files and numerics) with zero occurrences of 'Command_Line' or 'Argument_Count' - its single 'argument' hit is the unrelated sidebar link 'Argumentation and Business Perspectives' - and the ada-auth standards page timed out, so no listed source read today documents the Argument_Count/Argument loop or the packages."
+    },
+    {
+      "claim": "Ada.Command_Line.Set_Exit_Status (Ada.Command_Line.Failure);\nif Ada.Environment_Variables.Exists (\"HOME\") then ... end if;",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Set_Exit_Status' and 'Environment_Variables' appear zero times in the fetched Adacore course index, and the ada-auth standards page timed out, so no listed source read today covers Set_Exit_Status, the Failure status or Ada.Environment_Variables.Exists."
+    },
+    {
+      "claim": "- `Command_Name` gives program path.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Command_Name' appears zero times in the fetched Adacore course index, and the ada-auth standards page timed out, so no listed source read today states what Command_Name returns."
+    },
+    {
+      "claim": "- Use `GNAT.Command_Line` for option parsing.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'GNAT.Command_Line' appears zero times in the fetched Adacore course index, whose chapter list covers language features and standard-library chapters with no GNAT tooling content, and the ada-auth standards page timed out, so no listed source read today covers GNAT.Command_Line option parsing."
+    },
+    {
+      "claim": "- `Argument (0)` raises `Constraint_Error`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'Constraint_Error' appears zero times in the fetched Adacore course index (the predefined-exceptions material lives in its Exceptions chapter, not on this page, and says nothing about command-line arguments), and the ada-auth standards page timed out, so no listed source read today states the Argument (0) behaviour."
+    },
+    {
+      "claim": "Print all args and exit with failure; check shell status.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Self-check: the fetched Adacore course index contains no command-line or exit-status content and the ada-auth standards page timed out, so no listed source read today covers the print-arguments/exit-failure/shell-status behaviour."
+    }
+  ],
+  "coverage": "I took the frontmatter description, all six lines of the code block (the with-clauses for Ada.Command_Line and Ada.Environment_Variables, the 1 .. Argument_Count loop calling Argument (I), the Set_Exit_Status (Failure) call and the Exists (\"HOME\") test), the Command_Name bullet, the GNAT.Command_Line bullet, the Argument (0) gotcha and the self-check line - covering every package, command, flag and behaviour - and checked each against the listed sources: the Adacore course index was fetched (HTTP 200) and read, while https://www.ada-auth.org/standards/ timed out on every attempt today (web fetch tool, urllib with the attest user-agent, and curl) and could not be read or hashed, so only the fetched URL appears in sources.",
+  "verdict": "fail",
+  "suggested_edits": "Nothing is contradicted, but all 7 claims are unverifiable against the listed sources. The cited Adacore URL is only the Introduction to Ada course index - its 24 chapters cover language basics and standard-library containers, dates, strings, files and numerics, with zero occurrences of Command_Line, Argument_Count, Argument, Set_Exit_Status, Environment_Variables, Command_Name, GNAT.Command_Line or Constraint_Error - and www.ada-auth.org/standards/ timed out on every fetch attempt from this environment (web fetch tool, urllib with the attest user-agent, and curl), so nothing could be confirmed or contradicted. A fix PR should bump version and cite sources that actually cover the material: the Ada Reference Manual sections on the predefined packages Ada.Command_Line and Ada.Environment_Variables (Argument_Count, Argument, Set_Exit_Status, Command_Name, and the rule that argument numbers outside 1 .. Argument_Count raise Constraint_Error) plus GNAT's documentation for GNAT.Command_Line option parsing, or an Adacore course page that actually discusses command-line arguments. Note that the ada-auth host was unreachable from this environment today, which can make automated re-fetch checks of that source fail elsewhere too.",
+  "attestation_sha256": "5783f04b17fb0012513c04bd06d460119fe1d17f020104dca8af86f821401596"
+}

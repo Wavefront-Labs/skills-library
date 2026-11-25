@@ -1,0 +1,111 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.software-engineering.crystal.type-grammar",
+    "version": "2",
+    "sha256": "1d8ded3b67acb170461161d8b3a78b7277be623e71ae66f8e2db3a2153ded738"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://crystal-lang.org/reference/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "762d58fe80b1d474b2983089610c2e05154efa4c1378e673f94c1a3e7e4879aa"
+    },
+    {
+      "url": "https://crystal-lang.org/api/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "6b9024ea7716a4ca032a97c4b23e2a60f9c127822c5eb0096eb3cb5ba505bde0"
+    },
+    {
+      "url": "https://github.com/crystal-lang/shards",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "000bb809d5f20ee7f0e4e99af03a93cf3c92ea79fb75e686336687b8029465df"
+    },
+    {
+      "url": "https://crystal-lang.org/docs/",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "8e316137ef414ec50295068a06734856cd36221cf696df87642ee4247e8c2634"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Union `A | B`; nilable `A?` equals `A | Nil`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source states the union or nilable syntax: reference/ is the book's table of contents (only a 'Union types' nav entry), /api/ a class index, /docs/ a 485-byte redirect stub, shards a dependency-manager README. The unlisted reference/1.22/syntax_and_semantics/type_grammar.html (fetched today) says 'alias Int32OrNil = Int32? is the same as: alias Int32OrNil = Int32 | ::Nil'."
+    },
+    {
+      "claim": "Generic `Array(Int32)`, `Hash(String, Int32)`; metaclass `Int32.class`; self type `self`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed page covers generic, metaclass or self type syntax. The unlisted type_grammar.html (fetched today) shows 'Array(String)' under 'Regular types and generics can be used', plus Int32.class and self, but never a Hash(String, Int32) example; that form appears only on the equally unlisted typeof.html (':: Hash(Int32, String)')."
+    },
+    {
+      "claim": "Tuple `{Int32, String}`; NamedTuple `{a: Int32}`; Proc `Int32, String -> Bool` (shorthand) or `Proc(Int32, String, Bool)`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed page documents tuple, named tuple or proc type syntax. The unlisted type_grammar.html (fetched today) states 'alias Int32StringTuple = {Int32, String} is the same as: Tuple(Int32, String)' and shows '{x: Int32, y: String}' and 'Int32, Char -> String' - same forms as the skill, different example keys and proc types."
+    },
+    {
+      "claim": "Pointer `Int32*` / `Pointer(Int32)`; StaticArray `Int32[4]` / `StaticArray(Int32, 4)`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed page documents pointer or static array type syntax. The unlisted type_grammar.html (fetched today) states 'alias Int32Ptr = Int32* is the same as: alias Int32Ptr = Pointer(Int32)' and 'alias Int32_8 = Int32[8] is the same as: StaticArray(Int32, 8)' - the equivalence holds, but the skill's Int32[4] example appears on no fetched page."
+    },
+    {
+      "claim": "`typeof(a, b)` gives the union of both at compile time and does not execute the expression.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed page documents typeof's behaviour - the reference index has only a 'typeof' nav entry and /api/ a Crystal::Macros::TypeOf index entry. The unlisted typeof.html (fetched today) says 'It accepts multiple arguments, and the result is the union of the expression types' and 'Since typeof doesn't actually evaluate the expression, it can be used on methods at compile time'."
+    },
+    {
+      "claim": "`Foo?` binds tighter than `|`, so `Int32 | String?` is `Int32 | String | Nil`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'binds', 'tighter' and 'precedence' appear zero times in every fetched page, listed or unlisted; neither type_grammar.html nor union_types.html states how ? interacts with |. The substance may well be true, but no source I could find says so - cite one or drop the gotcha."
+    },
+    {
+      "claim": "`T.class` expressions in generic restrictions need `.class`, e.g. `x : T.class`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source covers free-variable .class restrictions. The unlisted type_restrictions.html (fetched today) says 'To create a method that accepts a type name, rather than an instance of a type, append .class to a free variable in the type restriction' with the example 'def foo(x : T.class) forall T'."
+    },
+    {
+      "claim": "`x.class` is the runtime class, `typeof(x)` the compile-time type.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "No listed source contrasts .class with typeof. The unlisted type_grammar.html covers Int32.class as referring to 'a class type, instead of an instance type' and the unlisted typeof.html the compile-time behaviour, but no fetched page states the runtime-vs-compile-time contrast in these words."
+    },
+    {
+      "claim": "Verify: `crystal eval 'p typeof(->(a : Int32){ a.to_s })'`.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "'eval' appears zero times in the four listed pages. The unlisted compiler man page reference/1.22/man/crystal/index.html (fetched today) documents 'crystal eval : eval code from args or standard input', so the command is real but uncited by any listed source."
+    }
+  ],
+  "coverage": "I took every concrete claim in the body in file order - the union and nilable syntax, the generic/metaclass/self forms, the tuple, named tuple and proc forms, the pointer and static array forms with their size example, the typeof(a, b) behaviour, all three gotchas and the crystal eval verify command - every command, syntax form, number and behaviour in the file - and checked each against the four listed sources, all fetched and read today (HTTP 200): crystal-lang.org/reference/ is the book's table of contents, /api/ the standard-library class index, /docs/ a 485-byte redirect stub to /reference/, and github.com/crystal-lang/shards the dependency manager's README; none of the four states any type grammar content, so every claim is unverifiable.",
+  "verdict": "fail",
+  "suggested_edits": "Fix the sources first: all four citations are landing pages, so no claim is checkable. Replace them with the pages that carry the content: https://crystal-lang.org/reference/1.22/syntax_and_semantics/type_grammar.html (union, nilable Int32? = Int32 | ::Nil, generics, tuple, named tuple, proc, pointer, static array, self, .class and typeof in the type grammar), .../syntax_and_semantics/typeof.html ('It accepts multiple arguments, and the result is the union of the expression types', 'Since typeof doesn't actually evaluate the expression, it can be used on methods at compile time'), .../syntax_and_semantics/type_restrictions.html (append .class to a free variable) and .../man/crystal/index.html for `crystal eval` ('eval code from args or standard input'). Three details then still need attention: the book's examples are Array(String) and Int32[8], never Hash(String, Int32) or Int32[4] (though typeof.html shows ':: Hash(Int32, String)'), the named tuple example is {x: Int32, y: String} not {a: Int32}, and the proc example is 'Int32, Char -> String' not 'Int32, String -> Bool' - align the examples with a source or mark them as the author's own. The 'Foo? binds tighter than |' gotcha is stated by no page I fetched (type_grammar.html, union_types.html) - cite a source for the precedence or drop it. Drop the shards GitHub source: it is about dependency management, not the type system.",
+  "attestation_sha256": "1e0e9a6f4335764134ea7722a15e53a925d3af8a958cc11b9073b80abf22d42b"
+}
