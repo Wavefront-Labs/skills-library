@@ -1,0 +1,204 @@
+{
+  "schema": "wavefront-attestation/1",
+  "protocol": "docs-check/1",
+  "skill": {
+    "id": "computing-software.it-support-helpdesk.remote-support-tools.rd-gateway-and-rd-web-troubleshooting",
+    "version": "2",
+    "sha256": "0045e0c62d63b21538c6f09e3730ad20895f0b0a49382767676f683d8b375014"
+  },
+  "reviewer": {
+    "github": "spazman998",
+    "kind": "agent",
+    "agent": "qwen-code",
+    "model": "qwen3-coder"
+  },
+  "reviewed_at": "2026-11-24",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remote-desktop-gateway-role",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "c64c3fae51fe5137a8c33e0ec35d4c658d053799611f275e5dd3439d435c0fac"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-web-client-admin",
+      "fetched_at": "2026-11-24",
+      "http_status": 200,
+      "content_sha256": "f43871fd1dc0751afc1b38662f376cbe5d1973c0bdf3d823f4fb1f2264a3ee6b"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "Client -> TLS 443 (and optionally UDP 3391) -> RD Gateway -> RDP 3389 -> target.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source states ports: the gateway page describes the role and certificate import but never mentions 443, 3389, UDP or 3391 (the web client page's only port is 3392, for broker-direct connections); the general premise that RD Gateway carries remote connections over the internet is on the gateway page, but not the port chain."
+    },
+    {
+      "claim": "gateway checks a **CAP** (who can connect: user/computer groups, auth method) and a **RAP**",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "CAP and RAP appear nowhere in either source; the gateway page covers only install and certificate configuration, and the web client page lists 'an RD Gateway, an RD Connection Broker, and RD Web Access' as prerequisites without any policy detail."
+    },
+    {
+      "claim": "(which targets they can reach: AD group or gateway-managed group of computers).",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "RAP semantics, AD groups and gateway-managed computer groups are in neither source."
+    },
+    {
+      "claim": "Certificate warning or \"can't verify identity\"",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "This exact symptom is not in either source; the web client page's nearest material is a browser security warning when opening the web client, tied to the RD Web Access certificate."
+    },
+    {
+      "claim": "Gateway cert name does not match the public name, or chain/CRL not reachable from outside",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source states this cause: the web client page's name-mismatch line concerns the web client URL vs the RD Web certificate ('your server name in the web client URL might not match the name provided by the RD Web certificate'), and CRL reachability is mentioned nowhere; the gateway page only recommends a publicly issued certificate and pre-configuring the trust chain for private ones."
+    },
+    {
+      "claim": "Your user account is not authorized to access the RD Gateway",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "This error string appears in neither source."
+    },
+    {
+      "claim": "User not in a CAP group, or the CAP requires smart card/device redirection settings the client violates",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "CAP groups, smart cards and device-redirection CAP settings are absent from both sources."
+    },
+    {
+      "claim": "...not authorized to access the remote computer",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "This error string is not in either source."
+    },
+    {
+      "claim": "RAP group does not contain the target in the form the client used (FQDN vs short name vs IP)",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "RAP target matching and the FQDN/short-name/IP distinction are covered by neither source; the web client page only says the web client URL should use the RD Web server's FQDN."
+    },
+    {
+      "claim": "Connects then drops in seconds, slow",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source describes this symptom."
+    },
+    {
+      "claim": "UDP blocked; client falls back but some firewalls drop half the flow. Test with UDP off",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "UDP transport, fallback and 'Test with UDP off' are in neither source; 'UDP' appears zero times in both pages (the only port discussed is 3392 for broker-direct web client connections)."
+    },
+    {
+      "claim": "RD Web shows no icons",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Not in either source; the web client troubleshooting section handles users who can see resources listed but cannot connect."
+    },
+    {
+      "claim": "User not assigned to the collection/RemoteApp, or the web feed URL is stale",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source covers collection/RemoteApp assignment or a stale web feed URL."
+    },
+    {
+      "claim": "Gateway server: Event Viewer > Applications and Services > Microsoft > Windows >\nTerminalServices-Gateway > Operational.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The TerminalServices-Gateway Operational log path is in neither source; the gateway page has no event-log content at all."
+    },
+    {
+      "claim": "Event 200 = CAP passed, 302 = connected to resource,",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Event IDs 200 and 302 and their meanings appear nowhere in either source."
+    },
+    {
+      "claim": "303 = disconnected with bytes transferred",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Event ID 303 and its meaning are not in either source."
+    },
+    {
+      "claim": "failure events next to them name the policy or\ntarget that rejected the user.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Neither source describes gateway failure events naming the rejecting policy or target."
+    },
+    {
+      "claim": "Classic: `https://<gateway>/RDWeb`; HTML5 client: `https://<gateway>/RDWeb/webclient`",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-web-client-admin",
+      "evidence_quote": "Make sure you can access the web client at the web client URL with your server name, formatted as https://server_FQDN/RDWeb/webclient/index.html",
+      "note": "The page gives the web client URL as https://server_FQDN/RDWeb/webclient/index.html, confirming the /RDWeb/webclient path of the HTML5 client; it describes only the web client, so the classic client living at /RDWeb is implied by the path but never stated."
+    },
+    {
+      "claim": "The web client needs the gateway cert published to it (`Import-RDWebClientBrokerCert`)",
+      "verdict": "contradicted",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-web-client-admin",
+      "evidence_quote": "Copy the .cer file from the RD Connection Broker to the server running the RD Web role.",
+      "note": "The source ties Import-RDWebClientBrokerCert to the RD Connection Broker certificate, not the gateway's: 'On the RD Connection Broker server, obtain the certificate used for Remote Desktop connections and export it as a .cer file', then 'run this cmdlet with the bracketed value replaced with the path of the .cer file that you copied from the RD Broker: Import-RDWebClientBrokerCert'."
+    },
+    {
+      "claim": "and a publicly trusted cert on the gateway",
+      "verdict": "confirmed",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-web-client-admin",
+      "evidence_quote": "Make sure public trusted certificates are configured for the RD Gateway and RD Web Access roles.",
+      "note": "Stated verbatim in the web client prerequisites; the gateway page independently recommends a publicly issued certificate for the role."
+    },
+    {
+      "claim": "Gateway managed computer groups list exact names; add both FQDN and short name, or use\n  an AD group.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "Gateway-managed computer groups and the exact-name/FQDN/short-name duality are in neither source."
+    },
+    {
+      "claim": "NPS central policy store mode moves CAPs into NPS; look there if Gateway Manager shows\n  none.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "NPS, the central policy store and CAP storage are not mentioned in either source; the gateway page's only RD Gateway Manager content is the certificate tab."
+    },
+    {
+      "claim": "Old `.rdp` files pin gateway settings; republish the feed after changes.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": ".rdp files appear in the web client page only as a remote-resource launch method ('by downloading an .rdp file to handle with another client'), never as pinning gateway settings."
+    },
+    {
+      "claim": "The user connects from outside, gateway log shows 200 then 302 for that user and target,\nand no certificate warning appears.",
+      "verdict": "unverifiable",
+      "source_url": "",
+      "evidence_quote": "",
+      "note": "The verification procedure rests on event IDs 200/302, which neither source documents; only the 'connects from outside' premise matches the gateway page's 'users can access internal network resources from remote locations without the need for a VPN'."
+    }
+  ],
+  "coverage": "I extracted every command, URL, number and behaviour claim in the skill - the TLS 443 / UDP 3391 / RDP 3389 port chain, the CAP and RAP definitions, all five symptom and all five cause cells of the Common failures table, the TerminalServices-Gateway Operational log path with its Event 200/302/303 meanings and failure-event behaviour, the /RDWeb and /RDWeb/webclient client URLs, the Import-RDWebClientBrokerCert and publicly-trusted-cert claims, all three Gotchas bullets (gateway-managed computer groups, NPS central policy store, stale .rdp files) and the two-line Verify procedure - then fetched both listed learn.microsoft.com sources with the checker's own request (both 200) and judged each claim only against their text: the web client URL path and the publicly trusted certificate on the RD Gateway are confirmed, the Import-RDWebClientBrokerCert claim is contradicted (the page imports the RD Connection Broker certificate, not the gateway's), and the ports, CAP/RAP mechanics, event IDs, both exact error strings, the UDP fallback advice, NPS policy store, computer-group naming and the .rdp/feed gotchas appear in neither source, which also has no event-log content.",
+  "verdict": "fail",
+  "attestation_sha256": "839cfcedcc4ccf25fc236a4985f837b6a585913481b45e01ab89fb95c618bd99",
+  "suggested_edits": "Fix the contradicted claim first: the web client page says Import-RDWebClientBrokerCert imports the RD Connection Broker certificate ('On the RD Connection Broker server, obtain the certificate used for Remote Desktop connections and export it as a .cer file. Copy the .cer file from the RD Connection Broker to the server running the RD Web role.'), so reword the RD Web bullet to 'The web client needs the RD Connection Broker certificate imported (`Import-RDWebClientBrokerCert`) and a publicly trusted cert on the gateway'. The two listed sources only cover role install, certificate import, the web client setup and its URL, so add sources for the rest before re-review: an RD Gateway CAP/RAP policy reference, a TerminalServices-Gateway event reference with events 200/302/303, the RDP-over-UDP/3391 transport documentation, NPS-as-central-policy-store for RD Gateway CAPs, RD Web Access classic-client URL documentation, and the two exact error strings; alternatively trim the skill to what these two pages actually support. The classic client's /RDWeb path is implied by the web client URL but never stated by the source, so consider sourcing it too."
+}
